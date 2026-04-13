@@ -41,8 +41,9 @@ For each item file that still has a `> **Review needed**` block:
 1. Read the full item file
 2. Extract the question(s) from the blockquote
 3. If the human has answered the question in the conversation:
-   - Update the item content to reflect the answer (e.g. change the threshold value)
-   - Remove the `> **Review needed**` blockquote
+   - Update the item content to reflect the answer (e.g. change the threshold value, rewrite the relevant sentence/field)
+   - Remove the `> **Review needed**` blockquote entirely
+   - **Do NOT ask about this question again** — it is resolved
 4. If the human has NOT answered the question yet, present the question clearly and wait for their answer before modifying the file
 
 Format open questions as:
@@ -58,6 +59,7 @@ Format open questions as:
 
 Rules:
 - Apply all answers the human has already provided — do not re-ask resolved questions
+- Once a `> **Review needed**` block is resolved and removed, never surface that question again
 - If the answer conflicts with another item, flag the conflict before updating
 - If multiple questions exist in one block, handle each separately
 - Never skip a `> **Review needed**` block
@@ -216,6 +218,6 @@ Fix broken markdown links or build errors before reporting.
 
 ## Constraints
 
-- **Never change item content.** Only state and DRAFT flag removal.
+- **Item content may only be changed to apply a human-provided answer** to a `> **Review needed**` block. All other content is immutable — no paraphrasing, no reformatting, no additions beyond the answer.
 - **Never promote without explicit human instruction.**
 - **Report traceability issues; do not silently fix them.** Gaps in traceability are design decisions — the human must decide.
