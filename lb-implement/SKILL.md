@@ -9,8 +9,8 @@ description: |
 **Goal**: For each `IMPLEMENT` flag in the book, write the corresponding source code exactly as described. The design is already approved — do not make design decisions here.
 
 Read before starting:
-- `shared/references/flags.md` — IMPLEMENT flag semantics
-- `shared/references/source-refs.md` — how source references are formatted in the book
+- `references/flags.md` — IMPLEMENT flag semantics
+- `references/source-refs.md` — how source references are formatted in the book
 
 ---
 
