@@ -133,6 +133,7 @@ Users need a secure way to identify themselves to access protected features; thi
 - → [SAD-003](../sad/SAD-003.md): This requirement is fulfilled by the AuthService component, which owns credential validation and session creation
 - → [AT-005](../at/AT-005.md): Acceptance test verifies the full login flow from the user's perspective, including the lockout scenario
 
+## Description
 Users shall be able to authenticate using a valid email address and password.
 The system shall reject invalid credentials with an appropriate error message.
 The system shall lock the account after 5 consecutive failed attempts.
