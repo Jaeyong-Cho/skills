@@ -9,9 +9,9 @@ description: |
 **Goal**: Write the design of a new feature into the book. No code is written yet — the book is updated, flagged for review, and code tasks are queued as `IMPLEMENT` flags.
 
 Read these references before writing:
-- `shared/references/writing.md` — topic-centric structure, narrative style, diagrams
-- `shared/references/flags.md` — DRAFT / IMPLEMENT / FIX semantics
-- `shared/references/source-refs.md` — source code reference format
+- `references/writing.md` — topic-centric structure, narrative style, diagrams
+- `references/flags.md` — DRAFT / IMPLEMENT / FIX semantics
+- `references/source-refs.md` — source code reference format
 
 ---
 
@@ -40,7 +40,7 @@ If a new chapter is needed, explain the placement decision to the user before wr
 
 ### 3. Write the book update
 
-Write as a narrative — context → problem → solution → design → tradeoffs. See `shared/references/writing.md`.
+Write as a narrative — context → problem → solution → design → tradeoffs. See `references/writing.md`.
 
 Every new or significantly changed section gets a `DRAFT` flag immediately after the section heading or at the end of the section:
 
