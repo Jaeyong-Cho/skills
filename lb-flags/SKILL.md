@@ -9,8 +9,8 @@ description: |
 **Goal**: Scan the book for `DRAFT` and `FIX` flags. Understand human intent from surrounding context and edits. Revise book content. Do not touch `IMPLEMENT` flags.
 
 Read before starting:
-- `shared/references/flags.md` — flag semantics and promotion rules
-- `shared/references/writing.md` — narrative style when revising sections
+- `references/flags.md` — flag semantics and promotion rules
+- `references/writing.md` — narrative style when revising sections
 
 ---
 
