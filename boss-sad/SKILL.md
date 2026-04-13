@@ -1,0 +1,154 @@
+---
+name: boss-sad
+description: |
+  SAD review skill. Use this to review SAD items, apply inline answers from markdown files, and cascade to create SDD and UT items.
+  Triggers: "boss-sad", "review SAD", "I answered the SAD items", "check SAD review points", "update SAD", "show SAD pending".
+  When called with no specific items — shows all pending SAD review points.
+  When called after the human has answered review points inline — applies those answers, marks items reviewed, and creates the corresponding SDD and UT items.
+---
+
+# boss-sad: Review SAD Items and Cascade to Detailed Design
+
+**Goal**: Surface all pending SAD review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, update SIT items if content changed, and cascade by creating corresponding SDD and UT items.
+
+Read before starting:
+- `references/items.md` — item format, states, traceability link conventions
+- `references/review-points.md` — how review points work and how answers are indicated
+
+---
+
+## Step 1: Find all draft SAD items
+
+```bash
+grep -rl "^\`draft\`" book/src/sad/
+```
+
+Read each draft SAD item file.
+
+For each item, determine its status:
+
+- **Answered**: the `> **Review needed**` blockquote has been removed, or contains `> **Answer**:` text added by the human
+- **Pending**: the blockquote exists with only the original question
+
+---
+
+## Step 2: Show pending review points
+
+List every pending SAD item so the human knows what still needs their attention:
+
+```
+## Pending SAD Review Points
+
+### SAD-003: AuthService component
+> Should AuthService own session creation, or delegate to a separate SessionService?
+
+### SAD-001: Project directory structure
+> Confirm file extension and whether a monorepo layout is needed
+```
+
+If there are no pending items, note that and move to Step 3.
+
+---
+
+## Step 3: Apply inline answers to answered items
+
+For each answered SAD item:
+
+**If the blockquote contains `> **Answer**: <text>`:**
+- Read the answer
+- Incorporate it into the relevant content field — update the Interface, Location, Responsibility, Dependencies, or Diagram section as appropriate
+- Remove the entire blockquote block
+
+**If the blockquote has been removed entirely:**
+- Accept the current file content as the human's approved version
+- No content change needed
+
+When incorporating an answer that changes the component's interface or responsibility, also check whether the component diagram (mermaid) needs updating — keep the diagram in sync with the text.
+
+---
+
+## Step 4: Mark answered items as `reviewed`
+
+For each item where all review points are resolved:
+
+Change `## State` from `` `draft` `` to `` `reviewed` ``.
+
+---
+
+## Step 5: Update SIT items
+
+For each SAD item whose interface or component boundaries changed during Step 3, read its linked SIT item(s) via the `→ [SIT-` trace. Update the SIT's sequence diagram, components under test, and expected behavior if they no longer reflect the revised interface. Keep SIT state as `draft`.
+
+---
+
+## Step 6: Cascade — create SDD and UT items
+
+For each SAD item newly marked `reviewed` that has no `→ [SDD-` trace yet (or only a `TBD` placeholder), create the corresponding SDD and UT items.
+
+Read `references/cascade.md` for the SDD and UT item templates and the full process.
+
+Key principles:
+- Create one SDD item per function listed in the SAD item's `## Interface` section
+- Write the algorithm based on what the SAD component's responsibility and the upstream SRS requirements say — the SDD should be specific enough to implement without guessing
+- Create at least one UT item per SDD item; add more for significant error paths and edge cases
+- After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
+
+---
+
+## Step 7: Update tags and indexes
+
+- Update `book/src/tags.md` for any new tags used in new SDD or UT items
+- Update `book/src/sdd/index.md` traceability table
+- Update `book/src/ut/index.md` traceability table
+- Update `SUMMARY.md` with new SDD and UT entries
+
+---
+
+## Step 8: Build check
+
+```bash
+cd book && mdbook build 2>&1 | tail -20
+```
+
+Fix broken markdown links before reporting.
+
+---
+
+## Step 9: Report
+
+```
+## SAD Review Summary
+
+### Promoted to Reviewed
+| ID | Title |
+|----|-------|
+| SAD-003 | AuthService component |
+
+### Still Pending (answer these inline, then run boss-sad again)
+| ID | Review Question |
+|----|----------------|
+| SAD-001 | Confirm file extension and monorepo layout |
+
+### SDD Items Created
+| ID | Title | Parent SAD |
+|----|-------|-----------|
+| SDD-010 | AuthService.authenticate() | SAD-003 |
+| SDD-011 | AuthService.checkLockout() | SAD-003 |
+
+### UT Items Created
+| ID | Title | Tests |
+|----|-------|-------|
+| UT-010 | authenticate — happy path | SDD-010 |
+| UT-011 | authenticate — wrong password | SDD-010 |
+| UT-012 | checkLockout — account locked | SDD-011 |
+
+### SIT Items Updated
+| ID | What changed |
+|----|-------------|
+| SIT-002 | Updated sequence diagram to reflect revised AuthService interface |
+
+---
+
+Next: Open the SDD item files, write your answers to the review points inline,
+then run **boss-sdd** to apply answers, mark SDD items reviewed, and update UT items.
+```

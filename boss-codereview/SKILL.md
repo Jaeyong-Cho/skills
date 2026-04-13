@@ -1,7 +1,7 @@
 ---
 name: boss-codereview
 description: |
-  Use this skill after the human has written source code and wants AI to review it against BOSS documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "boss code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. AI never rewrites or generates code — it reports findings and asks questions.
+  Use this skill after the human has written source code and wants AI to review it against BOSS documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "boss code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. Conformant items are marked `done`. AI never rewrites or generates code — it reports findings and asks questions.
 ---
 
 # boss-codereview: Review Human-Written Code Against BOSS
@@ -169,16 +169,18 @@ Ask the human whether undocumented functions need SDD items added.
 
 ---
 
-## Step 8: State promotion prompt
+## Step 8: Mark conformant items as `done`
 
-For each item where no deviations were found, inform the human they may promote it to `done`:
+For each item where no deviations were found, update its `## State` from `` `reviewed` `` to `` `done` ``:
 
+```bash
+# Example: mark SDD-010 done
+sed -i '' 's/^`reviewed`$/`done`/' book/src/sdd/SDD-010.md
 ```
-SDD-010: No deviations found. You may mark this `done` using boss-review.
-UT-010:  Test stub present. Mark `done` after tests pass.
-```
 
-Do not promote state yourself.
+Do this for SDD items, their parent SAD items (if all SDD items under that SAD are done), and the linked UT/AT/SIT items when their test stubs are confirmed present.
+
+For items with deviations, leave state as `reviewed` and list what needs to be resolved before they can be marked `done`.
 
 ---
 
