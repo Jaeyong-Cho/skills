@@ -218,6 +218,6 @@ Fix broken markdown links or build errors before reporting.
 
 ## Constraints
 
-- **Item content may only be changed to apply a human-provided answer** to a `> **Review needed**` block. All other content is immutable — no paraphrasing, no reformatting, no additions beyond the answer.
+- **Item content may only be changed to apply a human-provided answer** to a `> **Review needed**` block. All other content is can be edited if needed. — no paraphrasing, no reformatting, no additions beyond the answer.
 - **Never promote without explicit human instruction.**
 - **Report traceability issues; do not silently fix them.** Gaps in traceability are design decisions — the human must decide.
