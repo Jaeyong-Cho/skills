@@ -9,8 +9,8 @@ description: |
 **Goal**: Diagnose the bug. Determine whether the book is wrong, the code diverged from the book, or both. Fix whichever is wrong. Mark all changes for human review.
 
 Read before starting:
-- `shared/references/flags.md` — DRAFT / FIX semantics
-- `shared/references/source-refs.md` — how to locate and verify symbols
+- `references/flags.md` — DRAFT / FIX semantics
+- `references/source-refs.md` — how to locate and verify symbols
 
 ---
 
