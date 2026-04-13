@@ -6,7 +6,7 @@ description: |
 
 # boss-review: Process Review and Validate Consistency
 
-**Goal**: Promote item states as directed by the human, verify traceability links are complete and symmetric, and surface any structural inconsistencies. AI does not judge whether the content is correct — that is the human's responsibility.
+**Goal**: Find items with inline review marks, apply the human's answers to those items, promote states as directed, and surface traceability inconsistencies. AI does not judge content correctness — that is the human's responsibility.
 
 Read before starting:
 - `references/items.md` — item states, traceability link format
@@ -14,50 +14,53 @@ Read before starting:
 
 ---
 
-## Step 1: Read current document state
+## Step 1: Find items with review marks
+
+Do NOT read all document files. Use grep to find only the items that need attention:
 
 ```bash
-cat book/src/curs/curs.md
-cat book/src/srs/srs.md
-cat book/src/sad/sad.md
-cat book/src/sdd/sdd.md
-cat book/src/at/at.md
-cat book/src/sit/sit.md
-cat book/src/ut/ut.md
+# Find all items with pending review marks
+grep -rl "Review needed" book/src/
+
+# Find all draft items
+grep -rl "^\`draft\`" book/src/
 ```
+
+Read **only** the specific item files returned by these searches. Do not read anything else.
 
 ---
 
-## Step 2: Answer inline review questions
+## Step 2: Apply the human's answers to review marks
 
-Scan all item files for `> **Review needed**` blockquotes — these are questions or concerns the human has written inline while drafting or reading.
+The human will have provided answers in the conversation — either:
+- Inline answers written directly into the item file (the blockquote is already gone or modified)
+- Answers stated in their message (e.g. "unlock is manual", "threshold is 3 not 5")
 
-```bash
-grep -rl "Review needed" book/src/
-```
-
-For each item that has a `> **Review needed**` block:
+For each item file that still has a `> **Review needed**` block:
 
 1. Read the full item file
 2. Extract the question(s) from the blockquote
-3. Answer each question using only information already present in the BOSS documents (other items, traces, the Why field). Do not invent facts.
-4. If the answer requires information outside the documents (e.g. a business decision, an external constraint), say so explicitly and describe what input is needed from the human.
+3. If the human has answered the question in the conversation:
+   - Update the item content to reflect the answer (e.g. change the threshold value)
+   - Remove the `> **Review needed**` blockquote
+4. If the human has NOT answered the question yet, present the question clearly and wait for their answer before modifying the file
 
-Format the output as:
+Format open questions as:
 
 ```
-### SRS-007 — Review Questions
+### SRS-007 — Needs Your Answer
 
 > verify lockout threshold (5 attempts) and whether unlock is automatic or manual
 
-**Answer**: The lockout threshold of 5 attempts is stated in SRS-007 but not derived from any CuRS item — it is an AI assumption. SDD-003 currently implements a fixed threshold with no configuration option. Whether unlock is automatic or manual is not addressed in any SDD item. **Human decision needed**: confirm the threshold value and whether SDD-003 should be updated to support configurable unlock behavior.
+**What AI found**: The threshold value "5" is not derived from any CuRS item — it was an AI assumption. SDD-003 has no configurable unlock behavior.
+**Decision needed from you**: What is the correct threshold? Is unlock time-based or admin-initiated?
 ```
 
 Rules:
-- Do not modify the blockquote or the item — only answer in the report
-- If the question is already answered by another item, cite it with its ID and file
-- If multiple questions exist in one block, answer each separately
-- Never skip a `> **Review needed**` block, even if the question seems obvious
+- Apply all answers the human has already provided — do not re-ask resolved questions
+- If the answer conflicts with another item, flag the conflict before updating
+- If multiple questions exist in one block, handle each separately
+- Never skip a `> **Review needed**` block
 
 ---
 
