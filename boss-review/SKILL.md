@@ -28,7 +28,40 @@ cat book/src/ut/ut.md
 
 ---
 
-## Step 2: Process state promotions
+## Step 2: Answer inline review questions
+
+Scan all item files for `> **Review needed**` blockquotes — these are questions or concerns the human has written inline while drafting or reading.
+
+```bash
+grep -rl "Review needed" book/src/
+```
+
+For each item that has a `> **Review needed**` block:
+
+1. Read the full item file
+2. Extract the question(s) from the blockquote
+3. Answer each question using only information already present in the BOSS documents (other items, traces, the Why field). Do not invent facts.
+4. If the answer requires information outside the documents (e.g. a business decision, an external constraint), say so explicitly and describe what input is needed from the human.
+
+Format the output as:
+
+```
+### SRS-007 — Review Questions
+
+> verify lockout threshold (5 attempts) and whether unlock is automatic or manual
+
+**Answer**: The lockout threshold of 5 attempts is stated in SRS-007 but not derived from any CuRS item — it is an AI assumption. SDD-003 currently implements a fixed threshold with no configuration option. Whether unlock is automatic or manual is not addressed in any SDD item. **Human decision needed**: confirm the threshold value and whether SDD-003 should be updated to support configurable unlock behavior.
+```
+
+Rules:
+- Do not modify the blockquote or the item — only answer in the report
+- If the question is already answered by another item, cite it with its ID and file
+- If multiple questions exist in one block, answer each separately
+- Never skip a `> **Review needed**` block, even if the question seems obvious
+
+---
+
+## Step 3: Process state promotions
 
 The human specifies which items to promote. Accept any of these forms:
 - `"mark SRS-007 as reviewed"`
@@ -44,11 +77,11 @@ For each promoted item:
 
 ---
 
-## Step 3: Validate traceability
+## Step 4: Validate traceability
 
 Check every item file's `## Traces` section for these structural rules:
 
-### 3a. Link validity
+### 4a. Link validity
 
 Every link target must resolve to an existing file.
 
@@ -64,7 +97,7 @@ grep -rh "\[SAD-" book/src/sdd/ | grep -o "SAD-[0-9]*" | sort | uniq | while rea
 done
 ```
 
-### 3b. Symmetry check
+### 4b. Symmetry check
 
 If item A traces → B, then B should trace ← A.
 
@@ -85,7 +118,7 @@ ls book/src/srs/ | grep "^SRS-"
 
 Report any missing or broken traces without silently fixing them.
 
-### 3c. Orphan detection
+### 4c. Orphan detection
 
 ```bash
 # SRS items with no upstream CuRS trace
@@ -103,7 +136,7 @@ Report orphans for human decision — do not delete or add traces without instru
 
 ---
 
-## Step 4: Check reviewed-items readiness
+## Step 5: Check reviewed-items readiness
 
 For any item the human is promoting to `reviewed`, verify the review checklist from `references/review-points.md` is addressable. Also check that the `> **Review needed**` blockquote has been removed by the human before promoting — if it is still present, ask whether the question has been resolved.
 
@@ -116,7 +149,7 @@ If a mandatory field is missing, flag it and ask before promoting.
 
 ---
 
-## Step 5: Update index traceability tables
+## Step 6: Update index traceability tables
 
 After processing promotions, update the traceability summary table in each affected `index.md`. Links point directly to item files:
 
@@ -131,7 +164,7 @@ After processing promotions, update the traceability summary table in each affec
 
 ---
 
-## Step 6: Build check
+## Step 7: Build check
 
 ```bash
 cd book && mdbook build 2>&1 | tail -20
@@ -141,7 +174,7 @@ Fix broken markdown links or build errors before reporting.
 
 ---
 
-## Step 7: Report
+## Step 8: Report
 
 ```
 ## State Changes
