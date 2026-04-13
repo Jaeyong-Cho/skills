@@ -1,7 +1,7 @@
 ---
 name: boss-codereview
 description: |
-  Use this skill after the human has written source code and wants AI to review it against BOSS documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "vdoc code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. AI never rewrites or generates code — it reports findings and asks questions.
+  Use this skill after the human has written source code and wants AI to review it against BOSS documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "boss code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. AI never rewrites or generates code — it reports findings and asks questions.
 ---
 
 # boss-codereview: Review Human-Written Code Against BOSS
@@ -24,10 +24,10 @@ Ask the human (or infer from context) which items have been implemented:
 
 ```bash
 # Find all reviewed SDD items
-grep -rl "^\*\*State\*\*: \`reviewed\`" book/src/sdd/ | sort
+grep -rl "^\`reviewed\`" book/src/sdd/ | sort
 
 # Find all reviewed SAD items
-grep -rl "^\*\*State\*\*: \`reviewed\`" book/src/sad/ | sort
+grep -rl "^\`reviewed\`" book/src/sad/ | sort
 
 # Find SDD items belonging to a specific SAD component (e.g. SAD-003)
 grep -rl "\[SAD-003\]" book/src/sdd/
@@ -55,12 +55,12 @@ grep "→ \[UT-" book/src/sdd/SDD-010.md
 # → then: cat book/src/ut/UT-010.md
 ```
 
-Build a checklist from each item's fields:
-- SAD `**Location**:` → expected file path in `src/`
-- SDD `**Signature**:` → expected function signature
-- SDD `**Algorithm**:` → expected implementation steps
-- SDD `**Error cases**:` → expected error handling
-- SDD `**Traces** → [UT-*]` → test items to verify
+Build a checklist from each item's sections:
+- SAD `## Location` → expected file path in `src/`
+- SDD `## Signature` → expected function signature
+- SDD `## Algorithm` → expected implementation steps
+- SDD `## Error cases` → expected error handling
+- SDD `## Traces` → `[UT-*]` links → test items to verify
 
 ---
 
@@ -84,9 +84,9 @@ For each SAD item in scope, verify:
 
 | Check | Pass criterion |
 |-------|---------------|
-| File location | Source file exists at the path specified in SAD `**Location**:` |
-| Responsibility | The file/class contains only what SAD's `**Responsibility**:` describes |
-| Interface | Every method listed in SAD `**Interface**:` exists with a matching signature |
+| File location | Source file exists at the path specified in SAD `## Location` |
+| Responsibility | The file/class contains only what SAD's `## Responsibility` describes |
+| Interface | Every method listed in SAD `## Interface` exists with a matching signature |
 | Dependencies | The code depends only on the SAD-specified dependencies |
 
 Report each deviation with:
@@ -103,10 +103,10 @@ For each SDD item in scope, verify:
 
 | Check | Pass criterion |
 |-------|---------------|
-| Signature | Function name, parameter names, types, and return type match SDD `**Signature**:` |
-| Algorithm | Each numbered step in SDD is identifiable in the code |
-| Error cases | Every error case in SDD `**Error cases**:` is handled |
-| Side effects | Side effects match SDD `**Side effects**:` declaration |
+| Signature | Function name, parameter names, types, and return type match SDD `## Signature` |
+| Algorithm | Each numbered step in SDD `## Algorithm` is identifiable in the code |
+| Error cases | Every error case in SDD `## Error cases` is handled |
+| Side effects | Side effects match SDD `## Side effects` declaration |
 
 Flag deviations by SDD item ID. Do not suggest fixes — ask the human to decide.
 

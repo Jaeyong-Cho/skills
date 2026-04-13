@@ -22,14 +22,21 @@ ID format: `{PREFIX}-{NNN}` — e.g. `SRS-001`, `SDD-012`.
 
 ## Item File Format
 
-Each item lives in its own file (e.g. `book/src/srs/SRS-007.md`). The filename must exactly match the item ID in uppercase. The file uses a **level-1 heading** since it is its own page in the book:
+Each item lives in its own file (e.g. `book/src/srs/SRS-007.md`). The filename must exactly match the item ID in uppercase. The file uses a **level-1 heading** since it is its own page in the book, with level-2 headings for each field:
 
 ```markdown
 # SRS-007: User authentication via email and password
 
-**State**: `draft`
-**Tags**: `#auth` `#security` `#user`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#auth` `#security` `#user`
+
+## Why
+Users need a secure way to identify themselves to access protected features; this is the primary authentication method chosen from CuRS-002.
+
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): The customer explicitly requested email/password login as the primary entry point, making this a mandatory requirement
 - → [SAD-003](../sad/SAD-003.md): This requirement is fulfilled by the AuthService component, which owns credential validation and session creation
 - → [AT-005](../at/AT-005.md): Acceptance test verifies the full login flow from the user's perspective, including the lockout scenario
@@ -69,7 +76,7 @@ When the human has resolved the questions and promotes the item to `reviewed`, t
 | `reviewed` | Human has approved the content | Human |
 | `done` | Implementation complete and verified | Human (after coding) |
 
-State is declared in the `**State**:` field inside the item block.
+State is declared under the `## State` heading inside the item file.
 
 **Rule**: AI sets `draft`. Humans promote to `reviewed` or `done`. AI never promotes state.
 
@@ -79,7 +86,7 @@ State is declared in the `**State**:` field inside the item block.
 
 Tags are short lowercase labels prefixed with `#`. They appear in two places:
 
-1. Inside the item block: `**Tags**: \`#auth\` \`#security\``
+1. Under the `## Tags` heading in the item file: `` `#auth` `` `` `#security` ``
 2. In the tag registry: `book/src/tags.md`
 
 Tags serve two purposes:
@@ -92,14 +99,28 @@ Only create a new tag if no existing tag covers the concept. Add it to `tags.md`
 
 ---
 
+## Why Field
+
+Every item has a `## Why` section explaining the intent behind the item — why it exists, not just what it says. This is distinct from the trace descriptions (which explain why a link exists between two items).
+
+- **CuRS Why**: the business motivation or customer concern that prompted this input
+- **SRS Why**: the software need this requirement addresses and what customer intent it formalizes
+- **SAD Why**: the architectural reasoning for this component boundary or structure
+- **SDD Why**: the behavioral intent this function implements within its parent component
+- **AT/SIT/UT Why**: what specific behavior or risk this test validates and why this scenario was chosen
+
+Keep it to one or two sentences.
+
+---
+
 ## Traceability Links
 
-Traces use **relative paths directly to the item file**. No anchors needed — each item is its own page.
+Traces appear under the `## Traces` heading. Use **relative paths directly to the item file**. No anchors needed — each item is its own page.
 
 The description after the colon must explain **why** this item is connected to the target — not just what the target is.
 
 ```markdown
-**Traces**:
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): The customer's request for email login is the direct origin of this requirement; without CuRS-002 this requirement would not exist
 - → [SAD-003](../sad/SAD-003.md): The AuthService component is the architectural decision that implements this requirement; it owns credential validation and session lifecycle
 - ↔ [SRS-008](../srs/SRS-008.md): Both requirements share the same authentication flow; SRS-008's lockout policy is a direct consequence of this requirement existing
@@ -107,12 +128,14 @@ The description after the colon must explain **why** this item is connected to t
 
 **Bad** (what, not why):
 ```markdown
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): Customer requirement
 - → [SAD-003](../sad/SAD-003.md): Auth service
 ```
 
 **Good** (why the connection exists):
 ```markdown
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): This requirement derives directly from the customer's request for email login; the 5-attempt lockout was added as a security hardening assumption not explicitly stated by the customer
 - → [SAD-003](../sad/SAD-003.md): AuthService is the sole component responsible for this requirement; it validates credentials and enforces the lockout policy defined here
 ```
@@ -135,7 +158,7 @@ ls book/src/sad/
 cat book/src/srs/SRS-007.md
 
 # All draft items across all types
-grep -rl "^\*\*State\*\*: \`draft\`" book/src/
+grep -rl "^\`draft\`" book/src/
 
 # Items with a specific tag
 grep -rl "#auth" book/src/

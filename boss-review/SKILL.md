@@ -1,7 +1,7 @@
 ---
 name: boss-review
 description: |
-  Use this skill after the human has reviewed draft items and wants to promote their state, or when checking traceability consistency across documents. Triggers: "I reviewed the items", "mark SRS-007 as reviewed", "check traceability", "promote these items", "vdoc review". AI does not judge content correctness — it processes state promotions requested by the human and validates structural consistency.
+  Use this skill after the human has reviewed draft items and wants to promote their state, or when checking traceability consistency across documents. Triggers: "I reviewed the items", "mark SRS-007 as reviewed", "check traceability", "promote these items", "boss review". AI does not judge content correctness — it processes state promotions requested by the human and validates structural consistency.
 ---
 
 # boss-review: Process Review and Validate Consistency
@@ -36,7 +36,7 @@ The human specifies which items to promote. Accept any of these forms:
 - `"all draft SRS items are reviewed"`
 
 For each promoted item:
-1. Change `**State**: \`draft\`` to `**State**: \`reviewed\``
+1. Change the content under `## State` from `` `draft` `` to `` `reviewed` ``
 2. Remove the `> **Review needed**` blockquote block for that item
 3. Do not change any other content
 
@@ -46,7 +46,7 @@ For each promoted item:
 
 ## Step 3: Validate traceability
 
-Check every item file's `**Traces**:` section for these structural rules:
+Check every item file's `## Traces` section for these structural rules:
 
 ### 3a. Link validity
 

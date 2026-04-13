@@ -114,14 +114,21 @@ Item Count is updated by AI each time it adds or removes items with that tag.
 
 Each item is a standalone markdown file. The filename is the item ID in uppercase: `SRS-001.md`, `SAD-003.md`.
 
-The file uses a **level-1 heading** (since it is its own page in the book):
+The file uses a **level-1 heading** (since it is its own page in the book) with **level-2 headings** for each field:
 
 ```markdown
 # SRS-007: User authentication via email and password
 
-**State**: `draft`
-**Tags**: `#auth` `#security` `#user`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#auth` `#security` `#user`
+
+## Why
+Users need a secure way to identify themselves to access protected features; this is the primary authentication method chosen from CuRS-002.
+
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): The customer explicitly requested email/password login as the primary entry point, making this a mandatory requirement
 - → [SAD-003](../sad/SAD-003.md): This requirement is fulfilled by the AuthService component, which owns credential validation and session creation
 - → [AT-005](../at/AT-005.md): Acceptance test verifies the full login flow from the user's perspective, including the lockout scenario
@@ -134,9 +141,74 @@ The system shall lock the account after 5 consecutive failed attempts.
 ```
 
 **Rules**:
-- Use `# H1` not `### H3` — each file is its own page
+- Use `# H1` for the item title, `## H2` for fields — each file is its own page
 - Filename must exactly match the ID: `SRS-007.md` for `SRS-007`
 - No `---` separators needed — the page boundary is the file boundary
+
+---
+
+## Mermaid Diagrams
+
+The book has mermaid support. **Use mermaid diagrams aggressively** wherever they add clarity. A diagram is almost always clearer than prose for structure and flow.
+
+### When to add diagrams
+
+| Item type | Diagram type | When to add |
+|-----------|-------------|-------------|
+| SAD | `graph LR` component diagram | Always — show the component and its dependencies |
+| SAD-001 | `graph TD` directory tree | Always — visualize the folder structure |
+| SDD | `flowchart TD` algorithm | When the algorithm has branches or loops |
+| SIT | `sequenceDiagram` | Always — show the interaction sequence between components |
+| SRS | `flowchart LR` | When the requirement involves a multi-step user flow |
+
+### Diagram placement
+
+Add a `## Diagram` section after `## Traces` and before the item body:
+
+```markdown
+## Diagram
+
+\`\`\`mermaid
+graph LR
+  Client --> AuthService
+  AuthService --> UserRepository
+  AuthService --> SessionStore
+\`\`\`
+```
+
+### Mermaid examples by type
+
+**SAD component diagram** (`graph LR`):
+```
+graph LR
+  Client["Client (API router)"] --> AS["AuthService\nsrc/auth/AuthService.ts"]
+  AS --> UR["UserRepository\nsrc/user/UserRepository.ts"]
+  AS --> SS["SessionStore\nsrc/auth/SessionStore.ts"]
+```
+
+**SIT sequence diagram** (`sequenceDiagram`):
+```
+sequenceDiagram
+  participant Router
+  participant AuthService
+  participant UserRepository
+  Router->>AuthService: authenticate(email, password)
+  AuthService->>UserRepository: findByEmail(email)
+  UserRepository-->>AuthService: User | null
+  AuthService-->>Router: Session | AuthError
+```
+
+**SDD algorithm flowchart** (`flowchart TD`):
+```
+flowchart TD
+  A[Look up user by email] --> B{Found?}
+  B -- No --> C[Return INVALID_CREDENTIALS]
+  B -- Yes --> D{Locked?}
+  D -- Yes --> E[Return ACCOUNT_LOCKED]
+  D -- No --> F{Password match?}
+  F -- No --> G[Increment failure counter\nReturn INVALID_CREDENTIALS]
+  F -- Yes --> H[Reset counter\nCreate session\nReturn Session]
+```
 
 ---
 
@@ -162,10 +234,10 @@ Each item traces to one or more CuRS items and to one or more SAD items.
 
 ## Traceability Link Format
 
-Links use **relative paths directly to the item file**. No anchors needed — each item is its own page.
+Links appear under the `## Traces` heading. Use **relative paths directly to the item file**. No anchors needed — each item is its own page.
 
 ```markdown
-**Traces**:
+## Traces
 - ← [CuRS-002](../curs/CuRS-002.md): <why this item originates from that upstream item>
 - → [SAD-003](../sad/SAD-003.md): <why this downstream item is the response to this item>
 - ↔ [SRS-008](../srs/SRS-008.md): <why these two peer items are related>
@@ -189,10 +261,28 @@ SAD items must include enough detail for the human to create files and directori
 ```markdown
 # SAD-001: Project directory structure
 
-**State**: `draft`
-**Tags**: `#structure`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#structure`
+
+## Why
+A shared, authoritative directory map prevents component placement ambiguity across all other SAD items.
+
+## Traces
 - ← [SRS-001](../srs/SRS-001.md): SRS-001 defines the top-level system scope; this directory structure reflects the module boundaries implied by those requirements
+
+## Diagram
+
+\`\`\`mermaid
+graph TD
+  root["project/"] --> src["src/"]
+  root --> tests["tests/"]
+  src --> auth["auth/"]
+  src --> user["user/"]
+  src --> api["api/"]
+\`\`\`
 
 \`\`\`
 src/
@@ -217,18 +307,40 @@ tests/
 ```markdown
 # SAD-003: AuthService component
 
-**State**: `draft`
-**Tags**: `#auth` `#security`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#auth` `#security`
+
+## Why
+Centralizing credential validation and session management in one component keeps auth logic auditable and prevents it from leaking into other layers.
+
+## Traces
 - ← [SRS-007](../srs/SRS-007.md): SRS-007 requires email/password authentication; AuthService is designated to own this responsibility end-to-end
 - ← [SRS-008](../srs/SRS-008.md): SRS-008 requires account lockout; this policy is enforced within AuthService to keep auth logic centralized
 - → [SDD-010](../sdd/SDD-010.md): SDD-010 specifies authenticate(), the core credential validation function of this component
 - → [SIT-003](../sit/SIT-003.md): SIT-003 verifies that AuthService integrates correctly with UserRepository and SessionStore
 
-**Location**: `src/auth/AuthService.{ext}`
-**Responsibility**: Authenticate users, manage sessions, enforce lockout policy.
-**Dependencies**: UserRepository (SAD-004), SessionStore (SAD-005)
-**Interface**:
+## Diagram
+
+\`\`\`mermaid
+graph LR
+  Router --> AS["AuthService\nsrc/auth/AuthService.ts"]
+  AS --> UR["UserRepository (SAD-004)"]
+  AS --> SS["SessionStore (SAD-005)"]
+\`\`\`
+
+## Location
+`src/auth/AuthService.{ext}`
+
+## Responsibility
+Authenticate users, manage sessions, enforce lockout policy.
+
+## Dependencies
+UserRepository (SAD-004), SessionStore (SAD-005)
+
+## Interface
 - `authenticate(email, password) → Session | AuthError`
 - `logout(sessionId) → void`
 - `checkLockout(email) → LockoutStatus`
@@ -245,28 +357,51 @@ SDD items must be detailed enough for the human to write the function body witho
 ```markdown
 # SDD-010: AuthService.authenticate()
 
-**State**: `draft`
-**Tags**: `#auth` `#security`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#auth` `#security`
+
+## Why
+This is the sole entry point for credential validation; centralizing the logic here ensures lockout, hashing, and session creation always happen together.
+
+## Traces
 - ← [SAD-003](../sad/SAD-003.md): SAD-003 defines AuthService as the owner of credential validation; this function is its primary entry point
 - → [UT-010](../ut/UT-010.md): UT-010 tests this function in isolation covering the happy path, wrong-password, and lockout cases
 
-**Signature**: `authenticate(email: string, password: string): Session | AuthError`
-**Algorithm**:
+## Diagram
+
+\`\`\`mermaid
+flowchart TD
+  A[Look up user by email] --> B{Found?}
+  B -- No --> C[Return INVALID_CREDENTIALS]
+  B -- Yes --> D{checkLockout}
+  D -- Locked --> E[Return ACCOUNT_LOCKED]
+  D -- OK --> F{bcrypt compare}
+  F -- Mismatch --> G[Increment counter\nReturn INVALID_CREDENTIALS]
+  F -- Match --> H[Reset counter\nCreate session\nReturn Session]
+\`\`\`
+
+## Signature
+`authenticate(email: string, password: string): Session | AuthError`
+
+## Algorithm
 1. Look up user by email in UserRepository. If not found, return `AuthError.INVALID_CREDENTIALS`.
 2. Check lockout status via `checkLockout(email)`. If locked, return `AuthError.ACCOUNT_LOCKED`.
 3. Compare password against stored bcrypt hash (cost factor 12). If mismatch, increment failure counter and return `AuthError.INVALID_CREDENTIALS`.
 4. On success, reset failure counter. Create session with 24h expiry. Return session.
 
-**Variables**:
+## Variables
 - `user: User | null` — result of UserRepository lookup
 - `lockout: LockoutStatus` — current lockout state for this email
 
-**Error cases**:
+## Error cases
 - `AuthError.INVALID_CREDENTIALS` — wrong email or password (do not distinguish which)
 - `AuthError.ACCOUNT_LOCKED` — 5+ consecutive failures
 
-**Side effects**: Writes to failure counter store on failure. Writes session on success.
+## Side effects
+Writes to failure counter store on failure. Writes session on success.
 
 > **Review needed** — confirm bcrypt cost factor (12) matches the production security policy
 ```
@@ -284,7 +419,7 @@ ls book/src/sad/
 cat book/src/srs/SRS-007.md
 
 # All draft items across all types
-grep -rl "^\*\*State\*\*: \`draft\`" book/src/
+grep -rl "^\`draft\`" book/src/
 
 # Items with a specific tag
 grep -rl "#auth" book/src/
@@ -310,7 +445,7 @@ grep -rl "#auth" book/src/
 
 # Items tagged #auth that are reviewed (ready to reference)
 for f in $(grep -rl "#auth" book/src/); do
-  grep -l "^\*\*State\*\*: \`reviewed\`" "$f"
+  grep -l "^\`reviewed\`" "$f"
 done
 ```
 
@@ -337,11 +472,11 @@ ls book/src/sdd/ | grep "^SDD-[0-9]" | sort -t- -k2 -n | tail -1
 ### Read a specific item quickly
 
 ```bash
-# Read just the header fields (State, Tags, Traces) of an item
-head -20 book/src/srs/SRS-007.md
+# Read just the header fields of an item
+head -25 book/src/srs/SRS-007.md
 
 # Read only the Traces section
-grep -A10 "^\*\*Traces\*\*" book/src/sad/SAD-003.md
+grep -A10 "^## Traces" book/src/sad/SAD-003.md
 ```
 
 ### Find all items in a component's scope

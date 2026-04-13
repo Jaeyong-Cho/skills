@@ -1,7 +1,7 @@
 ---
 name: boss-update
 description: |
-  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the BOSS documents updated. Triggers: "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", "update vdoc", or any time the user describes what the software should do. This is the core workflow skill. AI drafts CuRS → SRS → SAD → SDD → test items, marks them DRAFT, and provides review points. No source code is written.
+  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the BOSS documents updated. Triggers: "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", "update boss", or any time the user describes what the software should do. This is the core workflow skill. AI drafts CuRS → SRS → SAD → SDD → test items, marks them DRAFT, and provides review points. No source code is written.
 ---
 
 # boss-update: Update BOSS from Customer Input
@@ -52,7 +52,7 @@ Read the full content of any item that looks relevant:
 ```bash
 cat book/src/srs/SRS-007.md    # read a specific item
 head -20 book/src/sad/SAD-003.md  # read just header fields quickly
-grep -A10 "^\*\*Traces\*\*" book/src/sad/SAD-003.md  # read only traces
+grep -A10 "^## Traces" book/src/sad/SAD-003.md  # read only traces
 ```
 
 ### 1c. Read tag registry
@@ -72,15 +72,23 @@ Create a new file `book/src/curs/CuRS-{NNN}.md`. Record the customer's input as-
 ```markdown
 # CuRS-{NNN}: <short title>
 
-**State**: `draft`
-**Tags**: `#tag1` `#tag2`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1` `#tag2`
+
+## Why
+<one-sentence intent — what business motivation or customer concern this requirement addresses>
+
+## Traces
 - → [SRS-{NNN}](../srs/SRS-{NNN}.md): <explain which aspect of this customer input is being formalized into a requirement and why it requires its own SRS item>
 
-**Input** (verbatim or near-verbatim):
-> "<customer's words>"
+## Input
+> "<customer's words verbatim or near-verbatim>"
 
-**Context**: <when this was stated and any relevant background>
+## Context
+<when this was stated and any relevant background>
 
 > **Review needed** — confirm this captures the customer's intent accurately; note any assumptions made in transcription
 ```
@@ -106,9 +114,16 @@ If a CuRS item is ambiguous, write the most likely interpretation and flag it.
 ```markdown
 # SRS-{NNN}: <requirement title>
 
-**State**: `draft`
-**Tags**: `#tag1` `#tag2`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1` `#tag2`
+
+## Why
+<one-sentence intent — why this requirement exists and what customer need it formalizes>
+
+## Traces
 - ← [CuRS-{NNN}](../curs/CuRS-{NNN}.md): <explain why this requirement is a direct derivation of that customer input, including any assumptions added beyond what the customer literally said>
 - → [SAD-{NNN}](../sad/SAD-{NNN}.md): <explain why this particular component is the architectural response to this requirement>
 - → [AT-{NNN}](../at/AT-{NNN}.md): <explain what aspect of this requirement the acceptance test validates>
@@ -131,17 +146,38 @@ SAD items must be concrete enough for the human to create files and directories:
 ```markdown
 # SAD-{NNN}: <component or structure title>
 
-**State**: `draft`
-**Tags**: `#tag1`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one-sentence intent — why this component exists and what architectural problem it solves>
+
+## Traces
 - ← [SRS-{NNN}](../srs/SRS-{NNN}.md): <explain which requirement(s) this component satisfies and why this component boundary was chosen to satisfy it>
 - → [SDD-{NNN}](../sdd/SDD-{NNN}.md): <explain which function or class in the detailed design implements the core responsibility of this component>
 - → [SIT-{NNN}](../sit/SIT-{NNN}.md): <explain what integration scenario between components this test covers>
 
-**Location**: `src/<path>/<FileName>.{ext}`
-**Responsibility**: <single sentence — what this component does>
-**Dependencies**: <other SAD components this depends on>
-**Interface**:
+## Diagram
+
+\`\`\`mermaid
+graph LR
+  <CallerComponent> --> SAD-{NNN}["<ComponentName>\n<file path>"]
+  SAD-{NNN} --> <DependencyComponent>
+\`\`\`
+
+## Location
+`src/<path>/<FileName>.{ext}`
+
+## Responsibility
+<single sentence — what this component does>
+
+## Dependencies
+<other SAD components this depends on>
+
+## Interface
 - `<methodName>(params) → ReturnType` — <one-line description>
 
 > **Review needed** — <question about component boundary, naming, or interface>
@@ -160,26 +196,46 @@ For each function or class in a SAD component, create `book/src/sdd/SDD-{NNN}.md
 ```markdown
 # SDD-{NNN}: <ClassName.methodName() or module-level function>
 
-**State**: `draft`
-**Tags**: `#tag1`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one-sentence intent — why this function exists and what behavior it implements within its parent component>
+
+## Traces
 - ← [SAD-{NNN}](../sad/SAD-{NNN}.md): <explain why this function is the implementation of a specific responsibility declared in the parent SAD component>
 - → [UT-{NNN}](../ut/UT-{NNN}.md): <explain which behavior of this function the unit test covers>
 
-**Signature**: `<functionName>(param: Type, ...): ReturnType`
+## Diagram
 
-**Algorithm**:
+\`\`\`mermaid
+flowchart TD
+  A[<first step>] --> B{<decision?>}
+  B -- Yes --> C[<action>]
+  B -- No --> D[<action>]
+\`\`\`
+
+_Omit if the algorithm is a straight sequence with no branches._
+
+## Signature
+`<functionName>(param: Type, ...): ReturnType`
+
+## Algorithm
 1. <Step 1 — specific action, not vague>
 2. <Step 2>
 3. ...
 
-**Variables**:
+## Variables
 - `<varName>: <Type>` — <purpose>
 
-**Error cases**:
+## Error cases
 - `<ErrorType>` — <when this is raised>
 
-**Side effects**: <what is written/read beyond the return value, or "none">
+## Side effects
+<what is written/read beyond the return value, or "none">
 
 > **Review needed** — <question about algorithm detail, error handling, or edge case>
 ```
@@ -196,17 +252,30 @@ For each new SRS/SAD/SDD item, create the corresponding test file.
 ```markdown
 # AT-{NNN}: <test title>
 
-**State**: `draft`
-**Tags**: `#tag1`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one-sentence intent — what requirement behavior this test verifies and why this scenario was chosen>
+
+## Traces
 - ← [SRS-{NNN}](../srs/SRS-{NNN}.md): <explain which "shall" statement this test verifies, and why this scenario is sufficient to confirm compliance>
 
-**Preconditions**: <system state before test>
-**Steps**:
+## Preconditions
+<system state before test>
+
+## Steps
 1. <action>
 2. <action>
-**Expected result**: <observable outcome — specific and measurable>
-**Failure criterion**: <what makes this test fail>
+
+## Expected result
+<observable outcome — specific and measurable>
+
+## Failure criterion
+<what makes this test fail>
 
 > **Review needed** — <question about test scope or pass criterion>
 ```
@@ -215,14 +284,36 @@ For each new SRS/SAD/SDD item, create the corresponding test file.
 ```markdown
 # SIT-{NNN}: <test title>
 
-**State**: `draft`
-**Tags**: `#tag1`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one-sentence intent — what component interaction this test verifies and why this boundary matters>
+
+## Traces
 - ← [SAD-{NNN}](../sad/SAD-{NNN}.md): <explain which interface boundary this test exercises and why testing this interaction point is necessary>
 
-**Components under test**: <ComponentA> ↔ <ComponentB>
-**Scenario**: <what interaction is being verified>
-**Expected behavior**: <specific observable outcome>
+## Diagram
+
+\`\`\`mermaid
+sequenceDiagram
+  participant <ComponentA>
+  participant <ComponentB>
+  <ComponentA>->><ComponentB>: <call>
+  <ComponentB>-->><ComponentA>: <response>
+\`\`\`
+
+## Components under test
+<ComponentA> ↔ <ComponentB>
+
+## Scenario
+<what interaction is being verified>
+
+## Expected behavior
+<specific observable outcome>
 
 > **Review needed** — <question about test boundary or mock strategy>
 ```
@@ -231,15 +322,29 @@ For each new SRS/SAD/SDD item, create the corresponding test file.
 ```markdown
 # UT-{NNN}: <test title>
 
-**State**: `draft`
-**Tags**: `#tag1`
-**Traces**:
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one-sentence intent — what specific function behavior or edge case this test validates>
+
+## Traces
 - ← [SDD-{NNN}](../sdd/SDD-{NNN}.md): <explain which specific algorithm step, error case, or behavior defined in SDD this test case is validating>
 
-**Function**: `<functionName>()`
-**Case**: <what specific case this tests>
-**Input**: <specific input values>
-**Expected output**: <specific return value or side effect>
+## Function
+`<functionName>()`
+
+## Case
+<what specific case this tests>
+
+## Input
+<specific input values>
+
+## Expected output
+<specific return value or side effect>
 
 > **Review needed** — <question about edge case coverage>
 ```
@@ -317,3 +422,4 @@ End every session with a consolidated review summary. See `references/review-poi
 - **SAD must name files.** If a SAD item introduces a component, it must specify the exact file path.
 - **SDD must be implementable.** If you cannot describe the algorithm step-by-step, place a `> **Review needed**` blockquote asking the human for clarification instead of writing a vague description.
 - **Every test item traces to exactly one upstream item.** Do not write a test that covers multiple SRS/SAD/SDD items.
+- **Use mermaid diagrams aggressively.** SAD items always get a component diagram. SIT items always get a sequence diagram. SDD items get a flowchart whenever there are branches or loops. See `references/structure.md` for diagram types and examples.
