@@ -83,17 +83,31 @@ For each SRS item whose content changed during Step 3, read its linked AT item(s
 
 ---
 
-## Step 6: Cascade — create SAD and SIT items
+## Step 6: Cascade — create or update SAD and SIT items
 
-For each SRS item newly marked `reviewed` that has no `→ [SAD-` trace yet, create the corresponding architectural items.
+For each SRS item newly marked `reviewed`, handle downstream items in two cases:
 
-Read `references/cascade.md` for the SAD and SIT item templates and the full process.
+### No `→ [SAD-` trace yet — create new items
+
+Create the corresponding SAD and SIT items. Read `references/cascade.md` for templates and the full process.
 
 Key principles:
 - Group closely related SRS items into one SAD component when they belong to the same module
 - Write the SAD item based on what the reviewed SRS tells you the system must do — the architecture should serve the requirements, not the other way around
 - Create a SIT item for each SAD component that interacts with other components
 - After creating SAD and SIT, go back to each SRS item and add `→ [SAD-{NNN}](../sad/SAD-{NNN}.md): <why>` to its Traces section
+
+### `→ [SAD-` trace already exists — update existing items
+
+Read each linked SAD item and compare it against what the now-reviewed SRS says. If the SRS content changed during Step 3 (a value was corrected, a behavior was clarified, a constraint was added), update the SAD item to stay aligned:
+
+- Revise **Responsibility** if the component's purpose or scope changed
+- Revise **Interface** if new methods are implied or signatures changed
+- Revise **Dependencies** if new relationships were revealed
+- Update the **Diagram** if component relationships changed
+- If the SAD item was in `reviewed` state and the changes are substantial, reset it to `` `draft` `` — it needs re-review since the requirement that informed it has changed
+
+Also follow each SAD item's `→ [SIT-` traces and update the linked SIT items if the SRS change affected the integration boundary (scenario, expected behavior, or sequence diagram).
 
 ---
 

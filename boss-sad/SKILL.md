@@ -81,17 +81,31 @@ For each SAD item whose interface or component boundaries changed during Step 3,
 
 ---
 
-## Step 6: Cascade — create SDD and UT items
+## Step 6: Cascade — create or update SDD and UT items
 
-For each SAD item newly marked `reviewed` that has no `→ [SDD-` trace yet (or only a `TBD` placeholder), create the corresponding SDD and UT items.
+For each SAD item newly marked `reviewed`, handle downstream items in two cases:
 
-Read `references/cascade.md` for the SDD and UT item templates and the full process.
+### No `→ [SDD-` trace yet (or only a `TBD` placeholder) — create new items
+
+Create the corresponding SDD and UT items. Read `references/cascade.md` for templates and the full process.
 
 Key principles:
 - Create one SDD item per function listed in the SAD item's `## Interface` section
 - Write the algorithm based on what the SAD component's responsibility and the upstream SRS requirements say — the SDD should be specific enough to implement without guessing
 - Create at least one UT item per SDD item; add more for significant error paths and edge cases
 - After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
+
+### `→ [SDD-` trace already exists — update existing items
+
+Read each linked SDD item and compare it against what the now-reviewed SAD says. If the SAD content changed during Step 3 (interface revised, responsibility narrowed, dependency added), update the SDD item to stay aligned:
+
+- Revise **Signature** if the function's parameters or return type changed
+- Revise **Algorithm** if the component's responsibility changed how the function should work
+- Revise **Error cases** or **Side effects** if the SAD introduced new constraints
+- Update the **Diagram** if the control flow changed
+- If the SDD item was in `reviewed` state and the changes are substantial, reset it to `` `draft` `` — it needs re-review since the design that informed it has changed
+
+Also follow each SDD item's `→ [UT-` traces and update the linked UT items if the SDD changes affect inputs, expected outputs, or error paths that those tests cover. If the revised SDD introduces a new error case or behavior path with no existing UT, create one.
 
 ---
 
