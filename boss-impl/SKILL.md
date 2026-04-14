@@ -1,6 +1,5 @@
 ---
 name: boss-impl
-model: haiku
 description: |
   BOSS implementation skill. Use this to implement source code for a specific BOSS item (SDD, SAD component, or a named feature). Reads the full upstream context (SDD → SAD → SRS → CuRS) and downstream test items (UT), then writes code that strictly follows the spec. When a conflict or ambiguity blocks implementation, writes a review point on the relevant item instead of guessing.
   Triggers: "boss-impl", "implement SDD-010", "implement SAD-003", "implement the auth module", "write the code for SDD-012", "boss implement", "implement this item".

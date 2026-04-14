@@ -1,12 +1,12 @@
 ---
 name: boss-init
 description: |
-  Use this skill to initialize a new BOSS book for a software project. Triggers: "init boss", "set up boss", "start the documentation", "create boss", or any request to begin V-model documentation for a project that has no book/ directory yet. Creates the mdbook structure, CSS theme override, all document chapters (CuRS, SRS, SAD, SDD, AT, SIT, UT), tag registry, and project directory skeleton.
+  Use this skill to initialize a new BOSS book for a software project. Triggers: "init boss", "set up boss", "start the documentation", "create boss", or any request to begin V-model documentation for a project. If the project already has source code, also bootstraps initial CuRS, SRS, SAD, SDD, AT, SIT, and UT items from the existing codebase. Creates the mdbook structure, CSS theme override, all document chapters, tag registry, and project directory skeleton.
 ---
 
 # boss-init: Initialize the BOSS Book
 
-**Goal**: Set up `book/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. No items are written yet — that is done by **boss-update**.
+**Goal**: Set up `book/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft BOSS items by reverse-engineering the existing codebase.
 
 Read before starting:
 - `references/items.md` — item format, ID system, states, tags
@@ -243,10 +243,94 @@ Fix all errors before reporting.
 
 ---
 
-## Step 10: Report
+## Step 10: Bootstrap documents from existing code (if applicable)
+
+**Only do this step if the project already has source code** (i.e., `src/` contains non-empty files, or there are source files in the project root beyond scaffolding).
+
+The goal is to reverse-engineer a first draft of all BOSS layers from the existing codebase, so the team has a documentation baseline to review and refine rather than starting from scratch.
+
+### 10a. Survey the codebase
+
+```bash
+find . -not -path './book/*' -not -path './.git/*' \
+  -name "*.py" -o -name "*.ts" -o -name "*.js" -o -name "*.go" \
+  -o -name "*.rs" -o -name "*.java" -o -name "*.c" -o -name "*.cpp" \
+  | head -60
+```
+
+Read key files: entry points, main modules, public interfaces, README if present, any existing tests. Build a mental model of:
+- What the software does (user-facing behaviour)
+- How it is structured (components and their responsibilities)
+- What the important functions and data structures are
+- What tests already exist
+
+### 10b. Write CuRS items
+
+Infer 1–3 customer-level requirements from the observable purpose of the software. Each CuRS captures *what the software does for its users*, not implementation details.
+
+Create `book/src/curs/CuRS-{NNN}.md` for each. Use the item template from `references/items.md`. Mark state `draft`. Add a review point asking the team to confirm the inferred customer intent.
+
+Add entries to `SUMMARY.md` and `book/src/curs/index.md`.
+
+### 10c. Derive SRS items
+
+For each CuRS, derive testable software requirements. Each SRS item must trace back to a CuRS and describe a specific, measurable behaviour the software shall provide.
+
+Create `book/src/srs/SRS-{NNN}.md` for each. Mark state `draft`. Link to the CuRS that motivated it.
+
+Add entries to `SUMMARY.md` and `book/src/srs/index.md`.
+
+### 10d. Write SAD items
+
+Describe the architectural components you observed: directories, modules, key interfaces. SAD-001 must describe the directory structure. Subsequent items describe each significant component.
+
+Create `book/src/sad/SAD-{NNN}.md` for each. Mark state `draft`. Trace to the SRS items that each component satisfies.
+
+Add entries to `SUMMARY.md` and `book/src/sad/index.md`.
+
+### 10e. Write SDD items
+
+For each significant function or class in the codebase, create an SDD item describing its signature, behaviour, and error handling. Focus on the public API surface first; private helpers only if they are complex.
+
+Create `book/src/sdd/SDD-{NNN}.md` for each. Mark state `draft`. Trace to the SAD component.
+
+Add entries to `SUMMARY.md` and `book/src/sdd/index.md`.
+
+### 10f. Write AT, SIT, UT items
+
+- **AT**: One acceptance test per SRS item, based on the observable behaviour. If automated tests already exist, map them to AT items.
+- **SIT**: One integration test per SAD component boundary. If existing integration tests exist, map them.
+- **UT**: One unit test per SDD item covering the core logic path. If existing unit tests exist, map them.
+
+Create the item files. Mark state `draft`. Trace back to the relevant SRS/SAD/SDD items respectively.
+
+Add entries to `SUMMARY.md` and the respective `index.md` files.
+
+### 10g. Update tags.md
+
+Add tags used across all new items to the tag registry.
+
+### 10h. Build check
+
+```bash
+cd book && mdbook build 2>&1
+```
+
+Fix all broken links before continuing.
+
+---
+
+## Step 11: Generate project overview
+
+After all files are written and the build passes, run **boss-overview** to produce a full project overview. This gives the user an immediate bird's-eye view of what was just created.
+
+---
+
+## Step 12: Report
 
 Tell the user:
 
+**If no source code existed:**
 ```
 BOSS initialized.
 
@@ -259,5 +343,21 @@ Tags:    book/src/tags.md (empty — populated as items are added)
 Source:  src/
 Tests:   tests/at/  tests/sit/  tests/ut/
 
-Next step: Use boss-update with your first customer requirement.
+Next step: Use boss-curs with your first customer requirement.
+```
+
+**If source code was found and documents were bootstrapped:**
+```
+BOSS initialized and bootstrapped from existing code.
+
+Book:    book/  (mdbook + mermaid)
+Chapters: CuRS · SRS · SAD · SDD · AT · SIT · UT
+          <N> items created across all layers (all marked draft)
+Tags:    book/src/tags.md
+
+All items are draft — they represent AI's best reading of the existing code.
+Review each layer and answer the review points before running the boss-* review skills.
+
+Next step: Open book/src/curs/ and review the inferred customer requirements.
+           Correct anything that doesn't match your actual intent, then run boss-srs.
 ```

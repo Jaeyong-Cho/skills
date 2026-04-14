@@ -1,6 +1,5 @@
 ---
 name: boss-sad
-model: opus
 description: |
   SAD review skill. Use this to review SAD items, apply inline answers from markdown files, and cascade to create SDD and UT items.
   Triggers: "boss-sad", "review SAD", "I answered the SAD items", "check SAD review points", "update SAD", "show SAD pending".

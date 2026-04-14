@@ -1,6 +1,5 @@
 ---
 name: boss-curs
-model: opus
 description: |
   Use this skill when the user provides new or changed customer requirements (CuRS) and wants the BOSS documents updated. Triggers: "boss-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. No SAD/SDD/test stubs yet — those cascade after SRS review via boss-srs.
 ---

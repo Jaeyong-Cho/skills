@@ -1,6 +1,5 @@
 ---
 name: boss-srs
-model: opus
 description: |
   SRS review skill. Use this to review SRS items, apply inline answers from markdown files, and cascade to create SAD and SIT items.
   Triggers: "boss-srs", "review SRS", "I answered the SRS items", "check SRS review points", "update SRS", "show SRS pending".
