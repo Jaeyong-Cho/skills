@@ -134,6 +134,14 @@ List every file changed and what changed in each, one line per file:
 
 If you noticed something else wrong but weren't asked about it, mention it briefly rather than fixing it silently.
 
+Then print a ready-to-use commit message:
+
+```
+<type>(<scope>): <short summary of what changed>
+```
+
+Pick `type` from: `fix`, `docs`, `refactor`, `test`. Use the item ID as `scope` when applicable (e.g. `fix(SRS-007):`). Keep the summary under 72 characters.
+
 ---
 
 ## PROTOTYPE MODE
@@ -205,3 +213,9 @@ Next step: run boss-impl for SDD-010 to get the production version.
 ```
 
 This keeps the human in control of what still needs to be done properly.
+
+Then print a ready-to-use commit message:
+
+```
+prototype(<ID>): rough spike for <one-line description>
+```
