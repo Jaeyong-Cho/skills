@@ -91,6 +91,34 @@ Keep UT state as `draft` — they follow their own review if needed.
 
 ---
 
+## Step 5b: Surface and apply UT review points
+
+Find all draft UT items:
+
+```bash
+grep -rl "^\`draft\`" book/src/ut/
+```
+
+For each draft UT item, check if it has a pending `> **Review needed**` blockquote.
+
+**Show pending UT review points** alongside the SDD pending list:
+
+```
+## Pending UT Review Points
+
+### UT-010: authenticate — happy path
+> Confirm expected session token format (JWT string vs object with exp field)
+
+### UT-012: checkLockout — account locked
+> Should this test mock the current time or use a fixed counter threshold?
+```
+
+**Apply answers** the human has written inline using the same pattern as Step 3:
+- If blockquote contains `> **Answer**: <text>` — incorporate into Case, Input, or Expected output, then remove the blockquote
+- If blockquote removed entirely — accept as-is
+
+---
+
 ## Step 6: Update indexes and tags
 
 - Update `book/src/sdd/index.md` traceability table for any state changes
@@ -122,9 +150,10 @@ Fix broken links before reporting.
 | SDD-011 | AuthService.checkLockout() |
 
 ### Still Pending (answer these inline, then run boss-sdd again)
-| ID | Review Question |
-|----|----------------|
-| SDD-012 | Which session store adapter is used — Redis or in-process? |
+| ID | Type | Review Question |
+|----|------|----------------|
+| SDD-012 | SDD | Which session store adapter is used — Redis or in-process? |
+| UT-010 | UT | Confirm expected session token format |
 
 ### UT Items Updated
 | ID | What changed |

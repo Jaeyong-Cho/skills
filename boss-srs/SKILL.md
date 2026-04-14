@@ -83,6 +83,34 @@ For each SRS item whose content changed during Step 3, read its linked AT item(s
 
 ---
 
+## Step 5b: Surface and apply AT review points
+
+Find all draft AT items:
+
+```bash
+grep -rl "^\`draft\`" book/src/at/
+```
+
+For each draft AT item, check if it has a pending `> **Review needed**` blockquote.
+
+**Show pending AT review points** alongside the SRS pending list:
+
+```
+## Pending AT Review Points
+
+### AT-005: Login flow — happy path
+> Clarify whether the test should verify session token in response body or cookie
+
+### AT-006: Account lockout scenario
+> Confirm whether test should use real time delay or a mock clock
+```
+
+**Apply answers** the human has written inline using the same pattern as Step 3:
+- If blockquote contains `> **Answer**: <text>` — incorporate and remove the blockquote
+- If blockquote removed entirely — accept as-is
+
+---
+
 ## Step 6: Cascade — create or update SAD and SIT items
 
 For each SRS item newly marked `reviewed`, handle downstream items in two cases:
@@ -141,9 +169,10 @@ Fix broken markdown links before reporting.
 | SRS-007 | ... |
 
 ### Still Pending (answer these inline, then run boss-srs again)
-| ID | Review Question |
-|----|----------------|
-| SRS-008 | Is lockout duration fixed or configurable? |
+| ID | Type | Review Question |
+|----|------|----------------|
+| SRS-008 | SRS | Is lockout duration fixed or configurable? |
+| AT-006 | AT | Confirm whether test should use real time delay or mock clock |
 
 ### SAD Items Created
 | ID | Title | Traces from SRS |

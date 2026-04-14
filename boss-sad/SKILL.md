@@ -81,6 +81,34 @@ For each SAD item whose interface or component boundaries changed during Step 3,
 
 ---
 
+## Step 5b: Surface and apply SIT review points
+
+Find all draft SIT items:
+
+```bash
+grep -rl "^\`draft\`" book/src/sit/
+```
+
+For each draft SIT item, check if it has a pending `> **Review needed**` blockquote.
+
+**Show pending SIT review points** alongside the SAD pending list:
+
+```
+## Pending SIT Review Points
+
+### SIT-002: AuthService ↔ UserRepository interaction
+> Confirm whether tests should use a real database or an in-memory stub
+
+### SIT-003: SessionService ↔ RedisAdapter interaction
+> Is the Redis connection shared across test cases or freshly initialized each time?
+```
+
+**Apply answers** the human has written inline using the same pattern as Step 3:
+- If blockquote contains `> **Answer**: <text>` — incorporate into Scenario, Expected behavior, or Diagram, then remove the blockquote
+- If blockquote removed entirely — accept as-is
+
+---
+
 ## Step 6: Cascade — create or update SDD and UT items
 
 For each SAD item newly marked `reviewed`, handle downstream items in two cases:
@@ -139,9 +167,10 @@ Fix broken markdown links before reporting.
 | SAD-003 | AuthService component |
 
 ### Still Pending (answer these inline, then run boss-sad again)
-| ID | Review Question |
-|----|----------------|
-| SAD-001 | Confirm file extension and monorepo layout |
+| ID | Type | Review Question |
+|----|------|----------------|
+| SAD-001 | SAD | Confirm file extension and monorepo layout |
+| SIT-002 | SIT | Use real database or in-memory stub? |
 
 ### SDD Items Created
 | ID | Title | Parent SAD |
