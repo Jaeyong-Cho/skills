@@ -195,3 +195,18 @@ Fix broken markdown links before reporting.
 Next: Open the SDD item files, write your answers to the review points inline,
 then run **boss-sdd** to apply answers, mark SDD items reviewed, and update UT items.
 ```
+
+---
+
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+docs(sad): <short description under 72 chars>
+
+Why: <which SAD review points were answered and what design decision was made>
+What: <which SAD/SDD/UT/SIT items were created or updated>
+```
+
+Keep `Why` and `What` to one or two sentences each — enough for someone reading `git log` to understand the change without opening the diff.

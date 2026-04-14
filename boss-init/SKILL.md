@@ -361,3 +361,18 @@ Review each layer and answer the review points before running the boss-* review 
 Next step: Open book/src/curs/ and review the inferred customer requirements.
            Correct anything that doesn't match your actual intent, then run boss-srs.
 ```
+
+---
+
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+chore(boss): <short description under 72 chars>
+
+Why: <what prompted initializing the BOSS book — new project or existing codebase being documented>
+What: <what was created — book structure, chapters, item count if bootstrapped from code>
+```
+
+Keep `Why` and `What` to one or two sentences each — enough for someone reading `git log` to understand the change without opening the diff.

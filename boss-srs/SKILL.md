@@ -194,3 +194,18 @@ Fix broken markdown links before reporting.
 Next: Open the SAD item files, write your answers to the review points inline,
 then run **boss-sad** to apply answers, mark SAD items reviewed, and generate SDD items.
 ```
+
+---
+
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+docs(srs): <short description under 72 chars>
+
+Why: <which SRS review points were answered and what requirement decision was made>
+What: <which SRS/SAD/SIT/AT items were created or updated>
+```
+
+Keep `Why` and `What` to one or two sentences each — enough for someone reading `git log` to understand the change without opening the diff.

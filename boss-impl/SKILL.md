@@ -197,6 +197,21 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 
 ---
 
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+feat(<scope>): <short description under 72 chars>
+
+Why: <which SDD item(s) drove this implementation and why they're needed>
+What: <which files were created or modified and what they now do>
+```
+
+Use `feat` for new functionality, `fix` for corrections to existing implementation. The `scope` is the primary SDD item ID or component name (e.g., `sdd-010`, `auth-service`). Keep `Why` and `What` to one or two sentences each.
+
+---
+
 ## Constraints
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.

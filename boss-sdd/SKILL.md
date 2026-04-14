@@ -175,3 +175,18 @@ your implementation against the reviewed design.
 ```
 
 Only show the "Ready to Implement" section if all SDD items linked from reviewed SAD items are now in `reviewed` state. If some are still `draft`, omit it and note which items remain.
+
+---
+
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+docs(sdd): <short description under 72 chars>
+
+Why: <which SDD review points were answered and what detailed design decision was made>
+What: <which SDD/UT items were updated or created>
+```
+
+Keep `Why` and `What` to one or two sentences each — enough for someone reading `git log` to understand the change without opening the diff.

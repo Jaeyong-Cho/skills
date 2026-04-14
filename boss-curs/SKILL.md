@@ -209,6 +209,21 @@ reviewed, and generate the corresponding SAD items.
 
 ---
 
+## Commit message
+
+After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
+
+```
+docs(curs): <short description under 72 chars>
+
+Why: <what triggered this change — the new or changed customer requirement>
+What: <which CuRS/SRS items were created or updated>
+```
+
+Keep `Why` and `What` to one or two sentences each — enough for someone reading `git log` to understand the change without opening the diff.
+
+---
+
 ## Constraints
 
 - Write no source code and no SAD/SDD items — those belong to the cascade after review.
