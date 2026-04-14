@@ -72,7 +72,7 @@ Write a structured overview in this format:
 
 ## Architecture
 <paragraph describing the component structure from SAD-001 and other SAD items>
-<include a mermaid diagram if the architecture is non-trivial>
+<include a mermaid diagram if the architecture is non-trivial — use <br/> for line breaks inside node labels, not \n>
 
 ## Design
 <brief paragraph on key design decisions from SDD items, if any are reviewed>

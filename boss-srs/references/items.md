@@ -70,6 +70,23 @@ When the human has resolved the questions and promotes the item to `reviewed`, t
 
 ---
 
+## Diagrams
+
+Each item's `## Description` should include **at least one mermaid diagram**. A diagram makes the item self-explanatory in the rendered book and reduces ambiguity during review. Any diagram type is fine — choose whatever communicates the idea most clearly. Recommended types by layer:
+
+| Layer | Recommended | What to show |
+|-------|-------------|--------------|
+| CuRS  | flowchart or context diagram | How the customer's process works today / the desired interaction |
+| SRS   | sequence or flowchart | User-facing flow, including error paths and edge cases |
+| SAD   | flowchart or block diagram | Component boundaries, data flow, major interfaces |
+| SDD   | sequence or state diagram | How the function/class behaves step-by-step or across states |
+| SIT   | sequence diagram | Integration scenario between components under test |
+| UT    | flowchart or sequence | The test scenario and the expected call/return path |
+
+> **Mermaid line breaks**: Use `<br/>` for line breaks inside node labels — not `\n`. The `\n` character renders literally in the book.
+
+---
+
 ## Item States
 
 | State | Meaning | Who sets it |

@@ -229,4 +229,4 @@ Keep `Why` and `What` to one or two sentences each — enough for someone readin
 - Write no source code and no SAD/SDD items — those belong to the cascade after review.
 - SAD items will be created by boss-srs once SRS items are reviewed.
 - Every SRS item must be testable. If it isn't, either split it or flag it as a question.
-- Use mermaid diagrams in SRS items when a multi-step user flow is involved.
+- Use mermaid diagrams in SRS items when a multi-step user flow is involved. Use `<br/>` for line breaks inside node labels — `\n` renders literally in mermaid.
