@@ -94,10 +94,31 @@ Each item's `## Description` should include **at least one mermaid diagram**. A 
 | `draft` | AI has written this; awaiting human review | AI |
 | `reviewed` | Human has approved the content | Human |
 | `done` | Implementation complete and verified | Human (after coding) |
+| `deprecated` | No longer needed; kept for traceability | Human or AI (with human confirmation) |
 
 State is declared under the `## State` heading inside the item file.
 
-**Rule**: AI sets `draft`. Humans promote to `reviewed` or `done`. AI never promotes state.
+**Rule**: AI sets `draft`. Humans promote to `reviewed`, `done`, or `deprecated`. AI may propose `deprecated` but must confirm with the human before applying it.
+
+### Deprecating an item
+
+When a feature is removed, a requirement is superseded, or a design decision is reversed, mark the item `deprecated` rather than deleting it. Deleting breaks traceability and loses the history of why something was tried and dropped.
+
+Add a `## Deprecated` section to the item explaining why:
+
+```markdown
+## State
+`deprecated`
+
+## Deprecated
+**Reason**: <why this item is no longer needed>
+**Superseded by**: [SRS-012](../srs/SRS-012.md) *(optional — link to replacement if one exists)*
+**Date**: <when deprecated>
+```
+
+Cascade the deprecation: when a CuRS is deprecated, check whether its downstream SRS items are also obsolete. When an SRS is deprecated, check its AT items. Deprecate the whole chain if nothing else traces to those items. If another item still depends on a downstream item, do not deprecate it — note the partial dependency instead.
+
+Items in `deprecated` state are excluded from review queues and build warnings. They remain in the book as a record.
 
 ---
 

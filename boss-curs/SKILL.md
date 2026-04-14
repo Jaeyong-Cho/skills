@@ -15,7 +15,7 @@ Read before starting:
 
 ---
 
-## Step 1: Orient — find next IDs and related existing items
+## Step 1: Orient — find next IDs and assess existing coverage
 
 ### 1a. Next available IDs
 
@@ -25,19 +25,37 @@ ls book/src/srs/  | grep "^SRS-[0-9]"  | sort -t- -k2 -n | tail -1
 ls book/src/at/   | grep "^AT-[0-9]"   | sort -t- -k2 -n | tail -1
 ```
 
-### 1b. Find related existing items
+### 1b. Similarity analysis
 
-Check for existing coverage to avoid duplicates and find items to link:
+Before writing anything, understand what's already in the book. Search with several keyword angles — the user's exact words, synonyms, the feature area, and the actor/system involved:
 
 ```bash
-# Does any SRS item already cover this topic?
-grep -ril "<keyword>" book/src/srs/
-
-# Does any CuRS item express the same customer need?
-grep -ril "<keyword>" book/src/curs/
+grep -ril "<keyword1>" book/src/curs/ book/src/srs/
+grep -ril "<keyword2>" book/src/curs/ book/src/srs/
 ```
 
-Read the full content of any item that looks relevant. Present matching items to the user before creating new ones — they may want to amend an existing SRS rather than create a new one.
+Read the full content of every match. For each distinct concept in the user's input, classify the coverage:
+
+| Coverage | Meaning | Action |
+|----------|---------|--------|
+| **Full duplicate** | An existing CuRS+SRS already captures this intent completely | **SKIP** — no new item needed; mention the existing ID |
+| **Partial overlap** | An existing item covers part of it, or it extends/clarifies the existing one | **ENHANCE** — add a section or broaden the existing item's scope |
+| **Changed intent** | The customer is explicitly revising a prior requirement | **UPDATE** — modify the existing item to reflect the new intent |
+| **New territory** | No existing item covers this need | **NEW** — create a full CuRS → SRS → AT chain |
+
+Present your coverage analysis to the user in a compact table before making any changes:
+
+```
+| Concept | Closest match | Coverage | Planned action |
+|---------|--------------|----------|----------------|
+| X       | CuRS-002     | partial  | ENHANCE CuRS-002 + SRS-004 |
+| Y       | —            | none     | NEW CuRS-005 |
+| Z       | CuRS-001     | full     | SKIP |
+```
+
+If any planned action is SKIP, explain briefly why the existing item already covers it. If UPDATE or ENHANCE, quote the relevant part of the existing item so the user can see the diff before you make it.
+
+Proceed with changes only after presenting this table. If the user overrides an action (e.g., wants NEW instead of ENHANCE), follow their call.
 
 ### 1c. Read tag registry
 
@@ -47,7 +65,11 @@ cat book/src/tags.md
 
 ---
 
-## Step 2: Write CuRS item(s)
+## Step 2: Execute planned actions
+
+Work through each concept according to the action decided in Step 1b.
+
+### NEW — Write CuRS item(s)
 
 Create `book/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately — do not over-interpret yet.
 
@@ -76,6 +98,34 @@ Create `book/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately —
 ```
 
 Add to `SUMMARY.md` under Customer Requirements and add a row to `book/src/curs/index.md`.
+
+### UPDATE — Revise an existing CuRS item
+
+When the customer is explicitly changing a prior requirement, edit the existing `CuRS-{NNN}.md`:
+
+1. Change `State` to `draft` if it was `reviewed`
+2. Append the new customer input to the `## Input` section (keep the original — the history matters):
+   ```markdown
+   > "<original input>"
+
+   **Updated {date}:** "<new customer words>"
+   ```
+3. Revise `## Why` and `## Context` if the motivation or scope changed
+4. Add a new review point noting what changed and what downstream items (SRS, AT) may need revisiting
+5. Follow the same UPDATE path for any SRS items that trace to this CuRS
+
+### ENHANCE — Extend an existing CuRS item
+
+When the customer input adds scope to something already captured (not a contradiction, just more detail):
+
+1. Keep `State` unchanged unless you're adding something structurally new
+2. Add a `## Additions` section (or append to `## Context`) with the new detail
+3. If the new scope warrants a new SRS item, create it and add a trace from the existing CuRS
+4. If the new scope fits within an existing SRS item, update that SRS item instead
+
+### SKIP — No changes needed
+
+When an existing item already covers the intent, don't create anything. Just note the relevant IDs in the report so the user knows the input was heard and is already tracked.
 
 ---
 
@@ -181,13 +231,15 @@ Fix all broken links before reporting.
 ## Step 8: Report review points
 
 ```
-## Items Created
+## Changes Summary
 
-| ID | Title | Type |
-|----|-------|------|
-| CuRS-003 | ... | new |
-| SRS-007  | ... | new |
-| AT-005   | ... | new |
+| ID | Title | Action | Reason |
+|----|-------|--------|--------|
+| CuRS-003 | ... | new     | no existing coverage |
+| SRS-007  | ... | new     | derived from CuRS-003 |
+| CuRS-001 | ... | enhance | user input adds scope to login flow |
+| SRS-002  | ... | update  | revised timeout requirement |
+| CuRS-002 | ... | skip    | already fully covered (user input rephrased same need) |
 
 ## Review Points
 
