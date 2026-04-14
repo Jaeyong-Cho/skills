@@ -149,23 +149,20 @@ Do not suggest specific refactors — describe the shallowness and ask the human
 
 For each implemented SDD item, read the linked UT item file and verify a corresponding test stub exists in the test directory.
 
+Each test item has its own directory: `tests/ut/ut-{NNN}/`, `tests/at/at-{NNN}/`, `tests/sit/sit-{NNN}/`.
+
 ```bash
 # Read the UT item to know what function/case to look for
 cat book/src/ut/UT-010.md
 
-# Check test stub file exists
-ls tests/ut/
-
-# Check test case exists for function
-grep -rn "authenticate\|UT-010" tests/ut/
+# Check test stub directory and file exist
+ls tests/ut/ut-010/
 ```
 
 For AT and SIT items in scope:
 ```bash
-ls tests/at/
-ls tests/sit/
-grep -rn "AT-005" tests/at/
-grep -rn "SIT-003" tests/sit/
+ls tests/at/at-005/
+ls tests/sit/sit-003/
 ```
 
 Report missing test files or test cases by item ID.
@@ -257,13 +254,13 @@ Scope: SAD-003, SDD-010, SDD-011, SDD-012, AT-005, SIT-003, UT-010, UT-011, UT-0
 
 ### Test Coverage
 
-| Item | Test File | Status |
+| Item | Directory | Status |
 |------|-----------|--------|
-| UT-010 | tests/ut/auth.test.ts | ✅ stub present |
-| UT-011 | tests/ut/auth.test.ts | ✅ stub present |
-| UT-012 | tests/ut/auth.test.ts | ❌ no test case found |
-| AT-005 | tests/at/login.test.ts | ✅ stub present |
-| SIT-003 | tests/sit/          | ❌ no file found |
+| UT-010 | tests/ut/ut-010/ | ✅ stub present |
+| UT-011 | tests/ut/ut-011/ | ✅ stub present |
+| UT-012 | tests/ut/ut-012/ | ❌ directory missing |
+| AT-005 | tests/at/at-005/ | ✅ stub present |
+| SIT-003 | tests/sit/sit-003/ | ❌ directory missing |
 
 ### Ready to Promote
 

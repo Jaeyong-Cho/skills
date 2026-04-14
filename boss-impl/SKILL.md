@@ -129,23 +129,28 @@ This is the right behavior because the spec is the source of truth. If the spec 
 For each UT item linked from the implemented SDDs, check if a test stub exists:
 
 ```bash
-ls tests/ut/
-grep -rn "UT-{NNN}\|{functionName}" tests/ut/
+ls tests/ut/ut-{NNN}/
 ```
 
-If no stub exists, create one — a minimal test function that names the case and has a `pass`/`todo` body. Do not write the test assertions; the human does that after reviewing the UT item.
+Each test item gets its own directory — `tests/ut/ut-{NNN}/`, `tests/sit/sit-{NNN}/`, `tests/at/at-{NNN}/`. If the directory doesn't exist, create it.
+
+If no stub file exists in the directory, create one — a minimal test function that names the case and has a `pass`/`todo` body. Do not write the test assertions; the human does that after reviewing the UT item.
 
 ```python
+# tests/ut/ut-010/test_authenticate.py
+
 # UT-010: authenticate — happy path
 def test_authenticate_happy_path():
     pass  # TODO: implement per UT-010
+
+# tests/ut/ut-011/test_authenticate.py
 
 # UT-011: authenticate — wrong password
 def test_authenticate_wrong_password():
     pass  # TODO: implement per UT-011
 ```
 
-For SIT stubs (`tests/sit/`) and AT stubs (`tests/at/`), apply the same pattern only if the SAD or SRS item is in scope.
+For SIT stubs (`tests/sit/sit-{NNN}/`) and AT stubs (`tests/at/at-{NNN}/`), apply the same pattern only if the SAD or SRS item is in scope.
 
 ---
 
@@ -178,11 +183,11 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 | SDD-011 | AuthService.checkLockout() | src/auth/auth_service.py |
 
 ### Test Stubs Created
-| UT | File |
-|----|------|
-| UT-010 | tests/ut/test_auth_service.py |
-| UT-011 | tests/ut/test_auth_service.py |
-| UT-012 | tests/ut/test_auth_service.py |
+| UT | Directory |
+|----|-----------|
+| UT-010 | tests/ut/ut-010/ |
+| UT-011 | tests/ut/ut-011/ |
+| UT-012 | tests/ut/ut-012/ |
 
 ### Blocked — Review Points Added
 | Item | Problem |

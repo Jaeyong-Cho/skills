@@ -53,9 +53,18 @@ book/
 src/
   (human-written source code)
 tests/
-  at/                          ← acceptance test stubs
-  sit/                         ← integration test stubs
-  ut/                          ← unit test stubs
+  at/
+    at-001/                    ← one directory per AT item
+    at-002/
+    ...
+  sit/
+    sit-001/                   ← one directory per SIT item
+    sit-002/
+    ...
+  ut/
+    ut-001/                    ← one directory per UT item
+    ut-002/
+    ...
 ```
 
 ---
@@ -296,8 +305,11 @@ src/
     router.{ext}
 tests/
   at/
+    at-001/
   sit/
+    sit-001/
   ut/
+    ut-001/
 \`\`\`
 
 > **Review needed** — confirm file extension and whether a monorepo layout is needed
