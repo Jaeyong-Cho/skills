@@ -1,5 +1,6 @@
 ---
 name: boss-sdd
+model: opus
 description: |
   SDD review skill. Use this to review SDD items, apply inline answers from markdown files, update UT items, and mark SDD items reviewed.
   Triggers: "boss-sdd", "review SDD", "I answered the SDD items", "check SDD review points", "update SDD", "show SDD pending".
