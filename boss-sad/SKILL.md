@@ -65,6 +65,8 @@ For each answered SAD item:
 
 When incorporating an answer that changes the component's interface or responsibility, also check whether the component diagram (mermaid) needs updating — keep the diagram in sync with the text.
 
+When an answer reshapes a component's interface, evaluate it against Deep Module principles (Ousterhout, *A Philosophy of Software Design*): does the revised interface hide more complexity than before, or does it leak internal details to callers? If the answer pushes complexity outward (more parameters, more caller knowledge required, narrower purpose), flag a review point asking whether the complexity can be absorbed into the component instead.
+
 ---
 
 ## Step 4: Mark answered items as `reviewed`
@@ -122,6 +124,12 @@ Key principles:
 - Write the algorithm based on what the SAD component's responsibility and the upstream SRS requirements say — the SDD should be specific enough to implement without guessing
 - Create at least one UT item per SDD item; add more for significant error paths and edge cases
 - After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
+
+**Before creating SDD items, evaluate the SAD component's depth** (Ousterhout, *A Philosophy of Software Design*):
+- Count the functions in `## Interface` against the complexity in `## Responsibility`. If the interface is nearly as complex as the responsibility, the component is shallow — it won't pull its weight.
+- If two or more interface functions always need to be called together, they likely belong inside the component, not exposed to callers.
+- A function whose signature requires callers to understand internal data structures is leaking abstraction — add a review point to simplify before proceeding to SDD.
+- The SDD algorithm should be substantially more complex than the function signature. If the algorithm is just one or two obvious steps, the function may be too fine-grained.
 
 ### `→ [SDD-` trace already exists — update existing items
 

@@ -122,6 +122,29 @@ SDD-010 — AuthService.authenticate()
 
 ---
 
+## Step 5b: Check module depth
+
+For each SAD component in scope, evaluate whether the implemented code is a **deep module** (Ousterhout, *A Philosophy of Software Design*):
+
+| Check | Pass criterion |
+|-------|---------------|
+| Interface vs. implementation ratio | The public API surface (number of functions × parameter complexity) is substantially smaller than the internal implementation complexity |
+| Information hiding | Internal data structures, algorithms, and external dependencies are not visible or required by callers |
+| No pass-through | The component is not merely delegating calls to another module without adding its own logic |
+| Caller knowledge | Callers can use the component correctly without understanding how it works internally |
+
+Flag shallow modules with severity `shallow`:
+```
+SAD-003 — AuthService
+  SHALLOW: authenticate() and checkLockout() are always called together by callers.
+  → Consider whether lockout checking should be absorbed into authenticate() so callers
+    don't need to orchestrate the two-step sequence.
+```
+
+Do not suggest specific refactors — describe the shallowness and ask the human to decide.
+
+---
+
 ## Step 6: Check test presence
 
 For each implemented SDD item, read the linked UT item file and verify a corresponding test stub exists in the test directory.
@@ -207,6 +230,12 @@ Scope: SAD-003, SDD-010, SDD-011, SDD-012, AT-005, SIT-003, UT-010, UT-011, UT-0
 | SDD-010 | Error: ACCOUNT_LOCKED | ❌ Missing |
 | SDD-011 | Signature | ✅ |
 | SDD-011 | All algorithm steps | ✅ |
+
+### Module Depth
+
+| Component | Depth Assessment |
+|-----------|-----------------|
+| SAD-003   | ✅ Deep — callers only call authenticate(); lockout logic hidden inside |
 
 ### Deviations (require human decision)
 

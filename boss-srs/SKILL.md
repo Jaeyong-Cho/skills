@@ -125,6 +125,15 @@ Key principles:
 - Create a SIT item for each SAD component that interacts with other components
 - After creating SAD and SIT, go back to each SRS item and add `→ [SAD-{NNN}](../sad/SAD-{NNN}.md): <why>` to its Traces section
 
+**Design each SAD component as a deep module** (Ousterhout, *A Philosophy of Software Design*):
+- A deep module has a **simple interface** that hides a **large, complex implementation**. The interface cost to callers should be far less than the value the component provides.
+- **Pull complexity downward**: if a design choice forces callers to understand internal detail, absorb that complexity into the component instead.
+- **Prefer general-purpose interfaces**: an interface slightly more general than today's use case is usually simpler, more stable, and serves future requirements without change.
+- **Avoid pass-through components**: a component that merely delegates to another without adding its own logic is shallow — merge it or give it real responsibility.
+- **Information hiding**: hide data structures, algorithms, storage technology, and external dependencies. Only expose what callers genuinely need to know.
+
+For each new SAD component, ask: *Is the interface simpler than the implementation? Could two adjacent components merge into one deeper one? Does the interface expose any internal detail callers shouldn't need?* If the answer reveals a shallow design, redesign before creating SDD items — shallow interfaces are far cheaper to fix at the architecture layer than after implementation.
+
 ### `→ [SAD-` trace already exists — update existing items
 
 Read each linked SAD item and compare it against what the now-reviewed SRS says. If the SRS content changed during Step 3 (a value was corrected, a behavior was clarified, a constraint was added), update the SAD item to stay aligned:
