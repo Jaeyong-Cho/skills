@@ -1,13 +1,13 @@
 ---
-name: boss-sdd
+name: sophist-sdd
 description: |
   SDD review skill. Use this to review SDD items, apply inline answers from markdown files, update UT items, and mark SDD items reviewed.
-  Triggers: "boss-sdd", "review SDD", "I answered the SDD items", "check SDD review points", "update SDD", "show SDD pending".
+  Triggers: "sophist-sdd", "review SDD", "I answered the SDD items", "check SDD review points", "update SDD", "show SDD pending".
   When called with no specific items — shows all pending SDD review points.
   When called after the human has answered review points inline — applies those answers, marks items reviewed, updates UT items, and signals readiness to implement.
 ---
 
-# boss-sdd: Review SDD Items and Finalize Detailed Design
+# sophist-sdd: Review SDD Items and Finalize Detailed Design
 
 **Goal**: Surface all pending SDD review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, and update corresponding UT items to reflect any changes. When all SDD items are reviewed, the design is ready for implementation.
 
@@ -149,7 +149,7 @@ Fix broken links before reporting.
 | SDD-010 | AuthService.authenticate() |
 | SDD-011 | AuthService.checkLockout() |
 
-### Still Pending (answer these inline, then run boss-sdd again)
+### Still Pending (answer these inline, then run sophist-sdd again)
 | ID | Type | Review Question |
 |----|------|----------------|
 | SDD-012 | SDD | Which session store adapter is used — Redis or in-process? |
@@ -170,7 +170,7 @@ Fix broken links before reporting.
 ## Ready to Implement
 
 All SDD items are reviewed. Implement the functions described in the SDD items, following
-the signatures and algorithm steps exactly. When done, run **boss-codereview** to verify
+the signatures and algorithm steps exactly. When done, run **sophist-codereview** to verify
 your implementation against the reviewed design.
 ```
 

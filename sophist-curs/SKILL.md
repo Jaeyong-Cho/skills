@@ -1,12 +1,12 @@
 ---
-name: boss-curs
+name: sophist-curs
 description: |
-  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the BOSS documents updated. Triggers: "boss-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. No SAD/SDD/test stubs yet — those cascade after SRS review via boss-srs.
+  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the SOPHIST documents updated. Triggers: "sophist-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. No SAD/SDD/test stubs yet — those cascade after SRS review via sophist-srs.
 ---
 
-# boss-update: Capture Customer Input and Draft SRS
+# sophist-update: Capture Customer Input and Draft SRS
 
-**Goal**: Translate customer intent into a CuRS item, derive SRS requirements, and create corresponding AT items. All new items are marked `draft` with review points. SAD and SDD are created later by boss-srs and boss-sad after each layer is reviewed.
+**Goal**: Translate customer intent into a CuRS item, derive SRS requirements, and create corresponding AT items. All new items are marked `draft` with review points. SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
 
 Read before starting:
 - `references/items.md` — item format, ID system, states, tags, traceability links
@@ -158,7 +158,7 @@ For each CuRS item, create one or more `book/src/srs/SRS-{NNN}.md` files. Each S
 
 Add to `SUMMARY.md` under Software Requirements and add a row to `book/src/srs/index.md`.
 
-Note: The `→ SAD` trace is intentionally absent here. boss-srs creates the SAD items and adds that trace after you review the SRS.
+Note: The `→ SAD` trace is intentionally absent here. sophist-srs creates the SAD items and adds that trace after you review the SRS.
 
 ---
 
@@ -255,7 +255,7 @@ Fix all broken links before reporting.
 ---
 
 Next: Open the SRS and AT files, write your answers inline by removing or updating the
-`> **Review needed**` blocks, then run **boss-srs** to apply your answers, mark items
+`> **Review needed**` blocks, then run **sophist-srs** to apply your answers, mark items
 reviewed, and generate the corresponding SAD items.
 ```
 
@@ -279,6 +279,6 @@ Keep `Why` and `What` to one or two sentences each — enough for someone readin
 ## Constraints
 
 - Write no source code and no SAD/SDD items — those belong to the cascade after review.
-- SAD items will be created by boss-srs once SRS items are reviewed.
+- SAD items will be created by sophist-srs once SRS items are reviewed.
 - Every SRS item must be testable. If it isn't, either split it or flag it as a question.
 - Use mermaid diagrams in SRS items when a multi-step user flow is involved. Use `<br/>` for line breaks inside node labels — `\n` renders literally in mermaid.

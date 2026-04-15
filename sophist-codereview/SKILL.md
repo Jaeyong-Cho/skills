@@ -1,10 +1,10 @@
 ---
-name: boss-codereview
+name: sophist-codereview
 description: |
-  Use this skill after the human has written source code and wants AI to review it against BOSS documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "boss code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. Conformant items are marked `done`. AI never rewrites or generates code — it reports findings and asks questions.
+  Use this skill after the human has written source code and wants AI to review it against SOPHIST documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "sophist code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. Conformant items are marked `done`. AI never rewrites or generates code — it reports findings and asks questions.
 ---
 
-# boss-codereview: Review Human-Written Code Against BOSS
+# sophist-codereview: Review Human-Written Code Against SOPHIST
 
 **Goal**: Verify that human-written source code conforms to the reviewed SDD and SAD items. Identify deviations, missing items, and test coverage gaps. Report findings with references to specific document items. Write no code.
 
@@ -35,7 +35,7 @@ grep -rl "\[SAD-003\]" book/src/sdd/
 
 ---
 
-## Step 2: Read BOSS items in scope
+## Step 2: Read SOPHIST items in scope
 
 Read each relevant item file directly:
 
@@ -239,7 +239,7 @@ Scope: SAD-003, SDD-010, SDD-011, SDD-012, AT-005, SIT-003, UT-010, UT-011, UT-0
 **SDD-010 — signature mismatch**
   SDD: `authenticate(email: string, password: string): Session | AuthError`
   Code: `authenticate(credentials: Credentials): Session | AuthError`
-  → Is this an intentional change? If yes, SDD-010 needs updating (boss-update).
+  → Is this an intentional change? If yes, SDD-010 needs updating (sophist-update).
 
 **SDD-010 — ACCOUNT_LOCKED not handled**
   → Was this omitted intentionally or accidentally?

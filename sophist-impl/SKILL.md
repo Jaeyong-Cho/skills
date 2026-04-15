@@ -1,14 +1,14 @@
 ---
-name: boss-impl
+name: sophist-impl
 description: |
-  BOSS implementation skill. Use this to implement source code for a specific BOSS item (SDD, SAD component, or a named feature). Reads the full upstream context (SDD → SAD → SRS → CuRS) and downstream test items (UT), then writes code that strictly follows the spec. When a conflict or ambiguity blocks implementation, writes a review point on the relevant item instead of guessing.
-  Triggers: "boss-impl", "implement SDD-010", "implement SAD-003", "implement the auth module", "write the code for SDD-012", "boss implement", "implement this item".
-  Use this whenever the human wants AI to write source code driven by BOSS documents — even if they say "just implement it" or "write the code" while a BOSS book is present.
+  SOPHIST implementation skill. Use this to implement source code for a specific SOPHIST item (SDD, SAD component, or a named feature). Reads the full upstream context (SDD → SAD → SRS → CuRS) and downstream test items (UT), then writes code that strictly follows the spec. When a conflict or ambiguity blocks implementation, writes a review point on the relevant item instead of guessing.
+  Triggers: "sophist-impl", "implement SDD-010", "implement SAD-003", "implement the auth module", "write the code for SDD-012", "sophist implement", "implement this item".
+  Use this whenever the human wants AI to write source code driven by SOPHIST documents — even if they say "just implement it" or "write the code" while a SOPHIST book is present.
 ---
 
-# boss-impl: Implement Code from BOSS Items
+# sophist-impl: Implement Code from SOPHIST Items
 
-**Goal**: Write source code that exactly matches reviewed BOSS items — the right file location, the right function signature, the right algorithm steps. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
+**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
 
 ---
 
@@ -41,7 +41,7 @@ If the scope is ambiguous, ask: "I found these items — implement all of them, 
 Only implement items in `reviewed` state. If a target item is still `draft`, stop and tell the human:
 
 ```
-SDD-010 is still `draft` — it has unanswered review points. Run boss-sdd first to resolve them before implementing.
+SDD-010 is still `draft` — it has unanswered review points. Run sophist-sdd first to resolve them before implementing.
 ```
 
 For each item in scope, also trace upward:
@@ -195,8 +195,8 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 | SDD-012 | Algorithm step 3 refers to "the session store" but SAD-004 lists two possible adapters (Redis and in-process) without specifying which. Added review point to SDD-012. |
 
 ### Next steps
-- Answer the review point in SDD-012, then run **boss-sdd** to apply it
-- Run **boss-codereview** to verify conformance when all items are unblocked
+- Answer the review point in SDD-012, then run **sophist-sdd** to apply it
+- Run **sophist-codereview** to verify conformance when all items are unblocked
 - Write test assertions in the stubs, following each UT item's Input/Expected output
 ```
 
@@ -220,6 +220,6 @@ Use `feat` for new functionality, `fix` for corrections to existing implementati
 ## Constraints
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.
-- **Never promote item state.** Leave all items as `reviewed`. boss-codereview is the step that moves items to `done`.
+- **Never promote item state.** Leave all items as `reviewed`. sophist-codereview is the step that moves items to `done`.
 - **Never silently deviate.** Any gap between the spec and what you wrote must appear in the report.
 - **Never delete existing code** unless an SDD item explicitly describes replacing it. When in doubt, ask.

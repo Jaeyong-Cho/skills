@@ -1,12 +1,12 @@
 ---
-name: boss-init
+name: sophist-init
 description: |
-  Use this skill to initialize a new BOSS book for a software project. Triggers: "init boss", "set up boss", "start the documentation", "create boss", or any request to begin V-model documentation for a project. If the project already has source code, also bootstraps initial CuRS, SRS, SAD, SDD, AT, SIT, and UT items from the existing codebase. Creates the mdbook structure, CSS theme override, all document chapters, tag registry, and project directory skeleton.
+  Use this skill to initialize a new SOPHIST book for a software project. Triggers: "init sophist", "set up sophist", "start the documentation", "create sophist", or any request to begin V-model documentation for a project. If the project already has source code, also bootstraps initial CuRS, SRS, SAD, SDD, AT, SIT, and UT items from the existing codebase. Creates the mdbook structure, CSS theme override, all document chapters, tag registry, and project directory skeleton.
 ---
 
-# boss-init: Initialize the BOSS Book
+# sophist-init: Initialize the SOPHIST Book
 
-**Goal**: Set up `book/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft BOSS items by reverse-engineering the existing codebase.
+**Goal**: Set up `book/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft SOPHIST items by reverse-engineering the existing codebase.
 
 Read before starting:
 - `references/items.md` — item format, ID system, states, tags
@@ -93,7 +93,7 @@ additional-css = ["theme/css/variables.css"]
 - [Unit Tests](./ut/index.md)
 ```
 
-Item entries are added as nested lines under each section by **boss-update** as items are created.
+Item entries are added as nested lines under each section by **sophist-update** as items are created.
 
 ---
 
@@ -102,7 +102,7 @@ Item entries are added as nested lines under each section by **boss-update** as 
 ```markdown
 # Tag Registry
 
-All tags used across BOSS items. Consult this before creating new tags. Add new tags here before using them in items.
+All tags used across SOPHIST items. Consult this before creating new tags. Add new tags here before using them in items.
 
 | Tag | Description | Item Count |
 |-----|-------------|------------|
@@ -114,7 +114,7 @@ _No tags yet. Tags are added as items are created._
 
 ## Step 7: Create index stubs
 
-Create one `index.md` per document type. Item files are created separately by **boss-update**.
+Create one `index.md` per document type. Item files are created separately by **sophist-update**.
 
 **book/src/curs/index.md**:
 ```markdown
@@ -128,7 +128,7 @@ Each CuRS item records what the customer said, not what will be built.
 | CuRS | → SRS |
 |------|-------|
 
-_No items yet. Add customer requirements using **boss-update**._
+_No items yet. Add customer requirements using **sophist-update**._
 ```
 
 **book/src/srs/index.md**:
@@ -247,7 +247,7 @@ Fix all errors before reporting.
 
 **Only do this step if the project already has source code** (i.e., `src/` contains non-empty files, or there are source files in the project root beyond scaffolding).
 
-The goal is to reverse-engineer a first draft of all BOSS layers from the existing codebase, so the team has a documentation baseline to review and refine rather than starting from scratch.
+The goal is to reverse-engineer a first draft of all SOPHIST layers from the existing codebase, so the team has a documentation baseline to review and refine rather than starting from scratch.
 
 ### 10a. Survey the codebase
 
@@ -322,7 +322,7 @@ Fix all broken links before continuing.
 
 ## Step 11: Generate project overview
 
-After all files are written and the build passes, run **boss-overview** to produce a full project overview. This gives the user an immediate bird's-eye view of what was just created.
+After all files are written and the build passes, run **sophist-overview** to produce a full project overview. This gives the user an immediate bird's-eye view of what was just created.
 
 ---
 
@@ -332,7 +332,7 @@ Tell the user:
 
 **If no source code existed:**
 ```
-BOSS initialized.
+SOPHIST initialized.
 
 Book:    book/  (mdbook + mermaid)
 Theme:   book/theme/css/variables.css (--content-max-width: 80%)
@@ -343,12 +343,12 @@ Tags:    book/src/tags.md (empty — populated as items are added)
 Source:  src/
 Tests:   tests/at/  tests/sit/  tests/ut/
 
-Next step: Use boss-curs with your first customer requirement.
+Next step: Use sophist-curs with your first customer requirement.
 ```
 
 **If source code was found and documents were bootstrapped:**
 ```
-BOSS initialized and bootstrapped from existing code.
+SOPHIST initialized and bootstrapped from existing code.
 
 Book:    book/  (mdbook + mermaid)
 Chapters: CuRS · SRS · SAD · SDD · AT · SIT · UT
@@ -356,10 +356,10 @@ Chapters: CuRS · SRS · SAD · SDD · AT · SIT · UT
 Tags:    book/src/tags.md
 
 All items are draft — they represent AI's best reading of the existing code.
-Review each layer and answer the review points before running the boss-* review skills.
+Review each layer and answer the review points before running the sophist-* review skills.
 
 Next step: Open book/src/curs/ and review the inferred customer requirements.
-           Correct anything that doesn't match your actual intent, then run boss-srs.
+           Correct anything that doesn't match your actual intent, then run sophist-srs.
 ```
 
 ---
@@ -369,9 +369,9 @@ Next step: Open book/src/curs/ and review the inferred customer requirements.
 After all file writes are complete, propose a commit message for the changes. Run `git diff HEAD` to review what changed, then write a message in this format:
 
 ```
-chore(boss): <short description under 72 chars>
+chore(sophist): <short description under 72 chars>
 
-Why: <what prompted initializing the BOSS book — new project or existing codebase being documented>
+Why: <what prompted initializing the SOPHIST book — new project or existing codebase being documented>
 What: <what was created — book structure, chapters, item count if bootstrapped from code>
 ```
 

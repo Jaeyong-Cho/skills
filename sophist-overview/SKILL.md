@@ -1,12 +1,12 @@
 ---
-name: boss-overview
+name: sophist-overview
 description: |
-  Generate a concise overview of a BOSS-documented project. Triggers: "boss-overview", "show me the project overview", "summarize the project", "what does this project do", "give me an overview of the BOSS docs", "what's in the book", or any request to understand a project's purpose, scope, or current documentation state. Reads all BOSS layers and produces a human-readable summary covering purpose, requirements, architecture, design, and test coverage. Use this skill whenever someone wants a bird's-eye view of a project that has a book/ directory.
+  Generate a concise overview of a SOPHIST-documented project. Triggers: "sophist-overview", "show me the project overview", "summarize the project", "what does this project do", "give me an overview of the SOPHIST docs", "what's in the book", or any request to understand a project's purpose, scope, or current documentation state. Reads all SOPHIST layers and produces a human-readable summary covering purpose, requirements, architecture, design, and test coverage. Use this skill whenever someone wants a bird's-eye view of a project that has a book/ directory.
 ---
 
-# boss-overview: Project Overview
+# sophist-overview: Project Overview
 
-**Goal**: Read all BOSS layers and produce a clear, concise overview of the project — what it does, how it is built, and where the documentation currently stands.
+**Goal**: Read all SOPHIST layers and produce a clear, concise overview of the project — what it does, how it is built, and where the documentation currently stands.
 
 ---
 
@@ -97,7 +97,7 @@ Write a structured overview in this format:
 Tip: run `grep -r "Review needed" book/src/ | grep -v "^Binary"` to find them.
 
 ## Next step
-<one clear recommendation: which boss-* skill to run next, and why>
+<one clear recommendation: which sophist-* skill to run next, and why>
 ```
 
 ---
@@ -106,4 +106,4 @@ Tip: run `grep -r "Review needed" book/src/ | grep -v "^Binary"` to find them.
 
 - Do not modify any files — this is a read-only skill.
 - Keep the overview factual and grounded in what the documents say. If something is ambiguous or missing, say so rather than inferring.
-- If `book/` does not exist, tell the user to run `boss-init` first.
+- If `book/` does not exist, tell the user to run `sophist-init` first.

@@ -1,13 +1,13 @@
 ---
-name: boss-sad
+name: sophist-sad
 description: |
   SAD review skill. Use this to review SAD items, apply inline answers from markdown files, and cascade to create SDD and UT items.
-  Triggers: "boss-sad", "review SAD", "I answered the SAD items", "check SAD review points", "update SAD", "show SAD pending".
+  Triggers: "sophist-sad", "review SAD", "I answered the SAD items", "check SAD review points", "update SAD", "show SAD pending".
   When called with no specific items — shows all pending SAD review points.
   When called after the human has answered review points inline — applies those answers, marks items reviewed, and creates the corresponding SDD and UT items.
 ---
 
-# boss-sad: Review SAD Items and Cascade to Detailed Design
+# sophist-sad: Review SAD Items and Cascade to Detailed Design
 
 **Goal**: Surface all pending SAD review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, update SIT items if content changed, and cascade by creating corresponding SDD and UT items.
 
@@ -176,7 +176,7 @@ Fix broken markdown links before reporting.
 |----|-------|
 | SAD-003 | AuthService component |
 
-### Still Pending (answer these inline, then run boss-sad again)
+### Still Pending (answer these inline, then run sophist-sad again)
 | ID | Type | Review Question |
 |----|------|----------------|
 | SAD-001 | SAD | Confirm file extension and monorepo layout |
@@ -203,7 +203,7 @@ Fix broken markdown links before reporting.
 ---
 
 Next: Open the SDD item files, write your answers to the review points inline,
-then run **boss-sdd** to apply answers, mark SDD items reviewed, and update UT items.
+then run **sophist-sdd** to apply answers, mark SDD items reviewed, and update UT items.
 ```
 
 ---

@@ -1,13 +1,13 @@
 ---
-name: boss-srs
+name: sophist-srs
 description: |
   SRS review skill. Use this to review SRS items, apply inline answers from markdown files, and cascade to create SAD and SIT items.
-  Triggers: "boss-srs", "review SRS", "I answered the SRS items", "check SRS review points", "update SRS", "show SRS pending".
+  Triggers: "sophist-srs", "review SRS", "I answered the SRS items", "check SRS review points", "update SRS", "show SRS pending".
   When called with no specific items — shows all pending SRS review points so the human knows what to answer.
   When called after the human has answered review points inline — applies those answers, marks items reviewed, and creates the corresponding SAD and SIT items.
 ---
 
-# boss-srs: Review SRS Items and Cascade to Architecture
+# sophist-srs: Review SRS Items and Cascade to Architecture
 
 **Goal**: Surface all pending SRS review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, update AT items if content changed, and cascade by creating corresponding SAD and SIT items.
 
@@ -177,7 +177,7 @@ Fix broken markdown links before reporting.
 |----|-------|
 | SRS-007 | ... |
 
-### Still Pending (answer these inline, then run boss-srs again)
+### Still Pending (answer these inline, then run sophist-srs again)
 | ID | Type | Review Question |
 |----|------|----------------|
 | SRS-008 | SRS | Is lockout duration fixed or configurable? |
@@ -201,7 +201,7 @@ Fix broken markdown links before reporting.
 ---
 
 Next: Open the SAD item files, write your answers to the review points inline,
-then run **boss-sad** to apply answers, mark SAD items reviewed, and generate SDD items.
+then run **sophist-sad** to apply answers, mark SAD items reviewed, and generate SDD items.
 ```
 
 ---

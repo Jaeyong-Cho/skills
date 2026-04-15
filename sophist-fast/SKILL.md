@@ -1,19 +1,19 @@
 ---
-name: boss-fast
+name: sophist-fast
 description: |
-  Quick, surgical fixes OR rapid prototyping using BOSS documentation context — no full review workflow needed. Two modes:
+  Quick, surgical fixes OR rapid prototyping using SOPHIST documentation context — no full review workflow needed. Two modes:
   • FIX: small known correction to docs or code (rename, typo, tag, broken link, minor bug)
-  • PROTOTYPE: generate a quick working spike/prototype for a specific item by reading just enough BOSS context (SDD → SAD → SRS), without the full rigor of boss-impl. Great for testing an approach before committing to it.
-  Triggers: "boss-fast", "rename this item", "fix the title of SRS-007", "typo in SAD-003", "fix the link", "minor fix", "quick doc edit", "rename this function", "small code fix", "prototype SDD-010", "quick prototype for SAD-003", "spike this", "draft a quick impl for", "test this approach", "prototype mode", "write a rough version of", "just get something working for".
-  Use this instead of boss-srs / boss-sad / boss-sdd / boss-curs / boss-impl when the change is small or you want a fast throwaway prototype to validate an idea.
+  • PROTOTYPE: generate a quick working spike/prototype for a specific item by reading just enough SOPHIST context (SDD → SAD → SRS), without the full rigor of sophist-impl. Great for testing an approach before committing to it.
+  Triggers: "sophist-fast", "rename this item", "fix the title of SRS-007", "typo in SAD-003", "fix the link", "minor fix", "quick doc edit", "rename this function", "small code fix", "prototype SDD-010", "quick prototype for SAD-003", "spike this", "draft a quick impl for", "test this approach", "prototype mode", "write a rough version of", "just get something working for".
+  Use this instead of sophist-srs / sophist-sad / sophist-sdd / sophist-curs / sophist-impl when the change is small or you want a fast throwaway prototype to validate an idea.
 ---
 
-# boss-fast: Quick Fix or Prototype
+# sophist-fast: Quick Fix or Prototype
 
 **Two modes** — pick based on what the user wants:
 
-- **Fix mode**: apply a small, known correction to BOSS docs or source/test code
-- **Prototype mode**: generate a rough working implementation for a BOSS item using its doc context as a spec, skipping full rigor in favour of speed
+- **Fix mode**: apply a small, known correction to SOPHIST docs or source/test code
+- **Prototype mode**: generate a rough working implementation for a SOPHIST item using its doc context as a spec, skipping full rigor in favour of speed
 
 ---
 
@@ -47,7 +47,7 @@ If the user's message already has all three, skip this step.
 
 Read the relevant file before editing so you understand the current content.
 
-For a BOSS item:
+For a SOPHIST item:
 ```bash
 cat book/src/<layer>/<ID>.md
 ```
@@ -116,7 +116,7 @@ Update all call sites. Also check whether the corresponding SDD item's `## Signa
 
 **If a test file was changed:**
 
-Make sure the change doesn't break the relationship between the test and its BOSS UT/AT/SIT item. If the test ID comment or item reference in the file is now wrong, fix it.
+Make sure the change doesn't break the relationship between the test and its SOPHIST UT/AT/SIT item. If the test ID comment or item reference in the file is now wrong, fix it.
 
 ---
 
@@ -146,7 +146,7 @@ Pick `type` from: `fix`, `docs`, `refactor`, `test`. Use the item ID as `scope` 
 
 ## PROTOTYPE MODE
 
-**Goal**: Read the minimum BOSS context needed for a specific item and write a rough, runnable implementation — fast. The output is a throwaway spike, not production code.
+**Goal**: Read the minimum SOPHIST context needed for a specific item and write a rough, runnable implementation — fast. The output is a throwaway spike, not production code.
 
 ---
 
@@ -178,7 +178,7 @@ Extract the key facts you need to write code:
 - **Dependencies** — what it calls or receives
 - **Error cases** — what it must handle
 
-Stop reading when you have enough to write something runnable. Don't read the full chain (CuRS → SRS → SAD → SDD → UT) — that's boss-impl's job.
+Stop reading when you have enough to write something runnable. Don't read the full chain (CuRS → SRS → SAD → SDD → UT) — that's sophist-impl's job.
 
 ---
 
@@ -189,7 +189,7 @@ Write lean, direct code. Rules for prototypes:
 - **Goal is runnable, not perfect.** Stubs, hardcoded values, and simplified logic are fine if they let you test the core idea.
 - **Mark assumptions.** When you skip something the spec asks for (e.g. error handling, persistence), leave a `// TODO: per <ID>` comment so it's obvious what was deferred.
 - **Match the project's language.** Check existing `src/` files for the language and import style — use the same.
-- **No new doc updates.** Don't touch BOSS items, SUMMARY.md, or index.md — this is throwaway code.
+- **No new doc updates.** Don't touch SOPHIST items, SUMMARY.md, or index.md — this is throwaway code.
 
 Place the prototype in a clearly temporary location:
 ```
@@ -209,7 +209,7 @@ Skipped for speed:
 - bcrypt cost factor config (SDD-010: Review needed)
 - Full AuthError enum (SAD-003: Interface)
 
-Next step: run boss-impl for SDD-010 to get the production version.
+Next step: run sophist-impl for SDD-010 to get the production version.
 ```
 
 This keeps the human in control of what still needs to be done properly.
