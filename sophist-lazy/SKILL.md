@@ -264,34 +264,7 @@ Create UT items (`book/src/ut/UT-{NNN}.md`) for each SDD item. Left `draft` — 
 
 ---
 
-## Step 5: Write the lazy log
-
-Create or update `book/src/lazy-log.md`. One row per lazy assumption, in L-ID order.
-
-```markdown
-# Lazy Log
-
-Each row is an unreviewed design assumption. The guard will fire at runtime if the
-assumption turns out to be wrong. Work through `⬜ open` rows and resolve them with
-a real review cycle (sophist-srs / sophist-sad / sophist-sdd).
-
-| L-ID | Source item | Assumption | Guard level | Where it fires | Status |
-|------|-------------|-----------|-------------|---------------|--------|
-| L-001 | SRS-007 | user_id is always a non-empty string | `assert` | entry of `authenticate()` in SDD-012 | ⬜ open |
-| L-002 | SAD-003 | single database, no replica reads | `must-review` | module load of `db_adapter.py` | ⬜ open |
-| L-003 | SAD-003 | connection pool size = 10 is sufficient | `monitor` | `DbAdapter.__init__` | ⬜ open |
-| L-005 | SDD-012 | JWT expiry is always 3600s | `log` | step 5 of `authenticate()` | ⬜ open |
-```
-
-The `Where it fires` column tells the human exactly where to look in the code when a guard triggers.
-
-Status: `⬜ open` → `✅ resolved` once the assumption is replaced with a real reviewed decision.
-
-Add `book/src/lazy-log.md` to `SUMMARY.md` if not already there.
-
----
-
-## Step 6: Update indexes and build
+## Step 5: Update indexes and build
 
 Update `index.md` for each document type touched, `book/src/tags.md` for `#lazy`, and `SUMMARY.md` for all new files.
 
@@ -318,21 +291,21 @@ Fix all broken links before reporting.
 | SDD-012  | ... | SDD  | 3 (guards in algorithm + contracts table) |
 | UT-012   | ... | UT   | stub only |
 
-### Lazy log summary — N assumptions in book/src/lazy-log.md
+### Lazy assumptions summary
 
-| Guard level | Count |
-|---|---|
-| must-review | N |
-| assert      | N |
-| log         | N |
-| monitor     | N |
+| Guard level | Count | Items |
+|---|---|---|
+| must-review | N | SAD-NNN (module load), ... |
+| assert      | N | SDD-NNN step 1, ... |
+| log         | N | SDD-NNN step 5, ... |
+| monitor     | N | SAD-NNN __init__, ... |
 
 ### ⚠ Must-review items (will panic at startup until resolved)
 - L-002 (SAD-003): <assumption> — fires at module load of <file>
 
 ### Next steps
-- Open **book/src/lazy-log.md** and work through `⬜ open` rows
-- For each resolved assumption: remove the lazy blockquote from the item, remove `[LAZY L-NNN]` step from the algorithm, mark `✅ resolved` in the log
+- Search `#lazy` items to find all open assumptions: `grep -rl "#lazy" book/src/`
+- For each: answer the lazy blockquote inline, remove the `[LAZY L-NNN]` step from the algorithm and the corresponding row from `## Lazy contracts`, clear the `#lazy` tag
 - Run **sophist-srs → sophist-sad → sophist-sdd** to promote items through proper review
 - Run **sophist-impl** to generate code — it will emit guards from Algorithm steps and SAD Lazy observability exactly as specified
 ```
@@ -345,8 +318,7 @@ Fix all broken links before reporting.
 docs(lazy): <short description of the requirement under 72 chars>
 
 Why: <the customer need that triggered this pipeline run>
-What: <which CuRS/SRS/SAD/SDD items were created and how many lazy assumptions remain>
-Lazy: N assumptions logged — M must-review
+What: <which CuRS/SRS/SAD/SDD items were created and how many lazy assumptions remain (grep #lazy to list them)>
 ```
 
 ---
@@ -354,7 +326,7 @@ Lazy: N assumptions logged — M must-review
 ## Constraints
 
 - **Never block for review.** If a decision is needed, make the lazy assumption and move on.
-- **Every lazy assumption must produce a guard in two places**: (1) in the SAD `## Lazy observability` table or an SDD `## Algorithm` step, and (2) in `lazy-log.md`. An assumption with no implementation-level spec is invisible — that defeats the purpose.
+- **Every lazy assumption must produce a guard**: in the SAD `## Lazy observability` table or an SDD `## Algorithm` step (and its `## Lazy contracts` summary). An assumption with no implementation-level spec is invisible — that defeats the purpose.
 - **Component-level guards belong in SAD `## Lazy observability`**, not in SDD Algorithm steps. SDD guards cover function-scoped assumptions; SAD guards cover component lifecycle and cross-cutting concerns.
 - **must-review must panic at startup**, before any request is served. A wrong security assumption caught at boot is far better than one caught in production.
 - **Keep CuRS honest.** Lazy assumptions belong in SRS and below. CuRS records the customer's words, not the interpretation.
