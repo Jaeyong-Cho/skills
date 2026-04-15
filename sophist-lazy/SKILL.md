@@ -1,14 +1,16 @@
 ---
 name: sophist-lazy
 description: |
-  SOPHIST lazy pipeline skill. Use this when the human has a new requirement and wants the full V-model chain (CuRS → SRS → SAD → SDD) written in one uninterrupted pass — without stopping for review at each stage. Every unresolved review point gets a "lazy assumption" (explicit best-guess decision) plus a runtime guard (assert, log, monitor, or must-review panic) so that assumptions which were never validated by a human will surface when the software runs. All assumptions are also collected into book/src/lazy-log.md for later triage.
+  SOPHIST lazy pipeline skill. Use this when the human has a new requirement and wants the full V-model chain (CuRS → SRS → SAD → SDD) written in one uninterrupted pass — without stopping for review at each stage. Every unresolved review point gets a "lazy assumption" (explicit best-guess decision) plus implementation-level observability specs written directly into SAD and SDD items, so that sophist-impl can emit the exact assert/log/monitor code and the human can detect when an unreviewed assumption fires at runtime. All assumptions are also collected into book/src/lazy-log.md for later triage.
   Triggers: "sophist-lazy", "push this through the full pipeline", "draft the full chain for this requirement", "lazy pipeline", "one-shot from requirement to SDD", "quick design pass", "draft everything end to end", "just run the whole pipeline", "don't stop for review", "full V-model from this requirement".
   Use this when speed matters more than design certainty, and when you're willing to have the gaps flagged at runtime rather than at review time.
 ---
 
 # sophist-lazy: Full Pipeline — Requirement to SDD in One Pass
 
-**Goal**: Take a customer requirement and produce a complete CuRS → SRS → SAD → SDD chain without pausing for human review. Every time a review point would normally block forward progress, make an explicit lazy assumption instead, attach a runtime guard to the relevant SDD item, and log the assumption. The human reviews *lazy-log.md* after the fact rather than inline during the pipeline.
+**Goal**: Take a customer requirement and produce a complete CuRS → SRS → SAD → SDD chain without pausing for human review. Every time a review point would normally block forward progress, make an explicit lazy assumption instead and write implementation-level observability specs into the SAD and SDD so that:
+- sophist-impl knows exactly *what* to emit and *where* to place it
+- the human can see, in running logs/metrics, precisely which unreviewed assumption fired
 
 The guiding principle: what isn't reviewed at design time must be *observable* at runtime. A lazy assumption that turns out to be wrong should produce a clear, traceable signal — not a silent mismatch.
 
@@ -20,7 +22,7 @@ If the human has not provided a requirement, ask:
 
 > "What does the customer need? Describe it in plain terms — I'll handle the translation into SOPHIST items."
 
-Accept any form: a sentence, a paragraph, a user story, a feature name. The only requirement is enough to work with.
+Accept any form: a sentence, a paragraph, a user story, a feature name.
 
 ---
 
@@ -28,18 +30,16 @@ Accept any form: a sentence, a paragraph, a user story, a feature name. The only
 
 ### 1a. Check for existing coverage
 
-Search for related existing CuRS items before creating new ones:
-
 ```bash
-ls book/src/curs/ | grep "^CuRS-" | sort -t- -k2 -n | tail -1   # next ID
-grep -ril "<keyword>" book/src/curs/ book/src/srs/                # similarity
+ls book/src/curs/ | grep "^CuRS-" | sort -t- -k2 -n | tail -1
+grep -ril "<keyword>" book/src/curs/ book/src/srs/
 ```
 
-If a full duplicate exists, stop and tell the human — there is nothing to do. If partial overlap, note it but continue creating the new chain (don't stall).
+If a full duplicate exists, stop and tell the human. If partial overlap, note it and continue.
 
 ### 1b. Create the CuRS item
 
-Create `book/src/curs/CuRS-{NNN}.md` — record the customer's words accurately, do not over-interpret:
+Record the customer's words accurately — do not over-interpret.
 
 ```markdown
 # CuRS-{NNN}: <short title>
@@ -65,18 +65,15 @@ Create `book/src/curs/CuRS-{NNN}.md` — record the customer's words accurately,
 > **Review needed** — confirm this captures the customer's intent accurately
 >
 > **Lazy assumption**: taken at face value — no alternative interpretation attempted
-> **Guard type**: `log`
 ```
 
-Mark state `draft` and tag `#lazy`. Add a row to `book/src/curs/index.md` and an entry to `SUMMARY.md`.
+Add a row to `book/src/curs/index.md` and an entry to `SUMMARY.md`.
 
 ---
 
 ## Step 2: SRS pass
 
-Derive one or more SRS items from the CuRS item. Each SRS item must be testable — if you can't imagine an AT for it, split or reframe it.
-
-Create `book/src/srs/SRS-{NNN}.md`:
+Derive SRS items from the CuRS item. Each must be testable.
 
 ```markdown
 # SRS-{NNN}: <requirement title>
@@ -88,7 +85,7 @@ Create `book/src/srs/SRS-{NNN}.md`:
 `#lazy`
 
 ## Why
-<one sentence — why this requirement exists>
+<one sentence>
 
 ## Traces
 - ← [CuRS-{NNN}](../curs/CuRS-{NNN}.md): <derivation rationale>
@@ -98,40 +95,34 @@ Create `book/src/srs/SRS-{NNN}.md`:
 <Requirement text — "shall" for mandatory, "should" for preferred.>
 ```
 
-### SRS review point handling
-
-For each ambiguity you encounter — scope, performance constraint, actor identity, error behavior, or interface contract — apply the lazy assumption protocol:
-
-1. Write the original review point as normal
-2. Immediately below it, write your assumption and assign a guard level
+For each ambiguity (scope, performance, actor, error behavior, interface contract), apply the lazy assumption protocol:
 
 ```markdown
 > **Review needed** — <original question>
 >
-> **Lazy assumption**: <what was assumed and why — one sentence>
+> **Lazy assumption**: <what was assumed and why>
 > **Guard level**: `assert` | `log` | `monitor` | `must-review`
+> **Lazy ID**: L-{NNN}
 ```
+
+Assign a sequential Lazy ID (`L-001`, `L-002`, …) to every assumption across the entire pipeline run. Add each to the lazy log (Step 5).
 
 **Guard level guide**:
 
-| Level | When to use | What it generates in code |
+| Level | When to use | Runtime behavior |
 |---|---|---|
-| `must-review` | Security, auth, data integrity — wrong assumption causes harm | Startup panic / `raise` at module load |
-| `assert` | Functional invariant — wrong assumption causes incorrect behavior | `assert <condition>, "LAZY-[ID]: ..."` at the call site |
-| `log` | Soft assumption — wrong assumption degrades quality but doesn't break | `logger.warning("LAZY-[ID]: ...")` on first use |
-| `monitor` | Scale or performance assumption | Metric emission; counter or histogram |
+| `must-review` | Security, auth, data integrity — wrong assumption causes harm | Panics at startup; blocks the process from running |
+| `assert` | Functional invariant — wrong assumption causes incorrect behavior | Hard failure at the call site with a traceable message |
+| `log` | Soft assumption — wrong assumption degrades quality but doesn't break | Warning on first occurrence; program continues |
+| `monitor` | Scale or performance assumption | Metric counter/histogram; surfaced in dashboards |
 
-Add to lazy log (see Step 5) for every review point handled here.
-
-Create the AT item as well (`book/src/at/AT-{NNN}.md`). The AT represents the intended behavior even if some design details are lazy — keep it honest about what the system should *do*, not how it should work internally.
+Create the AT item too (`book/src/at/AT-{NNN}.md`).
 
 ---
 
 ## Step 3: SAD pass
 
-Derive SAD component(s) from SRS items. Follow the standard SAD item format, but do not stop for review — apply the lazy assumption protocol to every open question.
-
-Create `book/src/sad/SAD-{NNN}.md`:
+Derive SAD components from SRS items. Apply the lazy assumption protocol for every open question. The key addition over a normal SAD item is `## Lazy observability` — a concrete implementation spec for component-level instrumentation.
 
 ```markdown
 # SAD-{NNN}: <component title>
@@ -143,14 +134,14 @@ Create `book/src/sad/SAD-{NNN}.md`:
 `#lazy`
 
 ## Why
-<one sentence — what this component's existence solves>
+<one sentence>
 
 ## Traces
 - ← [SRS-{NNN}](../srs/SRS-{NNN}.md): <responsibility derivation>
 - → [SDD-{NNN}](../sdd/SDD-{NNN}.md): <function to be designed>
 
 ## Responsibility
-<What this component owns — one paragraph. Prefer deep modules: hide decisions inside,
+<What this component owns. Prefer deep modules — hide decisions inside,
 expose only what callers need to know.>
 
 ## Interface
@@ -160,18 +151,26 @@ expose only what callers need to know.>
 `src/<path>/<filename>`
 
 ## Dependencies
-- [SAD-{MMM}](SAD-{MMM}.md): <why this dependency exists>
+- [SAD-{MMM}](SAD-{MMM}.md): <why>
+
+## Lazy observability
+These are component-level instrumentation points.
+sophist-impl must emit each one at the described location when implementing this component.
+
+| L-ID | Where | Kind | Implementation line |
+|------|-------|------|---------------------|
+| L-002 | module load / `__init__` | `must-review` | `raise AssertionError("LAZY-L-002 [SAD-NNN]: <assumption> — must be reviewed before deploy")` |
+| L-003 | component initialisation | `log` | `logger.warning("LAZY-L-003 [SAD-NNN]: <assumption> — unreviewed, monitor for unexpected behaviour")` |
+| L-004 | first public method call | `monitor` | `metrics.increment("lazy.sad_nnn.<assumption_slug>")` |
 ```
 
-Apply the lazy assumption protocol for every review point (technology choice, component boundary, interface shape, etc.).
+The `Where` column must be specific enough for sophist-impl to place the line without guessing: `module load`, `__init__`, `connect()`, `first call to process()`, etc.
 
 ---
 
 ## Step 4: SDD pass
 
-Derive SDD items from each SAD component. This is where runtime guards are generated. Every lazy assumption from steps 2–3 that affects function behavior must appear in `## Lazy guards` of the relevant SDD item.
-
-Create `book/src/sdd/SDD-{NNN}.md`:
+Derive SDD items from each SAD component. This is the most critical layer for observability: guards are embedded **inside `## Algorithm` steps** at the exact position they belong, so sophist-impl has no ambiguity about placement. A summary table `## Lazy contracts` lists them all for human scanning.
 
 ```markdown
 # SDD-{NNN}: <function title>
@@ -186,8 +185,8 @@ Create `book/src/sdd/SDD-{NNN}.md`:
 <one sentence>
 
 ## Traces
-- ← [SAD-{NNN}](../sad/SAD-{NNN}.md): <component this belongs to>
-- → [UT-{NNN}](../ut/UT-{NNN}.md): <test coverage>
+- ← [SAD-{NNN}](../sad/SAD-{NNN}.md)
+- → [UT-{NNN}](../ut/UT-{NNN}.md)
 
 ## Signature
 <function_name(param: Type, ...) -> ReturnType>
@@ -208,55 +207,85 @@ Create `book/src/sdd/SDD-{NNN}.md`:
 ## Side effects
 <none | list>
 
-## Lazy guards
-<Guards that sophist-impl must emit for unreviewed assumptions.
-One line per assumption, in the form the implementation should produce.>
+## Lazy contracts
+<Summary of all lazy guards in this function — for human review.
+Each row maps to a `[LAZY L-NNN]` marker in the Algorithm above.>
+
+| L-ID | Assumption | Kind | Implementation line |
+|------|-----------|------|---------------------|
 ```
 
-### How to write lazy guards
+### Embedding guards in the Algorithm
 
-Each guard corresponds to a lazy assumption from any upstream item (CuRS, SRS, or SAD). Pull them all into the SDD that implements the affected logic. Format them as concrete code-level expressions — the implementing agent copies these verbatim:
+When a lazy assumption affects a specific point in the function's execution, add a `[LAZY L-NNN]` step at that exact position:
 
 ```markdown
-## Lazy guards
-- `assert isinstance(user_id, str) and len(user_id) > 0, "LAZY-SRS-007: assumed non-empty string user_id — review input format"`
-- `logger.warning("LAZY-SAD-003: single-database assumption — multi-tenant not validated")  # emit once at startup`
-- `assert config.get("max_retries") is not None, "LAZY-SDD-010: assumed max_retries always set in config"`
+## Algorithm
+1. [LAZY L-001] Precondition check — assert input contract assumed in SRS-007:
+   `assert isinstance(user_id, str) and len(user_id) > 0, "LAZY-L-001 [SRS-007]: assumed non-empty string user_id — review input contract"`
+2. Fetch user record from db using user_id
+3. If record not found → raise `UserNotFoundError`
+4. Validate password hash against stored hash
+5. [LAZY L-005] Log soft assumption about token expiry format:
+   `logger.warning("LAZY-L-005 [SDD-012]: JWT expiry assumed 3600s — hardcoded, not config-driven")`
+6. Generate and return session token
 ```
 
-Guard syntax by language:
+Rules for placing guards:
+- **Precondition** (bad input assumption) → first step in the algorithm
+- **Postcondition** (output shape assumption) → last step before return
+- **Mid-algorithm** (technology/logic assumption) → immediately before the step it guards
+- **Startup/init** (component-level) → belongs in SAD `## Lazy observability`, not here
 
-| Language | assert | log | monitor | must-review |
+### Lazy contracts table
+
+Fill the `## Lazy contracts` table from the algorithm markers:
+
+```markdown
+## Lazy contracts
+
+| L-ID | Assumption | Kind | Implementation line |
+|------|-----------|------|---------------------|
+| L-001 | user_id is always a non-empty string | `assert` | `assert isinstance(user_id, str) and len(user_id) > 0, "LAZY-L-001..."` |
+| L-005 | JWT expiry is always 3600s | `log` | `logger.warning("LAZY-L-005...")` |
+```
+
+This table exists for the human's benefit — it makes all lazy assumptions scannable in one place without reading through every algorithm step. It contains no new information beyond what is already in the Algorithm.
+
+### Guard syntax by language
+
+| Language | `assert` | `log` | `monitor` | `must-review` |
 |---|---|---|---|---|
-| Python | `assert <cond>, "LAZY-..."` | `logger.warning("LAZY-...")` | `metrics.increment("lazy.<id>")` | `raise AssertionError("LAZY-...")` at import |
-| TypeScript | `if (!<cond>) throw new Error("LAZY-...")` | `console.warn("LAZY-...")` | `metrics.count("lazy.<id>")` | top-level `throw` |
-| Go | `if !<cond> { panic("LAZY-...") }` | `log.Warn("LAZY-...")` | `metrics.Inc("lazy.<id>")` | `func init() { panic(...) }` |
+| Python | `assert <cond>, "LAZY-L-NNN [ITEM]: ..."` | `logger.warning("LAZY-L-NNN [ITEM]: ...")` | `metrics.increment("lazy.l_nnn.<slug>")` | `raise AssertionError("LAZY-L-NNN ...")` at import |
+| TypeScript | `if (!<cond>) throw new Error("LAZY-L-NNN ...")` | `console.warn("LAZY-L-NNN ...")` | `metrics.count("lazy.l_nnn.<slug>")` | top-level `throw` |
+| Go | `if !<cond> { panic("LAZY-L-NNN ...") }` | `log.Warn("LAZY-L-NNN ...")` | `metrics.Inc("lazy.l_nnn.<slug>")` | `func init() { panic(...) }` |
 
-Apply the lazy assumption protocol for any new review points that emerge at SDD level too.
-
-Create UT items (`book/src/ut/UT-{NNN}.md`) for each SDD item. UT items are left `draft` with empty assertion bodies — the human writes those after review.
+Create UT items (`book/src/ut/UT-{NNN}.md`) for each SDD item. Left `draft` — the human writes assertions after review.
 
 ---
 
 ## Step 5: Write the lazy log
 
-Create or update `book/src/lazy-log.md`. This is the human's triage sheet — one row per lazy assumption across the entire pipeline run.
+Create or update `book/src/lazy-log.md`. One row per lazy assumption, in L-ID order.
 
 ```markdown
 # Lazy Log
 
-Items marked `#lazy` have unreviewed assumptions. Each row below traces an assumption
-to its source item, the decision made, the guard level, and the guard that will be
-emitted in code. Review and replace with a real design decision when you have time.
+Each row is an unreviewed design assumption. The guard will fire at runtime if the
+assumption turns out to be wrong. Work through `⬜ open` rows and resolve them with
+a real review cycle (sophist-srs / sophist-sad / sophist-sdd).
 
-| ID | Item | Assumption | Guard level | Guard expression | Status |
-|----|------|-----------|-------------|-----------------|--------|
-| L-001 | SRS-007 | user_id is always a non-empty string | assert | `assert isinstance(user_id, str)...` | ⬜ open |
-| L-002 | SAD-003 | single database, no replica reads | log | `logger.warning("LAZY-SAD-003...")` | ⬜ open |
-| L-003 | SDD-010 | max_retries always set in config | assert | `assert config.get(...) is not None...` | ⬜ open |
+| L-ID | Source item | Assumption | Guard level | Where it fires | Status |
+|------|-------------|-----------|-------------|---------------|--------|
+| L-001 | SRS-007 | user_id is always a non-empty string | `assert` | entry of `authenticate()` in SDD-012 | ⬜ open |
+| L-002 | SAD-003 | single database, no replica reads | `must-review` | module load of `db_adapter.py` | ⬜ open |
+| L-003 | SAD-003 | connection pool size = 10 is sufficient | `monitor` | `DbAdapter.__init__` | ⬜ open |
+| L-005 | SDD-012 | JWT expiry is always 3600s | `log` | step 5 of `authenticate()` | ⬜ open |
 ```
 
-Status column: `⬜ open` until the human reviews and replaces the assumption; `✅ resolved` when a proper review point is answered and the lazy tag removed.
+The `Where it fires` column tells the human exactly where to look in the code when a guard triggers.
+
+Status: `⬜ open` → `✅ resolved` once the assumption is replaced with a real reviewed decision.
 
 Add `book/src/lazy-log.md` to `SUMMARY.md` if not already there.
 
@@ -264,13 +293,13 @@ Add `book/src/lazy-log.md` to `SUMMARY.md` if not already there.
 
 ## Step 6: Update indexes and build
 
-Update `index.md` for each document type touched (CuRS, SRS, AT, SAD, SDD, UT), `book/src/tags.md` for the `#lazy` tag, and `SUMMARY.md` for all new files.
+Update `index.md` for each document type touched, `book/src/tags.md` for `#lazy`, and `SUMMARY.md` for all new files.
 
 ```bash
 cd book && mdbook build 2>&1 | tail -20
 ```
 
-Fix broken links before reporting.
+Fix all broken links before reporting.
 
 ---
 
@@ -285,12 +314,11 @@ Fix broken links before reporting.
 | CuRS-003 | ... | CuRS | 1 |
 | SRS-007  | ... | SRS  | 2 |
 | AT-007   | ... | AT   | 0 |
-| SAD-005  | ... | SAD  | 1 |
-| SDD-012  | ... | SDD  | 3 (guards written) |
+| SAD-005  | ... | SAD  | 2 (observability spec written) |
+| SDD-012  | ... | SDD  | 3 (guards in algorithm + contracts table) |
 | UT-012   | ... | UT   | stub only |
 
-### Lazy log summary
-N assumptions logged in book/src/lazy-log.md
+### Lazy log summary — N assumptions in book/src/lazy-log.md
 
 | Guard level | Count |
 |---|---|
@@ -299,24 +327,19 @@ N assumptions logged in book/src/lazy-log.md
 | log         | N |
 | monitor     | N |
 
-### ⚠ Must-review items (address before deploying)
-These assumptions affect security, auth, or data integrity.
-Running the code without resolving them will panic at startup.
-
-- L-00X (SRS-00X): <assumption text>
+### ⚠ Must-review items (will panic at startup until resolved)
+- L-002 (SAD-003): <assumption> — fires at module load of <file>
 
 ### Next steps
 - Open **book/src/lazy-log.md** and work through `⬜ open` rows
-- For each resolved assumption: remove the lazy blockquote from the item, clear the `#lazy` tag, mark `✅ resolved` in the log
-- Run **sophist-srs**, **sophist-sad**, **sophist-sdd** in sequence to promote items through proper review
-- Run **sophist-impl** to generate code — lazy guards will be emitted automatically from `## Lazy guards` sections
+- For each resolved assumption: remove the lazy blockquote from the item, remove `[LAZY L-NNN]` step from the algorithm, mark `✅ resolved` in the log
+- Run **sophist-srs → sophist-sad → sophist-sdd** to promote items through proper review
+- Run **sophist-impl** to generate code — it will emit guards from Algorithm steps and SAD Lazy observability exactly as specified
 ```
 
 ---
 
 ## Commit message
-
-After all file writes are complete, propose a commit message:
 
 ```
 docs(lazy): <short description of the requirement under 72 chars>
@@ -331,7 +354,8 @@ Lazy: N assumptions logged — M must-review
 ## Constraints
 
 - **Never block for review.** If a decision is needed, make the lazy assumption and move on.
-- **Never skip a guard.** Every review point must produce a guard entry in both the relevant SDD's `## Lazy guards` and in `lazy-log.md`. Invisible assumptions are the most dangerous kind.
-- **must-review assumptions must panic at startup**, not silently pass. A wrong security assumption caught at first boot is far better than a wrong assumption caught in production.
-- **Keep CuRS honest.** Record the customer's actual words. Lazy assumptions belong in SRS and below — CuRS is the contract, not the interpretation.
-- **Deep module principle still applies.** Even lazy SAD components should aim to hide complexity. A lazy interface that leaks internal details just moves the review debt to every call site.
+- **Every lazy assumption must produce a guard in two places**: (1) in the SAD `## Lazy observability` table or an SDD `## Algorithm` step, and (2) in `lazy-log.md`. An assumption with no implementation-level spec is invisible — that defeats the purpose.
+- **Component-level guards belong in SAD `## Lazy observability`**, not in SDD Algorithm steps. SDD guards cover function-scoped assumptions; SAD guards cover component lifecycle and cross-cutting concerns.
+- **must-review must panic at startup**, before any request is served. A wrong security assumption caught at boot is far better than one caught in production.
+- **Keep CuRS honest.** Lazy assumptions belong in SRS and below. CuRS records the customer's words, not the interpretation.
+- **Deep module principle still applies.** Even lazy SAD components should aim to hide complexity. A lazy interface that leaks internal details shifts review debt onto every call site.
