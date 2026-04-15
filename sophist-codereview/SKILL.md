@@ -1,12 +1,16 @@
 ---
 name: sophist-codereview
 description: |
-  Use this skill after the human has written source code and wants AI to review it against SOPHIST documents. Triggers: "review my code", "check my implementation", "does my code match the spec", "sophist code review", "I finished implementing SDD-010". AI checks conformance to SDD (function signatures, algorithms, error handling), alignment with SAD (file locations, component responsibilities), and presence of test stubs. Conformant items are marked `done`. AI never rewrites or generates code — it reports findings and asks questions.
+  Use this skill to align source code and SOPHIST documents in either direction. Two modes: (1) Spec → Code — human implemented from spec, AI verifies conformance, marks items done. (2) Code → Spec — human edited source directly, AI detects divergences via git diff, judges whether the code or the spec is correct, updates spec items when the code is right, reports deviations when the code is wrong.
+  Triggers: "review my code", "check my implementation", "does my code match the spec", "sophist code review", "I finished implementing SDD-010", "I edited the code directly", "sync the docs with my changes", "I made a quick fix", "update the spec to match my code".
 ---
 
-# sophist-codereview: Review Human-Written Code Against SOPHIST
+# sophist-codereview: Review Code Against SOPHIST
 
-**Goal**: Verify that human-written source code conforms to the reviewed SDD and SAD items. Identify deviations, missing items, and test coverage gaps. Report findings with references to specific document items. Write no code.
+**Goal**: Verify that source code and SOPHIST documents are aligned. Two directions are possible:
+
+- **Spec → Code** (normal): human implemented from spec — verify code matches.
+- **Code → Spec** (direct edit): human edited code directly — find what diverged, judge whether the code or the spec is correct, and update whichever is wrong.
 
 Read before starting:
 - `references/items.md` — item format, traceability
@@ -14,22 +18,41 @@ Read before starting:
 
 ---
 
-## Step 1: Identify scope
+## Step 1: Identify scope and mode
 
-Ask the human (or infer from context) which items have been implemented:
+### 1a. Detect direct code edits
+
+Before anything else, check if the human edited source files directly without going through the spec cycle:
+
+```bash
+git diff HEAD --name-only          # unstaged changes
+git diff --cached --name-only      # staged changes
+git status --short                 # overall picture
+```
+
+If modified source files correspond to existing SOPHIST items → treat this as **Code → Spec** mode. The human's edits are the source of truth for *intent*; the spec is the source of truth for *design contract*. Your job is to reconcile them.
+
+If the human says "I just implemented SDD-010" with no prior direct edits → **Spec → Code** mode.
+
+When in doubt, check both: find the scope, compare code to spec, then classify each divergence (Step 5c).
+
+### 1b. Identify scope
+
+Ask the human (or infer from context) which items are in scope:
+- `"I edited auth.py directly"` → find all SDD items under the SAD that owns `auth.py`
 - `"I implemented SDD-010"` → read `book/src/sdd/SDD-010.md` directly
 - `"I finished the auth module"` → find all SDD items under SAD-003:
   `grep -rl "SAD-003" book/src/sdd/`
-- `"review everything"` → full review of all `reviewed` items
+- `"review everything"` → full review of all `reviewed` and `done` items
 
 ```bash
 # Find all reviewed SDD items
 grep -rl "^\`reviewed\`" book/src/sdd/ | sort
 
-# Find all reviewed SAD items
-grep -rl "^\`reviewed\`" book/src/sad/ | sort
+# Find all done SDD items (direct edits may have made done items diverge)
+grep -rl "^\`done\`" book/src/sdd/ | sort
 
-# Find SDD items belonging to a specific SAD component (e.g. SAD-003)
+# Find SDD items for a specific SAD component
 grep -rl "\[SAD-003\]" book/src/sdd/
 ```
 
@@ -142,6 +165,44 @@ SAD-003 — AuthService
 ```
 
 Do not suggest specific refactors — describe the shallowness and ask the human to decide.
+
+---
+
+## Step 5c: Classify divergences (Code → Spec mode)
+
+For every deviation found in steps 4–5b, judge whether **the code is right** (spec is stale) or **the code is wrong** (code is a bug or unintended deviation).
+
+Use this heuristic:
+
+| Signal | Likely verdict |
+|--------|---------------|
+| Change is a subset/superset of the spec (added null check, added missing error case, renamed param to clearer name) | **Code is right** — spec is stale |
+| Change is consistent with the SAD component's Responsibility and the SRS intent | **Code is right** — spec is stale |
+| Change is a bug fix (the old spec described incorrect behavior) | **Code is right** — spec is stale |
+| Change contradicts a core invariant or removes required error handling | **Code is wrong** — report as deviation |
+| Change adds responsibility that belongs to a different SAD component | **Code is wrong** — report as deviation |
+| Change is structurally different from the algorithm for unclear reasons | **Ambiguous** — ask the human before acting |
+
+When ambiguous, ask one focused question rather than listing options. Prefer to trust the human's intent when the change is coherent.
+
+### When code is right: update the spec
+
+For each "code is right" divergence, update the SOPHIST items to match the code:
+
+- **Signature changed**: rewrite `## Signature` in the SDD item
+- **Algorithm step changed or added**: update the numbered step; if steps were reordered, renumber
+- **New error case added**: add a row to `## Error cases`
+- **Side effect changed**: update `## Side effects`
+- **File moved**: update `## Location` in the SAD item
+- **Interface changed**: update `## Interface` in the SAD item
+
+After updating: if the change was trivial (variable rename, wording, added null check that doesn't alter the algorithm), keep the item state as-is. If the change was structural (algorithm logic, interface shape, error contract), set the item back to `draft` — it needs a review pass before being treated as authoritative again.
+
+Also check whether the linked UT items still match the updated spec. If a test's `## Input` or `## Expected output` is now wrong, update it.
+
+### When code is wrong: report as deviation
+
+Use the same format as steps 4–5: item ID, what the spec says, what the code has, severity. Do not fix the code — the human decides.
 
 ---
 
@@ -262,6 +323,16 @@ Scope: SAD-003, SDD-010, SDD-011, SDD-012, AT-005, SIT-003, UT-010, UT-011, UT-0
 | AT-005 | tests/at/at-005/ | ✅ stub present |
 | SIT-003 | tests/sit/sit-003/ | ❌ directory missing |
 
+### Spec updates applied (Code → Spec mode)
+
+| Item | Field updated | Change |
+|------|--------------|--------|
+| SDD-010 | Signature | param renamed `credentials` → `email, password` |
+| SDD-010 | Algorithm step 2 | added null check before bcrypt compare |
+
+Items set back to `draft` (structural change):
+- SDD-010 — algorithm changed, needs re-review before treated as authoritative
+
 ### Ready to Promote
 
 No items are ready to promote — resolve deviations first.
@@ -273,5 +344,6 @@ No items are ready to promote — resolve deviations first.
 
 - **Never write or rewrite source code.** Even to fix a mismatch.
 - **Never generate test code.** Report missing tests; the human writes them.
-- **Never silently accept deviations.** Every mismatch is reported and requires a human decision.
-- **If the code is better than the spec**, report it as an extra and ask whether SDD should be updated — do not assume the spec is wrong.
+- **Never silently accept deviations.** Every mismatch must be classified and resolved — either the spec is updated to match the code, or the deviation is reported for the human to fix.
+- **When updating the spec to match code**: trivial changes (rename, added null check) keep item state; structural changes (algorithm, interface, error contract) set the item back to `draft`.
+- **When ambiguous**, ask one focused question rather than making a unilateral decision about which side is correct.
