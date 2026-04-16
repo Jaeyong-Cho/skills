@@ -191,9 +191,9 @@ graph LR
 **SAD component diagram** (`graph LR`):
 ```
 graph LR
-  Client["Client (API router)"] --> AS["AuthService\nsrc/auth/AuthService.ts"]
-  AS --> UR["UserRepository\nsrc/user/UserRepository.ts"]
-  AS --> SS["SessionStore\nsrc/auth/SessionStore.ts"]
+  Client["Client (API router)"] --> AS["AuthService<br/>src/auth/AuthService.ts"]
+  AS --> UR["UserRepository<br/>src/user/UserRepository.ts"]
+  AS --> SS["SessionStore<br/>src/auth/SessionStore.ts"]
 ```
 
 **SIT sequence diagram** (`sequenceDiagram`):
@@ -216,8 +216,8 @@ flowchart TD
   B -- Yes --> D{Locked?}
   D -- Yes --> E[Return ACCOUNT_LOCKED]
   D -- No --> F{Password match?}
-  F -- No --> G[Increment failure counter\nReturn INVALID_CREDENTIALS]
-  F -- Yes --> H[Reset counter\nCreate session\nReturn Session]
+  F -- No --> G["Increment failure counter<br/>Return INVALID_CREDENTIALS"]
+  F -- Yes --> H["Reset counter<br/>Create session<br/>Return Session"]
 ```
 
 ---
@@ -339,7 +339,7 @@ Centralizing credential validation and session management in one component keeps
 
 \`\`\`mermaid
 graph LR
-  Router --> AS["AuthService\nsrc/auth/AuthService.ts"]
+  Router --> AS["AuthService<br/>src/auth/AuthService.ts"]
   AS --> UR["UserRepository (SAD-004)"]
   AS --> SS["SessionStore (SAD-005)"]
 \`\`\`
@@ -392,8 +392,8 @@ flowchart TD
   B -- Yes --> D{checkLockout}
   D -- Locked --> E[Return ACCOUNT_LOCKED]
   D -- OK --> F{bcrypt compare}
-  F -- Mismatch --> G[Increment counter\nReturn INVALID_CREDENTIALS]
-  F -- Match --> H[Reset counter\nCreate session\nReturn Session]
+  F -- Mismatch --> G["Increment counter<br/>Return INVALID_CREDENTIALS"]
+  F -- Match --> H["Reset counter<br/>Create session<br/>Return Session"]
 \`\`\`
 
 ## Signature

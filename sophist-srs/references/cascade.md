@@ -40,7 +40,7 @@ Create `book/src/sad/SAD-{NNN}.md` for each architectural component implied by t
 
 ```mermaid
 graph LR
-  <CallerComponent> --> SAD-{NNN}["<ComponentName>\n<file path>"]
+  <CallerComponent> --> SAD-{NNN}["<ComponentName><br/><file path>"]
   SAD-{NNN} --> <DependencyComponent>
 ```
 
