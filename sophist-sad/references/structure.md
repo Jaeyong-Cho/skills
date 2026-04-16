@@ -220,6 +220,13 @@ flowchart TD
   F -- Yes --> H["Reset counter<br/>Create session<br/>Return Session"]
 ```
 
+### Syntax safety
+
+- **Quote labels with special characters** — wrap the label in `"..."` whenever it contains `[`, `]`, `(`, `)`, `{`, `}`, or `:`. Bare brackets make the parser think you're opening a new node shape: `A["result: User[]"]` not `A[result: User[]]`.
+- **Use `<br/>` for line breaks** — not `\n`. The `\n` character renders as literal text.
+- **Avoid `end` as a node ID** in `graph`/`flowchart` — it's a reserved keyword. Use `done`, `finish`, or `endNode` instead.
+- **When in doubt, quote** — `["label"]` is always safe; `[label]` is only safe for plain alphanumeric text.
+
 ---
 
 ## Index File Format

@@ -83,7 +83,7 @@ Each item's `## Description` should include **at least one mermaid diagram**. A 
 | SIT   | sequence diagram | Integration scenario between components under test |
 | UT    | flowchart or sequence | The test scenario and the expected call/return path |
 
-> **Mermaid line breaks**: Use `<br/>` for line breaks inside node labels — not `\n`. The `\n` character renders literally in the book.
+> **Mermaid syntax safety**: Use `<br/>` for line breaks — not `\n` (renders literally). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` syntax — bare brackets break the parser. When in doubt, always quote: `["label"]` is always safe.
 
 ---
 

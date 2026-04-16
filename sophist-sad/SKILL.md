@@ -65,7 +65,7 @@ For each answered SAD item:
 
 When incorporating an answer that changes the component's interface or responsibility, also check whether the component diagram (mermaid) needs updating — keep the diagram in sync with the text.
 
-> **Mermaid line breaks**: Use `<br/>` for line breaks inside mermaid node labels — not `\n`. The `\n` character renders literally and will not create a new line.
+> **Mermaid syntax safety**: Use `<br/>` for line breaks — not `\n` (renders literally). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` syntax — bare brackets break the parser.
 
 When an answer reshapes a component's interface, evaluate it against Deep Module principles (Ousterhout, *A Philosophy of Software Design*): does the revised interface hide more complexity than before, or does it leak internal details to callers? If the answer pushes complexity outward (more parameters, more caller knowledge required, narrower purpose), flag a review point asking whether the complexity can be absorbed into the component instead.
 
