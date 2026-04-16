@@ -33,7 +33,18 @@ Create one `book/src/sdd/SDD-{NNN}.md` per function or class method defined in t
 - ← [SAD-{NNN}](../sad/SAD-{NNN}.md): <why this function is the implementation of a specific responsibility declared in the parent SAD component>
 - → [UT-{NNN}](../ut/UT-{NNN}.md): <which behavior of this function the unit test covers>
 
-## Diagram
+## Static View
+
+```mermaid
+graph LR
+  <ParentModule>["<ClassName or Module>"] --> fn["<functionName>()"]
+  <ParentModule> --> sibling1["<siblingFunction>()"]
+  fn --> sibling1
+```
+
+_Show the parent module/class, this function, and any sibling functions it delegates to internally._
+
+## Dynamic View
 
 ```mermaid
 flowchart TD
@@ -42,7 +53,7 @@ flowchart TD
   B -- No --> D[<action>]
 ```
 
-_Omit diagram if the algorithm is a straight sequence with no branches._
+_Omit if the algorithm is a straight sequence with no branches. Use `sequenceDiagram` instead when the function primarily delegates to other functions._
 
 ## Signature
 `<functionName>(param: Type, ...): ReturnType`

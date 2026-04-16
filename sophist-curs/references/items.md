@@ -74,14 +74,16 @@ When the human has resolved the questions and promotes the item to `reviewed`, t
 
 Each item's `## Description` should include **at least one mermaid diagram**. A diagram makes the item self-explanatory in the rendered book and reduces ambiguity during review. Any diagram type is fine — choose whatever communicates the idea most clearly. Recommended types by layer:
 
-| Layer | Recommended | What to show |
-|-------|-------------|--------------|
-| CuRS  | flowchart or context diagram | How the customer's process works today / the desired interaction |
-| SRS   | sequence or flowchart | User-facing flow, including error paths and edge cases |
-| SAD   | flowchart or block diagram | Component boundaries, data flow, major interfaces |
-| SDD   | sequence or state diagram | How the function/class behaves step-by-step or across states |
-| SIT   | sequence diagram | Integration scenario between components under test |
-| UT    | flowchart or sequence | The test scenario and the expected call/return path |
+| Layer | View | Recommended | What to show |
+|-------|------|-------------|--------------|
+| CuRS  | — | flowchart or context diagram | How the customer's process works today / the desired interaction |
+| SRS   | — | sequence or flowchart | User-facing flow, including error paths and edge cases |
+| SAD   | Static (`## Static View`) | `graph LR` component diagram | Module structure — which components exist and how they depend on each other |
+| SAD   | Dynamic (`## Dynamic View`) | `sequenceDiagram` | Runtime message flow — how this module and its dependencies communicate during a typical operation |
+| SDD   | Static (`## Static View`) | `graph LR` module call graph | Function's structural position within its parent module — sibling functions and internal call relationships |
+| SDD   | Dynamic (`## Dynamic View`) | `flowchart TD` or `sequenceDiagram` | Algorithm control flow (flowchart for branching logic) or delegation sequence (sequenceDiagram for function-to-function calls) |
+| SIT   | — | `sequenceDiagram` | Integration scenario — specific test sequence between components under test |
+| UT    | — | flowchart or sequence | The test scenario and the expected call/return path |
 
 > **Mermaid syntax safety**: Use `<br/>` for line breaks — not `\n` (renders literally). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` syntax — bare brackets break the parser. When in doubt, always quote: `["label"]` is always safe.
 

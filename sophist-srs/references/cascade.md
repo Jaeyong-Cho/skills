@@ -36,12 +36,25 @@ Create `book/src/sad/SAD-{NNN}.md` for each architectural component implied by t
 - → [SDD-{NNN}](../sdd/SDD-{NNN}.md): TBD — SDD items created after SAD review
 - → [SIT-{NNN}](../sit/SIT-{NNN}.md): <what integration scenario this test covers>
 
-## Diagram
+## Static View
 
 ```mermaid
 graph LR
   <CallerComponent> --> SAD-{NNN}["<ComponentName><br/><file path>"]
   SAD-{NNN} --> <DependencyComponent>
+```
+
+## Dynamic View
+
+```mermaid
+sequenceDiagram
+  participant <Caller>
+  participant <ComponentName>
+  participant <Dependency>
+  <Caller>->><ComponentName>: <primary method call>
+  <ComponentName>->><Dependency>: <internal call>
+  <Dependency>-->><ComponentName>: <response>
+  <ComponentName>-->><Caller>: <result>
 ```
 
 ## Location

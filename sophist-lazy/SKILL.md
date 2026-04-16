@@ -140,6 +140,27 @@ Derive SAD components from SRS items. Apply the lazy assumption protocol for eve
 - ← [SRS-{NNN}](../srs/SRS-{NNN}.md): <responsibility derivation>
 - → [SDD-{NNN}](../sdd/SDD-{NNN}.md): <function to be designed>
 
+## Static View
+
+```mermaid
+graph LR
+  <CallerComponent> --> SAD-{NNN}["<ComponentName><br/><file path>"]
+  SAD-{NNN} --> <DependencyComponent>
+```
+
+## Dynamic View
+
+```mermaid
+sequenceDiagram
+  participant <Caller>
+  participant <ComponentName>
+  participant <Dependency>
+  <Caller>->><ComponentName>: <primary method call>
+  <ComponentName>->><Dependency>: <internal call>
+  <Dependency>-->><ComponentName>: <response>
+  <ComponentName>-->><Caller>: <result>
+```
+
 ## Responsibility
 <What this component owns. Prefer deep modules — hide decisions inside,
 expose only what callers need to know.>
@@ -187,6 +208,24 @@ Derive SDD items from each SAD component. This is the most critical layer for ob
 ## Traces
 - ← [SAD-{NNN}](../sad/SAD-{NNN}.md)
 - → [UT-{NNN}](../ut/UT-{NNN}.md)
+
+## Static View
+
+```mermaid
+graph LR
+  <ParentModule>["<ClassName or Module>"] --> fn["<functionName>()"]
+  <ParentModule> --> sibling1["<siblingFunction>()"]
+  fn --> sibling1
+```
+
+## Dynamic View
+
+```mermaid
+flowchart TD
+  A[<first step>] --> B{<decision?>}
+  B -- Yes --> C[<action>]
+  B -- No --> D[<action>]
+```
 
 ## Signature
 <function_name(param: Type, ...) -> ReturnType>

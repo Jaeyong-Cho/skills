@@ -163,40 +163,87 @@ The book has mermaid support. **Use mermaid diagrams aggressively** wherever the
 
 ### When to add diagrams
 
-| Item type | Diagram type | When to add |
-|-----------|-------------|-------------|
-| SAD | `graph LR` component diagram | Always — show the component and its dependencies |
-| SAD-001 | `graph TD` directory tree | Always — visualize the folder structure |
-| SDD | `flowchart TD` algorithm | When the algorithm has branches or loops |
-| SIT | `sequenceDiagram` | Always — show the interaction sequence between components |
-| SRS | `flowchart LR` | When the requirement involves a multi-step user flow |
+Each SAD and SDD item requires two diagram sections — a **static view** and a **dynamic view** — placed after `## Traces` and before the content fields.
+
+| Item type | Section | Diagram type | When to add |
+|-----------|---------|-------------|-------------|
+| SAD | `## Static View` | `graph LR` component diagram | Always — show this module's structure and dependencies |
+| SAD | `## Dynamic View` | `sequenceDiagram` | Always — show runtime message flow between this module and its dependencies |
+| SAD-001 | — | `graph TD` directory tree | Always — visualize the folder structure (no static/dynamic split needed) |
+| SDD | `## Static View` | `graph LR` module call graph | Always — show this function's structural position within its parent module |
+| SDD | `## Dynamic View` | `flowchart TD` or `sequenceDiagram` | Always — control flow for branching algorithms; sequence for delegation-heavy functions |
+| SIT | — | `sequenceDiagram` | Always — show the specific integration test scenario |
+| SRS | — | `flowchart LR` | When the requirement involves a multi-step user flow |
 
 ### Diagram placement
 
-Add a `## Diagram` section after `## Traces` and before the item body:
+Replace the single `## Diagram` section with two sections — one for structure, one for behavior:
 
 ```markdown
-## Diagram
+## Static View
 
 \`\`\`mermaid
 graph LR
-  Client --> AuthService
-  AuthService --> UserRepository
-  AuthService --> SessionStore
+  ...
+\`\`\`
+
+## Dynamic View
+
+\`\`\`mermaid
+sequenceDiagram
+  ...
 \`\`\`
 ```
 
+Place both sections after `## Traces`, before the item-specific content fields (e.g., `## Location`, `## Signature`).
+
 ### Mermaid examples by type
 
-**SAD component diagram** (`graph LR`):
+**SAD static view** (`graph LR`) — module structure and dependencies:
 ```
 graph LR
-  Client["Client (API router)"] --> AS["AuthService<br/>src/auth/AuthService.ts"]
-  AS --> UR["UserRepository<br/>src/user/UserRepository.ts"]
-  AS --> SS["SessionStore<br/>src/auth/SessionStore.ts"]
+  Router --> AS["AuthService<br/>src/auth/AuthService.ts"]
+  AS --> UR["UserRepository (SAD-004)<br/>src/user/UserRepository.ts"]
+  AS --> SS["SessionStore (SAD-005)<br/>src/auth/SessionStore.ts"]
 ```
 
-**SIT sequence diagram** (`sequenceDiagram`):
+**SAD dynamic view** (`sequenceDiagram`) — runtime message flow between modules:
+```
+sequenceDiagram
+  participant Router
+  participant AuthService
+  participant UserRepository
+  participant SessionStore
+  Router->>AuthService: authenticate(email, password)
+  AuthService->>UserRepository: findByEmail(email)
+  UserRepository-->>AuthService: User | null
+  AuthService->>SessionStore: createSession(user)
+  SessionStore-->>AuthService: Session
+  AuthService-->>Router: Session | AuthError
+```
+
+**SDD static view** (`graph LR`) — function's structural position within its module:
+```
+graph LR
+  AS["AuthService"] --> auth["authenticate()"]
+  AS --> lock["checkLockout()"]
+  AS --> out["logout()"]
+  auth --> lock
+```
+
+**SDD dynamic view** (`flowchart TD`) — algorithm and control flow:
+```
+flowchart TD
+  A[Look up user by email] --> B{Found?}
+  B -- No --> C[Return INVALID_CREDENTIALS]
+  B -- Yes --> D{checkLockout}
+  D -- Locked --> E[Return ACCOUNT_LOCKED]
+  D -- OK --> F{Password match?}
+  F -- No --> G["Increment failure counter<br/>Return INVALID_CREDENTIALS"]
+  F -- Yes --> H["Reset counter<br/>Create session<br/>Return Session"]
+```
+
+**SIT sequence diagram** (`sequenceDiagram`) — specific integration test scenario:
 ```
 sequenceDiagram
   participant Router
@@ -206,18 +253,6 @@ sequenceDiagram
   AuthService->>UserRepository: findByEmail(email)
   UserRepository-->>AuthService: User | null
   AuthService-->>Router: Session | AuthError
-```
-
-**SDD algorithm flowchart** (`flowchart TD`):
-```
-flowchart TD
-  A[Look up user by email] --> B{Found?}
-  B -- No --> C[Return INVALID_CREDENTIALS]
-  B -- Yes --> D{Locked?}
-  D -- Yes --> E[Return ACCOUNT_LOCKED]
-  D -- No --> F{Password match?}
-  F -- No --> G["Increment failure counter<br/>Return INVALID_CREDENTIALS"]
-  F -- Yes --> H["Reset counter<br/>Create session<br/>Return Session"]
 ```
 
 ### Syntax safety
@@ -342,13 +377,29 @@ Centralizing credential validation and session management in one component keeps
 - → [SDD-010](../sdd/SDD-010.md): SDD-010 specifies authenticate(), the core credential validation function of this component
 - → [SIT-003](../sit/SIT-003.md): SIT-003 verifies that AuthService integrates correctly with UserRepository and SessionStore
 
-## Diagram
+## Static View
 
 \`\`\`mermaid
 graph LR
   Router --> AS["AuthService<br/>src/auth/AuthService.ts"]
   AS --> UR["UserRepository (SAD-004)"]
   AS --> SS["SessionStore (SAD-005)"]
+\`\`\`
+
+## Dynamic View
+
+\`\`\`mermaid
+sequenceDiagram
+  participant Router
+  participant AuthService
+  participant UserRepository
+  participant SessionStore
+  Router->>AuthService: authenticate(email, password)
+  AuthService->>UserRepository: findByEmail(email)
+  UserRepository-->>AuthService: User | null
+  AuthService->>SessionStore: createSession(user)
+  SessionStore-->>AuthService: Session
+  AuthService-->>Router: Session | AuthError
 \`\`\`
 
 ## Location
@@ -390,7 +441,17 @@ This is the sole entry point for credential validation; centralizing the logic h
 - ← [SAD-003](../sad/SAD-003.md): SAD-003 defines AuthService as the owner of credential validation; this function is its primary entry point
 - → [UT-010](../ut/UT-010.md): UT-010 tests this function in isolation covering the happy path, wrong-password, and lockout cases
 
-## Diagram
+## Static View
+
+\`\`\`mermaid
+graph LR
+  AS["AuthService"] --> auth["authenticate()"]
+  AS --> lock["checkLockout()"]
+  AS --> out["logout()"]
+  auth --> lock
+\`\`\`
+
+## Dynamic View
 
 \`\`\`mermaid
 flowchart TD
