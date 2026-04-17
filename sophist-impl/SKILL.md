@@ -1,14 +1,30 @@
 ---
 name: sophist-impl
 description: |
-  SOPHIST implementation skill. Use this to implement source code for a specific SOPHIST item (SDD, SAD component, or a named feature). Reads the full upstream context (SDD → SAD → SRS → CuRS) and downstream test items (UT), then writes code that strictly follows the spec. When a conflict or ambiguity blocks implementation, writes a review point on the relevant item instead of guessing.
+  SOPHIST implementation skill. Use this to implement source code for a specific SOPHIST item (SDD, SAD component, or a named feature). Reads the full upstream context (SDD → SAD → SRS → CuRS) and downstream test items (UT), then writes code that strictly follows the spec. Automatically instruments code with diagram-traced log calls at SAD and SDD level. When a conflict or ambiguity blocks implementation, writes a review point on the relevant item instead of guessing.
   Triggers: "sophist-impl", "implement SDD-010", "implement SAD-003", "implement the auth module", "write the code for SDD-012", "sophist implement", "implement this item".
   Use this whenever the human wants AI to write source code driven by SOPHIST documents — even if they say "just implement it" or "write the code" while a SOPHIST book is present.
 ---
 
 # sophist-impl: Implement Code from SOPHIST Items
 
-**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
+**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. Instrument every implementation with log calls that correspond one-to-one with numbered steps in the SAD and SDD diagrams, so runtime logs are directly traceable back to the spec. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
+
+---
+
+## Logging model
+
+Every implementation produced by this skill includes log calls tied to the SOPHIST diagrams. The logging system must satisfy three requirements:
+
+| Requirement | Detail |
+|-------------|--------|
+| **Output** | Writes to stdout AND a log file simultaneously |
+| **Enable/disable** | `LOG_LEVEL=0` turns logging off entirely |
+| **Levels** | `LOG_LEVEL=1` — SAD only (component boundary crossings); `LOG_LEVEL=2` — SAD + SDD (full detail) |
+
+Higher levels are cumulative: `LOG_LEVEL=2` always includes SAD logs.
+
+Each log call must carry: the level name (SAD or SDD), the item ID, the step number, and the diagram label text. The exact format and implementation are determined by the project's own conventions — use whatever logging library and style the project already uses, or establish a simple one consistent with the language if none exists.
 
 ---
 
@@ -92,9 +108,97 @@ ls src/<path-from-sad-location>
 
 ---
 
-## Step 5: Implement
+## Step 5: Number and extract log points from diagrams
 
-Write the code following the SDD exactly:
+Before writing any business logic, enumerate every log checkpoint from the diagrams. This ensures log calls in the code match the spec exactly — no guessing, no drift.
+
+### SAD log points (level 1)
+
+Read the `## Dynamic View` of each parent SAD item. It contains a `sequenceDiagram`. Number each arrow in visual order (top to bottom):
+
+```
+sequenceDiagram
+  %% [1]
+  Client->>AuthService: authenticate(email, password)
+  %% [2]
+  AuthService->>UserStore: findByEmail(email)
+  %% [3]
+  UserStore-->>AuthService: user record
+  %% [4]
+  AuthService->>SessionStore: createSession(userId)
+  %% [5]
+  SessionStore-->>AuthService: session token
+  %% [6]
+  AuthService-->>Client: session token
+```
+
+**If the diagram does not already have `%% [N]` step annotations, add them now** before proceeding. This keeps the diagram and the code permanently in sync.
+
+Build a SAD log-point table:
+
+| Step | Label (exact diagram text) |
+|------|---------------------------|
+| [1]  | Client → AuthService: authenticate(email, password) |
+| [2]  | AuthService → UserStore: findByEmail(email) |
+| ... | ... |
+
+### SDD log points (level 2)
+
+Read the `## Dynamic View` of each SDD item. It is typically a `flowchart TD` or `sequenceDiagram`. Number each node or arrow in visual order:
+
+**Flowchart example:**
+```
+flowchart TD
+  A["[1] receive email, password"]
+  --> B["[2] validate email format"]
+  --> C{"[3] email valid?"}
+  C -- yes --> D["[4] fetch user from UserStore"]
+  C -- no --> E["[5] raise AuthError: invalid email"]
+  D --> F["[6] compare password with bcrypt hash"]
+  F --> G{"[7] match?"}
+  G -- yes --> H["[8] call createSession(userId)"]
+  G -- no --> I["[9] increment failCount; check lockout"]
+```
+
+**If step labels are not yet embedded in the node text, add them** using `["[N] original label"]` syntax.
+
+Build an SDD log-point table:
+
+| Step | Label |
+|------|-------|
+| [1]  | receive email, password |
+| [2]  | validate email format |
+| ... | ... |
+
+### Map log points to function scope
+
+Identify which SDD function body each log point belongs to, and which SAD step(s) that function corresponds to. A function typically begins where a SAD arrow arrives at this component, and ends where the SAD arrow returns. This determines where in the code to place each `log_sad` vs `log_sdd` call.
+
+---
+
+## Step 6: Ensure logging infrastructure exists
+
+Before implementing business logic, check whether the project already has a logging system:
+
+```bash
+# Look for existing logger setup — adapt search to the project's language
+grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/null | head -10
+```
+
+**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Do not create a parallel logger.
+
+**If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
+- Write to stdout and a log file simultaneously
+- Respect a `LOG_LEVEL` setting (0 = off, 1 = SAD only, 2 = SAD+SDD) — read from an env var or config file consistent with how the project reads other settings
+- Expose two call sites — one for SAD-level entries and one for SDD-level entries — so callers don't embed level logic
+
+Keep it simple. The goal is not a sophisticated logging framework; it is a reliable two-output, two-level system that the implementation can call without worrying about where output goes.
+
+---
+
+## Step 7: Implement
+
+Write the code following the SDD exactly, inserting log calls at each extracted checkpoint:
 
 | SDD field | What it drives |
 |-----------|---------------|
@@ -103,6 +207,49 @@ Write the code following the SDD exactly:
 | `## Variables` | Use the variable names and types listed |
 | `## Error cases` | Every error case must be handled — no silent omissions |
 | `## Side effects` | Honor what's declared; if "none", don't add any |
+
+### Placing log calls
+
+Insert log calls at the exact point in the code where the corresponding diagram step executes — not before, not after:
+
+- **`log_sad`** — at the function's entry point where the SAD diagram shows this component receiving a message, and at the return point where it sends a response. Use the SAD item ID and the step number from the `%% [N]` annotation.
+- **`log_sdd`** — at each algorithm step inside the function body, in the same order as the SDD Dynamic View diagram. Use the SDD item ID and the step number from the node label.
+
+**Example** (Python, auth scenario):
+
+```python
+from src.logging.sophist_logger import log_sad, log_sdd
+
+def authenticate(email: str, password: str) -> str:
+    log_sad("SAD-003", 1, "Client → AuthService: authenticate(email, password)")
+
+    log_sdd("SDD-010", 1, "receive email, password")
+    log_sdd("SDD-010", 2, "validate email format")
+    if not _is_valid_email(email):
+        log_sdd("SDD-010", 5, "raise AuthError: invalid email")
+        raise AuthError("invalid email format")
+
+    log_sdd("SDD-010", 4, "fetch user from UserStore")
+    log_sad("SAD-003", 2, "AuthService → UserStore: findByEmail(email)")
+    user = user_store.find_by_email(email)
+    log_sad("SAD-003", 3, "UserStore → AuthService: user record")
+
+    log_sdd("SDD-010", 6, "compare password with bcrypt hash")
+    if not bcrypt.checkpw(password.encode(), user.password_hash):
+        log_sdd("SDD-010", 9, "increment failCount; check lockout")
+        _handle_failed_attempt(user)
+        raise AuthError("invalid credentials")
+
+    log_sdd("SDD-010", 8, "call createSession(userId)")
+    log_sad("SAD-003", 4, "AuthService → SessionStore: createSession(userId)")
+    token = session_store.create_session(user.id)
+    log_sad("SAD-003", 5, "SessionStore → AuthService: session token")
+
+    log_sad("SAD-003", 6, "AuthService → Client: session token")
+    return token
+```
+
+The message text must be the exact label from the diagram — copy it, don't paraphrase. This is what makes the log traceable back to the spec without ambiguity.
 
 **When implementing a SAD component** (multiple SDD items in the same file): write all functions for that component in one pass, so imports and shared state are coherent.
 
@@ -120,11 +267,9 @@ Write the code following the SDD exactly:
    ```
 4. Continue with other functions
 
-This is the right behavior because the spec is the source of truth. If the spec is unclear, fixing the spec is more valuable than guessing — a wrong guess here can cascade into UT failures and a sad review cycle later.
-
 ---
 
-## Step 6: Create test stubs
+## Step 8: Create test stubs
 
 For each UT item linked from the implemented SDDs, check if a test stub exists:
 
@@ -154,7 +299,7 @@ For SIT stubs (`tests/sit/sit-{NNN}/`) and AT stubs (`tests/at/at-{NNN}/`), appl
 
 ---
 
-## Step 7: Build check
+## Step 9: Build check
 
 ```bash
 # Language-appropriate check — pick the right one for the project
@@ -171,7 +316,7 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 
 ---
 
-## Step 8: Report
+## Step 10: Report
 
 ```
 ## Implementation Report
@@ -182,22 +327,37 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 | SDD-010 | AuthService.authenticate() | src/auth/auth_service.py |
 | SDD-011 | AuthService.checkLockout() | src/auth/auth_service.py |
 
+### Log Points Instrumented
+| Level | Item | Step | Diagram label |
+|-------|------|------|---------------|
+| SAD | SAD-003 | [1] | Client → AuthService: authenticate(email, password) |
+| SAD | SAD-003 | [2] | AuthService → UserStore: findByEmail(email) |
+| SDD | SDD-010 | [2] | validate email format |
+| SDD | SDD-010 | [6] | compare password with bcrypt hash |
+| ... | ... | ... | ... |
+
+### Diagram Annotations Added
+| Item | Change |
+|------|--------|
+| SAD-003 | Added %% [N] step numbers to Dynamic View sequenceDiagram |
+| SDD-010 | Added [N] labels to Dynamic View flowchart nodes |
+
 ### Test Stubs Created
 | UT | Directory |
 |----|-----------|
 | UT-010 | tests/ut/ut-010/ |
 | UT-011 | tests/ut/ut-011/ |
-| UT-012 | tests/ut/ut-012/ |
 
 ### Blocked — Review Points Added
 | Item | Problem |
 |------|---------|
-| SDD-012 | Algorithm step 3 refers to "the session store" but SAD-004 lists two possible adapters (Redis and in-process) without specifying which. Added review point to SDD-012. |
+| SDD-012 | Algorithm step 3 refers to "the session store" but SAD-004 lists two possible adapters without specifying which. Added review point to SDD-012. |
 
 ### Next steps
 - Answer the review point in SDD-012, then run **sophist-sdd** to apply it
 - Run **sophist-codereview** to verify conformance when all items are unblocked
 - Write test assertions in the stubs, following each UT item's Input/Expected output
+- Set LOG_LEVEL=1 for production (SAD only), LOG_LEVEL=2 for debugging
 ```
 
 ---
@@ -220,6 +380,8 @@ Use `feat` for new functionality, `fix` for corrections to existing implementati
 ## Constraints
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.
+- **Log messages must match the diagram labels exactly.** Copy the text from the diagram; do not paraphrase. Paraphrasing breaks the log-to-spec traceability.
+- **Number diagrams before coding.** Step annotations (`%% [N]` in mermaid) must exist in the diagram before the corresponding log call is written in code. If the diagram lacks them, add them first.
 - **Never promote item state.** Leave all items as `reviewed`. sophist-codereview is the step that moves items to `done`.
 - **Never silently deviate.** Any gap between the spec and what you wrote must appear in the report.
 - **Never delete existing code** unless an SDD item explicitly describes replacing it. When in doubt, ask.
