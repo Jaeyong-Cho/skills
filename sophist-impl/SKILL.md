@@ -14,15 +14,19 @@ description: |
 
 ## Logging model
 
-Every implementation produced by this skill includes log calls tied to the SOPHIST diagrams. The logging system must satisfy three requirements:
+Diagram-traced logging is **optional**. If the human does not ask for logging instrumentation (e.g. just says "implement SDD-010" with no mention of logging), skip Steps 5–6 and the log call placement in Step 7 entirely — write clean business logic only.
+
+When logging is requested (or already present in the project), the system must satisfy these requirements:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output** | Writes to stdout AND a log file simultaneously |
+| **Output destination** | Configurable: `stdout` only, `file` only, or `both` simultaneously |
 | **Enable/disable** | `LOG_LEVEL=0` turns logging off entirely |
 | **Levels** | `LOG_LEVEL=1` — SAD only (component boundary crossings); `LOG_LEVEL=2` — SAD + SDD (full detail) |
 
 Higher levels are cumulative: `LOG_LEVEL=2` always includes SAD logs.
+
+The output destination is read from a `LOG_OUTPUT` setting (env var or config key, consistent with how the project reads other settings). Accepted values: `stdout` (default), `file`, `both`. When `file`, write to a project-appropriate log path (e.g. `logs/sophist.log`) or a path the human specifies.
 
 Each log call must carry: the level name (SAD or SDD), the item ID, the step number, and the diagram label text. The exact format and implementation are determined by the project's own conventions — use whatever logging library and style the project already uses, or establish a simple one consistent with the language if none exists.
 
@@ -178,6 +182,8 @@ Identify which SDD function body each log point belongs to, and which SAD step(s
 
 ## Step 6: Ensure logging infrastructure exists
 
+*(Skip this step entirely if logging instrumentation was not requested.)*
+
 Before implementing business logic, check whether the project already has a logging system:
 
 ```bash
@@ -185,14 +191,14 @@ Before implementing business logic, check whether the project already has a logg
 grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/null | head -10
 ```
 
-**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Do not create a parallel logger.
+**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `LOG_OUTPUT` (stdout / file / both) and `LOG_LEVEL` — if it doesn't, add only the missing pieces rather than replacing it.
 
 **If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
-- Write to stdout and a log file simultaneously
+- Route output based on `LOG_OUTPUT`: `stdout` → print only, `file` → append to log file only, `both` → do both
 - Respect a `LOG_LEVEL` setting (0 = off, 1 = SAD only, 2 = SAD+SDD) — read from an env var or config file consistent with how the project reads other settings
 - Expose two call sites — one for SAD-level entries and one for SDD-level entries — so callers don't embed level logic
 
-Keep it simple. The goal is not a sophisticated logging framework; it is a reliable two-output, two-level system that the implementation can call without worrying about where output goes.
+Keep it simple. The goal is not a sophisticated logging framework; it is a reliable configurable-output, two-level system that the implementation can call without worrying about where output goes.
 
 ---
 
@@ -380,6 +386,7 @@ Use `feat` for new functionality, `fix` for corrections to existing implementati
 ## Constraints
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.
+- **Log output destination is configurable.** When creating a new logger, honour `LOG_OUTPUT`: `stdout` (default), `file`, or `both`. Never hard-code one destination.
 - **Log messages must match the diagram labels exactly.** Copy the text from the diagram; do not paraphrase. Paraphrasing breaks the log-to-spec traceability.
 - **Number diagrams before coding.** Step annotations (`%% [N]` in mermaid) must exist in the diagram before the corresponding log call is written in code. If the diagram lacks them, add them first.
 - **Never promote item state.** Leave all items as `reviewed`. sophist-codereview is the step that moves items to `done`.
