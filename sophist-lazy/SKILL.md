@@ -1,7 +1,7 @@
 ---
 name: sophist-lazy
 description: |
-  SOPHIST lazy pipeline skill. Use this when the human has a new requirement and wants the full V-model chain (CuRS → SRS → SAD → SDD) written in one uninterrupted pass — without stopping for review at each stage. Every unresolved review point gets a "lazy assumption" (explicit best-guess decision) plus implementation-level observability specs written directly into SAD and SDD items, so that sophist-impl can emit the exact assert/log/monitor code and the human can detect when an unreviewed assumption fires at runtime. All assumptions are also collected into book/src/lazy-log.md for later triage.
+  SOPHIST lazy pipeline skill. Use this when the human has a new requirement and wants the full V-model chain (CuRS → SRS → SAD → SDD) written in one uninterrupted pass — without stopping for review at each stage. Every unresolved review point gets a "lazy assumption" (explicit best-guess decision) plus implementation-level observability specs written directly into SAD and SDD items, so that sophist-impl can emit the exact assert/log/monitor code and the human can detect when an unreviewed assumption fires at runtime. All assumptions are also collected into .sophist/src/lazy-log.md for later triage.
   Triggers: "sophist-lazy", "push this through the full pipeline", "draft the full chain for this requirement", "lazy pipeline", "one-shot from requirement to SDD", "quick design pass", "draft everything end to end", "just run the whole pipeline", "don't stop for review", "full V-model from this requirement".
   Use this when speed matters more than design certainty, and when you're willing to have the gaps flagged at runtime rather than at review time.
 ---
@@ -31,8 +31,8 @@ Accept any form: a sentence, a paragraph, a user story, a feature name.
 ### 1a. Check for existing coverage
 
 ```bash
-ls book/src/curs/ | grep "^CuRS-" | sort -t- -k2 -n | tail -1
-grep -ril "<keyword>" book/src/curs/ book/src/srs/
+ls .sophist/src/curs/ | grep "^CuRS-" | sort -t- -k2 -n | tail -1
+grep -ril "<keyword>" .sophist/src/curs/ .sophist/src/srs/
 ```
 
 If a full duplicate exists, stop and tell the human. If partial overlap, note it and continue.
@@ -67,7 +67,7 @@ Record the customer's words accurately — do not over-interpret.
 > **Lazy assumption**: taken at face value — no alternative interpretation attempted
 ```
 
-Add a row to `book/src/curs/index.md` and an entry to `SUMMARY.md`.
+Add a row to `.sophist/src/curs/index.md` and an entry to `SUMMARY.md`.
 
 ---
 
@@ -116,7 +116,7 @@ Assign a sequential Lazy ID (`L-001`, `L-002`, …) to every assumption across t
 | `log` | Soft assumption — wrong assumption degrades quality but doesn't break | Warning on first occurrence; program continues |
 | `monitor` | Scale or performance assumption | Metric counter/histogram; surfaced in dashboards |
 
-Create the AT item too (`book/src/at/AT-{NNN}.md`).
+Create the AT item too (`.sophist/src/at/AT-{NNN}.md`).
 
 ---
 
@@ -299,16 +299,16 @@ This table exists for the human's benefit — it makes all lazy assumptions scan
 | TypeScript | `if (!<cond>) throw new Error("LAZY-L-NNN ...")` | `console.warn("LAZY-L-NNN ...")` | `metrics.count("lazy.l_nnn.<slug>")` | top-level `throw` |
 | Go | `if !<cond> { panic("LAZY-L-NNN ...") }` | `log.Warn("LAZY-L-NNN ...")` | `metrics.Inc("lazy.l_nnn.<slug>")` | `func init() { panic(...) }` |
 
-Create UT items (`book/src/ut/UT-{NNN}.md`) for each SDD item. Left `draft` — the human writes assertions after review.
+Create UT items (`.sophist/src/ut/UT-{NNN}.md`) for each SDD item. Left `draft` — the human writes assertions after review.
 
 ---
 
 ## Step 5: Update indexes and build
 
-Update `index.md` for each document type touched, `book/src/tags.md` for `#lazy`, and `SUMMARY.md` for all new files.
+Update `index.md` for each document type touched, `.sophist/src/tags.md` for `#lazy`, and `SUMMARY.md` for all new files.
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix all broken links before reporting.
@@ -343,7 +343,7 @@ Fix all broken links before reporting.
 - L-002 (SAD-003): <assumption> — fires at module load of <file>
 
 ### Next steps
-- Search `#lazy` items to find all open assumptions: `grep -rl "#lazy" book/src/`
+- Search `#lazy` items to find all open assumptions: `grep -rl "#lazy" .sophist/src/`
 - For each: answer the lazy blockquote inline, remove the `[LAZY L-NNN]` step from the algorithm and the corresponding row from `## Lazy contracts`, clear the `#lazy` tag
 - Run **sophist-srs → sophist-sad → sophist-sdd** to promote items through proper review
 - Run **sophist-impl** to generate code — it will emit guards from Algorithm steps and SAD Lazy observability exactly as specified

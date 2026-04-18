@@ -20,7 +20,7 @@ Read before starting:
 ## Step 1: Find all draft SAD items
 
 ```bash
-grep -rl "^\`draft\`" book/src/sad/
+grep -rl "^\`draft\`" .sophist/src/sad/
 ```
 
 Read each draft SAD item file.
@@ -90,7 +90,7 @@ For each SAD item whose interface or component boundaries changed during Step 3,
 Find all draft SIT items:
 
 ```bash
-grep -rl "^\`draft\`" book/src/sit/
+grep -rl "^\`draft\`" .sophist/src/sit/
 ```
 
 For each draft SIT item, check if it has a pending `> **Review needed**` blockquote.
@@ -149,9 +149,9 @@ Also follow each SDD item's `→ [UT-` traces and update the linked UT items if 
 
 ## Step 7: Update tags and indexes
 
-- Update `book/src/tags.md` for any new tags used in new SDD or UT items
-- Update `book/src/sdd/index.md` traceability table
-- Update `book/src/ut/index.md` traceability table
+- Update `.sophist/src/tags.md` for any new tags used in new SDD or UT items
+- Update `.sophist/src/sdd/index.md` traceability table
+- Update `.sophist/src/ut/index.md` traceability table
 - Update `SUMMARY.md` with new SDD and UT entries
 
 ---
@@ -159,7 +159,7 @@ Also follow each SDD item's `→ [UT-` traces and update the linked UT items if 
 ## Step 8: Build check
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix broken markdown links before reporting.

@@ -20,7 +20,7 @@ Read before starting:
 ## Step 1: Find all draft SDD items
 
 ```bash
-grep -rl "^\`draft\`" book/src/sdd/
+grep -rl "^\`draft\`" .sophist/src/sdd/
 ```
 
 Read each draft SDD item file.
@@ -96,7 +96,7 @@ Keep UT state as `draft` — they follow their own review if needed.
 Find all draft UT items:
 
 ```bash
-grep -rl "^\`draft\`" book/src/ut/
+grep -rl "^\`draft\`" .sophist/src/ut/
 ```
 
 For each draft UT item, check if it has a pending `> **Review needed**` blockquote.
@@ -121,9 +121,9 @@ For each draft UT item, check if it has a pending `> **Review needed**` blockquo
 
 ## Step 6: Update indexes and tags
 
-- Update `book/src/sdd/index.md` traceability table for any state changes
-- Update `book/src/ut/index.md` if new UT items were added
-- Update `book/src/tags.md` if new tags were used
+- Update `.sophist/src/sdd/index.md` traceability table for any state changes
+- Update `.sophist/src/ut/index.md` if new UT items were added
+- Update `.sophist/src/tags.md` if new tags were used
 - Update `SUMMARY.md` if new UT items were created
 
 ---
@@ -131,7 +131,7 @@ For each draft UT item, check if it has a pending `> **Review needed**` blockquo
 ## Step 7: Build check
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix broken links before reporting.

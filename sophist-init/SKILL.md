@@ -6,7 +6,7 @@ description: |
 
 # sophist-init: Initialize the SOPHIST Book
 
-**Goal**: Set up `book/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft SOPHIST items by reverse-engineering the existing codebase.
+**Goal**: Set up `.sophist/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft SOPHIST items by reverse-engineering the existing codebase.
 
 Read before starting:
 - `references/items.md` — item format, ID system, states, tags
@@ -30,8 +30,8 @@ If `cargo` is not available, tell the user to install it first:
 ## Step 2: Initialize mdbook
 
 ```bash
-mdbook init book --title "<project-name>" --ignore git
-mdbook-mermaid install book/
+mdbook init .sophist --title "<project-name>" --ignore git
+mdbook-mermaid install .sophist/
 ```
 
 Replace `<project-name>` with the actual project name.
@@ -41,11 +41,11 @@ Replace `<project-name>` with the actual project name.
 ## Step 3: Generate theme and apply CSS override
 
 ```bash
-cd book
+cd .sophist
 mdbook init --theme
 ```
 
-This creates `book/theme/` with the default theme files. Then open `book/theme/css/variables.css` and set the content width at the top of the `:root` block:
+This creates `.sophist/theme/` with the default theme files. Then open `.sophist/theme/css/variables.css` and set the content width at the top of the `:root` block:
 
 ```css
 :root {
@@ -59,7 +59,7 @@ The full `:root` block will already contain many variables — add or replace on
 
 ## Step 4: Configure book.toml
 
-Replace `book/book.toml` with:
+Replace `.sophist/book.toml` with:
 
 ```toml
 [book]
@@ -116,7 +116,7 @@ _No tags yet. Tags are added as items are created._
 
 Create one `index.md` per document type. Item files are created separately by **sophist-update**.
 
-**book/src/curs/index.md**:
+**.sophist/src/curs/index.md**:
 ```markdown
 # Customer Requirements (CuRS)
 
@@ -131,7 +131,7 @@ Each CuRS item records what the customer said, not what will be built.
 _No items yet. Add customer requirements using **sophist-update**._
 ```
 
-**book/src/srs/index.md**:
+**.sophist/src/srs/index.md**:
 ```markdown
 # Software Requirements Specification (SRS)
 
@@ -146,7 +146,7 @@ Each item traces to one or more CuRS items and to one or more SAD items.
 _No items yet._
 ```
 
-**book/src/sad/index.md**:
+**.sophist/src/sad/index.md**:
 ```markdown
 # Software Architectural Design (SAD)
 
@@ -165,7 +165,7 @@ _To be filled in by SAD-001._
 _No items yet._
 ```
 
-**book/src/sdd/index.md**:
+**.sophist/src/sdd/index.md**:
 ```markdown
 # Software Detailed Design (SDD)
 
@@ -180,7 +180,7 @@ SDD items must be specific enough for a human to write the function body without
 _No items yet._
 ```
 
-**book/src/at/index.md**:
+**.sophist/src/at/index.md**:
 ```markdown
 # Acceptance Tests (AT)
 
@@ -194,7 +194,7 @@ Black-box tests that verify SRS items from the user's perspective.
 _No items yet._
 ```
 
-**book/src/sit/index.md**:
+**.sophist/src/sit/index.md**:
 ```markdown
 # Software Integration Tests (SIT)
 
@@ -208,7 +208,7 @@ Tests that verify SAD-level component interactions.
 _No items yet._
 ```
 
-**book/src/ut/index.md**:
+**.sophist/src/ut/index.md**:
 ```markdown
 # Unit Tests (UT)
 
@@ -236,7 +236,7 @@ mkdir -p tests/at tests/sit tests/ut
 ## Step 9: Build check
 
 ```bash
-cd book && mdbook build 2>&1
+cd .sophist && mdbook build 2>&1
 ```
 
 Fix all errors before reporting.
@@ -252,7 +252,7 @@ The goal is to reverse-engineer a first draft of all SOPHIST layers from the exi
 ### 10a. Survey the codebase
 
 ```bash
-find . -not -path './book/*' -not -path './.git/*' \
+find . -not -path './.sophist/*' -not -path './.git/*' \
   -name "*.py" -o -name "*.ts" -o -name "*.js" -o -name "*.go" \
   -o -name "*.rs" -o -name "*.java" -o -name "*.c" -o -name "*.cpp" \
   | head -60
@@ -268,33 +268,33 @@ Read key files: entry points, main modules, public interfaces, README if present
 
 Infer 1–3 customer-level requirements from the observable purpose of the software. Each CuRS captures *what the software does for its users*, not implementation details.
 
-Create `book/src/curs/CuRS-{NNN}.md` for each. Use the item template from `references/items.md`. Mark state `draft`. Add a review point asking the team to confirm the inferred customer intent.
+Create `.sophist/src/curs/CuRS-{NNN}.md` for each. Use the item template from `references/items.md`. Mark state `draft`. Add a review point asking the team to confirm the inferred customer intent.
 
-Add entries to `SUMMARY.md` and `book/src/curs/index.md`.
+Add entries to `SUMMARY.md` and `.sophist/src/curs/index.md`.
 
 ### 10c. Derive SRS items
 
 For each CuRS, derive testable software requirements. Each SRS item must trace back to a CuRS and describe a specific, measurable behaviour the software shall provide.
 
-Create `book/src/srs/SRS-{NNN}.md` for each. Mark state `draft`. Link to the CuRS that motivated it.
+Create `.sophist/src/srs/SRS-{NNN}.md` for each. Mark state `draft`. Link to the CuRS that motivated it.
 
-Add entries to `SUMMARY.md` and `book/src/srs/index.md`.
+Add entries to `SUMMARY.md` and `.sophist/src/srs/index.md`.
 
 ### 10d. Write SAD items
 
 Describe the architectural components you observed: directories, modules, key interfaces. SAD-001 must describe the directory structure. Subsequent items describe each significant component.
 
-Create `book/src/sad/SAD-{NNN}.md` for each. Mark state `draft`. Trace to the SRS items that each component satisfies.
+Create `.sophist/src/sad/SAD-{NNN}.md` for each. Mark state `draft`. Trace to the SRS items that each component satisfies.
 
-Add entries to `SUMMARY.md` and `book/src/sad/index.md`.
+Add entries to `SUMMARY.md` and `.sophist/src/sad/index.md`.
 
 ### 10e. Write SDD items
 
 For each significant function or class in the codebase, create an SDD item describing its signature, behaviour, and error handling. Focus on the public API surface first; private helpers only if they are complex.
 
-Create `book/src/sdd/SDD-{NNN}.md` for each. Mark state `draft`. Trace to the SAD component.
+Create `.sophist/src/sdd/SDD-{NNN}.md` for each. Mark state `draft`. Trace to the SAD component.
 
-Add entries to `SUMMARY.md` and `book/src/sdd/index.md`.
+Add entries to `SUMMARY.md` and `.sophist/src/sdd/index.md`.
 
 ### 10f. Write AT, SIT, UT items
 
@@ -313,7 +313,7 @@ Add tags used across all new items to the tag registry.
 ### 10h. Build check
 
 ```bash
-cd book && mdbook build 2>&1
+cd .sophist && mdbook build 2>&1
 ```
 
 Fix all broken links before continuing.
@@ -334,11 +334,11 @@ Tell the user:
 ```
 SOPHIST initialized.
 
-Book:    book/  (mdbook + mermaid)
-Theme:   book/theme/css/variables.css (--content-max-width: 80%)
+Book:    .sophist/  (mdbook + mermaid)
+Theme:   .sophist/theme/css/variables.css (--content-max-width: 80%)
 Chapters: CuRS · SRS · SAD · SDD · AT · SIT · UT
           Each item is a separate file within its chapter directory.
-Tags:    book/src/tags.md (empty — populated as items are added)
+Tags:    .sophist/src/tags.md (empty — populated as items are added)
 
 Source:  src/
 Tests:   tests/at/  tests/sit/  tests/ut/
@@ -350,15 +350,15 @@ Next step: Use sophist-curs with your first customer requirement.
 ```
 SOPHIST initialized and bootstrapped from existing code.
 
-Book:    book/  (mdbook + mermaid)
+Book:    .sophist/  (mdbook + mermaid)
 Chapters: CuRS · SRS · SAD · SDD · AT · SIT · UT
           <N> items created across all layers (all marked draft)
-Tags:    book/src/tags.md
+Tags:    .sophist/src/tags.md
 
 All items are draft — they represent AI's best reading of the existing code.
 Review each layer and answer the review points before running the sophist-* review skills.
 
-Next step: Open book/src/curs/ and review the inferred customer requirements.
+Next step: Open .sophist/src/curs/ and review the inferred customer requirements.
            Correct anything that doesn't match your actual intent, then run sophist-srs.
 ```
 

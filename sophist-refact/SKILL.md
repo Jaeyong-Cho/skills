@@ -19,7 +19,7 @@ The guiding principle: a module is good when its interface is simpler than its i
 Read the SAD index to get the list of components and their declared interfaces:
 
 ```bash
-cat book/src/sad/index.md
+cat .sophist/src/sad/index.md
 ```
 
 Then map what calls what by scanning the source tree:
@@ -163,11 +163,11 @@ Keep UT items in `draft` — the human writes the assertions.
 
 ```bash
 # Update relevant index files
-book/src/sad/index.md     — state changes, new/deprecated components
-book/src/sdd/index.md     — state changes, new/deprecated items
-book/src/ut/index.md      — new or deprecated UT items
-book/src/tags.md          — any new tags (e.g. `refactor`, `deprecated`)
-book/src/SUMMARY.md       — new files need entries
+.sophist/src/sad/index.md     — state changes, new/deprecated components
+.sophist/src/sdd/index.md     — state changes, new/deprecated items
+.sophist/src/ut/index.md      — new or deprecated UT items
+.sophist/src/tags.md          — any new tags (e.g. `refactor`, `deprecated`)
+.sophist/src/SUMMARY.md       — new files need entries
 ```
 
 ---
@@ -175,7 +175,7 @@ book/src/SUMMARY.md       — new files need entries
 ## Step 7: Build check
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix broken links before reporting.

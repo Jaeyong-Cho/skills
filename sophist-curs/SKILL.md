@@ -20,9 +20,9 @@ Read before starting:
 ### 1a. Next available IDs
 
 ```bash
-ls book/src/curs/ | grep "^CuRS-[0-9]" | sort -t- -k2 -n | tail -1
-ls book/src/srs/  | grep "^SRS-[0-9]"  | sort -t- -k2 -n | tail -1
-ls book/src/at/   | grep "^AT-[0-9]"   | sort -t- -k2 -n | tail -1
+ls .sophist/src/curs/ | grep "^CuRS-[0-9]" | sort -t- -k2 -n | tail -1
+ls .sophist/src/srs/  | grep "^SRS-[0-9]"  | sort -t- -k2 -n | tail -1
+ls .sophist/src/at/   | grep "^AT-[0-9]"   | sort -t- -k2 -n | tail -1
 ```
 
 ### 1b. Similarity analysis
@@ -30,8 +30,8 @@ ls book/src/at/   | grep "^AT-[0-9]"   | sort -t- -k2 -n | tail -1
 Before writing anything, understand what's already in the book. Search with several keyword angles — the user's exact words, synonyms, the feature area, and the actor/system involved:
 
 ```bash
-grep -ril "<keyword1>" book/src/curs/ book/src/srs/
-grep -ril "<keyword2>" book/src/curs/ book/src/srs/
+grep -ril "<keyword1>" .sophist/src/curs/ .sophist/src/srs/
+grep -ril "<keyword2>" .sophist/src/curs/ .sophist/src/srs/
 ```
 
 Read the full content of every match. For each distinct concept in the user's input, classify the coverage:
@@ -60,7 +60,7 @@ Proceed with changes only after presenting this table. If the user overrides an 
 ### 1c. Read tag registry
 
 ```bash
-cat book/src/tags.md
+cat .sophist/src/tags.md
 ```
 
 ---
@@ -71,7 +71,7 @@ Work through each concept according to the action decided in Step 1b.
 
 ### NEW — Write CuRS item(s)
 
-Create `book/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately — do not over-interpret yet.
+Create `.sophist/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately — do not over-interpret yet.
 
 ```markdown
 # CuRS-{NNN}: <short title>
@@ -97,7 +97,7 @@ Create `book/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately —
 > **Review needed** — confirm this captures the customer's intent accurately; note any assumptions made
 ```
 
-Add to `SUMMARY.md` under Customer Requirements and add a row to `book/src/curs/index.md`.
+Add to `SUMMARY.md` under Customer Requirements and add a row to `.sophist/src/curs/index.md`.
 
 ### UPDATE — Revise an existing CuRS item
 
@@ -131,7 +131,7 @@ When an existing item already covers the intent, don't create anything. Just not
 
 ## Step 3: Derive SRS items
 
-For each CuRS item, create one or more `book/src/srs/SRS-{NNN}.md` files. Each SRS item must be testable — if you can't imagine an AT for it, split or reframe it.
+For each CuRS item, create one or more `.sophist/src/srs/SRS-{NNN}.md` files. Each SRS item must be testable — if you can't imagine an AT for it, split or reframe it.
 
 ```markdown
 # SRS-{NNN}: <requirement title>
@@ -156,7 +156,7 @@ For each CuRS item, create one or more `book/src/srs/SRS-{NNN}.md` files. Each S
 > **Review needed** — <specific question: scope, ambiguity, or assumption to verify>
 ```
 
-Add to `SUMMARY.md` under Software Requirements and add a row to `book/src/srs/index.md`.
+Add to `SUMMARY.md` under Software Requirements and add a row to `.sophist/src/srs/index.md`.
 
 Note: The `→ SAD` trace is intentionally absent here. sophist-srs creates the SAD items and adds that trace after you review the SRS.
 
@@ -164,7 +164,7 @@ Note: The `→ SAD` trace is intentionally absent here. sophist-srs creates the 
 
 ## Step 4: Write AT items
 
-For each SRS item, create `book/src/at/AT-{NNN}.md`.
+For each SRS item, create `.sophist/src/at/AT-{NNN}.md`.
 
 ```markdown
 # AT-{NNN}: <test title>
@@ -197,7 +197,7 @@ For each SRS item, create `book/src/at/AT-{NNN}.md`.
 > **Review needed** — <question about test scope or pass criterion>
 ```
 
-Add to `SUMMARY.md` under Acceptance Tests and add a row to `book/src/at/index.md`.
+Add to `SUMMARY.md` under Acceptance Tests and add a row to `.sophist/src/at/index.md`.
 
 ---
 
@@ -206,7 +206,7 @@ Add to `SUMMARY.md` under Acceptance Tests and add a row to `book/src/at/index.m
 For every new tag used, add a row to the tag registry and update item counts for affected tags.
 
 ```bash
-grep -rh "#[a-z]" book/src/curs/ book/src/srs/ book/src/at/ \
+grep -rh "#[a-z]" .sophist/src/curs/ .sophist/src/srs/ .sophist/src/at/ \
   | grep -o "#[a-z-]*" | sort | uniq -c | sort -rn
 ```
 
@@ -214,14 +214,14 @@ grep -rh "#[a-z]" book/src/curs/ book/src/srs/ book/src/at/ \
 
 ## Step 6: Update traceability summaries
 
-Update the traceability tables in `book/src/curs/index.md`, `book/src/srs/index.md`, and `book/src/at/index.md`.
+Update the traceability tables in `.sophist/src/curs/index.md`, `.sophist/src/srs/index.md`, and `.sophist/src/at/index.md`.
 
 ---
 
 ## Step 7: Build check
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix all broken links before reporting.

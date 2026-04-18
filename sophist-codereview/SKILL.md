@@ -40,20 +40,20 @@ When in doubt, check both: find the scope, compare code to spec, then classify e
 
 Ask the human (or infer from context) which items are in scope:
 - `"I edited auth.py directly"` → find all SDD items under the SAD that owns `auth.py`
-- `"I implemented SDD-010"` → read `book/src/sdd/SDD-010.md` directly
+- `"I implemented SDD-010"` → read `.sophist/src/sdd/SDD-010.md` directly
 - `"I finished the auth module"` → find all SDD items under SAD-003:
-  `grep -rl "SAD-003" book/src/sdd/`
+  `grep -rl "SAD-003" .sophist/src/sdd/`
 - `"review everything"` → full review of all `reviewed` and `done` items
 
 ```bash
 # Find all reviewed SDD items
-grep -rl "^\`reviewed\`" book/src/sdd/ | sort
+grep -rl "^\`reviewed\`" .sophist/src/sdd/ | sort
 
 # Find all done SDD items (direct edits may have made done items diverge)
-grep -rl "^\`done\`" book/src/sdd/ | sort
+grep -rl "^\`done\`" .sophist/src/sdd/ | sort
 
 # Find SDD items for a specific SAD component
-grep -rl "\[SAD-003\]" book/src/sdd/
+grep -rl "\[SAD-003\]" .sophist/src/sdd/
 ```
 
 ---
@@ -64,18 +64,18 @@ Read each relevant item file directly:
 
 ```bash
 # Read a specific SDD item
-cat book/src/sdd/SDD-010.md
+cat .sophist/src/sdd/SDD-010.md
 
 # Read its parent SAD item (find via trace reference in the SDD file)
-grep "← \[SAD-" book/src/sdd/SDD-010.md
-# → then: cat book/src/sad/SAD-003.md
+grep "← \[SAD-" .sophist/src/sdd/SDD-010.md
+# → then: cat .sophist/src/sad/SAD-003.md
 
 # Read all SDD items under a given SAD component
-grep -rl "\[SAD-003\]" book/src/sdd/ | sort | xargs -I{} cat {}
+grep -rl "\[SAD-003\]" .sophist/src/sdd/ | sort | xargs -I{} cat {}
 
 # Read linked UT items (find via trace)
-grep "→ \[UT-" book/src/sdd/SDD-010.md
-# → then: cat book/src/ut/UT-010.md
+grep "→ \[UT-" .sophist/src/sdd/SDD-010.md
+# → then: cat .sophist/src/ut/UT-010.md
 ```
 
 Build a checklist from each item's sections:
@@ -214,7 +214,7 @@ Each test item has its own directory: `tests/ut/ut-{NNN}/`, `tests/at/at-{NNN}/`
 
 ```bash
 # Read the UT item to know what function/case to look for
-cat book/src/ut/UT-010.md
+cat .sophist/src/ut/UT-010.md
 
 # Check test stub directory and file exist
 ls tests/ut/ut-010/
@@ -239,7 +239,7 @@ Look for significant code that has no corresponding SDD item:
 grep -n "def \|function \|async \|^\s*[a-zA-Z].*(" src/<path>/<file>
 
 # List all SDD items that reference this SAD component
-grep -rl "\[SAD-003\]" book/src/sdd/ | xargs ls
+grep -rl "\[SAD-003\]" .sophist/src/sdd/ | xargs ls
 ```
 
 Compare functions found in source against SDD items. Any non-trivial function without a SDD item is either:
@@ -256,7 +256,7 @@ For each item where no deviations were found, update its `## State` from `` `rev
 
 ```bash
 # Example: mark SDD-010 done
-sed -i '' 's/^`reviewed`$/`done`/' book/src/sdd/SDD-010.md
+sed -i '' 's/^`reviewed`$/`done`/' .sophist/src/sdd/SDD-010.md
 ```
 
 Do this for SDD items, their parent SAD items (if all SDD items under that SAD are done), and the linked UT/AT/SIT items when their test stubs are confirmed present.

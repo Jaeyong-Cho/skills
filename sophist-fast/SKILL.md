@@ -49,7 +49,7 @@ Read the relevant file before editing so you understand the current content.
 
 For a SOPHIST item:
 ```bash
-cat book/src/<layer>/<ID>.md
+cat .sophist/src/<layer>/<ID>.md
 ```
 
 For source or test code, locate the file first if the path wasn't given:
@@ -81,24 +81,24 @@ Make only the targeted edit. Don't touch unrelated fields or lines.
 
 SUMMARY.md:
 ```bash
-grep -n "<ID>" book/src/SUMMARY.md
+grep -n "<ID>" .sophist/src/SUMMARY.md
 ```
 Update the display text: `- [<ID>: <new title>](./<layer>/<ID>.md)`
 
 index.md for this layer:
 ```bash
-grep -n "<ID>" book/src/<layer>/index.md
+grep -n "<ID>" .sophist/src/<layer>/index.md
 ```
 
 Other items whose trace descriptions name this item by title:
 ```bash
-grep -rl "\[<ID>\]" book/src/
+grep -rl "\[<ID>\]" .sophist/src/
 ```
 Update only the description text; link targets (file paths) don't change.
 
 **If a tag was added or removed:**
 
-Update the item count in `book/src/tags.md`. If the tag is brand new, add a row for it.
+Update the item count in `.sophist/src/tags.md`. If the tag is brand new, add a row for it.
 
 **If a traceability link was fixed:**
 
@@ -125,9 +125,9 @@ Make sure the change doesn't break the relationship between the test and its SOP
 List every file changed and what changed in each, one line per file:
 
 ```
-✓ book/src/srs/SRS-007.md      — title: "User auth" → "User authentication via email"
-✓ book/src/SUMMARY.md          — updated display text for SRS-007
-✓ book/src/srs/index.md        — updated link text in traceability table
+✓ .sophist/src/srs/SRS-007.md      — title: "User auth" → "User authentication via email"
+✓ .sophist/src/SUMMARY.md          — updated display text for SRS-007
+✓ .sophist/src/srs/index.md        — updated link text in traceability table
 ✓ src/auth/AuthService.ts      — renamed checkLockout() → checkLockoutStatus()
 ✓ tests/ut/ut-010/test.ts      — updated call site for renamed function
 ```
@@ -165,7 +165,7 @@ Read the target item and one level up — no more than needed:
 
 ```bash
 # Target item
-cat book/src/<layer>/<ID>.md
+cat .sophist/src/<layer>/<ID>.md
 
 # Direct upstream (the "why" and interface contract)
 # For SDD → read its parent SAD item

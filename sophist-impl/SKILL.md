@@ -43,13 +43,13 @@ Infer the target from the human's message:
 
 ```bash
 # Find reviewed SDD items not yet done
-grep -rl "^\`reviewed\`" book/src/sdd/ | sort
+grep -rl "^\`reviewed\`" .sophist/src/sdd/ | sort
 
 # Find all SDD items under a SAD component
-grep -rl "\[SAD-003\]" book/src/sdd/
+grep -rl "\[SAD-003\]" .sophist/src/sdd/
 
 # Find SDD items by keyword
-grep -rl "authenticate" book/src/sdd/
+grep -rl "authenticate" .sophist/src/sdd/
 ```
 
 If the scope is ambiguous, ask: "I found these items — implement all of them, or just some?"
@@ -77,22 +77,22 @@ For each SDD item to implement, build a complete picture before writing a single
 **Upstream** (why this code exists):
 ```bash
 # Read the SDD item
-cat book/src/sdd/SDD-{NNN}.md
+cat .sophist/src/sdd/SDD-{NNN}.md
 
 # Read its parent SAD (for file location, component responsibility)
-grep "← \[SAD-" book/src/sdd/SDD-{NNN}.md
-cat book/src/sad/SAD-{MMM}.md
+grep "← \[SAD-" .sophist/src/sdd/SDD-{NNN}.md
+cat .sophist/src/sad/SAD-{MMM}.md
 
 # Read the SRS items traced from that SAD (for the requirement intent)
-grep "← \[SRS-" book/src/sad/SAD-{MMM}.md
-cat book/src/srs/SRS-{KKK}.md
+grep "← \[SRS-" .sophist/src/sad/SAD-{MMM}.md
+cat .sophist/src/srs/SRS-{KKK}.md
 ```
 
 **Downstream** (what tests must pass):
 ```bash
 # Read linked UT items
-grep "→ \[UT-" book/src/sdd/SDD-{NNN}.md
-cat book/src/ut/UT-{NNN}.md
+grep "→ \[UT-" .sophist/src/sdd/SDD-{NNN}.md
+cat .sophist/src/ut/UT-{NNN}.md
 ```
 
 You don't need to read CuRS unless the SRS intent is genuinely unclear. The SDD and its parent SAD are the primary implementation contract.
@@ -309,7 +309,7 @@ For SIT stubs (`tests/sit/sit-{NNN}/`) and AT stubs (`tests/at/at-{NNN}/`), appl
 
 ```bash
 # Language-appropriate check — pick the right one for the project
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 
 # For Python
 python -m py_compile src/<file>

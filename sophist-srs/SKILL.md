@@ -20,7 +20,7 @@ Read before starting:
 ## Step 1: Find all draft SRS items
 
 ```bash
-grep -rl "^\`draft\`" book/src/srs/
+grep -rl "^\`draft\`" .sophist/src/srs/
 ```
 
 Read each draft SRS item file.
@@ -88,7 +88,7 @@ For each SRS item whose content changed during Step 3, read its linked AT item(s
 Find all draft AT items:
 
 ```bash
-grep -rl "^\`draft\`" book/src/at/
+grep -rl "^\`draft\`" .sophist/src/at/
 ```
 
 For each draft AT item, check if it has a pending `> **Review needed**` blockquote.
@@ -150,9 +150,9 @@ Also follow each SAD item's `→ [SIT-` traces and update the linked SIT items i
 
 ## Step 7: Update tags and indexes
 
-- Update `book/src/tags.md` for any new tags used in new SAD or SIT items
-- Update `book/src/sad/index.md` traceability table
-- Update `book/src/sit/index.md` traceability table
+- Update `.sophist/src/tags.md` for any new tags used in new SAD or SIT items
+- Update `.sophist/src/sad/index.md` traceability table
+- Update `.sophist/src/sit/index.md` traceability table
 - Update `SUMMARY.md` with new SAD and SIT entries
 
 ---
@@ -160,7 +160,7 @@ Also follow each SAD item's `→ [SIT-` traces and update the linked SIT items i
 ## Step 8: Build check
 
 ```bash
-cd book && mdbook build 2>&1 | tail -20
+cd .sophist && mdbook build 2>&1 | tail -20
 ```
 
 Fix broken markdown links before reporting.
