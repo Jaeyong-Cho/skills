@@ -122,21 +122,15 @@ Read the `## Dynamic View` of each parent SAD item. It contains a `sequenceDiagr
 
 ```
 sequenceDiagram
-  %% [1]
-  Client->>AuthService: authenticate(email, password)
-  %% [2]
-  AuthService->>UserStore: findByEmail(email)
-  %% [3]
-  UserStore-->>AuthService: user record
-  %% [4]
-  AuthService->>SessionStore: createSession(userId)
-  %% [5]
-  SessionStore-->>AuthService: session token
-  %% [6]
-  AuthService-->>Client: session token
+  Client->>AuthService: [1] authenticate(email, password)
+  AuthService->>UserStore: [2] findByEmail(email)
+  UserStore-->>AuthService: [3] user record
+  AuthService->>SessionStore: [4] createSession(userId)
+  SessionStore-->>AuthService: [5] session token
+  AuthService-->>Client: [6] session token
 ```
 
-**If the diagram does not already have `%% [N]` step annotations, add them now** before proceeding. This keeps the diagram and the code permanently in sync.
+**If the diagram does not already have `[N]` step annotations, add them now** before proceeding. This keeps the diagram and the code permanently in sync.
 
 Build a SAD log-point table:
 
