@@ -150,18 +150,18 @@ Read the `## Dynamic View` of each SDD item. It is typically a `flowchart TD` or
 **Flowchart example:**
 ```
 flowchart TD
-  A["[1] receive email, password"]
-  --> B["[2] validate email format"]
-  --> C{"[3] email valid?"}
-  C -- yes --> D["[4] fetch user from UserStore"]
-  C -- no --> E["[5] raise AuthError: invalid email"]
-  D --> F["[6] compare password with bcrypt hash"]
-  F --> G{"[7] match?"}
-  G -- yes --> H["[8] call createSession(userId)"]
-  G -- no --> I["[9] increment failCount; check lockout"]
+  A["1. receive email, password"]
+  --> B["2. validate email format"]
+  --> C{"3. email valid?"}
+  C -- yes --> D["4. fetch user from UserStore"]
+  C -- no --> E["5. raise AuthError: invalid email"]
+  D --> F["6. compare password with bcrypt hash"]
+  F --> G{"7. match?"}
+  G -- yes --> H["8. call createSession(userId)"]
+  G -- no --> I["9. increment failCount; check lockout"]
 ```
 
-**If step labels are not yet embedded in the node text, add them** using `["[N] original label"]` syntax.
+**If step labels are not yet embedded in the node text, add them** using `["N. original label"]` syntax.
 
 Build an SDD log-point table:
 
