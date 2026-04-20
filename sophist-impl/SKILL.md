@@ -8,7 +8,7 @@ description: |
 
 # sophist-impl: Implement Code from SOPHIST Items
 
-**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. Instrument every implementation with log calls that correspond one-to-one with numbered steps in the SAD and SDD diagrams, so runtime logs are directly traceable back to the spec. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
+**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. Instrument every implementation with appropriate log calls so runtime behavior is observable and traceable back to the spec. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
 
 ---
 
@@ -35,7 +35,7 @@ Higher levels are cumulative: `DEBUG` always includes `INFO` output.
 
 `LOG_OUTPUT` and `LOG_LEVEL` are read from env vars or a config key, consistent with how the project reads other settings. When `LOG_OUTPUT=file`, write to a path the human specifies.
 
-Each log call uses the project's standard logger at the appropriate level. The message must carry: the item ID and step number as a `[ITEM.N]` prefix, and the relevant runtime variable values. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
+Each log call uses the project's standard logger at the appropriate level. The message must carry the relevant runtime variable values — enough context to understand what happened without reading the source. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
 
 ---
 
@@ -127,7 +127,7 @@ Before writing any business logic, read the diagrams to build a mental model of 
 
 **SDD Dynamic View** (`flowchart TD` or `sequenceDiagram`): read it to understand the internal algorithm — the key decisions, error branches, and transformations. These are the `DEBUG`-level moments — log at branches and error paths that a developer would need to trace when debugging.
 
-No step-by-step numbering or annotation of diagram nodes is required. Use the diagrams as a map to understand the important moments, then place logs where they are useful. The diagrams may already have step numbers from a previous pass; you can reference them mentally but don't need to add or match them.
+No step-by-step numbering or annotation of diagram nodes is required. Use the diagrams as a map to understand the important moments, then place logs where they are useful.
 
 ---
 
