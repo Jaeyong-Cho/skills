@@ -14,9 +14,11 @@ description: |
 
 ## Logging model
 
-Diagram-traced logging is **optional**. If the human does not ask for logging instrumentation (e.g. just says "implement SDD-010" with no mention of logging), skip Steps 5–6 and the log call placement in Step 7 entirely — write clean business logic only.
+Diagram-traced logging is **essential**. Even if the human does not ask for logging instrumentation (e.g. just says "implement SDD-010" with no mention of logging), do not skip Steps 5–6 and the log call placement in Step 7 entirely
 
 When logging is requested (or already present in the project), the system must satisfy these requirements:
+Check the existing logging system. Integrate with existing logging system to do following requirement.
+Check the existing options, add option to support log-level and output destination.
 
 | Requirement | Detail |
 |-------------|--------|
