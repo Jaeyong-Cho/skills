@@ -87,6 +87,10 @@ Each item's `## Description` should include **at least one mermaid diagram**. A 
 
 > **Mermaid syntax safety**: Use `<br/>` for line breaks — not `\n` (renders literally). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` syntax — bare brackets break the parser. When in doubt, always quote: `["label"]` is always safe.
 
+> **Step numbering**: Always number steps in diagrams so readers can reference them in reviews.
+> - **sequenceDiagram** — add `autonumber` on the line after `sequenceDiagram`. Mermaid will render each message with a `[1]`, `[2]`, … badge automatically.
+> - **flowchart / graph** — prefix every step label with `n:` inside the node label string, e.g. `A["1: Validate input"] --> B["2: Write to DB"]`. This gives a consistent, scannable sequence that renders correctly in mdBook.
+
 ---
 
 ## Item States
