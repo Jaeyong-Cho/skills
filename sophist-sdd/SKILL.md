@@ -76,6 +76,12 @@ Change `## State` from `` `draft` `` to `` `reviewed` ``.
 
 ---
 
+## Step 4b: Logging SDD items
+
+If any of the answered SDD items belong to a Logger SAD component (tagged `#logging`), the SDD items define the concrete logging functions — `log_sad()`, `log_sdd()`, or whatever the SAD interface specifies. Treat them exactly like any other SDD item: the `## Signature` section is what sophist-impl will call verbatim; the `## Algorithm` section describes how the function routes output based on `LOG_LEVEL` and `LOG_OUTPUT`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
+
+---
+
 ## Step 5: Update UT items
 
 For each SDD item whose algorithm, error cases, or signature changed during Step 3, read its linked UT item(s) via the `→ [UT-` trace.

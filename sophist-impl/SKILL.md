@@ -181,17 +181,34 @@ Identify which SDD function body each log point belongs to, and which SAD step(s
 
 *(Skip this step entirely if logging instrumentation was not requested.)*
 
-Before implementing business logic, check whether the project already has a logging system:
+### 6a: Find the logging specification in the SOPHIST book
+
+Before touching source code, look for the logging system specification in the project's SOPHIST items:
+
+```bash
+# Find Logger SAD item by tag or keyword
+grep -rl "#logging" .sophist/src/sad/ 2>/dev/null
+grep -rl "Logger\|logging" .sophist/src/sad/ 2>/dev/null | head -5
+```
+
+**If a Logger SAD item exists** (any SAD item tagged `#logging` or named Logger/LogService):
+- Read it — the `## Interface` section defines the exact call signatures (`log_sad`, `log_sdd`, or whatever the project chose)
+- Read its linked SDD items for precise parameter names, types, and return values
+- Use those signatures verbatim in every log call; do not substitute the default model below
+
+**If no Logger SAD item exists**: the logging system has not been formally specified in SOPHIST yet. Use the default logging model below. After implementing, suggest to the human that a logging CuRS → SRS → SAD → SDD chain should be created via sophist-curs to formalize what was built.
+
+### 6b: Check and set up the logging infrastructure in source code
 
 ```bash
 # Look for existing logger setup — adapt search to the project's language
 grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/null | head -10
 ```
 
-**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `LOG_OUTPUT` (stdout / file / both) and `LOG_LEVEL` — if it doesn't, add only the missing pieces rather than replacing it.
+**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `LOG_OUTPUT` (stdout / file) and `LOG_LEVEL` — if it doesn't, add only the missing pieces rather than replacing it.
 
 **If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
-- Route output based on `LOG_OUTPUT`: `stdout` → print only, `file` → append to log file only, `both` → do both
+- Route output based on `LOG_OUTPUT`: `stdout` → print only, `file` → append to log file only
 - Respect a `LOG_LEVEL` setting (0 = off, 1 = SAD only, 2 = SAD+SDD) — read from an env var or config file consistent with how the project reads other settings
 - Expose two call sites — one for SAD-level entries and one for SDD-level entries — so callers don't embed level logic
 

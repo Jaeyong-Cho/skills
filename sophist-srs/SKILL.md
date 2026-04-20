@@ -115,6 +115,16 @@ For each draft AT item, check if it has a pending `> **Review needed**` blockquo
 
 For each SRS item newly marked `reviewed`, handle downstream items in two cases:
 
+### Logging cross-cutting concern
+
+When cascading SRS items to SAD, check whether a logging SRS item exists:
+
+```bash
+grep -rl "#logging" .sophist/src/srs/ 2>/dev/null
+```
+
+If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: log levels (SAD-level = component boundary crossings; SDD-level = internal algorithm steps), output destinations (stdout, file), and how configuration is passed (env var or config key). Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
+
 ### No `→ [SAD-` trace yet — create new items
 
 Create the corresponding SAD and SIT items. Read `references/cascade.md` for templates and the full process.
