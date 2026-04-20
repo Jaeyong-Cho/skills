@@ -214,7 +214,7 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 ### Placing log calls
 
 Insert log calls at the exact point in the code where the corresponding diagram step executes — not before, not after:
-Make sure that logging variable's value using variable directly.
+Make sure that logging variable's value using variable directly. **Important** Logging related variable value is very important for debugging. Make sure that log related sufficient variable's value with readable format.
 If same location there is a multiple log, combine it to do not make the buisness logic is too dirty.
 
 - **`log_sad`** — at the function's entry point where the SAD diagram shows this component receiving a message, and at the return point where it sends a response. Use the SAD item ID and the step number from the `%% [N]` annotation.
