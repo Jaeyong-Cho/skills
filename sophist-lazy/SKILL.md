@@ -71,6 +71,50 @@ Add a row to `.sophist/src/curs/index.md` and an entry to `SUMMARY.md`.
 
 ---
 
+## Step 1b: Logging cross-cutting concern
+
+Check whether a logging CuRS exists in the project:
+
+```bash
+grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
+```
+
+If no logging CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a logging CuRS before proceeding. Tag it `#logging` and apply the lazy assumption protocol: the lazy assumption is that the default level model (`LOG_LEVEL=OFF/INFO/DEBUG/VERBOSE`, `LOG_OUTPUT=stdout/file/both`) is acceptable.
+
+```markdown
+# CuRS-{NNN}: Logging and runtime observability
+
+## State
+`draft`
+
+## Tags
+`#logging` `#lazy`
+
+## Why
+Operators need to inspect runtime behavior without rebuilding.
+
+## Traces
+- → [SRS-{NNN}](../srs/SRS-{NNN}.md): log level and output destination configuration
+
+## Input
+> "operators shall be able to set log verbosity and output destination without rebuilding the software"
+
+## Context
+Added automatically by sophist-lazy because the pipeline produces multi-component interactions.
+
+> **Review needed** — confirm LOG_LEVEL scale and LOG_OUTPUT destinations match project constraints
+>
+> **Lazy assumption**: LOG_LEVEL=OFF|INFO|DEBUG|VERBOSE (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); LOG_OUTPUT=stdout|file|both
+> **Guard level**: `log`
+> **Lazy ID**: L-{NNN}
+```
+
+Then derive SRS, SAD, and SDD items for the Logger the same way as any other pipeline item (Steps 2–4 below). The Logger SAD item's `## Interface` defines the standard level methods (`info`, `debug`, `verbose`, `warning`, `error`) and configuration (`LOG_LEVEL`, `LOG_OUTPUT`) — sophist-impl will import from it for all other SAD components in the project.
+
+If a logging CuRS already exists, skip this step.
+
+---
+
 ## Step 2: SRS pass
 
 Derive SRS items from the CuRS item. Each must be testable.

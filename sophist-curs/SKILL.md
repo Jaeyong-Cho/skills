@@ -172,7 +172,7 @@ grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
 
 If no logging CuRS exists and this is either the first set of requirements for the project or the new CuRS items involve multi-step behavior across components, note in the report that a logging CuRS is missing. The logging CuRS captures the customer's need for runtime observability — e.g. "operators shall be able to set log verbosity and output destination without rebuilding the software." Without it, the logging system in sophist-impl has no spec to follow and is implemented ad hoc.
 
-Do not create the logging CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#logging`, derive an SRS item that specifies log levels (0 = off, 1 = component boundary, 2 = full detail) and output destinations (`stdout`, `file`), and write an AT item that verifies LOG_LEVEL and LOG_OUTPUT configuration works at runtime.
+Do not create the logging CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#logging`, derive an SRS item that specifies log levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output destinations (`stdout`, `file`, `both`), and write an AT item that verifies LOG_LEVEL and LOG_OUTPUT configuration works at runtime.
 
 ---
 

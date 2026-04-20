@@ -26,15 +26,16 @@ When no Logger SAD/SDD items exist, apply this spec and suggest to the human tha
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | Configurable via `LOG_OUTPUT`: `stdout` (default) or `file` |
-| **Enable/disable** | `LOG_LEVEL=0` turns logging off entirely |
-| **Levels** | `LOG_LEVEL=1` — SAD only (component boundary crossings); `LOG_LEVEL=2` — SAD + SDD (full detail) |
+| **Output destination** | Configurable via `LOG_OUTPUT`: `stdout` (default), `file`, or `both` |
+| **Enable/disable** | `LOG_LEVEL=OFF` (or `0`) turns logging off entirely |
+| **Levels** | Standard levels in ascending detail: `INFO` → `DEBUG` → `VERBOSE` |
+| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — very fine-grained traces if needed |
 
-Higher levels are cumulative: `LOG_LEVEL=2` always includes SAD logs.
+Higher levels are cumulative: `DEBUG` always includes `INFO` output.
 
 `LOG_OUTPUT` and `LOG_LEVEL` are read from env vars or a config key, consistent with how the project reads other settings. When `LOG_OUTPUT=file`, write to a path the human specifies.
 
-Each log call must carry: the level (SAD or SDD), the item ID, the step number, and the exact diagram label text. Use the project's existing logging library and style, or establish a minimal one consistent with the language if none exists.
+Each log call uses the project's standard logger at the appropriate level. The message must carry: the item ID and step number as a `[ITEM.N]` prefix, and the relevant runtime variable values. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
 
 ---
 
@@ -118,65 +119,15 @@ ls src/<path-from-sad-location>
 
 ---
 
-## Step 5: Number and extract log points from diagrams
+## Step 5: Understand the flow from diagrams
 
-Before writing any business logic, enumerate every log checkpoint from the diagrams. This ensures log calls in the code match the spec exactly — no guessing, no drift.
+Before writing any business logic, read the diagrams to build a mental model of the flow. This determines where to place log calls — not mechanically, but at the locations that actually matter.
 
-### SAD log points (level 1)
+**SAD Dynamic View** (`sequenceDiagram`): read it to understand the component's entry points, what it calls downstream, and what it returns. These are the `INFO`-level moments — you'll log at function entry, at each outbound call, and at function return.
 
-Read the `## Dynamic View` of each parent SAD item. It contains a `sequenceDiagram`. Number each arrow in visual order (top to bottom):
+**SDD Dynamic View** (`flowchart TD` or `sequenceDiagram`): read it to understand the internal algorithm — the key decisions, error branches, and transformations. These are the `DEBUG`-level moments — log at branches and error paths that a developer would need to trace when debugging.
 
-```
-sequenceDiagram
-  Client->>AuthService: 1. authenticate(email, password)
-  AuthService->>UserStore: 2. findByEmail(email)
-  UserStore-->>AuthService: 3. user record
-  AuthService->>SessionStore: 4. createSession(userId)
-  SessionStore-->>AuthService: 5. session token
-  AuthService-->>Client: 6. session token
-```
-
-**If the diagram does not already have `N.` step annotations, add them now** before proceeding. This keeps the diagram and the code permanently in sync.
-
-Build a SAD log-point table:
-
-| Step | Label (exact diagram text) |
-|------|---------------------------|
-| [1]  | Client → AuthService: authenticate(email, password) |
-| [2]  | AuthService → UserStore: findByEmail(email) |
-| ... | ... |
-
-### SDD log points (level 2)
-
-Read the `## Dynamic View` of each SDD item. It is typically a `flowchart TD` or `sequenceDiagram`. Number each node or arrow in visual order:
-
-**Flowchart example:**
-```
-flowchart TD
-  A["[1: receive email, password"]
-  --> B["2: validate email format"]
-  --> C{"3: email valid?"}
-  C -- yes --> D["4: fetch user from UserStore"]
-  C -- no --> E["5: raise AuthError: invalid email"]
-  D --> F["6: compare password with bcrypt hash"]
-  F --> G{"7: match?"}
-  G -- yes --> H["8: call createSession(userId)"]
-  G -- no --> I["9: increment failCount; check lockout"]
-```
-
-**If step labels are not yet embedded in the node text, add them** using `["N: original label"]` syntax.
-
-Build an SDD log-point table:
-
-| Step | Label |
-|------|-------|
-| [1]  | receive email, password |
-| [2]  | validate email format |
-| ... | ... |
-
-### Map log points to function scope
-
-Identify which SDD function body each log point belongs to, and which SAD step(s) that function corresponds to. A function typically begins where a SAD arrow arrives at this component, and ends where the SAD arrow returns. This determines where in the code to place each `log_sad` vs `log_sdd` call.
+No step-by-step numbering or annotation of diagram nodes is required. Use the diagrams as a map to understand the important moments, then place logs where they are useful. The diagrams may already have step numbers from a previous pass; you can reference them mentally but don't need to add or match them.
 
 ---
 
@@ -195,9 +146,9 @@ grep -rl "Logger\|logging" .sophist/src/sad/ 2>/dev/null | head -5
 ```
 
 **If a Logger SAD item exists** (any SAD item tagged `#logging` or named Logger/LogService):
-- Read it — the `## Interface` section defines the exact call signatures (`log_sad`, `log_sdd`, or whatever the project chose)
-- Read its linked SDD items for precise parameter names, types, and return values
-- Use those signatures verbatim in every log call; do not substitute the default model below
+- Read it — the `## Interface` section defines the logger's API (level methods, message format, configuration)
+- Read its linked SDD items for precise parameter names, types, and configuration keys
+- Follow that interface; do not substitute the default model below
 
 **If no Logger SAD item exists**: the logging system has not been formally specified in SOPHIST yet. Use the default logging model below. After implementing, suggest to the human that a logging CuRS → SRS → SAD → SDD chain should be created via sophist-curs to formalize what was built.
 
@@ -211,11 +162,11 @@ grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/nul
 **If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `LOG_OUTPUT` (stdout / file) and `LOG_LEVEL` — if it doesn't, add only the missing pieces rather than replacing it.
 
 **If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
-- Route output based on `LOG_OUTPUT`: `stdout` → print only, `file` → append to log file only
-- Respect a `LOG_LEVEL` setting (0 = off, 1 = SAD only, 2 = SAD+SDD) — read from an env var or config file consistent with how the project reads other settings
-- Expose two call sites — one for SAD-level entries and one for SDD-level entries — so callers don't embed level logic
+- Route output based on `LOG_OUTPUT`: `stdout` → write to stdout only, `file` → append to log file only, `both` → write to both
+- Respect a `LOG_LEVEL` setting that maps to standard levels — read from an env var or config file consistent with how the project reads other settings. Supported levels in ascending verbosity: `OFF`, `INFO`, `DEBUG`, `VERBOSE`
+- Expose the standard level methods (`info`, `debug`, `verbose`, or the project language's equivalent) so callers choose the level at the call site
 
-Keep it simple. The goal is not a sophisticated logging framework; it is a reliable configurable-output, two-level system that the implementation can call without worrying about where output goes.
+Keep it simple. The goal is a reliable, configurable-output logger that lets callers use standard levels without worrying about routing or configuration.
 
 ---
 
@@ -233,48 +184,51 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 
 ### Placing log calls
 
-Insert log calls at the exact point in the code where the corresponding diagram step executes — not before, not after:
-Make sure that logging variable's value using variable directly. **Important** Logging related variable value is very important for debugging. Make sure that log related sufficient variable's value with readable format.
-If same location there is a multiple log, combine it to do not make the buisness logic is too dirty.
+Insert log calls at the exact point in the code where the corresponding diagram step executes — not before, not after.
 
-- **`log_sad`** — at the function's entry point where the SAD diagram shows this component receiving a message, and at the return point where it sends a response. Use the SAD item ID and the step number from the `%% [N]` annotation.
-- **`log_sdd`** — at each algorithm step inside the function body, in the same order as the SDD Dynamic View diagram. Use the SDD item ID and the step number from the node label.
+**Level mapping** — use the level that fits the importance of the event, not a rigid rule:
+
+| Level | When to use |
+|-------|-------------|
+| `INFO` | Component entry/exit, inter-component calls and responses, significant state transitions — events visible in normal operation |
+| `DEBUG` | Internal decisions (branch taken, validation result), sub-computations, intermediate values — needed when diagnosing a specific bug |
+| `VERBOSE` | Fine-grained traces: loop iterations, large data structures, micro-steps. Use only when `DEBUG` alone isn't enough |
+| `WARNING` | Something unexpected happened that the function recovered from |
+| `ERROR` | An operation failed — log immediately before raising or returning an error |
+
+There is no 1:1 requirement to log every arrow or node in the diagram. Read the SAD and SDD to understand the important steps, then **place logs at the locations where a developer would actually want to know what happened** — entry points, key decisions, error paths, and inter-component calls. Lean on your judgment: a function with 3 obvious steps doesn't need 3 log lines; a complex conditional tree does.
+
+**Non-duplication**: Don't emit two log lines that say the same thing at the same code location. If an `INFO` at function entry already captures the parameters, don't add a `DEBUG` that repeats "received email and password". One informative log beats two redundant ones.
+
+**Variable values are required**: Every log message must carry the runtime values that make it useful for debugging. Use the actual variable names from the SDD `## Variables` section. Format them readably inline — e.g. `f"email={email}, user_id={user.id}"`. For sensitive values (passwords, tokens, credentials), log only a safe representation (e.g., `token[:8]+"..."`, `"[redacted]"`).
 
 **Example** (Python, auth scenario):
 
 ```python
-from src.logging.logger import log_sad, log_sdd
+import logging
+logger = logging.getLogger(__name__)
 
 def authenticate(email: str, password: str) -> str:
-    log_sad("SAD-003", 1, "Client → AuthService: authenticate(email, password)")
+    logger.info(f"authenticate: email={email}")
 
-    log_sdd("SDD-010", 1, "receive email, password")
-    log_sdd("SDD-010", 2, "validate email format")
     if not _is_valid_email(email):
-        log_sdd("SDD-010", 5, "raise AuthError: invalid email")
+        logger.debug(f"invalid email format: email={email}")
         raise AuthError("invalid email format")
 
-    log_sdd("SDD-010", 4, "fetch user from UserStore")
-    log_sad("SAD-003", 2, "AuthService → UserStore: findByEmail(email)")
+    logger.debug(f"fetching user from UserStore: email={email}")
     user = user_store.find_by_email(email)
-    log_sad("SAD-003", 3, "UserStore → AuthService: user record")
 
-    log_sdd("SDD-010", 6, "compare password with bcrypt hash")
     if not bcrypt.checkpw(password.encode(), user.password_hash):
-        log_sdd("SDD-010", 9, "increment failCount; check lockout")
+        logger.debug(f"password mismatch for user_id={user.id}, incrementing fail_count")
         _handle_failed_attempt(user)
         raise AuthError("invalid credentials")
 
-    log_sdd("SDD-010", 8, "call createSession(userId)")
-    log_sad("SAD-003", 4, "AuthService → SessionStore: createSession(userId)")
     token = session_store.create_session(user.id)
-    log_sad("SAD-003", 5, "SessionStore → AuthService: session token")
-
-    log_sad("SAD-003", 6, "AuthService → Client: session token")
+    logger.info(f"authenticate complete: user_id={user.id}")
     return token
 ```
 
-The message text must be the exact label from the diagram — copy it, don't paraphrase. This is what makes the log traceable back to the spec without ambiguity.
+The logs capture the important moments (entry, validation failure, credential failure, success) with the relevant variable values. There's no mechanical step-by-step logging of every diagram node — just the information a developer needs to trace what actually happened.
 
 **When implementing a SAD component** (multiple SDD items in the same file): write all functions for that component in one pass, so imports and shared state are coherent.
 
@@ -353,19 +307,12 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 | SDD-011 | AuthService.checkLockout() | src/auth/auth_service.py |
 
 ### Log Points Instrumented
-| Level | Item | Step | Diagram label |
-|-------|------|------|---------------|
-| SAD | SAD-003 | [1] | Client → AuthService: authenticate(email, password) |
-| SAD | SAD-003 | [2] | AuthService → UserStore: findByEmail(email) |
-| SDD | SDD-010 | [2] | validate email format |
-| SDD | SDD-010 | [6] | compare password with bcrypt hash |
-| ... | ... | ... | ... |
-
-### Diagram Annotations Added
-| Item | Change |
-|------|--------|
-| SAD-003 | Added %% [N] step numbers to Dynamic View sequenceDiagram |
-| SDD-010 | Added [N] labels to Dynamic View flowchart nodes |
+| Level | Location | Message summary |
+|-------|----------|-----------------|
+| INFO  | authenticate() entry | email |
+| DEBUG | email validation failure | email |
+| INFO  | authenticate() return | user_id |
+| ... | ... | ... |
 
 ### Test Stubs Created
 | UT | Directory |
@@ -382,7 +329,7 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 - Answer the review point in SDD-012, then run **sophist-sdd** to apply it
 - Run **sophist-codereview** to verify conformance when all items are unblocked
 - Write test assertions in the stubs, following each UT item's Input/Expected output
-- Set LOG_LEVEL=1 for production (SAD only), LOG_LEVEL=2 for debugging
+- Set LOG_LEVEL=INFO for production (boundary events only), LOG_LEVEL=DEBUG for diagnosing issues
 ```
 
 ---
@@ -406,8 +353,8 @@ Use `feat` for new functionality, `fix` for corrections to existing implementati
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.
 - **Log output destination is configurable.** When creating a new logger, honour `LOG_OUTPUT`: `stdout` (default), `file`, or `both`. Never hard-code one destination.
-- **Log messages must match the diagram labels exactly.** Copy the text from the diagram; do not paraphrase. Paraphrasing breaks the log-to-spec traceability.
-- **Number diagrams before coding.** Step annotations (`%% [N]` in mermaid) must exist in the diagram before the corresponding log call is written in code. If the diagram lacks them, add them first.
+- **Log messages must be traceable to diagram steps.** Reference the diagram label text so a reader can identify which step fired, but enrich it with actual variable values — don't copy the label verbatim if doing so omits the runtime context. Traceability comes from the item ID and step number, not from word-for-word label repetition.
+- **Logging level reflects importance.** SAD boundary events (component entry, inter-component calls, returns) belong at `INFO`. Internal algorithm steps, decisions, and error paths belong at `DEBUG`. Use `VERBOSE` only for truly fine-grained traces. Use `WARNING`/`ERROR` for unexpected or failed conditions.
 - **Never promote item state.** Leave all items as `reviewed`. sophist-codereview is the step that moves items to `done`.
 - **Never silently deviate.** Any gap between the spec and what you wrote must appear in the report.
 - **Never delete existing code** unless an SDD item explicitly describes replacing it. When in doubt, ask.

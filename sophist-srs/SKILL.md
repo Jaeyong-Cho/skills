@@ -123,7 +123,7 @@ When cascading SRS items to SAD, check whether a logging SRS item exists:
 grep -rl "#logging" .sophist/src/srs/ 2>/dev/null
 ```
 
-If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: log levels (SAD-level = component boundary crossings; SDD-level = internal algorithm steps), output destinations (stdout, file), and how configuration is passed (env var or config key). Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
+If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: log levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces), output destinations (stdout, file, both), and how configuration is passed (env var or config key). Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
 
 ### No `→ [SAD-` trace yet — create new items
 

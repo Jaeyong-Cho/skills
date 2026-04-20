@@ -288,6 +288,24 @@ Create `.sophist/src/sad/SAD-{NNN}.md` for each. Mark state `draft`. Trace to th
 
 Add entries to `SUMMARY.md` and `.sophist/src/sad/index.md`.
 
+### 10d-logging. Check for logging cross-cutting concern
+
+After writing SAD items, check whether any of them show inter-component interactions (i.e., their Dynamic View contains a `sequenceDiagram` with multiple participants):
+
+```bash
+grep -rl "sequenceDiagram" .sophist/src/sad/ 2>/dev/null
+```
+
+If multi-component SAD items were found, also check whether a logging CuRS already exists:
+
+```bash
+grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
+```
+
+If no logging CuRS exists, note it in the bootstrap report. The logging system (configurable `LOG_LEVEL` and `LOG_OUTPUT`) is a cross-cutting concern that must be specified before sophist-impl can instrument log calls consistently. Suggest the human add it via sophist-curs with: "operators shall be able to set log verbosity and output destination without rebuilding the software."
+
+Do not create the logging CuRS automatically here — just flag it so the human can decide.
+
 ### 10e. Write SDD items
 
 For each significant function or class in the codebase, create an SDD item describing its signature, behaviour, and error handling. Focus on the public API surface first; private helpers only if they are complex.
@@ -357,6 +375,12 @@ Tags:    .sophist/src/tags.md
 
 All items are draft — they represent AI's best reading of the existing code.
 Review each layer and answer the review points before running the sophist-* review skills.
+
+[if multi-component SAD items were found and no logging CuRS exists]
+⚠ Logging CuRS missing: the codebase has inter-component interactions but no logging
+  specification was found. Run sophist-curs and tell it: "operators shall be able to set
+  log verbosity and output destination without rebuilding the software." This creates the
+  logging CuRS/SRS/SAD/SDD chain that sophist-impl needs to instrument log calls consistently.
 
 Next step: Open .sophist/src/curs/ and review the inferred customer requirements.
            Correct anything that doesn't match your actual intent, then run sophist-srs.
