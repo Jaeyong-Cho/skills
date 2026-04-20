@@ -14,24 +14,27 @@ description: |
 
 ## Logging model
 
-Diagram-traced logging is **essential**. Even if the human does not ask for logging instrumentation (e.g. just says "implement SDD-010" with no mention of logging), do not skip Steps 5–6 and the log call placement in Step 7 entirely.
-If human ask do implement logging, then skep Steps 5-6 and the log call placement in Step 7 entirely.
+Diagram-traced logging is **essential**. Always perform Steps 5–6 and place log calls in Step 7 — even if the human says nothing about logging (e.g. "implement SDD-010"). Only skip Steps 5–6 and log call placement if the human **explicitly asks not to instrument logging**.
 
-When logging is requested (or already present in the project), the system must satisfy these requirements:
-Check the existing logging system. Integrate with existing logging system to do following requirement.
-Check the existing options, add option to support log-level and output destination.
+### Authoritative source: SOPHIST book items
+
+The logging specification lives in the project's SOPHIST book. Step 6a (below) looks for a Logger SAD item tagged `#logging`. **If one exists, its `## Interface` and linked SDD items are the binding spec** — use their exact function signatures and follow their algorithm. The default model below is a fallback only when no logging items exist in the book yet.
+
+### Default logging model (fallback)
+
+When no Logger SAD/SDD items exist, apply this spec and suggest to the human that it should be captured as SOPHIST items via sophist-curs:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | Configurable: `stdout` only, `file` only |
+| **Output destination** | Configurable via `LOG_OUTPUT`: `stdout` (default) or `file` |
 | **Enable/disable** | `LOG_LEVEL=0` turns logging off entirely |
 | **Levels** | `LOG_LEVEL=1` — SAD only (component boundary crossings); `LOG_LEVEL=2` — SAD + SDD (full detail) |
 
 Higher levels are cumulative: `LOG_LEVEL=2` always includes SAD logs.
 
-The output destination is read from a `LOG_OUTPUT` setting (env var or config key, consistent with how the project reads other settings). Accepted values: `stdout` (default), `file (filename)`. When `file`, write to a path the human specifies.
+`LOG_OUTPUT` and `LOG_LEVEL` are read from env vars or a config key, consistent with how the project reads other settings. When `LOG_OUTPUT=file`, write to a path the human specifies.
 
-Each log call must carry: the level name (SAD or SDD), the item ID, the step number, and the diagram label text. The exact format and implementation are determined by the project's own conventions — use whatever logging library and style the project already uses, or establish a simple one consistent with the language if none exists.
+Each log call must carry: the level (SAD or SDD), the item ID, the step number, and the exact diagram label text. Use the project's existing logging library and style, or establish a minimal one consistent with the language if none exists.
 
 ---
 
