@@ -23,13 +23,13 @@ Check the existing options, add option to support log-level and output destinati
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | Configurable: `stdout` only, `file` only, or `both` simultaneously |
+| **Output destination** | Configurable: `stdout` only, `file` only |
 | **Enable/disable** | `LOG_LEVEL=0` turns logging off entirely |
 | **Levels** | `LOG_LEVEL=1` — SAD only (component boundary crossings); `LOG_LEVEL=2` — SAD + SDD (full detail) |
 
 Higher levels are cumulative: `LOG_LEVEL=2` always includes SAD logs.
 
-The output destination is read from a `LOG_OUTPUT` setting (env var or config key, consistent with how the project reads other settings). Accepted values: `stdout` (default), `file (filename)`, `both`. When `file`, write to a path the human specifies.
+The output destination is read from a `LOG_OUTPUT` setting (env var or config key, consistent with how the project reads other settings). Accepted values: `stdout` (default), `file (filename)`. When `file`, write to a path the human specifies.
 
 Each log call must carry: the level name (SAD or SDD), the item ID, the step number, and the diagram label text. The exact format and implementation are determined by the project's own conventions — use whatever logging library and style the project already uses, or establish a simple one consistent with the language if none exists.
 
