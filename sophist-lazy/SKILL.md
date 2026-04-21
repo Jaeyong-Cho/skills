@@ -359,7 +359,7 @@ Fix all broken links before reporting.
 
 ---
 
-## Step 7: Report
+## Step 6: Report
 
 ```
 ## Lazy Pipeline Complete

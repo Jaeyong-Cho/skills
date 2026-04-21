@@ -4,7 +4,7 @@ description: |
   Use this skill when the user provides new or changed customer requirements (CuRS) and wants the SOPHIST documents updated. Triggers: "sophist-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. No SAD/SDD/test stubs yet — those cascade after SRS review via sophist-srs.
 ---
 
-# sophist-update: Capture Customer Input and Draft SRS
+# sophist-curs: Capture Customer Input and Draft SRS
 
 **Goal**: Translate customer intent into a CuRS item, derive SRS requirements, and create corresponding AT items. All new items are marked `draft` with review points. SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
 
