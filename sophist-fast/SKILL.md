@@ -17,8 +17,6 @@ description: |
 
 ---
 
----
-
 ## Decide the mode
 
 If the user mentions "prototype", "spike", "rough version", "quick impl", or "test this approach" → use **Prototype mode** (skip to the Prototype section below).

@@ -300,7 +300,7 @@ Scope: SAD-003, SDD-010, SDD-011, SDD-012, AT-005, SIT-003, UT-010, UT-011, UT-0
 **SDD-010 — signature mismatch**
   SDD: `authenticate(email: string, password: string): Session | AuthError`
   Code: `authenticate(credentials: Credentials): Session | AuthError`
-  → Is this an intentional change? If yes, SDD-010 needs updating (sophist-update).
+  → Is this an intentional change? If yes, SDD-010 needs updating (sophist-fast).
 
 **SDD-010 — ACCOUNT_LOCKED not handled**
   → Was this omitted intentionally or accidentally?

@@ -46,7 +46,7 @@ Then read the actual item files (all of them if the project is small; key ones i
 Count items per state to understand documentation maturity:
 
 ```bash
-grep -r "^\`draft\`\|^\`review\`\|^\`reviewed\`\|^\`approved\`" .sophist/src/ \
+grep -r "^\`draft\`\|^\`reviewed\`\|^\`done\`\|^\`deprecated\`" .sophist/src/ \
   | sed 's/.*:\`//' | sed 's/\`.*//' | sort | uniq -c
 ```
 
@@ -68,7 +68,7 @@ Write a structured overview in this format:
 <one bullet per CuRS item: ID · title · state>
 
 ## Software requirements (<N> items)
-<one bullet per reviewed/approved SRS item; group draft items with a count only>
+<one bullet per reviewed SRS item; group draft items with a count only>
 
 ## Architecture
 <paragraph describing the component structure from SAD-001 and other SAD items>

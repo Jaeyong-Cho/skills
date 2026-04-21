@@ -93,7 +93,7 @@ additional-css = ["theme/css/variables.css"]
 - [Unit Tests](./ut/index.md)
 ```
 
-Item entries are added as nested lines under each section by **sophist-update** as items are created.
+Item entries are added as nested lines under each section by **sophist-curs** as items are created.
 
 ---
 
@@ -114,7 +114,7 @@ _No tags yet. Tags are added as items are created._
 
 ## Step 7: Create index stubs
 
-Create one `index.md` per document type. Item files are created separately by **sophist-update**.
+Create one `index.md` per document type. Item files are created separately by **sophist-curs**.
 
 **.sophist/src/curs/index.md**:
 ```markdown
@@ -128,7 +128,7 @@ Each CuRS item records what the customer said, not what will be built.
 | CuRS | → SRS |
 |------|-------|
 
-_No items yet. Add customer requirements using **sophist-update**._
+_No items yet. Add customer requirements using **sophist-curs**._
 ```
 
 **.sophist/src/srs/index.md**:
