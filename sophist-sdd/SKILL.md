@@ -78,7 +78,7 @@ Change `## State` from `` `draft` `` to `` `reviewed` ``.
 
 ## Step 4b: Logging SDD items
 
-If any of the answered SDD items belong to a Logger SAD component (tagged `#logging`), the SDD items define the concrete logger implementation — level methods (`info`, `debug`, `verbose`, `warning`, `error`) and configuration routing (`LOG_LEVEL`, `LOG_OUTPUT`). Treat them exactly like any other SDD item: the `## Signature` section defines what callers call; the `## Algorithm` section describes how the function routes output based on `LOG_LEVEL` and `LOG_OUTPUT`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
+If any of the answered SDD items belong to a Logger SAD component (tagged `#logging`), the SDD items define the concrete logger implementation — level methods (`info`, `debug`, `verbose`, `warning`, `error`) and CLI option parsing (`--debug-level`, `--debug-output-dir`). Treat them exactly like any other SDD item: the `## Signature` section defines what callers call; the `## Algorithm` section describes how the function routes output based on `--debug-level` and `--debug-output-dir`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
 
 ---
 
@@ -181,6 +181,25 @@ your implementation against the reviewed design.
 ```
 
 Only show the "Ready to Implement" section if all SDD items linked from reviewed SAD items are now in `reviewed` state. If some are still `draft`, omit it and note which items remain.
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-sdd/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-draft-items.md` | List of all draft SDD items found, each with status (answered / pending) and the review question text |
+| `01-answers-applied.md` | For each answered item: the original question, the human's answer, and which SDD field was updated (Signature / Algorithm / Variables / Error cases / Side effects) |
+| `02-ut-updates.md` | Each UT item updated or created — what changed and why (which SDD algorithm change drove it) |
+| `03-review-points.md` | All items still pending with their unanswered questions |
 
 ---
 

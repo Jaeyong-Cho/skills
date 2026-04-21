@@ -123,7 +123,7 @@ When cascading SRS items to SAD, check whether a logging SRS item exists:
 grep -rl "#logging" .sophist/src/srs/ 2>/dev/null
 ```
 
-If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: log levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces), output destinations (stdout, file, both), and how configuration is passed (env var or config key). Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
+If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: debug levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), both passed as CLI options. Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
 
 ### No `→ [SAD-` trace yet — create new items
 
@@ -213,6 +213,25 @@ Fix broken markdown links before reporting.
 Next: Open the SAD item files, write your answers to the review points inline,
 then run **sophist-sad** to apply answers, mark SAD items reviewed, and generate SDD items.
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-srs/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-draft-items.md` | List of all draft SRS items found, each with status (answered / pending) and the review question text |
+| `01-answers-applied.md` | For each answered item: the original question, the human's answer, and what content field was updated |
+| `02-sad-cascade.md` | Each SAD and SIT item created or updated — ID, title, which SRS items drove it, and the key design decision made |
+| `03-review-points.md` | All items still pending with their unanswered questions |
 
 ---
 

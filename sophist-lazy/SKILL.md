@@ -79,7 +79,7 @@ Check whether a logging CuRS exists in the project:
 grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no logging CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a logging CuRS before proceeding. Tag it `#logging` and apply the lazy assumption protocol: the lazy assumption is that the default level model (`LOG_LEVEL=OFF/INFO/DEBUG/VERBOSE`, `LOG_OUTPUT=stdout/file/both`) is acceptable.
+If no logging CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a logging CuRS before proceeding. Tag it `#logging` and apply the lazy assumption protocol: the lazy assumption is that the default level model (`--debug-level=OFF/INFO/DEBUG/VERBOSE`, `--debug-output-dir=<path>` or stdout when omitted) is acceptable.
 
 ```markdown
 # CuRS-{NNN}: Logging and runtime observability
@@ -102,14 +102,14 @@ Operators need to inspect runtime behavior without rebuilding.
 ## Context
 Added automatically by sophist-lazy because the pipeline produces multi-component interactions.
 
-> **Review needed** — confirm LOG_LEVEL scale and LOG_OUTPUT destinations match project constraints
+> **Review needed** — confirm `--debug-level` scale and `--debug-output-dir` usage match project constraints
 >
-> **Lazy assumption**: LOG_LEVEL=OFF|INFO|DEBUG|VERBOSE (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); LOG_OUTPUT=stdout|file|both
+> **Lazy assumption**: `--debug-level=OFF|INFO|DEBUG|VERBOSE` (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); `--debug-output-dir=<path>` for file output, omit for stdout
 > **Guard level**: `log`
 > **Lazy ID**: L-{NNN}
 ```
 
-Then derive SRS, SAD, and SDD items for the Logger the same way as any other pipeline item (Steps 2–4 below). The Logger SAD item's `## Interface` defines the standard level methods (`info`, `debug`, `verbose`, `warning`, `error`) and configuration (`LOG_LEVEL`, `LOG_OUTPUT`) — sophist-impl will import from it for all other SAD components in the project.
+Then derive SRS, SAD, and SDD items for the Logger the same way as any other pipeline item (Steps 2–4 below). The Logger SAD item's `## Interface` defines the standard level methods (`info`, `debug`, `verbose`, `warning`, `error`) and CLI options (`--debug-level`, `--debug-output-dir`) — sophist-impl will import from it for all other SAD components in the project.
 
 If a logging CuRS already exists, skip this step.
 
@@ -392,6 +392,25 @@ Fix all broken links before reporting.
 - Run **sophist-srs → sophist-sad → sophist-sdd** to promote items through proper review
 - Run **sophist-impl** to generate code — it will emit guards from Algorithm steps and SAD Lazy observability exactly as specified
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-lazy/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-pipeline.md` | All items created in order (CuRS → SRS → SAD → SDD) with their IDs and titles |
+| `01-lazy-assumptions.md` | Every lazy assumption — L-ID, layer, assumption text, guard level, and the implementation line that will fire at runtime |
+| `02-must-review.md` | Must-review items only (will panic at startup) — L-ID, item, location in code, and what assumption it guards |
+| `03-observability-map.md` | Per-item mapping of lazy IDs to their runtime guard locations (SAD `## Lazy observability` entries and SDD `## Lazy contracts` rows) |
 
 ---
 

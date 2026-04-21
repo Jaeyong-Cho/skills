@@ -26,14 +26,14 @@ When no Logger SAD/SDD items exist, apply this spec and suggest to the human tha
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | Configurable via `LOG_OUTPUT`: `stdout` (default), `file`, or `both` |
-| **Enable/disable** | `LOG_LEVEL=OFF` (or `0`) turns logging off entirely |
+| **Output destination** | `--debug-output-dir <path>` — write logs to that directory, one file per run named by timestamp. Omit to write to stdout only. |
+| **Enable/disable** | `--debug-level=OFF` turns logging off entirely |
 | **Levels** | Standard levels in ascending detail: `INFO` → `DEBUG` → `VERBOSE` |
 | **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — very fine-grained traces if needed |
 
 Higher levels are cumulative: `DEBUG` always includes `INFO` output.
 
-`LOG_OUTPUT` and `LOG_LEVEL` are read from env vars or a config key, consistent with how the project reads other settings. When `LOG_OUTPUT=file`, write to a path the human specifies.
+`--debug-level` and `--debug-output-dir` are read as CLI options passed to the application. When `--debug-output-dir` is provided, write one log file per process run to that directory, named by timestamp (e.g. `20240115-143022.log`). When omitted, write to stdout. Never hard-code a path — the directory is always passed explicitly via `--debug-output-dir`.
 
 Each log call uses the project's standard logger at the appropriate level. The message must carry the relevant runtime variable values — enough context to understand what happened without reading the source. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
 
@@ -159,11 +159,11 @@ grep -rl "Logger\|logging" .sophist/src/sad/ 2>/dev/null | head -5
 grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/null | head -10
 ```
 
-**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `LOG_OUTPUT` (stdout / file) and `LOG_LEVEL` — if it doesn't, add only the missing pieces rather than replacing it.
+**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `--debug-output-dir` (directory-based file output) and `--debug-level` — if it doesn't, add only the missing pieces rather than replacing it.
 
 **If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
-- Route output based on `LOG_OUTPUT`: `stdout` → write to stdout only, `file` → append to log file only, `both` → write to both
-- Respect a `LOG_LEVEL` setting that maps to standard levels — read from an env var or config file consistent with how the project reads other settings. Supported levels in ascending verbosity: `OFF`, `INFO`, `DEBUG`, `VERBOSE`
+- Accept `--debug-output-dir <path>`: write one timestamped log file per run to that directory; when omitted, write to stdout
+- Accept `--debug-level <level>` that maps to standard levels. Supported levels in ascending verbosity: `OFF`, `INFO`, `DEBUG`, `VERBOSE`
 - Expose the standard level methods (`info`, `debug`, `verbose`, or the project language's equivalent) so callers choose the level at the call site
 
 Keep it simple. The goal is a reliable, configurable-output logger that lets callers use standard levels without worrying about routing or configuration.
@@ -329,8 +329,29 @@ Fix syntax errors. Do not fix logic errors by diverging from the spec — if the
 - Answer the review point in SDD-012, then run **sophist-sdd** to apply it
 - Run **sophist-codereview** to verify conformance when all items are unblocked
 - Write test assertions in the stubs, following each UT item's Input/Expected output
-- Set LOG_LEVEL=INFO for production (boundary events only), LOG_LEVEL=DEBUG for diagnosing issues
+- Pass `--debug-level=INFO` for production (boundary events only), `--debug-level=DEBUG` for diagnosing issues
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-impl/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-scope.md` | Which SDD items were in scope, how scope was determined |
+| `01-context.md` | Upstream context read: SAD location/interface, SRS intent summary |
+| `02-log-points.md` | Every log call placed — level, function, message, and which diagram step drove it |
+| `03-ambiguities.md` | Any review points written, the ambiguity described, and the placeholder left in code |
+
+These files are for debugging the skill's decisions — why a particular log level was chosen, which diagram step maps to which log call, and what was blocked.
 
 ---
 
@@ -352,7 +373,7 @@ Use `feat` for new functionality, `fix` for corrections to existing implementati
 ## Constraints
 
 - **Follow the SDD exactly.** If the SDD says `bcrypt`, use bcrypt. If it says 12 rounds, use 12. Do not substitute equivalent libraries or adjust parameters without a review point.
-- **Log output destination is configurable.** When creating a new logger, honour `LOG_OUTPUT`: `stdout` (default), `file`, or `both`. Never hard-code one destination.
+- **Log output destination is configurable.** When creating a new logger, honour `--debug-output-dir`: if provided, write to that directory; if absent, write to stdout. Never hard-code one destination.
 - **Log messages must be traceable to diagram steps.** Reference the diagram label text so a reader can identify which step fired, but enrich it with actual variable values — don't copy the label verbatim if doing so omits the runtime context. Traceability comes from the item ID and step number, not from word-for-word label repetition.
 - **Logging level reflects importance.** SAD boundary events (component entry, inter-component calls, returns) belong at `INFO`. Internal algorithm steps, decisions, and error paths belong at `DEBUG`. Use `VERBOSE` only for truly fine-grained traces. Use `WARNING`/`ERROR` for unexpected or failed conditions.
 - **Never promote item state.** Leave all items as `reviewed`. sophist-codereview is the step that moves items to `done`.

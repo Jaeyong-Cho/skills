@@ -340,6 +340,25 @@ No items are ready to promote — resolve deviations first.
 
 ---
 
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-codereview/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-scope.md` | Items reviewed, mode detected (Spec→Code or Code→Spec), and scope rationale |
+| `01-deviations.md` | Every divergence found — item ID, field, what spec says, what code has, severity classification, and verdict (code-right / code-wrong / ambiguous) |
+| `02-spec-updates.md` | Each spec field updated (Code→Spec mode) — old value, new value, and whether item was reset to draft |
+| `03-depth-assessment.md` | Module depth evaluation per SAD component — depth verdict and any shallow flags |
+
+---
+
 ## Constraints
 
 - **Never write or rewrite source code.** Even to fix a mismatch.

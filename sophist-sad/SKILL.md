@@ -125,7 +125,7 @@ Before cascading to SDD, check whether a Logger SAD item exists:
 grep -rl "#logging" .sophist/src/sad/ 2>/dev/null
 ```
 
-If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Logger SAD item exists yet, and there is an SRS item tagged `#logging` that traces here — create the Logger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the logger API (standard level methods: `info`, `debug`, `verbose`, `warning`, `error`, plus configuration for `LOG_LEVEL` and `LOG_OUTPUT`). All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
+If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Logger SAD item exists yet, and there is an SRS item tagged `#logging` that traces here — create the Logger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the logger API (standard level methods: `info`, `debug`, `verbose`, `warning`, `error`, plus CLI options `--debug-level` and `--debug-output-dir`). All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
 
 If no logging SRS item exists at all, skip this — it means logging has not yet been specified at the requirements layer. Note it in the report so the human can decide whether to add it via sophist-curs.
 
@@ -217,6 +217,25 @@ Fix broken markdown links before reporting.
 Next: Open the SDD item files, write your answers to the review points inline,
 then run **sophist-sdd** to apply answers, mark SDD items reviewed, and update UT items.
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-sad/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-draft-items.md` | List of all draft SAD items found, each with status (answered / pending) and the review question text |
+| `01-answers-applied.md` | For each answered item: the original question, the human's answer, and which field (Interface / Location / Responsibility / Diagram) was updated |
+| `02-sdd-cascade.md` | Each SDD and UT item created or updated — ID, title, parent SAD, and the key algorithm/signature decision made |
+| `03-review-points.md` | All items still pending with their unanswered questions |
 
 ---
 

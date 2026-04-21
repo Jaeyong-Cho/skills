@@ -65,6 +65,69 @@ cat .sophist/src/tags.md
 
 ---
 
+## Step 1d: Understand intent and agree on validation
+
+Before making any changes, step back from the mechanics and understand what the human is actually trying to accomplish. A CuRS item that doesn't match the true intent wastes everything downstream — every wrong assumption propagates through SRS, SAD, SDD, and into code.
+
+### Analyze the input for three things
+
+**Purpose** — What business or product goal does this serve? Ask "why does this matter to the end user or the business?" not just "what should the software do?" A clear purpose anchors the requirement and helps resolve ambiguity later.
+
+**Intent** — What specific change does the human want? Is this a new feature, a constraint on existing behavior, a workflow change, or a quality improvement? Be precise — "the user wants faster response" is too vague; "the user wants the list to load in under 500ms on a slow connection" is workable.
+
+**Hypothesis** — Is this requirement based on a known, validated user need, or is the human testing an assumption? If the input reads like an experiment ("users might want X", "we think this would help", "let's try Y"), flag it — a hypothesis should be validated before it drives architecture decisions.
+
+Write a brief statement for each and present it to the human:
+
+```
+Here's what I understand you're asking for:
+- **Purpose**: …
+- **Intent**: …
+- **Hypothesis**: stated / not yet validated — [flag if applicable]
+
+Does this match what you have in mind?
+```
+
+Wait for confirmation or correction before proceeding.
+
+### Check validation strategy
+
+A requirement without a validation strategy is incomplete. Ask (or infer from context) how the human plans to verify that this requirement is satisfied:
+
+- What observable behavior confirms it's working correctly?
+- Who is the intended validator — the human, an end user, automated tests, a stakeholder?
+- Is there a measurable success criterion (e.g., error rate below 1%, task completion in under 3 clicks, zero data loss)?
+
+If the human hasn't stated a validation strategy, propose one based on the requirement type:
+
+| Requirement type | Suggested validation approach |
+|-----------------|------------------------------|
+| UI / UX behavior | Task-completion test with representative users; specify scenario and success threshold |
+| Performance | Before/after benchmark with a specific numeric threshold |
+| Data correctness | Golden-dataset comparison or property-based test |
+| Integration / API | Contract test against a real dependency; specify request/response fixture |
+| Security / access control | Negative test — verify the prohibited action is actually blocked |
+| Configuration / operational | Runbook walkthrough; verify runtime output without rebuilding |
+
+### Proposed validation guide
+
+Include this block in your response:
+
+```
+## Validation Guide (draft)
+
+**Purpose**: <what goal this serves — one sentence>
+**Intent**: <what specifically is changing — one sentence>
+**Hypothesis**: <stated by human / not yet validated — note if flagged>
+**Validation strategy**: <how success will be measured>
+**Who validates**: <end user / QA / automated test / stakeholder>
+**Success criterion**: <observable, measurable outcome>
+```
+
+If the human corrects or adds to this, update the guide before moving on. This validation strategy directly informs the AT items written in Step 4 — getting it right here pays off downstream.
+
+---
+
 ## Step 2: Execute planned actions
 
 Work through each concept according to the action decided in Step 1b.
@@ -172,7 +235,7 @@ grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
 
 If no logging CuRS exists and this is either the first set of requirements for the project or the new CuRS items involve multi-step behavior across components, note in the report that a logging CuRS is missing. The logging CuRS captures the customer's need for runtime observability — e.g. "operators shall be able to set log verbosity and output destination without rebuilding the software." Without it, the logging system in sophist-impl has no spec to follow and is implemented ad hoc.
 
-Do not create the logging CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#logging`, derive an SRS item that specifies log levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output destinations (`stdout`, `file`, `both`), and write an AT item that verifies LOG_LEVEL and LOG_OUTPUT configuration works at runtime.
+Do not create the logging CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#logging`, derive an SRS item that specifies debug levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), and write an AT item that verifies `--debug-level` and `--debug-output-dir` CLI options work at runtime.
 
 ---
 
@@ -272,6 +335,26 @@ Next: Open the SRS and AT files, write your answers inline by removing or updati
 `> **Review needed**` blocks, then run **sophist-srs** to apply your answers, mark items
 reviewed, and generate the corresponding SAD items.
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-curs/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-input.md` | The human's original request, verbatim |
+| `01-coverage.md` | Coverage analysis table — each concept, closest match, coverage rating, planned action, and brief rationale |
+| `02-intent.md` | Purpose / intent / hypothesis analysis and the full Validation Guide from Step 1d |
+| `03-actions.md` | Each planned action executed (NEW/UPDATE/ENHANCE/SKIP) with item IDs and one-line reasoning |
+| `04-review-points.md` | All review points generated, grouped by Must/Should/Awareness |
 
 ---
 

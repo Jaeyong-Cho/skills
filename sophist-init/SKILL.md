@@ -302,7 +302,7 @@ If multi-component SAD items were found, also check whether a logging CuRS alrea
 grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no logging CuRS exists, note it in the bootstrap report. The logging system (configurable `LOG_LEVEL` and `LOG_OUTPUT`) is a cross-cutting concern that must be specified before sophist-impl can instrument log calls consistently. Suggest the human add it via sophist-curs with: "operators shall be able to set log verbosity and output destination without rebuilding the software."
+If no logging CuRS exists, note it in the bootstrap report. The logging system (CLI options `--debug-level` and `--debug-output-dir`) is a cross-cutting concern that must be specified before sophist-impl can instrument log calls consistently. Suggest the human add it via sophist-curs with: "operators shall be able to set debug level and output directory via CLI options without rebuilding the software."
 
 Do not create the logging CuRS automatically here — just flag it so the human can decide.
 

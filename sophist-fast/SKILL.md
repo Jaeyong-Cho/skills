@@ -219,3 +219,20 @@ Then print a ready-to-use commit message:
 ```
 prototype(<ID>): rough spike for <one-line description>
 ```
+
+---
+
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-fast/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-mode.md` | Which mode was selected (FIX or PROTOTYPE), the decision rationale, and the target item or scope |
+| `01-changes.md` | FIX: each file edited with old → new value and which item it traces to. PROTOTYPE: the item prototyped and a list of spec requirements intentionally skipped with their item references |

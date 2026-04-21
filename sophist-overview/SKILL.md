@@ -102,6 +102,23 @@ Tip: run `grep -r "Review needed" .sophist/src/ | grep -v "^Binary"` to find the
 
 ---
 
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-overview/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-coverage.md` | Item counts per layer and state (draft / reviewed / done / deprecated) — the raw data behind the overview tables |
+| `01-gaps.md` | Traceability gaps found: items missing upstream or downstream traces, layers with no items yet, review points blocking progress |
+
+---
+
 ## Constraints
 
 - Do not modify any files — this is a read-only skill.

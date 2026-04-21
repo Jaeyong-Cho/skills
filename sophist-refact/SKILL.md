@@ -222,6 +222,24 @@ what behavior moved inside, and why callers are better off not knowing it.]
 
 ---
 
+## Debug output
+
+If the skill was invoked with `--debug-level=VERBOSE`, write a debug session. Create the output directory from `--debug-output-dir` (default: `.sophist/debug/`):
+
+```bash
+mkdir -p <value of --debug-output-dir, or .sophist/debug>
+```
+
+Create a timestamped directory inside it (e.g. `20240115-143022-refact/`) and write:
+
+| File | Contents |
+|------|----------|
+| `00-candidates.md` | All scored candidates — component, dependency count, debt score per anti-pattern, and ranking rationale |
+| `01-plan.md` | The chosen candidate's refactoring plan — interface delta, behavior preservation constraints, and all affected items |
+| `02-changes.md` | Each SOPHIST item updated — what field changed, old value, new value, and new state |
+
+---
+
 ## Constraints
 
 - **One candidate at a time.** Do not update items for multiple refactoring candidates in the same pass. Keeping the diff small makes review tractable.
