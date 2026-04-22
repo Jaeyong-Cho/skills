@@ -145,7 +145,36 @@ SDD-010 — AuthService.authenticate()
 
 ---
 
-## Step 5b: Check module depth
+## Step 5b: Check debug strategy coverage
+
+For each SAD item in scope, check whether `## Debug strategy` exists and is implemented:
+
+| Check | Pass criterion |
+|-------|---------------|
+| `## Debug strategy` present in SAD | Section exists with healthy trace, key observables, failure signatures, and diagnostic process |
+| Healthy trace implemented | Log calls exist at the component entry, each outbound call, and return — matching the healthy trace description |
+| Key observables logged | Variables listed under "Key observables" appear in at least one log message |
+| Failure signatures covered | Log messages exist that would produce the described failure signature for each failure mode |
+
+For each SDD item in scope, check whether `## Debug trace` exists and is implemented:
+
+| Check | Pass criterion |
+|-------|---------------|
+| `## Debug trace` present in SDD | Section exists with happy path, error paths, and key variables |
+| Happy path trace implemented | Log messages in the code match the happy path trace in order |
+| Error paths covered | Each error path in `## Debug trace` has at least one log call before the raise/return |
+| Key variables captured | Variables listed under "Key variables" appear in at least one log message |
+
+Flag missing sections as `missing-debug-spec`:
+```
+SAD-003 — AuthService
+  MISSING debug-spec: no ## Debug strategy section — developer cannot tell from the spec
+  what logs to look for when this component fails.
+```
+
+---
+
+## Step 5c: Check module depth
 
 For each SAD component in scope, evaluate whether the implemented code is a **deep module** (Ousterhout, *A Philosophy of Software Design*):
 
@@ -168,7 +197,7 @@ Do not suggest specific refactors — describe the shallowness and ask the human
 
 ---
 
-## Step 5c: Classify divergences (Code → Spec mode)
+## Step 5d: Classify divergences (Code → Spec mode)
 
 For every deviation found in steps 4–5b, judge whether **the code is right** (spec is stale) or **the code is wrong** (code is a bug or unintended deviation).
 

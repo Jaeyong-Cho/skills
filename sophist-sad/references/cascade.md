@@ -72,6 +72,12 @@ _Omit if the algorithm is a straight sequence with no branches. Use `sequenceDia
 ## Side effects
 <what is written/read/mutated beyond the return value, or "none">
 
+## Debug trace
+**Happy path**: <ordered log messages for a successful execution — enough to confirm each algorithm step fired>
+**Error paths**:
+- `<ErrorType>`: <log messages that appear when this error occurs, and which variable values confirm it>
+**Key variables**: <the runtime values a developer most needs to see when diagnosing a failure in this function>
+
 > **Review needed** — <question about algorithm detail, error handling, or edge case>
 ```
 

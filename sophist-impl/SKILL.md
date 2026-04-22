@@ -119,15 +119,19 @@ ls src/<path-from-sad-location>
 
 ---
 
-## Step 5: Understand the flow from diagrams
+## Step 5: Read the debug strategy
 
-Before writing any business logic, read the diagrams to build a mental model of the flow. This determines where to place log calls — not mechanically, but at the locations that actually matter.
+Before writing any business logic, read the debug specifications in the SOPHIST items. These tell you exactly what to log and why — use them as the binding spec for log placement, the same way `## Algorithm` is the binding spec for code logic.
 
-**SAD Dynamic View** (`sequenceDiagram`): read it to understand the component's entry points, what it calls downstream, and what it returns. These are the `INFO`-level moments — you'll log at function entry, at each outbound call, and at function return.
+**From the SAD item — `## Debug strategy`**: read the healthy trace, key observables, failure signatures, and diagnostic process. These define the `INFO`-level log points — the component boundary events that a developer needs to reconstruct what happened.
 
-**SDD Dynamic View** (`flowchart TD` or `sequenceDiagram`): read it to understand the internal algorithm — the key decisions, error branches, and transformations. These are the `DEBUG`-level moments — log at branches and error paths that a developer would need to trace when debugging.
+**From the SDD item — `## Debug trace`**: read the happy path trace, error path traces, and key variables. These define the `DEBUG`-level log points — the internal moments that distinguish correct execution from a bug.
 
-No step-by-step numbering or annotation of diagram nodes is required. Use the diagrams as a map to understand the important moments, then place logs where they are useful.
+If a `## Debug strategy` or `## Debug trace` section is missing from the spec, write a review point on that item and fall back to reading the diagrams:
+- **SAD Dynamic View** (`sequenceDiagram`): entry points, outbound calls, and returns → `INFO`-level moments.
+- **SDD Dynamic View** (`flowchart TD` or `sequenceDiagram`): key decisions, error branches → `DEBUG`-level moments.
+
+No step-by-step annotation of diagram nodes is required. The debug sections in the spec replace the need to guess.
 
 ---
 
@@ -184,7 +188,11 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 
 ### Placing log calls
 
-Insert log calls at the exact point in the code where the corresponding diagram step executes — not before, not after.
+**Use the debug spec as the primary guide.** The SAD `## Debug strategy` specifies the `INFO`-level log points; the SDD `## Debug trace` specifies the `DEBUG`-level log points and key variable values. Place log calls exactly where those specs say to — at the same locations, carrying the same variables.
+
+If neither section exists, fall back to diagram-guided placement as described in Step 5.
+
+Insert log calls at the exact point in the code where the corresponding step executes — not before, not after.
 
 **Level mapping** — use the level that fits the importance of the event, not a rigid rule:
 

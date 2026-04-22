@@ -218,6 +218,13 @@ expose only what callers need to know.>
 ## Dependencies
 - [SAD-{MMM}](SAD-{MMM}.md): <why>
 
+## Debug strategy
+**Healthy trace**: <what log messages appear in order when this component executes correctly>
+**Key observables**: <which variables or state values are most diagnostic>
+**Failure signatures**:
+- <failure mode>: <log pattern or missing output that indicates this failure>
+**Diagnostic process**: <step-by-step how to isolate a bug in this component>
+
 ## Lazy observability
 These are component-level instrumentation points.
 sophist-impl must emit each one at the described location when implementing this component.
@@ -289,6 +296,12 @@ flowchart TD
 
 ## Side effects
 <none | list>
+
+## Debug trace
+**Happy path**: <ordered log messages for a successful execution>
+**Error paths**:
+- `<ErrorType>`: <log messages and variable values that identify this error>
+**Key variables**: <runtime values most useful for diagnosing a failure in this function>
 
 ## Lazy contracts
 <Summary of all lazy guards in this function — for human review.
