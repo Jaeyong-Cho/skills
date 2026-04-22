@@ -166,6 +166,7 @@ For each SDD item in scope, check whether `## Debug trace` exists and is impleme
 | Key variables captured | Variables listed under "Key variables" appear in at least one log message |
 | Debug data files written | Each row in `## Debug data` tables (SAD and SDD) has a corresponding `write_debug_data()` call at the specified trigger point, with the exact filename and fields from the spec |
 | Debug data guarded | Every debug data write is conditional on `--debug-output-dir` being set — never writes unconditionally |
+| Log format includes source location | Logger formatter emits `filename:line_number` in every log line — configured at formatter setup, not at individual call sites |
 
 Flag missing sections as `missing-debug-spec`:
 ```

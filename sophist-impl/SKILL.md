@@ -30,12 +30,24 @@ When no Logger SAD/SDD items exist, apply this spec and suggest to the human tha
 | **Enable/disable** | `--debug-level=OFF` turns logging off entirely |
 | **Levels** | Standard levels in ascending detail: `INFO` → `DEBUG` → `VERBOSE` |
 | **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — very fine-grained traces if needed |
+| **Log format** | Every log line must include: `<timestamp> <level> <filename>:<line_number> <message>` — filename and line number are mandatory so a developer can jump directly to the call site from a log line |
 
 Higher levels are cumulative: `DEBUG` always includes `INFO` output.
 
 `--debug-level` and `--debug-output-dir` are read as CLI options passed to the application. When `--debug-output-dir` is provided, write one log file per process run to that directory, named by timestamp (e.g. `20240115-143022.log`). When omitted, write to stdout. Never hard-code a path — the directory is always passed explicitly via `--debug-output-dir`.
 
 Each log call uses the project's standard logger at the appropriate level. The message must carry the relevant runtime variable values — enough context to understand what happened without reading the source. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
+
+**Filename and line number** must be emitted automatically by the logger — do not construct them manually at each call site. Configure the logging formatter/handler once at setup time:
+
+| Language | How to include filename:line |
+|----------|------------------------------|
+| Python | `logging.Formatter("%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(message)s")` |
+| TypeScript/Node.js | Use `winston` with `{filename: true}` or capture via `new Error().stack` in a custom format; or use `pino` which includes `caller` metadata |
+| Go | `slog.NewTextHandler(w, &slog.HandlerOptions{AddSource: true})` |
+| Rust | `env_logger` with `RUST_LOG_STYLE=always`; or `tracing` with `#[instrument]` and a subscriber that includes file/line |
+
+If the project's existing logger does not emit filename and line number, add it to the formatter/handler configuration — never wrap every call site manually.
 
 ---
 
@@ -169,8 +181,11 @@ grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/nul
 - Accept `--debug-output-dir <path>`: write one timestamped log file per run to that directory; when omitted, write to stdout
 - Accept `--debug-level <level>` that maps to standard levels. Supported levels in ascending verbosity: `OFF`, `INFO`, `DEBUG`, `VERBOSE`
 - Expose the standard level methods (`info`, `debug`, `verbose`, or the project language's equivalent) so callers choose the level at the call site
+- **Emit `filename:line_number` in every log line**, configured once in the formatter — not at each call site
 
 Keep it simple. The goal is a reliable, configurable-output logger that lets callers use standard levels without worrying about routing or configuration.
+
+**If a logging system exists but does not include filename and line number**: add it to the formatter/handler configuration now. This is a one-line change at the logger setup; it must not be spread across individual call sites.
 
 ### 6c: Check and set up debug data output infrastructure
 

@@ -102,9 +102,9 @@ Operators need to inspect runtime behavior without rebuilding.
 ## Context
 Added automatically by sophist-lazy because the pipeline produces multi-component interactions.
 
-> **Review needed** — confirm `--debug-level` scale and `--debug-output-dir` usage match project constraints
+> **Review needed** — confirm `--debug-level` scale, `--debug-output-dir` usage, and log format match project constraints
 >
-> **Lazy assumption**: `--debug-level=OFF|INFO|DEBUG|VERBOSE` (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); `--debug-output-dir=<path>` for file output, omit for stdout
+> **Lazy assumption**: `--debug-level=OFF|INFO|DEBUG|VERBOSE` (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); `--debug-output-dir=<path>` for file output, omit for stdout; log format includes `filename:line_number` in every line, configured once in the logger formatter
 > **Guard level**: `log`
 > **Lazy ID**: L-{NNN}
 ```
