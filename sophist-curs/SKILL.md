@@ -225,17 +225,17 @@ Note: The `→ SAD` trace is intentionally absent here. sophist-srs creates the 
 
 ---
 
-## Step 3b: Logging cross-cutting concern
+## Step 3b: Debugger cross-cutting concern
 
-After deriving SRS items, check whether the project has a logging CuRS:
+After deriving SRS items, check whether the project has a debugger CuRS:
 
 ```bash
-grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no logging CuRS exists and this is either the first set of requirements for the project or the new CuRS items involve multi-step behavior across components, note in the report that a logging CuRS is missing. The logging CuRS captures the customer's need for runtime observability — e.g. "operators shall be able to set log verbosity and output destination without rebuilding the software." Without it, the logging system in sophist-impl has no spec to follow and is implemented ad hoc.
+If no debugger CuRS exists and this is either the first set of requirements for the project or the new CuRS items involve multi-step behavior across components, note in the report that a debugger CuRS is missing. The debugger CuRS captures the customer's need for runtime observability — e.g. "operators shall be able to set log verbosity and output destination without rebuilding the software." Without it, the Debugger component in sophist-impl has no spec to follow and is implemented ad hoc.
 
-Do not create the logging CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#logging`, derive an SRS item that specifies debug levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), and write an AT item that verifies `--debug-level` and `--debug-output-dir` CLI options work at runtime.
+Do not create the debugger CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#debugger`, derive an SRS item that specifies debug levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output control (`--debug-output-dir <path>` for structured data files and a log file, omit for stdout-only), and write an AT item that verifies `--debug-level` and `--debug-output-dir` CLI options work at runtime.
 
 ---
 

@@ -115,15 +115,15 @@ For each draft AT item, check if it has a pending `> **Review needed**` blockquo
 
 For each SRS item newly marked `reviewed`, handle downstream items in two cases:
 
-### Logging cross-cutting concern
+### Debugger cross-cutting concern
 
-When cascading SRS items to SAD, check whether a logging SRS item exists:
+When cascading SRS items to SAD, check whether a debugger SRS item exists:
 
 ```bash
-grep -rl "#logging" .sophist/src/srs/ 2>/dev/null
+grep -rl "#debugger" .sophist/src/srs/ 2>/dev/null
 ```
 
-If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no logging SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The logging SRS item should specify: debug levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), both passed as CLI options. Once that SRS item is reviewed, sophist-srs will cascade it into a Logger SAD component.
+If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no debugger SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The debugger SRS item should specify: debug levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), both passed as CLI options. Once that SRS item is reviewed, sophist-srs will cascade it into a Debugger SAD component.
 
 ### No `→ [SAD-` trace yet — create new items
 

@@ -12,42 +12,30 @@ description: |
 
 ---
 
-## Logging model
+## Debug model
 
-Diagram-traced logging is **essential**. Always perform Steps 5–6 and place log calls in Step 7 — even if the human says nothing about logging (e.g. "implement SDD-010"). Only skip Steps 5–6 and log call placement if the human **explicitly asks not to instrument logging**.
+Debug instrumentation is **essential**. Always perform Steps 5–6 and place debug calls in Step 7 — even if the human says nothing about it (e.g. "implement SDD-010"). Only skip Steps 5–6 if the human **explicitly asks not to instrument debugging**.
+
+The project uses a single **Debugger** component that owns all debug output: structured log lines and structured data files both go through it. This keeps `--debug-output-dir` and `--debug-level` in one place — components never touch the filesystem or routing directly.
 
 ### Authoritative source: SOPHIST book items
 
-The logging specification lives in the project's SOPHIST book. Step 6a (below) looks for a Logger SAD item tagged `#logging`. **If one exists, its `## Interface` and linked SDD items are the binding spec** — use their exact function signatures and follow their algorithm. The default model below is a fallback only when no logging items exist in the book yet.
+Look for a Debugger SAD item tagged `#debugger` in the SOPHIST book (Step 6a below). **If one exists, its `## Interface` and linked SDD items are the binding spec** — use their exact signatures. The default model below is a fallback only when no Debugger items exist yet.
 
-### Default logging model (fallback)
+### Default Debugger model (fallback)
 
-When no Logger SAD/SDD items exist, apply this spec and suggest to the human that it should be captured as SOPHIST items via sophist-curs:
+When no Debugger SAD/SDD items exist, apply this spec and suggest to the human that it should be captured as SOPHIST items via sophist-curs:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | `--debug-output-dir <path>` — write logs to that directory, one file per run named by timestamp. Omit to write to stdout only. |
-| **Enable/disable** | `--debug-level=OFF` turns logging off entirely |
-| **Levels** | Standard levels in ascending detail: `INFO` → `DEBUG` → `VERBOSE` |
-| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — very fine-grained traces if needed |
-| **Log format** | Every log line must include: `<timestamp> <level> <filename>:<line_number> <message>` — filename and line number are mandatory so a developer can jump directly to the call site from a log line |
+| **Output destination** | `--debug-output-dir <path>` — all debug output (log file + data files) written to this directory. Omit to write logs to stdout only; data writes become no-ops. |
+| **Enable/disable** | `--debug-level=OFF` suppresses all log output (data writes still occur if `--debug-output-dir` is set) |
+| **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. |
+| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces |
+| **Log format** | `<timestamp> <level> <filename>:<line_number> <message>` — source location is mandatory, configured at the handler not at call sites |
+| **Interface** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` for log lines; `write(filename, data)` for structured data files |
 
-Higher levels are cumulative: `DEBUG` always includes `INFO` output.
-
-`--debug-level` and `--debug-output-dir` are read as CLI options passed to the application. When `--debug-output-dir` is provided, write one log file per process run to that directory, named by timestamp (e.g. `20240115-143022.log`). When omitted, write to stdout. Never hard-code a path — the directory is always passed explicitly via `--debug-output-dir`.
-
-Each log call uses the project's standard logger at the appropriate level. The message must carry the relevant runtime variable values — enough context to understand what happened without reading the source. Use the project's existing logging library and style (e.g. Python `logging`, Node.js `winston`, Go `slog`), or establish a minimal one consistent with the language if none exists.
-
-**Filename and line number** must be emitted automatically by the logger — do not construct them manually at each call site. Configure the logging formatter/handler once at setup time:
-
-| Language | How to include filename:line |
-|----------|------------------------------|
-| Python | `logging.Formatter("%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(message)s")` |
-| TypeScript/Node.js | Use `winston` with `{filename: true}` or capture via `new Error().stack` in a custom format; or use `pino` which includes `caller` metadata |
-| Go | `slog.NewTextHandler(w, &slog.HandlerOptions{AddSource: true})` |
-| Rust | `env_logger` with `RUST_LOG_STYLE=always`; or `tracing` with `#[instrument]` and a subscriber that includes file/line |
-
-If the project's existing logger does not emit filename and line number, add it to the formatter/handler configuration — never wrap every call site manually.
+The `write(filename, data)` method writes `data` to `--debug-output-dir/<filename>`, inferring format from the file extension (`.json` → JSON, anything else → string). It is always a no-op when `--debug-output-dir` is not set, and never raises — debug output must never break the program.
 
 ---
 
@@ -147,78 +135,89 @@ No step-by-step annotation of diagram nodes is required. The debug sections in t
 
 ---
 
-## Step 6: Ensure logging infrastructure exists
+## Step 6: Ensure the Debugger exists
 
-*(Skip this step entirely if logging instrumentation was not requested.)*
+*(Skip this step entirely if debug instrumentation was not requested.)*
 
-### 6a: Find the logging specification in the SOPHIST book
-
-Before touching source code, look for the logging system specification in the project's SOPHIST items:
+### 6a: Find the Debugger specification in the SOPHIST book
 
 ```bash
-# Find Logger SAD item by tag or keyword
-grep -rl "#logging" .sophist/src/sad/ 2>/dev/null
-grep -rl "Logger\|logging" .sophist/src/sad/ 2>/dev/null | head -5
+grep -rl "#debugger" .sophist/src/sad/ 2>/dev/null
+grep -rl "Debugger" .sophist/src/sad/ 2>/dev/null | head -5
 ```
 
-**If a Logger SAD item exists** (any SAD item tagged `#logging` or named Logger/LogService):
-- Read it — the `## Interface` section defines the logger's API (level methods, message format, configuration)
-- Read its linked SDD items for precise parameter names, types, and configuration keys
-- Follow that interface; do not substitute the default model below
+**If a Debugger SAD item exists**: read it and its linked SDD items — they are the binding spec for the Debugger's interface and algorithm. Follow them exactly; do not substitute the default model.
 
-**If no Logger SAD item exists**: the logging system has not been formally specified in SOPHIST yet. Use the default logging model below. After implementing, suggest to the human that a logging CuRS → SRS → SAD → SDD chain should be created via sophist-curs to formalize what was built.
+**If no Debugger SAD item exists**: use the default model from the "Debug model" section above. After implementing, suggest creating a Debugger CuRS → SRS → SAD → SDD chain via sophist-curs.
 
-### 6b: Check and set up the logging infrastructure in source code
+### 6b: Check and set up the Debugger in source code
 
 ```bash
-# Look for existing logger setup — adapt search to the project's language
-grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/null | head -10
+grep -rl "Debugger\|debugger" src/ 2>/dev/null | head -10
 ```
 
-**If a logging system exists**: use it as-is. Wire the SAD and SDD log calls through whatever interface it already exposes. Verify that it supports `--debug-output-dir` (directory-based file output) and `--debug-level` — if it doesn't, add only the missing pieces rather than replacing it.
+**If a Debugger already exists**: use it. Confirm it exposes both log methods (`info`, `debug`, `verbose`, `warning`, `error`) and `write(filename, data)`. If it only has log methods (old Logger), add `write()` to it rather than creating a second component.
 
-**If no logging system exists**: create a minimal one appropriate to the project's language and style. It must:
-- Accept `--debug-output-dir <path>`: write one timestamped log file per run to that directory; when omitted, write to stdout
-- Accept `--debug-level <level>` that maps to standard levels. Supported levels in ascending verbosity: `OFF`, `INFO`, `DEBUG`, `VERBOSE`
-- Expose the standard level methods (`info`, `debug`, `verbose`, or the project language's equivalent) so callers choose the level at the call site
-- **Emit `filename:line_number` in every log line**, configured once in the formatter — not at each call site
-
-Keep it simple. The goal is a reliable, configurable-output logger that lets callers use standard levels without worrying about routing or configuration.
-
-**If a logging system exists but does not include filename and line number**: add it to the formatter/handler configuration now. This is a one-line change at the logger setup; it must not be spread across individual call sites.
-
-### 6c: Check and set up debug data output infrastructure
-
-Read the `## Debug data` tables in the SAD and SDD items being implemented. If any rows are present, the component writes structured debug files to `--debug-output-dir`.
-
-Check whether a debug data writer already exists in the project:
-
-```bash
-grep -rl "debug_output_dir\|debug-output-dir\|debugOutputDir" src/ 2>/dev/null | head -5
-```
-
-**If a debug data writer exists**: use it. Confirm it can write arbitrary files (not just the log file) to the `--debug-output-dir` path.
-
-**If none exists**: add a minimal helper alongside the logger — a function that, given `--debug-output-dir`, a filename, and data, serialises and writes it. Keep this separate from the logger: the logger handles line-oriented messages; the debug data writer handles structured files. A simple example:
+**If none exists**: create a single Debugger class/module. Adapt the language and style to the project — below is a Python reference implementation:
 
 ```python
-# debug_data.py
-import json, os
+# debugger.py
+import json, logging, os
+from datetime import datetime
 
-def write_debug_data(debug_output_dir, filename, data):
-    """Write structured debug data to --debug-output-dir. No-op if dir is None."""
-    if not debug_output_dir:
-        return
-    os.makedirs(debug_output_dir, exist_ok=True)
-    path = os.path.join(debug_output_dir, filename)
-    with open(path, "w") as f:
-        if filename.endswith(".json"):
-            json.dump(data, f, indent=2)
+class Debugger:
+    _LEVELS = {"OFF": 0, "INFO": 1, "DEBUG": 2, "VERBOSE": 3}
+
+    def __init__(self, debug_level: str = "OFF", debug_output_dir: str | None = None):
+        self._threshold = self._LEVELS.get(debug_level.upper(), 0)
+        self._dir = debug_output_dir
+        self._log = self._make_logger(debug_output_dir)
+
+    def _make_logger(self, output_dir: str | None) -> logging.Logger:
+        log = logging.getLogger("app.debugger")
+        log.setLevel(logging.DEBUG)
+        fmt = logging.Formatter("%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(message)s")
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+            h = logging.FileHandler(os.path.join(output_dir, f"{datetime.now():%Y%m%d-%H%M%S}.log"))
         else:
-            f.write(str(data))
+            h = logging.StreamHandler()
+        h.setFormatter(fmt)
+        log.addHandler(h)
+        return log
+
+    def info(self, msg: str) -> None:
+        if self._threshold >= 1: self._log.info(msg)
+
+    def debug(self, msg: str) -> None:
+        if self._threshold >= 2: self._log.debug(msg)
+
+    def verbose(self, msg: str) -> None:
+        if self._threshold >= 3: self._log.debug(f"[VERBOSE] {msg}")
+
+    def warning(self, msg: str) -> None:
+        if self._threshold >= 1: self._log.warning(msg)
+
+    def error(self, msg: str) -> None:
+        if self._threshold >= 1: self._log.error(msg)
+
+    def write(self, filename: str, data) -> None:
+        """Write structured debug data to --debug-output-dir. No-op if dir is unset."""
+        if not self._dir:
+            return
+        try:
+            os.makedirs(self._dir, exist_ok=True)
+            path = os.path.join(self._dir, filename)
+            with open(path, "w") as f:
+                if filename.endswith(".json"):
+                    json.dump(data, f, indent=2)
+                else:
+                    f.write(str(data))
+        except Exception:
+            pass  # debug output must never crash the program
 ```
 
-Adapt the format, language, and serialisation to match the project. The key contract: it only writes when `--debug-output-dir` is provided, it never raises (wrap in try/except if needed), and it uses the exact filename from the `## Debug data` table.
+Construct the Debugger once at application entry from the CLI options, then pass it to every component that needs it. Components call `debugger.info(...)`, `debugger.write(...)` — they never access `--debug-output-dir` directly.
 
 ---
 
@@ -234,24 +233,24 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 | `## Error cases` | Every error case must be handled — no silent omissions |
 | `## Side effects` | Honor what's declared; if "none", don't add any |
 
-### Placing log calls and debug data writes
+### Placing Debugger calls
 
 **Use the debug spec as the primary guide.**
 
-- The SAD `## Debug strategy` specifies `INFO`-level log points and component-level debug data files.
-- The SDD `## Debug trace` specifies `DEBUG`-level log points and function-level debug data files.
+- The SAD `## Debug strategy` specifies `debugger.info()` points and component-level `debugger.write()` calls.
+- The SDD `## Debug trace` specifies `debugger.debug()` points and function-level `debugger.write()` calls.
 
-Place log calls and `write_debug_data()` calls exactly where those specs say — at the same trigger points, carrying the same fields.
+Place calls exactly where those specs say — at the same trigger points, carrying the same fields.
 
 If neither section exists, fall back to diagram-guided placement as described in Step 5.
 
-**Debug data writes** follow the `## Debug data` table row by row:
+**`debugger.write()` calls** follow the `## Debug data` table row by row:
 - Use the exact filename from the table — do not invent names.
-- Write the exact fields listed — add nothing, omit nothing.
+- Pass the exact fields listed — add nothing, omit nothing.
 - Respect the trigger: `on entry` means the very first line of the function body; `on error` means immediately before raising; `on return` means just before returning.
-- Guard every write with `if debug_output_dir` (or equivalent) — never write unconditionally.
+- No separate guard needed — `debugger.write()` is already a no-op when `--debug-output-dir` is unset.
 
-Insert log calls and debug data writes at the exact point in the code where the corresponding step executes — not before, not after.
+Insert all Debugger calls at the exact point in the code where the corresponding step executes — not before, not after.
 
 **Level mapping** — use the level that fits the importance of the event, not a rigid rule:
 

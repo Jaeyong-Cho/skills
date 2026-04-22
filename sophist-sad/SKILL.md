@@ -117,17 +117,17 @@ For each draft SIT item, check if it has a pending `> **Review needed**` blockqu
 
 For each SAD item newly marked `reviewed`, handle downstream items in two cases:
 
-### Logging cross-cutting concern
+### Debugger cross-cutting concern
 
-Before cascading to SDD, check whether a Logger SAD item exists:
+Before cascading to SDD, check whether a Debugger SAD item exists:
 
 ```bash
-grep -rl "#logging" .sophist/src/sad/ 2>/dev/null
+grep -rl "#debugger" .sophist/src/sad/ 2>/dev/null
 ```
 
-If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Logger SAD item exists yet, and there is an SRS item tagged `#logging` that traces here — create the Logger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the logger API (standard level methods: `info`, `debug`, `verbose`, `warning`, `error`, plus CLI options `--debug-level` and `--debug-output-dir`). All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
+If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Debugger SAD item exists yet, and there is an SRS item tagged `#debugger` that traces here — create the Debugger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the Debugger API (log methods: `info`, `debug`, `verbose`, `warning`, `error`; data write method: `write(filename, data)`; CLI options `--debug-level` and `--debug-output-dir`). All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
 
-If no logging SRS item exists at all, skip this — it means logging has not yet been specified at the requirements layer. Note it in the report so the human can decide whether to add it via sophist-curs.
+If no debugger SRS item exists at all, skip this — it means runtime observability has not yet been specified at the requirements layer. Note it in the report so the human can decide whether to add it via sophist-curs.
 
 ### No `→ [SDD-` trace yet (or only a `TBD` placeholder) — create new items
 

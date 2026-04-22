@@ -71,47 +71,47 @@ Add a row to `.sophist/src/curs/index.md` and an entry to `SUMMARY.md`.
 
 ---
 
-## Step 1b: Logging cross-cutting concern
+## Step 1b: Debugger cross-cutting concern
 
-Check whether a logging CuRS exists in the project:
+Check whether a Debugger CuRS exists in the project:
 
 ```bash
-grep -rl "#logging" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no logging CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a logging CuRS before proceeding. Tag it `#logging` and apply the lazy assumption protocol: the lazy assumption is that the default level model (`--debug-level=OFF/INFO/DEBUG/VERBOSE`, `--debug-output-dir=<path>` or stdout when omitted) is acceptable.
+If no Debugger CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a Debugger CuRS before proceeding. Tag it `#debugger` and apply the lazy assumption protocol.
 
 ```markdown
-# CuRS-{NNN}: Logging and runtime observability
+# CuRS-{NNN}: Runtime debuggability
 
 ## State
 `draft`
 
 ## Tags
-`#logging` `#lazy`
+`#debugger` `#lazy`
 
 ## Why
-Operators need to inspect runtime behavior without rebuilding.
+Operators need to inspect runtime behavior — both event traces and structured state snapshots — without rebuilding the software.
 
 ## Traces
-- → [SRS-{NNN}](../srs/SRS-{NNN}.md): log level and output destination configuration
+- → [SRS-{NNN}](../srs/SRS-{NNN}.md): debug level, output destination, and data file format
 
 ## Input
-> "operators shall be able to set log verbosity and output destination without rebuilding the software"
+> "operators shall be able to set debug verbosity and output directory via CLI options without rebuilding the software"
 
 ## Context
 Added automatically by sophist-lazy because the pipeline produces multi-component interactions.
 
 > **Review needed** — confirm `--debug-level` scale, `--debug-output-dir` usage, and log format match project constraints
 >
-> **Lazy assumption**: `--debug-level=OFF|INFO|DEBUG|VERBOSE` (INFO=component boundaries, DEBUG=internal steps, VERBOSE=fine-grained); `--debug-output-dir=<path>` for file output, omit for stdout; log format includes `filename:line_number` in every line, configured once in the logger formatter
+> **Lazy assumption**: single Debugger component with `--debug-level=OFF|INFO|DEBUG|VERBOSE` and `--debug-output-dir=<path>`; exposes `info/debug/verbose/warning/error(msg)` for log lines and `write(filename, data)` for structured data files; log lines include `filename:line_number`; all output routes through the Debugger — components never write to the filesystem directly
 > **Guard level**: `log`
 > **Lazy ID**: L-{NNN}
 ```
 
-Then derive SRS, SAD, and SDD items for the Logger the same way as any other pipeline item (Steps 2–4 below). The Logger SAD item's `## Interface` defines the standard level methods (`info`, `debug`, `verbose`, `warning`, `error`) and CLI options (`--debug-level`, `--debug-output-dir`) — sophist-impl will import from it for all other SAD components in the project.
+Then derive SRS, SAD, and SDD items for the Debugger the same way as any other pipeline item (Steps 2–4 below). The Debugger SAD item's `## Interface` defines both the log methods and `write()` — sophist-impl will import from it for all other SAD components in the project.
 
-If a logging CuRS already exists, skip this step.
+If a Debugger CuRS already exists, skip this step.
 
 ---
 

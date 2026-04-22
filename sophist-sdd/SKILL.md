@@ -76,9 +76,9 @@ Change `## State` from `` `draft` `` to `` `reviewed` ``.
 
 ---
 
-## Step 4b: Logging SDD items
+## Step 4b: Debugger SDD items
 
-If any of the answered SDD items belong to a Logger SAD component (tagged `#logging`), the SDD items define the concrete logger implementation — level methods (`info`, `debug`, `verbose`, `warning`, `error`) and CLI option parsing (`--debug-level`, `--debug-output-dir`). Treat them exactly like any other SDD item: the `## Signature` section defines what callers call; the `## Algorithm` section describes how the function routes output based on `--debug-level` and `--debug-output-dir`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
+If any of the answered SDD items belong to a Debugger SAD component (tagged `#debugger`), the SDD items define the concrete Debugger implementation — log methods (`info`, `debug`, `verbose`, `warning`, `error`), data write method (`write(filename, data)`), and CLI option parsing (`--debug-level`, `--debug-output-dir`). Treat them exactly like any other SDD item: the `## Signature` section defines what callers call; the `## Algorithm` section describes how each method routes output or writes data based on `--debug-level` and `--debug-output-dir`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
 
 ---
 
