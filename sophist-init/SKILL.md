@@ -82,7 +82,6 @@ Replace `.sophist/book.toml` with:
 ```toml
 [book]
 language = "en"
-multilingual = false
 src = "src"
 title = "<project-name>"
 
