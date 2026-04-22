@@ -172,6 +172,39 @@ grep -rl "logging\|logger\|log_file\|FileHandler\|winston\|slog" src/ 2>/dev/nul
 
 Keep it simple. The goal is a reliable, configurable-output logger that lets callers use standard levels without worrying about routing or configuration.
 
+### 6c: Check and set up debug data output infrastructure
+
+Read the `## Debug data` tables in the SAD and SDD items being implemented. If any rows are present, the component writes structured debug files to `--debug-output-dir`.
+
+Check whether a debug data writer already exists in the project:
+
+```bash
+grep -rl "debug_output_dir\|debug-output-dir\|debugOutputDir" src/ 2>/dev/null | head -5
+```
+
+**If a debug data writer exists**: use it. Confirm it can write arbitrary files (not just the log file) to the `--debug-output-dir` path.
+
+**If none exists**: add a minimal helper alongside the logger — a function that, given `--debug-output-dir`, a filename, and data, serialises and writes it. Keep this separate from the logger: the logger handles line-oriented messages; the debug data writer handles structured files. A simple example:
+
+```python
+# debug_data.py
+import json, os
+
+def write_debug_data(debug_output_dir, filename, data):
+    """Write structured debug data to --debug-output-dir. No-op if dir is None."""
+    if not debug_output_dir:
+        return
+    os.makedirs(debug_output_dir, exist_ok=True)
+    path = os.path.join(debug_output_dir, filename)
+    with open(path, "w") as f:
+        if filename.endswith(".json"):
+            json.dump(data, f, indent=2)
+        else:
+            f.write(str(data))
+```
+
+Adapt the format, language, and serialisation to match the project. The key contract: it only writes when `--debug-output-dir` is provided, it never raises (wrap in try/except if needed), and it uses the exact filename from the `## Debug data` table.
+
 ---
 
 ## Step 7: Implement
@@ -186,13 +219,24 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 | `## Error cases` | Every error case must be handled — no silent omissions |
 | `## Side effects` | Honor what's declared; if "none", don't add any |
 
-### Placing log calls
+### Placing log calls and debug data writes
 
-**Use the debug spec as the primary guide.** The SAD `## Debug strategy` specifies the `INFO`-level log points; the SDD `## Debug trace` specifies the `DEBUG`-level log points and key variable values. Place log calls exactly where those specs say to — at the same locations, carrying the same variables.
+**Use the debug spec as the primary guide.**
+
+- The SAD `## Debug strategy` specifies `INFO`-level log points and component-level debug data files.
+- The SDD `## Debug trace` specifies `DEBUG`-level log points and function-level debug data files.
+
+Place log calls and `write_debug_data()` calls exactly where those specs say — at the same trigger points, carrying the same fields.
 
 If neither section exists, fall back to diagram-guided placement as described in Step 5.
 
-Insert log calls at the exact point in the code where the corresponding step executes — not before, not after.
+**Debug data writes** follow the `## Debug data` table row by row:
+- Use the exact filename from the table — do not invent names.
+- Write the exact fields listed — add nothing, omit nothing.
+- Respect the trigger: `on entry` means the very first line of the function body; `on error` means immediately before raising; `on return` means just before returning.
+- Guard every write with `if debug_output_dir` (or equivalent) — never write unconditionally.
+
+Insert log calls and debug data writes at the exact point in the code where the corresponding step executes — not before, not after.
 
 **Level mapping** — use the level that fits the importance of the event, not a rigid rule:
 

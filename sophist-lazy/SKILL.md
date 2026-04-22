@@ -225,6 +225,12 @@ expose only what callers need to know.>
 - <failure mode>: <log pattern or missing output that indicates this failure>
 **Diagnostic process**: <step-by-step how to isolate a bug in this component>
 
+**Debug data** (written to `--debug-output-dir` when enabled):
+
+| File | Format | When written | Contents |
+|------|--------|-------------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <fields or entries> |
+
 ## Lazy observability
 These are component-level instrumentation points.
 sophist-impl must emit each one at the described location when implementing this component.
@@ -302,6 +308,12 @@ flowchart TD
 **Error paths**:
 - `<ErrorType>`: <log messages and variable values that identify this error>
 **Key variables**: <runtime values most useful for diagnosing a failure in this function>
+
+**Debug data** (written to `--debug-output-dir` when enabled):
+
+| File | Format | When written | Contents |
+|------|--------|-------------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | on entry \| on error \| on return \| always | <exact fields — specific enough to implement without guessing> |
 
 ## Lazy contracts
 <Summary of all lazy guards in this function — for human review.

@@ -78,6 +78,14 @@ _Omit if the algorithm is a straight sequence with no branches. Use `sequenceDia
 - `<ErrorType>`: <log messages that appear when this error occurs, and which variable values confirm it>
 **Key variables**: <the runtime values a developer most needs to see when diagnosing a failure in this function>
 
+**Debug data** (written to `--debug-output-dir` when debug output is enabled):
+
+| File | Format | When written | Contents |
+|------|--------|-------------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger: on entry \| on error \| on return \| always> | <exact fields or entries — be specific enough that impl can write the file without guessing> |
+
+_Each file should answer one diagnostic question. Prefer formats that are easy to diff or grep. JSON for structured state; line-per-event logs for sequences; CSV for tabular data._
+
 > **Review needed** — <question about algorithm detail, error handling, or edge case>
 ```
 

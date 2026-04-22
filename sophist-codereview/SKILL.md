@@ -164,6 +164,8 @@ For each SDD item in scope, check whether `## Debug trace` exists and is impleme
 | Happy path trace implemented | Log messages in the code match the happy path trace in order |
 | Error paths covered | Each error path in `## Debug trace` has at least one log call before the raise/return |
 | Key variables captured | Variables listed under "Key variables" appear in at least one log message |
+| Debug data files written | Each row in `## Debug data` tables (SAD and SDD) has a corresponding `write_debug_data()` call at the specified trigger point, with the exact filename and fields from the spec |
+| Debug data guarded | Every debug data write is conditional on `--debug-output-dir` being set — never writes unconditionally |
 
 Flag missing sections as `missing-debug-spec`:
 ```

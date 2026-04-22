@@ -76,6 +76,14 @@ sequenceDiagram
 - <failure mode>: <what log pattern or missing output indicates this failure>
 **Diagnostic process**: <step-by-step how to isolate a bug in this component — which logs to check first, which downstream components to rule out>
 
+**Debug data** (written to `--debug-output-dir` when debug output is enabled):
+
+| File | Format | When written | Contents |
+|------|--------|-------------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <what data fields or entries it contains> |
+
+_Design these files so a developer can diagnose the most common failures without reading source code. Each file should answer a specific diagnostic question._
+
 > **Review needed** — <question about component boundary, file location, interface, or dependency>
 ```
 
