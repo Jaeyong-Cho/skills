@@ -50,18 +50,25 @@ set the goal
 
 ### 3. Capture Requirements — `sophist-curs`
 
-Tell it what the customer wants. It:
+Two modes in one skill:
+
+**Capture mode** — tell it what the customer wants. It:
 - Checks for duplicate or overlapping existing items (NEW / ENHANCE / UPDATE / SKIP)
 - Creates `CuRS-NNN` items capturing the customer's words
 - Derives `SRS-NNN` requirements (testable, traceable)
 - Creates `AT-NNN` acceptance tests
 - Flags if a Debugger CuRS is missing
 
-After it runs, open the draft files, write your answers to the `> **Review needed**` blocks, then run `sophist-srs`.
+**Review mode** — after answering review points inline in the CuRS files. It:
+- Applies your inline answers into the item files
+- Marks answered CuRS items `reviewed`
+- Updates linked SRS items if CuRS content changed
 
 ```
 sophist-curs
 I have a new requirement: <describe what the customer wants>
+review CuRS
+I answered the CuRS items
 ```
 
 ---

@@ -1,12 +1,17 @@
 ---
 name: sophist-curs
 description: |
-  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the SOPHIST documents updated. Triggers: "sophist-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. No SAD/SDD/test stubs yet — those cascade after SRS review via sophist-srs.
+  Use this skill when the user provides new or changed customer requirements (CuRS) and wants the SOPHIST documents updated. Triggers: "sophist-curs", "update the docs with this requirement", "I have a new requirement", "add this to the spec", "the customer wants X", or any time the user describes what the software should do. Also handles reviewing answered CuRS items — triggers: "review CuRS", "I answered the CuRS items", "check CuRS review points", "show CuRS pending". AI drafts CuRS → SRS → AT items, marks them draft, and provides review points. Reviewing CuRS items marks them reviewed and updates the linked SRS items. No SAD/SDD/test stubs yet — those cascade after SRS review via sophist-srs.
 ---
 
 # sophist-curs: Capture Customer Input and Draft SRS
 
-**Goal**: Translate customer intent into a CuRS item, derive SRS requirements, and create corresponding AT items. All new items are marked `draft` with review points. SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
+**Goal**: Two modes depending on context.
+
+- **Capture mode** (user provides a new/changed requirement): translate customer intent into CuRS items, derive SRS requirements, create AT items. All new items are marked `draft` with review points.
+- **Review mode** (user has answered review points inline): apply answers to draft CuRS items, mark them `reviewed`, update linked SRS items if content changed.
+
+SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
 
 Read before starting:
 - `references/items.md` — item format, ID system, states, tags, traceability links
@@ -15,6 +20,133 @@ Read before starting:
 - `.sophist/src/goal.md` — project goal (if it exists); read to understand what the project is for and keep new items aligned with it
 
 ---
+
+## Detect mode
+
+Check which mode applies:
+
+- If the user has provided a new or changed customer requirement (a description of what the software should do) → **Capture mode**: go to Step 1.
+- If the user says "review CuRS", "I answered the CuRS items", "check CuRS review points", or invokes sophist-curs with no new requirement → **Review mode**: go to the Review section below.
+- If there are both (new requirement AND answered items): run Review mode first, then Capture mode.
+
+---
+
+## REVIEW MODE
+
+### R1: Find all draft CuRS items
+
+```bash
+grep -rl "^\`draft\`" .sophist/src/curs/
+```
+
+Read each draft CuRS item. For each, determine its status:
+
+- **Answered**: the `> **Review needed**` blockquote has been removed, or now contains `> **Answer**:` text added by the human
+- **Pending**: the blockquote exists with only the original question — no answer yet
+
+---
+
+### R2: Show pending review points
+
+List every pending CuRS item clearly so the human knows what still needs attention:
+
+```
+## Pending CuRS Review Points
+
+### CuRS-003: Password reset flow
+> confirm this captures the customer's intent — does "reset" mean email-based or in-app?
+
+### CuRS-004: Audit logging requirement
+> clarify whether this applies to all user actions or only privileged ones
+```
+
+If there are no pending items, note that and move to R3.
+
+---
+
+### R3: Apply inline answers to answered items
+
+For each answered CuRS item:
+
+**If the blockquote contains `> **Answer**: <text>`:**
+- Read the answer
+- Incorporate it into the relevant field — `## Input`, `## Why`, or `## Context` as appropriate
+- Remove the entire blockquote block (both question and answer lines)
+
+**If the blockquote has been removed entirely:**
+- Accept the current file content as the human's approved version
+- No content change needed — the human has already edited it directly
+
+After applying an answer, the item file should have no remaining `> **Review needed**` block. If there were multiple questions, address each separately. Rewrite clearly — don't just append.
+
+---
+
+### R4: Mark answered CuRS items as `reviewed`
+
+For each item where all review points are now resolved:
+
+Change `## State` from `` `draft` `` to `` `reviewed` ``.
+
+---
+
+### R5: Update linked SRS items
+
+For each CuRS item whose content changed during R3, read its linked SRS items via the `→ [SRS-` traces. Check whether the SRS items' `## Description`, `## Why`, or upstream trace annotation still accurately reflect the updated CuRS. If they don't:
+
+- Update the `## Why` or trace annotation to match the corrected CuRS intent
+- If the SRS Description's core requirement changed (not just clarified), reset the SRS item's state to `` `draft` `` and add a review point asking the human to confirm the SRS is still correct — the downstream design depends on it
+
+Do not create new SAD items here. That is sophist-srs's job.
+
+---
+
+### R6: Update traceability and tags
+
+- Update `.sophist/src/curs/index.md` to reflect any state changes
+- Update `.sophist/src/tags.md` if tags changed
+
+---
+
+### R7: Build check
+
+```bash
+cd .sophist && mdbook build 2>&1 | tail -20
+```
+
+Fix broken links before reporting.
+
+---
+
+### R8: Report
+
+```
+## CuRS Review Summary
+
+### Promoted to Reviewed
+| ID | Title |
+|----|-------|
+| CuRS-003 | Password reset flow |
+
+### Still Pending (answer these inline, then run sophist-curs again)
+| ID | Review Question |
+|----|----------------|
+| CuRS-004 | Applies to all user actions or only privileged ones? |
+
+### SRS Items Updated
+| ID | What changed |
+|----|-------------|
+| SRS-007 | Updated Why to reflect clarified password reset intent |
+
+---
+
+Next: Open any pending CuRS files, write your answers inline, then run sophist-curs again.
+When all CuRS items are reviewed, open the SRS files, write your answers inline, then run
+sophist-srs to apply answers, mark SRS items reviewed, and generate the corresponding SAD items.
+```
+
+---
+
+## CAPTURE MODE
 
 ## Step 1: Orient — find next IDs and assess existing coverage
 
@@ -332,9 +464,10 @@ Fix all broken links before reporting.
 
 ---
 
-Next: Open the SRS and AT files, write your answers inline by removing or updating the
-`> **Review needed**` blocks, then run **sophist-srs** to apply your answers, mark items
-reviewed, and generate the corresponding SAD items.
+Next: Open the CuRS files and write your answers to the `> **Review needed**` blocks inline,
+then run **sophist-curs** again to apply your answers and mark CuRS items reviewed.
+Also open the SRS and AT files and write your answers there, then run **sophist-srs** to
+mark SRS items reviewed and generate the corresponding SAD items.
 ```
 
 ---
