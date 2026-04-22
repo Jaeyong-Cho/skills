@@ -63,33 +63,38 @@ Score each component 0–3 (0 = clean, 3 = serious debt) on each dimension. You 
 
 ---
 
-## Step 3: Rank candidates by blast radius
+## Step 3: Rank candidates by complexity and blast radius
 
-Sort candidates by:
+**Primary sort: highest debt score first** — the goal is to find the components that most need simplification, regardless of how many things depend on them. A deeply broken component with many callers is exactly the kind of place where a refactor pays off most — callers suffer every day it stays broken.
 
-1. **Fewest inbound dependencies first** — if few things depend on this component, changing it won't ripple.
-2. **Highest debt score second** — within the same dependency tier, tackle the worst smell first.
+**Secondary sort: fewest inbound dependencies** — when two candidates have similar debt scores, prefer the one with fewer callers. This reduces the ripple risk and keeps the first refactoring self-contained.
+
+Show the blast radius clearly for each candidate so the human can make an informed tradeoff. A high-debt component with many dependents is worth listing even if it means a larger change — the human may choose to take it on anyway.
 
 Present the top 3 candidates:
 
 ```
 ## Refactoring Candidates
 
-### 1. SAD-002 ConfigLoader  (0 inbound deps, debt score: 8/9)
+### 1. SAD-003 DbAdapter  (debt score: 8/9, 3 inbound deps)
+- Temporal decomposition: connect(), query(), disconnect() are always called in sequence by every caller.
+- Leaky interface: callers must manage connection lifecycle manually — internal state leaks through the API.
+- Proposed direction: a single `withConnection(fn)` context manager hides the sequence and lifecycle inside.
+- Blast radius: 3 components need call-site updates if the interface changes.
+
+### 2. SAD-002 ConfigLoader  (debt score: 7/9, 0 inbound deps)
 - Shallow: 14 getter methods, each one line. Callers must know which key to ask for.
 - Leaky interface: callers pass raw string keys — config schema knowledge is spread across 6 call sites.
-- Proposed direction: collapse getters into one `get(key)` and push validation inside; or a typed config object built once at startup.
+- Proposed direction: collapse getters into one `get(key)` and push validation inside.
+- Blast radius: 0 — safe to change without touching any other component.
 
-### 2. SAD-003 DbAdapter  (1 inbound dep, debt score: 6/9)
-- Temporal decomposition: connect(), query(), disconnect() are always called in sequence by every caller.
-- Proposed direction: a single `withConnection(fn)` context manager hides the sequence inside.
-
-### 3. SAD-001 AuthService  (2 inbound deps, debt score: 5/9)
+### 3. SAD-001 AuthService  (debt score: 5/9, 2 inbound deps)
 - Pass-through: AuthService.validate() calls TokenValidator.validate() verbatim.
 - Proposed direction: absorb TokenValidator into AuthService; callers don't need to know it exists.
+- Blast radius: 2 components affected if the interface narrows.
 ```
 
-Ask the human: "Which of these would you like to tackle first? I'll start with #1 unless you say otherwise — it has no dependents so the change is self-contained."
+Ask the human: "Which of these would you like to tackle first? I'll start with #1 — it has the worst design debt — unless the blast radius makes you prefer #2 which is self-contained."
 
 ---
 
