@@ -8,7 +8,9 @@ description: |
 
 # sophist-impl: Implement Code from SOPHIST Items
 
-**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps. Instrument every implementation with appropriate log calls so runtime behavior is observable and traceable back to the spec. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
+**Goal**: Write source code that exactly matches reviewed SOPHIST items — the right file location, the right function signature, the right algorithm steps.
+
+If `.sophist/src/goal.md` exists, read it for context — it describes the project's purpose and can help resolve ambiguities about intent when the spec leaves room for interpretation. Instrument every implementation with appropriate log calls so runtime behavior is observable and traceable back to the spec. When something in the spec is unclear or contradictory, write a review point on the item rather than guessing. Never deviate silently.
 
 ---
 

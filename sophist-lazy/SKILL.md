@@ -8,7 +8,9 @@ description: |
 
 # sophist-lazy: Full Pipeline — Requirement to SDD in One Pass
 
-**Goal**: Take a customer requirement and produce a complete CuRS → SRS → SAD → SDD chain without pausing for human review. Every time a review point would normally block forward progress, make an explicit lazy assumption instead and write implementation-level observability specs into the SAD and SDD so that:
+**Goal**: Take a customer requirement and produce a complete CuRS → SRS → SAD → SDD chain without pausing for human review.
+
+If `.sophist/src/goal.md` exists, read it before starting — it describes the project's stated purpose and helps orient the lazy assumptions you'll be making throughout the pipeline. Every time a review point would normally block forward progress, make an explicit lazy assumption instead and write implementation-level observability specs into the SAD and SDD so that:
 - sophist-impl knows exactly *what* to emit and *where* to place it
 - the human can see, in running logs/metrics, precisely which unreviewed assumption fired
 

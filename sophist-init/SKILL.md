@@ -38,6 +38,24 @@ Replace `<project-name>` with the actual project name.
 
 ---
 
+## Step 2b: Capture the project goal
+
+Ask the user:
+
+> "What is this project for? A few sentences is fine — the purpose, who it serves, and what success looks like."
+
+Then write `.sophist/src/goal.md` with their answer verbatim:
+
+```markdown
+# Project Goal
+
+<user's answer, free-form>
+```
+
+This file is the project's north star. Other sophist-* skills read it to keep their work oriented toward the stated purpose. Do not reformat or add structure — the user's own words are the point.
+
+---
+
 ## Step 3: Generate theme and apply CSS override
 
 ```bash
@@ -83,6 +101,7 @@ additional-css = ["theme/css/variables.css"]
 ```markdown
 # Summary
 
+- [Goal](./goal.md)
 - [Tags](./tags.md)
 - [Customer Requirements](./curs/index.md)
 - [Software Requirements](./srs/index.md)

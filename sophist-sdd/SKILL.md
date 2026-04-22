@@ -14,6 +14,7 @@ description: |
 Read before starting:
 - `references/items.md` — item format, states, traceability link conventions
 - `references/review-points.md` — how review points work and how answers are indicated
+- `.sophist/src/goal.md` — project goal (if it exists); use it for orientation when finalizing design decisions
 
 ---
 

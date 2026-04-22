@@ -10,11 +10,14 @@ description: |
 
 ---
 
-## Step 1: Read the book structure
+## Step 1: Read the project goal and book structure
 
 ```bash
+cat .sophist/src/goal.md 2>/dev/null
 cat .sophist/src/SUMMARY.md
 ```
+
+If `goal.md` exists, read it first — it provides the stated purpose of the project and anchors everything else in the overview.
 
 This tells you which items exist across all layers.
 
@@ -60,6 +63,9 @@ Write a structured overview in this format:
 
 ```
 # Project Overview: <project name>
+
+## Goal
+<contents of goal.md verbatim, or "No goal set — run sophist-goal to define one." if the file is missing>
 
 ## What it does
 <2–4 sentences describing the software from a user's perspective, drawn from the CuRS items>

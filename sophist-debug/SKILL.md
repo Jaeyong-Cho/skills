@@ -12,6 +12,8 @@ description: |
 
 The guiding principle: **every deviation from the healthy trace is a diagnostic signal**. A missing log entry means a step didn't fire. An unexpected error entry means an error case fired. A data file with wrong values means a variable had the wrong value at that point in the algorithm.
 
+If `.sophist/src/goal.md` exists, read it — understanding what the project is trying to do helps distinguish a critical failure from a minor edge-case deviation.
+
 ---
 
 ## Step 1: Locate and inventory the debug directory

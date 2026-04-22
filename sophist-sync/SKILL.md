@@ -10,6 +10,8 @@ description: |
 
 **Goal**: Detect gaps between existing `.sophist` items and the current skill templates, then fill them by inferring content from each item's existing content. When a sophist-* skill adds a new section (e.g. `## Debug strategy`, `## Debug trace`), this skill finds every item missing that section and writes it — not a blank template shell, but a real first draft reasoned from what the item already says.
 
+If `.sophist/src/goal.md` exists, read it first — it gives you the project's purpose, which helps you infer missing sections more accurately.
+
 The guiding principle: **infer, don't blank.** A `## Debug strategy` derived from the existing Dynamic View is immediately useful. An empty template is noise that misleads the human into thinking the section is done.
 
 ---

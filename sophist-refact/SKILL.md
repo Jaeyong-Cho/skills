@@ -12,6 +12,8 @@ description: |
 
 The guiding principle: a module is good when its interface is simpler than its implementation. Every refactoring here is in service of that ratio.
 
+If `.sophist/src/goal.md` exists, read it — it clarifies the project's priorities and helps distinguish design debt that matters from debt that doesn't.
+
 ---
 
 ## Step 1: Build the dependency picture

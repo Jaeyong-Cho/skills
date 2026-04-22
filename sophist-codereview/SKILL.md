@@ -15,6 +15,7 @@ description: |
 Read before starting:
 - `references/items.md` — item format, traceability
 - `references/structure.md` — SAD file location conventions, SDD signature conventions
+- `.sophist/src/goal.md` — project goal (if it exists); useful context when judging whether a divergence matters
 
 ---
 

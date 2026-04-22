@@ -17,6 +17,8 @@ description: |
 
 ---
 
+If `.sophist/src/goal.md` exists, read it for context — it helps with Prototype mode in particular, where understanding the project's purpose shapes what a sensible prototype looks like.
+
 ## Decide the mode
 
 If the user mentions "prototype", "spike", "rough version", "quick impl", or "test this approach" → use **Prototype mode** (skip to the Prototype section below).
