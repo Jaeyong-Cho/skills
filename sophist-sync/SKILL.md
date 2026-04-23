@@ -28,7 +28,70 @@ If the human doesn't specify, default to a full scan and report before making ch
 
 ---
 
-## Step 2: Define the expected schema
+## Step 2: Migrate old-format review points to header format
+
+Before checking for missing sections, scan all item files in scope for old blockquote-style review points and convert them to the current header format.
+
+```bash
+grep -rl "> \*\*Review needed\*\*" .sophist/src/
+```
+
+For each file that matches, convert every occurrence:
+
+**Old format (blockquote):**
+```markdown
+> **Review needed** — confirm this captures the customer's intent accurately
+```
+
+**New format (header):**
+```markdown
+### Review needed
+confirm this captures the customer's intent accurately
+```
+
+**Old multi-question format:**
+```markdown
+> **Review needed**
+> - Is the lockout threshold 5 attempts or configurable?
+> - Should the error message distinguish "wrong password" from "user not found"?
+```
+
+**New format:**
+```markdown
+### Review needed
+- Is the lockout threshold 5 attempts or configurable?
+- Should the error message distinguish "wrong password" from "user not found"?
+```
+
+**Old inline answer (if present):**
+```markdown
+> **Answer**: 5 attempts fixed — not configurable.
+```
+
+**New format:**
+```markdown
+#### Answer
+5 attempts fixed — not configurable.
+```
+
+Also convert `> **Validation Guide** — ...` blockquotes to `### Validation Guide` sections with bullet fields on separate lines.
+
+Report what was migrated before proceeding to Step 3:
+
+```
+## Format Migration
+
+| Item | Occurrences converted |
+|------|-----------------------|
+| SRS-007 | 1 review point |
+| AT-005 | 1 review point (with answer) |
+```
+
+If nothing needed migration, note that and continue.
+
+---
+
+## Step 3: Define the expected schema
 
 The current required sections for each item type. Scan each item file and check for these headings. Missing = that `## Heading` does not appear anywhere in the file.
 
@@ -48,7 +111,7 @@ Skip items in `deprecated` state — they do not need to be synced.
 
 ---
 
-## Step 3: Scan and report drift
+## Step 4: Scan and report drift
 
 For each item type in scope, list all item files and read them:
 
@@ -85,7 +148,7 @@ Ask for confirmation before proceeding: "Ready to fill these sections. Should I 
 
 ---
 
-## Step 4: Infer and fill missing sections
+## Step 5: Infer and fill missing sections
 
 For each item that needs updating, read the full item file, reason from its existing content, and write the missing section. Never insert a section that contains only unresolved template placeholders — derive real content or write a focused review point explaining what you couldn't infer.
 
@@ -145,7 +208,7 @@ Apply the same pattern: read existing content, derive the missing section's cont
 
 ---
 
-## Step 5: Insert sections at the correct position
+## Step 6: Insert sections at the correct position
 
 Insert each new section at the position the schema table specifies — after the section that precedes it in the required order. Preserve every existing line in the file exactly.
 
@@ -156,7 +219,7 @@ Insert each new section at the position the schema table specifies — after the
 
 ---
 
-## Step 6: Build check
+## Step 7: Build check
 
 ```bash
 cd .sophist && mdbook build 2>&1 | tail -20
@@ -166,7 +229,7 @@ Fix any broken markdown links before reporting.
 
 ---
 
-## Step 7: Report
+## Step 8: Report
 
 ```
 ## Sync Complete
@@ -204,7 +267,7 @@ What: <N SAD items and M SDD items updated with the missing sections>
 ## Constraints
 
 - **Infer, don't blank.** Every added section must contain content derived from the existing item. If you genuinely cannot infer something, write a targeted `### Review needed` section explaining exactly what you couldn't determine — not a generic template placeholder.
-- **Never modify existing sections.** Only add what's missing. Do not rewrite or reorder content the human has already written and reviewed.
+- **Never modify existing sections** — except for format migration (Step 2). Converting blockquote review points to `### Review needed` headers is a pure format change; the content is preserved. All other sections: only add what's missing, never rewrite or reorder reviewed content.
 - **Deprecated items are skipped.** Do not sync items in `deprecated` state.
 - **Update the schema table when templates change.** Step 2's table is the single source of truth for what "up to date" means. When a sophist-* skill adds or removes a section from its item template, update this table in the same commit.
 - **One pass per item.** If an item is missing multiple sections, add all of them in a single pass — do not make partial updates that leave the item in an inconsistent state.
