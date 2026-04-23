@@ -64,9 +64,10 @@ Record the customer's words accurately — do not over-interpret.
 ## Context
 <when stated and any relevant background>
 
-> **Review needed** — confirm this captures the customer's intent accurately
->
-> **Lazy assumption**: taken at face value — no alternative interpretation attempted
+### Review needed
+confirm this captures the customer's intent accurately
+
+**Lazy assumption**: taken at face value — no alternative interpretation attempted
 ```
 
 Add a row to `.sophist/src/curs/index.md` and an entry to `SUMMARY.md`.
@@ -104,11 +105,12 @@ Operators need to inspect runtime behavior — both event traces and structured 
 ## Context
 Added automatically by sophist-lazy because the pipeline produces multi-component interactions.
 
-> **Review needed** — confirm `--debug-level` scale, `--debug-output-dir` usage, and log format match project constraints
->
-> **Lazy assumption**: single Debugger component with `--debug-level=OFF|INFO|DEBUG|VERBOSE` and `--debug-output-dir=<path>`; exposes `info/debug/verbose/warning/error(msg)` for log lines and `write(filename, data)` for structured data files; log lines include `filename:line_number`; all output routes through the Debugger — components never write to the filesystem directly
-> **Guard level**: `log`
-> **Lazy ID**: L-{NNN}
+### Review needed
+confirm `--debug-level` scale, `--debug-output-dir` usage, and log format match project constraints
+
+**Lazy assumption**: single Debugger component with `--debug-level=OFF|INFO|DEBUG|VERBOSE` and `--debug-output-dir=<path>`; exposes `info/debug/verbose/warning/error(msg)` for log lines and `write(filename, data)` for structured data files; log lines include `filename:line_number`; all output routes through the Debugger — components never write to the filesystem directly
+**Guard level**: `log`
+**Lazy ID**: L-{NNN}
 ```
 
 Then derive SRS, SAD, and SDD items for the Debugger the same way as any other pipeline item (Steps 2–4 below). The Debugger SAD item's `## Interface` defines both the log methods and `write()` — sophist-impl will import from it for all other SAD components in the project.
@@ -144,11 +146,12 @@ Derive SRS items from the CuRS item. Each must be testable.
 For each ambiguity (scope, performance, actor, error behavior, interface contract), apply the lazy assumption protocol:
 
 ```markdown
-> **Review needed** — <original question>
->
-> **Lazy assumption**: <what was assumed and why>
-> **Guard level**: `assert` | `log` | `monitor` | `must-review`
-> **Lazy ID**: L-{NNN}
+### Review needed
+<original question>
+
+**Lazy assumption**: <what was assumed and why>
+**Guard level**: `assert` | `log` | `monitor` | `must-review`
+**Lazy ID**: L-{NNN}
 ```
 
 Assign a sequential Lazy ID (`L-001`, `L-002`, …) to every assumption across the entire pipeline run. Add each to the lazy log (Step 5).

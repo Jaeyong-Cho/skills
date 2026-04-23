@@ -28,8 +28,8 @@ Read each draft SDD item file.
 
 For each item, determine its status:
 
-- **Answered**: the `> **Review needed**` blockquote has been removed, or contains `> **Answer**:` text added by the human
-- **Pending**: the blockquote exists with only the original question
+- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
+- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
 
 ---
 
@@ -55,12 +55,12 @@ If there are no pending items, note that and move to Step 3.
 
 For each answered SDD item:
 
-**If the blockquote contains `> **Answer**: <text>`:**
-- Read the answer
+**If the section contains a `#### Answer` subsection:**
+- Read the content under `#### Answer`
 - Incorporate it into the relevant field — Signature, Algorithm, Variables, Error cases, or Side effects
-- Remove the entire blockquote block
+- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
 
-**If the blockquote has been removed entirely:**
+**If the section has been removed entirely:**
 - Accept the current file content as the human's approved version
 
 When an answer changes an algorithm step, rewrite that specific step clearly. When it changes an error case or side effect, update those sections. Keep the algorithm numbered and concrete — the SDD must remain implementable without guessing after your edits.
@@ -106,7 +106,7 @@ Find all draft UT items:
 grep -rl "^\`draft\`" .sophist/src/ut/
 ```
 
-For each draft UT item, check if it has a pending `> **Review needed**` blockquote.
+For each draft UT item, check if it has a pending `### Review needed` section.
 
 **Show pending UT review points** alongside the SDD pending list:
 
@@ -121,8 +121,8 @@ For each draft UT item, check if it has a pending `> **Review needed**` blockquo
 ```
 
 **Apply answers** the human has written inline using the same pattern as Step 3:
-- If blockquote contains `> **Answer**: <text>` — incorporate into Case, Input, or Expected output, then remove the blockquote
-- If blockquote removed entirely — accept as-is
+- If section contains `#### Answer` — read it, incorporate into Case, Input, or Expected output, remove the entire `### Review needed` section
+- If section removed entirely — accept as-is
 
 ---
 

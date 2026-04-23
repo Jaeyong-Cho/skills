@@ -28,8 +28,8 @@ Read each draft SRS item file.
 
 For each item, determine its status:
 
-- **Answered**: the `> **Review needed**` blockquote has been removed, or the blockquote now contains `> **Answer**:` text added by the human
-- **Pending**: the blockquote exists with only the original question — no answer yet
+- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
+- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
 
 ---
 
@@ -55,16 +55,16 @@ If there are no pending items, note that and move to Step 3.
 
 For each answered SRS item:
 
-**If the blockquote contains `> **Answer**: <text>`:**
-- Read the answer
+**If the section contains a `#### Answer` subsection:**
+- Read the content under `#### Answer`
 - Incorporate it into the relevant content field — rewrite the sentence or value that the review question was about
-- Remove the entire blockquote block (both question and answer lines)
+- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
 
-**If the blockquote has been removed entirely:**
+**If the section has been removed entirely:**
 - Accept the current file content as the human's approved version
 - No content change needed — the human has already edited the item directly
 
-After applying an answer, the item file should have no remaining `> **Review needed**` block. If there were multiple questions in one block, address each separately; if some are answered and some aren't, update what's answered and rewrite the remaining questions as a fresh blockquote.
+After applying an answer, the item file should have no remaining `### Review needed` section. If there were multiple questions and only some have `#### Answer` subsections, apply those and leave the unanswered questions in place as a fresh `### Review needed` section.
 
 The goal is that each item accurately reflects the human's intent. Rewrite clearly — don't just append.
 
@@ -92,7 +92,7 @@ Find all draft AT items:
 grep -rl "^\`draft\`" .sophist/src/at/
 ```
 
-For each draft AT item, check if it has a pending `> **Review needed**` blockquote.
+For each draft AT item, check if it has a pending `### Review needed` section.
 
 **Show pending AT review points** alongside the SRS pending list:
 
@@ -107,8 +107,8 @@ For each draft AT item, check if it has a pending `> **Review needed**` blockquo
 ```
 
 **Apply answers** the human has written inline using the same pattern as Step 3:
-- If blockquote contains `> **Answer**: <text>` — incorporate and remove the blockquote
-- If blockquote removed entirely — accept as-is
+- If section contains `#### Answer` — read it, incorporate it, remove the entire `### Review needed` section
+- If section removed entirely — accept as-is
 
 ---
 

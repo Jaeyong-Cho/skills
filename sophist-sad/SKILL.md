@@ -28,8 +28,8 @@ Read each draft SAD item file.
 
 For each item, determine its status:
 
-- **Answered**: the `> **Review needed**` blockquote has been removed, or contains `> **Answer**:` text added by the human
-- **Pending**: the blockquote exists with only the original question
+- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
+- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
 
 ---
 
@@ -55,12 +55,12 @@ If there are no pending items, note that and move to Step 3.
 
 For each answered SAD item:
 
-**If the blockquote contains `> **Answer**: <text>`:**
-- Read the answer
+**If the section contains a `#### Answer` subsection:**
+- Read the content under `#### Answer`
 - Incorporate it into the relevant content field — update the Interface, Location, Responsibility, Dependencies, or Diagram section as appropriate
-- Remove the entire blockquote block
+- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
 
-**If the blockquote has been removed entirely:**
+**If the section has been removed entirely:**
 - Accept the current file content as the human's approved version
 - No content change needed
 
@@ -94,7 +94,7 @@ Find all draft SIT items:
 grep -rl "^\`draft\`" .sophist/src/sit/
 ```
 
-For each draft SIT item, check if it has a pending `> **Review needed**` blockquote.
+For each draft SIT item, check if it has a pending `### Review needed` section.
 
 **Show pending SIT review points** alongside the SAD pending list:
 
@@ -109,8 +109,8 @@ For each draft SIT item, check if it has a pending `> **Review needed**` blockqu
 ```
 
 **Apply answers** the human has written inline using the same pattern as Step 3:
-- If blockquote contains `> **Answer**: <text>` — incorporate into Scenario, Expected behavior, or Diagram, then remove the blockquote
-- If blockquote removed entirely — accept as-is
+- If section contains `#### Answer` — read it, incorporate into Scenario, Expected behavior, or Diagram, remove the entire `### Review needed` section
+- If section removed entirely — accept as-is
 
 ---
 

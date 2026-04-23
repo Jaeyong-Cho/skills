@@ -203,7 +203,7 @@ What: <N SAD items and M SDD items updated with the missing sections>
 
 ## Constraints
 
-- **Infer, don't blank.** Every added section must contain content derived from the existing item. If you genuinely cannot infer something, write a targeted `> **Review needed**` blockquote explaining exactly what you couldn't determine — not a generic template placeholder.
+- **Infer, don't blank.** Every added section must contain content derived from the existing item. If you genuinely cannot infer something, write a targeted `### Review needed` section explaining exactly what you couldn't determine — not a generic template placeholder.
 - **Never modify existing sections.** Only add what's missing. Do not rewrite or reorder content the human has already written and reviewed.
 - **Deprecated items are skipped.** Do not sync items in `deprecated` state.
 - **Update the schema table when templates change.** Step 2's table is the single source of truth for what "up to date" means. When a sophist-* skill adds or removes a section from its item template, update this table in the same commit.

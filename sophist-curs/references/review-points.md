@@ -8,24 +8,36 @@ After AI drafts or updates items, it must provide **review points** — explicit
 
 Review points are placed in two locations:
 
-### 1. Inline `> Review needed` callout (per item)
+### 1. Inline `### Review needed` section (per item)
 
-At the end of the item body, a rendered blockquote with the specific question for that item:
+At the end of the item body, a `### Review needed` section with the specific question for that item:
 
 ```markdown
-> **Review needed** — verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
+### Review needed
+verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
 ```
 
 For multiple questions on one item:
 
 ```markdown
-> **Review needed**
-> - Is the lockout threshold 5 attempts or configurable per deployment?
-> - Should the error message distinguish "wrong password" from "user not found"?
+### Review needed
+- Is the lockout threshold 5 attempts or configurable per deployment?
+- Should the error message distinguish "wrong password" from "user not found"?
 ```
 
-This blockquote is **visible in the rendered book** — the human sees it when reading the page.
-When the human has resolved the question, they delete the blockquote before asking AI to promote the item to `reviewed`.
+This section is **visible in the rendered book** — the human sees it when reading the page.
+
+**To answer inline**, the human adds a `#### Answer` subsection one level deeper:
+
+```markdown
+### Review needed
+verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
+
+#### Answer
+5 attempts, unlock is time-based (15 minutes).
+```
+
+When the AI next runs, it reads the `#### Answer` content, incorporates it, and removes the entire `### Review needed` section. Alternatively, the human may delete the entire section to indicate approval without comment.
 
 ### 2. End-of-session review summary
 

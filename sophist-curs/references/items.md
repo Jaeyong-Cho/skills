@@ -47,26 +47,38 @@ Users shall be able to authenticate using a valid email address and password.
 The system shall reject invalid credentials with an appropriate error message.
 The system shall lock the account after 5 consecutive failed attempts.
 
-> **Review needed** — verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
+### Review needed
+verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
 ```
 
-### Review needed callout rule
+### Review needed section rule
 
-**Never use HTML comments for review points** — they are invisible in the rendered book. Always use a blockquote at the end of the item body:
+**Never use HTML comments or blockquotes for review points** — HTML comments are invisible in the rendered book, and blockquotes don't create navigable document sections. Always use a `### Review needed` header at the end of the item body:
 
 ```markdown
-> **Review needed** — <specific question or assumption to verify>
+### Review needed
+<specific question or assumption to verify>
 ```
 
 For multiple questions on one item:
 
 ```markdown
-> **Review needed**
-> - Is the lockout threshold 5 attempts or configurable per deployment?
-> - Should the error message distinguish "wrong password" from "user not found"?
+### Review needed
+- Is the lockout threshold 5 attempts or configurable per deployment?
+- Should the error message distinguish "wrong password" from "user not found"?
 ```
 
-When the human has resolved the questions and promotes the item to `reviewed`, they delete the entire blockquote block.
+**To answer inline**, the human adds a `#### Answer` subsection one level deeper:
+
+```markdown
+### Review needed
+Is the lockout threshold 5 attempts or configurable per deployment?
+
+#### Answer
+5 attempts fixed — not configurable per deployment.
+```
+
+When the AI next runs, it reads the `#### Answer` content, incorporates it into the relevant field, and removes the entire `### Review needed` section. Alternatively, the human may delete the entire section to indicate approval without comment.
 
 ---
 
