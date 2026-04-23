@@ -41,8 +41,10 @@ grep -rl "^\`draft\`" .sophist/src/curs/
 
 Read each draft CuRS item. For each, determine its status:
 
-- **Answered**: the `> **Review needed**` blockquote has been removed, or now contains `> **Answer**:` text added by the human
-- **Pending**: the blockquote exists with only the original question — no answer yet
+- **Answered**: the `> **Review needed**` or `> **Validation Guide**` blockquote has been removed, or now contains `> **Answer**:` text added by the human
+- **Pending**: the blockquote exists with only the original question/guide — no answer yet
+
+Both `> **Review needed**` and `> **Validation Guide**` blocks are review points — treat them the same way.
 
 ---
 
@@ -70,14 +72,15 @@ For each answered CuRS item:
 
 **If the blockquote contains `> **Answer**: <text>`:**
 - Read the answer
-- Incorporate it into the relevant field — `## Input`, `## Why`, or `## Context` as appropriate
+- For `> **Review needed**`: incorporate the answer into `## Input`, `## Why`, or `## Context` as appropriate
+- For `> **Validation Guide**`: update the Validation Guide fields in place (Purpose, Intent, Hypothesis, Validation strategy, Who validates, Success criterion) with the corrected values; also update linked AT items if the success criterion changed
 - Remove the entire blockquote block (both question and answer lines)
 
 **If the blockquote has been removed entirely:**
 - Accept the current file content as the human's approved version
 - No content change needed — the human has already edited it directly
 
-After applying an answer, the item file should have no remaining `> **Review needed**` block. If there were multiple questions, address each separately. Rewrite clearly — don't just append.
+After applying all answers, the item file should have no remaining `> **Review needed**` or `> **Validation Guide**` blocks. If there were multiple review blocks, address each separately. Rewrite clearly — don't just append.
 
 ---
 
@@ -198,40 +201,21 @@ cat .sophist/src/tags.md
 
 ---
 
-## Step 1d: Understand intent and agree on validation
+## Step 1d: Understand intent — record, don't block
 
 Before making any changes, step back from the mechanics and understand what the human is actually trying to accomplish. A CuRS item that doesn't match the true intent wastes everything downstream — every wrong assumption propagates through SRS, SAD, SDD, and into code.
 
-### Analyze the input for three things
+Analyze the input for three things and record your conclusions — you will embed them as a review point in the CuRS item during Step 2. **Do not wait for chat confirmation; proceed immediately.**
 
-**Purpose** — What business or product goal does this serve? Ask "why does this matter to the end user or the business?" not just "what should the software do?" A clear purpose anchors the requirement and helps resolve ambiguity later.
+**Purpose** — What business or product goal does this serve? Ask "why does this matter to the end user or the business?" not just "what should the software do?"
 
-**Intent** — What specific change does the human want? Is this a new feature, a constraint on existing behavior, a workflow change, or a quality improvement? Be precise — "the user wants faster response" is too vague; "the user wants the list to load in under 500ms on a slow connection" is workable.
+**Intent** — What specific change does the human want? Is this a new feature, a constraint on existing behavior, a workflow change, or a quality improvement?
 
-**Hypothesis** — Is this requirement based on a known, validated user need, or is the human testing an assumption? If the input reads like an experiment ("users might want X", "we think this would help", "let's try Y"), flag it — a hypothesis should be validated before it drives architecture decisions.
+**Hypothesis** — Is this requirement based on a known, validated user need, or is the human testing an assumption? If the input reads like an experiment ("users might want X", "we think this would help", "let's try Y"), flag it.
 
-Write a brief statement for each and present it to the human:
+### Infer validation strategy
 
-```
-Here's what I understand you're asking for:
-- **Purpose**: …
-- **Intent**: …
-- **Hypothesis**: stated / not yet validated — [flag if applicable]
-
-Does this match what you have in mind?
-```
-
-Wait for confirmation or correction before proceeding.
-
-### Check validation strategy
-
-A requirement without a validation strategy is incomplete. Ask (or infer from context) how the human plans to verify that this requirement is satisfied:
-
-- What observable behavior confirms it's working correctly?
-- Who is the intended validator — the human, an end user, automated tests, a stakeholder?
-- Is there a measurable success criterion (e.g., error rate below 1%, task completion in under 3 clicks, zero data loss)?
-
-If the human hasn't stated a validation strategy, propose one based on the requirement type:
+Infer how success will be measured based on the requirement type:
 
 | Requirement type | Suggested validation approach |
 |-----------------|------------------------------|
@@ -242,22 +226,7 @@ If the human hasn't stated a validation strategy, propose one based on the requi
 | Security / access control | Negative test — verify the prohibited action is actually blocked |
 | Configuration / operational | Runbook walkthrough; verify runtime output without rebuilding |
 
-### Proposed validation guide
-
-Include this block in your response:
-
-```
-## Validation Guide (draft)
-
-**Purpose**: <what goal this serves — one sentence>
-**Intent**: <what specifically is changing — one sentence>
-**Hypothesis**: <stated by human / not yet validated — note if flagged>
-**Validation strategy**: <how success will be measured>
-**Who validates**: <end user / QA / automated test / stakeholder>
-**Success criterion**: <observable, measurable outcome>
-```
-
-If the human corrects or adds to this, update the guide before moving on. This validation strategy directly informs the AT items written in Step 4 — getting it right here pays off downstream.
+You will embed your analysis as a `> **Validation Guide**` review block in the CuRS item (see Step 2 template). The human answers it inline in the file on their next review pass, then re-runs sophist-curs to apply the answer. This validation strategy directly informs the AT items written in Step 4.
 
 ---
 
@@ -289,6 +258,9 @@ Create `.sophist/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately
 
 ## Context
 <when this was stated and any relevant background>
+
+> **Validation Guide** — Purpose: <one sentence> / Intent: <one sentence> / Hypothesis: <stated / not yet validated> / Validation strategy: <how success will be measured> / Who validates: <end user / QA / automated test / stakeholder> / Success criterion: <observable, measurable outcome>
+> Confirm or correct this inline, then re-run sophist-curs.
 
 > **Review needed** — confirm this captures the customer's intent accurately; note any assumptions made
 ```
