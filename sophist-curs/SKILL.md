@@ -41,10 +41,10 @@ grep -rl "^\`draft\`" .sophist/src/curs/
 
 Read each draft CuRS item. For each, determine its status:
 
-- **Answered**: the `> **Review needed**` or `> **Validation Guide**` blockquote has been removed, or now contains `> **Answer**:` text added by the human
-- **Pending**: the blockquote exists with only the original question/guide — no answer yet
+- **Answered**: the `### Review needed` or `### Validation Guide` section has been removed, or its content now contains an answer added by the human
+- **Pending**: the section header is still present with only the original question/guide — no answer yet
 
-Both `> **Review needed**` and `> **Validation Guide**` blocks are review points — treat them the same way.
+Both `### Review needed` and `### Validation Guide` sections are review points — treat them the same way.
 
 ---
 
@@ -70,17 +70,17 @@ If there are no pending items, note that and move to R3.
 
 For each answered CuRS item:
 
-**If the blockquote contains `> **Answer**: <text>`:**
+**If the section contains an answer added by the human:**
 - Read the answer
-- For `> **Review needed**`: incorporate the answer into `## Input`, `## Why`, or `## Context` as appropriate
-- For `> **Validation Guide**`: update the Validation Guide fields in place (Purpose, Intent, Hypothesis, Validation strategy, Who validates, Success criterion) with the corrected values; also update linked AT items if the success criterion changed
-- Remove the entire blockquote block (both question and answer lines)
+- For `### Review needed`: incorporate the answer into `## Input`, `## Why`, or `## Context` as appropriate
+- For `### Validation Guide`: update the fields in place (Purpose, Intent, Hypothesis, Validation strategy, Who validates, Success criterion) with the corrected values; also update linked AT items if the success criterion changed
+- Remove the entire section (header + content)
 
-**If the blockquote has been removed entirely:**
+**If the section has been removed entirely:**
 - Accept the current file content as the human's approved version
 - No content change needed — the human has already edited it directly
 
-After applying all answers, the item file should have no remaining `> **Review needed**` or `> **Validation Guide**` blocks. If there were multiple review blocks, address each separately. Rewrite clearly — don't just append.
+After applying all answers, the item file should have no remaining `### Review needed` or `### Validation Guide` sections. If there were multiple review sections, address each separately. Rewrite clearly — don't just append.
 
 ---
 
@@ -226,7 +226,7 @@ Infer how success will be measured based on the requirement type:
 | Security / access control | Negative test — verify the prohibited action is actually blocked |
 | Configuration / operational | Runbook walkthrough; verify runtime output without rebuilding |
 
-You will embed your analysis as a `> **Validation Guide**` review block in the CuRS item (see Step 2 template). The human answers it inline in the file on their next review pass, then re-runs sophist-curs to apply the answer. This validation strategy directly informs the AT items written in Step 4.
+You will embed your analysis as a `### Validation Guide` section in the CuRS item (see Step 2 template). The human answers it inline in the file on their next review pass, then re-runs sophist-curs to apply the answer. This validation strategy directly informs the AT items written in Step 4.
 
 ---
 
@@ -259,10 +259,18 @@ Create `.sophist/src/curs/CuRS-{NNN}.md`. Record the customer's input accurately
 ## Context
 <when this was stated and any relevant background>
 
-> **Validation Guide** — Purpose: <one sentence> / Intent: <one sentence> / Hypothesis: <stated / not yet validated> / Validation strategy: <how success will be measured> / Who validates: <end user / QA / automated test / stakeholder> / Success criterion: <observable, measurable outcome>
-> Confirm or correct this inline, then re-run sophist-curs.
+### Validation Guide
+- **Purpose**: <one sentence>
+- **Intent**: <one sentence>
+- **Hypothesis**: stated / not yet validated
+- **Validation strategy**: <how success will be measured>
+- **Who validates**: end user / QA / automated test / stakeholder
+- **Success criterion**: <observable, measurable outcome>
 
-> **Review needed** — confirm this captures the customer's intent accurately; note any assumptions made
+Confirm or correct this inline, then re-run sophist-curs.
+
+### Review needed
+confirm this captures the customer's intent accurately; note any assumptions made
 ```
 
 Add to `SUMMARY.md` under Customer Requirements and add a row to `.sophist/src/curs/index.md`.
@@ -321,7 +329,8 @@ For each CuRS item, create one or more `.sophist/src/srs/SRS-{NNN}.md` files. Ea
 
 <Requirement text. Use "shall" for mandatory, "should" for preferred.>
 
-> **Review needed** — <specific question: scope, ambiguity, or assumption to verify>
+### Review needed
+<specific question: scope, ambiguity, or assumption to verify>
 ```
 
 Add to `SUMMARY.md` under Software Requirements and add a row to `.sophist/src/srs/index.md`.
@@ -376,7 +385,8 @@ For each SRS item, create `.sophist/src/at/AT-{NNN}.md`.
 ## Failure criterion
 <what makes this test fail>
 
-> **Review needed** — <question about test scope or pass criterion>
+### Review needed
+<question about test scope or pass criterion>
 ```
 
 Add to `SUMMARY.md` under Acceptance Tests and add a row to `.sophist/src/at/index.md`.
@@ -436,7 +446,7 @@ Fix all broken links before reporting.
 
 ---
 
-Next: Open the CuRS files and write your answers to the `> **Review needed**` blocks inline,
+Next: Open the CuRS files and write your answers under the `### Review needed` and `### Validation Guide` sections inline,
 then run **sophist-curs** again to apply your answers and mark CuRS items reviewed.
 Also open the SRS and AT files and write your answers there, then run **sophist-srs** to
 mark SRS items reviewed and generate the corresponding SAD items.
