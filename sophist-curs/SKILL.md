@@ -349,7 +349,15 @@ grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
 
 If no debugger CuRS exists and this is either the first set of requirements for the project or the new CuRS items involve multi-step behavior across components, note in the report that a debugger CuRS is missing. The debugger CuRS captures the customer's need for runtime observability — e.g. "operators shall be able to set log verbosity and output destination without rebuilding the software." Without it, the Debugger component in sophist-impl has no spec to follow and is implemented ad hoc.
 
-Do not create the debugger CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#debugger`, derive an SRS item that specifies debug levels (`OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces) and output control (`--debug-output-dir <path>` for structured data files and a log file, omit for stdout-only), and write an AT item that verifies `--debug-level` and `--debug-output-dir` CLI options work at runtime.
+Do not create the debugger CuRS automatically — let the human decide whether to add it now. If they say yes, treat it as a NEW action: write a CuRS item tagged `#debugger`, derive an SRS item that specifies:
+- Debug levels: `OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces
+- Output control: `--debug-output-dir <path>` for structured data files + log file; omit for stdout-only logging
+- **Data files are written automatically when `--debug-output-dir` is set, regardless of `--debug-level`**
+- Subprocess logs are captured to separate files when `--debug-output-dir` is set; the main log records each subprocess log file path and timing
+- File write events are logged to the main log with path, purpose, and write event metadata; filename collisions are resolved by appending a sequence index
+- A data model (schema table) for each component's debug output files must be defined in the SAD `## Debug strategy` section
+
+Write an AT item that verifies: (a) `--debug-level` and `--debug-output-dir` CLI options work at runtime, (b) data files appear in the output dir when only `--debug-output-dir` is specified without `--debug-level`, (c) file metadata is present in the main log alongside each data write.
 
 ---
 

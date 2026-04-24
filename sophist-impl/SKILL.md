@@ -30,14 +30,18 @@ When no Debugger SAD/SDD items exist, apply this spec and suggest to the human t
 
 | Requirement | Detail |
 |-------------|--------|
-| **Output destination** | `--debug-output-dir <path>` — all debug output (log file + data files) written to this directory. Omit to write logs to stdout only; data writes become no-ops. |
-| **Enable/disable** | `--debug-level=OFF` suppresses all log output (data writes still occur if `--debug-output-dir` is set) |
+| **Output destination** | `--debug-output-dir <path>` — all debug output (log file + data files) written to this directory. Omit to send logs to stdout only; omitting also makes data writes and subprocess log captures no-ops. **Specifying `--debug-output-dir` alone (without `--debug-level`) is sufficient to trigger all data file output automatically.** |
+| **Enable/disable** | `--debug-level=OFF` (default) suppresses all log output but data file writes still occur when `--debug-output-dir` is set |
 | **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. |
 | **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces |
 | **Log format** | `<timestamp> <level> <filename>:<line_number> <message>` — source location is mandatory, configured at the handler not at call sites |
-| **Interface** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` for log lines; `write(filename, data)` for structured data files |
+| **Interface** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` for log lines; `write(filename, data, purpose)` for structured data files; `subprocess_log_path(name)` for subprocess log routing |
 
-The `write(filename, data)` method writes `data` to `--debug-output-dir/<filename>`, inferring format from the file extension (`.json` → JSON, anything else → string). It is always a no-op when `--debug-output-dir` is not set, and never raises — debug output must never break the program.
+**`write(filename, data, purpose)`** writes `data` to `--debug-output-dir/<filename>`. If a file with that name already exists, appends a sequence index (`-1`, `-2`, …) before the extension to avoid conflicts. After writing, logs the file path, purpose, and write event to the main log. Infers format from extension (`.json` → JSON, anything else → string). No-op when `--debug-output-dir` is not set. Never raises.
+
+**`subprocess_log_path(name)`** returns a unique file path inside `--debug-output-dir` for a subprocess to write its stdout/stderr to (e.g. `<dir>/<name>-<timestamp>.log`). Returns `None` when `--debug-output-dir` is not set. The caller records the returned path and the start time in the main log before launching the subprocess, and logs completion after it exits.
+
+**Data model**: every file written via `write()` should correspond to a row in the item's `## Debug data` table, which defines `filename`, `format`, `when written`, and `contents`. This table is the data model — it ensures all debugging-relevant state is captured in a predictable schema that analysis tools and humans can rely on.
 
 ---
 
@@ -160,10 +164,10 @@ grep -rl "Debugger\|debugger" src/ 2>/dev/null | head -10
 
 **If a Debugger already exists**: use it. Confirm it exposes both log methods (`info`, `debug`, `verbose`, `warning`, `error`) and `write(filename, data)`. If it only has log methods (old Logger), add `write()` to it rather than creating a second component.
 
-**If none exists**: create a single Debugger class/module. Adapt the language and style to the project — below is a Python reference implementation:
+**If none exists**: create a single Debugger class/module. Adapt the language, style, file name, and class structure to the project — the Python snippet below illustrates the required behaviors; it is **one example, not a prescription**:
 
 ```python
-# debugger.py
+# Example: debugger.py (Python) — adapt name, structure, and idioms to your project's language
 import json, logging, os
 from datetime import datetime
 
@@ -203,20 +207,41 @@ class Debugger:
     def error(self, msg: str) -> None:
         if self._threshold >= 1: self._log.error(msg)
 
-    def write(self, filename: str, data) -> None:
-        """Write structured debug data to --debug-output-dir. No-op if dir is unset."""
+    def write(self, filename: str, data, purpose: str = "") -> None:
+        """Write structured debug data to --debug-output-dir.
+        No-op if dir is unset. Triggered by --debug-output-dir alone,
+        regardless of --debug-level. Appends -N index on filename collision.
+        Logs file path, purpose, and write event to main log."""
         if not self._dir:
             return
         try:
             os.makedirs(self._dir, exist_ok=True)
-            path = os.path.join(self._dir, filename)
-            with open(path, "w") as f:
+            # Resolve collision: append -1, -2, ... before extension
+            base, ext = os.path.splitext(filename)
+            candidate = os.path.join(self._dir, filename)
+            idx = 1
+            while os.path.exists(candidate):
+                candidate = os.path.join(self._dir, f"{base}-{idx}{ext}")
+                idx += 1
+            with open(candidate, "w") as f:
                 if filename.endswith(".json"):
                     json.dump(data, f, indent=2)
                 else:
                     f.write(str(data))
+            # Log metadata to main log
+            self._log.info(f"[debug-write] path={candidate} purpose={purpose or 'unspecified'}")
         except Exception:
             pass  # debug output must never crash the program
+
+    def subprocess_log_path(self, name: str) -> str | None:
+        """Return a unique log file path for a subprocess to write stdout/stderr to.
+        Returns None when --debug-output-dir is not set (caller skips capture).
+        Caller must log the returned path and start time before launching the subprocess,
+        and log completion (exit code, duration) after it exits."""
+        if not self._dir:
+            return None
+        os.makedirs(self._dir, exist_ok=True)
+        return os.path.join(self._dir, f"{name}-{datetime.now():%Y%m%d-%H%M%S}.log")
 ```
 
 Construct the Debugger once at application entry from the CLI options, then pass it to every component that needs it. Components call `debugger.info(...)`, `debugger.write(...)` — they never access `--debug-output-dir` directly.
@@ -249,8 +274,18 @@ If neither section exists, fall back to diagram-guided placement as described in
 **`debugger.write()` calls** follow the `## Debug data` table row by row:
 - Use the exact filename from the table — do not invent names.
 - Pass the exact fields listed — add nothing, omit nothing.
+- Pass the table's `purpose` / `contents` value as the `purpose` argument so the main log records it.
 - Respect the trigger: `on entry` means the very first line of the function body; `on error` means immediately before raising; `on return` means just before returning.
-- No separate guard needed — `debugger.write()` is already a no-op when `--debug-output-dir` is unset.
+- No separate guard needed — `debugger.write()` is already a no-op when `--debug-output-dir` is unset. It activates automatically when only `--debug-output-dir` is set, regardless of `--debug-level`.
+- Filename collision is handled automatically — the implementation appends `-N` before the extension if the file already exists.
+
+**Subprocess log routing**: when the SDD invokes an external process, get a path from `debugger.subprocess_log_path(name)` and direct the subprocess stdout/stderr there. Log the path and start time to the main log before launching, and log exit code and duration after:
+```
+debugger.info(f"[subprocess:{name}] log={log_path} start={timestamp}")
+# ... run subprocess ...
+debugger.info(f"[subprocess:{name}] exit={code} duration={elapsed}s")
+```
+If `subprocess_log_path()` returns `None` (no output dir set), skip capture and let output go to the parent's stdout/stderr.
 
 Insert all Debugger calls at the exact point in the code where the corresponding step executes — not before, not after.
 

@@ -168,14 +168,20 @@ Write the section with these fields:
 **Key observables**: <parameters from Interface + intermediate state implied by Responsibility>
 **Failure signatures**:
 - <failure mode from Responsibility or child SDD error cases>: <what log pattern or absent output signals this>
-**Diagnostic process**: <ordered steps — check entry log first, then each downstream call in sequenceDiagram order, then check error paths>
+**Diagnostic process**: <ordered steps for interpreting logs and data files — check entry log first, then each downstream call in sequenceDiagram order, then cross-reference data files against expected schema, then check error paths>
+**Subprocess logs** (if this component invokes external processes): <list each subprocess by name; log path recorded in main log before launch; exit code and duration logged after completion>
 
-**Debug data** (written to `--debug-output-dir` when enabled):
+**Debug data model** (written to `--debug-output-dir` when set — active even without `--debug-level`):
 
-| File | Format | When written | Contents |
-|------|--------|-------------|---------|
-| `<component-slug>-state.json` | JSON | on error | <key fields from Interface parameters and any intermediate state> |
+| File | Format | When written | Purpose | Contents |
+|------|--------|-------------|---------|---------|
+| `<component-slug>-state.json` | JSON | on error | <why this file exists — what question it answers> | <key fields from Interface parameters and any intermediate state> |
 ```
+
+Notes on filling this:
+- Each row in the Debug data model table is part of the component's data model — derive fields from `## Interface` parameters and `## Responsibility` state, not from generic templates.
+- If the component invokes subprocesses, add a row for each subprocess log file: format `text`, when `on subprocess launch`, purpose `stdout/stderr capture for <subprocess name>`.
+- The "Purpose" column is what gets logged as metadata in the main log alongside each write event — make it specific enough to be useful in isolation.
 
 ### Filling `## Debug trace` in SDD items
 
@@ -193,14 +199,22 @@ Write the section with these fields:
 **Error paths**:
 - `<ErrorType from ## Error cases>`: <log messages and variable values that confirm this error fired>
 **Key variables**: <most diagnostic variables from ## Variables — the ones that distinguish correct from incorrect execution>
+**Analysis guide**: <how to interpret the data files and log sequence to diagnose a failure — e.g. "compare entry.json inputs against expected schema, then check if error.json exists; if absent, failure happened after the function returned">
+**Subprocess logs** (if this function invokes external processes): <subprocess name → log file naming pattern; note that path and timing are recorded in main log>
 
-**Debug data** (written to `--debug-output-dir` when enabled):
+**Debug data model** (written to `--debug-output-dir` when set — active even without `--debug-level`):
 
-| File | Format | When written | Contents |
-|------|--------|-------------|---------|
-| `<function-slug>-entry.json` | JSON | on entry | <input parameters from ## Signature> |
-| `<function-slug>-error.json` | JSON | on error | <ErrorType, error message, relevant variable values at point of failure> |
+| File | Format | When written | Purpose | Contents |
+|------|--------|-------------|---------|---------|
+| `<function-slug>-entry.json` | JSON | on entry | <why — e.g. "capture inputs for replay"> | <input parameters from ## Signature> |
+| `<function-slug>-error.json` | JSON | on error | <why — e.g. "capture state at failure point"> | <ErrorType, error message, relevant variable values at point of failure> |
 ```
+
+Notes on filling this:
+- Each Debug data model row defines the schema for one file — derive field names from `## Variables` and `## Signature`, not from generic templates.
+- If the function invokes a subprocess, add a row with format `text`, when `on subprocess launch`, purpose `stdout/stderr capture`.
+- The "Purpose" column is logged as metadata in the main log alongside the write event — make it specific.
+- When multiple calls to the same function could produce the same filename (e.g. in a loop), note that the implementation appends a sequence index automatically (`-1`, `-2`, …).
 
 ### Filling other missing sections
 

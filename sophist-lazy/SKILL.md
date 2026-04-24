@@ -108,12 +108,12 @@ Added automatically by sophist-lazy because the pipeline produces multi-componen
 ### Review needed
 confirm `--debug-level` scale, `--debug-output-dir` usage, and log format match project constraints
 
-**Lazy assumption**: single Debugger component with `--debug-level=OFF|INFO|DEBUG|VERBOSE` and `--debug-output-dir=<path>`; exposes `info/debug/verbose/warning/error(msg)` for log lines and `write(filename, data)` for structured data files; log lines include `filename:line_number`; all output routes through the Debugger — components never write to the filesystem directly
+**Lazy assumption**: single Debugger component with `--debug-level=OFF|INFO|DEBUG|VERBOSE` and `--debug-output-dir=<path>`; exposes `info/debug/verbose/warning/error(msg)` for log lines; `write(filename, data, purpose)` for structured data files (active when `--debug-output-dir` is set, regardless of `--debug-level`; appends sequence index on filename collision; logs file path and purpose to main log); `subprocess_log_path(name)` returns a per-subprocess log file path (main log records path and timing); log lines include `filename:line_number`; all output routes through the Debugger — components never write to the filesystem directly
 **Guard level**: `log`
 **Lazy ID**: L-{NNN}
 ```
 
-Then derive SRS, SAD, and SDD items for the Debugger the same way as any other pipeline item (Steps 2–4 below). The Debugger SAD item's `## Interface` defines both the log methods and `write()` — sophist-impl will import from it for all other SAD components in the project.
+Then derive SRS, SAD, and SDD items for the Debugger the same way as any other pipeline item (Steps 2–4 below). The Debugger SAD item's `## Interface` defines log methods, `write()`, and `subprocess_log_path()` — sophist-impl will import from it for all other SAD components in the project.
 
 If a Debugger CuRS already exists, skip this step.
 
