@@ -126,7 +126,15 @@ Before cascading to SDD, check whether a Debugger SAD item exists:
 grep -rl "#debugger" .sophist/src/sad/ 2>/dev/null
 ```
 
-If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Debugger SAD item exists yet, and there is an SRS item tagged `#debugger` that traces here — create the Debugger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the Debugger API (log methods: `info`, `debug`, `verbose`, `warning`, `error`; data write method: `write(filename, data)`; CLI options `--debug-level` and `--debug-output-dir`). All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
+If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Debugger SAD item exists yet, and there is an SRS item tagged `#debugger` that traces here — create the Debugger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the Debugger API:
+- Log methods: `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)`
+- Data write: `write(filename, data, purpose)` — writes to `--debug-output-dir` when set, regardless of `--debug-level`; appends sequence index on filename collision; logs path+purpose+write event to main log
+- Subprocess log routing: `subprocess_log_path(name)` — returns a unique log file path for subprocess stdout/stderr capture; returns `None` when `--debug-output-dir` is not set; caller logs path and timing to main log
+- CLI options: `--debug-level` and `--debug-output-dir`
+
+All other SAD components' SDD items will import from it. Treat it like any other SAD item: write it, add a review point for the human to confirm the interface, and let sophist-impl wire it in during implementation.
+
+When writing the Debugger SAD item's `## Debug strategy`, include the data model table for the Debugger's own output files (the main log file and any internal state writes). Each non-Debugger SAD component's `## Debug strategy` section must also include a data model table (filename, format, when written, purpose, contents) for the files it writes via `debugger.write()`.
 
 If no debugger SRS item exists at all, skip this — it means runtime observability has not yet been specified at the requirements layer. Note it in the report so the human can decide whether to add it via sophist-curs.
 

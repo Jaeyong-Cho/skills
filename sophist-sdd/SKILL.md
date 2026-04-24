@@ -79,7 +79,15 @@ Change `## State` from `` `draft` `` to `` `reviewed` ``.
 
 ## Step 4b: Debugger SDD items
 
-If any of the answered SDD items belong to a Debugger SAD component (tagged `#debugger`), the SDD items define the concrete Debugger implementation — log methods (`info`, `debug`, `verbose`, `warning`, `error`), data write method (`write(filename, data)`), and CLI option parsing (`--debug-level`, `--debug-output-dir`). Treat them exactly like any other SDD item: the `## Signature` section defines what callers call; the `## Algorithm` section describes how each method routes output or writes data based on `--debug-level` and `--debug-output-dir`. Make sure these are specific enough to implement without guessing — the same standard as any other SDD.
+If any of the answered SDD items belong to a Debugger SAD component (tagged `#debugger`), the SDD items define the concrete Debugger implementation. Treat them exactly like any other SDD item — the `## Signature` defines what callers call; the `## Algorithm` describes how each method works. Make them specific enough to implement without guessing.
+
+The Debugger SDD items must cover:
+- Log methods (`info`, `debug`, `verbose`, `warning`, `error`) — algorithm routes to file or stdout based on `--debug-level` and whether `--debug-output-dir` is set
+- `write(filename, data, purpose)` — algorithm: (1) no-op if `--debug-output-dir` unset; (2) resolve filename collision by appending sequence index (`-1`, `-2`, …) before extension if file exists; (3) write data inferred by extension; (4) log path+purpose+write event to main log. Active when `--debug-output-dir` is set regardless of `--debug-level`.
+- `subprocess_log_path(name)` — returns a unique timestamped path inside `--debug-output-dir` for subprocess stdout/stderr; returns `None` when dir unset. Caller logs the returned path and start time to the main log before launching, and exit code + duration after.
+- CLI option parsing for `--debug-level` and `--debug-output-dir`
+
+The `## Debug trace` for `write()` and `subprocess_log_path()` should include the data model table for their own output (what the Debugger itself writes) and the analysis guide for interpreting the main log's write-event entries.
 
 ---
 

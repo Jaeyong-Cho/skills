@@ -124,7 +124,15 @@ When cascading SRS items to SAD, check whether a debugger SRS item exists:
 grep -rl "#debugger" .sophist/src/srs/ 2>/dev/null
 ```
 
-If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no debugger SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The debugger SRS item should specify: debug levels (INFO = component boundary crossings; DEBUG = internal algorithm steps; VERBOSE = fine-grained traces) and output control (`--debug-output-dir <path>` for file output, omit for stdout), both passed as CLI options. Once that SRS item is reviewed, sophist-srs will cascade it into a Debugger SAD component.
+If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no debugger SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The debugger SRS item should specify:
+- Debug levels: `OFF`, `INFO` = component boundary crossings, `DEBUG` = internal algorithm steps, `VERBOSE` = fine-grained traces; passed as `--debug-level` CLI option
+- Output control: `--debug-output-dir <path>` writes log file + data files to that directory; omit for stdout-only
+- **Data files are written automatically when `--debug-output-dir` is set, regardless of `--debug-level`**
+- Subprocess logs are captured to separate files when `--debug-output-dir` is set; the main log records each subprocess log file path and timing
+- Write events are logged to the main log with file path, purpose, and write metadata; filename collisions are resolved with a sequence index
+- Each SAD component's `## Debug strategy` section must include a data model table (filename, format, when written, purpose, contents)
+
+Once that SRS item is reviewed, sophist-srs will cascade it into a Debugger SAD component.
 
 ### No `→ [SAD-` trace yet — create new items
 
