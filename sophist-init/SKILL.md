@@ -309,23 +309,21 @@ For each SAD item, write a `## Debug strategy` section inferred from the Dynamic
 
 Add entries to `SUMMARY.md` and `.sophist/src/sad/index.md`.
 
-### 10d-debugger. Check for debugger cross-cutting concern
+### 10d-debugger. Create debugger CuRS and SRS items
 
-After writing SAD items, check whether any of them show inter-component interactions (i.e., their Dynamic View contains a `sequenceDiagram` with multiple participants):
-
-```bash
-grep -rl "sequenceDiagram" .sophist/src/sad/ 2>/dev/null
-```
-
-If multi-component SAD items were found, also check whether a debugger CuRS already exists:
+Check whether a debugger CuRS already exists:
 
 ```bash
-grep -rl "#debug" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no debugger CuRS exists, note it in the bootstrap report. The Debugger (CLI options `--debug-level` and `--debug-output-dir`) is a cross-cutting concern that must be specified before sophist-impl can instrument log calls and debug data files consistently. Suggest the human add it via sophist-curs with: "operators shall be able to set debug level and output directory via CLI options without rebuilding the software."
+If one already exists, skip this step.
 
-Do not create the debugger CuRS automatically here — just flag it so the human can decide.
+If none exists, **create the debugger CuRS and two SRS items automatically**. The Debugger is a cross-cutting concern every project needs. Creating it now ensures sophist-impl can instrument log calls and debug data files consistently instead of ad hoc.
+
+Follow the same item templates as sophist-curs Step 3b (CuRS-{NNN}: Runtime Observability, SRS-{NNN}: Debug Level Control, SRS-{NNN+1}: Debug Output Directory + Log Format + Data File Rules). Skip the AT item — acceptance tests are added after requirements are reviewed.
+
+Add all new items to `SUMMARY.md`, `curs/index.md`, and `srs/index.md`. Add `#debugger` to `tags.md` if not present.
 
 ### 10e. Write SDD items
 
