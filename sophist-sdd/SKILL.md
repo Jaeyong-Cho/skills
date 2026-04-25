@@ -20,8 +20,6 @@ Read before starting:
 
 ## Steps 1–4: Find, surface, apply, and mark items
 
-Follow the shared review workflow in `../sophist-shared/review-workflow.md` — SDD layer. In brief:
-
 - **Step 1**: `grep -rl "^\`draft\`" .sophist/src/sdd/` — read each draft item and classify as answered or pending
 - **Step 2**: List every pending item so the human knows what still needs their attention
 - **Step 3**: For each answered item — incorporate `#### Answer` content into Signature, Algorithm, Variables, Error cases, or Side effects; remove the `### Review needed` section; accept removed sections as-is.

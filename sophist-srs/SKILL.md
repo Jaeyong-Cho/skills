@@ -20,8 +20,6 @@ Read before starting:
 
 ## Steps 1–4: Find, surface, apply, and mark items
 
-Follow the shared review workflow in `../sophist-shared/review-workflow.md` — SRS layer. In brief:
-
 - **Step 1**: `grep -rl "^\`draft\`" .sophist/src/srs/` — read each draft item and classify as answered (no `### Review needed`, or has `#### Answer`) or pending
 - **Step 2**: List every pending item so the human knows what still needs their attention
 - **Step 3**: For each answered item — if `#### Answer` present, incorporate into the relevant content field (rewrite the sentence or value the review question was about), then remove the entire `### Review needed` section; if section removed entirely, accept as-is. Rewrite clearly — don't just append.
