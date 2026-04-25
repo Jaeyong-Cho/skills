@@ -314,16 +314,16 @@ Add entries to `SUMMARY.md` and `.sophist/src/sad/index.md`.
 Check whether a debugger CuRS already exists:
 
 ```bash
-grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debug" .sophist/src/curs/ 2>/dev/null
 ```
 
 If one already exists, skip this step.
 
 If none exists, **create the debugger CuRS and two SRS items automatically**. The Debugger is a cross-cutting concern every project needs. Creating it now ensures sophist-impl can instrument log calls and debug data files consistently instead of ad hoc.
 
-Follow the same item templates as sophist-curs Step 3b (CuRS-{NNN}: Runtime Observability, SRS-{NNN}: Debug Level Control, SRS-{NNN+1}: Debug Output Directory + Log Format + Data File Rules). Skip the AT item — acceptance tests are added after requirements are reviewed.
+Read `../sophist-shared/debugger-curs.md` for the full item templates. Create CuRS-{NNN}, SRS-{NNN}, and SRS-{NNN+1} using those templates, substituting the next available item numbers. Skip the AT item — acceptance tests are added after requirements are reviewed.
 
-Add all new items to `SUMMARY.md`, `curs/index.md`, and `srs/index.md`. Add `#debugger` to `tags.md` if not present.
+Add all new items to `SUMMARY.md`, `curs/index.md`, and `srs/index.md`. Add `#debug` to `tags.md` if not present.
 
 ### 10e. Write SDD items
 
