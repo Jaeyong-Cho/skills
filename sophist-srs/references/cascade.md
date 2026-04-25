@@ -70,19 +70,22 @@ sequenceDiagram
 - `<methodName>(params) → ReturnType` — <one-line description>
 
 ## Debug strategy
-**Healthy trace**: <what log messages appear in order when this component executes correctly — entry, key calls, return>
-**Key observables**: <which variables or state values are most diagnostic — the ones a developer would want to see when something goes wrong>
-**Failure signatures**:
-- <failure mode>: <what log pattern or missing output indicates this failure>
-**Diagnostic process**: <step-by-step how to isolate a bug in this component — which logs to check first, which downstream components to rule out>
 
-**Debug data** (written to `--debug-output-dir` when debug output is enabled):
+- **Healthy trace**:
+  - `<log message on component entry>`
+  - `<log message for key outbound call>`
+  - `<log message on component return>`
+- **Key observables**: `<var1>`, `<var2>` — the inputs, outputs, and internal values most useful when something goes wrong
+- **Failure signatures**:
+  - `<failure mode>`: <what log pattern or missing line indicates this failure>
+- **Diagnostic process**: <how to isolate a bug in this component — which log lines to check first, which downstream components to rule out>
+- **Debug data model** (written to `--debug-output-dir` when set):
 
-| File | Format | When written | Contents |
-|------|--------|-------------|---------|
-| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <what data fields or entries it contains> |
+  | File | Format | When written | Contents |
+  |------|--------|-------------|---------|
+  | `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <what data fields or entries it contains> |
 
-_Design these files so a developer can diagnose the most common failures without reading source code. Each file should answer a specific diagnostic question._
+  _Design these files so a developer can diagnose the most common failures without reading source code. Each file should answer a specific diagnostic question._
 
 > **Review needed** — <question about component boundary, file location, interface, or dependency>
 ```
