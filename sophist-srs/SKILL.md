@@ -140,11 +140,11 @@ Once that SRS item is reviewed, sophist-srs will cascade it into a Debugger SAD 
 grep -ril "<requirement keyword>" .sophist/src/sad/
 ```
 
-If two or more existing SAD components already serve the same general Responsibility as the new requirement, flag the Rule of Three:
+If two or more existing SAD components already serve the same general Responsibility as the new requirement, automatically invoke **sophist-refact**:
 
-> Rule of Three / before feature: SAD-X and SAD-Y already cover similar ground. Consider running **sophist-refact** to merge or deepen them before adding another component. Shallow SAD components compound downstream — each gets its own shallow SDD layer.
+> Rule of Three / before feature: SAD-X and SAD-Y already cover similar ground. Running sophist-refact now to merge or deepen them before adding another component. Shallow SAD components compound downstream — each gets its own shallow SDD layer.
 
-This is a signal. If the new component is genuinely distinct, proceed.
+Run the full sophist-refact workflow. When it completes, resume creating SAD items here. The human may say "skip refact" to proceed without refactoring.
 
 ### No `→ [SAD-` trace yet — create new items
 

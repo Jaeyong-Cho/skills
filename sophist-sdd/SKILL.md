@@ -75,11 +75,11 @@ If an answer reveals that the algorithm is more complex than first written (e.g.
 grep -rl "^\`draft\`\|^\`reviewed\`" .sophist/src/sdd/ | sort
 ```
 
-If two or more other SDD items share the same core structure as an item just answered — same multi-step flow, same variable names, same error cases — flag the Rule of Three:
+If two or more other SDD items share the same core structure as an item just answered — same multi-step flow, same variable names, same error cases — automatically invoke **sophist-refact**:
 
-> Repeated algorithm pattern detected across SDD-X, SDD-Y, and SDD-Z. Consider running **sophist-refact** to consolidate into a shared module. Three identical algorithm implementations mean three places to maintain and three places to introduce bugs.
+> Rule of Three detected across SDD-X, SDD-Y, and SDD-Z. Running sophist-refact now to consolidate into a shared module. Three identical algorithm implementations mean three places to maintain and three places to introduce bugs.
 
-This is a signal, not a blocker. Continue marking items reviewed.
+Run the full sophist-refact workflow. When it completes, resume marking items reviewed here. The human may say "skip refact" to proceed without refactoring.
 
 ---
 

@@ -130,7 +130,11 @@ If two or more existing functions already solve the same kind of problem — sam
 
 > Messy area detected in `<file>:<line>`. Refactoring first would make this implementation cleaner. Consider running **sophist-refact**. The human may still proceed.
 
-Include these signals in the Step 10 report under `### Refactoring opportunities` if present.
+If either signal is present, automatically invoke **sophist-refact** before writing any new code:
+
+> Refactoring signal detected. Running sophist-refact now before implementing. Clean code first makes the implementation straightforward.
+
+Run the full sophist-refact workflow. When it completes, resume implementation here. The human may say "skip refact" to proceed directly to implementation.
 
 ---
 

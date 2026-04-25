@@ -211,9 +211,9 @@ Code review is one of the three canonical moments to refactor (Rule of Three: du
 | SAD-002   | Pass-through — 14 getters, no logic added | Rule of Three (3rd similar component) |
 ```
 
-> Run **sophist-refact** for any candidate here. It will score all components by debt severity and blast radius, plan the interface delta, and update SOPHIST docs alongside the code changes — so the spec stays in sync with the refactored design.
+> Refactoring candidates found during code review. Running sophist-refact now. It will score all components by debt severity and blast radius, plan the interface delta, and update SOPHIST docs alongside the code changes.
 
-Include this section in the Step 9 report only when candidates exist. Omit it if no structural debt was found.
+When candidates exist, automatically invoke **sophist-refact** after presenting the table. Run the full sophist-refact workflow, then resume the code review report. The human may say "skip refact" to complete the review without refactoring. Omit this section entirely if no structural debt was found.
 
 ---
 

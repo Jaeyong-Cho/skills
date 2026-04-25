@@ -153,11 +153,11 @@ Key principles:
 - If the SAD review revealed that callers must manage ordering constraints, pass internal details, or call multiple methods in sequence → the interface is leaky. This is a "before feature" refactoring signal.
 - If two or more existing SAD components already have a similar Interface structure to this one → Rule of Three.
 
-In either case, flag it:
+In either case, automatically invoke **sophist-refact** before cascading:
 
-> Before cascading SDD items from SAD-NNN, consider running **sophist-refact** to clean up the interface first. SDD items written against a leaky interface lock the leakage into every downstream function signature.
+> Refactoring signal detected before cascading SDD items from SAD-NNN. Running sophist-refact now. SDD items written against a leaky interface lock that leakage into every downstream function signature.
 
-This is a signal. If the interface is clean, proceed.
+Run the full sophist-refact workflow. When it completes, resume SDD cascade here. The human may say "skip refact" to proceed without refactoring.
 
 **Before creating SDD items, evaluate the SAD component's depth** (Ousterhout, *A Philosophy of Software Design*):
 - Count the functions in `## Interface` against the complexity in `## Responsibility`. If the interface is nearly as complex as the responsibility, the component is shallow — it won't pull its weight.
