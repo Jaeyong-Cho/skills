@@ -23,6 +23,52 @@ Each layer produces draft items with review points. You answer the review points
 
 ---
 
+## Workflow Diagram
+
+```mermaid
+flowchart TD
+    classDef you fill:#dbeafe,stroke:#3b82f6,color:#1e40af
+    classDef skill fill:#dcfce7,stroke:#16a34a,color:#15803d
+    classDef store fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef refact fill:#fee2e2,stroke:#dc2626,color:#991b1b
+
+    Y1([YOU: describe requirement]):::you
+    Y2([YOU: answer CuRS / SRS\nreview points]):::you
+    Y3([YOU: answer SAD\nreview points]):::you
+    Y4([YOU: answer SDD\nreview points]):::you
+    Y5([YOU: write tests\nreview code]):::you
+
+    CURS[sophist-curs]:::skill
+    SRS[sophist-srs]:::skill
+    SAD[sophist-sad]:::skill
+    SDD[sophist-sdd]:::skill
+    IMPL[sophist-impl]:::skill
+    CR[sophist-codereview]:::skill
+
+    D1[(CuRS · SRS · AT\ndraft)]:::store
+    D2[(SAD · SIT\ndraft)]:::store
+    D3[(SDD · UT\ndraft)]:::store
+    D4[(design\nreviewed)]:::store
+    D5[(code +\ntest stubs)]:::store
+    DONE[(items\ndone)]:::store
+
+    REFACT["sophist-refact\n──────────────\nRule of Three\nbefore feature\nbug fix\ncode review"]:::refact
+
+    Y1 --> CURS --> D1 --> Y2 --> SRS
+    SRS --> D2 --> Y3 --> SAD --> D3 --> Y4 --> SDD
+    SDD --> D4 --> IMPL --> D5 --> Y5 --> CR --> DONE
+
+    CURS -.->|3rd similar req| REFACT
+    SAD  -.->|shallow interface| REFACT
+    IMPL -.->|messy area / 3rd pattern| REFACT
+    CR   -.->|structural debt found| REFACT
+
+    REFACT -->|update docs\nreset to draft| D2
+    REFACT -->|update docs\nreset to draft| D3
+```
+
+---
+
 ## Main Workflow
 
 ### 1. Initialize — `sophist-init`

@@ -112,6 +112,28 @@ You don't need to read CuRS unless the SRS intent is genuinely unclear. The SDD 
 
 ---
 
+## Step 3b: Refactoring signal — check before writing
+
+Before touching any code, look at the implementation target through a refactoring lens:
+
+**Rule of Three**: Scan the source directory for functions that implement a similar pattern to the one you're about to write:
+
+```bash
+grep -rn "def \|function \|async " src/ | grep -i "<keyword>"
+```
+
+If two or more existing functions already solve the same kind of problem — same multi-step flow, same error pattern, same data transformation — you're about to create the third instance. Flag it:
+
+> Rule of Three: this pattern already exists in `src/X.py` and `src/Y.py`. Consider running **sophist-refact** before implementing, to consolidate the pattern into a shared module. The human may still proceed — this is a signal, not a blocker.
+
+**Before feature**: If the target file exists and the code you need to extend is messy (hard to read, no clear structure, mixed concerns), flag it:
+
+> Messy area detected in `<file>:<line>`. Refactoring first would make this implementation cleaner. Consider running **sophist-refact**. The human may still proceed.
+
+Include these signals in the Step 10 report under `### Refactoring opportunities` if present.
+
+---
+
 ## Step 4: Check the existing file
 
 Before writing, check if the file already exists at the SAD-specified Location:

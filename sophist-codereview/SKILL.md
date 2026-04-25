@@ -199,6 +199,22 @@ SAD-003 — AuthService
 
 Do not suggest specific refactors — describe the shallowness and ask the human to decide.
 
+### Step 5c-R: Emit refactoring recommendation
+
+Code review is one of the three canonical moments to refactor (Rule of Three: during code review). When Step 5c finds shallow modules, or when Steps 4–5b reveal the same anti-pattern across multiple components, produce a refactoring recommendation in the report:
+
+```
+### Refactoring Candidates
+| Component | Signal | Trigger |
+|-----------|--------|---------|
+| SAD-003   | Shallow — authenticate() and checkLockout() always called together by callers | Code review |
+| SAD-002   | Pass-through — 14 getters, no logic added | Rule of Three (3rd similar component) |
+```
+
+> Run **sophist-refact** for any candidate here. It will score all components by debt severity and blast radius, plan the interface delta, and update SOPHIST docs alongside the code changes — so the spec stays in sync with the refactored design.
+
+Include this section in the Step 9 report only when candidates exist. Omit it if no structural debt was found.
+
 ---
 
 ## Step 5d: Classify divergences (Code → Spec mode)

@@ -193,6 +193,12 @@ If any planned action is SKIP, explain briefly why the existing item already cov
 
 Proceed with changes only after presenting this table. If the user overrides an action (e.g., wants NEW instead of ENHANCE), follow their call.
 
+**Refactoring signal**: If the coverage analysis shows two or more ENHANCE or UPDATE actions targeting the same functional area — meaning this area has been extended before and is being extended again — flag the Rule of Three before writing items:
+
+> Rule of Three: this area has already been extended. Consider running **sophist-refact** to consolidate before adding more. Duplicated CuRS intent often signals a shallow design downstream.
+
+This is a signal, not a blocker. If the human confirms they want to proceed, continue with Step 1c.
+
 ### 1c. Read tag registry
 
 ```bash

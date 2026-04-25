@@ -148,6 +148,17 @@ Key principles:
 - Create at least one UT item per SDD item; add more for significant error paths and edge cases
 - After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
 
+**Refactoring signal**: Before creating SDD items, check whether the area being cascaded is messy or is the third instance of a pattern:
+
+- If the SAD review revealed that callers must manage ordering constraints, pass internal details, or call multiple methods in sequence → the interface is leaky. This is a "before feature" refactoring signal.
+- If two or more existing SAD components already have a similar Interface structure to this one → Rule of Three.
+
+In either case, flag it:
+
+> Before cascading SDD items from SAD-NNN, consider running **sophist-refact** to clean up the interface first. SDD items written against a leaky interface lock the leakage into every downstream function signature.
+
+This is a signal. If the interface is clean, proceed.
+
 **Before creating SDD items, evaluate the SAD component's depth** (Ousterhout, *A Philosophy of Software Design*):
 - Count the functions in `## Interface` against the complexity in `## Responsibility`. If the interface is nearly as complex as the responsibility, the component is shallow — it won't pull its weight.
 - If two or more interface functions always need to be called together, they likely belong inside the component, not exposed to callers.

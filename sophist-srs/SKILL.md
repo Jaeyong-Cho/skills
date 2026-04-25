@@ -134,6 +134,18 @@ If any reviewed SRS item describes behavior that crosses component boundaries (m
 
 Once that SRS item is reviewed, sophist-srs will cascade it into a Debugger SAD component.
 
+**Refactoring signal**: Before creating new SAD items, scan existing components for overlap:
+
+```bash
+grep -ril "<requirement keyword>" .sophist/src/sad/
+```
+
+If two or more existing SAD components already serve the same general Responsibility as the new requirement, flag the Rule of Three:
+
+> Rule of Three / before feature: SAD-X and SAD-Y already cover similar ground. Consider running **sophist-refact** to merge or deepen them before adding another component. Shallow SAD components compound downstream — each gets its own shallow SDD layer.
+
+This is a signal. If the new component is genuinely distinct, proceed.
+
 ### No `→ [SAD-` trace yet — create new items
 
 Create the corresponding SAD and SIT items. Read `references/cascade.md` for templates and the full process.
