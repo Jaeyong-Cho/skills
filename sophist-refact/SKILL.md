@@ -146,7 +146,7 @@ If the component's Interface or Location changes, update the SAD item:
 
 - Change the `## Interface` section to reflect the new surface
 - Add a `> **Review needed**` note if the interface change affects callers outside this component (i.e., it touches another SAD component's SDD items)
-- If the refactoring splits one component into two, create a new SAD item using the SAD template from `references/items.md`
+- If the refactoring splits one component into two, create a new SAD item using the SAD template from `../sophist-shared/items.md`
 - If it merges two components into one, mark the absorbed component `deprecated` and note the replacement in its header
 
 Keep the SAD item in `reviewed` state only if the changes are internal (no interface change visible to callers). Otherwise set it back to `draft` so it goes through the review cycle.

@@ -13,8 +13,8 @@ description: |
 - **Code → Spec** (direct edit): human edited code directly — find what diverged, judge whether the code or the spec is correct, and update whichever is wrong.
 
 Read before starting:
-- `references/items.md` — item format, traceability
-- `references/structure.md` — SAD file location conventions, SDD signature conventions
+- `../sophist-shared/items.md` — item format, traceability
+- `../sophist-shared/structure.md` — SAD file location conventions, SDD signature conventions
 - `.sophist/src/goal.md` — project goal (if it exists); useful context when judging whether a divergence matters
 
 ---

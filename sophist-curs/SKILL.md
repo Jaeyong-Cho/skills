@@ -14,9 +14,9 @@ description: |
 SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
 
 Read before starting:
-- `references/items.md` — item format, ID system, states, tags, traceability links
-- `references/structure.md` — per-document conventions
-- `references/review-points.md` — how to write review points
+- `../sophist-shared/items.md` — item format, ID system, states, tags, traceability links
+- `../sophist-shared/structure.md` — per-document conventions
+- `../sophist-shared/review-points.md` — how to write review points
 - `.sophist/src/goal.md` — project goal (if it exists); read to understand what the project is for and keep new items aligned with it
 
 ---

@@ -9,8 +9,8 @@ description: |
 **Goal**: Set up `.sophist/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft SOPHIST items by reverse-engineering the existing codebase.
 
 Read before starting:
-- `references/items.md` — item format, ID system, states, tags
-- `references/structure.md` — directory layout and per-document conventions
+- `../sophist-shared/items.md` — item format, ID system, states, tags
+- `../sophist-shared/structure.md` — directory layout and per-document conventions
 
 ---
 
@@ -286,7 +286,7 @@ Read key files: entry points, main modules, public interfaces, README if present
 
 Infer 1–3 customer-level requirements from the observable purpose of the software. Each CuRS captures *what the software does for its users*, not implementation details.
 
-Create `.sophist/src/curs/CuRS-{NNN}.md` for each. Use the item template from `references/items.md`. Mark state `draft`. Add a review point asking the team to confirm the inferred customer intent.
+Create `.sophist/src/curs/CuRS-{NNN}.md` for each. Use the item template from `../sophist-shared/items.md`. Mark state `draft`. Add a review point asking the team to confirm the inferred customer intent.
 
 Add entries to `SUMMARY.md` and `.sophist/src/curs/index.md`.
 

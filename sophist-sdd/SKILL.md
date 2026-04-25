@@ -12,8 +12,8 @@ description: |
 **Goal**: Surface all pending SDD review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, and update corresponding UT items to reflect any changes. When all SDD items are reviewed, the design is ready for implementation.
 
 Read before starting:
-- `references/items.md` — item format, states, traceability link conventions
-- `references/review-points.md` — how review points work and how answers are indicated
+- `../sophist-shared/items.md` — item format, states, traceability link conventions
+- `../sophist-shared/review-points.md` — how review points work and how answers are indicated
 - `.sophist/src/goal.md` — project goal (if it exists); use it for orientation when finalizing design decisions
 
 ---
@@ -73,7 +73,7 @@ Check whether existing UT items:
 - Cover error cases that were added or changed
 - Have input/output values that match the revised algorithm
 
-Update UT items that are now misaligned. If a new error case or behavior was added that has no UT item yet, create one using the UT template from `references/items.md` (see the UT item format in the SDD-specific section).
+Update UT items that are now misaligned. If a new error case or behavior was added that has no UT item yet, create one using the UT template from `../sophist-shared/items.md` (see the UT item format in the SDD-specific section).
 
 Keep UT state as `draft` — they follow their own review if needed.
 
