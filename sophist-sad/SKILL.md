@@ -18,65 +18,17 @@ Read before starting:
 
 ---
 
-## Step 1: Find all draft SAD items
+## Steps 1–4: Find, surface, apply, and mark items
 
-```bash
-grep -rl "^\`draft\`" .sophist/src/sad/
-```
+Follow the shared review workflow in `../sophist-shared/review-workflow.md` — SAD layer. In brief:
 
-Read each draft SAD item file.
-
-For each item, determine its status:
-
-- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
-- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
-
----
-
-## Step 2: Show pending review points
-
-List every pending SAD item so the human knows what still needs their attention:
-
-```
-## Pending SAD Review Points
-
-### SAD-003: AuthService component
-> Should AuthService own session creation, or delegate to a separate SessionService?
-
-### SAD-001: Project directory structure
-> Confirm file extension and whether a monorepo layout is needed
-```
-
-If there are no pending items, note that and move to Step 3.
-
----
-
-## Step 3: Apply inline answers to answered items
-
-For each answered SAD item:
-
-**If the section contains a `#### Answer` subsection:**
-- Read the content under `#### Answer`
-- Incorporate it into the relevant content field — update the Interface, Location, Responsibility, Dependencies, or Diagram section as appropriate
-- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
-
-**If the section has been removed entirely:**
-- Accept the current file content as the human's approved version
-- No content change needed
-
-When incorporating an answer that changes the component's interface or responsibility, also check whether the component diagram (mermaid) needs updating — keep the diagram in sync with the text.
-
-> **Mermaid syntax safety**: Use `<br/>` for line breaks — not `\n` (renders literally). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` syntax — bare brackets break the parser.
-
-When an answer reshapes a component's interface, evaluate it against Deep Module principles (Ousterhout, *A Philosophy of Software Design*): does the revised interface hide more complexity than before, or does it leak internal details to callers? If the answer pushes complexity outward (more parameters, more caller knowledge required, narrower purpose), flag a review point asking whether the complexity can be absorbed into the component instead.
-
----
-
-## Step 4: Mark answered items as `reviewed`
-
-For each item where all review points are resolved:
-
-Change `## State` from `` `draft` `` to `` `reviewed` ``.
+- **Step 1**: `grep -rl "^\`draft\`" .sophist/src/sad/` — read each draft item and classify as answered or pending
+- **Step 2**: List every pending item so the human knows what still needs their attention
+- **Step 3**: For each answered item — incorporate `#### Answer` content into Interface, Location, Responsibility, Dependencies, or Diagram; remove the entire `### Review needed` section; accept removed sections as-is.
+  - When an answer changes the component interface or responsibility, also update the mermaid diagram to stay in sync.
+  - **Mermaid syntax safety**: Use `<br/>` for line breaks (not `\n`). Quote any label containing `[`, `]`, `(`, `)`, `{`, `}`, or `:` using `["..."]` — bare brackets break the parser.
+  - When an answer reshapes a component's interface, evaluate it against Deep Module principles (Ousterhout): does the revised interface hide more complexity, or does it leak internal details to callers? If it pushes complexity outward, flag a review point asking whether the component can absorb that complexity instead.
+- **Step 4**: Change `## State` from `` `draft` `` to `` `reviewed` `` for each item with all review points resolved.
 
 ---
 

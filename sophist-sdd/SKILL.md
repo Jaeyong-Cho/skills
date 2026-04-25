@@ -18,56 +18,15 @@ Read before starting:
 
 ---
 
-## Step 1: Find all draft SDD items
+## Steps 1–4: Find, surface, apply, and mark items
 
-```bash
-grep -rl "^\`draft\`" .sophist/src/sdd/
-```
+Follow the shared review workflow in `../sophist-shared/review-workflow.md` — SDD layer. In brief:
 
-Read each draft SDD item file.
-
-For each item, determine its status:
-
-- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
-- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
-
----
-
-## Step 2: Show pending review points
-
-List every pending SDD item clearly:
-
-```
-## Pending SDD Review Points
-
-### SDD-010: AuthService.authenticate()
-> Confirm bcrypt cost factor (12) matches your production security policy
-
-### SDD-011: AuthService.checkLockout()
-> Is the failure counter stored in memory (reset on restart) or persisted?
-```
-
-If there are no pending items, note that and move to Step 3.
-
----
-
-## Step 3: Apply inline answers to answered items
-
-For each answered SDD item:
-
-**If the section contains a `#### Answer` subsection:**
-- Read the content under `#### Answer`
-- Incorporate it into the relevant field — Signature, Algorithm, Variables, Error cases, or Side effects
-- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
-
-**If the section has been removed entirely:**
-- Accept the current file content as the human's approved version
-
-When an answer changes an algorithm step, rewrite that specific step clearly. When it changes an error case or side effect, update those sections. Keep the algorithm numbered and concrete — the SDD must remain implementable without guessing after your edits.
-
-If an answer reveals that the algorithm is more complex than first written (e.g., the human says "the counter is persisted, not in-memory"), update the algorithm steps, variables, and side effects to reflect that accurately.
-
----
+- **Step 1**: `grep -rl "^\`draft\`" .sophist/src/sdd/` — read each draft item and classify as answered or pending
+- **Step 2**: List every pending item so the human knows what still needs their attention
+- **Step 3**: For each answered item — incorporate `#### Answer` content into Signature, Algorithm, Variables, Error cases, or Side effects; remove the `### Review needed` section; accept removed sections as-is.
+  - When an answer changes an algorithm step, rewrite that specific step clearly. Keep the algorithm numbered and concrete — the SDD must remain implementable without guessing after your edits.
+  - If an answer reveals the algorithm is more complex than first written, update algorithm steps, variables, and side effects to reflect that accurately.
 
 **Refactoring signal**: After applying answers, scan the full SDD item list for repeated algorithm patterns:
 

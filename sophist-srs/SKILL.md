@@ -18,63 +18,14 @@ Read before starting:
 
 ---
 
-## Step 1: Find all draft SRS items
+## Steps 1–4: Find, surface, apply, and mark items
 
-```bash
-grep -rl "^\`draft\`" .sophist/src/srs/
-```
+Follow the shared review workflow in `../sophist-shared/review-workflow.md` — SRS layer. In brief:
 
-Read each draft SRS item file.
-
-For each item, determine its status:
-
-- **Answered**: the `### Review needed` section has been removed, or it contains a `#### Answer` subsection added by the human
-- **Pending**: the `### Review needed` header is present with only the original question — no `#### Answer` subsection yet
-
----
-
-## Step 2: Show pending review points
-
-List every pending SRS item clearly so the human knows what still needs their attention:
-
-```
-## Pending SRS Review Points
-
-### SRS-007: User authentication via email and password
-> verify lockout threshold (5 attempts) and whether unlock is automatic or manual
-
-### SRS-008: Account lockout policy
-> Is lockout duration fixed (30 minutes) or configurable?
-```
-
-If there are no pending items, note that and move to Step 3.
-
----
-
-## Step 3: Apply inline answers to answered items
-
-For each answered SRS item:
-
-**If the section contains a `#### Answer` subsection:**
-- Read the content under `#### Answer`
-- Incorporate it into the relevant content field — rewrite the sentence or value that the review question was about
-- Remove the entire `### Review needed` section (including the `#### Answer` subsection)
-
-**If the section has been removed entirely:**
-- Accept the current file content as the human's approved version
-- No content change needed — the human has already edited the item directly
-
-After applying an answer, the item file should have no remaining `### Review needed` section. If there were multiple questions and only some have `#### Answer` subsections, apply those and leave the unanswered questions in place as a fresh `### Review needed` section.
-
-The goal is that each item accurately reflects the human's intent. Rewrite clearly — don't just append.
-
----
-
-## Step 4: Mark answered items as `reviewed`
-
-For each item where all review points are now resolved:
-
-Change `## State` from `` `draft` `` to `` `reviewed` ``.
+- **Step 1**: `grep -rl "^\`draft\`" .sophist/src/srs/` — read each draft item and classify as answered (no `### Review needed`, or has `#### Answer`) or pending
+- **Step 2**: List every pending item so the human knows what still needs their attention
+- **Step 3**: For each answered item — if `#### Answer` present, incorporate into the relevant content field (rewrite the sentence or value the review question was about), then remove the entire `### Review needed` section; if section removed entirely, accept as-is. Rewrite clearly — don't just append.
+- **Step 4**: Change `## State` from `` `draft` `` to `` `reviewed` `` for each item with all review points resolved.
 
 ---
 

@@ -26,22 +26,7 @@ Look for a Debugger SAD item tagged `#debug` in the SOPHIST book (Step 6a below)
 
 ### Default Debugger model (fallback)
 
-When no Debugger SAD/SDD items exist, apply this spec and suggest to the human that it should be captured as SOPHIST items via sophist-curs:
-
-| Requirement | Detail |
-|-------------|--------|
-| **Output destination** | `--debug-output-dir <path>` — all debug output (log file + data files) written to this directory. Omit to send logs to stdout only; omitting also makes data writes and subprocess log captures no-ops. **Specifying `--debug-output-dir` alone (without `--debug-level`) is sufficient to trigger all data file output automatically.** |
-| **Enable/disable** | `--debug-level=OFF` (default) suppresses all log output but data file writes still occur when `--debug-output-dir` is set |
-| **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. |
-| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces |
-| **Log format** | `<timestamp> <level> <filename>:<line_number> <message>` — source location is mandatory, configured at the handler not at call sites |
-| **Interface** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` for log lines; `write(filename, data, purpose)` for structured data files; `subprocess_log_path(name)` for subprocess log routing |
-
-**`write(filename, data, purpose)`** writes `data` to `--debug-output-dir/<filename>`. If a file with that name already exists, appends a sequence index (`-1`, `-2`, …) before the extension to avoid conflicts. After writing, logs the file path, purpose, and write event to the main log. Infers format from extension (`.json` → JSON, anything else → string). No-op when `--debug-output-dir` is not set. Never raises.
-
-**`subprocess_log_path(name)`** returns a unique file path inside `--debug-output-dir` for a subprocess to write its stdout/stderr to (e.g. `<dir>/<name>-<timestamp>.log`). Returns `None` when `--debug-output-dir` is not set. The caller records the returned path and the start time in the main log before launching the subprocess, and logs completion after it exits.
-
-**Data model**: every file written via `write()` should correspond to a row in the item's `## Debug data` table, which defines `filename`, `format`, `when written`, and `contents`. This table is the data model — it ensures all debugging-relevant state is captured in a predictable schema that analysis tools and humans can rely on.
+When no Debugger SAD/SDD items exist, read `../sophist-shared/debugger-spec.md` for the full interface specification and reference Python implementation. Then suggest to the human that it should be captured as SOPHIST items via sophist-curs.
 
 ---
 
