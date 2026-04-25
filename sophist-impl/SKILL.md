@@ -142,9 +142,9 @@ Before writing any business logic, read the debug specifications in the SOPHIST 
 
 **From the SAD item — `## Debug strategy`**: read the healthy trace, key observables, failure signatures, and diagnostic process. These define the `INFO`-level log points — the component boundary events that a developer needs to reconstruct what happened.
 
-**From the SDD item — `## Debug trace`**: read the happy path trace, error path traces, and key variables. These define the `DEBUG`-level log points — the internal moments that distinguish correct execution from a bug.
+**From the SDD item — `## Debug strategy`**: read the happy path trace, error path traces, and key variables. These define the `DEBUG`-level log points — the internal moments that distinguish correct execution from a bug.
 
-If a `## Debug strategy` or `## Debug trace` section is missing from the spec, write a review point on that item and fall back to reading the diagrams:
+If a `## Debug strategy` or `## Debug strategy` section is missing from the spec, write a review point on that item and fall back to reading the diagrams:
 - **SAD Dynamic View** (`sequenceDiagram`): entry points, outbound calls, and returns → `INFO`-level moments.
 - **SDD Dynamic View** (`flowchart TD` or `sequenceDiagram`): key decisions, error branches → `DEBUG`-level moments.
 
@@ -276,7 +276,7 @@ Write the code following the SDD exactly, inserting log calls at each extracted 
 **Use the debug spec as the primary guide.**
 
 - The SAD `## Debug strategy` specifies `debugger.info()` points and component-level `debugger.write()` calls.
-- The SDD `## Debug trace` specifies `debugger.debug()` points and function-level `debugger.write()` calls.
+- The SDD `## Debug strategy` specifies `debugger.debug()` points and function-level `debugger.write()` calls.
 
 Place calls exactly where those specs say — at the same trigger points, carrying the same fields.
 

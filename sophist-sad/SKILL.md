@@ -98,7 +98,7 @@ Key principles:
 - Create at least one UT item per SDD item; add more for significant error paths and edge cases
 - After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
 
-**Write `## Debug trace` for every SDD item created.** Based on the function's Algorithm and Error cases, draft:
+**Write `## Debug strategy` for every SDD item created.** Based on the function's Algorithm and Error cases, draft:
 
 - **Happy path**: the sequence of DEBUG-level log messages for a successful execution — one message per significant Algorithm step (entry, key decisions, return)
 - **Error paths**: for each Error case, what log messages and variable values confirm that specific error fired

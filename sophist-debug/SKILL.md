@@ -1,14 +1,14 @@
 ---
 name: sophist-debug
 description: |
-  Debug a failing run using output written to a debug directory. Reads log files and structured data files produced by the Debugger component, cross-references them against the SOPHIST spec (SAD ## Debug strategy, SDD ## Debug trace), locates the deviation point where actual execution diverged from the healthy trace, identifies the root cause, and proposes a resolution strategy grounded in the spec.
+  Debug a failing run using output written to a debug directory. Reads log files and structured data files produced by the Debugger component, cross-references them against the SOPHIST spec (SAD ## Debug strategy, SDD ## Debug strategy), locates the deviation point where actual execution diverged from the healthy trace, identifies the root cause, and proposes a resolution strategy grounded in the spec.
   Triggers: "sophist-debug", "debug this", "read the debug output", "analyze the logs", "what went wrong", "find the root cause", "the run failed, here are the logs", "investigate the debug directory", "analyze --debug-output-dir output", "look at the debug files", "debug output is in <path>", any mention of a directory containing debug logs or debug data files.
   Use this whenever the user provides a path to debug output, mentions a failing run with debug artifacts, or asks why something went wrong in a SOPHIST-instrumented system.
 ---
 
 # sophist-debug: Root Cause Analysis from Debug Output
 
-**Goal**: Turn raw debug output into a specific root cause and an actionable resolution strategy. The SOPHIST spec — `## Debug strategy` in SAD items and `## Debug trace` in SDD items — describes exactly what a healthy execution looks like. This skill compares the actual run against that spec to find precisely where things went wrong and why.
+**Goal**: Turn raw debug output into a specific root cause and an actionable resolution strategy. The SOPHIST spec — `## Debug strategy` in SAD items and `## Debug strategy` in SDD items — describes exactly what a healthy execution looks like. This skill compares the actual run against that spec to find precisely where things went wrong and why.
 
 The guiding principle: **every deviation from the healthy trace is a diagnostic signal**. A missing log entry means a step didn't fire. An unexpected error entry means an error case fired. A data file with wrong values means a variable had the wrong value at that point in the algorithm.
 
@@ -135,9 +135,9 @@ Also check the `## Failure signatures` in the SAD item. If the actual log matche
 Failure signature matched: "user not found" → SAD-003 failure mode: "record lookup failed"
 ```
 
-### SDD level — `## Debug trace`
+### SDD level — `## Debug strategy`
 
-For the SDD item corresponding to the function where the deviation occurred, read its `## Debug trace`.
+For the SDD item corresponding to the function where the deviation occurred, read its `## Debug strategy`.
 
 Compare the **happy path** trace to the actual `DEBUG`-level log entries:
 
@@ -148,7 +148,7 @@ Compare the **happy path** trace to the actual `DEBUG`-level log entries:
 
 The first ❌ is the **SDD-level deviation point** — the specific algorithm step that didn't complete.
 
-Then check the `## Error paths` in `## Debug trace`. If an error path trace matches the actual log sequence leading to the `ERROR` entry, that confirms which error case fired.
+Then check the `## Error paths` in `## Debug strategy`. If an error path trace matches the actual log sequence leading to the `ERROR` entry, that confirms which error case fired.
 
 ---
 
@@ -180,7 +180,7 @@ Synthesize the findings from Steps 2–6 into a single root cause statement.
 
 Structure:
 1. **Failure mode**: which SAD failure signature fired (from `## Debug strategy`)
-2. **Deviation point**: the specific SDD algorithm step that didn't complete (from `## Debug trace`)
+2. **Deviation point**: the specific SDD algorithm step that didn't complete (from `## Debug strategy`)
 3. **Evidence**: the log entries and data file values that confirm this
 4. **Cause**: the specific condition that produced the deviation
 
@@ -230,7 +230,7 @@ If the logs show the code did something reasonable but the spec didn't anticipat
 
 If the root cause required guessing because the debug output didn't capture enough state:
 - Name the specific variable or decision point that was missing
-- Recommend adding it to the `## Debug trace` / `## Debug data` table in the SDD item
+- Recommend adding it to the `## Debug strategy` / `## Debug data` table in the SDD item
 - Recommend running `sophist-codereview` to verify the new instrumentation is added
 
 ### Infrastructure fix (Debugger not wired correctly)
@@ -302,5 +302,5 @@ No spec change needed. SDD-010 algorithm is correct as written.
 - **Never modify source code directly.** Describe the fix precisely enough that the human or sophist-impl can apply it.
 - **Never guess between equally likely root causes.** If the debug output is insufficient to distinguish, say so and describe what additional data would resolve the ambiguity.
 - **Always ground the resolution in the spec.** A "fix" that contradicts the SDD algorithm is not a fix — it's a new deviation. If fixing the code requires changing the spec, flag that explicitly.
-- **Report missing debug instrumentation as a finding.** If the debug output was insufficient to diagnose the problem, the debug spec (`## Debug trace`, `## Debug data`) needs updating — that is itself a deliverable of this analysis.
+- **Report missing debug instrumentation as a finding.** If the debug output was insufficient to diagnose the problem, the debug spec (`## Debug strategy`, `## Debug data`) needs updating — that is itself a deliverable of this analysis.
 - **Do not run the program.** This skill is read-only: it reads debug artifacts and SOPHIST docs. It does not execute, rebuild, or re-run anything.

@@ -308,7 +308,7 @@ flowchart TD
 ## Side effects
 <none | list>
 
-## Debug trace
+## Debug strategy
 **Happy path**: <ordered log messages for a successful execution>
 **Error paths**:
 - `<ErrorType>`: <log messages and variable values that identify this error>

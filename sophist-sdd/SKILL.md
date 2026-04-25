@@ -58,7 +58,7 @@ The Debugger SDD items must cover:
 - `subprocess_log_path(name)` — returns a unique timestamped path inside `--debug-output-dir` for subprocess stdout/stderr; returns `None` when dir unset. Caller logs the returned path and start time to the main log before launching, and exit code + duration after.
 - CLI option parsing for `--debug-level` and `--debug-output-dir`
 
-The `## Debug trace` for `write()` and `subprocess_log_path()` should include the data model table for their own output (what the Debugger itself writes) and the analysis guide for interpreting the main log's write-event entries.
+The `## Debug strategy` for `write()` and `subprocess_log_path()` should include the data model table for their own output (what the Debugger itself writes) and the analysis guide for interpreting the main log's write-event entries.
 
 ---
 

@@ -8,7 +8,7 @@ description: |
 
 # sophist-sync: Sync Existing Items to Current Templates
 
-**Goal**: Detect gaps between existing `.sophist` items and the current skill templates, then fill them by inferring content from each item's existing content. When a sophist-* skill adds a new section (e.g. `## Debug strategy`, `## Debug trace`), this skill finds every item missing that section and writes it — not a blank template shell, but a real first draft reasoned from what the item already says.
+**Goal**: Detect gaps between existing `.sophist` items and the current skill templates, then fill them by inferring content from each item's existing content. When a sophist-* skill adds a new section (e.g. `## Debug strategy`, `## Debug strategy`), this skill finds every item missing that section and writes it — not a blank template shell, but a real first draft reasoned from what the item already says.
 
 If `.sophist/src/goal.md` exists, read it first — it gives you the project's purpose, which helps you infer missing sections more accurately.
 
@@ -100,7 +100,7 @@ The current required sections for each item type. Scan each item file and check 
 | CuRS  | State · Tags · Why · Traces · Input · Context |
 | SRS   | State · Tags · Why · Traces · Description |
 | SAD   | State · Tags · Why · Traces · Static View · Dynamic View · Location · Responsibility · Dependencies · Interface · **Debug strategy** |
-| SDD   | State · Tags · Why · Traces · Static View · Dynamic View · Signature · Algorithm · Variables · Error cases · Side effects · **Debug trace** |
+| SDD   | State · Tags · Why · Traces · Static View · Dynamic View · Signature · Algorithm · Variables · Error cases · Side effects · **Debug strategy** |
 | AT    | State · Tags · Why · Traces · Function · Case · Input · Expected output |
 | SIT   | State · Tags · Why · Traces · Diagram · Components under test · Scenario · Expected behavior |
 | UT    | State · Tags · Why · Traces · Function · Case · Input · Expected output |
@@ -135,9 +135,9 @@ Check each file for missing section headings. Produce a drift report before touc
 ### SDD items (3 of 6 need update)
 | Item | Missing sections |
 |------|-----------------|
-| SDD-010 | ## Debug trace |
-| SDD-011 | ## Debug trace |
-| SDD-012 | ## Debug trace |
+| SDD-010 | ## Debug strategy |
+| SDD-011 | ## Debug strategy |
+| SDD-012 | ## Debug strategy |
 
 ### Everything else: up to date ✓
 ```
@@ -183,7 +183,7 @@ Notes on filling this:
 - If the component invokes subprocesses, add a row for each subprocess log file: format `text`, when `on subprocess launch`, purpose `stdout/stderr capture for <subprocess name>`.
 - The "Purpose" column is what gets logged as metadata in the main log alongside each write event — make it specific enough to be useful in isolation.
 
-### Filling `## Debug trace` in SDD items
+### Filling `## Debug strategy` in SDD items
 
 Read:
 - `## Algorithm` — numbered steps drive the happy path trace
@@ -194,7 +194,7 @@ Read:
 Write the section with these fields:
 
 ```markdown
-## Debug trace
+## Debug strategy
 **Happy path**: <one log message per significant Algorithm step — entry, key decisions, return>
 **Error paths**:
 - `<ErrorType from ## Error cases>`: <log messages and variable values that confirm this error fired>
@@ -228,7 +228,7 @@ Insert each new section at the position the schema table specifies — after the
 
 ```
 ## Debug strategy  →  insert after ## Interface  in SAD items
-## Debug trace     →  insert after ## Side effects  in SDD items
+## Debug strategy     →  insert after ## Side effects  in SDD items
 ```
 
 ---
@@ -253,8 +253,8 @@ Fix any broken markdown links before reporting.
 |-------|--------------------|-----------------------------------------|
 | SAD-003 | ## Debug strategy | Dynamic View sequenceDiagram + Interface |
 | SAD-005 | ## Debug strategy | Dynamic View sequenceDiagram + Responsibility |
-| SDD-010 | ## Debug trace   | Algorithm (6 steps) + Error cases (2)  |
-| SDD-011 | ## Debug trace   | Algorithm (3 steps) + Error cases (1)  |
+| SDD-010 | ## Debug strategy   | Algorithm (6 steps) + Error cases (2)  |
+| SDD-011 | ## Debug strategy   | Algorithm (3 steps) + Error cases (1)  |
 
 ### Review recommended
 The inferred sections are first drafts. Open each updated item and check:
