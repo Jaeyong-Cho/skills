@@ -358,7 +358,7 @@ If a `#debug` CuRS already exists, skip this step.
 
 If none exists, **create the debugger CuRS, two SRS items, and one AT item automatically** — do not wait for the human. The Debugger is a cross-cutting concern every project needs; without it sophist-impl has no spec to follow and instruments logging ad hoc.
 
-Read `../sophist-shared/debugger-curs.md` for the full item templates (CuRS-{NNN}, SRS-{NNN}, SRS-{NNN+1}, AT-{NNN}). Create all four items using those templates, substituting the next available item numbers.
+Read `../sophist-shared/debug-curs.md` for the full item templates (CuRS-{NNN}, SRS-{NNN}, SRS-{NNN+1}, AT-{NNN}). Create all four items using those templates, substituting the next available item numbers.
 
 Add all new items to `SUMMARY.md` and their respective index files. Update `tags.md` with the `#debug` tag if not already present.
 
