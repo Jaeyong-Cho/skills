@@ -157,13 +157,13 @@ For each SAD item in scope, check whether `## Debug strategy` exists and is impl
 | Key observables logged | Variables listed under "Key observables" appear in at least one log message |
 | Failure signatures covered | Log messages exist that would produce the described failure signature for each failure mode |
 
-For each SDD item in scope, check whether `## Debug strategy` exists and is implemented:
+For each SDD item in scope, check whether `## Debug trace` exists and is implemented:
 
 | Check | Pass criterion |
 |-------|---------------|
-| `## Debug strategy` present in SDD | Section exists with happy path, error paths, and key variables |
+| `## Debug trace` present in SDD | Section exists with happy path, error paths, and key variables |
 | Happy path trace implemented | Log messages in the code match the happy path trace in order |
-| Error paths covered | Each error path in `## Debug strategy` has at least one log call before the raise/return |
+| Error paths covered | Each error path in `## Debug trace` has at least one log call before the raise/return |
 | Key variables captured | Variables listed under "Key variables" appear in at least one log message |
 | Debug data files written | Each row in `## Debug data` tables (SAD and SDD) has a corresponding `debugger.write()` call at the specified trigger point, with the exact filename and fields from the spec |
 | Debug data guarded | Every `debugger.write()` call is safe: the Debugger no-ops if `--debug-output-dir` is unset — no separate guard needed |

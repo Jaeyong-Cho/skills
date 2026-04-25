@@ -332,7 +332,7 @@ For each significant function or class in the codebase, create an SDD item descr
 
 Create `.sophist/src/sdd/SDD-{NNN}.md` for each. Mark state `draft`. Trace to the SAD component.
 
-For each SDD item, write a `## Debug strategy` section inferred from the Algorithm and Error cases: happy path, error paths, key variables, analysis guide, and a debug data model table (`| File | Format | When written | Purpose | Contents |`) — empty (`_none_`) if the function writes no data files.
+For each SDD item, write a `## Debug trace` section inferred from the Algorithm and Error cases: happy path, error paths, key variables, analysis guide, and a debug data model table (`| File | Format | When written | Purpose | Contents |`) — empty (`_none_`) if the function writes no data files.
 
 Add entries to `SUMMARY.md` and `.sophist/src/sdd/index.md`.
 
