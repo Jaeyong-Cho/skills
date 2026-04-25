@@ -27,7 +27,9 @@ Each layer produces draft items with review points. You answer the review points
 
 ### 1. Initialize — `sophist-init`
 
-Run once at the start of a project. Creates the `.sophist/` mdbook structure with all chapter directories, a tag registry, and index stubs. Also asks for the project goal.
+**Human**: Run once, at project start.
+
+Creates the `.sophist/` mdbook structure with all chapter directories, a tag registry, and index stubs. Also asks for the project goal.
 
 If the project already has source code, it reverse-engineers a first draft of all layers (CuRS through UT) from the existing codebase.
 
@@ -39,6 +41,8 @@ init sophist
 
 ### 2. Set / Update Goal — `sophist-goal`
 
+**Human**: Write one or two sentences describing what this project is for.
+
 Records the project's stated purpose in `.sophist/src/goal.md`. All other skills read this file to stay oriented. Can be updated at any time.
 
 ```
@@ -49,6 +53,8 @@ set the goal
 ---
 
 ### 3. Capture Requirements — `sophist-curs`
+
+**Human**: Describe what the customer wants (in plain language). After it runs, open the created CuRS item files, read the `### Review needed` sections, and write your `#### Answer` directly below each question.
 
 Two modes in one skill:
 
@@ -75,13 +81,15 @@ I answered the CuRS items
 
 ### 4. Review SRS → Architecture — `sophist-srs`
 
-Call it with no arguments to see all pending SRS review points. Call it after answering them inline to:
-- Apply your answers into the item files
-- Mark answered items `reviewed`
-- Create `SAD-NNN` architecture components and `SIT-NNN` integration tests
-- Update `AT-NNN` items if SRS content changed
+**Human**: Run it to see pending review points. Open the draft SRS files, write `#### Answer` under each `### Review needed`. Then run it again to apply your answers and cascade.
 
 After it runs, open the draft SAD files, answer the review points, then run `sophist-sad`.
+
+It:
+- Applies your answers into the item files
+- Marks answered items `reviewed`
+- Creates `SAD-NNN` architecture components and `SIT-NNN` integration tests
+- Updates `AT-NNN` items if SRS content changed
 
 ```
 sophist-srs
@@ -93,12 +101,14 @@ I answered the SRS items
 
 ### 5. Review SAD → Detailed Design — `sophist-sad`
 
-Same pattern as above, one layer down. After answering SAD review points, it:
+**Human**: Open the draft SAD files, write `#### Answer` under each `### Review needed`. Then run it to apply your answers and cascade.
+
+After it runs, open the draft SDD files, answer the review points, then run `sophist-sdd`.
+
+It:
 - Marks SAD items `reviewed`
 - Creates `SDD-NNN` detailed design items (one per function/class) and `UT-NNN` unit tests
 - Updates `SIT-NNN` items if component interfaces changed
-
-After it runs, open the draft SDD files, answer the review points, then run `sophist-sdd`.
 
 ```
 sophist-sad
@@ -110,7 +120,9 @@ I answered the SAD items
 
 ### 6. Review SDD → Ready to Implement — `sophist-sdd`
 
-Final review layer. After answering SDD review points, it:
+**Human**: Open the draft SDD files, write `#### Answer` under each `### Review needed`. Then run it to finalize.
+
+It:
 - Marks SDD items `reviewed`
 - Updates `UT-NNN` items to match any revised algorithms or signatures
 
@@ -126,6 +138,8 @@ I answered the SDD items
 
 ### 7. Implement — `sophist-impl`
 
+**Human**: Trigger it for specific items or let it find everything ready. Review the generated code and answer any review points it writes back.
+
 Writes source code from reviewed SDD items. Reads the full upstream chain (SDD → SAD → SRS → CuRS) to understand intent, and instruments the code with debug log calls following the Debugger component spec. When something in the spec is unclear, it writes a review point rather than guessing.
 
 ```
@@ -139,6 +153,8 @@ implement everything ready
 
 ### 8. Code Review — `sophist-codereview`
 
+**Human**: Tell it which mode: "I implemented from the spec" or "I edited the code directly". Confirm or correct any spec updates it proposes.
+
 Two modes:
 
 - **Spec → Code**: you implemented from the spec — AI verifies conformance, marks items `done`
@@ -149,6 +165,35 @@ sophist-codereview
 I finished implementing SDD-010
 I edited the code directly
 sync the docs with my changes
+```
+
+---
+
+### 9. Refactor — `sophist-refact`
+
+**Human**: Trigger this at any of the three natural refactoring moments (see below). Choose which candidate to tackle from its ranked list. The skill updates SOPHIST docs to stay in sync with the refactored design.
+
+**When to refactor:**
+
+| Signal | Action |
+|--------|--------|
+| **Rule of Three** — you've written the same pattern a third time | Stop and refactor the duplication |
+| **Before adding a feature** — the target area is messy | Clean first, then add |
+| **While fixing a bug** — bug lives in convoluted code | Refactor as you fix; clean code reveals the bug |
+| **During a code review** — you spot structural debt | Flag or fix before the code is merged |
+
+What it does:
+- Scores SAD components for design debt (shallow modules, leaky interfaces, pass-through methods, temporal decomposition)
+- Ranks candidates by debt severity × blast radius
+- Plans the interface delta and behavior-preserving constraints
+- Updates SAD → SDD → UT items to reflect the refactored design
+- Adds `### Review needed` to any SRS item whose observable contract changes
+
+```
+sophist-refact
+find refactoring points
+I've written this three times now
+clean up before I add the feature
 ```
 
 ---
@@ -211,16 +256,43 @@ draft → reviewed → done
 
 ## Full Example Flow
 
+Steps marked **[YOU]** are actions the human takes directly in the files or editor.
+
 ```
-1. init sophist                          # sophist-init: set up book + goal
-2. I have a new requirement: users       # sophist-curs: CuRS/SRS/AT created (draft)
-   should be able to reset their password
-3. [answer review points in SRS files]
-4. sophist-srs                           # applies answers, creates SAD/SIT (draft)
-5. [answer review points in SAD files]
-6. sophist-sad                           # applies answers, creates SDD/UT (draft)
-7. [answer review points in SDD files]
-8. sophist-sdd                           # finalizes design, all reviewed
-9. implement SDD-010                     # sophist-impl: writes code
-10. I finished implementing SDD-010      # sophist-codereview: marks done
+ 1. init sophist                             sophist-init: create book structure + goal
+ 2. [YOU] set the goal: "password reset"     sophist-goal: records goal.md
+
+ 3. I have a new requirement: users          sophist-curs: CuRS/SRS/AT created (draft)
+    should be able to reset their password
+ 4. [YOU] open CuRS files, write             #### Answer under each ### Review needed
+ 5. I answered the CuRS items                sophist-curs: applies answers, marks reviewed
+
+ 6. sophist-srs                              shows pending SRS review points
+ 7. [YOU] open SRS files, write              #### Answer under each ### Review needed
+ 8. I answered the SRS items                 sophist-srs: applies, creates SAD/SIT (draft)
+
+ 9. sophist-sad                              shows pending SAD review points
+10. [YOU] open SAD files, write              #### Answer under each ### Review needed
+11. I answered the SAD items                 sophist-sad: applies, creates SDD/UT (draft)
+
+12. sophist-sdd                              shows pending SDD review points
+13. [YOU] open SDD files, write              #### Answer under each ### Review needed
+14. I answered the SDD items                 sophist-sdd: finalizes design, all reviewed
+
+15. implement SDD-010                        sophist-impl: writes code
+16. [YOU] review generated code              read, test, adjust if needed
+
+17. I finished implementing SDD-010          sophist-codereview: marks done
+```
+
+**Refactoring flow** (insert at any point where you hit a Rule of Three moment,
+a messy area before a feature, a bug in dirty code, or a code review):
+
+```
+A. sophist-refact                            scores debt, shows top 3 candidates
+B. [YOU] pick a candidate                    tell it which one to tackle
+C. sophist-refact proceeds                   updates SAD/SDD/UT, sets items back to draft
+D. [YOU] answer any new review points        written to the changed SDD/SAD files
+E. sophist-sdd / sophist-sad                 re-review the refactored design
+F. implement <updated items>                 sophist-impl: re-implements if needed
 ```

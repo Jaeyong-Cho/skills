@@ -2,7 +2,7 @@
 name: sophist-refact
 description: |
   SOPHIST refactoring skill. Use this to find and apply refactoring opportunities grounded in the Deep Module philosophy (Ousterhout): simplify interfaces, deepen implementations, eliminate leakage. Reads source code, SDD, and SAD to find shallow or leaky spots, ranks candidates by low outgoing/incoming dependency count so the blast radius stays small, then updates SOPHIST items (SDD → SAD → SRS → UT) to reflect the improved design. Never touches CuRS — customer requirements are unchanged by internal restructuring.
-  Triggers: "sophist-refact", "find refactoring points", "refactor the code", "where should I refactor", "deep module refactoring", "find shallow modules", "clean up the design", "simplify the interface", "find leaky abstractions", "improve the architecture".
+  Triggers: "sophist-refact", "find refactoring points", "refactor the code", "where should I refactor", "deep module refactoring", "find shallow modules", "clean up the design", "simplify the interface", "find leaky abstractions", "improve the architecture", "I've written this three times now", "Rule of Three", "I keep repeating this pattern", "clean up before adding a feature", "refactor while fixing a bug", "tidy up during code review", "this code is a mess", "let me clean this up first".
   Use this instead of sophist-impl when the goal is improving existing structure rather than writing new functionality.
 ---
 
@@ -13,6 +13,28 @@ description: |
 The guiding principle: a module is good when its interface is simpler than its implementation. Every refactoring here is in service of that ratio.
 
 If `.sophist/src/goal.md` exists, read it — it clarifies the project's priorities and helps distinguish design debt that matters from debt that doesn't.
+
+---
+
+## When to Refactor
+
+Use this skill whenever any of these signals appear:
+
+### Rule of Three
+- **First time**: just get it done.
+- **Second time**: do the same thing, note the duplication.
+- **Third time**: stop and refactor. The pattern is real; the cost of repetition now exceeds the cost of abstraction.
+
+### Before adding a feature
+Refactoring first makes the new feature easier to land cleanly. If the area you're about to change is messy, clean it before writing new code — the cost of reading and understanding dirty code compounds across every future touch. Refactoring also builds familiarity with unfamiliar code you've inherited.
+
+### While fixing a bug
+Bugs concentrate in the dirtiest corners of the codebase. If a bug leads you to a convoluted module, refactor it as you fix — clean code makes the error visible. Don't just patch the symptom and leave the mess.
+
+### During a code review
+Code review is the last chance to improve structure before the code becomes load-bearing. If you're reviewing a PR and see a refactoring opportunity, raise it here. Pair with the author for simple changes; flag the harder ones for a dedicated pass.
+
+In all three cases, refactoring must update SOPHIST documents to stay in sync — see Step 5 below.
 
 ---
 
@@ -149,7 +171,8 @@ SRS items describe behavior visible to users or other systems. If the refactorin
 If the refactoring does change an observable contract (e.g., an error message, a response shape, an event name), locate the relevant SRS item and add a review point:
 
 ```markdown
-> **Review needed** — interface refactoring in SAD-002 changes how config errors surface to callers. Confirm whether the error type change in SDD-015 aligns with SRS-007's error behavior specification.
+### Review needed
+Interface refactoring in SAD-002 changes how config errors surface to callers. Confirm whether the error type change in SDD-015 aligns with SRS-007's error behavior specification.
 ```
 
 Do not update SRS content directly — the human must confirm the intent before the spec changes.
