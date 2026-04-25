@@ -317,7 +317,7 @@ grep -rl "sequenceDiagram" .sophist/src/sad/ 2>/dev/null
 If multi-component SAD items were found, also check whether a debugger CuRS already exists:
 
 ```bash
-grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debug" .sophist/src/curs/ 2>/dev/null
 ```
 
 If no debugger CuRS exists, note it in the bootstrap report. The Debugger (CLI options `--debug-level` and `--debug-output-dir`) is a cross-cutting concern that must be specified before sophist-impl can instrument log calls and debug data files consistently. Suggest the human add it via sophist-curs with: "operators shall be able to set debug level and output directory via CLI options without rebuilding the software."

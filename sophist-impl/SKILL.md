@@ -22,7 +22,7 @@ The project uses a single **Debugger** component that owns all debug output: str
 
 ### Authoritative source: SOPHIST book items
 
-Look for a Debugger SAD item tagged `#debugger` in the SOPHIST book (Step 6a below). **If one exists, its `## Interface` and linked SDD items are the binding spec** — use their exact signatures. The default model below is a fallback only when no Debugger items exist yet.
+Look for a Debugger SAD item tagged `#debug` in the SOPHIST book (Step 6a below). **If one exists, its `## Interface` and linked SDD items are the binding spec** — use their exact signatures. The default model below is a fallback only when no Debugger items exist yet.
 
 ### Default Debugger model (fallback)
 
@@ -174,7 +174,7 @@ No step-by-step annotation of diagram nodes is required. The debug sections in t
 ### 6a: Find the Debugger specification in the SOPHIST book
 
 ```bash
-grep -rl "#debugger" .sophist/src/sad/ 2>/dev/null
+grep -rl "#debug" .sophist/src/sad/ 2>/dev/null
 grep -rl "Debugger" .sophist/src/sad/ 2>/dev/null | head -5
 ```
 

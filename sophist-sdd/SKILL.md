@@ -93,7 +93,7 @@ Change `## State` from `` `draft` `` to `` `reviewed` ``.
 
 ## Step 4b: Debugger SDD items
 
-If any of the answered SDD items belong to a Debugger SAD component (tagged `#debugger`), the SDD items define the concrete Debugger implementation. Treat them exactly like any other SDD item — the `## Signature` defines what callers call; the `## Algorithm` describes how each method works. Make them specific enough to implement without guessing.
+If any of the answered SDD items belong to a Debugger SAD component (tagged `#debug`), the SDD items define the concrete Debugger implementation. Treat them exactly like any other SDD item — the `## Signature` defines what callers call; the `## Algorithm` describes how each method works. Make them specific enough to implement without guessing.
 
 The Debugger SDD items must cover:
 - Log methods (`info`, `debug`, `verbose`, `warning`, `error`) — algorithm routes to file or stdout based on `--debug-level` and whether `--debug-output-dir` is set

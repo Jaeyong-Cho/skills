@@ -123,10 +123,10 @@ For each SAD item newly marked `reviewed`, handle downstream items in two cases:
 Before cascading to SDD, check whether a Debugger SAD item exists:
 
 ```bash
-grep -rl "#debugger" .sophist/src/sad/ 2>/dev/null
+grep -rl "#debug" .sophist/src/sad/ 2>/dev/null
 ```
 
-If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Debugger SAD item exists yet, and there is an SRS item tagged `#debugger` that traces here — create the Debugger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the Debugger API:
+If one or more of the reviewed SAD items has a Dynamic View `sequenceDiagram` (i.e., it participates in cross-component message flows), and no Debugger SAD item exists yet, and there is an SRS item tagged `#debug` that traces here — create the Debugger SAD item first. It is a shared infrastructure component; its `## Interface` section defines the Debugger API:
 - Log methods: `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)`
 - Data write: `write(filename, data, purpose)` — writes to `--debug-output-dir` when set, regardless of `--debug-level`; appends sequence index on filename collision; logs path+purpose+write event to main log
 - Subprocess log routing: `subprocess_log_path(name)` — returns a unique log file path for subprocess stdout/stderr capture; returns `None` when `--debug-output-dir` is not set; caller logs path and timing to main log

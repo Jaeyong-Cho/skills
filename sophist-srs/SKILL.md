@@ -121,7 +121,7 @@ For each SRS item newly marked `reviewed`, handle downstream items in two cases:
 When cascading SRS items to SAD, check whether a debugger SRS item exists:
 
 ```bash
-grep -rl "#debugger" .sophist/src/srs/ 2>/dev/null
+grep -rl "#debug" .sophist/src/srs/ 2>/dev/null
 ```
 
 If any reviewed SRS item describes behavior that crosses component boundaries (multi-step flows, component interactions), and no debugger SRS item exists, add a note in the report suggesting the human capture one via sophist-curs. The debugger SRS item should specify:
@@ -155,6 +155,21 @@ Key principles:
 - Write the SAD item based on what the reviewed SRS tells you the system must do — the architecture should serve the requirements, not the other way around
 - Create a SIT item for each SAD component that interacts with other components
 - After creating SAD and SIT, go back to each SRS item and add `→ [SAD-{NNN}](../sad/SAD-{NNN}.md): <why>` to its Traces section
+
+**Write `## Debug strategy` for every SAD item created.** Based on the component's Responsibility and Interface, draft:
+
+- **Healthy trace**: the sequence of INFO-level log messages that should appear during a successful operation through this component — component entry, key outbound calls, and return
+- **Key observables**: which inputs, outputs, and internal state values are worth capturing in log messages at entry and exit
+- **Failure signatures**: what the log output would look like for each failure mode (e.g., "if auth fails, expect `ERROR authenticate: invalid credentials user_id=X` with no session-created line after")
+- **Diagnostic process**: one paragraph on how to use the logs to diagnose the most likely failure scenarios for this component
+- **Debug data model**: a table for structured data files this component writes via `debugger.write()`:
+
+  | File | Format | When written | Purpose | Contents |
+  |------|--------|-------------|---------|----------|
+
+  Leave the table empty (`_none_`) if this component writes no data files. If uncertain, add a `### Review needed` asking the human to confirm what data should be captured.
+
+If a Debugger `#debug` SRS item is being cascaded, its SAD item's `## Debug strategy` describes the Debugger component's own output (main log file format and schema) rather than a data model table.
 
 **Design each SAD component as a deep module** (Ousterhout, *A Philosophy of Software Design*):
 - A deep module has a **simple interface** that hides a **large, complex implementation**. The interface cost to callers should be far less than the value the component provides.

@@ -79,10 +79,10 @@ Add a row to `.sophist/src/curs/index.md` and an entry to `SUMMARY.md`.
 Check whether a Debugger CuRS exists in the project:
 
 ```bash
-grep -rl "#debugger" .sophist/src/curs/ 2>/dev/null
+grep -rl "#debug" .sophist/src/curs/ 2>/dev/null
 ```
 
-If no Debugger CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a Debugger CuRS before proceeding. Tag it `#debugger` and apply the lazy assumption protocol.
+If no Debugger CuRS exists **and** the requirement being pipelined involves multi-step behavior across components (i.e., the SAD pass will produce a `sequenceDiagram` with multiple participants), create a Debugger CuRS before proceeding. Tag it `#debug` and apply the lazy assumption protocol.
 
 ```markdown
 # CuRS-{NNN}: Runtime debuggability
@@ -91,7 +91,7 @@ If no Debugger CuRS exists **and** the requirement being pipelined involves mult
 `draft`
 
 ## Tags
-`#debugger` `#lazy`
+`#debug` `#lazy`
 
 ## Why
 Operators need to inspect runtime behavior — both event traces and structured state snapshots — without rebuilding the software.
