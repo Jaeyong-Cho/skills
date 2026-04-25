@@ -14,6 +14,7 @@ description: |
 SAD and SDD are created later by sophist-srs and sophist-sad after each layer is reviewed.
 
 Read before starting:
+- `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, ID system, states, tags, traceability links
 - `../sophist-shared/structure.md` — per-document conventions
 - `../sophist-shared/review-points.md` — how to write review points

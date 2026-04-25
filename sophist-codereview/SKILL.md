@@ -13,6 +13,7 @@ description: |
 - **Code → Spec** (direct edit): human edited code directly — find what diverged, judge whether the code or the spec is correct, and update whichever is wrong.
 
 Read before starting:
+- `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, traceability
 - `../sophist-shared/structure.md` — SAD file location conventions, SDD signature conventions
 - `.sophist/src/goal.md` — project goal (if it exists); useful context when judging whether a divergence matters

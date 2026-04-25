@@ -15,6 +15,9 @@ description: |
 - **Fix mode**: apply a small, known correction to SOPHIST docs or source/test code
 - **Prototype mode**: generate a rough working implementation for a SOPHIST item using its doc context as a spec, skipping full rigor in favour of speed
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order; use this to advise the human to run the proper review skill after a fix, or sophist-impl after a prototype is validated
+
 ---
 
 If `.sophist/src/goal.md` exists, read it for context — it helps with Prototype mode in particular, where understanding the project's purpose shapes what a sensible prototype looks like.

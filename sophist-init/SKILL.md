@@ -9,6 +9,7 @@ description: |
 **Goal**: Set up `.sophist/` with full V-Doc chapter structure, CSS theme override, empty tag registry, and project source/test directories. If the project already has source code, also generate initial draft SOPHIST items by reverse-engineering the existing codebase.
 
 Read before starting:
+- `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, ID system, states, tags
 - `../sophist-shared/structure.md` — directory layout and per-document conventions
 

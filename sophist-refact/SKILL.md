@@ -12,6 +12,10 @@ description: |
 
 The guiding principle: a module is good when its interface is simpler than its implementation. Every refactoring here is in service of that ratio.
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order and item states; refactoring updates SDD/SAD items and may reset their state to `draft`
+- `../sophist-shared/items.md` — SAD and SDD item templates
+
 If `.sophist/src/goal.md` exists, read it — it clarifies the project's priorities and helps distinguish design debt that matters from debt that doesn't.
 
 ---

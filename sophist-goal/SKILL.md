@@ -9,6 +9,9 @@ description: |
 
 **Goal**: Capture the user's description of the project's purpose and write it to `.sophist/src/goal.md`. If the file already exists, update it. If SUMMARY.md doesn't include goal.md yet, add it.
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order; the goal is set at the start (after sophist-init) and all other skills read it for orientation
+
 ---
 
 ## Step 1: Get the goal from the user

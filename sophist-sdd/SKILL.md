@@ -12,6 +12,7 @@ description: |
 **Goal**: Surface all pending SDD review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, and update corresponding UT items to reflect any changes. When all SDD items are reviewed, the design is ready for implementation.
 
 Read before starting:
+- `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, states, traceability link conventions
 - `../sophist-shared/review-points.md` — how review points work and how answers are indicated
 - `.sophist/src/goal.md` — project goal (if it exists); use it for orientation when finalizing design decisions

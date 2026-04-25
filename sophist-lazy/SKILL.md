@@ -10,6 +10,10 @@ description: |
 
 **Goal**: Take a customer requirement and produce a complete CuRS → SRS → SAD → SDD chain without pausing for human review.
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order and item states; sophist-lazy replaces the curs → srs → sad → sdd review steps with lazy assumptions
+- `../sophist-shared/items.md` — SAD and SDD item templates (Debug strategy / Debug trace bullet format)
+
 If `.sophist/src/goal.md` exists, read it before starting — it describes the project's stated purpose and helps orient the lazy assumptions you'll be making throughout the pipeline. Every time a review point would normally block forward progress, make an explicit lazy assumption instead and write implementation-level observability specs into the SAD and SDD so that:
 - sophist-impl knows exactly *what* to emit and *where* to place it
 - the human can see, in running logs/metrics, precisely which unreviewed assumption fired

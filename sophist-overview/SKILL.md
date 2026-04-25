@@ -8,6 +8,9 @@ description: |
 
 **Goal**: Read all SOPHIST layers and produce a clear, concise overview of the project — what it does, how it is built, and where the documentation currently stands.
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order and item states; use this to recommend the correct next skill based on which layers are still draft
+
 ---
 
 ## Step 1: Read the project goal and book structure

@@ -202,25 +202,171 @@ Direction convention:
 
 ---
 
+## SAD Item Template
+
+```markdown
+# SAD-{NNN}: <component or structure title>
+
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one sentence — why this component exists and what architectural problem it solves>
+
+## Traces
+- ← [SRS-{NNN}](../srs/SRS-{NNN}.md): <which requirement this component satisfies and why this component boundary was chosen>
+- → [SDD-{NNN}](../sdd/SDD-{NNN}.md): TBD — SDD items created after SAD review
+- → [SIT-{NNN}](../sit/SIT-{NNN}.md): <what integration scenario this test covers>
+
+## Static View
+
+```mermaid
+graph LR
+  <CallerComponent> --> SAD-{NNN}["<ComponentName><br/><file path>"]
+  SAD-{NNN} --> <DependencyComponent>
+```
+
+## Dynamic View
+
+```mermaid
+sequenceDiagram
+  participant <Caller>
+  participant <ComponentName>
+  participant <Dependency>
+  <Caller>->><ComponentName>: <primary method call>
+  <ComponentName>->><Dependency>: <internal call>
+  <Dependency>-->><ComponentName>: <response>
+  <ComponentName>-->><Caller>: <result>
+```
+
+## Location
+`src/<path>/<FileName>.{ext}`
+
+## Responsibility
+<single sentence — what this component does and nothing else>
+
+## Dependencies
+<other SAD components this depends on, or "none">
+
+## Interface
+- `<methodName>(params) → ReturnType` — <one-line description>
+
+## Debug strategy
+
+- **Healthy trace**:
+  - `<log message on component entry>`
+  - `<log message for key outbound call>`
+  - `<log message on component return>`
+- **Key observables**: `<var1>`, `<var2>` — inputs, outputs, and internal values most useful when something goes wrong
+- **Failure signatures**:
+  - `<failure mode>`: <what log pattern or missing line indicates this failure>
+- **Diagnostic process**: <how to isolate a bug in this component — which log lines to check first, which downstream components to rule out>
+- **Debug data model** (written to `--debug-output-dir` when set):
+
+  | File | Format | When written | Contents |
+  |------|--------|-------------|---------|
+  | `<filename>.<ext>` | JSON \| log \| csv | <trigger condition> | <what data fields or entries it contains> |
+
+### Review needed
+<question about component boundary, file location, interface, or dependency>
+```
+
+---
+
+## SDD Item Template
+
+```markdown
+# SDD-{NNN}: <ClassName.methodName() or module-level function name>
+
+## State
+`draft`
+
+## Tags
+`#tag1`
+
+## Why
+<one sentence — why this function exists and what behavior it implements within its parent component>
+
+## Traces
+- ← [SAD-{NNN}](../sad/SAD-{NNN}.md): <why this function is the implementation of a specific responsibility declared in the parent SAD component>
+- → [UT-{NNN}](../ut/UT-{NNN}.md): <which behavior of this function the unit test covers>
+
+## Static View
+
+```mermaid
+graph LR
+  <ParentModule>["<ClassName or Module>"] --> fn["<functionName>()"]
+  fn --> dep["<dependency>()"]
+```
+
+## Dynamic View
+
+```mermaid
+flowchart TD
+  A[<first step>] --> B{<decision?>}
+  B -- Yes --> C[<action>]
+  B -- No --> D[<action>]
+```
+
+## Signature
+`<functionName>(param: Type, ...): ReturnType`
+
+## Algorithm
+1. <Step 1 — specific action, not vague>
+2. <Step 2>
+3. ...
+
+## Variables
+- `<varName>: <Type>` — <purpose>
+
+## Error cases
+- `<ErrorType>` — <when this is raised and what caused it>
+
+## Side effects
+<what is written/read/mutated beyond the return value, or "none">
+
+## Debug trace
+
+- **Happy path**:
+  - `<log message confirming step 1 fired>`
+  - `<log message confirming step 2 fired>`
+- **Error paths**:
+  - `<ErrorType>`: <log messages that appear when this error fires, and which variable values confirm it>
+- **Key variables**: `<var1>`, `<var2>` — runtime values most needed when diagnosing a failure in this function
+- **Debug data model** (written to `--debug-output-dir` when set):
+
+  | File | Format | When written | Contents |
+  |------|--------|-------------|---------|
+  | `<filename>.<ext>` | JSON \| log \| csv | <trigger: on entry \| on error \| on return \| always> | <exact fields — specific enough that impl can write the file without guessing> |
+
+### Review needed
+<question about algorithm detail, error handling, or edge case>
+```
+
+---
+
 ## Scanning Items
 
 ```bash
 # List all items of a type
-ls book/src/srs/
-ls book/src/sad/
+ls .sophist/src/srs/
+ls .sophist/src/sad/
 
 # Read a specific item
-cat book/src/srs/SRS-007.md
+cat .sophist/src/srs/SRS-007.md
 
 # All draft items across all types
-grep -rl "^\`draft\`" book/src/
+grep -rl "^\`draft\`" .sophist/src/
 
 # Items with a specific tag
-grep -rl "#auth" book/src/
+grep -rl "#auth" .sophist/src/
 
 # All pending review points
-grep -rl "Review needed" book/src/
+grep -rl "Review needed" .sophist/src/
 
 # Find next available ID for a type (e.g. SRS)
-ls book/src/srs/ | grep "^SRS-" | sort | tail -1
+ls .sophist/src/srs/ | grep "^SRS-" | sort | tail -1
 ```

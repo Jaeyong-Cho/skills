@@ -12,6 +12,7 @@ description: |
 **Goal**: Surface all pending SRS review points, apply any inline answers the human has written in the item files, mark answered items as `reviewed`, update AT items if content changed, and cascade by creating corresponding SAD and SIT items.
 
 Read before starting:
+- `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, states, traceability link conventions
 - `../sophist-shared/review-points.md` — how review points work and how answers are indicated
 - `.sophist/src/goal.md` — project goal (if it exists); use it as orientation when writing SAD items during cascade

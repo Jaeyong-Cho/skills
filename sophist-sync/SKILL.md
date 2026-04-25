@@ -14,6 +14,10 @@ If `.sophist/src/goal.md` exists, read it first — it gives you the project's p
 
 The guiding principle: **infer, don't blank.** A `## Debug strategy` derived from the existing Dynamic View is immediately useful. An empty template is noise that misleads the human into thinking the section is done.
 
+Read before starting:
+- `../sophist-shared/workflow.md` — pipeline order and item states
+- `../sophist-shared/items.md` — the current canonical SAD and SDD item templates (including `## Debug strategy` and `## Debug trace` bullet formats); these are the target format to sync existing items toward
+
 ---
 
 ## Step 1: Determine scope
