@@ -230,11 +230,11 @@ expose only what callers need to know.>
 - <failure mode>: <log pattern or missing output that indicates this failure>
 **Diagnostic process**: <step-by-step how to isolate a bug in this component>
 
-**Debug data** (written to `--debug-output-dir` when enabled):
+**Debug data model** (written to `--debug-output-dir` when set — active even without `--debug-level`):
 
-| File | Format | When written | Contents |
-|------|--------|-------------|---------|
-| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <fields or entries> |
+| File | Format | When written | Purpose | Contents |
+|------|--------|-------------|---------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | <trigger condition> | <why this file exists — what question it answers> | <fields or entries> |
 
 ## Lazy observability
 These are component-level instrumentation points.
@@ -313,12 +313,13 @@ flowchart TD
 **Error paths**:
 - `<ErrorType>`: <log messages and variable values that identify this error>
 **Key variables**: <runtime values most useful for diagnosing a failure in this function>
+**Analysis guide**: <how to interpret the data files and log sequence to diagnose a failure — e.g. "check entry.json inputs first, then whether error.json exists; if absent, failure occurred after the function returned">
 
-**Debug data** (written to `--debug-output-dir` when enabled):
+**Debug data model** (written to `--debug-output-dir` when set — active even without `--debug-level`):
 
-| File | Format | When written | Contents |
-|------|--------|-------------|---------|
-| `<filename>.<ext>` | JSON \| log \| csv \| <other> | on entry \| on error \| on return \| always | <exact fields — specific enough to implement without guessing> |
+| File | Format | When written | Purpose | Contents |
+|------|--------|-------------|---------|---------|
+| `<filename>.<ext>` | JSON \| log \| csv \| <other> | on entry \| on error \| on return \| always | <why this file exists — what question it answers> | <exact fields — specific enough to implement without guessing> |
 
 ## Lazy contracts
 <Summary of all lazy guards in this function — for human review.

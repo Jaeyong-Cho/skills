@@ -148,6 +148,19 @@ Key principles:
 - Create at least one UT item per SDD item; add more for significant error paths and edge cases
 - After creating SDD and UT items, go back to each SAD item and replace the `TBD` SAD-to-SDD trace with the real link
 
+**Write `## Debug trace` for every SDD item created.** Based on the function's Algorithm and Error cases, draft:
+
+- **Happy path**: the sequence of DEBUG-level log messages for a successful execution — one message per significant Algorithm step (entry, key decisions, return)
+- **Error paths**: for each Error case, what log messages and variable values confirm that specific error fired
+- **Key variables**: which variables from `## Variables` are most diagnostic — the ones that distinguish correct from incorrect execution
+- **Analysis guide**: how to read the data files and log sequence to diagnose a failure in this function
+- **Debug data model**: a table for structured data files this function writes via `debugger.write()`:
+
+  | File | Format | When written | Purpose | Contents |
+  |------|--------|-------------|---------|----------|
+
+  Leave the table empty (`_none_`) if this function writes no data files. Add a `### Review needed` if uncertain what data to capture.
+
 **Refactoring signal**: Before creating SDD items, check whether the area being cascaded is messy or is the third instance of a pattern:
 
 - If the SAD review revealed that callers must manage ordering constraints, pass internal details, or call multiple methods in sequence → the interface is leaky. This is a "before feature" refactoring signal.
