@@ -47,26 +47,38 @@ Users shall be able to authenticate using a valid email address and password.
 The system shall reject invalid credentials with an appropriate error message.
 The system shall lock the account after 5 consecutive failed attempts.
 
-> **Review needed** — verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
+### Review needed
+verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
 ```
 
-### Review needed callout rule
+### Review needed format
 
-**Never use HTML comments for review points** — they are invisible in the rendered book. Always use a blockquote at the end of the item body:
+**Never use HTML comments or blockquotes for review points** — blockquotes are invisible as a signalling mechanism and HTML comments are invisible in the rendered book. Always use a `### Review needed` header at the end of the item body:
 
 ```markdown
-> **Review needed** — <specific question or assumption to verify>
+### Review needed
+<specific question or assumption to verify>
 ```
 
 For multiple questions on one item:
 
 ```markdown
-> **Review needed**
-> - Is the lockout threshold 5 attempts or configurable per deployment?
-> - Should the error message distinguish "wrong password" from "user not found"?
+### Review needed
+- Is the lockout threshold 5 attempts or configurable per deployment?
+- Should the error message distinguish "wrong password" from "user not found"?
 ```
 
-When the human has resolved the questions and promotes the item to `reviewed`, they delete the entire blockquote block.
+**How the human answers**: add a `#### Answer` subsection directly under `### Review needed`, then run the relevant review skill to apply it:
+
+```markdown
+### Review needed
+verify lockout threshold (5 attempts) and whether unlock is automatic (time-based) or manual (admin action)
+
+#### Answer
+5 attempts, unlock is automatic after 30 minutes.
+```
+
+The review skill reads the `#### Answer` content, incorporates it into the item, and removes the entire `### Review needed` section. If the human removes the section directly, the review skill accepts the current content as approved.
 
 ---
 
