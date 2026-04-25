@@ -4,9 +4,9 @@ Used by sophist-impl, sophist-lazy, and any skill that instruments or documents 
 
 ---
 
-## Default Debugger model
+## Contract (language-agnostic)
 
-When no Debugger SAD/SDD items exist in the SOPHIST book, apply this spec. After implementing, suggest the human capture it as SOPHIST items via sophist-curs.
+These behaviors must be preserved regardless of language or implementation style. Everything else is free to adapt.
 
 | Requirement | Detail |
 |-------------|--------|
@@ -15,22 +15,35 @@ When no Debugger SAD/SDD items exist in the SOPHIST book, apply this spec. After
 | **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. |
 | **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces |
 | **Log format** | `<timestamp> <level> <filename>:<line_number> <message>` — source location is mandatory, configured at the handler not at call sites |
-| **Interface** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` for log lines; `write(filename, data, purpose)` for structured data files; `subprocess_log_path(name)` for subprocess log routing |
+| **Log methods** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` |
+| **Data write** | `write(filename, data, purpose)` — writes to `--debug-output-dir/<filename>`, infers format from extension (`.json` → JSON, else string), appends sequence index on collision, logs the write event to the main log, never raises |
+| **Subprocess routing** | optional — only implement if the project spawns subprocesses; returns a unique log path inside `--debug-output-dir`, or null/None when unset |
 
-**`write(filename, data, purpose)`** writes `data` to `--debug-output-dir/<filename>`. If a file with that name already exists, appends a sequence index (`-1`, `-2`, …) before the extension to avoid conflicts. After writing, logs the file path, purpose, and write event to the main log. Infers format from extension (`.json` → JSON, anything else → string). No-op when `--debug-output-dir` is not set. Never raises.
+**Data model**: every file written via `write()` corresponds to a row in the item's `## Debug data` table (`filename`, `format`, `when written`, `purpose`, `contents`). This is what makes debug output predictable and analysable.
 
-**`subprocess_log_path(name)`** returns a unique file path inside `--debug-output-dir` for a subprocess to write its stdout/stderr to (e.g. `<dir>/<name>-<timestamp>.log`). Returns `None` when `--debug-output-dir` is not set. The caller records the returned path and the start time in the main log before launching the subprocess, and logs completion after it exits.
+**Single owner**: construct the Debugger once at application entry and pass it to every component. Components never access `--debug-output-dir` or the filesystem directly.
 
-**Data model**: every file written via `write()` should correspond to a row in the item's `## Debug data` table, which defines `filename`, `format`, `when written`, `purpose`, and `contents`. This table is the data model — it ensures all debugging-relevant state is captured in a predictable schema that analysis tools and humans can rely on.
+---
+
+## Adapting to your project
+
+Before implementing, read the project to understand its conventions:
+
+- **Language and idioms** — use the project's natural logging library, file I/O patterns, and module/class structure. A Go project uses a struct with methods; a TypeScript project might use a class or a module-level singleton; a shell script uses functions and environment variables. Don't impose an alien style.
+- **CLI flag parsing** — use whatever the project already uses (argparse, cobra, yargs, flags, env vars). The flag names `--debug-level` and `--debug-output-dir` are the external contract; the parsing mechanism is not.
+- **Subprocess pattern** — only implement `subprocess_log_path` if the project actually spawns subprocesses. Many projects don't need it.
+- **Error handling** — match the project's style for silent failures in non-critical paths. The key invariant is: debug output must never crash the program.
+- **File/module name** — name it whatever fits the project (`debugger.py`, `debug.go`, `logger.ts`, `debug.sh`, etc.).
+
+The contract is the interface (levels, write(), log format, CLI flags). The implementation is yours to shape.
 
 ---
 
 ## Reference implementation (Python)
 
-This illustrates the required behaviors. Adapt the language, style, file name, and class structure to the project — it is **one example, not a prescription**.
+Illustrates the required behaviors in Python. Use this as a mental model, not a template to copy.
 
 ```python
-# Example: debugger.py (Python) — adapt name, structure, and idioms to your project's language
 import json, logging, os
 from datetime import datetime
 
@@ -71,15 +84,10 @@ class Debugger:
         if self._threshold >= 1: self._log.error(msg)
 
     def write(self, filename: str, data, purpose: str = "") -> None:
-        """Write structured debug data to --debug-output-dir.
-        No-op if dir is unset. Triggered by --debug-output-dir alone,
-        regardless of --debug-level. Appends -N index on filename collision.
-        Logs file path, purpose, and write event to main log."""
         if not self._dir:
             return
         try:
             os.makedirs(self._dir, exist_ok=True)
-            # Resolve collision: append -1, -2, ... before extension
             base, ext = os.path.splitext(filename)
             candidate = os.path.join(self._dir, filename)
             idx = 1
@@ -91,20 +99,13 @@ class Debugger:
                     json.dump(data, f, indent=2)
                 else:
                     f.write(str(data))
-            # Log metadata to main log
             self._log.info(f"[debug-write] path={candidate} purpose={purpose or 'unspecified'}")
         except Exception:
-            pass  # debug output must never crash the program
+            pass
 
     def subprocess_log_path(self, name: str) -> str | None:
-        """Return a unique log file path for a subprocess to write stdout/stderr to.
-        Returns None when --debug-output-dir is not set (caller skips capture).
-        Caller must log the returned path and start time before launching the subprocess,
-        and log completion (exit code, duration) after it exits."""
         if not self._dir:
             return None
         os.makedirs(self._dir, exist_ok=True)
         return os.path.join(self._dir, f"{name}-{datetime.now():%Y%m%d-%H%M%S}.log")
 ```
-
-Construct the Debugger once at application entry from the CLI options, then pass it to every component that needs it. Components call `debugger.info(...)`, `debugger.write(...)` — they never access `--debug-output-dir` directly.
