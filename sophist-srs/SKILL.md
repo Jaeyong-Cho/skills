@@ -15,6 +15,7 @@ Read before starting:
 - `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, states, traceability link conventions
 - `../sophist-shared/review-points.md` — how review points work and how answers are indicated
+- `../sophist-shared/philosophy.md` — data structure design philosophy; apply when creating SAD items during cascade
 - `.sophist/src/goal.md` — project goal (if it exists); use it as orientation when writing SAD items during cascade
 
 ---
@@ -97,6 +98,14 @@ If two or more existing SAD components already serve the same general Responsibi
 Run the full sophist-refact workflow. When it completes, resume creating SAD items here. The human may say "skip refact" to proceed without refactoring.
 
 ### No `→ [SAD-` trace yet — create new items
+
+Before writing the SAD item, apply the data structure design philosophy from `../sophist-shared/philosophy.md`:
+
+- What objects does this requirement operate on? Identify the independent data entities involved.
+- What relations exist between those objects?
+- What transformation does the required behaviour perform — what comes in, what comes out?
+
+Let these answers shape the component's `## Responsibility` (what objects it owns) and `## Interface` (what objects it receives and produces). If the objects or their relations are unclear, add a `### Review needed` before continuing.
 
 Create the corresponding SAD and SIT items. Read `references/cascade.md` for templates and the full process.
 

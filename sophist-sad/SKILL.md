@@ -15,6 +15,7 @@ Read before starting:
 - `../sophist-shared/workflow.md` — full pipeline order, item states, and which skill to run next
 - `../sophist-shared/items.md` — item format, states, traceability link conventions
 - `../sophist-shared/review-points.md` — how review points work and how answers are indicated
+- `../sophist-shared/philosophy.md` — data structure design philosophy; apply when creating SDD items during cascade
 - `.sophist/src/goal.md` — project goal (if it exists); use it as orientation when writing SDD items during cascade
 
 ---
@@ -90,6 +91,14 @@ When writing the Debugger SAD item's `## Debug strategy`, include the data model
 If no debugger SRS item exists at all, skip this — it means runtime observability has not yet been specified at the requirements layer. Note it in the report so the human can decide whether to add it via sophist-curs.
 
 ### No `→ [SDD-` trace yet (or only a `TBD` placeholder) — create new items
+
+Before writing SDD items, apply the data structure design philosophy from `../sophist-shared/philosophy.md`:
+
+- What objects does this component's `## Interface` operate on? Name the input and output types explicitly.
+- What intermediate objects does the transformation produce or consume internally?
+- Are any objects owned by this component that callers should never access directly?
+
+Let these answers sharpen the `## Signature` (input/output types) and `## Variables` (intermediate objects) for each SDD item. If the input or output type of a function cannot be named clearly, add a `### Review needed` — the design is not ready to specify at this level.
 
 Create the corresponding SDD and UT items. Read `references/cascade.md` for templates and the full process.
 
