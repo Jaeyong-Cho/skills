@@ -27,7 +27,7 @@ Read before starting:
 - **Step 3**: For each answered item — incorporate `#### Answer` content into Signature, Algorithm, Variables, Error cases, or Side effects; remove the `### Review needed` section; accept removed sections as-is.
   - When an answer changes an algorithm step, rewrite that specific step clearly. Keep the algorithm numbered and concrete — the SDD must remain implementable without guessing after your edits.
   - If an answer reveals the algorithm is more complex than first written, update algorithm steps, variables, and side effects to reflect that accurately.
-  - Apply the data structure design philosophy from `../sophist-shared/philosophy.md`: verify that `## Signature` names real input/output object types, and `## Variables` names the intermediate objects the transformation produces. If the function's input or output is still unclear after applying the answer, add a targeted `### Review needed` rather than leaving the type implicit.
+  - Apply the data structure design philosophy from `../sophist-shared/philosophy.md`: design the output first — does `## Signature` name the return type with its fields listed? Does `## Variables` name the intermediate objects assembled into that output? Does each error path have a named return type? If the output type is still unnamed after applying the answer, add a targeted `### Review needed` rather than leaving it implicit.
 
 **Refactoring signal**: After applying answers, scan the full SDD item list for repeated algorithm patterns:
 

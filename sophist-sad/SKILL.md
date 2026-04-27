@@ -94,11 +94,12 @@ If no debugger SRS item exists at all, skip this — it means runtime observabil
 
 Before writing SDD items, apply the data structure design philosophy from `../sophist-shared/philosophy.md`:
 
-- What objects does this component's `## Interface` operate on? Name the input and output types explicitly.
-- What intermediate objects does the transformation produce or consume internally?
-- Are any objects owned by this component that callers should never access directly?
+For each function in the SAD component's `## Interface`:
+- What is the **exact type name** of its return value? Name every field in that type.
+- Which fields in the output come directly from independent objects, and which are derived?
+- What does the function return on **each error path**? Name that type too.
 
-Let these answers sharpen the `## Signature` (input/output types) and `## Variables` (intermediate objects) for each SDD item. If the input or output type of a function cannot be named clearly, add a `### Review needed` — the design is not ready to specify at this level.
+Design the output type first, then let it drive `## Signature` (return type) and `## Variables` (the intermediate objects assembled into the output). If a function's return type cannot be named with its fields listed, add a `### Review needed` — do not proceed to SDD until the output is defined.
 
 Create the corresponding SDD and UT items. Read `references/cascade.md` for templates and the full process.
 

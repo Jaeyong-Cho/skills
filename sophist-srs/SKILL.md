@@ -101,11 +101,11 @@ Run the full sophist-refact workflow. When it completes, resume creating SAD ite
 
 Before writing the SAD item, apply the data structure design philosophy from `../sophist-shared/philosophy.md`:
 
-- What objects does this requirement operate on? Identify the independent data entities involved.
-- What relations exist between those objects?
-- What transformation does the required behaviour perform — what comes in, what comes out?
+- What is the **name** of what this component produces? Give the output object a concrete type name.
+- Which independent data entities does this requirement involve, and which of them appear in the output?
+- What does the component produce on failure — a separate error object, or a status field on the success object?
 
-Let these answers shape the component's `## Responsibility` (what objects it owns) and `## Interface` (what objects it receives and produces). If the objects or their relations are unclear, add a `### Review needed` before continuing.
+Design the output object first, then let it drive the component's `## Interface` (return type) and `## Responsibility` (the transformation). If the output type cannot be named, add a `### Review needed` before continuing.
 
 Create the corresponding SAD and SIT items. Read `references/cascade.md` for templates and the full process.
 
