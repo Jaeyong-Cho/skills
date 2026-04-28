@@ -75,6 +75,7 @@ Read the full journal (today + context days) and identify knowledge worth preser
 - A design decision and the reasoning behind it
 - A research finding, mental model, or concept that clarified something
 - A recurring workflow or setup step worth referencing again
+- An insight — an observation, hypothesis, or "aha" moment about a system, domain, or approach, even if not yet proven. Insights are valuable even when tentative; record them with their context and reasoning so they can be revisited later.
 
 **Skip** things that are obvious, ephemeral, or already well-documented in the wiki.
 
@@ -100,7 +101,8 @@ For each piece of knowledge worth saving:
 ```
 
 Tag guidelines:
-- Use specific, reusable tags: `#rust`, `#debugging`, `#ml`, `#architecture`, `#research`, `#devops`
+- Use specific, reusable tags: `#rust`, `#debugging`, `#ml`, `#architecture`, `#research`, `#devops`, `#insight`
+- Use `#insight` for observations, hypotheses, and "aha" moments that may evolve over time
 - 2–5 tags per entry is typical
 - Prefer existing tags over inventing new ones (scan existing wiki files for established tags)
 
