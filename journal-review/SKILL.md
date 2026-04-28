@@ -1,33 +1,35 @@
 ---
 name: journal-review
 description: |
-  End-of-day review for a markdown knowledge base. Reads today's journal, writes a report section (achievements + next-work plan), extracts valuable knowledge to wiki/, updates SUMMARY.md, and suggests a git commit message. Use at the end of each work day for software development or research work.
-  Triggers: "end of day", "daily review", "review today", "journal review", "wrap up today", "end of work", "도 review", or any request to summarize today's journal and plan tomorrow.
+  End-of-day review for a markdown knowledge base. Reads today.md, writes a report section (achievements + next-work plan), renames it to Journal/YYYY/MM-DD.md, creates a fresh today.md pre-filled with tomorrow's plan, extracts valuable knowledge to wiki/, updates SUMMARY.md, and suggests a git commit message. Use at the end of each work day for software development or research work.
+  Triggers: "end of day", "daily review", "review today", "journal review", "wrap up today", "end of work", or any request to summarize today's journal and plan tomorrow.
 ---
 
 # journal-review: End-of-Day Review
 
-**Goal**: Turn today's freeform diary into a structured report, save reusable knowledge to the wiki, and hand the user a ready-to-use commit message.
+**Goal**: Turn `today.md` into a structured report, archive it as a dated journal entry, save reusable knowledge to the wiki, seed tomorrow's `today.md` with the next-work plan, and hand the user a ready-to-use commit message.
 
 ---
 
 ## Step 1: Find today's journal
 
-Determine today's date and locate `Journal/YYYY/MM-DD.md`. If the file doesn't exist, tell the user and stop — there is nothing to review.
+Look for `today.md` in the repo root. If it doesn't exist, tell the user and stop — there is nothing to review.
+
+Determine today's date for the archive path: `Journal/YYYY/MM-DD.md`.
 
 ---
 
 ## Step 2: Gather context
 
-1. Read today's journal entry in full.
-2. Find and read the **N most recent** previous journal files (default N=5). Scan `Journal/` recursively, sort by filename (YYYY/MM-DD lexicographic order), take the N entries before today. If the user specifies a different N in their message (e.g., "look back 7 days"), use that instead.
+1. Read `today.md` in full.
+2. Find and read the **N most recent** archived journal files (default N=5). Scan `Journal/` recursively, sort by filename (YYYY/MM-DD lexicographic order), take the N most recent. If the user specifies a different N (e.g., "look back 7 days"), use that instead.
 3. Read all existing wiki files in `wiki/` — just their filenames and first few lines — to avoid creating duplicate entries.
 
 ---
 
 ## Step 3: Write the Daily Report section
 
-Append the following section **at the end of today's journal file**. Do not rewrite or modify anything above it.
+Append the following section **at the end of `today.md`**. Do not rewrite or modify anything above it.
 
 ```markdown
 ---
@@ -59,6 +61,8 @@ Append the following section **at the end of today's journal file**. Do not rewr
 ```
 
 Fill each section with real content — don't leave placeholders. The plan should be specific enough that the user can start tomorrow without re-reading everything.
+
+If `today.md` already has a `## Daily Report` section (skill ran twice), overwrite only that section rather than appending a second one.
 
 ---
 
@@ -104,11 +108,30 @@ If a wiki entry for this topic already exists, **update it** rather than creatin
 
 ---
 
-## Step 5: Update SUMMARY.md
+## Step 5: Archive today.md and seed tomorrow
 
-After creating or updating wiki entries, update `SUMMARY.md` so mdbook can render them.
+1. Create the year directory if needed: `Journal/YYYY/`
+2. Move (rename) `today.md` → `Journal/YYYY/MM-DD.md`
+3. Create a fresh `today.md` in the repo root with only the next-work plan pre-filled:
 
-- Add today's journal under the Journal section if not already listed:
+```markdown
+<!-- today: YYYY-MM-DD -->
+<!-- Write freely below. No format required. -->
+
+## Plan
+
+<copy the Next Work Plan items from the archived report here>
+```
+
+The plan at the top of `today.md` gives a clear starting point for the next work session. The user can edit or ignore it — it's a prompt, not a constraint.
+
+---
+
+## Step 6: Update SUMMARY.md
+
+Update `SUMMARY.md` so mdbook can render the new archived entry and any new wiki entries.
+
+- Add the archived journal under the Journal section:
   ```markdown
   - [YYYY-MM-DD](Journal/YYYY/MM-DD.md)
   ```
@@ -121,7 +144,7 @@ Keep both sections sorted — journals by date descending, wiki alphabetically b
 
 ---
 
-## Step 6: Show the commit message
+## Step 7: Show the commit message
 
 Print a suggested git commit message. Do **not** run `git commit` — just show the message for the user to copy.
 
@@ -145,7 +168,7 @@ journal: 2026-01-15 — implemented JWT auth and debugged token expiry edge case
 
 ## Notes
 
-- The report section is the only thing appended to the journal — never modify the original diary text.
-- If today's journal already has a `## Daily Report` section (ran twice by mistake), overwrite only that section rather than appending a second one.
-- For research days with no code: the plan should reference papers, experiments, or analysis tasks — not code tasks.
+- Never modify the original diary text — only append the report section.
+- For research days with no code: the plan should reference papers, experiments, or analysis tasks.
 - Mermaid diagrams in wiki entries are rendered by mdbook-mermaid. Use them when a visual adds real clarity (flows, state machines, architecture). Don't use them just to have a diagram.
+- After a vacation (gap in journal dates), the skill still works — it just finds the last N archived entries as context regardless of how far back they are.

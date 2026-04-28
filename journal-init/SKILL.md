@@ -30,6 +30,7 @@ If `cargo` is not available, tell the user:
 <repo-root>/
 ├── book.toml
 ├── SUMMARY.md
+├── today.md
 ├── Journal/
 │   └── README.md
 └── wiki/
@@ -103,9 +104,23 @@ chore: initialize knowledge base with mdbook structure
 
 ---
 
+## Step 5b: Write today.md
+
+Create `today.md` at the repo root with this starter content:
+
+```markdown
+<!-- today: YYYY-MM-DD -->
+<!-- Write freely below. No format required. -->
+
+```
+
+Fill in the actual date.
+
+---
+
 ## Step 7: Tell the user what's next
 
 > Knowledge base initialized.  
-> - Write today's journal at `Journal/YYYY/MM-DD.md` (freeform — no required format).  
-> - At the end of the day, run `/journal-review` to generate the report, extract wiki entries, and get a commit message.  
+> - Write freely in `today.md` throughout the day — no format required.  
+> - At the end of the day, run `/journal-review` to generate the report, archive today.md, seed tomorrow's plan, and get a commit message.  
 > - Run `mdbook serve` anytime to preview the book in your browser.
