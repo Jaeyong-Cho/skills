@@ -23,7 +23,7 @@ Determine today's date for the archive path: `Journal/YYYY/MM-DD.md`.
 
 1. Read `today.md` in full.
 2. Find and read the **N most recent** archived journal files (default N=5). Scan `Journal/` recursively, sort by filename (YYYY/MM-DD lexicographic order), take the N most recent. If the user specifies a different N (e.g., "look back 7 days"), use that instead.
-3. Read all existing wiki files in `wiki/` — just their filenames and first few lines — to avoid creating duplicate entries.
+3. Read **all** existing wiki files in `wiki/` fully — you need their content and tags for two purposes: avoiding duplicate entries, and finding related entries to surface in the report.
 
 ---
 
@@ -43,9 +43,16 @@ Append the following section **at the end of `today.md`**. Do not rewrite or mod
 
 - ...
 
+### Related Knowledge
+
+<!-- Wiki entries whose tags overlap with today's topics — useful references for the work done or planned -->
+<!-- Format: [title](../wiki/slug.md) — why it's relevant -->
+
+- ...  *(none if no matches)*
+
 ### Knowledge Saved
 
-<!-- List any wiki entries created or updated in this session -->
+<!-- Wiki entries created or updated in this session -->
 <!-- Format: [title](../wiki/slug.md) — one-line summary -->
 
 - ...  *(none if nothing was saved)*
@@ -61,6 +68,8 @@ Append the following section **at the end of `today.md`**. Do not rewrite or mod
 ```
 
 Fill each section with real content — don't leave placeholders. The plan should be specific enough that the user can start tomorrow without re-reading everything.
+
+**For Related Knowledge**: infer the key topics/tags from today's journal (e.g., a day about Rust async maps to `#rust`, `#async`), then find wiki entries that carry any of those tags. Include only entries that are genuinely relevant — not every tag match, but the ones a reader would actually want to revisit given today's work.
 
 If `today.md` already has a `## Daily Report` section (skill ran twice), overwrite only that section rather than appending a second one.
 
