@@ -23,7 +23,7 @@ Determine today's date for the archive path: `Journal/YYYY/MM-DD.md`.
 
 1. Read `today.md` in full.
 2. Find and read the **N most recent** archived journal files (default N=5). Scan `Journal/` recursively, sort by filename (YYYY/MM-DD lexicographic order), take the N most recent. If the user specifies a different N (e.g., "look back 7 days"), use that instead.
-3. Read **all** existing wiki files in `wiki/` fully — you need their content and tags for two purposes: avoiding duplicate entries, and finding related entries to surface in the report.
+3. Infer the key tags for today's work from the journal content (e.g., a day debugging Rust async → `#rust`, `#async`, `#debugging`). Then scan wiki files for those tags — read only the first few lines of each wiki file (title + tag line) to check for matches, and fully read only the files whose tags overlap. This keeps context lean while still surfacing relevant entries.
 
 ---
 
@@ -86,7 +86,7 @@ Read the full journal (today + context days) and identify knowledge worth preser
 - A recurring workflow or setup step worth referencing again
 - An insight — an observation, hypothesis, or "aha" moment about a system, domain, or approach, even if not yet proven. Insights are valuable even when tentative; record them with their context and reasoning so they can be revisited later.
 
-**Skip** things that are obvious, ephemeral, or already well-documented in the wiki.
+**Skip** things that are obvious, ephemeral, or already covered — check filenames and the tag-matched files you already read before creating a new entry.
 
 For each piece of knowledge worth saving:
 
