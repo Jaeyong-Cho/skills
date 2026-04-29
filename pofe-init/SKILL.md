@@ -105,7 +105,7 @@ command = "mdbook-mermaid"
 ### (Topic)
 - [ ] Long-running task *(High)* *(bg)* — rationale *(→ Weekly: deliverable name)*
   - [ ] Sub-step one
-- [ ] Specific action *(High)* — why this action completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+- [ ] Specific action *(High)* *(ai: how AI helps here)* — why this action completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
   - [ ] Sub-step one
   - [ ] Sub-step two
 - [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
@@ -129,6 +129,12 @@ command = "mdbook-mermaid"
 |------|----------|------------|-------------|
 
 ## Insights
+
+_Not enough data yet._
+
+## Automation Candidates
+
+_Not enough data yet._
 
 *Last updated: YYYY-MM-DD*
 ```

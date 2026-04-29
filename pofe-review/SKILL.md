@@ -240,15 +240,37 @@ Keep rows sorted by `Est. Hours` descending — most time-consuming type first.
 
 **4. Update Insights.**
 
-After updating the table, rewrite the `## Insights` section with observations derived from the current numbers:
+Rewrite the `## Insights` section with observations derived from the current numbers:
 - Which type has consumed the most total time
 - Which type appears most frequently (highest Sessions)
-- Any notable ratio (e.g., "3× more time in experiment than implementation")
-- Any trend if recent sessions suggest a shift
+- Work effectiveness ratio: hours in high-value types (research, implementation, experiment) vs overhead types (devops, meeting, review, writing). Flag if overhead exceeds 30% of total.
+- Any notable ratio or trend if recent sessions suggest a shift
 
 Overwrite the previous Insights — it should always reflect the current totals, not accumulate stale notes.
 
-**5. Update the `Last updated` date.**
+**5. Update Automation Candidates.**
+
+Rewrite the `## Automation Candidates` section. For each type where the data suggests time or attention is being spent on repetitive, low-value, or scriptable work, write one bullet:
+
+```
+- TypeName (Xh, N sessions) — what specifically could be automated or made faster — concrete suggestion
+```
+
+Use these heuristics to identify candidates:
+
+| Signal | What it suggests |
+|--------|-----------------|
+| `devops` with many sessions and low hours each | repetitive manual setup steps → write scripts or use a Makefile |
+| `debugging` with high total hours | insufficient logging or test coverage → add structured logs, increase test coverage |
+| `review` with many sessions | checklist-driven work → automate with linters, formatters, or review templates |
+| `experiment` with many sessions | manual trial setup → parameterize and script experiment runs |
+| `writing` with many sessions | recurring doc patterns → create templates |
+| `meeting` with high hours relative to implementation | scheduling overhead or lack of async → consider async updates |
+| any type where hours/session is low but sessions are high | frequent context-switching → batch similar work into blocks |
+
+Only include types where the data actually supports the signal. Skip types with fewer than 3 sessions — not enough data. If no candidates exist yet, write `_Not enough data yet._`.
+
+**6. Update the `Last updated` date.**
 
 ```markdown
 # Work Statistics
@@ -260,12 +282,20 @@ Overwrite the previous Insights — it should always reflect the current totals,
 | experiment | 14 | 42.0 | 2026-04-30 |
 | research | 20 | 38.5 | 2026-04-29 |
 | implementation | 10 | 18.0 | 2026-04-28 |
+| debugging | 8 | 12.0 | 2026-04-27 |
+| devops | 6 | 4.5 | 2026-04-25 |
 
 ## Insights
 
-- Most time consumed: experiment (42h across 14 sessions, ~3h/session avg)
+- Most time consumed: experiment (42h, ~3h/session avg)
 - Most frequent: research (20 sessions)
-- research vs implementation ratio: 2:1 by sessions, consistent over time
+- Effectiveness ratio: 93.5h high-value (research + experiment + implementation) vs 16.5h overhead (debugging + devops) — 85% high-value
+- research vs implementation: 2:1 by sessions; may need more implementation time to apply findings
+
+## Automation Candidates
+
+- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks suggest manual steps that repeat → write a Makefile or setup script to reduce per-session friction
+- debugging (12h, 8 sessions) — high total hours suggest observability gaps → add structured logging at key decision points and expand test coverage for failure-prone paths
 
 *Last updated: 2026-04-30*
 ```
@@ -314,6 +344,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
    - Respect topic structure and high→medium→low order
    - **Each task must include a rationale** — one phrase explaining why this action matters and which weekly deliverable it advances. Carry rationale forward from the weekly goal when available; write new rationale when breaking a task down further.
    - **Background tasks**: mark any long-running independent task with `*(bg)*` and place it first within its topic. Also list it under `> Trigger first` at the top of Goals so it gets started immediately.
+   - **AI leverage**: for each task, consider whether AI assistance would meaningfully accelerate it. If yes, add `*(ai)*` after the priority annotation and append a brief note on how — e.g., `*(ai: draft the lit review section)*`, `*(ai: generate boilerplate, you review)*`, `*(ai: suggest debugging hypotheses)*`. Only add `*(ai)*` where it genuinely saves time; skip for tasks that require your own judgment or domain knowledge exclusively.
 
 ```markdown
 <!-- today: YYYY-MM-DD -->
@@ -328,7 +359,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 ### (Topic)
 - [ ] Long-running task *(High)* *(bg)* — rationale *(→ Weekly: deliverable name)*
   - [ ] Sub-step one
-- [ ] Specific action *(High)* — why this completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+- [ ] Specific action *(High)* *(ai: how AI helps here)* — why this completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
   - [ ] Sub-step one
   - [ ] Sub-step two
 - [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
