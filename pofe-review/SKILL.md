@@ -7,16 +7,23 @@ description: |
 
 # pofe-review: End-of-Day Review
 
-**Goal**: Close the day — assess progress against goals, grow the knowledge base, update achievement archive, analyze work patterns, and hand off a clean starting point for tomorrow.
+**Goal**: Close the day — assess progress against the full goal hierarchy, adjust goals based on what was learned, grow the knowledge base, update achievement archive, analyze work patterns, and hand off a clean starting point for tomorrow.
 
 ---
 
-## Step 1: Load today's files
+## Step 1: Load today's files and full goal hierarchy
 
 1. Find `today.md` in the repo root. If missing, stop and tell the user.
 2. Determine today's date (from the `<!-- today: YYYY-MM-DD -->` comment, or current date).
-3. Load `goals/YYYY/goal-MM-DD.md` (today's goal file). If missing, note that no goal was set for today.
+3. Load the **full goal hierarchy** — all of these files:
+   - `goals/goal.md` (total/lifetime)
+   - `goals/YYYY/goal.md` (yearly)
+   - `goals/YYYY/goal-MM.md` (monthly)
+   - `goals/YYYY/goal-MM-WNN.md` (weekly)
+   - `goals/YYYY/goal-MM-DD.md` (today — note if missing)
 4. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
+
+Reading the full hierarchy is essential — the next-day plan and goal adjustments must stay aligned with the bigger picture, not just today's leftover tasks.
 
 ---
 
@@ -63,17 +70,37 @@ Fill every section with real content. The Next Work Plan should be specific enou
 
 ---
 
-## Step 4: Mark goal progress
+## Step 4: Update and adjust the full goal hierarchy
 
+### 4a — Mark today's goal progress
 Update `goals/YYYY/goal-MM-DD.md`:
 - Check off completed tasks: `- [x]`
 - Add `*(partial)*` or `*(skipped)*` annotations to incomplete ones
 
-Then propagate upward:
+### 4b — Propagate completions upward
 - `goals/YYYY/goal-MM-WNN.md` — check off tasks completed this week (across all daily goals this week)
 - `goals/YYYY/goal-MM.md` — same for month
+- `goals/YYYY/goal.md` — same for year
 
-Only mark a weekly/monthly task done if it's fully achieved, not just started.
+Only mark a higher-level task done if fully achieved, not just started.
+
+### 4c — Adjust goals based on journal insights
+
+Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them:
+
+- **New goal discovered**: something in the journal points to a direction or objective not yet captured → add it to the appropriate level (weekly/monthly/yearly)
+- **Goal no longer relevant**: a task or direction became obsolete based on what happened → mark it `*(dropped)*` with a brief reason
+- **Goal needs splitting**: a task turned out much larger than expected → break it into sub-tasks at the daily/weekly level
+- **Goal needs re-prioritizing**: the journal shows a shift in what matters most → reorder tasks within their topic section (high stays at top)
+- **Blocked goal**: a dependency was not resolved → add `*(blocked: reason)*` annotation
+
+Apply changes to whichever goal file is the right scope — don't push everything to the daily file. A strategic change belongs in the monthly or yearly goal; a tactical one belongs in the weekly or daily.
+
+After adjusting, write a brief **Goal Adjustment Log** entry at the bottom of each modified goal file:
+```markdown
+## Adjustment Log
+- YYYY-MM-DD — <what changed> — <why, inferred from journal>
+```
 
 ---
 
@@ -173,7 +200,11 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 (paste Next Work Plan tasks here)
 ```
 
-4. Create `goals/YYYY/goal-MM-DD.md` for tomorrow, pre-populated from the Next Work Plan:
+4. Create `goals/YYYY/goal-MM-DD.md` for tomorrow. Seed it from the **full goal hierarchy** — not just today's leftovers:
+   - Start with uncompleted High tasks from the weekly goal that haven't appeared in recent daily goals yet
+   - Add uncompleted tasks carried over from today
+   - Pull in anything from the monthly goal that is due this week
+   - Respect the topic structure and high→medium→low ordering within each topic
 
 ```markdown
 # YYYY-MM-DD
@@ -189,7 +220,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 ## Adjustment Log
 ```
 
-Compute the correct weekly file link for tomorrow's date. If tomorrow crosses into a new week, create the new `goal-MM-WNN.md` for that week as well (seeded from the monthly goal's remaining tasks).
+Compute the correct weekly file link for tomorrow's date. If tomorrow crosses into a new week, create the new `goal-MM-WNN.md` seeded from the monthly goal's remaining tasks and the yearly goal's priorities for this period.
 
 ---
 
