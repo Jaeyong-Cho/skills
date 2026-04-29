@@ -26,29 +26,30 @@ If `cargo` is not available:
 
 ## Step 2: Create directory structure
 
+Daily goals live inside `today.md` — not as separate files. `goals/` holds weekly and above only.
+
 ```
 <repo-root>/
 ├── book.toml
 ├── SUMMARY.md
-├── today.md
+├── today.md              # daily journal + daily goal at top
 ├── patterns.md
 ├── Journal/
 │   └── README.md
 ├── wiki/
 │   └── README.md
 ├── goals/
-│   ├── goal.md                    # overall/lifetime goals
+│   ├── goal.md           # overall/lifetime goals
 │   └── YYYY/
-│       ├── goal.md                # yearly
-│       ├── goal-MM.md             # monthly
-│       ├── goal-MM-WNN.md         # weekly
-│       └── goal-MM-DD.md          # daily
+│       ├── goal.md       # yearly
+│       ├── goal-MM.md    # monthly
+│       └── goal-MM-WNN.md # weekly
 └── archive/
-    ├── archive.md                 # all-time achievements
+    ├── archive.md
     └── YYYY/
-        ├── archive.md             # yearly
-        ├── archive-MM.md          # monthly
-        └── archive-MM-WNN.md      # weekly
+        ├── archive.md
+        ├── archive-MM.md
+        └── archive-MM-WNN.md
 ```
 
 Add `book/` to `.gitignore`.
@@ -90,9 +91,22 @@ command = "mdbook-mermaid"
 
 ## Step 5: Create seed files
 
-**today.md** — fill in today's actual date:
+**today.md** — fill in today's actual date and week number:
 ```markdown
 <!-- today: YYYY-MM-DD -->
+
+## Goals
+
+> [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
+
+### (topic)
+- [ ] Task *(High)*
+- [ ] Task *(Medium)*
+
+## Adjustment Log
+
+---
+
 <!-- Write freely below. No format required. -->
 
 ```
@@ -126,6 +140,8 @@ command = "mdbook-mermaid"
 ```markdown
 # YYYY
 
+> [Total](../goal.md)
+
 ## Tasks
 
 ### (topic)
@@ -142,9 +158,11 @@ command = "mdbook-mermaid"
 
 ### (topic)
 - [ ] ...
+
+## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM-WNN.md** (current week, compute WNN from today's date):
+**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date):
 ```markdown
 # YYYY WNN · Mon DD – Sun DD
 
@@ -158,21 +176,18 @@ command = "mdbook-mermaid"
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM-DD.md** (today):
+**archive/archive.md**, **archive/YYYY/archive.md**, **archive/YYYY/archive-MM.md**, **archive/YYYY/archive-MM-WNN.md** — create with empty structure:
 ```markdown
-# YYYY-MM-DD
+# Archive · (period)
 
-> [Monthly](goal-MM.md) · [Weekly](goal-MM-WNN.md)
+## Achievements
 
-## Tasks
+## Goal Completion
+| Goal | Status | Notes |
+|------|--------|-------|
 
-### (topic)
-- [ ] ...
-
-## Adjustment Log
+## Patterns Observed
 ```
-
-**archive/archive.md**, **archive/YYYY/archive.md**, **archive/YYYY/archive-MM.md**, **archive/YYYY/archive-MM-WNN.md** — create with empty structure using the archive format (see pofe-review for format details).
 
 **Journal/README.md**, **wiki/README.md** — brief one-line intro.
 
@@ -196,8 +211,8 @@ chore: initialize POFE knowledge base
 ## Step 7: Tell the user what's next
 
 > POFE initialized.
-> - Write freely in `today.md` throughout the day.
-> - Fill in your goals in `goals/YYYY/goal-MM-DD.md` before starting work.
-> - Run `/pofe-review` at end of day to archive, extract knowledge, and plan tomorrow.
+> - Set your goals in `goals/YYYY/goal-MM-WNN.md` and `goals/YYYY/goal-MM.md`.
+> - Each day, write your daily goals at the top of `today.md`, then journal freely below.
+> - Run `/pofe-review` at end of day to archive, update goals, extract knowledge, and seed tomorrow.
 > - Run `/pofe-adjust` mid-day if priorities change.
 > - Run `mdbook serve` to preview the book.

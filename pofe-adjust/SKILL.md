@@ -13,9 +13,8 @@ description: |
 
 ## Step 1: Load current state
 
-1. Read `today.md` to understand what work has happened so far.
-2. Read `goals/YYYY/goal-MM-DD.md` (today's goal file).
-3. Read the weekly goal `goals/YYYY/goal-MM-WNN.md` for broader context.
+1. Read `today.md` in full — the `## Goals` section at the top is today's goal; the journal below shows what has happened so far.
+2. Read `goals/YYYY/goal-MM-WNN.md` (weekly goal) for broader context.
 
 ---
 
@@ -32,9 +31,9 @@ Infer from the journal what tasks should be added, removed, or re-prioritized, a
 
 ---
 
-## Step 3: Apply the changes to the goal file
+## Step 3: Apply the changes to the Goals section
 
-Update `goals/YYYY/goal-MM-DD.md`:
+Update the `## Goals` section at the top of `today.md`:
 
 - **Re-prioritize**: move tasks within their topic section (high → medium → low order must be maintained)
 - **Add a task**: place it in the correct topic section at the correct priority position; create the topic section if it doesn't exist
@@ -47,7 +46,7 @@ Topic sections within `## Tasks` are organized by subject (e.g., `### Rust`, `##
 
 ## Step 4: Append to the Adjustment Log
 
-Add an entry at the bottom of `## Adjustment Log` in the goal file:
+Add an entry at the bottom of `## Adjustment Log` in `today.md`:
 
 ```markdown
 - HH:MM — <what changed> — <why>

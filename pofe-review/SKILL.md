@@ -15,13 +15,13 @@ description: |
 
 1. Find `today.md` in the repo root. If missing, stop and tell the user.
 2. Determine today's date (from the `<!-- today: YYYY-MM-DD -->` comment, or current date).
-3. Load the **full goal hierarchy** — all of these files:
+3. Read the daily goals from the `## Goals` section at the top of `today.md` — this is the daily goal, not a separate file.
+4. Load the **persistent goal hierarchy**:
    - `goals/goal.md` (total/lifetime)
    - `goals/YYYY/goal.md` (yearly)
    - `goals/YYYY/goal-MM.md` (monthly)
    - `goals/YYYY/goal-MM-WNN.md` (weekly)
-   - `goals/YYYY/goal-MM-DD.md` (today — note if missing)
-4. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
+5. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
 
 Reading the full hierarchy is essential — the next-day plan and goal adjustments must stay aligned with the bigger picture, not just today's leftover tasks.
 
@@ -73,12 +73,12 @@ Fill every section with real content. The Next Work Plan should be specific enou
 ## Step 4: Update and adjust the full goal hierarchy
 
 ### 4a — Mark today's goal progress
-Update `goals/YYYY/goal-MM-DD.md`:
+Update the `## Goals` section in `today.md` (in place, before archiving):
 - Check off completed tasks: `- [x]`
 - Add `*(partial)*` or `*(skipped)*` annotations to incomplete ones
 
 ### 4b — Propagate completions upward
-- `goals/YYYY/goal-MM-WNN.md` — check off tasks completed this week (across all daily goals this week)
+- `goals/YYYY/goal-MM-WNN.md` — check off tasks completed this week
 - `goals/YYYY/goal-MM.md` — same for month
 - `goals/YYYY/goal.md` — same for year
 
@@ -189,38 +189,32 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 
 1. Create `Journal/YYYY/` if needed.
 2. Move `today.md` → `Journal/YYYY/MM-DD.md`.
-3. Create a fresh `today.md`:
+3. Create a fresh `today.md` with tomorrow's daily goals at the top, seeded from the full hierarchy:
+   - Start with uncompleted High tasks from the weekly goal not yet done
+   - Add carried-over tasks from today (partial or skipped)
+   - Pull in monthly goal tasks due this week
+   - Respect topic structure and high→medium→low order
 
 ```markdown
 <!-- today: YYYY-MM-DD -->
-<!-- Write freely below. No format required. -->
 
-## Plan
+## Goals
 
-(paste Next Work Plan tasks here)
-```
-
-4. Create `goals/YYYY/goal-MM-DD.md` for tomorrow. Seed it from the **full goal hierarchy** — not just today's leftovers:
-   - Start with uncompleted High tasks from the weekly goal that haven't appeared in recent daily goals yet
-   - Add uncompleted tasks carried over from today
-   - Pull in anything from the monthly goal that is due this week
-   - Respect the topic structure and high→medium→low ordering within each topic
-
-```markdown
-# YYYY-MM-DD
-
-> [Monthly](goal-MM.md) · [Weekly](goal-MM-WNN.md)
-
-## Tasks
+> [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
 ### (Topic)
 - [ ] Task *(High)*
 - [ ] Task *(Medium)*
 
 ## Adjustment Log
+
+---
+
+<!-- Write freely below. No format required. -->
+
 ```
 
-Compute the correct weekly file link for tomorrow's date. If tomorrow crosses into a new week, create the new `goal-MM-WNN.md` seeded from the monthly goal's remaining tasks and the yearly goal's priorities for this period.
+If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for that week, seeded from the monthly goal's remaining tasks and the yearly goal's priorities for this period.
 
 ---
 
