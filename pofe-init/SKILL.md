@@ -91,7 +91,7 @@ command = "mdbook-mermaid"
 
 ## Step 5: Create seed files
 
-**today.md** — daily goal at top: granular, actionable steps executable today. Each task should be a single concrete action, not a vague objective. Fill in today's actual date.
+**today.md** — daily goal at top: single concrete actions executable today. Each task states which weekly deliverable it fulfills and why doing it today is the right move.
 ```markdown
 <!-- today: YYYY-MM-DD -->
 
@@ -100,8 +100,8 @@ command = "mdbook-mermaid"
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
 ### (Topic)
-- [ ] Specific action — e.g. "implement X function", "read section 3.2", "fix bug in Y" *(High)*
-- [ ] Specific action *(Medium)*
+- [ ] Specific action *(High)* — why this action completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+- [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
 
 ## Adjustment Log
 
@@ -137,19 +137,19 @@ command = "mdbook-mermaid"
 **Effect**: ...
 ```
 
-**goals/YYYY/goal.md** (current year) — major milestones that move each total goal forward this year. Outcomes, not tasks.
+**goals/YYYY/goal.md** (current year) — major milestones that move each total goal forward this year. Each milestone states what success looks like and why it matters toward the total goal.
 ```markdown
 # YYYY
 
 > [Total](../goal.md)
 
 ## (Topic)
-- [ ] Milestone — what success looks like by year end *(→ Total: Goal Title)*
+- [ ] Milestone description — why this milestone matters for the total goal *(→ Total: Goal Title)*
 
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM.md** (current month) — concrete objectives measurable within a month. More specific than yearly milestones.
+**goals/YYYY/goal-MM.md** (current month) — concrete objectives measurable within a month. Each task states which yearly milestone it advances and why it is the right step now.
 ```markdown
 # YYYY-MM
 
@@ -158,13 +158,13 @@ command = "mdbook-mermaid"
 ## Tasks
 
 ### (Topic)
-- [ ] Concrete objective *(High)*
-- [ ] Concrete objective *(Medium)*
+- [ ] Concrete objective *(High)* — why this month's work moves the yearly milestone forward *(→ Yearly: milestone name)*
+- [ ] Concrete objective *(Medium)* — rationale *(→ Yearly: milestone name)*
 
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date) — specific deliverables for this week. Each task should be completable in 1–3 days.
+**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date) — specific deliverables completable in 1–3 days. Each task explains which monthly objective it serves and why it is the right piece this week.
 ```markdown
 # YYYY WNN · Mon DD – Sun DD
 
@@ -173,8 +173,8 @@ command = "mdbook-mermaid"
 ## Tasks
 
 ### (Topic)
-- [ ] Specific deliverable *(High)*
-- [ ] Specific deliverable *(Medium)*
+- [ ] Specific deliverable *(High)* — why this deliverable advances the monthly objective *(→ Monthly: objective name)*
+- [ ] Specific deliverable *(Medium)* — rationale *(→ Monthly: objective name)*
 
 ## Adjustment Log
 ```

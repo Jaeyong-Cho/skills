@@ -203,6 +203,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
    - Add carried-over tasks from today (partial or skipped)
    - Pull in monthly goal tasks due this week
    - Respect topic structure and high→medium→low order
+   - **Each task must include a rationale** — one phrase explaining why this action matters and which weekly deliverable it advances. Carry rationale forward from the weekly goal when available; write new rationale when breaking a task down further.
 
 ```markdown
 <!-- today: YYYY-MM-DD -->
@@ -212,8 +213,8 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
 ### (Topic)
-- [ ] Task *(High)*
-- [ ] Task *(Medium)*
+- [ ] Specific action *(High)* — why this completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+- [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
 
 ## Adjustment Log
 
