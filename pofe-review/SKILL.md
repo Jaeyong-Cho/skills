@@ -1,7 +1,7 @@
 ---
 name: pofe-review
 description: |
-  End-of-day review for the POFE knowledge base. Reads today.md and today's goal file, writes a structured daily report, marks goal progress, propagates completions to weekly/monthly goals, extracts wiki entries and insights, updates work patterns, archives today.md, seeds tomorrow's goal and today.md with the next plan, and suggests a git commit message.
+  End-of-day review for the POFE knowledge base. Reads today.md and today's goal file, writes a structured daily report, marks goal progress, propagates completions to weekly/monthly goals, extracts wiki entries and insights, updates work statistics, archives today.md, seeds tomorrow's goal and today.md with the next plan, and suggests a git commit message.
   Triggers: "end of day", "daily review", "review today", "pofe review", "wrap up today", "end of work", or any request to summarize today's journal and plan tomorrow.
 ---
 
@@ -199,14 +199,76 @@ Update existing entries rather than creating duplicates — add new learnings in
 
 ---
 
-## Step 6: Update work patterns
+## Step 6: Update work statistics
 
-Read `patterns.md`. Based on today's journal and goal file:
+Read `stats.md`. Based on today's journal:
 
-1. Identify the work category (e.g., `debugging`, `research`, `implementation`, `reading`, `writing`, `review`, `meeting`, `devops`). Infer from content — a day spent fixing bugs is `debugging`, reading papers is `research`, etc. Multiple categories are fine.
-2. Increment the count for each matched category in the frequency table.
-3. If a pattern or automation opportunity becomes apparent (e.g., debugging has been the top category for 5+ days), add an entry under Automation Opportunities or Insights.
-4. Update the `Last updated` date.
+**1. Classify today's work into types.**
+
+Standard types — use these before inventing new ones:
+
+| Type | What counts |
+|------|-------------|
+| `research` | reading papers, exploring new tools/techniques, literature review |
+| `implementation` | writing new code, building features |
+| `debugging` | fixing bugs, diagnosing failures, investigating unexpected behavior |
+| `experiment` | running trials, training models, evaluating results |
+| `writing` | documentation, reports, notes, planning docs |
+| `review` | code review, reading others' code, PR feedback |
+| `devops` | CI/CD, infra, deployment, environment setup |
+| `meeting` | sync, discussion, pair work |
+| `reading` | books, articles, non-paper content |
+
+A day may have multiple types. Assign each type that had meaningful time today.
+
+**2. Estimate hours per type.**
+
+Scan the journal for explicit time mentions (`"spent 2h"`, `"all morning"`, `"quick 30 min"`). Use those directly. For types with no explicit mention, estimate proportionally: divide the working day (assume ~6h if no total is mentioned) across the types based on how much journal content describes each.
+
+Round to the nearest 0.5h. Record `~` prefix when estimated (e.g., `~2.0`).
+
+**3. Update `stats.md`.**
+
+For each type active today:
+- Increment `Sessions` by 1
+- Add today's hours to `Est. Hours`
+- Update `Last Active` to today's date
+
+Create a new row if the type doesn't exist yet.
+
+Keep rows sorted by `Est. Hours` descending — most time-consuming type first.
+
+**4. Update Insights.**
+
+After updating the table, rewrite the `## Insights` section with observations derived from the current numbers:
+- Which type has consumed the most total time
+- Which type appears most frequently (highest Sessions)
+- Any notable ratio (e.g., "3× more time in experiment than implementation")
+- Any trend if recent sessions suggest a shift
+
+Overwrite the previous Insights — it should always reflect the current totals, not accumulate stale notes.
+
+**5. Update the `Last updated` date.**
+
+```markdown
+# Work Statistics
+
+## By Type
+
+| Type | Sessions | Est. Hours | Last Active |
+|------|----------|------------|-------------|
+| experiment | 14 | 42.0 | 2026-04-30 |
+| research | 20 | 38.5 | 2026-04-29 |
+| implementation | 10 | 18.0 | 2026-04-28 |
+
+## Insights
+
+- Most time consumed: experiment (42h across 14 sessions, ~3h/session avg)
+- Most frequent: research (20 sessions)
+- research vs implementation ratio: 2:1 by sessions, consistent over time
+
+*Last updated: 2026-04-30*
+```
 
 ---
 

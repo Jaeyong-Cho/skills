@@ -81,7 +81,7 @@ command = "mdbook-mermaid"
 - [Goals](goals/goal.md)
 - [Journal](Journal/README.md)
 - [Wiki](wiki/README.md)
-- [Patterns](patterns.md)
+- [Stats](stats.md)
 - [Archive](archive/archive.md)
 ```
 
@@ -119,15 +119,14 @@ command = "mdbook-mermaid"
 
 ```
 
-**patterns.md**:
+**stats.md**:
 ```markdown
-# Work Patterns
+# Work Statistics
 
-## Category Frequency
-| Category | Total | Last 30d | Trend |
-|----------|-------|----------|-------|
+## By Type
 
-## Automation Opportunities
+| Type | Sessions | Est. Hours | Last Active |
+|------|----------|------------|-------------|
 
 ## Insights
 
