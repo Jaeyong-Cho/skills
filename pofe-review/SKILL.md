@@ -11,6 +11,20 @@ description: |
 
 ---
 
+## Source of Truth
+
+**The human's journal text is always correct. Everything else is an AI inference that may be wrong.**
+
+When the journal conflicts with a goal file, wiki entry, archive, or report — the journal wins. Correct the other file, not the journal. Specifically:
+
+- If the journal describes work that contradicts a goal's stated direction → update the goal to match reality.
+- If the journal says a task is done but the goal file says it isn't (or vice versa) → trust the journal.
+- If the journal reveals that a wiki entry contains an error or outdated information → correct the wiki entry.
+- If the journal describes a different scope, priority, or outcome than what the goal files assumed → update the goal files.
+- Never silently ignore a mismatch. Either fix it or leave a note explaining the discrepancy.
+
+---
+
 ## Step 1: Load today's files and full goal hierarchy
 
 1. Find `today.md` in the repo root. If missing, stop and tell the user.
@@ -113,9 +127,11 @@ Update the `## Goals` section in `today.md` (in place, before archiving):
 
 Only mark a higher-level task done if fully achieved, not just started.
 
-### 4c — Adjust goals based on journal insights
+### 4c — Reconcile and adjust goals based on journal
 
-Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them. When deciding which level to update, respect each level's scope:
+**First, reconcile**: compare the journal with each loaded goal file. Look for mismatches — tasks marked in the wrong state, goals that describe a direction the journal contradicts, scope that no longer reflects what is actually being worked on. Fix every mismatch in favor of the journal. Log each correction in the Adjustment Log with `*(reconciled: reason)*`.
+
+Then adjust for new insights. Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them. When deciding which level to update, respect each level's scope:
 
 | Level | Scope | Contains |
 |-------|-------|----------|
@@ -154,6 +170,8 @@ Identify knowledge worth preserving — good candidates:
 - An insight — an observation, hypothesis, or "aha" moment, even if tentative
 
 Skip obvious or ephemeral things. Check filenames and tag-matched files already loaded before creating a new entry.
+
+**Reconcile existing entries**: if a loaded wiki entry conflicts with what the journal says — wrong technique, outdated approach, incorrect conclusion — correct the wiki entry to match the journal. Note the correction with `*Updated: YYYY-MM-DD — reason*` at the bottom of the entry.
 
 **Wiki entry format** (`wiki/<slug>.md`):
 ```markdown

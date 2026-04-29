@@ -20,12 +20,15 @@ description: |
 
 ## Step 2: Derive the adjustment from today.md
 
+**The journal is the source of truth.** The human's written notes are always correct. The goal files are AI inferences that may not match reality. When the journal and a goal file disagree, correct the goal file — never ignore the discrepancy.
+
 The reason for the adjustment is already written in `today.md` — read it to understand what happened and why the plan needs to change. Look for:
 - A blocker or unexpected problem encountered
 - A new urgent task that came up
 - A task that turned out larger or smaller than expected
 - A completed dependency that unblocks something
 - Any explicit note about needing to reprioritize
+- Any description of work done that contradicts the current goal file
 
 Infer from the journal what tasks should be added, removed, or re-prioritized, and what the reason is. Do not ask the user to re-explain what is already in the journal.
 
