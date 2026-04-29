@@ -33,7 +33,6 @@ Daily goals live inside `today.md` — not as separate files. `goals/` holds wee
 ├── book.toml
 ├── SUMMARY.md
 ├── today.md              # daily journal + daily goal at top
-├── patterns.md
 ├── Journal/
 │   └── README.md
 ├── wiki/
@@ -44,6 +43,12 @@ Daily goals live inside `today.md` — not as separate files. `goals/` holds wee
 │       ├── goal.md       # yearly
 │       ├── goal-MM.md    # monthly
 │       └── goal-MM-WNN.md # weekly
+├── stats/
+│   ├── stats.md          # all-time totals + insights + automation candidates
+│   └── YYYY/
+│       ├── stats.md      # yearly totals
+│       ├── stats-MM.md   # monthly totals
+│       └── stats-MM-WNN.md # weekly totals
 └── archive/
     ├── archive.md
     └── YYYY/
@@ -81,7 +86,7 @@ command = "mdbook-mermaid"
 - [Goals](goals/goal.md)
 - [Journal](Journal/README.md)
 - [Wiki](wiki/README.md)
-- [Stats](stats.md)
+- [Stats](stats/stats.md)
 - [Archive](archive/archive.md)
 ```
 
@@ -119,29 +124,12 @@ command = "mdbook-mermaid"
 
 ```
 
-**stats.md**:
+**stats/stats.md** — all-time totals, insights, automation candidates:
 ```markdown
-# Work Statistics
-
-## All Time
+# Stats · All Time
 
 | Type | Sessions | Est. Hours | Last Active |
 |------|----------|------------|-------------|
-
-## YYYY
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
-
-## YYYY-MM
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
-
-## YYYY-WNN
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
 
 ## Insights
 
@@ -150,6 +138,36 @@ _Not enough data yet._
 ## Automation Candidates
 
 _Not enough data yet._
+
+*Last updated: YYYY-MM-DD*
+```
+
+**stats/YYYY/stats.md** — yearly totals:
+```markdown
+# Stats · YYYY
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+
+*Last updated: YYYY-MM-DD*
+```
+
+**stats/YYYY/stats-MM.md** — monthly totals:
+```markdown
+# Stats · YYYY-MM
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+
+*Last updated: YYYY-MM-DD*
+```
+
+**stats/YYYY/stats-MM-WNN.md** — weekly totals:
+```markdown
+# Stats · YYYY WNN · Mon DD – Sun DD
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
 
 *Last updated: YYYY-MM-DD*
 ```

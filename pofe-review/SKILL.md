@@ -227,18 +227,25 @@ Scan the journal for explicit time mentions (`"spent 2h"`, `"all morning"`, `"qu
 
 Round to the nearest 0.5h. Record `~` prefix when estimated (e.g., `~2.0`).
 
-**3. Update `stats.md` — all four levels.**
+**3. Update the four stats files.**
 
-`stats.md` has four stacked period sections: All Time, current year (`## YYYY`), current month (`## YYYY-MM`), and current week (`## YYYY-WNN`). Update all four for today's types.
+Stats live in separate files mirroring the goal hierarchy:
 
-For each active section, for each type active today:
+| File | Scope |
+|------|-------|
+| `stats/stats.md` | All-time totals + Insights + Automation Candidates |
+| `stats/YYYY/stats.md` | Yearly totals |
+| `stats/YYYY/stats-MM.md` | Monthly totals |
+| `stats/YYYY/stats-MM-WNN.md` | Weekly totals |
+
+For each of the four files, for each type active today:
 - Increment `Sessions` by 1
 - Add today's hours to `Est. Hours`
-- Update `Last Active` to today's date (All Time section only)
+- Update `Last Active` to today's date (all-time file only)
+- Create a new row if the type doesn't exist yet
+- Keep rows sorted by `Est. Hours` descending
 
-Create a new row if the type doesn't exist in that section yet. Keep rows sorted by `Est. Hours` descending within each section.
-
-**Period boundaries**: if today crosses into a new week, month, or year, add a new section header for that period before updating — the old period section stays as a historical record. Never modify a past period's numbers.
+**New period**: if the current week, month, or year file doesn't exist yet, create it from the seed format before writing. Never modify a past period's file.
 
 **4. Update Insights.**
 
@@ -271,12 +278,11 @@ Use these heuristics to identify candidates:
 
 Only include types where the data actually supports the signal. Skip types with fewer than 3 sessions — not enough data. If no candidates exist yet, write `_Not enough data yet._`.
 
-**6. Update the `Last updated` date.**
+**6. Update the `Last updated` date in each file.**
 
+**stats/stats.md**:
 ```markdown
-# Work Statistics
-
-## All Time
+# Stats · All Time
 
 | Type | Sessions | Est. Hours | Last Active |
 |------|----------|------------|-------------|
@@ -286,15 +292,36 @@ Only include types where the data actually supports the signal. Skip types with 
 | debugging | 8 | 12.0 | 2026-04-27 |
 | devops | 6 | 4.5 | 2026-04-25 |
 
-## 2026
+## Insights
+
+- Most hours: experiment (42h, ~3h/session avg); most frequent: research (20 sessions)
+- Effectiveness: 85% high-value; this week → experiment dominant, research sessions dropped vs last week
+- This month: debugging high (4 sessions) — may indicate unstable experiment pipeline
+
+## Automation Candidates
+
+- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks → write a Makefile or setup script
+- debugging (12h, 8 sessions) — high total hours → add structured logging and expand test coverage
+
+*Last updated: 2026-04-30*
+```
+
+**stats/2026/stats.md**:
+```markdown
+# Stats · 2026
 
 | Type | Sessions | Est. Hours |
 |------|----------|------------|
-| research | 20 | 38.5 |
 | experiment | 14 | 42.0 |
+| research | 20 | 38.5 |
 | implementation | 10 | 18.0 |
 
-## 2026-04
+*Last updated: 2026-04-30*
+```
+
+**stats/2026/stats-04.md**:
+```markdown
+# Stats · 2026-04
 
 | Type | Sessions | Est. Hours |
 |------|----------|------------|
@@ -302,23 +329,17 @@ Only include types where the data actually supports the signal. Skip types with 
 | research | 7 | 14.0 |
 | debugging | 4 | 6.5 |
 
-## 2026-W18
+*Last updated: 2026-04-30*
+```
+
+**stats/2026/stats-04-W18.md**:
+```markdown
+# Stats · 2026 W18 · Apr 28 – May 4
 
 | Type | Sessions | Est. Hours |
 |------|----------|------------|
 | experiment | 3 | 9.0 |
 | research | 2 | 4.0 |
-
-## Insights
-
-- All time: most hours → experiment (42h, ~3h/session); most frequent → research (20 sessions); effectiveness 85% high-value
-- This week vs last week: experiment dominant both weeks; research sessions dropped from 4 → 2 — less exploration, more execution
-- This month: debugging unusually high (4 sessions) — may indicate unstable experiment pipeline
-
-## Automation Candidates
-
-- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks suggest manual steps that repeat → write a Makefile or setup script
-- debugging (12h, 8 sessions) — high total hours suggest observability gaps → add structured logging and expand test coverage
 
 *Last updated: 2026-04-30*
 ```
