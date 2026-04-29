@@ -91,7 +91,7 @@ command = "mdbook-mermaid"
 
 ## Step 5: Create seed files
 
-**today.md** — fill in today's actual date and week number:
+**today.md** — daily goal at top: granular, actionable steps executable today. Each task should be a single concrete action, not a vague objective. Fill in today's actual date.
 ```markdown
 <!-- today: YYYY-MM-DD -->
 
@@ -99,9 +99,9 @@ command = "mdbook-mermaid"
 
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
-### (topic)
-- [ ] Task *(High)*
-- [ ] Task *(Medium)*
+### (Topic)
+- [ ] Specific action — e.g. "implement X function", "read section 3.2", "fix bug in Y" *(High)*
+- [ ] Specific action *(Medium)*
 
 ## Adjustment Log
 
@@ -126,29 +126,30 @@ command = "mdbook-mermaid"
 *Last updated: YYYY-MM-DD*
 ```
 
-**goals/goal.md**:
+**goals/goal.md** — abstract, direction-setting. Each goal is a title + the effect of achieving it. No task lists here.
 ```markdown
 # Goals
 
-## Tasks
+## (Goal Title)
+**Effect**: What achieving this means — the long-term impact on your life, career, or work.
 
-### (add your topics here)
-- [ ] ...
+## (Goal Title)
+**Effect**: ...
 ```
 
-**goals/YYYY/goal.md** (current year):
+**goals/YYYY/goal.md** (current year) — major milestones that move each total goal forward this year. Outcomes, not tasks.
 ```markdown
 # YYYY
 
 > [Total](../goal.md)
 
-## Tasks
+## (Topic)
+- [ ] Milestone — what success looks like by year end *(→ Total: Goal Title)*
 
-### (topic)
-- [ ] ...
+## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM.md** (current month):
+**goals/YYYY/goal-MM.md** (current month) — concrete objectives measurable within a month. More specific than yearly milestones.
 ```markdown
 # YYYY-MM
 
@@ -156,13 +157,14 @@ command = "mdbook-mermaid"
 
 ## Tasks
 
-### (topic)
-- [ ] ...
+### (Topic)
+- [ ] Concrete objective *(High)*
+- [ ] Concrete objective *(Medium)*
 
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date):
+**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date) — specific deliverables for this week. Each task should be completable in 1–3 days.
 ```markdown
 # YYYY WNN · Mon DD – Sun DD
 
@@ -170,8 +172,9 @@ command = "mdbook-mermaid"
 
 ## Tasks
 
-### (topic)
-- [ ] ...
+### (Topic)
+- [ ] Specific deliverable *(High)*
+- [ ] Specific deliverable *(Medium)*
 
 ## Adjustment Log
 ```

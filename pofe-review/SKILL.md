@@ -86,15 +86,24 @@ Only mark a higher-level task done if fully achieved, not just started.
 
 ### 4c — Adjust goals based on journal insights
 
-Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them:
+Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them. When deciding which level to update, respect each level's scope:
 
-- **New goal discovered**: something in the journal points to a direction or objective not yet captured → add it to the appropriate level (weekly/monthly/yearly)
-- **Goal no longer relevant**: a task or direction became obsolete based on what happened → mark it `*(dropped)*` with a brief reason
-- **Goal needs splitting**: a task turned out much larger than expected → break it into sub-tasks at the daily/weekly level
-- **Goal needs re-prioritizing**: the journal shows a shift in what matters most → reorder tasks within their topic section (high stays at top)
-- **Blocked goal**: a dependency was not resolved → add `*(blocked: reason)*` annotation
+| Level | Scope | Contains |
+|-------|-------|----------|
+| Total (`goal.md`) | Lifetime direction | Abstract goal titles + Effect (impact). Never tasks. |
+| Yearly | Major milestones | Outcomes for the year. Update only if direction fundamentally changes. |
+| Monthly | Concrete objectives | Measurable goals for the month. Update when scope or priorities shift. |
+| Weekly | Specific deliverables | Tasks completable in 1–3 days. Update freely based on weekly progress. |
+| Daily (today.md) | Actionable steps | Single concrete actions executable today. Generated fresh each day. |
 
-Apply changes to whichever goal file is the right scope — don't push everything to the daily file. A strategic change belongs in the monthly or yearly goal; a tactical one belongs in the weekly or daily.
+**Scope violations to avoid**: don't add vague milestones to the weekly goal, don't add single-day tasks to the monthly goal, don't add "Effect" language to weekly/daily.
+
+Adjustments to make:
+- **New objective discovered** → add at the right level. If it spans multiple months → yearly. If it's this month's work → monthly. If it's this week → weekly.
+- **Goal no longer relevant** → mark `*(dropped: reason)*` at its level
+- **Task too large** → split into sub-tasks one level down (monthly task → weekly deliverables)
+- **Priority shift** → reorder within topic section at the appropriate level
+- **Blocked** → add `*(blocked: reason)*` at weekly or monthly level
 
 After adjusting, write a brief **Goal Adjustment Log** entry at the bottom of each modified goal file:
 ```markdown
