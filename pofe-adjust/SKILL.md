@@ -19,15 +19,16 @@ description: |
 
 ---
 
-## Step 2: Understand the adjustment
+## Step 2: Derive the adjustment from today.md
 
-The user's message should explain what to change. If it's unclear, ask:
-- What task(s) are being added, removed, or re-prioritized?
-- Why is this adjustment necessary?
+The reason for the adjustment is already written in `today.md` — read it to understand what happened and why the plan needs to change. Look for:
+- A blocker or unexpected problem encountered
+- A new urgent task that came up
+- A task that turned out larger or smaller than expected
+- A completed dependency that unblocks something
+- Any explicit note about needing to reprioritize
 
-Good reasons: a blocker appeared, an urgent request came in, a task turned out to be larger than expected, a dependency was resolved, context changed.
-
-Do not accept vague reasoning like "I just feel like it" — ask the user to be specific. The adjustment log is a record for future reflection.
+Infer from the journal what tasks should be added, removed, or re-prioritized, and what the reason is. Do not ask the user to re-explain what is already in the journal.
 
 ---
 
