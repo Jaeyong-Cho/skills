@@ -184,6 +184,7 @@ command = "mdbook-mermaid"
 # Archive · (period)
 
 ## Achievements
+<!-- Format: YYYY-MM-DD — what was done — why it matters for the final goal #tag *(→ Total: goal title)* -->
 
 ## Goal Completion
 | Goal | Status | Notes |

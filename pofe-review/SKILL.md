@@ -15,13 +15,32 @@ description: |
 
 1. Find `today.md` in the repo root. If missing, stop and tell the user.
 2. Determine today's date (from the `<!-- today: YYYY-MM-DD -->` comment, or current date).
-3. Read the daily goals from the `## Goals` section at the top of `today.md` — this is the daily goal, not a separate file.
-4. Load the **persistent goal hierarchy**:
+3. Read the daily goals from the `## Goals` section at the top of `today.md`.
+4. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
+5. Load the **persistent goal hierarchy** — check each file:
    - `goals/goal.md` (total/lifetime)
    - `goals/YYYY/goal.md` (yearly)
    - `goals/YYYY/goal-MM.md` (monthly)
    - `goals/YYYY/goal-MM-WNN.md` (weekly)
-5. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
+
+   **If any file is missing or empty**, do not stop — proceed to Step 1b.
+
+---
+
+## Step 1b: Bootstrap missing goal files from journal
+
+For each goal file that is missing or empty, infer its content from `today.md` and the recent journals. Read the work done, topics covered, and direction implied — then create the file with content appropriate to its scope:
+
+- **Total (`goals/goal.md`)**: Infer the user's overarching long-term direction. Write 1–3 abstract goal titles with an **Effect** line each. These should capture the ultimate "why" behind all the work observed in the journal.
+- **Yearly (`goals/YYYY/goal.md`)**: Infer major milestones the user is working toward this year. Each milestone should state what success looks like by year end and why it advances a total goal. Include `*(→ Total: goal title)*` reference.
+- **Monthly (`goals/YYYY/goal-MM.md`)**: Infer concrete objectives for this month from the journal. Each task should explain why it advances the yearly milestone. Include `*(→ Yearly: milestone name)*` reference.
+- **Weekly (`goals/YYYY/goal-MM-WNN.md`)**: Infer specific deliverables for this week. Each task should explain why it serves the monthly objective. Include `*(→ Monthly: objective name)*` reference.
+
+If a file already exists and has content, load it normally — do not overwrite. Updates to existing goals happen in Step 4c.
+
+After creating any missing files, also create the corresponding empty archive files if they don't exist:
+- `archive/YYYY/archive-MM.md`
+- `archive/YYYY/archive-MM-WNN.md`
 
 Reading the full hierarchy is essential — the next-day plan and goal adjustments must stay aligned with the bigger picture, not just today's leftover tasks.
 
@@ -165,11 +184,11 @@ Read `patterns.md`. Based on today's journal and goal file:
 
 ## Step 7: Update achievement archive
 
-Append today's achievements to the archive files:
+Append today's achievements to the archive files. Each entry must explain **why the achievement is meaningful** for the final goal — not just what was done, but what it moves forward.
 
 **archive/YYYY/archive-MM-WNN.md** — append under `## Achievements`:
 ```markdown
-- YYYY-MM-DD — brief summary of what was accomplished `#tag`
+- YYYY-MM-DD — what was accomplished — why this matters for the final goal `#tag` *(→ Total: goal title)*
 ```
 
 **archive/YYYY/archive-MM.md** — same format.
@@ -181,7 +200,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 # Archive · YYYY-MM (or WNN or YYYY)
 
 ## Achievements
-- YYYY-MM-DD — summary `#tag`
+- YYYY-MM-DD — what was accomplished — why it matters `#tag` *(→ Total: goal title)*
 
 ## Goal Completion
 | Goal | Status | Notes |
