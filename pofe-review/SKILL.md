@@ -67,7 +67,7 @@ Append to the end of `today.md`. Do not modify anything above. If a `## Daily Re
 ### Goal Progress
 | Task | Topic | Status | Notes |
 |------|-------|--------|-------|
-| ... | ... | ✅ done / 🔄 partial / ❌ skipped | ... |
+| ... | ... | done / partial / skipped | ... |
 
 ### Related Knowledge
 - [title](../wiki/slug.md) — why relevant
@@ -77,15 +77,25 @@ Append to the end of `today.md`. Do not modify anything above. If a `## Daily Re
 
 ### Next Work Plan
 
+> Trigger first (background):
+> - Task name — estimated duration; start immediately so it runs while other work proceeds
+
 #### (Topic)
 - [ ] Task *(High)*
+  - [ ] Sub-step one
+  - [ ] Sub-step two
 - [ ] Task *(Medium)*
+  - [ ] Sub-step one
 
 #### (Topic)
 - [ ] Task *(High)*
 ```
 
 Fill every section with real content. The Next Work Plan should be specific enough to start tomorrow without re-reading anything — infer from unfinished tasks, open questions, and logical next steps.
+
+**Sub-tasks**: Break each task into 1-level sub-steps (indented `  - [ ]`). Sub-steps are concrete, sequential actions that make the task executable without further thought. Aim for 2–4 sub-steps per task; omit sub-steps only if the task is already a single atomic action.
+
+**Background task identification**: Before listing topics, scan tomorrow's tasks for anything that runs independently and takes significant time (tests, builds, downloads, training runs, long scripts). List these under `> Trigger first (background):` so they get started at the beginning of the day and run in parallel with other work. Omit this block if no background tasks exist.
 
 ---
 
@@ -205,7 +215,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 ## Goal Completion
 | Goal | Status | Notes |
 |------|--------|-------|
-| ... | ✅ / 🔄 / ❌ | ... |
+| ... | done / partial / skipped | ... |
 
 ## Patterns Observed
 - ...
@@ -223,6 +233,7 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
    - Pull in monthly goal tasks due this week
    - Respect topic structure and high→medium→low order
    - **Each task must include a rationale** — one phrase explaining why this action matters and which weekly deliverable it advances. Carry rationale forward from the weekly goal when available; write new rationale when breaking a task down further.
+   - **Background tasks**: mark any long-running independent task with `*(bg)*` and place it first within its topic. Also list it under `> Trigger first` at the top of Goals so it gets started immediately.
 
 ```markdown
 <!-- today: YYYY-MM-DD -->
@@ -231,9 +242,17 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
+> Trigger first (background):
+> - Task name *(~Xh)* — start now; runs while other work proceeds
+
 ### (Topic)
+- [ ] Long-running task *(High)* *(bg)* — rationale *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
 - [ ] Specific action *(High)* — why this completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
+  - [ ] Sub-step two
 - [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
 
 ## Adjustment Log
 

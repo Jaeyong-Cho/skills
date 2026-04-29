@@ -91,7 +91,7 @@ command = "mdbook-mermaid"
 
 ## Step 5: Create seed files
 
-**today.md** — daily goal at top: single concrete actions executable today. Each task states which weekly deliverable it fulfills and why doing it today is the right move.
+**today.md** — daily goal at top: single concrete actions executable today. Each task states which weekly deliverable it fulfills and why doing it today is the right move. Long-running independent tasks are marked `*(bg)*` and listed under `> Trigger first` so they start at the top of the day and run in parallel with other work.
 ```markdown
 <!-- today: YYYY-MM-DD -->
 
@@ -99,9 +99,17 @@ command = "mdbook-mermaid"
 
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
+> Trigger first (background):
+> - Task name *(~Xh)* — start now; runs while other work proceeds
+
 ### (Topic)
+- [ ] Long-running task *(High)* *(bg)* — rationale *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
 - [ ] Specific action *(High)* — why this action completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
+  - [ ] Sub-step two
 - [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
+  - [ ] Sub-step one
 
 ## Adjustment Log
 

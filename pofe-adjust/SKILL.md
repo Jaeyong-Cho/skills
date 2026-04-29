@@ -39,8 +39,9 @@ Update the `## Goals` section at the top of `today.md`:
 - **Add a task**: place it in the correct topic section at the correct priority position; create the topic section if it doesn't exist
 - **Remove a task**: delete or mark `*(dropped)*` with a note
 - **Change priority**: move the task to the new position within its topic
+- **Background tasks**: if a newly added or discovered task is long-running and independent (test suite, build, download, training run), mark it `*(bg)*` and add it to the `> Trigger first` block at the top of Goals. If a background task finishes, remove it from that block.
 
-Topic sections within `## Tasks` are organized by subject (e.g., `### Rust`, `### ML Research`). Within each section, tasks run high → medium → low, top to bottom.
+Topic sections within `## Goals` are organized by subject (e.g., `### Rust`, `### ML Research`). Within each section, tasks run high → medium → low, top to bottom. Background tasks `*(bg)*` appear first within their priority band.
 
 ---
 
