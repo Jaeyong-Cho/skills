@@ -227,24 +227,25 @@ Scan the journal for explicit time mentions (`"spent 2h"`, `"all morning"`, `"qu
 
 Round to the nearest 0.5h. Record `~` prefix when estimated (e.g., `~2.0`).
 
-**3. Update `stats.md`.**
+**3. Update `stats.md` — all four levels.**
 
-For each type active today:
+`stats.md` has four stacked period sections: All Time, current year (`## YYYY`), current month (`## YYYY-MM`), and current week (`## YYYY-WNN`). Update all four for today's types.
+
+For each active section, for each type active today:
 - Increment `Sessions` by 1
 - Add today's hours to `Est. Hours`
-- Update `Last Active` to today's date
+- Update `Last Active` to today's date (All Time section only)
 
-Create a new row if the type doesn't exist yet.
+Create a new row if the type doesn't exist in that section yet. Keep rows sorted by `Est. Hours` descending within each section.
 
-Keep rows sorted by `Est. Hours` descending — most time-consuming type first.
+**Period boundaries**: if today crosses into a new week, month, or year, add a new section header for that period before updating — the old period section stays as a historical record. Never modify a past period's numbers.
 
 **4. Update Insights.**
 
-Rewrite the `## Insights` section with observations derived from the current numbers:
-- Which type has consumed the most total time
-- Which type appears most frequently (highest Sessions)
-- Work effectiveness ratio: hours in high-value types (research, implementation, experiment) vs overhead types (devops, meeting, review, writing). Flag if overhead exceeds 30% of total.
-- Any notable ratio or trend if recent sessions suggest a shift
+Rewrite the `## Insights` section using all four period levels:
+- **All time**: most time-consuming type; most frequent type; effectiveness ratio (high-value vs overhead — flag if overhead > 30%)
+- **Trend**: compare the current week's top type against last week's (or current month vs last month) — note any shift in focus
+- Any notable ratio across periods (e.g., "this week is 80% experiment vs monthly avg of 50%")
 
 Overwrite the previous Insights — it should always reflect the current totals, not accumulate stale notes.
 
@@ -275,7 +276,7 @@ Only include types where the data actually supports the signal. Skip types with 
 ```markdown
 # Work Statistics
 
-## By Type
+## All Time
 
 | Type | Sessions | Est. Hours | Last Active |
 |------|----------|------------|-------------|
@@ -285,17 +286,39 @@ Only include types where the data actually supports the signal. Skip types with 
 | debugging | 8 | 12.0 | 2026-04-27 |
 | devops | 6 | 4.5 | 2026-04-25 |
 
+## 2026
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+| research | 20 | 38.5 |
+| experiment | 14 | 42.0 |
+| implementation | 10 | 18.0 |
+
+## 2026-04
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+| experiment | 8 | 24.0 |
+| research | 7 | 14.0 |
+| debugging | 4 | 6.5 |
+
+## 2026-W18
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+| experiment | 3 | 9.0 |
+| research | 2 | 4.0 |
+
 ## Insights
 
-- Most time consumed: experiment (42h, ~3h/session avg)
-- Most frequent: research (20 sessions)
-- Effectiveness ratio: 93.5h high-value (research + experiment + implementation) vs 16.5h overhead (debugging + devops) — 85% high-value
-- research vs implementation: 2:1 by sessions; may need more implementation time to apply findings
+- All time: most hours → experiment (42h, ~3h/session); most frequent → research (20 sessions); effectiveness 85% high-value
+- This week vs last week: experiment dominant both weeks; research sessions dropped from 4 → 2 — less exploration, more execution
+- This month: debugging unusually high (4 sessions) — may indicate unstable experiment pipeline
 
 ## Automation Candidates
 
-- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks suggest manual steps that repeat → write a Makefile or setup script to reduce per-session friction
-- debugging (12h, 8 sessions) — high total hours suggest observability gaps → add structured logging at key decision points and expand test coverage for failure-prone paths
+- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks suggest manual steps that repeat → write a Makefile or setup script
+- debugging (12h, 8 sessions) — high total hours suggest observability gaps → add structured logging and expand test coverage
 
 *Last updated: 2026-04-30*
 ```

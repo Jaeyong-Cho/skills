@@ -123,10 +123,25 @@ command = "mdbook-mermaid"
 ```markdown
 # Work Statistics
 
-## By Type
+## All Time
 
 | Type | Sessions | Est. Hours | Last Active |
 |------|----------|------------|-------------|
+
+## YYYY
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+
+## YYYY-MM
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
+
+## YYYY-WNN
+
+| Type | Sessions | Est. Hours |
+|------|----------|------------|
 
 ## Insights
 
