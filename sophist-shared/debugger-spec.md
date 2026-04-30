@@ -11,11 +11,11 @@ These behaviors must be preserved regardless of language or implementation style
 | Requirement | Detail |
 |-------------|--------|
 | **Output destination** | `--debug-output-dir <path>` — all debug output (log file + data files) written to this directory. Omit to send logs to stdout only; omitting also makes data writes and subprocess log captures no-ops. **Specifying `--debug-output-dir` alone (without `--debug-level`) is sufficient to trigger all data file output automatically.** |
-| **Enable/disable** | `--debug-level=OFF` (default) suppresses all log output but data file writes still occur when `--debug-output-dir` is set |
-| **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. |
-| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces |
+| **Enable/disable** | `--debug-level=OFF` (default) suppresses `INFO`/`DEBUG`/`VERBOSE` log output, but data file writes still occur when `--debug-output-dir` is set. `WARNING` and `ERROR` are never suppressed — they emit at all levels including `OFF`. |
+| **Levels** | `INFO` → `DEBUG` → `VERBOSE` in ascending detail. Higher levels are cumulative. `WARNING` and `ERROR` sit outside this hierarchy — they are always on. |
+| **Level semantics** | `INFO` — SAD-level (component boundary crossings); `DEBUG` — SDD-level (internal algorithm steps); `VERBOSE` — fine-grained traces; `WARNING` — recoverable anomaly (always emitted); `ERROR` — operation failed (always emitted) |
 | **Log format** | `<timestamp> <level> <filename>:<line_number> <message>` — source location is mandatory, configured at the handler not at call sites |
-| **Log methods** | `info(msg)`, `debug(msg)`, `verbose(msg)`, `warning(msg)`, `error(msg)` |
+| **Log methods** | `info(msg)`, `debug(msg)`, `verbose(msg)` — gated by `--debug-level`; `warning(msg)`, `error(msg)` — bypass the threshold entirely, always emitted |
 | **Data write** | `write(filename, data, purpose)` — writes to `--debug-output-dir/<filename>`, infers format from extension (`.json` → JSON, else string), appends sequence index on collision, logs the write event to the main log, never raises |
 | **Subprocess routing** | optional — only implement if the project spawns subprocesses; returns a unique log path inside `--debug-output-dir`, or null/None when unset |
 
@@ -78,10 +78,10 @@ class Debugger:
         if self._threshold >= 3: self._log.debug(f"[VERBOSE] {msg}")
 
     def warning(self, msg: str) -> None:
-        if self._threshold >= 1: self._log.warning(msg)
+        self._log.warning(msg)  # always emitted — not gated by threshold
 
     def error(self, msg: str) -> None:
-        if self._threshold >= 1: self._log.error(msg)
+        self._log.error(msg)  # always emitted — not gated by threshold
 
     def write(self, filename: str, data, purpose: str = "") -> None:
         if not self._dir:

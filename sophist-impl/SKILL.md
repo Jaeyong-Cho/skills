@@ -356,7 +356,8 @@ The logs capture the important moments (entry, validation failure, credential fa
 1. Stop implementing that function
 2. Add a review point to the SDD item:
    ```markdown
-   > **Review needed** — <describe the ambiguity: what the two interpretations are, and why it matters for the implementation>
+   ### Review needed
+   <describe the ambiguity: what the two interpretations are, and why it matters for the implementation>
    ```
 3. Write a placeholder in the code:
    ```python

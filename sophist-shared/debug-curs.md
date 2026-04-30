@@ -55,12 +55,14 @@ Operators need granular control over how much diagnostic output the system emits
 
 The system shall accept a `--debug-level` CLI option with the following values:
 
-- `OFF` (default) — suppresses all log output; data file writes still occur if `--debug-output-dir` is set
+- `OFF` (default) — suppresses `INFO`/`DEBUG`/`VERBOSE` log output; data file writes still occur if `--debug-output-dir` is set
 - `INFO` — SAD-level logging: component boundary crossings, entry/exit of major operations
 - `DEBUG` — SDD-level logging: internal algorithm steps, variable values at key decision points
 - `VERBOSE` — fine-grained traces: loop iterations, intermediate computations, low-level state
 
 Levels are cumulative: `DEBUG` includes all `INFO` output; `VERBOSE` includes all `DEBUG` and `INFO` output.
+
+`WARNING` and `ERROR` are not controlled by `--debug-level`. They shall be emitted at all times, including when `--debug-level=OFF`. These represent conditions the operator must always be able to see — a recoverable anomaly (`WARNING`) or a failed operation (`ERROR`) must never be silenced by a verbosity setting.
 
 ### Review needed
 - Confirm the four levels (OFF/INFO/DEBUG/VERBOSE) are sufficient or whether additional levels are needed
@@ -141,11 +143,12 @@ Application is built and runnable. A temporary output directory exists.
 ## Steps
 1. Run with `--debug-level=INFO` — verify INFO-level log lines appear and DEBUG/VERBOSE do not
 2. Run with `--debug-level=DEBUG` — verify both INFO and DEBUG lines appear
-3. Run with `--debug-output-dir=<tmp>` only (no `--debug-level`) — verify log file and data files are created in `<tmp>`
-4. Inspect the log file — verify each line matches `<timestamp> <LEVEL> <filename>:<line_number> <message>`
-5. Inspect a data file — verify format matches the extension (JSON for `.json`)
-6. Run a second time with same `--debug-output-dir` — verify colliding filenames get sequence index appended, not overwritten
-7. Run with neither flag — verify no files are created and no crash occurs
+3. Run with `--debug-level=OFF` (or omitted) and trigger a WARNING or ERROR condition — verify WARNING/ERROR lines still appear in output despite level being OFF
+4. Run with `--debug-output-dir=<tmp>` only (no `--debug-level`) — verify log file and data files are created in `<tmp>`
+5. Inspect the log file — verify each line matches `<timestamp> <LEVEL> <filename>:<line_number> <message>`
+6. Inspect a data file — verify format matches the extension (JSON for `.json`)
+7. Run a second time with same `--debug-output-dir` — verify colliding filenames get sequence index appended, not overwritten
+8. Run with neither flag — verify no files are created and no crash occurs
 
 ## Expected result
 All seven steps produce their stated outcome without errors or crashes.
