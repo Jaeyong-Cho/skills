@@ -83,11 +83,19 @@ Append to the end of `today.md`. Do not modify anything above. If a `## Daily Re
 |------|-------|--------|-------|
 | ... | ... | done / partial / skipped | ... |
 
+### Personal Reflection
+- **Went well**: what worked — a decision, habit, or approach that paid off today
+- **Do differently**: one concrete thing to change or try tomorrow
+- **Pattern noticed**: any recurring behavior, tendency, or theme observed across today (or recent days)
+
 ### Related Knowledge
 - [title](../wiki/slug.md) — why relevant
 
 ### Knowledge Saved
 - [title](../wiki/slug.md) — one-line summary
+
+### Experience Saved
+- [title](../reflections/slug.md) — one-line summary
 
 ### Next Work Plan
 
@@ -106,6 +114,8 @@ Append to the end of `today.md`. Do not modify anything above. If a `## Daily Re
 ```
 
 Fill every section with real content. The Next Work Plan should be specific enough to start tomorrow without re-reading anything — infer from unfinished tasks, open questions, and logical next steps.
+
+**Personal Reflection guidance**: Draw from the full journal text — look for moments of frustration, flow, surprise, or pride. "Went well" should name a specific behavior, not just an outcome ("broke the task into 30-min blocks" not "was productive"). "Do differently" should be actionable tomorrow. "Pattern noticed" is optional but powerful — skip it rather than force it if nothing real stands out.
 
 **Sub-tasks**: Break each task into 1-level sub-steps (indented `  - [ ]`). Sub-steps are concrete, sequential actions that make the task executable without further thought. Aim for 2–4 sub-steps per task; omit sub-steps only if the task is already a single atomic action.
 
@@ -196,6 +206,50 @@ Tag guidelines:
 - 2–5 tags per entry; prefer existing tags over new ones
 
 Update existing entries rather than creating duplicates — add new learnings in a sub-section and update the date footer.
+
+---
+
+## Step 5b: Extract and save experience entries
+
+After saving wiki entries, scan the journal for personal and professional experience worth keeping — things that would help your future self work and grow better. These are distinct from technical wiki entries: the focus is on *how you work*, not *what you know*.
+
+Good candidates:
+- A work habit or approach that made a noticeable difference
+- A decision pattern — what led to a good or bad call
+- A communication or collaboration insight
+- A mistake you'd like to avoid repeating, with the root cause understood
+- A mental shift — a belief, assumption, or mindset that changed
+- A personal working condition insight (energy, focus, environment, time of day)
+
+Skip things already obvious to you, or too ephemeral to matter next week.
+
+**Experience entry format** (`reflections/<slug>.md`):
+```markdown
+# Title
+
+#tag1 #tag2 #tag3
+
+What happened and what you learned from it — written for your future self.
+
+## Context
+
+The situation that revealed this. Enough detail to make the lesson concrete.
+
+## What to apply
+
+One or two sentences on how to act on this going forward.
+
+---
+*First noted: YYYY-MM-DD*
+```
+
+Tag guidelines:
+- Use `#habit`, `#decision`, `#communication`, `#mistake`, `#growth`, `#focus`, `#energy`, `#career`
+- 2–4 tags per entry; prefer existing tags over new ones
+
+**Before creating a new entry**, scan `reflections/` filenames and the first 3 lines of any tag-matched files. If a relevant entry already exists, append a new dated sub-section rather than duplicating it — patterns strengthen when accumulated, not scattered.
+
+**Reconcile existing entries**: if the journal contradicts an existing reflection (the lesson turned out wrong, the habit no longer applies), update the entry and note `*Revised: YYYY-MM-DD — reason*`.
 
 ---
 
@@ -425,6 +479,7 @@ If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for
 
 - Add archived journal: `- [YYYY-MM-DD](Journal/YYYY/MM-DD.md)` under Journal, descending order.
 - Add new wiki entries under Wiki, alphabetically.
+- Add new reflection entries under Reflections, alphabetically. Create the Reflections section if it doesn't exist yet.
 
 ---
 

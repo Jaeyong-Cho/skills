@@ -37,6 +37,8 @@ Daily goals live inside `today.md` — not as separate files. `goals/` holds wee
 │   └── README.md
 ├── wiki/
 │   └── README.md
+├── reflections/
+│   └── README.md         # personal/professional experience entries
 ├── goals/
 │   ├── goal.md           # overall/lifetime goals
 │   └── YYYY/
@@ -86,6 +88,7 @@ command = "mdbook-mermaid"
 - [Goals](goals/goal.md)
 - [Journal](Journal/README.md)
 - [Wiki](wiki/README.md)
+- [Reflections](reflections/README.md)
 - [Stats](stats/stats.md)
 - [Archive](archive/archive.md)
 ```
@@ -237,6 +240,13 @@ _Not enough data yet._
 |------|--------|-------|
 
 ## Patterns Observed
+```
+
+**reflections/README.md** — brief intro:
+```markdown
+# Reflections
+
+Personal and professional experience entries — work habits, decision patterns, lessons learned, and mental shifts worth carrying forward.
 ```
 
 **Journal/README.md**, **wiki/README.md** — brief one-line intro.
