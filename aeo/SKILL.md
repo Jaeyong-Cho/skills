@@ -42,7 +42,13 @@ If it does **not** exist: read `references/init.md` and initialize the book firs
 | Documentation | `references/docs.md` |
 | AEO layer details (three layers in depth) | `references/layers.md` |
 
-Read only the file(s) relevant to the current task. After finishing, build the book:
+Read only the file(s) relevant to the current task.
+
+## Mermaid Diagrams
+
+Use Mermaid diagrams to explain any non-trivial structure — layer relationships, component dependencies, data flow, before/after refactoring, entity relationships. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. When in doubt, add one.
+
+After finishing, build the book:
 
 ```bash
 cd .aeo && mdbook build 2>&1

@@ -10,6 +10,8 @@ Output file: `.aeo/src/impl/<slug>.md`
 
 ### Step 1 — Write the plan
 
+Include a Mermaid diagram in every plan — it is the clearest way to show which components belong to which layer and how they relate. Do not skip the diagram even for small implementations.
+
 ```markdown
 # Implementation Plan: <title>
 
@@ -18,7 +20,7 @@ Output file: `.aeo/src/impl/<slug>.md`
 |-----------|-------|--------|
 
 ## Architecture Diagram
-<mermaid diagram showing target layer structure>
+<mermaid diagram showing target layer structure — required>
 
 ## Steps
 1. ...
@@ -50,6 +52,8 @@ Output file: `.aeo/src/refact/<slug>.md`
 
 ### Step 1 — Write the plan
 
+Include a before/after Mermaid diagram showing the current tangled structure and the target separated structure. This is the most important part of a refactoring plan — it makes the intent unambiguous.
+
 ```markdown
 # Refactoring Plan: <title>
 
@@ -58,7 +62,7 @@ Output file: `.aeo/src/refact/<slug>.md`
 |----------|-----------|-------|
 
 ## Target Structure
-<mermaid diagram showing before → after layer separation>
+<mermaid diagram: before (tangled) → after (separated) — required>
 
 ## Steps
 1. Extract Axiology: ...

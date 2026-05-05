@@ -13,6 +13,8 @@ For each piece of code, identify which layer it belongs to and flag violations:
 
 Structure each finding as: **[Layer] Issue → Why it matters → Suggested fix**
 
+Include a Mermaid diagram showing how the layers are currently tangled and how they should be separated after the fix. Even when the code is mostly clean, a diagram confirming the correct layer boundaries is more useful than prose alone.
+
 If layers are cleanly separated, say so — don't invent problems.
 
 ## Output structure

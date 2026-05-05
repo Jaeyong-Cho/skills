@@ -17,6 +17,6 @@ Structure documentation around the three AEO layers:
 <entities, their properties, relationships, invariants>
 ```
 
-Include a Mermaid diagram if the relationships between components benefit from visual explanation.
+Include a Mermaid diagram showing the relationships between the three layers and their key components. A diagram is the default — only omit one if the subject is genuinely too simple to have any structure worth visualizing.
 
 Add the file as a nested entry in `.aeo/src/SUMMARY.md` under `Documentation`.
