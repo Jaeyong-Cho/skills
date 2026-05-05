@@ -24,15 +24,13 @@ mdbook-mermaid install .aeo/
 cd .aeo && mdbook init --theme
 ```
 
-This creates `.aeo/theme/`. Open `.aeo/theme/css/variables.css` and add `--content-max-width` at the top of the `:root` block:
+This creates `.aeo/theme/`. The file `.aeo/theme/css/variables.css` already contains a `--content-max-width` definition. Replace it with 80%:
 
-```css
-:root {
-    --content-max-width: 80%;
-}
+```bash
+sed -i '' 's/--content-max-width:[^;]*/--content-max-width: 80%/' .aeo/theme/css/variables.css
 ```
 
-Leave all other variables intact.
+Do not add a new line — replace the existing one.
 
 ## Step 4: Configure book.toml
 
@@ -64,9 +62,9 @@ Write `.aeo/src/SUMMARY.md`:
 # Summary
 
 - [Design](./design/index.md)
+- [Implementation Plans](./impl/index.md)
 - [Code Reviews](./reviews/index.md)
 - [Refactoring Plans](./refact/index.md)
-- [Implementation Plans](./impl/index.md)
 - [Documentation](./docs/index.md)
 ```
 
