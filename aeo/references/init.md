@@ -11,21 +11,30 @@ which mdbook-mermaid || cargo install mdbook-mermaid
 
 If `cargo` is not available, tell the user to install Rust first: https://www.rust-lang.org/tools/install
 
-## Step 2: Initialize and configure
+## Step 2: Initialize mdbook
 
 ```bash
 mdbook init .aeo --title "AEO" --ignore git
 mdbook-mermaid install .aeo/
 ```
 
-Copy pan-zoom assets into the book:
+## Step 3: Generate theme and set content width
 
 ```bash
-cp <skill-path>/assets/mermaid-pan-zoom.js .aeo/
-cp <skill-path>/assets/mermaid-pan-zoom.css .aeo/
+cd .aeo && mdbook init --theme
 ```
 
-Replace `<skill-path>` with the path to the aeo skill directory.
+This creates `.aeo/theme/`. Open `.aeo/theme/css/variables.css` and add `--content-max-width` at the top of the `:root` block:
+
+```css
+:root {
+    --content-max-width: 80%;
+}
+```
+
+Leave all other variables intact.
+
+## Step 4: Configure book.toml
 
 Replace `.aeo/book.toml` with:
 
@@ -39,11 +48,11 @@ title = "AEO"
 command = "mdbook-mermaid"
 
 [output.html]
-additional-js = ["mermaid.min.js", "mermaid-init.js", "mermaid-pan-zoom.js"]
-additional-css = ["mermaid-pan-zoom.css"]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
+additional-css = ["theme/css/variables.css"]
 ```
 
-## Step 3: Create chapter directories and SUMMARY.md
+## Step 5: Create chapter directories and SUMMARY.md
 
 ```bash
 mkdir -p .aeo/src/design .aeo/src/reviews .aeo/src/refact .aeo/src/impl .aeo/src/docs
@@ -63,7 +72,7 @@ Write `.aeo/src/SUMMARY.md`:
 
 Create an `index.md` stub in each chapter directory with content `# <Chapter Name>\n\n_No entries yet._`
 
-## Step 4: Build check
+## Step 6: Build check
 
 ```bash
 cd .aeo && mdbook build 2>&1
@@ -71,7 +80,7 @@ cd .aeo && mdbook build 2>&1
 
 Fix all errors before continuing.
 
-## Step 5: Copy serve script
+## Step 7: Copy serve script
 
 ```bash
 cp <skill-path>/scripts/serve.sh .aeo/serve.sh
