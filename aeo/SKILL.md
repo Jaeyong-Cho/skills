@@ -65,6 +65,10 @@ After each session, show the user a recommended commit message in this format:
 
 ```
 <type>(aeo): <short description>
+
+Why: <Axiology — what value or goal this addresses>
+What: <Ontology — what entities or artifacts were created or changed>
+How: <Epistemology — what method or approach was applied>
 ```
 
-Where `<type>` is one of: `feat` (new design/impl/review/docs), `refact` (refactoring plan), `fix` (correction to existing content). The description should name the specific artifact produced (e.g. `add design 0001 auth-flow`, `add review 0003 payment-service`).
+Where `<type>` is one of: `feat` (new design/impl/review/docs), `refact` (refactoring plan), `fix` (correction to existing content). The subject line should name the specific artifact produced (e.g. `add design 0001 auth-flow`, `add review 0003 payment-service`).
