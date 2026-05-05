@@ -18,6 +18,15 @@ mdbook init .aeo --title "AEO" --ignore git
 mdbook-mermaid install .aeo/
 ```
 
+Copy pan-zoom assets into the book:
+
+```bash
+cp <skill-path>/assets/mermaid-pan-zoom.js .aeo/
+cp <skill-path>/assets/mermaid-pan-zoom.css .aeo/
+```
+
+Replace `<skill-path>` with the path to the aeo skill directory.
+
 Replace `.aeo/book.toml` with:
 
 ```toml
@@ -30,7 +39,8 @@ title = "AEO"
 command = "mdbook-mermaid"
 
 [output.html]
-additional-js = ["mermaid.min.js", "mermaid-init.js"]
+additional-js = ["mermaid.min.js", "mermaid-init.js", "mermaid-pan-zoom.js"]
+additional-css = ["mermaid-pan-zoom.css"]
 ```
 
 ## Step 3: Create chapter directories and SUMMARY.md
