@@ -6,21 +6,35 @@
 
 ## Implementation
 
-Output file: `.aeo/src/impl/<slug>.md`
+Output directory: `.aeo/src/impl/<slug>/`
 
-### Step 1 — Write the plan
+### File structure
 
-Include a Mermaid diagram in every plan — it is the clearest way to show which components belong to which layer and how they relate. Do not skip the diagram even for small implementations.
+```
+.aeo/src/impl/<slug>/
+├── index.md     — overview: what is being built, links to sub-pages
+├── plan.md      — step-by-step implementation steps and files to create
+├── layers.md    — AEO layer mapping for each component
+└── diagram.md   — Mermaid diagram of the target layer structure (required)
+```
+
+### index.md
 
 ```markdown
-# Implementation Plan: <title>
+# Implementation: <title>
 
-## AEO Layer Mapping
-| Component | Layer | Reason |
-|-----------|-------|--------|
+Brief description of what is being implemented.
 
-## Architecture Diagram
-<mermaid diagram showing target layer structure — required>
+## Sections
+- [Plan](./plan.md)
+- [Layer Mapping](./layers.md)
+- [Diagram](./diagram.md)
+```
+
+### plan.md
+
+```markdown
+# Implementation Plan
 
 ## Steps
 1. ...
@@ -31,38 +45,74 @@ Include a Mermaid diagram in every plan — it is the clearest way to show which
 |------|-------|---------|
 ```
 
-### Step 2 — Ask for confirmation
+### layers.md
+
+```markdown
+# AEO Layer Mapping
+
+| Component | Layer | Reason |
+|-----------|-------|--------|
+```
+
+### diagram.md
+
+Include a Mermaid diagram showing the target layer structure. Required — do not skip even for small implementations.
+
+```markdown
+# Architecture Diagram
+
+\`\`\`mermaid
+graph TD
+    ...
+\`\`\`
+```
+
+### Confirmation gate
+
+After writing all plan files, ask:
 
 > "Here's the implementation plan. Does this look right? I'll write the code once you confirm."
 
-### Step 3 — Execute after confirmation
+Do not write source code before the user confirms.
 
-Write code following the layer separation:
-- Axiology components: value definitions, scorers, validators, selectors — dedicated modules/classes
-- Epistemology components: algorithms, pipelines, strategies — composable and swappable
-- Ontology components: domain models — stable, free of method-specific assumptions
+### SUMMARY.md entries
 
-Add the plan file as a nested entry in `.aeo/src/SUMMARY.md` under `Implementation Plans`.
+```markdown
+- [Impl: <title>](./impl/<slug>/index.md)
+  - [Plan](./impl/<slug>/plan.md)
+  - [Layer Mapping](./impl/<slug>/layers.md)
+  - [Diagram](./impl/<slug>/diagram.md)
+```
 
 ---
 
 ## Refactoring
 
-Output file: `.aeo/src/refact/<slug>.md`
+Output directory: `.aeo/src/refact/<slug>/`
 
-### Step 1 — Write the plan
+### File structure
 
-Include a before/after Mermaid diagram showing the current tangled structure and the target separated structure. This is the most important part of a refactoring plan — it makes the intent unambiguous.
+```
+.aeo/src/refact/<slug>/
+├── index.md      — overview: what is being refactored, links to sub-pages
+├── violations.md — current layer violations found in the code
+├── plan.md       — step-by-step refactoring steps and files to modify
+└── diagram.md    — Mermaid before/after diagram (required)
+```
+
+### violations.md
 
 ```markdown
-# Refactoring Plan: <title>
+# Current Layer Violations
 
-## Current Layer Violations
 | Location | Violation | Layer |
 |----------|-----------|-------|
+```
 
-## Target Structure
-<mermaid diagram: before (tangled) → after (separated) — required>
+### plan.md
+
+```markdown
+# Refactoring Plan
 
 ## Steps
 1. Extract Axiology: ...
@@ -74,12 +124,37 @@ Include a before/after Mermaid diagram showing the current tangled structure and
 |------|--------|
 ```
 
-### Step 2 — Ask for confirmation
+### diagram.md
+
+Before/after Mermaid diagram is the most important part of a refactoring plan — it makes the intent unambiguous. Required.
+
+```markdown
+# Structure Diagram
+
+## Before (tangled)
+\`\`\`mermaid
+...
+\`\`\`
+
+## After (separated)
+\`\`\`mermaid
+...
+\`\`\`
+```
+
+### Confirmation gate
+
+After writing all plan files, ask:
 
 > "Here's the refactoring plan. Does this look right? I'll apply the changes once you confirm."
 
-### Step 3 — Execute after confirmation
+Do not modify source code before the user confirms.
 
-Apply changes layer by layer. Don't modify behavior — only separate concerns.
+### SUMMARY.md entries
 
-Add the plan file as a nested entry in `.aeo/src/SUMMARY.md` under `Refactoring Plans`.
+```markdown
+- [Refact: <title>](./refact/<slug>/index.md)
+  - [Violations](./refact/<slug>/violations.md)
+  - [Plan](./refact/<slug>/plan.md)
+  - [Diagram](./refact/<slug>/diagram.md)
+```

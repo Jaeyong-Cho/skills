@@ -1,38 +1,89 @@
 # Code Review Mode
 
-Output file: `.aeo/src/reviews/<slug>.md`
+Output directory: `.aeo/src/reviews/<slug>/`
 
-## Process
+## File structure
 
-For each piece of code, identify which layer it belongs to and flag violations:
+```
+.aeo/src/reviews/<slug>/
+├── index.md     — summary: what was reviewed, overall verdict, link to findings
+├── layers.md    — layer classification of the existing code
+├── findings.md  — violations found, each with why it matters and suggested fix
+└── diagram.md   — Mermaid diagram: current structure vs target structure
+```
 
-- Axiology mixed into Epistemology (e.g., scoring logic tangled with execution logic)
-- Ontology shaped by a specific Epistemology (entity changes shape for one caller)
-- Missing Axiology (selection/evaluation done implicitly, not explicitly)
-- Monolithic code where all three layers are entangled
-
-Structure each finding as: **[Layer] Issue → Why it matters → Suggested fix**
-
-Include a Mermaid diagram showing how the layers are currently tangled and how they should be separated after the fix. Even when the code is mostly clean, a diagram confirming the correct layer boundaries is more useful than prose alone.
-
-If layers are cleanly separated, say so — don't invent problems.
-
-## Output structure
+## index.md
 
 ```markdown
-# Code Review: <title>
+# Review: <title>
 
-## Layer Classification
-<table or bullets mapping code sections to their AEO layer>
+Brief description of what was reviewed.
 
-## Findings
+## Overall verdict
+<clean / minor violations / significant violations>
 
-### [Layer] <Issue title>
+## Sections
+- [Layer Classification](./layers.md)
+- [Findings](./findings.md)
+- [Diagram](./diagram.md)
+```
+
+## layers.md
+
+Map each code section to its AEO layer:
+
+```markdown
+# Layer Classification
+
+| Code / Module | Assigned Layer | Notes |
+|---------------|---------------|-------|
+| ...           | Axiology      | ...   |
+| ...           | Epistemology  | ...   |
+| ...           | Ontology      | ...   |
+```
+
+## findings.md
+
+One section per finding. Structure each as:
+
+```markdown
+# Findings
+
+## [Layer] <Issue title>
 **Why it matters**: ...
 **Suggested fix**: ...
 
-## Summary
-<overall assessment — what's working, what needs attention>
+## [Layer] <Issue title>
+...
 ```
 
-Add the file as a nested entry in `.aeo/src/SUMMARY.md` under `Code Reviews`.
+If layers are cleanly separated, say so — don't invent problems.
+
+## diagram.md
+
+Show the current structure and the target structure side by side:
+
+```markdown
+# Structure Diagram
+
+## Current (tangled)
+\`\`\`mermaid
+...
+\`\`\`
+
+## Target (separated)
+\`\`\`mermaid
+...
+\`\`\`
+```
+
+Include this diagram for every review — even clean code benefits from a diagram confirming the correct layer boundaries.
+
+## SUMMARY.md entries
+
+```markdown
+- [Review: <title>](./reviews/<slug>/index.md)
+  - [Layer Classification](./reviews/<slug>/layers.md)
+  - [Findings](./reviews/<slug>/findings.md)
+  - [Diagram](./reviews/<slug>/diagram.md)
+```
