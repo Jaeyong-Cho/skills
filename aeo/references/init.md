@@ -61,15 +61,17 @@ cd .aeo && mdbook build 2>&1
 
 Fix all errors before continuing.
 
-## Step 5: Start the book server
+## Step 5: Copy serve script
 
 ```bash
-chmod +x <skill-path>/scripts/serve.sh
-bash <skill-path>/scripts/serve.sh &
+cp <skill-path>/scripts/serve.sh .aeo/serve.sh
+chmod +x .aeo/serve.sh
 ```
 
-Replace `<skill-path>` with the path to the aeo skill directory. The server runs at http://localhost:4800 and live-reloads on file changes.
+Replace `<skill-path>` with the path to the aeo skill directory. Tell the user they can start the book server anytime with:
 
-Tell the user: "AEO book is running at http://localhost:4800"
+```bash
+.aeo/serve.sh
+```
 
 Then return to the main task.
