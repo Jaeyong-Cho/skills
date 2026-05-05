@@ -1,89 +1,53 @@
 # Code Review Mode
 
-Output directory: `.aeo/src/reviews/<slug>/`
+Output: a single file `.aeo/src/reviews/<slug>.md`
 
 ## File structure
-
-```
-.aeo/src/reviews/<slug>/
-├── index.md     — summary: what was reviewed, overall verdict, link to findings
-├── layers.md    — layer classification of the existing code
-├── findings.md  — violations found, each with why it matters and suggested fix
-└── diagram.md   — Mermaid diagram: current structure vs target structure
-```
-
-## index.md
 
 ```markdown
 # Review: <title>
 
 Brief description of what was reviewed.
 
-## Overall verdict
-<clean / minor violations / significant violations>
+**Verdict**: clean / minor violations / significant violations
 
-## Sections
-- [Layer Classification](./layers.md)
-- [Findings](./findings.md)
-- [Diagram](./diagram.md)
-```
+## Layer Classification
 
-## layers.md
+| Code / Module | Layer | Notes |
+|---------------|-------|-------|
+| ...           | Axiology | ... |
+| ...           | Epistemology | ... |
+| ...           | Ontology | ... |
 
-Map each code section to its AEO layer:
+## Findings
 
-```markdown
-# Layer Classification
-
-| Code / Module | Assigned Layer | Notes |
-|---------------|---------------|-------|
-| ...           | Axiology      | ...   |
-| ...           | Epistemology  | ...   |
-| ...           | Ontology      | ...   |
-```
-
-## findings.md
-
-One section per finding. Structure each as:
-
-```markdown
-# Findings
-
-## [Layer] <Issue title>
+### [Layer] <Issue title>
 **Why it matters**: ...
 **Suggested fix**: ...
 
-## [Layer] <Issue title>
+### [Layer] <Issue title>
+...
+
+## Structure Diagram
+
+### Current
+```mermaid
 ...
 ```
 
-If layers are cleanly separated, say so — don't invent problems.
-
-## diagram.md
-
-Show the current structure and the target structure side by side:
-
-```markdown
-# Structure Diagram
-
-## Current (tangled)
-\`\`\`mermaid
+### Target
+```mermaid
 ...
-\`\`\`
-
-## Target (separated)
-\`\`\`mermaid
-...
-\`\`\`
 ```
 
-Include this diagram for every review — even clean code benefits from a diagram confirming the correct layer boundaries.
+## Summary
+<overall assessment — what's working, what needs attention>
+```
 
-## SUMMARY.md entries
+Include the before/after diagram for every review — even clean code benefits from a diagram confirming correct layer boundaries. If no violations exist, a single diagram showing the clean structure is sufficient.
+
+## SUMMARY.md entry
 
 ```markdown
-- [Review: <title>](./reviews/<slug>/index.md)
-  - [Layer Classification](./reviews/<slug>/layers.md)
-  - [Findings](./reviews/<slug>/findings.md)
-  - [Diagram](./reviews/<slug>/diagram.md)
+  - [<title>](./reviews/<slug>.md)
 ```
