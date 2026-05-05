@@ -7,7 +7,6 @@
             var wrapper = document.createElement('div');
             wrapper.className = 'mermaid-wrapper';
             wrapper.style.width = '100%';
-            wrapper.style.height = '480px';
 
             var inner = document.createElement('div');
             inner.className = 'mermaid-inner';

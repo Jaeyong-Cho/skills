@@ -1,6 +1,6 @@
 .mermaid-wrapper {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid var(--table-border-color, #ccc);
     border-radius: 4px;
     cursor: grab;
