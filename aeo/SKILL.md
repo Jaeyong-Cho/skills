@@ -20,6 +20,111 @@ Design direction: Axiology first → Epistemology second → Ontology last (but 
 
 ---
 
+## Output and Book Setup
+
+All AEO outputs are written as markdown files into `.aeo/src/` and rendered with mdbook.
+
+### Check for existing book
+
+Before producing any output, check whether `.aeo/book.toml` exists:
+
+```bash
+ls .aeo/book.toml 2>/dev/null
+```
+
+If it does **not** exist, initialize the book first (see **Initializing the AEO Book** below), then proceed with the task.
+
+### Writing output files
+
+- **Design / Architecture** → `.aeo/src/design/<slug>.md`
+- **Code Review** → `.aeo/src/reviews/<slug>.md`
+- **Refactoring Plan** → `.aeo/src/refact/<slug>.md`
+- **Implementation Plan** → `.aeo/src/impl/<slug>.md`
+- **Documentation** → `.aeo/src/docs/<slug>.md`
+
+Use a short kebab-case slug based on the subject (e.g., `recommendation-engine.md`, `user-plan-selector.md`).
+
+After writing, add the file as a nested entry under the appropriate chapter in `.aeo/src/SUMMARY.md`. Then build:
+
+```bash
+cd .aeo && mdbook build 2>&1
+```
+
+Fix any errors before reporting to the user.
+
+---
+
+## Initializing the AEO Book
+
+Run this only when `.aeo/book.toml` does not exist.
+
+### Step 1: Install tooling if needed
+
+```bash
+which mdbook || cargo install mdbook
+which mdbook-mermaid || cargo install mdbook-mermaid
+```
+
+If `cargo` is not available, tell the user to install Rust first: https://www.rust-lang.org/tools/install
+
+### Step 2: Initialize and configure
+
+```bash
+mdbook init .aeo --title "AEO" --ignore git
+mdbook-mermaid install .aeo/
+```
+
+Replace `.aeo/book.toml` with:
+
+```toml
+[book]
+language = "en"
+src = "src"
+title = "AEO"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
+```
+
+### Step 3: Create chapter directories and SUMMARY.md
+
+```bash
+mkdir -p .aeo/src/design .aeo/src/reviews .aeo/src/refact .aeo/src/impl .aeo/src/docs
+```
+
+Write `.aeo/src/SUMMARY.md`:
+
+```markdown
+# Summary
+
+- [Design](./design/index.md)
+- [Code Reviews](./reviews/index.md)
+- [Refactoring Plans](./refact/index.md)
+- [Implementation Plans](./impl/index.md)
+- [Documentation](./docs/index.md)
+```
+
+Create an `index.md` stub in each chapter directory:
+
+```markdown
+# <Chapter Name>
+
+_No entries yet._
+```
+
+### Step 4: Build check
+
+```bash
+cd .aeo && mdbook build 2>&1
+```
+
+Fix all errors before proceeding to the actual task.
+
+---
+
 ## The Three Layers in Detail
 
 ### Axiology — Value
@@ -57,41 +162,94 @@ Design signal: domain models, core data structures, entity types. They should be
 
 ## Modes of Operation
 
-Adapt your output based on what the user asks. Common modes:
-
 ### Design / Architecture
+
 1. **Axiology first** — identify the values: what outcomes matter? what does success look like? what must never happen?
 2. **Epistemology second** — design the methods: what algorithms, workflows, or decision processes realize those values?
 3. **Ontology last** — identify the stable entities the methods will operate on.
-4. Present each layer clearly. Call out any leakage between layers (e.g., Ontology shaped by a single use case).
+4. Use a Mermaid diagram to show the layer relationships and component structure.
+5. Call out any leakage between layers (e.g., Ontology shaped by a single use case).
+6. Write the result to `.aeo/src/design/<slug>.md`.
+
+**Mermaid diagram template for design architecture:**
+
+````markdown
+```mermaid
+graph TD
+    subgraph Axiology
+        A1[Value Definition] --> A2[Value Evaluation]
+        A2 --> A3[Value Validation]
+        A3 --> A4[Value Selection]
+    end
+    subgraph Epistemology
+        E1[Algorithm / Workflow]
+        E2[Strategy / Policy]
+    end
+    subgraph Ontology
+        O1[Entity A]
+        O2[Entity B]
+    end
+    A4 -->|selects| E1
+    E1 -->|uses| O1
+    E1 -->|uses| O2
+    E2 -->|uses| O1
+```
+````
+
+Adapt the nodes to the actual system being designed. Always include this diagram in design outputs.
 
 ### Code Review
+
 For each piece of code, identify which layer it belongs to and flag violations:
 - Axiology mixed into Epistemology (e.g., scoring logic tangled with execution logic)
 - Ontology shaped by a specific Epistemology (entity changes shape for one caller)
 - Missing Axiology (selection/evaluation done implicitly, not explicitly)
 - Monolithic code where all three layers are entangled
 
-Structure feedback as: **[Layer] Issue → Why it matters → Suggested fix**
+Structure each finding as: **[Layer] Issue → Why it matters → Suggested fix**
 
-### Coding / Implementation
-When writing code, label your design decisions by layer:
-- Separate value logic (Axiology) from execution logic (Epistemology) from entity definitions (Ontology)
-- Axiology components: value definitions, scorers, validators, selectors — keep these in dedicated modules/classes
-- Epistemology components: algorithms, pipelines, strategies — make them swappable
-- Ontology components: domain models — keep them stable and free of method-specific assumptions
+Write the full review to `.aeo/src/reviews/<slug>.md`.
 
-### Refactoring
-Identify layer violations in existing code, then propose targeted separations:
-1. Extract Axiology (value, scoring, thresholds, selection) into explicit components
-2. Extract Epistemology (algorithms, workflows) into composable units
-3. Stabilize Ontology by removing method-specific fields or behaviors from entities
+### Implementation and Refactoring — Plan First
+
+For implementation and refactoring requests, **always write a plan before touching any code**.
+
+**Step 1 — Write the plan** to `.aeo/src/impl/<slug>.md` or `.aeo/src/refact/<slug>.md`:
+
+```markdown
+# Plan: <short title>
+
+## AEO Layer Mapping
+<describe which layer each component belongs to>
+
+## Architecture Diagram
+<mermaid diagram showing layer structure and component relationships>
+
+## Steps
+1. ...
+2. ...
+
+## Files to create / modify
+| File | Change |
+|------|--------|
+```
+
+Include a Mermaid diagram in the plan showing the target layer structure.
+
+**Step 2 — Ask for confirmation:**
+
+> "Here's the plan. Does this look right? I'll proceed once you confirm."
+
+**Step 3 — Execute only after confirmation.** Do not write or modify source code before the user approves the plan.
 
 ### Documentation
+
 Structure documentation around the three layers:
 - **Why** section: values, goals, success criteria (Axiology)
 - **How** section: methods, workflows, decision logic (Epistemology)
 - **What** section: entities, their properties and relationships (Ontology)
+
+Write to `.aeo/src/docs/<slug>.md`.
 
 ---
 
@@ -112,5 +270,7 @@ Structure documentation around the three layers:
 - Always name which layer you're discussing
 - When identifying violations, explain *why* it's a problem (not just which rule it breaks)
 - Be concrete: show the code change or the structure, not just the concept
-- Adapt verbosity to the task: a quick review note doesn't need full layer breakdowns; a full architecture session does
+- Use Mermaid diagrams when explaining design architecture — not for simple notes
+- Write all outputs to the appropriate `.aeo/src/` subdirectory and build the book
+- For implementation and refactoring: plan → confirm → execute. Never skip the confirmation step
 - If layers are cleanly separated already, say so — don't invent problems
