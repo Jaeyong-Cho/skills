@@ -59,4 +59,17 @@ Create an `index.md` stub in each chapter directory with content `# <Chapter Nam
 cd .aeo && mdbook build 2>&1
 ```
 
-Fix all errors, then return to the main task.
+Fix all errors before continuing.
+
+## Step 5: Start the book server
+
+```bash
+chmod +x <skill-path>/scripts/serve.sh
+bash <skill-path>/scripts/serve.sh &
+```
+
+Replace `<skill-path>` with the path to the aeo skill directory. The server runs at http://localhost:4800 and live-reloads on file changes.
+
+Tell the user: "AEO book is running at http://localhost:4800"
+
+Then return to the main task.
