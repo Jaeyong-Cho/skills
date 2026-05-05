@@ -4,72 +4,25 @@ Output: `.aeo/src/design/<ID>-<slug>.md`
 
 ## ID assignment
 
-Check the existing files to get the next ID:
-
 ```bash
 ls .aeo/src/design/*.md 2>/dev/null | wc -l
 ```
 
-Use zero-padded 4-digit format: `0001`, `0002`, etc.
+Zero-padded 4-digit format: `0001`, `0002`, etc.
 
-## File structure
+## What to write
 
-```markdown
-# [<ID>] Design: <title>
+There is no fixed template — let the content determine the structure. Think through the three layers and write what is actually true about the system being designed.
 
-Brief description of the system and its purpose.
+The questions to answer:
 
-## Axiology — Value
+**Axiology** — What is this software automating, and why is that valuable? What does success look like? What must never happen? Which behaviors are worth building?
 
-### Value Definition
-<what matters and how much>
+**Epistemology** — From which aspect(s) are the ontological objects being used? What algorithm makes the decision? How do the objects interact to produce the outcome? What strategies or workflows are composable here?
 
-### Value Evaluation
-<how results are measured>
+**Ontology** — What entities must exist? What distinguishes each from others? Is the abstraction level right for this concern — not too large, not too small? Are they stable and invariant across the different aspects that will use them?
 
-### Value Validation
-<minimum acceptable thresholds>
-
-### Value Selection
-<how the best option is chosen>
-
-## Epistemology — Method
-
-### Workflow
-<step-by-step process>
-
-### Decision Logic
-<how choices are made>
-
-### Composable Units
-<strategies, policies, pipelines and how they can be swapped>
-
-## Ontology — Entities
-
-### <Entity Name>
-**Properties**: ...
-**Behaviors**: ...
-**Relationships**: ...
-**Invariant**: <what stays the same regardless of which Epistemology uses it>
-
-## Architecture Diagram
-
-```mermaid
-graph TD
-    subgraph Axiology
-        ...
-    end
-    subgraph Epistemology
-        ...
-    end
-    subgraph Ontology
-        ...
-    end
-```
-
-## Layer Violations / Risks
-<any cross-layer leakage identified — omit section if none>
-```
+Also call out any leakage between layers, and include a Mermaid diagram showing the layer structure and relationships between components.
 
 ## SUMMARY.md entry
 

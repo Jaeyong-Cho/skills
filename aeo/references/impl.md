@@ -14,41 +14,23 @@ Output: `.aeo/src/impl/<ID>-<slug>.md`
 ls .aeo/src/impl/*.md 2>/dev/null | wc -l
 ```
 
-Use zero-padded 4-digit format: `0001`, `0002`, etc.
+Zero-padded 4-digit format: `0001`, `0002`, etc.
 
-### File structure
+### What to write
 
-```markdown
-# [<ID>] Implementation Plan: <title>
+There is no fixed template — write what is actually needed for the implementation to be unambiguous. Think through:
 
-Brief description of what is being built.
+**What exists (Ontology)** — Which entities need to be created or used? Is the abstraction level right for this concern? Are they stable enough to be shared across multiple aspects?
 
-## AEO Layer Mapping
+**Which aspect (Epistemology)** — From what angle are the objects being used? What algorithm makes the decision? How do the components interact to produce the outcome?
 
-| Component | Layer | Reason |
-|-----------|-------|--------|
+**What value (Axiology)** — What does success look like? What selection or evaluation logic is needed?
 
-## Architecture Diagram
+Include a Mermaid diagram showing the target layer structure. This is the most important part of the plan — it makes the intended separation visible before any code is written.
 
-```mermaid
-graph TD
-    ...
-```
+List the files to create and which layer each belongs to.
 
-## Steps
-
-1. ...
-2. ...
-
-## Files to Create
-
-| File | Layer | Purpose |
-|------|-------|---------|
-```
-
-The Mermaid diagram is required — it makes the layer structure unambiguous before any code is written.
-
-After writing the file, ask:
+After writing the plan, ask:
 
 > "Here's the implementation plan. Does this look right? I'll write the code once you confirm."
 
@@ -72,45 +54,20 @@ Output: `.aeo/src/refact/<ID>-<slug>.md`
 ls .aeo/src/refact/*.md 2>/dev/null | wc -l
 ```
 
-### File structure
+### What to write
 
-```markdown
-# [<ID>] Refactoring Plan: <title>
+There is no fixed template. Identify the violations, explain why they are problems in terms of the AEO philosophy, and describe the target structure.
 
-Brief description of what is being refactored.
+Key questions to answer:
 
-## Current Layer Violations
+- Which Ontological objects are being shaped by a specific aspect? (leakage)
+- Where is Axiology implicit rather than encoded?
+- Which Epistemological units are not composable or swappable?
+- Is any object's abstraction level mismatched to the concern?
 
-| Location | Violation | Layer |
-|----------|-----------|-------|
+Include a before/after Mermaid diagram — this is the clearest way to communicate the intended restructuring. Required, do not skip.
 
-## Before
-
-```mermaid
-...
-```
-
-## After
-
-```mermaid
-...
-```
-
-## Steps
-
-1. Extract Axiology: ...
-2. Extract Epistemology: ...
-3. Stabilize Ontology: ...
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-```
-
-Both before/after diagrams are required. They are the most important part of a refactoring plan — they make the intent unambiguous before any code is touched.
-
-After writing the file, ask:
+After writing the plan, ask:
 
 > "Here's the refactoring plan. Does this look right? I'll apply the changes once you confirm."
 

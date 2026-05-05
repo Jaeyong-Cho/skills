@@ -8,51 +8,23 @@ Output: `.aeo/src/reviews/<ID>-<slug>.md`
 ls .aeo/src/reviews/*.md 2>/dev/null | wc -l
 ```
 
-Use zero-padded 4-digit format: `0001`, `0002`, etc.
+Zero-padded 4-digit format: `0001`, `0002`, etc.
 
-## File structure
+## What to write
 
-```markdown
-# [<ID>] Review: <title>
+There is no fixed template — structure the review around what the code actually reveals. The goal is to identify whether the three layers are cleanly separated and whether the ontological objects are well-designed for their concern.
 
-Brief description of what was reviewed.
+Questions to answer through the review:
 
-**Verdict**: clean / minor violations / significant violations
+**Layer separation** — Is value logic (Axiology) explicit and separate? Is the method/aspect (Epistemology) composable and swappable? Are entities (Ontology) stable and invariant across the aspects that use them?
 
-## Layer Classification
+**Ontology quality** — Is the abstraction level right for the concern? Is each object distinguishable from others? Do objects change shape depending on who uses them (a smell)?
 
-| Code / Module | Layer | Notes |
-|---------------|-------|-------|
-| ...           | Axiology | ... |
-| ...           | Epistemology | ... |
-| ...           | Ontology | ... |
+**Aspect leakage** — Are Epistemological views bleeding into Ontological definitions? Does an object carry fields or methods that only make sense from one specific aspect?
 
-## Findings
+**Axiology visibility** — Is selection, evaluation, and validation explicit in code, or hidden in conditionals and magic numbers?
 
-### [Layer] <Issue title>
-**Why it matters**: ...
-**Suggested fix**: ...
-
-### [Layer] <Issue title>
-...
-
-## Current Structure
-
-```mermaid
-...
-```
-
-## Target Structure
-
-```mermaid
-...
-```
-
-## Summary
-<overall assessment — what's working, what needs attention>
-```
-
-Include both diagrams for every review. If no violations exist, a single diagram confirming the correct layer boundaries is sufficient — label it "Structure" instead of "Current / Target".
+For each finding, explain why it matters — not just which rule it breaks. Include a Mermaid diagram showing the current structure and, if violations exist, the target structure.
 
 ## SUMMARY.md entry
 

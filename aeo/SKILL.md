@@ -2,7 +2,7 @@
 name: aeo
 description: |
   Apply the AEO (Axiology–Epistemology–Ontology) software architecture philosophy to any engineering task.
-  AEO is a three-layer design lens: Axiology defines value (why), Epistemology defines method (how), Ontology defines stable entities (what).
+  AEO is a three-layer design lens inspired by OOP and AOP: Axiology defines value (why), Epistemology defines method and aspect (how), Ontology defines stable invariant entities (what).
   Use this skill whenever the user says "aeo", "apply aeo", "use aeo philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
   Also trigger when the user asks to analyze or critique an architecture and the AEO framework would help clarify responsibilities and boundaries.
   Even if the user just says "review this" or "design this" in a context where AEO has been mentioned or is the active working philosophy, apply this skill.
@@ -10,13 +10,15 @@ description: |
 
 # AEO Skill
 
-The AEO philosophy structures software around three layers:
+A program is an automation tool for making decisions to achieve a goal. AEO structures this around three layers:
 
-- **Axiology (Why)** — values, evaluation, validation, selection
-- **Epistemology (How)** — algorithms, workflows, composable methods
-- **Ontology (What)** — stable entities independent of any single method
+- **Axiology (Why)** — what goal is worth automating; values, evaluation, validation, selection
+- **Epistemology (How)** — the algorithm and aspect through which objects are used to realize the value
+- **Ontology (What)** — stable, invariant entities; their properties, behaviors, and relationships
 
 Design direction: **Axiology → Epistemology → Ontology** (iterative in practice).
+
+For layer details including the OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
 
 ---
 
@@ -37,16 +39,17 @@ If it does **not** exist: read `references/init.md` and initialize the book firs
 | Task | Reference file |
 |------|---------------|
 | Design / Architecture | `references/design.md` |
+| Implementation | `references/impl.md` |
 | Code Review | `references/review.md` |
-| Implementation or Refactoring | `references/impl.md` |
+| Refactoring | `references/impl.md` |
 | Documentation | `references/docs.md` |
-| AEO layer details (three layers in depth) | `references/layers.md` |
+| AEO layer details | `references/layers.md` |
 
 Read only the file(s) relevant to the current task.
 
 ## Mermaid Diagrams
 
-Use Mermaid diagrams to explain any non-trivial structure — layer relationships, component dependencies, data flow, before/after refactoring, entity relationships. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. When in doubt, add one.
+Use Mermaid diagrams to explain any non-trivial structure — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. When in doubt, add one.
 
 After finishing, build the book:
 
