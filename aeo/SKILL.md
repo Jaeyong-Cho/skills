@@ -49,7 +49,7 @@ Read only the file(s) relevant to the current task.
 
 ## Mermaid Diagrams
 
-Use Mermaid diagrams to explain any non-trivial structure — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. When in doubt, add one.
+Use Mermaid diagrams to explain any non-trivial structure — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. When in doubt, add one. Use multiple diagrams in the same file when different aspects of the design need separate explanation — there is no limit.
 
 After finishing, build the book:
 
