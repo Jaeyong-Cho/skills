@@ -58,3 +58,13 @@ cd .aeo && mdbook build 2>&1
 ```
 
 Fix all errors before reporting to the user.
+
+## Commit Message
+
+After each session, show the user a recommended commit message in this format:
+
+```
+<type>(aeo): <short description>
+```
+
+Where `<type>` is one of: `feat` (new design/impl/review/docs), `refact` (refactoring plan), `fix` (correction to existing content). The description should name the specific artifact produced (e.g. `add design 0001 auth-flow`, `add review 0003 payment-service`).
