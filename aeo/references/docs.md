@@ -16,7 +16,7 @@ Documentation is structured like a textbook — a named book with chapters, each
 │   └── ...
 ```
 
-Diagrams are embedded inline within the most relevant section file — typically `02-epistemology.md` for workflow diagrams or `03-ontology.md` for entity relationship diagrams. Do not create a separate diagram file.
+Diagrams are embedded inline within whichever section they best illustrate — `01-axiology.md` for value flow, `02-epistemology.md` for workflows, `03-ontology.md` for entity relationships. A single section may contain multiple diagrams if needed. Do not create a separate diagram file.
 
 Number chapters and sections so they sort correctly in the sidebar. Name directories and files with kebab-case slugs.
 
