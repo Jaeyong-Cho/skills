@@ -2,6 +2,8 @@
 
 **Always write the plan file and get confirmation before touching any code.**
 
+**Write simple, readable code. Prefer straightforward constructs over clever or advanced techniques. If a junior developer would have to pause to understand it, simplify it.**
+
 ---
 
 ## Implementation
