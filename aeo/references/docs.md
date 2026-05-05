@@ -10,12 +10,13 @@ Documentation is structured like a textbook — a named book with chapters, each
 ├── 01-<topic>/
 │   ├── index.md          — chapter introduction and section links
 │   ├── 01-axiology.md    — Why: values, goals, success criteria
-│   ├── 02-epistemology.md — How: methods, workflows, decision logic
-│   ├── 03-ontology.md    — What: entities, properties, relationships
-│   └── 04-diagram.md     — Architecture diagram for this topic
+│   ├── 02-epistemology.md — How: methods, workflows, decision logic (diagram here)
+│   └── 03-ontology.md    — What: entities, properties, relationships
 ├── 02-<topic>/
 │   └── ...
 ```
+
+Diagrams are embedded inline within the most relevant section file — typically `02-epistemology.md` for workflow diagrams or `03-ontology.md` for entity relationship diagrams. Do not create a separate diagram file.
 
 Number chapters and sections so they sort correctly in the sidebar. Name directories and files with kebab-case slugs.
 
@@ -117,5 +118,4 @@ Add each new chapter as a nested group:
     - [Axiology](./docs/01-<topic>/01-axiology.md)
     - [Epistemology](./docs/01-<topic>/02-epistemology.md)
     - [Ontology](./docs/01-<topic>/03-ontology.md)
-    - [Diagram](./docs/01-<topic>/04-diagram.md)
 ```

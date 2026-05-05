@@ -1,11 +1,19 @@
 # Code Review Mode
 
-Output: a single file `.aeo/src/reviews/<slug>.md`
+Output: `.aeo/src/reviews/<ID>-<slug>.md`
+
+## ID assignment
+
+```bash
+ls .aeo/src/reviews/*.md 2>/dev/null | wc -l
+```
+
+Use zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## File structure
 
 ```markdown
-# Review: <title>
+# [<ID>] Review: <title>
 
 Brief description of what was reviewed.
 
@@ -28,14 +36,14 @@ Brief description of what was reviewed.
 ### [Layer] <Issue title>
 ...
 
-## Structure Diagram
+## Current Structure
 
-### Current
 ```mermaid
 ...
 ```
 
-### Target
+## Target Structure
+
 ```mermaid
 ...
 ```
@@ -44,10 +52,10 @@ Brief description of what was reviewed.
 <overall assessment — what's working, what needs attention>
 ```
 
-Include the before/after diagram for every review — even clean code benefits from a diagram confirming correct layer boundaries. If no violations exist, a single diagram showing the clean structure is sufficient.
+Include both diagrams for every review. If no violations exist, a single diagram confirming the correct layer boundaries is sufficient — label it "Structure" instead of "Current / Target".
 
 ## SUMMARY.md entry
 
 ```markdown
-  - [<title>](./reviews/<slug>.md)
+  - [[<ID>] <title>](./reviews/<ID>-<slug>.md)
 ```

@@ -6,12 +6,20 @@
 
 ## Implementation
 
-Output: a single file `.aeo/src/impl/<slug>.md`
+Output: `.aeo/src/impl/<ID>-<slug>.md`
+
+### ID assignment
+
+```bash
+ls .aeo/src/impl/*.md 2>/dev/null | wc -l
+```
+
+Use zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ### File structure
 
 ```markdown
-# Implementation Plan: <title>
+# [<ID>] Implementation Plan: <title>
 
 Brief description of what is being built.
 
@@ -38,7 +46,7 @@ graph TD
 |------|-------|---------|
 ```
 
-A Mermaid diagram is required in every implementation plan — it makes the layer structure unambiguous before any code is written.
+The Mermaid diagram is required — it makes the layer structure unambiguous before any code is written.
 
 After writing the file, ask:
 
@@ -49,19 +57,25 @@ Do not write source code before the user confirms.
 ### SUMMARY.md entry
 
 ```markdown
-  - [<title>](./impl/<slug>.md)
+  - [[<ID>] <title>](./impl/<ID>-<slug>.md)
 ```
 
 ---
 
 ## Refactoring
 
-Output: a single file `.aeo/src/refact/<slug>.md`
+Output: `.aeo/src/refact/<ID>-<slug>.md`
+
+### ID assignment
+
+```bash
+ls .aeo/src/refact/*.md 2>/dev/null | wc -l
+```
 
 ### File structure
 
 ```markdown
-# Refactoring Plan: <title>
+# [<ID>] Refactoring Plan: <title>
 
 Brief description of what is being refactored.
 
@@ -70,14 +84,14 @@ Brief description of what is being refactored.
 | Location | Violation | Layer |
 |----------|-----------|-------|
 
-## Structure Diagram
+## Before
 
-### Before (tangled)
 ```mermaid
 ...
 ```
 
-### After (separated)
+## After
+
 ```mermaid
 ...
 ```
@@ -94,7 +108,7 @@ Brief description of what is being refactored.
 |------|--------|
 ```
 
-The before/after diagram is the most important part — it makes the intent unambiguous. Required, do not skip.
+Both before/after diagrams are required. They are the most important part of a refactoring plan — they make the intent unambiguous before any code is touched.
 
 After writing the file, ask:
 
@@ -105,5 +119,5 @@ Do not modify source code before the user confirms.
 ### SUMMARY.md entry
 
 ```markdown
-  - [<title>](./refact/<slug>.md)
+  - [[<ID>] <title>](./refact/<ID>-<slug>.md)
 ```

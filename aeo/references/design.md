@@ -1,11 +1,21 @@
 # Design / Architecture Mode
 
-Output: a single file `.aeo/src/design/<slug>.md`
+Output: `.aeo/src/design/<ID>-<slug>.md`
+
+## ID assignment
+
+Check the existing files to get the next ID:
+
+```bash
+ls .aeo/src/design/*.md 2>/dev/null | wc -l
+```
+
+Use zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## File structure
 
 ```markdown
-# Design: <title>
+# [<ID>] Design: <title>
 
 Brief description of the system and its purpose.
 
@@ -63,8 +73,6 @@ graph TD
 
 ## SUMMARY.md entry
 
-Add a single line under `Design`:
-
 ```markdown
-  - [<title>](./design/<slug>.md)
+  - [[<ID>] <title>](./design/<ID>-<slug>.md)
 ```
