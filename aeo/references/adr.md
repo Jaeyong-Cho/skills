@@ -16,22 +16,13 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## Step 1: Grill-me (reach shared understanding before writing)
 
-Before writing the ADR, ask the user targeted questions to make sure both sides understand the decision the same way. The goal is not to gather information mechanically — it is to surface assumptions, constraints, and intentions that would otherwise only become visible after the ADR is written and wrong.
+Interview the user relentlessly about every aspect of this decision until reaching shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one by one.
 
-Ask only questions that genuinely matter for making the decision. Stop when you feel you and the user see the problem the same way. A good grill-me session ends with the user confirming "yes, that's it" or correcting a misunderstanding you had.
+- Ask questions **one at a time**
+- For each question, provide your **recommended answer** so the user can confirm, correct, or refine
+- If a question can be answered by **exploring the codebase**, do that instead of asking
 
-Questions to consider (pick the ones relevant to this decision):
-
-- What is the user need this decision serves? Who specifically benefits and how?
-- What triggered this decision now — what changed or broke?
-- What does success look like after this is done? How would you know it worked?
-- What must not change or break as a result of this decision?
-- Are there constraints (performance, compatibility, team, deadline) that limit the options?
-- What alternatives have already been considered or ruled out?
-- Is this a new capability, a fix, or a restructuring of something existing?
-- Which parts of the codebase does this touch, and which should it leave alone?
-
-After the questions are answered, briefly summarize your understanding and ask the user to confirm before proceeding to the ADR.
+Stop when every branch of the decision tree is resolved and both sides see the problem the same way.
 
 ---
 
