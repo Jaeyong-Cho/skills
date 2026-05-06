@@ -53,6 +53,8 @@ Read only the file(s) relevant to the current task.
 
 Use Mermaid diagrams anywhere a visual explanation is clearer than prose — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships, decision logic, anything. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. Place diagrams wherever they help, use as many as needed, and never restrict them to specific sections.
 
+Keep each diagram focused on one context. If a diagram is getting large, split it — one diagram per concern is more readable than one diagram trying to show everything. A diagram that needs scrolling or squinting has already failed its purpose.
+
 For multi-line text inside node labels, use `<br/>` — not `\n`. `\n` does not render in Mermaid node labels.
 
 ```
