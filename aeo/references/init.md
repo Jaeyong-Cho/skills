@@ -62,7 +62,7 @@ Write `.aeo/src/SUMMARY.md`:
 # Summary
 
 - [ADR](./adr/index.md)
-- [Software Manual](./docs/index.md)
+- [Documentation](./docs/index.md)
 ```
 
 Create an `index.md` stub in each directory with content `# <Chapter Name>\n\n_No entries yet._`

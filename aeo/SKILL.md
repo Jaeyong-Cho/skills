@@ -42,7 +42,7 @@ Every task follows this sequence:
 
 1. **Write an ADR** — read `references/adr.md`. All decisions (new feature, refactoring, architecture change) are ADRs. Ask the user to confirm before writing any code.
 2. **Implement** — write code according to the step-by-step plan in the ADR.
-3. **Code review confirmed** — update the software manual. Read `references/docs.md`.
+3. **Code review confirmed** — update the documentation. Read `references/docs.md`.
 
 For AEO layer details, read `references/layers.md`.
 

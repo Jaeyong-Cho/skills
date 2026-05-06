@@ -1,6 +1,6 @@
-# Software Manual
+# Documentation
 
-The software manual is the living documentation of the system — updated after each confirmed implementation, not per-decision. It describes the current state of the system, not the history of decisions (that is what ADRs are for).
+The documentation is the living documentation of the system — updated after each confirmed implementation, not per-decision. It describes the current state of the system, not the history of decisions (that is what ADRs are for).
 
 Output: `.aeo/src/docs/`
 
@@ -25,7 +25,7 @@ Number chapters and sections so they sort correctly in the sidebar. Use kebab-ca
 ## docs/index.md
 
 ```markdown
-# Software Manual
+# Documentation
 
 This manual documents the current system design using the AEO framework.
 
