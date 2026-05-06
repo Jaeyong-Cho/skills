@@ -12,7 +12,7 @@ This leads to two types of classes: **entity objects** (what exists) and **aspec
 
 ---
 
-## Entity layer — Existence (What)
+## Ontology (Entity layer) — Existence (What)
 
 Entity objects are the things that must exist to satisfy both the user need and the method. They are not an arbitrary catalog of domain things — they are the objects that the method selects and uses, shaped to serve the concerns that the value layer defines.
 
@@ -39,7 +39,7 @@ Entity objects are the stable foundation. Multiple method-layer components can u
 
 ---
 
-## Method layer — Algorithm / Aspect (How)
+## Epistemology (Method layer) — Algorithm / Aspect (How)
 
 The method layer has two responsibilities:
 
@@ -56,7 +56,7 @@ Structure the method layer into composable units — strategies, workflows, pipe
 
 ---
 
-## Value layer — User Value (Why)
+## Axiology (Value layer) — User Value (Why)
 
 The value layer encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
 

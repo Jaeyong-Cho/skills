@@ -1,8 +1,8 @@
 ---
 name: aeo
 description: |
-  Apply the AEO software architecture philosophy to any engineering task.
-  AEO is a three-layer design lens inspired by OOP and AOP: value layer (why — user needs), method layer (how — algorithm and aspect), entity layer (what — stable domain objects).
+  Apply the AEO (Axiology–Epistemology–Ontology) software architecture philosophy to any engineering task.
+  AEO is a three-layer design lens inspired by OOP and AOP: Axiology defines user value (why), Epistemology defines method and aspect (how), Ontology defines stable domain entities (what).
   Use this skill whenever the user says "aeo", "apply aeo", "use aeo philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
   Also trigger when the user asks to analyze or critique an architecture and the AEO framework would help clarify responsibilities and boundaries.
   Even if the user just says "review this" or "design this" in a context where AEO has been mentioned or is the active working philosophy, apply this skill.
@@ -12,13 +12,13 @@ description: |
 
 A program is an automation tool for making decisions to achieve a goal. AEO structures this around three layers:
 
-- **Value layer (Why)** — user value: which features are worth building, which results users need, what a good outcome looks like; the entry point that represents user intent in code
-- **Method layer (How)** — how to meet the need, and which objects to use and from which angle; the composable algorithm that bridges value and entity
-- **Entity layer (What)** — the stable objects that exist to satisfy the need and the method; invariant across aspects
+- **Axiology (Why)** — user value: which features are worth building, which results users need, what a good outcome looks like; the entry point that represents user intent in code
+- **Epistemology (How)** — how to meet the need, and which objects to use and from which angle; the composable algorithm that bridges value and entity
+- **Ontology (What)** — the stable objects that exist to satisfy the need and the method; invariant across aspects
 
-Design direction: **value → method → entity** (iterative in practice).
+Design direction: **Axiology → Epistemology → Ontology** (iterative in practice).
 
-In all documents, ADRs, and code labels always use `[value]`, `[method]`, `[entity]`.
+In output documents, ADRs, and code labels use plain terms: `[value]`, `[method]`, `[entity]` instead of the philosophical names.
 
 For layer details including the OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
 
