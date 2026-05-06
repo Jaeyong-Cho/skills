@@ -18,7 +18,7 @@ A program is an automation tool for making decisions to achieve a goal. AEO stru
 
 Design direction: **value → method → entity** (iterative in practice).
 
-The philosophical names — Axiology, Epistemology, Ontology — are used in academic references only. In documents and code, always use: `[value]`, `[method]`, `[entity]`.
+In all documents, ADRs, and code labels always use `[value]`, `[method]`, `[entity]`.
 
 For layer details including the OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
 
