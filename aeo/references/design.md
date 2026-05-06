@@ -26,16 +26,16 @@ What constraints or forces are in play?
 
 ## Decision
 
-What was decided, and why. Walk through the three AEO layers:
+What was decided, and why. Walk through the three layers:
 
-**Axiology** — What does the end user need from this? Which features are worth
+**Value** — What does the end user need from this? Which features are worth
 building and why? What does a good result look like from the user's perspective?
 What must never happen?
 
-**Epistemology** — From which aspect(s) are the objects being used?
+**Method** — From which aspect(s) are the entities being used?
 What algorithm makes the decision? How do components interact?
 
-**Ontology** — What entities must exist? Are they stable and invariant?
+**Entity** — What objects must exist? Are they stable and invariant?
 Is the abstraction level right — not too large, not too small?
 
 Call out any leakage between layers.
@@ -60,12 +60,14 @@ graph TD
 
 ## Step-by-Step Plan
 
-Ordered tasks to realize this design. Each step names the file or component
-and which AEO layer it belongs to.
+Ordered tasks to realize this design. Each step names the file or component,
+what it does, and which layer it belongs to. Use the project's own directory
+naming — the layer label in brackets is just to show which AEO layer it is.
 
-1. Step one — `path/to/file.ts` (Ontology)
-2. Step two — `path/to/service.ts` (Epistemology)
-3. ...
+1. Create `src/models/user.ts` — User entity [entity]
+2. Create `src/services/auth.ts` — authentication workflow [method]
+3. Create `src/commands/login.ts` — login use-case entry point [value]
+4. ...
 ```
 
 After writing the document, ask the user to confirm before starting implementation.

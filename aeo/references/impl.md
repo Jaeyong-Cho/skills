@@ -34,15 +34,15 @@ What existing code or constraints does this touch?
 
 ## Decision
 
-What was decided about how to implement this. Walk through the three AEO layers:
+What was decided about how to implement this. Walk through the three layers:
 
-**Ontology** — Which entities need to be created or used? Are they stable
+**Entity** — Which objects need to be created or used? Are they stable
 enough to be shared across multiple aspects? Is the abstraction level right?
 
-**Epistemology** — From what angle are the objects being used? What algorithm
+**Method** — From what angle are the entities being used? What algorithm
 makes the decision? How do the components interact to produce the outcome?
 
-**Axiology** — What does the end user need from this feature? What does a
+**Value** — What does the end user need from this feature? What does a
 good result look like from their perspective? What must the implementation
 never do?
 
@@ -66,11 +66,13 @@ graph TD
 
 ## Step-by-Step Plan
 
-Ordered tasks. Each step names the file, what it does, and which AEO layer it belongs to.
+Ordered tasks. Each step names the file, what it does, and which layer it
+belongs to. Use the project's own directory naming — the label in brackets
+shows which AEO layer it is.
 
-1. Create `path/to/entity.ts` — defines the X entity (Ontology)
-2. Create `path/to/service.ts` — orchestrates the X workflow (Epistemology)
-3. Update `path/to/evaluator.ts` — adds success criterion Y (Axiology)
+1. Create `src/models/user.ts` — User entity [entity]
+2. Create `src/services/auth.ts` — authentication workflow [method]
+3. Create `src/commands/login.ts` — login use-case entry point [value]
 4. ...
 ```
 
@@ -109,13 +111,13 @@ Each refactoring plan is an Architecture Decision Record. Use this structure:
 
 ## Context
 
-What AEO violations exist in the current code? Why do they matter?
+What layer violations exist in the current code? Why do they matter?
 What symptom or pain point prompted this refactoring?
 
 Answer:
-- Which Ontological objects are being shaped by a specific aspect? (leakage)
-- Where is Axiology implicit rather than encoded?
-- Which Epistemological units are not composable or swappable?
+- Which entity objects are being shaped by a specific aspect? (leakage into method layer)
+- Where is the user value implicit rather than encoded? (leakage into method or entity layer)
+- Which method units are not composable or swappable?
 - Is any object's abstraction level mismatched to its concern?
 
 ## Decision
@@ -149,13 +151,13 @@ graph TD
 ## Step-by-Step Plan
 
 Ordered tasks to move from the current state to the target. Be specific — name
-files, what moves where, and which layer each belongs to. This is what the
-developer will follow step by step.
+files, what moves where, and which layer each belongs to. Use the project's own
+directory naming — the label in brackets shows which AEO layer it is.
 
-1. Extract `X` from `path/to/current.ts` into `path/to/entity.ts` (Ontology)
-2. Move decision logic from `service.ts` into `path/to/evaluator.ts` (Axiology)
-3. Update `path/to/aspect.ts` to call the new evaluator (Epistemology)
-4. Delete now-unused code in `path/to/old.ts`
+1. Extract `User` from `src/services/auth.ts` into `src/models/user.ts` [entity]
+2. Move selection logic from `auth.ts` into `src/commands/login.ts` [value]
+3. Update `src/services/auth.ts` to call the extracted model [method]
+4. Delete now-unused code in `src/old/handler.ts`
 5. ...
 ```
 
