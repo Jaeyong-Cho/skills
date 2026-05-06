@@ -1,8 +1,8 @@
 ---
 name: aeo
 description: |
-  Apply the AEO (Axiology–Epistemology–Ontology) software architecture philosophy to any engineering task.
-  AEO is a three-layer design lens inspired by OOP and AOP: Axiology defines value (why), Epistemology defines method and aspect (how), Ontology defines stable invariant entities (what).
+  Apply the AEO software architecture philosophy to any engineering task.
+  AEO is a three-layer design lens inspired by OOP and AOP: value layer (why — user needs), method layer (how — algorithm and aspect), entity layer (what — stable domain objects).
   Use this skill whenever the user says "aeo", "apply aeo", "use aeo philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
   Also trigger when the user asks to analyze or critique an architecture and the AEO framework would help clarify responsibilities and boundaries.
   Even if the user just says "review this" or "design this" in a context where AEO has been mentioned or is the active working philosophy, apply this skill.

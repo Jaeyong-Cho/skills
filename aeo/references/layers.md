@@ -10,8 +10,6 @@ AEO is a software design philosophy inspired by OOP and AOP. A program is an aut
 
 This leads to two types of classes: **entity objects** (what exists) and **aspect objects** (how things are viewed and used to achieve a goal). The value layer sits above both, determining which user goals are worth pursuing.
 
-The philosophical terms for these layers are Axiology (value), Epistemology (method), and Ontology (entity) — but in code and documents, use plain labels: `[value]`, `[method]`, `[entity]`.
-
 ---
 
 ## Entity layer — Existence (What)
