@@ -46,6 +46,10 @@ A good module has an interface simpler than its implementation. If a proposed ch
 
 ## Step 3: ADR template
 
+For the full definition of each layer, read `references/layers.md`.
+
+
+
 ```markdown
 # [ID] Title
 
