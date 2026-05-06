@@ -1,31 +1,33 @@
-# Documentation Mode
+# Software Manual
 
-Documentation is structured like a textbook — a named book with chapters, each chapter covering one coherent topic. Every chapter is a separate file. The book grows as new topics are documented.
+The software manual is the living documentation of the system — updated after each confirmed implementation, not per-decision. It describes the current state of the system, not the history of decisions (that is what ADRs are for).
 
-## Directory structure
+Output: `.aeo/src/docs/`
+
+## Structure
 
 ```
 .aeo/src/docs/
-├── index.md              — book introduction and table of contents
+├── index.md              — introduction and table of contents
 ├── 01-<topic>/
 │   ├── index.md          — chapter introduction and section links
-│   ├── 01-axiology.md    — Why: values, goals, success criteria
-│   ├── 02-epistemology.md — How: methods, workflows, decision logic (diagram here)
-│   └── 03-ontology.md    — What: entities, properties, relationships
+│   ├── 01-value.md       — Why: user needs, goals, success criteria
+│   ├── 02-method.md      — How: workflows, decision logic, composable units
+│   └── 03-entity.md      — What: entities, properties, behaviors, relationships
 ├── 02-<topic>/
 │   └── ...
 ```
 
-Diagrams are embedded inline within whichever section they best illustrate — `01-axiology.md` for value flow, `02-epistemology.md` for workflows, `03-ontology.md` for entity relationships. A single section may contain multiple diagrams if needed. Do not create a separate diagram file.
+Number chapters and sections so they sort correctly in the sidebar. Use kebab-case for directory and file names.
 
-Number chapters and sections so they sort correctly in the sidebar. Name directories and files with kebab-case slugs.
+---
 
-## docs/index.md — Book introduction
+## docs/index.md
 
 ```markdown
-# AEO Documentation
+# Software Manual
 
-This book documents the system using the AEO framework.
+This manual documents the current system design using the AEO framework.
 
 ## Chapters
 
@@ -33,7 +35,7 @@ This book documents the system using the AEO framework.
 - [Chapter 2: <Topic>](./02-<topic>/index.md)
 ```
 
-## Chapter index.md — Chapter introduction
+## Chapter index.md
 
 ```markdown
 # Chapter N: <Topic>
@@ -42,80 +44,40 @@ One paragraph introducing what this chapter covers and why it matters.
 
 ## Sections
 
-- [Axiology — Why](./01-axiology.md)
-- [Epistemology — How](./02-epistemology.md)
-- [Ontology — What](./03-ontology.md)
-- [Diagram](./04-diagram.md)
+- [Value — Why](./01-value.md)
+- [Method — How](./02-method.md)
+- [Entity — What](./03-entity.md)
 ```
 
 ## Section files
 
-**01-axiology.md**
-```markdown
-# Axiology — Why
+**01-value.md** — user needs this topic serves, what success looks like, what must never happen
 
-## Value Definition
-<what matters and how much>
+**02-method.md** — how the need is met: workflows, decision logic, composable strategies. Include Mermaid diagrams for flows and interactions.
 
-## Value Evaluation
-<how results are measured>
+**03-entity.md** — the objects that exist: properties, behaviors, relationships, and invariants. Include Mermaid diagrams for entity relationships.
 
-## Value Validation
-<minimum acceptable thresholds>
+---
 
-## Value Selection
-<how the best option is chosen>
-```
+## When to update
 
-**02-epistemology.md**
-```markdown
-# Epistemology — How
+Update the manual **after** a code review is confirmed — not before. The manual reflects what is actually in the code, not what was planned. If an ADR was partially implemented or changed during implementation, the manual should reflect what was actually built.
 
-## Workflow
-<step-by-step process>
-
-## Decision Logic
-<how choices are made>
-
-## Composable Units
-<strategies, policies, pipelines>
-```
-
-**03-ontology.md**
-```markdown
-# Ontology — What
-
-## <Entity Name>
-**Properties**: ...
-**Behaviors**: ...
-**Relationships**: ...
-**Invariant**: ...
-```
-
-**04-diagram.md**
-```markdown
-# Architecture Diagram
-
-```mermaid
-graph TD
-    ...
-```
-```
-
-Include a Mermaid diagram by default. Only omit if the topic is trivially simple.
+When updating:
+- Find the relevant chapter (or create one if this is a new topic)
+- Update only the sections that changed
+- Keep language describing the current system, not the history of changes
 
 ## Adding a new chapter
 
-When the user asks to document a new topic, create a new numbered chapter directory with its four section files and update both `docs/index.md` and `SUMMARY.md`.
+Create a new numbered chapter directory with its three section files and update both `docs/index.md` and `SUMMARY.md`.
 
 ## SUMMARY.md entries
-
-Add each new chapter as a nested group:
 
 ```markdown
 - [Documentation](./docs/index.md)
   - [Chapter 1: <Topic>](./docs/01-<topic>/index.md)
-    - [Axiology](./docs/01-<topic>/01-axiology.md)
-    - [Epistemology](./docs/01-<topic>/02-epistemology.md)
-    - [Ontology](./docs/01-<topic>/03-ontology.md)
+    - [Value](./docs/01-<topic>/01-value.md)
+    - [Method](./docs/01-<topic>/02-method.md)
+    - [Entity](./docs/01-<topic>/03-entity.md)
 ```

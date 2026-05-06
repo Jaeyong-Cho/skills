@@ -53,7 +53,7 @@ additional-css = ["theme/css/variables.css"]
 ## Step 5: Create chapter directories and SUMMARY.md
 
 ```bash
-mkdir -p .aeo/src/design .aeo/src/reviews .aeo/src/refact .aeo/src/impl .aeo/src/docs
+mkdir -p .aeo/src/adr .aeo/src/docs
 ```
 
 Write `.aeo/src/SUMMARY.md`:
@@ -61,14 +61,11 @@ Write `.aeo/src/SUMMARY.md`:
 ```markdown
 # Summary
 
-- [Design](./design/index.md)
-- [Implementation Plans](./impl/index.md)
-- [Code Reviews](./reviews/index.md)
-- [Refactoring Plans](./refact/index.md)
-- [Documentation](./docs/index.md)
+- [ADR](./adr/index.md)
+- [Software Manual](./docs/index.md)
 ```
 
-Create an `index.md` stub in each chapter directory with content `# <Chapter Name>\n\n_No entries yet._`
+Create an `index.md` stub in each directory with content `# <Chapter Name>\n\n_No entries yet._`
 
 ## Step 6: Build check
 

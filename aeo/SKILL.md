@@ -36,18 +36,15 @@ If it does **not** exist: read `references/init.md` and initialize the book firs
 
 ---
 
-## What to Read for Each Task
+## Workflow
 
-| Task | Reference file |
-|------|---------------|
-| Design / Architecture | `references/design.md` |
-| Implementation | `references/impl.md` |
-| Code Review | `references/review.md` |
-| Refactoring | `references/impl.md` |
-| Documentation | `references/docs.md` |
-| AEO layer details | `references/layers.md` |
+Every task follows this sequence:
 
-Read only the file(s) relevant to the current task.
+1. **Write an ADR** — read `references/adr.md`. All decisions (new feature, refactoring, architecture change) are ADRs. Ask the user to confirm before writing any code.
+2. **Implement** — write code according to the step-by-step plan in the ADR.
+3. **Code review confirmed** — update the software manual. Read `references/docs.md`.
+
+For AEO layer details, read `references/layers.md`.
 
 ## Mermaid Diagrams
 
