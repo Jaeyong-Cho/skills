@@ -18,7 +18,14 @@ The philosophical terms for these layers are Axiology (value), Epistemology (met
 
 Entity objects are the things that must exist to satisfy both the user need and the method. They are not an arbitrary catalog of domain things — they are the objects that the method selects and uses, shaped to serve the concerns that the value layer defines.
 
-An entity object defines: properties, actions, behaviors, and relationships for a target in the problem domain.
+An entity object is not just a data container. It defines the full identity of a domain target:
+
+- **Properties** — the state it holds
+- **Actions** — what it can do (methods, commands, transitions)
+- **Behaviors** — how it responds to events or conditions
+- **Relationships** — how it connects to other entities
+
+A class that only holds data with no actions or behaviors is a data bag, not an entity object. If the logic that belongs to an entity is scattered across service or method-layer classes instead, that is a leakage smell — the entity is too thin.
 
 **The key design question**: What distinguishes this object from others, and is it the right abstraction for the concern being served?
 

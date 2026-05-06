@@ -54,8 +54,11 @@ building? What does success look like? What must never happen?
 **Method** — How is the need met? Which entities are used and from which angle?
 What algorithm or workflow produces the outcome?
 
-**Entity** — What objects must exist? Are they stable and invariant across
-different uses? Is the abstraction level right — not too large, not too small?
+**Entity** — What objects must exist? Each entity must have more than just
+data — it should own properties, actions, behaviors, and relationships relevant
+to its concern. If logic that belongs to an entity lives outside it, the entity
+is too thin. Are the entities stable and invariant across different uses? Is the
+abstraction level right — not too large, not too small?
 
 Call out any leakage between layers.
 
