@@ -10,6 +10,19 @@ ls .aeo/src/design/*.md 2>/dev/null | wc -l
 
 Zero-padded 4-digit format: `0001`, `0002`, etc.
 
+## Deep Module principle
+
+Every module in the design should be **deep**: its interface should be simpler than its implementation. A wide, thin interface that exposes internals is a design smell regardless of which layer it lives in. When evaluating each component, ask:
+
+- Is the interface narrower than the implementation, or does it expose internal steps?
+- Does the caller need to know internal details to use this correctly? (leaky interface)
+- Are two components always edited together? (should be one)
+- Is the same logic encoded in more than one place? (information leakage / duplication)
+
+If a proposed module is shallow, either deepen it by pulling more behavior inside, or question whether it should exist as a separate module at all.
+
+---
+
 ## Document structure (ADR format)
 
 Each design document is an Architecture Decision Record. Use this structure:

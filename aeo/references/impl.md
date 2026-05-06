@@ -100,6 +100,22 @@ Output: `.aeo/src/refact/<ID>-<slug>.md`
 ls .aeo/src/refact/*.md 2>/dev/null | wc -l
 ```
 
+### Deep Module checklist
+
+Before writing the plan, assess the current code against these anti-patterns. Each one is a refactoring target:
+
+| Anti-pattern | What to look for |
+|---|---|
+| **Shallow module** | Interface nearly as wide as the implementation — many tiny methods, getter/setter heavy |
+| **Duplicated logic** | Same algorithm or rule in two or more places — changing it requires touching every copy |
+| **Information leakage** | Same knowledge (config key, format, validation rule) scattered across call sites |
+| **Temporal decomposition** | Split by execution order rather than responsibility — `ParseX`, `ProcessX`, `OutputX` as separate classes when all exist only to serve X |
+| **Pass-through method** | A function whose body is just calling another function with the same arguments |
+| **Leaky interface** | Callers must know internal details (ordering, magic values, init sequences) to use the module |
+| **Conjoined twins** | Two modules always edited together — should probably be one |
+
+The goal of any refactoring is to make the interface simpler than the implementation, and to reduce how many modules must change when internals change. If the refactoring doesn't move those numbers down, it is not achieving its purpose.
+
 ### Document structure (ADR format)
 
 Each refactoring plan is an Architecture Decision Record. Use this structure:
