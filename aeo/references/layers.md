@@ -14,9 +14,11 @@ This leads to two types of classes: **Ontological objects** (what exists) and **
 
 ## Ontology — Existence (What)
 
+Ontological objects are the things that must exist to satisfy both the Axiological need and the Epistemological method. They are not an arbitrary catalog of domain entities — they are the objects that Epistemology selects and uses, shaped to serve the concerns that Axiology defines.
+
 An Ontological object defines: properties, actions, behaviors, and relationships for a target in the problem domain.
 
-**The key design question**: What distinguishes this object from others?
+**The key design question**: What distinguishes this object from others, and is it the right abstraction for the concern being served?
 
 **The key design constraint**: Size must match the concern.
 
@@ -24,7 +26,7 @@ An Ontological object defines: properties, actions, behaviors, and relationships
 - If the concern is `Animal`, `Atom` is too small — define `Arm`, `Head`, `Body` instead.
 - The object must not be too large (covering things outside the concern) or too small (forcing callers to reconstruct meaning).
 
-**The invariance principle**: An Ontological object must remain the same regardless of which aspect is looking at it. If the object changes shape for a specific use case, it is no longer Ontological — it has leaked into Epistemology.
+**The invariance principle**: An Ontological object must remain the same regardless of which aspect is looking at it. If the object changes shape for a specific use case, it has leaked into Epistemology.
 
 Ontological objects are the stable foundation. Multiple Epistemologies can use the same object from different angles without the object knowing or caring.
 
@@ -32,32 +34,34 @@ Ontological objects are the stable foundation. Multiple Epistemologies can use t
 
 ## Epistemology — Method / Aspect (How)
 
-Epistemology describes how to interpret and use Ontological objects from a specific **aspect** to realize a goal. This is where AOP thinking enters: different aspects see the same objects differently, use only some of their properties, and combine them in different ways.
+Epistemology has two responsibilities:
+
+1. **How to meet the need** — the algorithm, workflow, or strategy that realizes the Axiological goal
+2. **Which objects to use and how to see them** — from what angle are the Ontological objects viewed? What subset of their properties matters here?
+
+This is where AOP thinking enters: different aspects see the same object differently, use only some of its properties, and combine objects in different ways. Epistemology decides which Ontological objects are needed and how to compose them to produce the desired outcome.
 
 - An aspect does not need to use all Ontological objects.
-- An aspect may use only some properties of an Ontological object, not the whole thing.
-- The same Ontological object may be described very differently across aspects (this is normal and correct).
+- An aspect may use only some properties of an object, not the whole thing.
+- The same object may look very different across aspects — this is correct, not a problem.
 
-Epistemology answers: **given these objects, how do we combine, sequence, and interpret them to produce the desired outcome?**
-
-Structure Epistemology into composable units — policies, strategies, workflows, pipelines — so that methods can be swapped without changing the entities or the value definition.
+Structure Epistemology into composable units — strategies, workflows, pipelines — so that methods can be swapped without changing the entities or the value definition.
 
 ---
 
-## Axiology — Value (Why)
+## Axiology — User Value (Why)
 
-Axiology defines what is worth automating. Features are not values themselves — they are means to realize values such as time saving, accuracy, convenience, and stability.
+Axiology is the layer that encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
 
-Four components:
+This is the purpose layer — it exists to represent the user's goals, not the system's internals. In code it is the entry point: the use-case, command, or application service that says "the user needs X." Everything below it (Epistemology, Ontology) exists to serve what Axiology defines.
 
-| Component | Role |
-|---|---|
-| **Value Definition** | What matters and how much (weights, priorities) |
-| **Value Evaluation** | Measures how good a result is |
-| **Value Validation** | Enforces minimum acceptable thresholds |
-| **Value Selection** | Picks the best option among candidates |
+Axiology encodes:
+- Which user needs are worth satisfying (feature selection)
+- What a successful result looks like (evaluation)
+- What must never happen (validation)
+- Which method (Epistemology) should deliver the result
 
-Axiology does not execute behavior. It governs which Epistemology gets chosen, how results are evaluated, and whether they are acceptable. Keep it explicit and encoded in logic — not buried in comments or implicit in control flow.
+Because Axiology represents user intent, it delegates the *how* to Epistemology. Keep it explicit in logic — if the user's need only lives in a comment or a ticket, it has not been encoded in Axiology yet.
 
 ---
 

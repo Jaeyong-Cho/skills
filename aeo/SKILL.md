@@ -12,9 +12,9 @@ description: |
 
 A program is an automation tool for making decisions to achieve a goal. AEO structures this around three layers:
 
-- **Axiology (Why)** — what goal is worth automating; values, evaluation, validation, selection
-- **Epistemology (How)** — the algorithm and aspect through which objects are used to realize the value
-- **Ontology (What)** — stable, invariant entities; their properties, behaviors, and relationships
+- **Axiology (Why)** — user value: which features are worth building, which results users need, what a good outcome looks like; the entry point that represents user intent in code
+- **Epistemology (How)** — how to meet the need, and which objects to use and from which angle; the composable method that bridges value and entity
+- **Ontology (What)** — the stable objects that exist to satisfy the need and the method; invariant across aspects
 
 Design direction: **Axiology → Epistemology → Ontology** (iterative in practice).
 

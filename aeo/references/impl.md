@@ -1,6 +1,6 @@
 # Implementation and Refactoring Mode
 
-**Always write the plan file and get confirmation before touching any code.**
+**Always write the plan document and get confirmation before touching any code.**
 
 **Write simple, readable code. Prefer straightforward constructs over clever or advanced techniques. If a junior developer would have to pause to understand it, simplify it.**
 
@@ -18,19 +18,61 @@ ls .aeo/src/impl/*.md 2>/dev/null | wc -l
 
 Zero-padded 4-digit format: `0001`, `0002`, etc.
 
-### What to write
+### Document structure (ADR format)
 
-There is no fixed template — write what is actually needed for the implementation to be unambiguous. Think through:
+Each implementation plan is an Architecture Decision Record. Use this structure:
 
-**What exists (Ontology)** — Which entities need to be created or used? Is the abstraction level right for this concern? Are they stable enough to be shared across multiple aspects?
+```markdown
+# [ID] Title
 
-**Which aspect (Epistemology)** — From what angle are the objects being used? What algorithm makes the decision? How do the components interact to produce the outcome?
+**Status:** Proposed | Accepted | Deprecated | Superseded by [ID]
 
-**What value (Axiology)** — What does success look like? What selection or evaluation logic is needed?
+## Context
 
-Include a Mermaid diagram showing the target layer structure. This is the most important part of the plan — it makes the intended separation visible before any code is written.
+What feature or requirement is being implemented, and why now?
+What existing code or constraints does this touch?
 
-List the files to create and which layer each belongs to.
+## Decision
+
+What was decided about how to implement this. Walk through the three AEO layers:
+
+**Ontology** — Which entities need to be created or used? Are they stable
+enough to be shared across multiple aspects? Is the abstraction level right?
+
+**Epistemology** — From what angle are the objects being used? What algorithm
+makes the decision? How do the components interact to produce the outcome?
+
+**Axiology** — What does the end user need from this feature? What does a
+good result look like from their perspective? What must the implementation
+never do?
+
+## Alternatives Considered
+
+Other approaches evaluated and why they were ruled out.
+
+## Consequences
+
+Trade-offs, risks, and what this decision makes easier or harder.
+
+## Before / After
+
+Show a before/after Mermaid diagram of the layer structure.
+If greenfield, show only the target architecture.
+
+```mermaid
+graph TD
+  ...
+```
+
+## Step-by-Step Plan
+
+Ordered tasks. Each step names the file, what it does, and which AEO layer it belongs to.
+
+1. Create `path/to/entity.ts` — defines the X entity (Ontology)
+2. Create `path/to/service.ts` — orchestrates the X workflow (Epistemology)
+3. Update `path/to/evaluator.ts` — adds success criterion Y (Axiology)
+4. ...
+```
 
 After writing the plan, ask:
 
@@ -56,18 +98,66 @@ Output: `.aeo/src/refact/<ID>-<slug>.md`
 ls .aeo/src/refact/*.md 2>/dev/null | wc -l
 ```
 
-### What to write
+### Document structure (ADR format)
 
-There is no fixed template. Identify the violations, explain why they are problems in terms of the AEO philosophy, and describe the target structure.
+Each refactoring plan is an Architecture Decision Record. Use this structure:
 
-Key questions to answer:
+```markdown
+# [ID] Title
 
+**Status:** Proposed | Accepted | Deprecated | Superseded by [ID]
+
+## Context
+
+What AEO violations exist in the current code? Why do they matter?
+What symptom or pain point prompted this refactoring?
+
+Answer:
 - Which Ontological objects are being shaped by a specific aspect? (leakage)
 - Where is Axiology implicit rather than encoded?
 - Which Epistemological units are not composable or swappable?
-- Is any object's abstraction level mismatched to the concern?
+- Is any object's abstraction level mismatched to its concern?
 
-Include a before/after Mermaid diagram — this is the clearest way to communicate the intended restructuring. Required, do not skip.
+## Decision
+
+What restructuring was decided and why it resolves the violations.
+
+## Alternatives Considered
+
+Other approaches and why they were ruled out.
+
+## Consequences
+
+Trade-offs, risks, and what becomes easier or harder after this refactoring.
+
+## Before / After
+
+Required. Show the current structure and the target structure side by side.
+
+**Before:**
+```mermaid
+graph TD
+  ...
+```
+
+**After:**
+```mermaid
+graph TD
+  ...
+```
+
+## Step-by-Step Plan
+
+Ordered tasks to move from the current state to the target. Be specific — name
+files, what moves where, and which layer each belongs to. This is what the
+developer will follow step by step.
+
+1. Extract `X` from `path/to/current.ts` into `path/to/entity.ts` (Ontology)
+2. Move decision logic from `service.ts` into `path/to/evaluator.ts` (Axiology)
+3. Update `path/to/aspect.ts` to call the new evaluator (Epistemology)
+4. Delete now-unused code in `path/to/old.ts`
+5. ...
+```
 
 After writing the plan, ask:
 
