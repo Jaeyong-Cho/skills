@@ -40,7 +40,7 @@ Replace `.aeo/book.toml` with:
 [book]
 language = "en"
 src = "src"
-title = "AEO"
+title = "PROJECT_NAME"
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
