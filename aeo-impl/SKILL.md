@@ -32,6 +32,14 @@ From the ADR, collect:
 2. **Test targets** — from Testing Decisions: which layers and modules get tests
 3. **Priority order** — implement the tracer bullet (most end-to-end behavior) first
 
+Example behavior list extracted from an ADR:
+```
+1. User can log in with valid credentials       [tracer bullet]
+2. Login rejects unknown email
+3. Login rejects wrong password
+4. User entity validates its own password hash
+```
+
 Confirm the behavior list and priority with the user before writing any code.
 
 ---

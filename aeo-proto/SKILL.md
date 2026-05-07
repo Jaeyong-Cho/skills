@@ -18,6 +18,11 @@ ADRs are stored at `.aeo/src/adr/<ID>-<slug>.md` (e.g. `adr-001` → `.aeo/src/a
 
 Ask the user: **what specific question does this prototype need to answer?**
 
+Good prototype questions:
+- "Does this cart state model handle concurrent modifications correctly?"
+- "Which of these three checkout layouts do users find clearest?"
+- "Can we derive the invoice total from order events alone, without storing it?"
+
 If an existing ADR is referenced, read it first — the question is usually an unresolved decision in the Decision or Alternatives Considered section.
 
 If no ADR exists yet, the question comes from the user's request.

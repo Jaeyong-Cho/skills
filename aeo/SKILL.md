@@ -83,14 +83,4 @@ Fix all errors before reporting to the user.
 
 ## Commit Message
 
-After each session, show the user a recommended commit message in this format:
-
-```
-<type>(aeo): <short description>
-
-Why: <what value or goal this addresses>
-What: <what entities or artifacts were created or changed>
-How: <what method or approach was applied>
-```
-
-Where `<type>` is one of: `feat` (new design/impl/review/docs), `refact` (refactoring plan), `fix` (correction to existing content). The subject line should name the specific artifact produced (e.g. `add design 0001 auth-flow`, `add review 0003 payment-service`).
+After each session, suggest a commit message. Read `references/commit.md` for the format and examples.
