@@ -4,6 +4,9 @@ Every change — new feature, refactoring, or architecture design — is an ADR.
 
 Output: `.aeo/src/adr/<ID>-<slug>.md`
 
+For layer definitions, read `references/layers.md`.
+For deep module principles, read `references/deep-modules.md`.
+
 ## ID assignment
 
 ```bash
@@ -26,29 +29,7 @@ Stop when every branch of the decision tree is resolved and both sides see the p
 
 ---
 
-## Step 2: Deep Module check (before writing the ADR)
-
-Before writing, assess the affected code for these smells:
-
-| Smell | What to look for |
-|---|---|
-| **Shallow module** | Interface nearly as wide as the implementation — many tiny methods |
-| **Duplicated logic** | Same rule or algorithm in more than one place |
-| **Information leakage** | Same knowledge scattered across call sites instead of owned by one module |
-| **Temporal decomposition** | Split by execution order rather than responsibility |
-| **Pass-through method** | A function that just calls another with the same arguments |
-| **Leaky interface** | Callers must know internal details to use the module correctly |
-| **Conjoined twins** | Two modules always edited together — should probably be one |
-
-A good module has an interface simpler than its implementation. If a proposed change makes an interface wider, question it.
-
----
-
-## Step 3: ADR template
-
-For the full definition of each layer, read `references/layers.md`.
-
-
+## Step 2: ADR template
 
 ```markdown
 # [ID] Title
