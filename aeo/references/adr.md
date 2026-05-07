@@ -135,7 +135,7 @@ After writing the ADR, ask the user to confirm before writing any code.
 
 Once the user has reviewed the code:
 
-1. Update the documentation — read `references/docs.md`
+1. Use the `aeo-docs` skill to update the documentation
 2. Mark the ADR status as `Accepted`
 
 ## SUMMARY.md entry
