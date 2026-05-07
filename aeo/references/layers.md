@@ -37,21 +37,9 @@ A class that only holds data with no actions or behaviors is a data bag, not an 
 
 Entity objects are the stable foundation. Multiple method-layer components can use the same entity from different angles without the entity knowing or caring.
 
-### Relationship Design (for scalability)
+### Relationships
 
-Relationships are first-class citizens of the entity layer — not an afterthought. Design them explicitly from the start:
-
-| Question | Why it matters |
-|---|---|
-| **Cardinality** — one-to-one, one-to-many, many-to-many? | Determines storage shape and traversal cost |
-| **Ownership** — which entity owns the lifecycle of the other? | Defines who creates and destroys — prevents orphans and leaks |
-| **Navigability** — which direction can you traverse? | Unidirectional is simpler; bidirectional adds coupling |
-| **Aggregate boundary** — which entities must change together atomically? | Defines the consistency unit; keep aggregates small |
-| **Stability** — is this relationship intrinsic to the entity, or view-specific? | View-specific joins belong in the method layer, not the entity |
-
-A relationship that belongs to the entity should be navigable through the entity itself, not reconstructed by callers. If callers must join two entities manually to derive a relationship, the entity is too thin.
-
-**Scalability smell**: if adding a new use case requires adding a new relationship to an existing entity, the entity's boundary may be too narrow — or the new relationship belongs in the method layer as a view.
+For each relationship, decide: cardinality, ownership (who controls the lifecycle), navigability (which direction), and aggregate boundary (what changes atomically together). View-specific joins belong in the method layer, not the entity.
 
 ---
 

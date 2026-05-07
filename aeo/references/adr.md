@@ -64,14 +64,8 @@ to its concern. If logic that belongs to an entity lives outside it, the entity
 is too thin. Are the entities stable and invariant across different uses? Is the
 abstraction level right — not too large, not too small?
 
-For each relationship between entities, answer:
-- Cardinality (one-to-one / one-to-many / many-to-many)?
-- Ownership — which entity controls the other's lifecycle?
-- Navigability — which direction can you traverse?
-- Aggregate boundary — which entities must change atomically together?
-
-A relationship intrinsic to the entity should be navigable through the entity,
-not reconstructed by callers. View-specific joins belong in the method layer.
+For each relationship: cardinality, ownership, navigability, aggregate boundary.
+View-specific joins belong in the method layer.
 
 Call out any leakage between layers.
 
