@@ -29,6 +29,8 @@ Interview me relentlessly about every aspect of this plan until reaching shared 
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved. The user can stop at any time or say "wrap up" to summarise and move on.
+
 ---
 
 ## Step 2: ADR template
