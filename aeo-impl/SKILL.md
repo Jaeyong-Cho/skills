@@ -8,6 +8,8 @@ description: |
 
 # AEO Implementation (TDD)
 
+For TDD philosophy and the RED→GREEN→REFACTOR loop, read `../aeo/references/tdd.md`.
+
 ADRs are stored at `.aeo/src/adr/<ID>-<slug>.md` (e.g. `adr-001` → `.aeo/src/adr/0001-*.md`).
 
 If the user names an ADR (e.g. "adr-001", "0001", "auth-flow"), find the matching file with:
@@ -18,16 +20,11 @@ ls .aeo/src/adr/ | grep 0001
 
 If no ADR is specified, list available ADRs and ask which one to implement.
 
-For TDD principles and the RED→GREEN→REFACTOR loop, read `../aeo/references/tdd.md`.
-For test writing examples (good vs bad), read `../aeo/references/tdd-tests.md`.
-For mocking guidelines, read `../aeo/references/tdd-mocking.md`.
-For refactoring after green, read `../aeo/references/tdd-refactoring.md`.
-For layer definitions, read `../aeo/references/layers.md`.
-For deep module and interface design principles, read `../aeo/references/deep-modules.md`.
-
 ---
 
 ## Step 1: Extract behaviors from the ADR
+
+For layer definitions, read `../aeo/references/layers.md`.
 
 From the ADR, collect:
 
@@ -40,6 +37,9 @@ Confirm the behavior list and priority with the user before writing any code.
 ---
 
 ## Step 2: Implement — one behavior at a time
+
+For test writing examples, read `../aeo/references/tdd-tests.md`.
+For mocking guidelines, read `../aeo/references/tdd-mocking.md`.
 
 For each behavior in the plan:
 
@@ -56,7 +56,8 @@ GREEN: Write minimal code to make it pass → confirm it passes
 
 ## Step 3: Refactor (after all behaviors are green)
 
-Check for deep module opportunities:
+For refactoring guidelines, read `../aeo/references/tdd-refactoring.md`.
+For deep module and interface design principles, read `../aeo/references/deep-modules.md`.
 
 - [ ] Can any interface be narrowed?
 - [ ] Is complexity hidden or exposed?
