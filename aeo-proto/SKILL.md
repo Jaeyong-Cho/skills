@@ -23,6 +23,8 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 Ask the user: **what specific question does this prototype need to answer?**
 
+**One PoC = one question.** If the user's question contains multiple independent unknowns, split into separate PoCs. A sign of too-broad scope: answering one part doesn't help decide the other.
+
 Good prototype questions:
 - "Does this cart state model handle concurrent modifications correctly?"
 - "Which of these three checkout layouts do users find clearest?"

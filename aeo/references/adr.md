@@ -2,6 +2,8 @@
 
 Every change — new feature, refactoring, or architecture design — is an ADR. There are no separate document types.
 
+**One ADR = one problem.** If the scope covers multiple independent problems, split into separate ADRs before starting. A sign of too-broad scope: the grill-me branches into unrelated decision trees.
+
 Output: `.aeo/src/adr/<ID>-<slug>.md`
 
 For layer definitions, read `references/layers.md`.
