@@ -1,5 +1,7 @@
 # Logic Prototype
 
+The six rules in `SKILL.md` Step 2 apply to all prototypes. This file adds logic-specific guidance.
+
 Use when the question is about **business logic, state transitions, or data shape**.
 
 ## Steps

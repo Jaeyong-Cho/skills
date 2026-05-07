@@ -1,5 +1,7 @@
 # UI Prototype
 
+The six rules in `SKILL.md` Step 2 apply to all prototypes. This file adds UI-specific guidance.
+
 Use when the question is about **layout, interaction, or visual design direction**.
 
 Generate several radically different UI variations switchable via a floating bottom bar — compare approaches and steal the best bits before discarding the rest.
