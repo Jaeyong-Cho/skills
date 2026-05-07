@@ -8,7 +8,15 @@ description: |
 
 # AEO Implementation (TDD)
 
-Read the relevant ADR from `.aeo/src/adr/`. If no ADR is specified, ask which one to implement.
+ADRs are stored at `.aeo/src/adr/<ID>-<slug>.md` (e.g. `adr-001` → `.aeo/src/adr/0001-*.md`).
+
+If the user names an ADR (e.g. "adr-001", "0001", "auth-flow"), find the matching file with:
+
+```bash
+ls .aeo/src/adr/ | grep 0001
+```
+
+If no ADR is specified, list available ADRs and ask which one to implement.
 
 For TDD principles and the RED→GREEN→REFACTOR loop, read `../aeo/references/tdd.md`.
 For layer definitions, read `../aeo/references/layers.md`.
