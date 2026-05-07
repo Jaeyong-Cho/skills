@@ -64,6 +64,11 @@ Write from high-level to detailed — value first, then method, then entity.
 
 Each section describes what **is**, not what **was decided**. Write in present tense.
 
+Example (checkout feature):
+- `01-value.md`: "Users can complete a purchase without creating an account. Guest checkout must never silently drop items from the cart."
+- `02-method.md`: "The checkout flow is a linear state machine: cart → address → payment → confirmation. Each step validates before advancing."
+- `03-entity.md`: "`Order` owns `LineItem[]` and holds a `status` invariant — once `confirmed`, items cannot be removed."
+
 ---
 
 ## Step 4: Update index and SUMMARY.md
