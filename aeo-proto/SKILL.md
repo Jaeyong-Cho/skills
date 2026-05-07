@@ -69,4 +69,4 @@ For ADR format and template, read `../aeo/references/adr.md`.
 - The prototype answers the grill-me questions — skip Step 1 of the ADR process
 - Delete the prototype code
 
-After writing the ADR, ask the user to confirm before any further implementation.
+After writing the ADR, ask the user to confirm. Once confirmed, use the `aeo-impl` skill to implement with TDD.

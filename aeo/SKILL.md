@@ -38,11 +38,26 @@ If it does **not** exist: read `references/init.md` and initialize the book firs
 
 ## Workflow
 
-Every task follows this sequence:
+```
+[uncertain about design?]
+        ↓
+   aeo-proto  ──→  ADR (created or updated)
+                        ↓
+[clear on what to build]
+        ↓
+      aeo    ──→  ADR (written + confirmed)
+                        ↓
+                   aeo-impl  ──→  TDD implementation
+                                        ↓
+                              code review confirmed
+                                        ↓
+                               update documentation
+```
 
-1. **Write an ADR** — read `references/adr.md`. All decisions (new feature, refactoring, architecture change) are ADRs. Ask the user to confirm before writing any code.
-2. **Implement with TDD** — use the `aeo-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
-3. **Code review confirmed** — update the documentation. Read `references/docs.md`.
+1. **Prototype first (optional)** — if the design question is unresolved, use the `aeo-proto` skill. It builds a throwaway prototype and outputs a confirmed ADR.
+2. **Write an ADR** — read `references/adr.md`. If coming from `aeo-proto`, the ADR already exists — skip to confirm. Ask the user to confirm before writing any code.
+3. **Implement with TDD** — use the `aeo-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
+4. **Code review confirmed** — update the documentation. Read `references/docs.md`.
 
 For AEO layer details, read `references/layers.md`.
 
