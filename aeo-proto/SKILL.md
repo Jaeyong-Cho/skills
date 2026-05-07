@@ -51,11 +51,13 @@ Once agreed, determine the prototype type:
 
 ---
 
-## Step 3: Write the PoC document
+## Step 3: Collect feedback and write the PoC document
+
+Before writing, ask the user: **what did you observe while running it?** — reactions, surprises, things that felt wrong, anything that didn't match expectations. Capture this verbatim as User feedback, not paraphrased.
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Decisions, Open questions, Out of scope.
+Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, User feedback, Decisions, Open questions, Out of scope.
 
 Add to `.aeo/src/SUMMARY.md`:
 ```markdown
