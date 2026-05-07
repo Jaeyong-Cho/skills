@@ -7,8 +7,6 @@ description: |
 
 # AEO Initialization
 
-Run this only when `.aeo/book.toml` does not exist.
-
 ## Step 1: Install tooling if needed
 
 ```bash
@@ -54,8 +52,6 @@ command = "mdbook-mermaid"
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
 additional-css = ["theme/css/variables.css"]
 ```
-
-Replace `PROJECT_NAME` with the actual project name.
 
 ## Step 5: Create chapter directories and SUMMARY.md
 

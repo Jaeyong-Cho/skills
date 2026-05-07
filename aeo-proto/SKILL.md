@@ -47,56 +47,16 @@ The question determines the prototype type:
 
 ## Step 3: Write the PoC document
 
-Write `.aeo/src/poc/<ID>-<slug>.md`:
+Read `references/poc-template.md` for the document structure.
 
-```markdown
-# [ID] Title
-
-**Date:** YYYY-MM-DD
-**Question:** <the specific question this prototype answered>
-**Type:** Logic | UI
-
-## What was built
-
-Brief description of the prototype.
-
-## Findings
-
-What the prototype revealed — validated, invalidated, and surprising.
-
-## Decisions
-
-Concrete decisions this prototype enables:
-- Interfaces, data shapes, or workflows that are now clear
-- Options that were ruled out and why
-
-## Open questions
-
-What remains unresolved — to be explored in the ADR grill-me.
-
-## Out of scope
-
-What was deliberately not tested.
-```
+Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Decisions, Open questions, Out of scope.
 
 Add to `.aeo/src/SUMMARY.md`:
 ```markdown
   - [[<ID>] <title>](./poc/<ID>-<slug>.md)
 ```
 
----
-
-## Mermaid Diagrams
-
-Use Mermaid diagrams in the PoC document wherever a visual makes findings clearer — state transitions, data flow, before/after comparisons, decision trees. A diagram communicates structure faster than prose.
-
-Keep each diagram focused on one context. If it's getting large, split it — one diagram per concern.
-
-For multi-line text inside node labels, use `<br/>` — not `\n`.
-
-```
-A["line one<br/>line two"]
-```
+Use Mermaid diagrams wherever a visual makes findings clearer — state transitions, data flow, before/after comparisons. Keep each diagram focused on one context. Use `<br/>` for multi-line node labels, not `\n`.
 
 ---
 
