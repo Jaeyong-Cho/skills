@@ -41,7 +41,7 @@ If it does **not** exist: use the `aeo-init` skill to initialize the book first,
 ```
 [uncertain about design?]
         ↓
-   aeo-proto  ──→  ADR (created or updated)
+   aeo-proto  ──→  PoC document
                         ↓
 [clear on what to build]
         ↓
