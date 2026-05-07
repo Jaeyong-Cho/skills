@@ -48,14 +48,45 @@ AEO (Axiology–Epistemology–Ontology) is a three-layer design philosophy for 
 
 ---
 
+## POFE — Daily Journal Workflow
+
+POFE is a personal productivity system: daily journaling, goal management, achievement tracking, wiki, and work pattern analysis, rendered via mdbook.
+
+### Workflow
+
+```
+[start of day]
+      ↓
+  pofe-init  ──→  knowledge base ready  (run once)
+                        ↓
+               write in today.md freely
+                        ↓
+             [priorities shift mid-day?]
+                        ↓
+              pofe-adjust  ──→  today's goal updated
+                        ↓
+               [end of day]
+                        ↓
+              pofe-review  ──→  daily report written
+                                goal progress marked
+                                tomorrow seeded
+```
+
+### Skills
+
+| Skill | When to use |
+|-------|-------------|
+| `pofe-init` | First time — initialize the knowledge base in the repo |
+| `pofe-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
+| `pofe-review` | End of day — close the day, propagate goal progress, seed tomorrow |
+
+---
+
 ## Other Skills
 
 | Skill | What it does |
 |-------|-------------|
 | `write-a-skill` | Create new agent skills with proper structure and review checklist |
-| `pofe-init` | Initialize a POFE personal productivity knowledge base |
-| `pofe-review` | End-of-day review for the POFE knowledge base |
-| `pofe-adjust` | Mid-day plan adjustment for the POFE knowledge base |
 
 ---
 
