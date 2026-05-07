@@ -107,13 +107,22 @@ graph TD
 
 ## Step-by-Step Plan
 
-Ordered tasks. Name each file, what it does, and which layer it belongs to.
-Use the project's own directory naming — the label in brackets shows the layer.
+Each item is one RED→GREEN TDD cycle. Order from the most end-to-end behavior (tracer bullet) to the most specific.
 
-1. Create `src/models/user.ts` — User entity [entity]
-2. Create `src/services/auth.ts` — authentication workflow [method]
-3. Create `src/commands/login.ts` — login use-case entry point [value]
-4. ...
+For each item:
+- **Behavior** — what the system does (maps to a User Story)
+- **Test target** — which public interface to test through (value entry point, entity action)
+- **File** — what to create or modify, and which layer `[value|method|entity]`
+
+Example:
+
+1. User can log in with valid credentials
+   - Test: call `login(email, password)` → returns session token
+   - Files: `src/commands/login.ts` [value], `src/services/auth.ts` [method]
+2. User entity validates its own password hash
+   - Test: `user.verifyPassword(plain)` → true/false
+   - Files: `src/models/user.ts` [entity]
+3. ...
 ```
 
 After writing the ADR, ask the user to confirm before writing any code.

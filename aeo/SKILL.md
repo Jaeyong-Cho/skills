@@ -41,7 +41,7 @@ If it does **not** exist: read `references/init.md` and initialize the book firs
 Every task follows this sequence:
 
 1. **Write an ADR** — read `references/adr.md`. All decisions (new feature, refactoring, architecture change) are ADRs. Ask the user to confirm before writing any code.
-2. **Implement with TDD** — read `references/tdd.md`. Extract behaviors from the ADR's User Stories and Step-by-Step Plan, then implement one behavior at a time: RED → GREEN → REFACTOR.
+2. **Implement with TDD** — use the `aeo-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
 3. **Code review confirmed** — update the documentation. Read `references/docs.md`.
 
 For AEO layer details, read `references/layers.md`.
