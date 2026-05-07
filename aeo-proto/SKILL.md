@@ -39,7 +39,7 @@ The question determines the prototype type:
 ## Step 2: Build the prototype
 
 1. **Throwaway from day one, and clearly marked as such.** Locate it near where it will be used — name it so a casual reader sees it's a prototype, not production.
-2. **One command to run.** Use the project's existing task runner.
+2. **One command to run.** Use the project's existing task runner — `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
 3. **No persistence by default.** State lives in memory. If testing persistence, use a scratch DB or local file named "PROTOTYPE — wipe me".
 4. **Skip the polish.** No tests, no error handling beyond runnable, no abstractions.
 5. **Surface the state.** After every action (logic) or variant switch (UI), show the full relevant state.
