@@ -109,7 +109,7 @@ graph TD
 
 ## Step-by-Step Plan
 
-**For behavior changes** — each item is one RED→GREEN TDD cycle. Order from the most end-to-end behavior (tracer bullet) to the most specific.
+Each item is one RED→GREEN TDD cycle. Order from the most end-to-end behavior (tracer bullet) to the most specific.
 
 For each item:
 - **Behavior** — what the system does (maps to a User Story)
@@ -125,13 +125,6 @@ Example:
    - Test: `user.verifyPassword(plain)` → true/false
    - Files: `src/models/user.ts` [entity]
 3. ...
-
-**For structural decisions** (e.g. repo extraction, module reorganization) — each item is a migration step. Order from the highest-cohesion boundary cut to the lowest-risk mechanical moves.
-
-For each item:
-- **Move** — what is being relocated and why (high cohesion, loose coupling)
-- **Contract** — the interface left behind (the coupling point between the two sides)
-- **File** — what to create, move, or delete
 ```
 
 After writing the ADR, ask the user to confirm before writing any code.
