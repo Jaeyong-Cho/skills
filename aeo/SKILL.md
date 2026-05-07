@@ -55,7 +55,7 @@ If it does **not** exist: use the `aeo-init` skill to initialize the book first,
 ```
 
 1. **Prototype first (optional)** — if the design question is unresolved, use the `aeo-proto` skill. It builds a throwaway prototype and writes a PoC document at `.aeo/src/poc/<ID>-<slug>.md`.
-2. **Write an ADR** — read `references/adr.md`. If coming from `aeo-proto`, read the PoC document first — it replaces the grill-me step. Ask the user to confirm before writing any code.
+2. **Write an ADR** — read `references/adr.md`. If coming from `aeo-proto`, read the PoC document first — use its findings and open questions as the starting context for grill-me instead of starting from scratch. Ask the user to confirm before writing any code.
 3. **Implement with TDD** — use the `aeo-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
 4. **Code review confirmed** — update the documentation. Read `references/docs.md`.
 

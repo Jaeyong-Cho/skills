@@ -64,4 +64,4 @@ Use Mermaid diagrams wherever a visual makes findings clearer — state transiti
 
 Once the PoC document is written, tell the user:
 
-> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the PoC findings will replace the grill-me step."
+> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the PoC findings and open questions will be the starting context for grill-me."
