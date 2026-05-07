@@ -1,7 +1,7 @@
 ---
 name: aeo-system
 description: |
-  Write system-level ADRs, PoCs, and documentation that span multiple repositories. Manages a dedicated architecture repo as the single source of truth for cross-repo contracts, service ownership, and shared domain models. Sub-repos reference system decisions by ID.
+  Write system-level ADRs, PoCs, and documentation that span multiple repositories. Manages a dedicated architecture repo with a sub-repo registry — can read files directly from registered repos to build cross-service context.
   Triggers: "aeo-system", "system ADR", "cross-repo design", "system architecture", "service contract", "multi-repo design", or when a decision affects more than one repository.
 ---
 
@@ -15,25 +15,40 @@ The architecture repo is the single source of truth for decisions that span serv
 
 ## Setup
 
-### Architecture repo
-
-Run `aeo-init` in the architecture repo. System ADRs use the prefix `SYS-`:
-
-```bash
-mkdir -p .aeo/src/adr .aeo/src/poc .aeo/src/docs
-```
-
-IDs: `SYS-0001`, `SYS-0002`, etc.
-
-### Sub-repo pointer
-
-In each sub-repo, create `.aeo/system.toml`:
+Run `aeo-init` in the architecture repo. Then create the sub-repo registry at `.aeo/repos.toml`:
 
 ```toml
-repo = "../architecture"   # relative or absolute path to the architecture repo
+[repos]
+auth-service    = "../auth-service"
+order-service   = "../order-service"
+payment-service = "../../payment/payment-service"
 ```
 
-Sub-repos read this to locate system ADRs when referencing them.
+Paths are relative to the architecture repo root. Each sub-repo registers itself here when it joins the system.
+
+System ADR IDs: `SYS-0001`, `SYS-0002`, etc. Output: `.aeo/src/adr/SYS-<ID>-<slug>.md`
+
+---
+
+## Reading sub-repos
+
+Before writing a system ADR, read the relevant sub-repos for context:
+
+```bash
+# List registered repos
+cat .aeo/repos.toml
+
+# Read a sub-repo's ADRs
+ls <path>/.aeo/src/adr/
+
+# Find which sub-repos reference a system ADR
+grep -r "SYS-0001" $(cat .aeo/repos.toml | grep -oP '".*?"' | tr -d '"')/.aeo/ 2>/dev/null
+
+# Check a sub-repo's source for divergence from the contract
+ls <path>/src/
+```
+
+Use this to: understand current state before proposing a contract, find which services are already implementing something, or verify a system ADR is correctly reflected downstream.
 
 ---
 
@@ -51,7 +66,7 @@ If yes → write a system ADR here. If no → use `aeo` in the service repo.
 
 ## Step 2: Write a system ADR
 
-Use the same `aeo` grill-me and ADR template. Add two extra sections:
+Read sub-repo context first (see above), then use the same `aeo` grill-me and ADR template. Add two extra sections:
 
 **Services involved** — which repos are affected and how:
 ```
@@ -64,13 +79,11 @@ Use the same `aeo` grill-me and ADR template. Add two extra sections:
 - Event: name, schema, producer, consumers
 - Shared model: entity name, fields, ownership rules
 
-System ADR output: `.aeo/src/adr/SYS-<ID>-<slug>.md`
-
 ---
 
 ## Step 3: Link from sub-repo ADRs
 
-When a service ADR depends on a system decision, add a reference:
+When a service ADR depends on a system decision, add to the service repo ADR:
 
 ```markdown
 ## System context
@@ -80,16 +93,6 @@ Implements [SYS-0001 User Session Contract](../architecture/.aeo/src/adr/SYS-000
 
 ---
 
-## Step 4: Scan sub-repos (optional)
+## Step 4: Documentation and commit
 
-To build a cross-service view, list which system ADRs each sub-repo implements:
-
-```bash
-grep -r "SYS-" */aeo/src/adr/ 2>/dev/null
-```
-
----
-
-## Step 5: Documentation and commit
-
-Write system docs with `aeo-docs`. Use the commit format from `../aeo/references/commit.md` with type `feat(system)`.
+Write system docs with `aeo-docs`. Use commit format from `../aeo/references/commit.md` with type `feat(system)`.
