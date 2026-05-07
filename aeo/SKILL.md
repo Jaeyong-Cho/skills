@@ -32,7 +32,7 @@ Check whether the AEO book exists:
 ls .aeo/book.toml 2>/dev/null
 ```
 
-If it does **not** exist: read `references/init.md` and initialize the book first, then proceed.
+If it does **not** exist: use the `aeo-init` skill to initialize the book first, then proceed.
 
 ---
 
