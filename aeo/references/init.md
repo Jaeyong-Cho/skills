@@ -53,7 +53,7 @@ additional-css = ["theme/css/variables.css"]
 ## Step 5: Create chapter directories and SUMMARY.md
 
 ```bash
-mkdir -p .aeo/src/adr .aeo/src/docs
+mkdir -p .aeo/src/adr .aeo/src/poc .aeo/src/docs
 ```
 
 Write `.aeo/src/SUMMARY.md`:
@@ -62,6 +62,7 @@ Write `.aeo/src/SUMMARY.md`:
 # Summary
 
 - [ADR](./adr/index.md)
+- [PoC](./poc/index.md)
 - [Documentation](./docs/index.md)
 ```
 
