@@ -19,13 +19,13 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## Step 1: Grill-me (reach shared understanding before writing)
 
-Interview the user relentlessly about every aspect of this decision until reaching shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one by one. Start from the highest-level perspective and narrow down to details.
+Interview me relentlessly about every aspect of this plan until reaching shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one by one.
 
 - Ask questions **one at a time**
 - For each question, provide your **recommended answer** so the user can confirm, correct, or refine
-- If a question can be answered by **exploring the codebase**, do that instead of asking
+- Start from the highest-level perspective and narrow down to details.
 
-Stop when every branch of the decision tree is resolved and both sides see the problem the same way.
+If a question can be answered by exploring the codebase, explore the codebase instead.
 
 ---
 
