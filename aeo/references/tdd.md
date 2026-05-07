@@ -2,6 +2,11 @@
 
 Implementation always follows TDD: one behavior at a time, RED → GREEN → REFACTOR.
 
+For test writing examples, read `references/tdd-tests.md`.
+For mocking guidelines, read `references/tdd-mocking.md`.
+For refactoring after green, read `references/tdd-refactoring.md`.
+For interface design for testability, read `references/deep-modules.md`.
+
 ## What to test
 
 Test through **public interfaces only** — value layer entry points and entity public actions.
