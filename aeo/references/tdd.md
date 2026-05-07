@@ -7,13 +7,42 @@ For mocking guidelines, read `references/tdd-mocking.md`.
 For refactoring after green, read `references/tdd-refactoring.md`.
 For interface design for testability, read `references/deep-modules.md`.
 
-## What to test
+---
 
-Test through **public interfaces only** — value layer entry points and entity public actions.
-Never test internal methods, private state, or implementation details.
-A test that breaks on refactor without behavior changing is a bad test.
+## Philosophy
 
-The ADR's **User Stories** map to test names. The ADR's **Testing Decisions** determine which modules get tests.
+**Core principle**: Tests verify behavior through public interfaces — not implementation details. Code can change entirely; tests shouldn't.
+
+**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+
+**Bad tests** are coupled to implementation: they mock internal collaborators, test private methods, or verify through external means. The warning sign: your test breaks when you refactor, but behavior hasn't changed.
+
+---
+
+## Anti-Pattern: Horizontal Slices
+
+**DO NOT write all tests first, then all implementation.** This is "horizontal slicing" — treating RED as "write all tests" and GREEN as "write all code."
+
+This produces bad tests:
+- Tests written in bulk test _imagined_ behavior, not _actual_ behavior
+- You end up testing the _shape_ of things (data structures, signatures) rather than user-facing behavior
+- Tests become insensitive to real changes — they pass when behavior breaks, fail when behavior is fine
+- You commit to test structure before understanding the implementation
+
+**Correct approach**: Vertical slices via tracer bullets. One test → one implementation → repeat.
+
+```
+WRONG (horizontal):
+  RED:   test1, test2, test3, test4, test5
+  GREEN: impl1, impl2, impl3, impl4, impl5
+
+RIGHT (vertical):
+  RED→GREEN: test1→impl1
+  RED→GREEN: test2→impl2
+  RED→GREEN: test3→impl3
+```
+
+---
 
 ## Workflow
 
@@ -25,6 +54,8 @@ From the ADR's Step-by-Step Plan, extract the behavior list:
 - [ ] Which entity actions or behaviors need verification?
 - [ ] Which behaviors are most critical? (test those first)
 - [ ] Confirm with the user before starting
+
+**You can't test everything.** Focus on critical paths and complex logic, not every edge case.
 
 ### 2. Tracer bullet
 
@@ -57,7 +88,9 @@ After all tests are green, check for deep module opportunities (see `references/
 - [ ] Is complexity hidden or exposed?
 - [ ] Any duplication to extract?
 
-Run tests after each refactor step. Never refactor while RED.
+Run tests after each refactor step. **Never refactor while RED.**
+
+---
 
 ## AEO layer guidance
 
@@ -71,6 +104,7 @@ Run tests after each refactor step. Never refactor while RED.
 
 ```
 [ ] Test names match User Stories from the ADR
+[ ] Test describes behavior, not implementation
 [ ] Test uses public interface only
 [ ] Test would survive internal refactor
 [ ] Code is minimal for this test
