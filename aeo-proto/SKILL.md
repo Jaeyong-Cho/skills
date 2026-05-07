@@ -86,6 +86,20 @@ Add to `.aeo/src/SUMMARY.md`:
 
 ---
 
+## Mermaid Diagrams
+
+Use Mermaid diagrams in the PoC document wherever a visual makes findings clearer — state transitions, data flow, before/after comparisons, decision trees. A diagram communicates structure faster than prose.
+
+Keep each diagram focused on one context. If it's getting large, split it — one diagram per concern.
+
+For multi-line text inside node labels, use `<br/>` — not `\n`.
+
+```
+A["line one<br/>line two"]
+```
+
+---
+
 ## Step 4: Hand off to aeo
 
 Once the PoC document is written, tell the user:
