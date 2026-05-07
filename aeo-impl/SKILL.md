@@ -81,4 +81,4 @@ Once all behaviors are implemented and tests are green:
 
 1. Show the user a summary of what was built
 2. Ask the user to confirm the code review
-3. On confirmation: update the documentation (`../aeo/references/docs.md`) and mark the ADR status as `Accepted`
+3. On confirmation: use the `aeo-docs` skill to update the documentation, and mark the ADR status as `Accepted`

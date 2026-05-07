@@ -34,6 +34,7 @@ AEO (Axiology–Epistemology–Ontology) is a three-layer design philosophy for 
 | `aeo-proto` | Design question is unresolved — build a throwaway prototype, write a PoC document |
 | `aeo` | Design is clear — run grill-me (or read PoC), write and confirm an ADR |
 | `aeo-impl` | ADR is confirmed — TDD implementation, RED → GREEN → REFACTOR |
+| `aeo-docs` | Implementation reviewed — write or update project documentation |
 
 ### Artifacts
 
