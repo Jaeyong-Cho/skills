@@ -19,13 +19,17 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## Step 1: Grill-me (reach shared understanding before writing)
 
-Interview the user relentlessly about every aspect of this decision until reaching shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one by one.
+Interview the user relentlessly until reaching shared understanding. Ask questions **one at a time**, from high-level to detailed — resolve the value layer first, then method, then entity.
 
-- Ask questions **one at a time**
-- For each question, provide your **recommended answer** so the user can confirm, correct, or refine
-- If a question can be answered by **exploring the codebase**, do that instead of asking
+**Order of questioning:**
+1. **Value** — What user problem does this solve? What does success look like? What must never happen?
+2. **Method** — How should the need be met? Which workflow or algorithm? Which objects are involved?
+3. **Entity** — What objects must exist? What do they own, do, and relate to?
 
-Stop when every branch of the decision tree is resolved and both sides see the problem the same way.
+For each question, provide your **recommended answer** so the user can confirm, correct, or refine.
+If a question can be answered by **exploring the codebase**, do that instead of asking.
+
+Stop when every branch is resolved and both sides see the problem the same way.
 
 ---
 
