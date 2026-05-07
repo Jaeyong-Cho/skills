@@ -19,8 +19,11 @@ ls .aeo/src/adr/ | grep 0001
 If no ADR is specified, list available ADRs and ask which one to implement.
 
 For TDD principles and the RED→GREEN→REFACTOR loop, read `../aeo/references/tdd.md`.
+For test writing examples (good vs bad), read `../aeo/references/tdd-tests.md`.
+For mocking guidelines, read `../aeo/references/tdd-mocking.md`.
+For refactoring after green, read `../aeo/references/tdd-refactoring.md`.
 For layer definitions, read `../aeo/references/layers.md`.
-For deep module principles, read `../aeo/references/deep-modules.md`.
+For deep module and interface design principles, read `../aeo/references/deep-modules.md`.
 
 ---
 
