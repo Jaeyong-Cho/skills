@@ -51,11 +51,13 @@ One paragraph introducing what this chapter covers and why it matters.
 
 ## Section files
 
-**01-value.md** — user needs this topic serves, what success looks like, what must never happen
+Within each section, order content from **broad scope to narrow** — start with the overall picture, then zoom into specifics.
 
-**02-method.md** — how the need is met: workflows, decision logic, composable strategies. Include Mermaid diagrams for flows and interactions.
+**01-value.md** — user needs this topic serves, what success looks like, what must never happen. Start with the overall goal, narrow to specific constraints.
 
-**03-entity.md** — the objects that exist: properties, behaviors, relationships, and invariants. Include Mermaid diagrams for entity relationships.
+**02-method.md** — how the need is met: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
+
+**03-entity.md** — the objects that exist: start with the top-level aggregate, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for entity relationships.
 
 ---
 

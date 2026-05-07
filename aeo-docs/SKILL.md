@@ -45,29 +45,28 @@ If updating, read the existing section files first so you don't overwrite conten
 
 ## Step 3: Write the documentation
 
-Write from high-level to detailed — value first, then method, then entity.
+The three sections (`value`, `method`, `entity`) are written in parallel — each covers the same feature from a different angle. Within **each section**, order content from broad scope to narrow: start with the overall picture, then zoom into specifics.
 
-**01-value.md** — What is valuable about this feature:
-- The user need it serves
-- What success looks like
-- What must never happen (invariants from the user's perspective)
+**01-value.md** — What is valuable:
+- Start with the broad user goal this feature serves
+- Then narrow to specific success criteria and edge-case constraints
 
 **02-method.md** — How it works:
-- Workflows and decision logic
-- Composable strategies and entry points
+- Start with the overall workflow or entry point
+- Then narrow to specific decision logic, strategies, and flows
 - Mermaid diagrams for flows and interactions
 
 **03-entity.md** — Which objects are used:
-- Entities, their properties and behaviors
-- Relationships and aggregate boundaries
+- Start with the aggregate or top-level entity
+- Then narrow to properties, behaviors, relationships, and invariants
 - Mermaid diagrams for entity relationships
 
 Each section describes what **is**, not what **was decided**. Write in present tense.
 
-Example (checkout feature):
-- `01-value.md`: "Users can complete a purchase without creating an account. Guest checkout must never silently drop items from the cart."
-- `02-method.md`: "The checkout flow is a linear state machine: cart → address → payment → confirmation. Each step validates before advancing."
-- `03-entity.md`: "`Order` owns `LineItem[]` and holds a `status` invariant — once `confirmed`, items cannot be removed."
+Example (checkout feature, narrow-down order within each section):
+- `01-value.md`: "Users can complete a purchase. → Guest checkout is supported. → Items must never be silently dropped."
+- `02-method.md`: "Checkout is a linear flow. → Each step validates before advancing. → Payment step retries on transient failure."
+- `03-entity.md`: "`Order` owns `LineItem[]`. → `LineItem` holds quantity and price snapshot. → Once `confirmed`, items cannot be removed."
 
 ---
 
