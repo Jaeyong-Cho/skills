@@ -19,18 +19,22 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ---
 
-## Step 1: Identify the question
+## Step 1: Sharpen the question (interactive)
 
-Ask the user: **what specific question does this prototype need to answer?**
+Do not ask the user to write the question themselves. Instead, lead an interactive narrowing:
 
-**One PoC = one question.** If the user's question contains multiple independent unknowns, split into separate PoCs. A sign of too-broad scope: answering one part doesn't help decide the other.
+1. **Draft a question** from what the user described — propose it out loud
+2. **Ask one thing** to make it sharper: scope, assumption, success condition
+3. **Revise** based on the answer — repeat until the question is crisp and testable
 
-Good prototype questions:
+A good question is specific enough that a prototype can answer it with a yes/no or a clear winner:
 - "Does this cart state model handle concurrent modifications correctly?"
 - "Which of these three checkout layouts do users find clearest?"
 - "Can we derive the invoice total from order events alone, without storing it?"
 
-The question determines the prototype type:
+**One PoC = one question.** If the question still covers multiple independent unknowns after narrowing, propose splitting into separate PoCs.
+
+Once agreed, determine the prototype type:
 - **Logic question** (state transitions, business rules, data shape) → read `references/proto-logic.md`
 - **UI question** (layout, interaction, design direction) → read `references/proto-ui.md`
 
