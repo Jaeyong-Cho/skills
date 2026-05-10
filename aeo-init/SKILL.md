@@ -53,23 +53,20 @@ additional-js = ["mermaid.min.js", "mermaid-init.js"]
 additional-css = ["theme/css/variables.css"]
 ```
 
-## Step 5: Create chapter directories and SUMMARY.md
+## Step 5: Create chapter directories and copy templates
 
 ```bash
 mkdir -p .aeo/src/adr .aeo/src/poc .aeo/src/docs
 ```
 
-Write `.aeo/src/SUMMARY.md`:
+Find the aeo-init skill directory (typically `~/.claude/skills/aeo-init/`) and copy:
 
-```markdown
-# Summary
-
-- [ADR](./adr/index.md)
-- [PoC](./poc/index.md)
-- [Documentation](./docs/index.md)
+```bash
+cp <skill-path>/templates/SUMMARY.md .aeo/src/SUMMARY.md
+cp <skill-path>/templates/adr-index.md .aeo/src/adr/index.md
+cp <skill-path>/templates/poc-index.md .aeo/src/poc/index.md
+cp <skill-path>/templates/docs-index.md .aeo/src/docs/index.md
 ```
-
-Create an `index.md` stub in each directory with content `# <Chapter Name>\n\n_No entries yet._`
 
 ## Step 6: Build check
 
