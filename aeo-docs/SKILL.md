@@ -61,6 +61,8 @@ The three sections (`value`, `method`, `entity`) are written in parallel — eac
 - Then narrow to properties, behaviors, relationships, and invariants
 - Mermaid diagrams for entity relationships
 
+For all Mermaid diagrams: use `<br/>` for multi-line node labels, not `\n`.
+
 Each section describes what **is**, not what **was decided**. Write in present tense.
 
 Example (checkout feature, narrow-down order within each section):
