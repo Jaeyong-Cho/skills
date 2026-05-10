@@ -51,13 +51,11 @@ Once agreed, determine the prototype type:
 
 ---
 
-## Step 3: Collect feedback and write the PoC document
-
-Before writing, ask the user: **what did you observe while running it?** — reactions, surprises, things that felt wrong, anything that didn't match expectations. Capture this verbatim as User feedback, not paraphrased.
+## Step 3: Write the PoC document
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, User feedback, Decisions, Open questions, Out of scope.
+Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, User feedback (leave blank for now), Decisions, Open questions, Out of scope.
 
 Add to `.aeo/src/SUMMARY.md`:
 ```markdown
@@ -65,6 +63,10 @@ Add to `.aeo/src/SUMMARY.md`:
 ```
 
 Use Mermaid diagrams wherever a visual makes findings clearer — state transitions, data flow, before/after comparisons. Keep each diagram focused on one context. Use `<br/>` for multi-line node labels, not `\n`.
+
+Show the document to the user, then ask: **what did you observe while running it?** — reactions, surprises, things that felt wrong, anything that didn't match expectations.
+
+Update the User feedback section verbatim based on the response. Do not paraphrase.
 
 ---
 
