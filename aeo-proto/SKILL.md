@@ -72,6 +72,16 @@ Update the User feedback section verbatim based on the response. Do not paraphra
 
 ## Step 4: Hand off to aeo
 
-Once the PoC document is written, tell the user:
+Before handing off, derive the AEO shape from the prototype findings:
 
-> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the PoC findings and open questions will be the starting context for grill-me."
+- **Entities** — which stable objects emerged from the prototype? What do they own (properties, behaviors)?
+- **Methods** — which workflows or decision logic connected the entities to the user's goal?
+
+Present these as a draft sketch, not a final answer. Example:
+
+> **Entities**: `Cart` (owns items, total), `LineItem` (quantity, price snapshot)
+> **Methods**: `addItem`, `applyDiscount`, `checkout`
+
+Then tell the user:
+
+> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the sketch above and the PoC findings will be the starting context for grill-me."
