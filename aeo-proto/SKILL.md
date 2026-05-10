@@ -21,9 +21,9 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## Step 1: Sharpen the question (interactive)
 
-Do not ask the user to write the question themselves. Instead, lead an interactive narrowing:
+If the user provided a scenario with the command, use it as the starting material. Do not ask the user to write the question themselves. Instead, lead an interactive narrowing:
 
-1. **Draft a question** from what the user described — propose it out loud
+1. **Draft a question** from the user's scenario — propose it out loud
 2. **Ask one thing** to make it sharper: scope, assumption, success condition
 3. **Revise** based on the answer — repeat until the question is crisp and testable
 
