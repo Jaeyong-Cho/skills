@@ -12,8 +12,8 @@ Output: `.aeo/src/docs/`
 ├── 01-<topic>/
 │   ├── index.md          — chapter introduction and section links
 │   ├── 01-value.md       — Why: user needs, goals, success criteria
-│   ├── 02-method.md      — How: workflows, decision logic, composable units
-│   └── 03-entity.md      — What: entities, properties, behaviors, relationships
+│   ├── 02-aspect.md      — How: workflows, decision logic, composable units
+│   └── 03-object.md      — What: entities, properties, behaviors, relationships
 ├── 02-<topic>/
 │   └── ...
 ```
@@ -45,8 +45,8 @@ One paragraph introducing what this chapter covers and why it matters.
 ## Sections
 
 - [Value — Why](./01-value.md)
-- [Method — How](./02-method.md)
-- [Entity — What](./03-entity.md)
+- [Aspect — How](./02-aspect.md)
+- [Object — What](./03-object.md)
 ```
 
 ## Section files
@@ -55,9 +55,9 @@ Within each section, order content from **broad scope to narrow** — start with
 
 **01-value.md** — user needs this topic serves, what success looks like, what must never happen. Start with the overall goal, narrow to specific constraints.
 
-**02-method.md** — how the need is met: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
+**02-aspect.md** — how the need is met: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
 
-**03-entity.md** — the objects that exist: start with the top-level aggregate, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for entity relationships.
+**03-object.md** — the objects that exist: start with the top-level aggregate, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for object relationships.
 
 ---
 
@@ -80,6 +80,6 @@ Create a new numbered chapter directory with its three section files and update 
 - [Documentation](./docs/index.md)
   - [Chapter 1: <Topic>](./docs/01-<topic>/index.md)
     - [Value](./docs/01-<topic>/01-value.md)
-    - [Method](./docs/01-<topic>/02-method.md)
-    - [Entity](./docs/01-<topic>/03-entity.md)
+    - [Aspect](./docs/01-<topic>/02-aspect.md)
+    - [Object](./docs/01-<topic>/03-object.md)
 ```

@@ -45,21 +45,21 @@ If updating, read the existing section files first so you don't overwrite conten
 
 ## Step 3: Write the documentation
 
-The three sections (`value`, `method`, `entity`) are written in parallel — each covers the same feature from a different angle. Within **each section**, order content from broad scope to narrow: start with the overall picture, then zoom into specifics.
+The three sections (`value`, `aspect`, `object`) are written in parallel — each covers the same feature from a different angle. Within **each section**, order content from broad scope to narrow: start with the overall picture, then zoom into specifics.
 
 **01-value.md** — What is valuable:
 - Start with the broad user goal this feature serves
 - Then narrow to specific success criteria and edge-case constraints
 
-**02-method.md** — How it works:
+**02-aspect.md** — How it works (aspect):
 - Start with the overall workflow or entry point
 - Then narrow to specific decision logic, strategies, and flows
 - Mermaid diagrams for flows and interactions
 
-**03-entity.md** — Which objects are used:
-- Start with the aggregate or top-level entity
+**03-object.md** — Which objects are used:
+- Start with the aggregate or top-level object
 - Then narrow to properties, behaviors, relationships, and invariants
-- Mermaid diagrams for entity relationships
+- Mermaid diagrams for object relationships
 
 For all Mermaid diagrams: use `<br/>` for multi-line node labels, not `\n`.
 
@@ -67,8 +67,9 @@ Each section describes what **is**, not what **was decided**. Write in present t
 
 Example (checkout feature, narrow-down order within each section):
 - `01-value.md`: "Users can complete a purchase. → Guest checkout is supported. → Items must never be silently dropped."
-- `02-method.md`: "Checkout is a linear flow. → Each step validates before advancing. → Payment step retries on transient failure."
-- `03-entity.md`: "`Order` owns `LineItem[]`. → `LineItem` holds quantity and price snapshot. → Once `confirmed`, items cannot be removed."
+- `02-aspect.md`: "Checkout is a linear flow. → Each step validates before advancing. → Payment step retries on transient failure."
+- `03-object.md`: "`Order` owns `LineItem[]`. → `LineItem` holds quantity and price snapshot. → Once `confirmed`, items cannot be removed."
+
 
 ---
 

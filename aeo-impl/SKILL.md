@@ -37,7 +37,7 @@ Example behavior list extracted from an ADR:
 1. User can log in with valid credentials       [tracer bullet]
 2. Login rejects unknown email
 3. Login rejects wrong password
-4. User entity validates its own password hash
+4. User object validates its own password hash
 ```
 
 Confirm the behavior list and priority with the user before writing any code.
@@ -57,7 +57,7 @@ GREEN: Write minimal code to make it pass → confirm it passes
 ```
 
 - Test names must match the User Stories from the ADR
-- Test only through public interfaces (value-layer entry points, entity public actions)
+- Test only through public interfaces (value-layer entry points, object public actions)
 - Do not write the next test until the current one is green
 
 ---

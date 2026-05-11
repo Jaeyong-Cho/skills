@@ -97,8 +97,8 @@ Run tests after each refactor step. **Never refactor while RED.**
 | Layer | What to test |
 |---|---|
 | **Value** | Entry point behavior — correct result for the user need |
-| **Method** | Workflow outcome — given these entities, the right result is produced |
-| **Entity** | Public actions and behaviors — state transitions, not internal fields |
+| **Aspect** | Workflow outcome — given these objects, the right result is produced |
+| **Object** | Public actions and behaviors — state transitions, not internal fields |
 
 ## Checklist per cycle
 

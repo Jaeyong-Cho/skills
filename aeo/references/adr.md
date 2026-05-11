@@ -59,17 +59,17 @@ What was decided and why. Walk through the three layers:
 **Value** — What does the end user need from this? Which features are worth
 building? What does success look like? What must never happen?
 
-**Method** — How is the need met? Which entities are used and from which angle?
+**Aspect** — How is the need met? Which objects are used and from which angle?
 What algorithm or workflow produces the outcome?
 
-**Entity** — What objects must exist? Each entity must have more than just
+**Object** — What objects must exist? Each object must have more than just
 data — it should own properties, actions, behaviors, and relationships relevant
-to its concern. If logic that belongs to an entity lives outside it, the entity
-is too thin. Are the entities stable and invariant across different uses? Is the
+to its concern. If logic that belongs to an object lives outside it, the object
+is too thin. Are the objects stable and invariant across different uses? Is the
 abstraction level right — not too large, not too small?
 
 For each relationship: cardinality, ownership, navigability, aggregate boundary.
-View-specific joins belong in the method layer.
+View-specific joins belong in the aspect layer.
 
 Call out any leakage between layers.
 
@@ -122,10 +122,10 @@ Example:
 
 1. User can log in with valid credentials
    - Test: call `login(email, password)` → returns session token
-   - Files: `src/commands/login.ts` [value], `src/services/auth.ts` [method]
-2. User entity validates its own password hash
+   - Files: `src/commands/login.ts` [value], `src/services/auth.ts` [aspect]
+2. User object validates its own password hash
    - Test: `user.verifyPassword(plain)` → true/false
-   - Files: `src/models/user.ts` [entity]
+   - Files: `src/models/user.ts` [object]
 3. ...
 ```
 

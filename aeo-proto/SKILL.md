@@ -55,7 +55,7 @@ Once agreed, determine the prototype type:
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, method, entity — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
+Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, aspect, object — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
 
 Add to `.aeo/src/SUMMARY.md`:
 ```markdown
