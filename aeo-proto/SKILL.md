@@ -70,10 +70,14 @@ Update the User feedback section verbatim based on the response. Do not paraphra
 
 ---
 
-## Step 4: Interview and hand off to aeo
+## Step 4: Interview
 
 Interview the user — one question at a time, with your recommended answer. Cover what worked, what didn't, what was surprising, what felt wrong, and any open concerns. Update the PoC document (findings, architecture, open questions) as the interview surfaces new information. Keep going until nothing remains unresolved.
 
-Then tell the user:
+---
+
+## Step 5: Hand off to aeo
+
+Tell the user:
 
 > "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
