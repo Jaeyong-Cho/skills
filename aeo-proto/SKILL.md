@@ -82,6 +82,6 @@ Present these as a draft sketch, not a final answer. Example:
 > **Entities**: `Cart` (owns items, total), `LineItem` (quantity, price snapshot)
 > **Methods**: `addItem`, `applyDiscount`, `checkout`
 
-Then tell the user:
+Then interview the user:
 
 > "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the sketch above and the PoC findings will be the starting context for grill-me."
