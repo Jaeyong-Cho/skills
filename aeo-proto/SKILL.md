@@ -72,13 +72,7 @@ Update the User feedback section verbatim based on the response. Do not paraphra
 
 ## Step 4: Interview and hand off to aeo
 
-Present the Architecture section from the PoC document to the user, then interview them about it — one question at a time, with your recommended answer. Probe each AEO layer:
-
-- **Value** — does this correctly capture what the user needs? is the success condition right?
-- **Method** — are these the right workflows? is any decision logic missing or wrong?
-- **Entity** — are these the right stable objects? does anything own too much or too little?
-
-Update the Architecture section in the PoC document as the interview refines the sketch. Keep going until each layer is settled.
+Interview the user — one question at a time, with your recommended answer. Cover what worked, what didn't, what was surprising, what felt wrong, and any open concerns. Update the PoC document (findings, architecture, open questions) as the interview surfaces new information. Keep going until nothing remains unresolved.
 
 Then tell the user:
 
