@@ -78,6 +78,8 @@ Interview the user — one question at a time, with your recommended answer. Cov
 
 ## Step 5: Hand off to aeo
 
-Tell the user:
+Suggest a commit message using `../aeo/references/commit.md`.
+
+Then tell the user:
 
 > "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
