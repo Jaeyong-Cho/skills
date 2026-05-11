@@ -55,7 +55,7 @@ Once agreed, determine the prototype type:
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, User feedback (leave blank for now), Decisions, Open questions, Out of scope.
+Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, method, entity — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
 
 Add to `.aeo/src/SUMMARY.md`:
 ```markdown
@@ -70,18 +70,16 @@ Update the User feedback section verbatim based on the response. Do not paraphra
 
 ---
 
-## Step 4: Hand off to aeo
+## Step 4: Interview and hand off to aeo
 
-Before handing off, derive the AEO shape from the prototype findings:
+Present the Architecture section from the PoC document to the user, then interview them about it — one question at a time, with your recommended answer. Probe each AEO layer:
 
-- **Entities** — which stable objects emerged from the prototype? What do they own (properties, behaviors)?
-- **Methods** — which workflows or decision logic connected the entities to the user's goal?
+- **Value** — does this correctly capture what the user needs? is the success condition right?
+- **Method** — are these the right workflows? is any decision logic missing or wrong?
+- **Entity** — are these the right stable objects? does anything own too much or too little?
 
-Present these as a draft sketch, not a final answer. Example:
+Update the Architecture section in the PoC document as the interview refines the sketch. Keep going until each layer is settled.
 
-> **Entities**: `Cart` (owns items, total), `LineItem` (quantity, price snapshot)
-> **Methods**: `addItem`, `applyDiscount`, `checkout`
+Then tell the user:
 
-Then interview the user:
-
-> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the sketch above and the PoC findings will be the starting context for grill-me."
+> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."

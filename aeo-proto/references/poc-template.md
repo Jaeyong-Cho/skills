@@ -23,7 +23,13 @@ Concrete decisions this prototype enables:
 
 ## Architecture
 
-The found needed objects or methods to building it.
+AEO shape derived from the prototype findings:
+
+**Value** — what user goal does this serve? what must succeed, what must never happen?
+
+**Method** — which workflows or decision logic connect entities to the user's goal?
+
+**Entity** — which stable objects emerged? what do they own (properties, behaviors)?
 
 ## User feedback
 
