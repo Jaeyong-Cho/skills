@@ -5,7 +5,7 @@ Implementation always follows TDD: one behavior at a time, RED → GREEN → REF
 For test writing examples, read `tdd-tests.md`.
 For mocking guidelines, read `tdd-mocking.md`.
 For refactoring after green, read `tdd-refactoring.md`.
-For interface design for testability, read `../aeo/../aeo/references/deep-modules.md`.
+For interface design for testability, read `../aeo/references/deep-modules.md`.
 
 ---
 
