@@ -8,7 +8,7 @@ description: |
 
 # AEO Implementation (TDD)
 
-For TDD philosophy and the RED→GREEN→REFACTOR loop, read `../aeo/references/tdd.md`.
+For TDD philosophy and the RED→GREEN→REFACTOR loop, read `references/tdd.md`.
 
 ADRs are stored at `.aeo/src/adr/<ID>-<slug>.md` (e.g. `adr-001` → `.aeo/src/adr/0001-*.md`).
 
@@ -46,8 +46,8 @@ Confirm the behavior list and priority with the user before writing any code.
 
 ## Step 2: Implement — one behavior at a time
 
-For test writing examples, read `../aeo/references/tdd-tests.md`.
-For mocking guidelines, read `../aeo/references/tdd-mocking.md`.
+For test writing examples, read `references/tdd-tests.md`.
+For mocking guidelines, read `references/tdd-mocking.md`.
 
 For each behavior in the plan:
 
@@ -64,7 +64,7 @@ GREEN: Write minimal code to make it pass → confirm it passes
 
 ## Step 3: Refactor (after all behaviors are green)
 
-For refactoring guidelines, read `../aeo/references/tdd-refactoring.md`.
+For refactoring guidelines, read `references/tdd-refactoring.md`.
 For deep module and interface design principles, read `../aeo/references/deep-modules.md`.
 
 - [ ] Can any interface be narrowed?
