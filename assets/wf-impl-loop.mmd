@@ -1,7 +1,0 @@
-flowchart TD
-    BEH["Behavior from ADR<br/>Step-by-Step Plan"] --> RED
-    RED["🔴 RED<br/>Write a failing test<br/>Confirm it fails"] --> GREEN
-    GREEN["🟢 GREEN<br/>Write minimal code to pass<br/>Confirm it passes"] --> MORE{More behaviors?}
-    MORE -->|Yes — next behavior| RED
-    MORE -->|No — all green| REF
-    REF["🔵 REFACTOR<br/>Narrow interfaces · hide complexity<br/>Remove duplication<br/>Run all tests after each step"]
