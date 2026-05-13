@@ -87,19 +87,22 @@ Example (checkout component):
 
 - Update each layer's `index.md` component list (`value/index.md`, `aspect/index.md`, `object/index.md`)
 - Update `docs/index.md` if the layer directories are new
-- Add the new component as a sub-chapter under each layer in `.pf/src/SUMMARY.md`:
+- Each layer file is its own sub-chapter under its layer in `.pf/src/SUMMARY.md`. A value file is a sub-chapter of Value, an aspect file is a sub-chapter of Aspect, an object file is a sub-chapter of Object:
 
 ```markdown
 - [Documentation](./docs/index.md)
   - [Value](./docs/value/index.md)
-    - [Component Name](./docs/value/01-<component>.md)
+    - [Auth](./docs/value/01-auth.md)
+    - [Checkout](./docs/value/02-checkout.md)
   - [Aspect](./docs/aspect/index.md)
-    - [Component Name](./docs/aspect/01-<component>.md)
+    - [Auth](./docs/aspect/01-auth.md)
+    - [Checkout](./docs/aspect/02-checkout.md)
   - [Object](./docs/object/index.md)
-    - [Component Name](./docs/object/01-<component>.md)
+    - [Auth](./docs/object/01-auth.md)
+    - [Checkout](./docs/object/02-checkout.md)
 ```
 
-If the layer entries already exist in SUMMARY.md, append the new component line under the correct layer — do not duplicate the layer entry itself.
+When adding a new file, append its line under its layer — do not duplicate the layer entry itself.
 
 Then build:
 
