@@ -95,11 +95,11 @@ Example (checkout component):
     - [Auth](./docs/value/01-auth.md)
     - [Checkout](./docs/value/02-checkout.md)
   - [Aspect](./docs/aspect/index.md)
-    - [Auth](./docs/aspect/01-auth.md)
-    - [Checkout](./docs/aspect/02-checkout.md)
+    - [Login Flow](./docs/aspect/01-login-flow.md)
+    - [Payment Flow](./docs/aspect/02-payment-flow.md)
   - [Object](./docs/object/index.md)
-    - [Auth](./docs/object/01-auth.md)
-    - [Checkout](./docs/object/02-checkout.md)
+    - [User](./docs/object/01-user.md)
+    - [Order](./docs/object/02-order.md)
 ```
 
 When adding a new file, append its line under its layer — do not duplicate the layer entry itself.
