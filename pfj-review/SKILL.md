@@ -1,11 +1,11 @@
 ---
-name: pofe-review
+name: pfj-review
 description: |
   End-of-day review for the POFE knowledge base. Reads today.md and today's goal file, writes a structured daily report, marks goal progress, propagates completions to weekly/monthly goals, extracts wiki entries and insights, updates work statistics, archives today.md, seeds tomorrow's goal and today.md with the next plan, and suggests a git commit message.
-  Triggers: "end of day", "daily review", "review today", "pofe review", "wrap up today", "end of work", or any request to summarize today's journal and plan tomorrow.
+  Triggers: "end of day", "daily review", "review today", "pfj review", "wrap up today", "end of work", or any request to summarize today's journal and plan tomorrow.
 ---
 
-# pofe-review: End-of-Day Review
+# pfj-review: End-of-Day Review
 
 **Goal**: Close the day — assess progress against the full goal hierarchy, adjust goals based on what was learned, grow the knowledge base, update achievement archive, analyze work patterns, and hand off a clean starting point for tomorrow.
 
@@ -488,7 +488,7 @@ If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for
 Do **not** commit — just show:
 
 ```
-pofe: YYYY-MM-DD — <one-line summary of today's main work>
+pfj: YYYY-MM-DD — <one-line summary of today's main work>
 
 - wiki/slug.md (new/updated)
 ```

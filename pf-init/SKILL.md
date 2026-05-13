@@ -1,9 +1,11 @@
 ---
-name: aeo-init
+name: pf-init
 description: |
   Initialize the AEO book (.aeo/) in the current project. Creates the mdbook structure, theme, chapters (adr, poc, docs), and serve script.
-  Triggers: "aeo-init", "initialize aeo", "set up aeo book", "create aeo book", or when any aeo skill detects .aeo/book.toml does not exist.
+  Triggers: "pf-init", "initialize pf", "set up pf book", "create pf book", or when any pf skill detects .aeo/book.toml does not exist.
 ---
+
+> Use `/caveman` for compressed output during this session.
 
 # AEO Initialization
 
@@ -56,16 +58,19 @@ additional-css = ["theme/css/variables.css"]
 ## Step 5: Create chapter directories and copy templates
 
 ```bash
-mkdir -p .aeo/src/adr .aeo/src/poc .aeo/src/docs
+mkdir -p .aeo/src/adr .aeo/src/poc .aeo/src/docs/value .aeo/src/docs/aspect .aeo/src/docs/object
 ```
 
-Find the aeo-init skill directory (typically `~/.claude/skills/aeo-init/`) and copy:
+Find the pf-init skill directory (typically `~/.claude/skills/pf-init/`) and copy:
 
 ```bash
 cp <skill-path>/templates/SUMMARY.md .aeo/src/SUMMARY.md
 cp <skill-path>/templates/adr-index.md .aeo/src/adr/index.md
 cp <skill-path>/templates/poc-index.md .aeo/src/poc/index.md
 cp <skill-path>/templates/docs-index.md .aeo/src/docs/index.md
+cp <skill-path>/templates/docs-value-index.md .aeo/src/docs/value/index.md
+cp <skill-path>/templates/docs-aspect-index.md .aeo/src/docs/aspect/index.md
+cp <skill-path>/templates/docs-object-index.md .aeo/src/docs/object/index.md
 ```
 
 ## Step 6: Build check
@@ -78,7 +83,7 @@ Fix all errors before continuing.
 
 ## Step 7: Copy serve script
 
-Find the aeo skill directory (where this skill lives, typically `~/.claude/skills/aeo/`) and copy:
+Find the pf skill directory (where this skill lives, typically `~/.claude/skills/pf/`) and copy:
 
 ```bash
 cp <skill-path>/scripts/serve.sh .aeo/serve.sh
@@ -92,3 +97,4 @@ Tell the user they can start the book server anytime with:
 ```
 
 Then return to the task that triggered initialization.
+

@@ -97,6 +97,15 @@ Show the current structure and the target structure.
 For a greenfield decision, show only the target.
 Keep each diagram focused on one concern — split if it gets large.
 
+In the **After** diagram, mark every node that is new or changed with a highlight style so the delta is immediately visible:
+
+```
+classDef changed fill:#f5a623,stroke:#c97d0a,color:#000
+class NewNode,ChangedNode changed
+```
+
+Use orange (`#f5a623`) as the default highlight. Nodes that are unchanged carry no class.
+
 **Before:**
 ```mermaid
 graph TD
@@ -107,6 +116,8 @@ graph TD
 ```mermaid
 graph TD
   ...
+  classDef changed fill:#f5a623,stroke:#c97d0a,color:#000
+  class NewOrChangedNode changed
 ```
 
 ## Step-by-Step Plan
@@ -137,7 +148,7 @@ After writing the ADR, ask the user to confirm before writing any code.
 
 Once the user has reviewed the code:
 
-1. Use the `aeo-docs` skill to update the documentation
+1. Use the `pf-docs` skill to update the documentation
 2. Mark the ADR status as `Accepted`
 
 ## SUMMARY.md entry

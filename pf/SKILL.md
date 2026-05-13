@@ -1,12 +1,14 @@
 ---
-name: aeo
+name: pf
 description: |
   Apply the AEO (Axiology–Epistemology–Ontology) software architecture philosophy to any engineering task.
   AEO is a three-layer design lens inspired by OOP and AOP: Axiology defines user value (why), Epistemology defines aspect (how), Ontology defines stable domain objects (what).
-  Use this skill whenever the user says "aeo", "apply aeo", "use aeo philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
+  Use this skill whenever the user says "pf", "apply pf", "use pf philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
   Also trigger when the user asks to analyze or critique an architecture and the AEO framework would help clarify responsibilities and boundaries.
-  Even if the user just says "review this" or "design this" in a context where AEO has been mentioned or is the active working philosophy, apply this skill.
+  Even if the user just says "review this" or "design this" in a context where pf has been mentioned or is the active working philosophy, apply this skill.
 ---
+
+> Use `/caveman` for compressed output during this session.
 
 # AEO Skill
 
@@ -32,7 +34,7 @@ Check whether the AEO book exists:
 ls .aeo/book.toml 2>/dev/null
 ```
 
-If it does **not** exist: use the `aeo-init` skill to initialize the book first, then proceed.
+If it does **not** exist: use the `pf-init` skill to initialize the book first, then proceed.
 
 ---
 
@@ -41,23 +43,23 @@ If it does **not** exist: use the `aeo-init` skill to initialize the book first,
 ```
 [uncertain about design?]
         ↓
-   aeo-proto  ──→  PoC document
+   pf-proto  ──→  PoC document
                         ↓
 [clear on what to build]
         ↓
-      aeo    ──→  ADR (written + confirmed)
+      pf  ──→  ADR (written + confirmed)
                         ↓
-                   aeo-impl  ──→  TDD implementation
+                   pf-impl  ──→  TDD implementation
                                         ↓
                               code review confirmed
                                         ↓
-                               aeo-docs  ──→  documentation updated
+                               pf-docs  ──→  documentation updated
 ```
 
-1. **Prototype first (optional)** — if the design question is unresolved, use the `aeo-proto` skill. It builds a throwaway prototype and writes a PoC document at `.aeo/src/poc/<ID>-<slug>.md`.
-2. **Write an ADR** — read `references/adr.md`. If the user provided a scenario with the command, use it as the starting context for grill-me. If coming from `aeo-proto`, read the PoC document first and use its findings and open questions instead. Ask the user to confirm before writing any code.
-3. **Implement with TDD** — use the `aeo-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
-4. **Code review confirmed** — use the `aeo-docs` skill to update the documentation.
+1. **Prototype first (optional)** — if the design question is unresolved, use the `pf-proto` skill. It builds a throwaway prototype and writes a PoC document at `.aeo/src/poc/<ID>-<slug>.md`.
+2. **Write an ADR** — read `references/deep-modules.md` and `references/adr.md`. If the user provided a scenario with the command, use it as the starting context for grill-me. If coming from `pf-proto`, read the PoC document first and use its findings and open questions instead. Ask the user to confirm before writing any code.
+3. **Implement with TDD** — use the `pf-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
+4. **Code review confirmed** — use the `pf-docs` skill to update the documentation.
 
 For AEO layer details, read `references/layers.md`.
 
@@ -84,3 +86,4 @@ Fix all errors before reporting to the user.
 ## Commit Message
 
 After each session, suggest a commit message. Read `references/commit.md` for the format and examples.
+

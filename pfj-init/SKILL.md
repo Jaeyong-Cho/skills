@@ -1,11 +1,11 @@
 ---
-name: pofe-init
+name: pfj-init
 description: |
   Initialize a POFE knowledge base — a personal productivity system combining daily journaling, goal management, achievement tracking, wiki, and work pattern analysis, all rendered via mdbook. Run once per repo. Use whenever the user wants to set up a journal, knowledge base, personal productivity system, or goal-tracking repo from scratch.
-  Triggers: "init pofe", "set up knowledge base", "initialize journal", "create knowledge base", "start my productivity system", or any request to bootstrap a personal journal/wiki/goal system.
+  Triggers: "init pfj", "set up knowledge base", "initialize journal", "create knowledge base", "start my productivity system", or any request to bootstrap a personal journal/wiki/goal system.
 ---
 
-# pofe-init: Initialize the POFE Knowledge Base
+# pfj-init: Initialize the POFE Knowledge Base
 
 **Goal**: Bootstrap a clean repo with mdbook structure, daily journal, wiki, goal hierarchy, achievement archive, and work pattern tracking. Run once.
 
@@ -93,7 +93,7 @@ command = "mdbook-mermaid"
 - [Archive](archive/archive.md)
 ```
 
-`pofe-review` will append new entries automatically.
+`pfj-review` will append new entries automatically.
 
 ---
 
@@ -273,6 +273,6 @@ chore: initialize POFE knowledge base
 > POFE initialized.
 > - Set your goals in `goals/YYYY/goal-MM-WNN.md` and `goals/YYYY/goal-MM.md`.
 > - Each day, write your daily goals at the top of `today.md`, then journal freely below.
-> - Run `/pofe-review` at end of day to archive, update goals, extract knowledge, and seed tomorrow.
-> - Run `/pofe-adjust` mid-day if priorities change.
+> - Run `/pfj-review` at end of day to archive, update goals, extract knowledge, and seed tomorrow.
+> - Run `/pfj-adjust` mid-day if priorities change.
 > - Run `mdbook serve` to preview the book.

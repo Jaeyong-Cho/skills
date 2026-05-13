@@ -5,7 +5,7 @@ Implementation always follows TDD: one behavior at a time, RED → GREEN → REF
 For test writing examples, read `tdd-tests.md`.
 For mocking guidelines, read `tdd-mocking.md`.
 For refactoring after green, read `tdd-refactoring.md`.
-For interface design for testability, read `../aeo/references/deep-modules.md`.
+For interface design for testability, read `../pf/references/deep-modules.md`.
 
 ---
 
@@ -82,7 +82,7 @@ Rules:
 
 ### 4. Refactor
 
-After all tests are green, check for deep module opportunities (see `../aeo/references/deep-modules.md`):
+After all tests are green, check for deep module opportunities (see `../pf/references/deep-modules.md`):
 
 - [ ] Can any interface be narrowed?
 - [ ] Is complexity hidden or exposed?

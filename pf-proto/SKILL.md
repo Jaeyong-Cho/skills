@@ -1,9 +1,11 @@
 ---
-name: aeo-proto
+name: pf-proto
 description: |
   Build a throwaway prototype to validate a design question, then write a Proof of Concept (PoC) document. Use when the user wants to explore or validate a design before committing to an ADR.
-  Triggers: "aeo-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
+  Triggers: "pf-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
 ---
+
+> Use `/caveman` for compressed output during this session.
 
 # AEO Prototype
 
@@ -42,7 +44,7 @@ Once agreed, determine the prototype type:
 
 ## Step 2: Build the prototype
 
-1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious — but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
+1. **Throwaway from day one, clearly marked as such.** All prototype code lives in `proto/<slug>/` at the project root — never next to production modules. This keeps throwaway code isolated and easy to delete wholesale.
 2. **One command to run.** Whatever the project's existing task runner supports — `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
 3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is checking, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE — wipe me" name.
 4. **Skip the polish.** No tests, no error handling beyond what makes the prototype runnable, no abstractions. The point is to learn something fast and then delete it.
@@ -81,10 +83,11 @@ Keep going until nothing remains unresolved.
 
 ---
 
-## Step 5: Hand off to aeo
+## Step 5: Hand off to pf
 
-Suggest a commit message using `../aeo/references/commit.md`.
+Suggest a commit message using `../pf/references/commit.md`.
 
 Then tell the user:
 
-> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/aeo` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
+> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/pf` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
+

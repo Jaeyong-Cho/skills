@@ -3,7 +3,7 @@
 After each session, show the user a recommended commit message:
 
 ```
-<type>(aeo): <short description>
+<type>(pf): <short description>
 
 Why: <what value or goal this addresses>
 What: <what entities or artifacts were created or changed>
@@ -15,7 +15,7 @@ How: <what method or approach was applied>
 The subject line should name the specific artifact produced, e.g.:
 
 ```
-feat(aeo): add design 0001 auth-flow
-fix(aeo): correct entity relationships in 0002-payment
-refact(aeo): simplify checkout workflow in 0003
+feat(pf): add design 0001 auth-flow
+fix(pf): correct entity relationships in 0002-payment
+refact(pf): simplify checkout workflow in 0003
 ```

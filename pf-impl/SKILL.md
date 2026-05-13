@@ -1,10 +1,12 @@
 ---
-name: aeo-impl
+name: pf-impl
 description: |
   Implement code from an AEO ADR using TDD (RED → GREEN → REFACTOR).
   Use after an ADR has been written and confirmed. Reads the ADR's Step-by-Step Plan and User Stories, then implements one behavior at a time through the red-green-refactor loop.
-  Triggers: "aeo-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an AEO ADR exists.
+  Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an AEO ADR exists.
 ---
+
+> Use `/caveman` for compressed output during this session.
 
 # AEO Implementation (TDD)
 
@@ -24,7 +26,7 @@ If no ADR is specified, list available ADRs and ask which one to implement.
 
 ## Step 1: Extract behaviors from the ADR
 
-For layer definitions, read `../aeo/references/layers.md`.
+For layer definitions, read `../pf/references/layers.md`.
 
 From the ADR, collect:
 
@@ -65,7 +67,7 @@ GREEN: Write minimal code to make it pass → confirm it passes
 ## Step 3: Refactor (after all behaviors are green)
 
 For refactoring guidelines, read `references/tdd-refactoring.md`.
-For deep module and interface design principles, read `../aeo/references/deep-modules.md`.
+For deep module and interface design principles, read `../pf/references/deep-modules.md`.
 
 - [ ] Can any interface be narrowed?
 - [ ] Is complexity hidden or exposed?
@@ -81,4 +83,5 @@ Once all behaviors are implemented and tests are green:
 
 1. Show the user a summary of what was built
 2. Ask the user to confirm the code review
-3. On confirmation: use the `aeo-docs` skill to update the documentation, and mark the ADR status as `Accepted`
+3. On confirmation: use the `pf-docs` skill to update the documentation, and mark the ADR status as `Accepted`
+

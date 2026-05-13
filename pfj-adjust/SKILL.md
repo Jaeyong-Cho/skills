@@ -1,11 +1,11 @@
 ---
-name: pofe-adjust
+name: pfj-adjust
 description: |
   Mid-day plan adjustment for the POFE knowledge base. Updates today's goal file based on new information, blockers, or changed priorities — and requires explicit reasoning for every change. Use when priorities shift during the day, a task gets blocked, or new urgent work appears.
-  Triggers: "adjust today's plan", "update today's goals", "pofe adjust", "change today's priorities", "something came up", "I need to reprioritize", or any request to modify the current day's goal mid-day.
+  Triggers: "adjust today's plan", "update today's goals", "pfj adjust", "change today's priorities", "something came up", "I need to reprioritize", or any request to modify the current day's goal mid-day.
 ---
 
-# pofe-adjust: Mid-Day Plan Adjustment
+# pfj-adjust: Mid-Day Plan Adjustment
 
 **Goal**: Update today's goal file to reflect the current reality, with an explicit record of what changed and why — so the end-of-day review has accurate context.
 
