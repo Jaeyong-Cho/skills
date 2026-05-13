@@ -32,34 +32,22 @@ style: |
 
 # The Full Workflow
 
-```
-👤 Human: "I have an idea..."
-         ↓
-    [Design unclear?]
-         ↓
-    /pf-proto ─────────────────────────────────────────────┐
-         ↓                                                  │
-    Run prototype                                           │
-         ↓                                                  │
-👤 "Here's what I observed..." ← surprising findings        │
-         ↓                                                  │
-    Interview (one Q at a time)                             │
-         ↓                                                  │
-    PoC document written ──────────────────────────────────┘
-         ↓
-    [Design is clear]
-         ↓
-    /pf ──→ Grill-me (one Q at a time, no limit)
-         ↓
-👤 Confirms every design decision
-         ↓
-    ADR written (value / aspect / object)
-         ↓
-    /pf-impl ──→ RED → GREEN → REFACTOR
-         ↓
-👤 Code review confirmed
-         ↓
-    /pf-docs ──→ Living documentation updated
+```mermaid
+flowchart TD
+    IDEA["👤 Human: 'I have an idea...'"] --> Q{Design unclear?}
+    Q -->|Yes| PROTO["/pf-proto"]
+    PROTO --> RUN["Run prototype"]
+    RUN --> OBS["👤 'Here's what I observed...'"]
+    OBS --> INT["Interview — one Q at a time"]
+    INT --> POC["PoC document written"]
+    POC --> CLEAR["Design is clear"]
+    Q -->|No| CLEAR
+    CLEAR --> PF["/pf — Grill-me"]
+    PF --> CONF["👤 Confirms every design decision"]
+    CONF --> ADR["ADR written<br/>(value / aspect / object)"]
+    ADR --> IMPL["/pf-impl — RED → GREEN → REFACTOR"]
+    IMPL --> REV["👤 Code review confirmed"]
+    REV --> DOCS["/pf-docs — Living documentation updated"]
 ```
 
 ---
@@ -98,12 +86,12 @@ context for architecture design — not assumptions, real observations.
 
 Three layers. One direction.
 
-```
-  Value  (Why)    ──→  What does the user need?
-    ↓
-  Aspect (How)    ──→  How is the need met? Which objects, from which angle?
-    ↓
-  Object (What)   ──→  What stable things must exist?
+```mermaid
+flowchart TD
+    V["Value (Why)<br/>What does the user need?"]
+    A["Aspect (How)<br/>How is the need met?<br/>Which objects, from which angle?"]
+    O["Object (What)<br/>What stable things must exist?"]
+    V --> A --> O
 ```
 
 > Design flows **Value → Aspect → Object**.
@@ -248,19 +236,14 @@ Each item = one RED→GREEN TDD cycle, ordered tracer-bullet first.
 
 ## The Loop
 
-```
-For each behavior in the ADR Step-by-Step Plan:
-
-  RED    Write a failing test → confirm it fails
-           ↓
-  GREEN  Write minimal code to pass → confirm it passes
-           ↓
-  (next behavior)
-
-After all behaviors are green:
-
-  REFACTOR  Narrow interfaces · hide complexity · remove duplication
-            Run all tests after each refactor step
+```mermaid
+flowchart TD
+    BEH["Behavior from ADR<br/>Step-by-Step Plan"] --> RED
+    RED["🔴 RED<br/>Write a failing test<br/>Confirm it fails"] --> GREEN
+    GREEN["🟢 GREEN<br/>Write minimal code to pass<br/>Confirm it passes"] --> MORE{More behaviors?}
+    MORE -->|Yes — next behavior| RED
+    MORE -->|No — all green| REF
+    REF["🔵 REFACTOR<br/>Narrow interfaces · hide complexity<br/>Remove duplication<br/>Run all tests after each step"]
 ```
 
 > Never write the next test until the current one is green.
@@ -338,27 +321,15 @@ Write in present tense.
 
 # The Full Picture
 
-```
-👤 "I have an idea"
-        ↓
-/pf-proto  →  One crisp question
-               Build in proto/
-               Run it → 👤 "I was surprised that..."
-               Interview → PoC document
-        ↓
-/pf        →  Read PoC findings
-               Grill-me (no limit) → 👤 confirms each decision
-               ADR: value / aspect / object
-               👤 confirms ADR
-        ↓
-/pf-impl   →  Behavior list from ADR
-               RED → GREEN per behavior
-               REFACTOR when all green
-               👤 code review confirmed
-        ↓
-/pf-docs   →  value/ aspect/ object/ chapters
-               One file per component per layer
-               Present tense · current state only
+```mermaid
+flowchart TD
+    IDEA["👤 'I have an idea'"]
+    PROTO["/pf-proto<br/>One crisp question<br/>Build in proto/<br/>Run it → 👤 observe findings"]
+    PF["/pf<br/>Read PoC findings<br/>Grill-me — no limit<br/>→ 👤 confirms each decision<br/>ADR: value / aspect / object<br/>→ 👤 confirms ADR"]
+    IMPL["/pf-impl<br/>Behavior list from ADR<br/>RED → GREEN per behavior<br/>REFACTOR when all green<br/>→ 👤 code review confirmed"]
+    DOCS["/pf-docs<br/>value/ aspect/ object/ chapters<br/>One file per component per layer<br/>Present tense · current state only"]
+
+    IDEA --> PROTO --> PF --> IMPL --> DOCS
 ```
 
 ---
