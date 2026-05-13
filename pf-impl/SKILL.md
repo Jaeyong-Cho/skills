@@ -6,7 +6,7 @@ description: |
   Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
-> Use `/caveman` for compressed output during this session.
+> `/caveman` — compressed output mode.
 
 # VAO Implementation (TDD)
 

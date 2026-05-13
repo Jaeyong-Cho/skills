@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-docs-migrate", "migrate docs", "update docs format", "convert docs structure", or when old-format docs are detected.
 ---
 
-> Use `/caveman` for compressed output during this session.
+> `/caveman` — compressed output mode.
 
 # VAO Docs Migration
 

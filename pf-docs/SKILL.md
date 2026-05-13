@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-docs", "update the docs", "write documentation", "document this", after code review is confirmed and an ADR exists.
 ---
 
-> Use `/caveman` for compressed output during this session.
+> `/caveman` — compressed output mode.
 
 # VAO Documentation
 
