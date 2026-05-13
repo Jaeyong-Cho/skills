@@ -1,4 +1,4 @@
-# TDD in AEO
+# TDD in VAO
 
 Implementation always follows TDD: one behavior at a time, RED → GREEN → REFACTOR.
 
@@ -92,7 +92,7 @@ Run tests after each refactor step. **Never refactor while RED.**
 
 ---
 
-## AEO layer guidance
+## VAO layer guidance
 
 | Layer | What to test |
 |---|---|

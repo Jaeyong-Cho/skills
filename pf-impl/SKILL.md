@@ -1,14 +1,14 @@
 ---
 name: pf-impl
 description: |
-  Implement code from an AEO ADR using TDD (RED → GREEN → REFACTOR).
+  Implement code from an VAO ADR using TDD (RED → GREEN → REFACTOR).
   Use after an ADR has been written and confirmed. Reads the ADR's Step-by-Step Plan and User Stories, then implements one behavior at a time through the red-green-refactor loop.
-  Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an AEO ADR exists.
+  Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Implementation (TDD)
+# VAO Implementation (TDD)
 
 For TDD philosophy and the RED→GREEN→REFACTOR loop, read `references/tdd.md`.
 

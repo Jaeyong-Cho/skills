@@ -7,7 +7,7 @@ description: |
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Prototype
+# VAO Prototype
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
@@ -57,7 +57,7 @@ Once agreed, determine the prototype type:
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.pf/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, aspect, object — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
+Write `.pf/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the VAO layers — value, aspect, object — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
 
 Add to `.pf/src/SUMMARY.md`:
 ```markdown

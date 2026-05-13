@@ -1,8 +1,8 @@
-# AEO Layers in Detail
+# VAO Layers in Detail
 
 ## Origin
 
-AEO is a software design philosophy inspired by OOP and AOP. A program is an automation tool for making decisions to achieve a goal. Designing it well requires three kinds of thinking:
+VAO is a software design philosophy inspired by OOP and AOP. A program is an automation tool for making decisions to achieve a goal. Designing it well requires three kinds of thinking:
 
 1. **What is the user goal worth automating?** → value layer
 2. **What algorithm and objects realize that goal?** → aspect layer
@@ -12,7 +12,7 @@ This leads to two types of classes: **domain objects** (what exists) and **aspec
 
 ---
 
-## Axiology (Value layer) — User Value (Why)
+## Value layer — User Value (Why)
 
 The value layer encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
 
@@ -28,7 +28,7 @@ Because the value layer represents user intent, it delegates the *how* to the as
 
 ---
 
-## Epistemology (Aspect layer) — Algorithm / Aspect (How)
+## Aspect layer — Algorithm / Aspect (How)
 
 The aspect layer has two responsibilities:
 
@@ -45,7 +45,7 @@ Structure the aspect layer into composable units — strategies, workflows, pipe
 
 ---
 
-## Ontology (Object layer) — Existence (What)
+## Object layer — Existence (What)
 
 Domain objects are the things that must exist to satisfy both the user need and the aspect. They are not an arbitrary catalog of domain things — they are the objects that the aspect selects and uses, shaped to serve the concerns that the value layer defines.
 

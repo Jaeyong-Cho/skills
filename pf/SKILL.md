@@ -1,24 +1,24 @@
 ---
 name: pf
 description: |
-  Apply the AEO (Axiology–Epistemology–Ontology) software architecture philosophy to any engineering task.
-  AEO is a three-layer design lens inspired by OOP and AOP: Axiology defines user value (why), Epistemology defines aspect (how), Ontology defines stable domain objects (what).
-  Use this skill whenever the user says "pf", "apply pf", "use pf philosophy", or asks for design, review, coding, refactoring, or documentation *with AEO in mind*.
-  Also trigger when the user asks to analyze or critique an architecture and the AEO framework would help clarify responsibilities and boundaries.
+  Apply the VAO (Value–Aspect–Object) software architecture philosophy to any engineering task.
+  VAO is a three-layer design lens inspired by OOP and AOP: Value defines user value (why), Aspect defines aspect (how), Object defines stable domain objects (what).
+  Use this skill whenever the user says "pf", "apply pf", "use pf philosophy", or asks for design, review, coding, refactoring, or documentation *with VAO in mind*.
+  Also trigger when the user asks to analyze or critique an architecture and the VAO framework would help clarify responsibilities and boundaries.
   Even if the user just says "review this" or "design this" in a context where pf has been mentioned or is the active working philosophy, apply this skill.
 ---
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Skill
+# VAO Skill
 
-A program is an automation tool for making decisions to achieve a goal. AEO structures this around three layers:
+A program is an automation tool for making decisions to achieve a goal. VAO structures this around three layers:
 
-- **Axiology (Why)** — user value: which features are worth building, which results users need, what a good outcome looks like; the entry point that represents user intent in code
-- **Epistemology (How)** — how to meet the need, and which objects to use and from which angle; the composable algorithm that bridges value and object
-- **Ontology (What)** — the stable objects that exist to satisfy the need and the aspect; invariant across aspects
+- **Value (Why)** — user value: which features are worth building, which results users need, what a good outcome looks like; the entry point that represents user intent in code
+- **Aspect (How)** — how to meet the need, and which objects to use and from which angle; the composable algorithm that bridges value and object
+- **Object (What)** — the stable objects that exist to satisfy the need and the aspect; invariant across aspects
 
-Design direction: **Axiology → Epistemology → Ontology** (iterative in practice).
+Design direction: **Value → Aspect → Object** (iterative in practice).
 
 In output documents, ADRs, and code labels use plain terms: `[value]`, `[aspect]`, `[object]` instead of the philosophical names.
 
@@ -28,7 +28,7 @@ For layer details including the OOP/AOP origin, object sizing by concern, and as
 
 ## Before Doing Anything
 
-Check whether the AEO book exists:
+Check whether the VAO book exists:
 
 ```bash
 ls .pf/book.toml 2>/dev/null
@@ -61,11 +61,11 @@ If it does **not** exist: use the `pf-init` skill to initialize the book first, 
 3. **Implement with TDD** — use the `pf-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
 4. **Code review confirmed** — use the `pf-docs` skill to update the documentation.
 
-For AEO layer details, read `references/layers.md`.
+For VAO layer details, read `references/layers.md`.
 
 ## Mermaid Diagrams
 
-Use Mermaid diagrams anywhere a visual explanation is clearer than prose — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships, decision logic, anything. A diagram communicates structure faster than prose and is the primary way AEO outputs make architecture visible. Place diagrams wherever they help, use as many as needed, and never restrict them to specific sections.
+Use Mermaid diagrams anywhere a visual explanation is clearer than prose — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships, decision logic, anything. A diagram communicates structure faster than prose and is the primary way VAO outputs make architecture visible. Place diagrams wherever they help, use as many as needed, and never restrict them to specific sections.
 
 Keep each diagram focused on one context. If a diagram is getting large, split it — one diagram per concern is more readable than one diagram trying to show everything. A diagram that needs scrolling or squinting has already failed its purpose.
 

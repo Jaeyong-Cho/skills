@@ -23,7 +23,7 @@ Concrete decisions this prototype enables:
 
 ## Architecture
 
-AEO shape derived from the prototype findings:
+VAO shape derived from the prototype findings:
 
 **Value** — what user goal does this serve? what must succeed, what must never happen?
 

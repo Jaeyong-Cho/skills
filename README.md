@@ -6,7 +6,7 @@ A collection of agent skills for software engineering.
 
 ## PF — Architecture Workflow
 
-PF (Positive Feedback) applies the AEO (Axiology–Epistemology–Ontology) three-layer design philosophy: **why** (user value), **how** (aspect), and **what** (stable objects).
+PF (Positive Feedback) applies the VAO (Value–Aspect–Object) three-layer design philosophy: **why** (user value), **how** (aspect), and **what** (stable objects).
 
 ### Workflow
 

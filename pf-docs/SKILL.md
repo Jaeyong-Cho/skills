@@ -1,13 +1,13 @@
 ---
 name: pf-docs
 description: |
-  Write or update the AEO project documentation after an ADR is implemented. Documents the current state of the system — what is valuable, how it works, which objects are used — organized from high-level to detailed.
+  Write or update the VAO project documentation after an ADR is implemented. Documents the current state of the system — what is valuable, how it works, which objects are used — organized from high-level to detailed.
   Triggers: "pf-docs", "update the docs", "write documentation", "document this", after code review is confirmed and an ADR exists.
 ---
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Documentation
+# VAO Documentation
 
 Documentation describes the **current state of the system**, not the history of decisions (that is what ADRs are for). Update after code review is confirmed — never before.
 

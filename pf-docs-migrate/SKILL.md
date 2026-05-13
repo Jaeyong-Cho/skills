@@ -1,13 +1,13 @@
 ---
 name: pf-docs-migrate
 description: |
-  One-time migration of AEO documentation from the old feature-centric format (numbered chapter directories, each with 01-value.md / 02-aspect.md / 03-object.md) to the new layer-centric format (value/, aspect/, object/ top-level directories, one file per component inside each).
+  One-time migration of VAO documentation from the old feature-centric format (numbered chapter directories, each with 01-value.md / 02-aspect.md / 03-object.md) to the new layer-centric format (value/, aspect/, object/ top-level directories, one file per component inside each).
   Triggers: "pf-docs-migrate", "migrate docs", "update docs format", "convert docs structure", or when old-format docs are detected.
 ---
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Docs Migration
+# VAO Docs Migration
 
 Converts `.pf/src/docs/` from feature-centric chapters to layer-centric chapters. Run once per project.
 
@@ -65,7 +65,7 @@ Replace `docs/index.md` with:
 ```markdown
 # Documentation
 
-This manual documents the current system design using the AEO framework.
+This manual documents the current system design using the VAO framework.
 
 ## Chapters
 

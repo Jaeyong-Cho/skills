@@ -1,6 +1,6 @@
 # Documentation
 
-This manual documents the current system design using the AEO framework.
+This manual documents the current system design using the VAO framework.
 
 ## Chapters
 

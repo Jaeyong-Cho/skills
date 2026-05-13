@@ -1,13 +1,13 @@
 ---
 name: pf-init
 description: |
-  Initialize the AEO book (.pf/) in the current project. Creates the mdbook structure, theme, chapters (adr, poc, docs), and serve script.
+  Initialize the VAO book (.pf/) in the current project. Creates the mdbook structure, theme, chapters (adr, poc, docs), and serve script.
   Triggers: "pf-init", "initialize pf", "set up pf book", "create pf book", or when any pf skill detects .pf/book.toml does not exist.
 ---
 
 > Use `/caveman` for compressed output during this session.
 
-# AEO Initialization
+# VAO Initialization
 
 ## Step 1: Install tooling if needed
 
@@ -21,7 +21,7 @@ If `cargo` is not available, tell the user to install Rust first: https://www.ru
 ## Step 2: Initialize mdbook
 
 ```bash
-mdbook init .pf --title "AEO" --ignore git
+mdbook init .pf --title "VAO" --ignore git
 mdbook-mermaid install .pf/
 ```
 
