@@ -11,7 +11,7 @@ description: |
 
 Documentation describes the **current state of the system**, not the history of decisions (that is what ADRs are for). Update after code review is confirmed — never before.
 
-Read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
+Read `../pf/references/layers.md` to understand the value/aspect/object philosophy, then read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
 
 ---
 
