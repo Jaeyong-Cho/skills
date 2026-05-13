@@ -4,22 +4,22 @@ A collection of agent skills for software engineering.
 
 ---
 
-## AEO — Architecture Workflow
+## PF — Architecture Workflow
 
-AEO (Axiology–Epistemology–Ontology) is a three-layer design philosophy for building software with clear separation of **why** (user value), **how** (method/aspect), and **what** (stable entities).
+PF (Positive Feedback) applies the AEO (Axiology–Epistemology–Ontology) three-layer design philosophy: **why** (user value), **how** (aspect), and **what** (stable objects).
 
 ### Workflow
 
 ```
 [uncertain about design?]
         ↓
-   aeo-proto  ──→  PoC document
+   pf-proto  ──→  PoC document
                         ↓
 [clear on what to build]
         ↓
-      aeo    ──→  ADR (written + confirmed)
+      pf    ──→  ADR (written + confirmed)
                         ↓
-                   aeo-impl  ──→  TDD implementation
+                   pf-impl  ──→  TDD implementation
                                         ↓
                               code review confirmed
                                         ↓
@@ -30,11 +30,12 @@ AEO (Axiology–Epistemology–Ontology) is a three-layer design philosophy for 
 
 | Skill | When to use |
 |-------|-------------|
-| `aeo-init` | First time — initialize the `.aeo/` book in the project |
-| `aeo-proto` | Design question is unresolved — build a throwaway prototype, write a PoC document |
-| `aeo` | Design is clear — run grill-me (or read PoC), write and confirm an ADR |
-| `aeo-impl` | ADR is confirmed — TDD implementation, RED → GREEN → REFACTOR |
-| `aeo-docs` | Implementation reviewed — write or update project documentation |
+| `pf-init` | First time — initialize the `.aeo/` book in the project |
+| `pf-proto` | Design question is unresolved — build a throwaway prototype, write a PoC document |
+| `pf` | Design is clear — run grill-me (or read PoC), write and confirm an ADR |
+| `pf-impl` | ADR is confirmed — TDD implementation, RED → GREEN → REFACTOR |
+| `pf-docs` | Implementation reviewed — write or update project documentation |
+| `pf-docs-migrate` | One-time — migrate old feature-centric docs to layer-centric format |
 
 ### Artifacts
 
@@ -44,31 +45,34 @@ AEO (Axiology–Epistemology–Ontology) is a three-layer design philosophy for 
 │   ├── adr/    # Architectural Decision Records (0001-slug.md)
 │   ├── poc/    # Proof of Concept documents (0001-slug.md)
 │   └── docs/   # Project documentation
+│       ├── value/    # Why — user goals per component
+│       ├── aspect/   # How — workflows per component
+│       └── object/   # What — domain objects per component
 └── serve.sh    # Start the book server
 ```
 
 ---
 
-## POFE — Daily Journal Workflow
+## PFJ — Daily Journal Workflow
 
-POFE is a personal productivity system: daily journaling, goal management, achievement tracking, wiki, and work pattern analysis, rendered via mdbook.
+PFJ (Positive Feedback Journal) is a personal productivity system: daily journaling, goal management, achievement tracking, wiki, and work pattern analysis, rendered via mdbook.
 
 ### Workflow
 
 ```
 [start of day]
       ↓
-  pofe-init  ──→  knowledge base ready  (run once)
+  pfj-init  ──→  knowledge base ready  (run once)
                         ↓
                write in today.md freely
                         ↓
              [priorities shift mid-day?]
                         ↓
-              pofe-adjust  ──→  today's goal updated
+              pfj-adjust  ──→  today's goal updated
                         ↓
                [end of day]
                         ↓
-              pofe-review  ──→  daily report written
+              pfj-review  ──→  daily report written
                                 goal progress marked
                                 tomorrow seeded
 ```
@@ -77,9 +81,9 @@ POFE is a personal productivity system: daily journaling, goal management, achie
 
 | Skill | When to use |
 |-------|-------------|
-| `pofe-init` | First time — initialize the knowledge base in the repo |
-| `pofe-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
-| `pofe-review` | End of day — close the day, propagate goal progress, seed tomorrow |
+| `pfj-init` | First time — initialize the knowledge base in the repo |
+| `pfj-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
+| `pfj-review` | End of day — close the day, propagate goal progress, seed tomorrow |
 
 ---
 
@@ -87,10 +91,12 @@ POFE is a personal productivity system: daily journaling, goal management, achie
 
 | Skill | What it does |
 |-------|-------------|
+| `grill-me` | Interview relentlessly about any plan or design until shared understanding is reached |
+| `caveman` | Ultra-compressed output mode — ~75% fewer tokens |
 | `write-a-skill` | Create new agent skills with proper structure and review checklist |
 
 ---
 
 ## Deprecated
 
-Skills in `deprecated/` are no longer actively used. The `sophist-*` V-model documentation skills have been superseded by the AEO workflow.
+Skills in `deprecated/` are no longer actively used. The `sophist-*` V-model documentation skills have been superseded by the PF workflow.
