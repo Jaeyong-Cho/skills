@@ -6,7 +6,7 @@ description: |
   Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
-> `/caveman` — compressed output mode.
+> `/caveman` — see `../caveman/SKILL.md`.
 
 # VAO Implementation (TDD)
 

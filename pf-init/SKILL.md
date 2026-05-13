@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-init", "initialize pf", "set up pf book", "create pf book", or when any pf skill detects .pf/book.toml does not exist.
 ---
 
-> `/caveman` — compressed output mode.
+> `/caveman` — see `../caveman/SKILL.md`.
 
 # VAO Initialization
 
