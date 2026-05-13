@@ -67,6 +67,15 @@ For all Mermaid diagrams: use `<br/>` for multi-line node labels, not `\n`.
 
 Each file describes what **is**, not what **was decided**. Write in present tense.
 
+At the bottom of each layer file, add a **Related files** section listing the source and test files for that component. Find them by searching the codebase for the object names, module names, or component slug from the ADR:
+
+```bash
+grep -rl "<ComponentName>" src/ --include="*.ts" --include="*.py" --include="*.go"
+grep -rl "<ComponentName>" tests/ --include="*.ts" --include="*.py" --include="*.go"
+```
+
+Adapt the paths and extensions to match the project. List each file as a relative path from the project root.
+
 Example (checkout component):
 - `value/02-checkout.md`: "Users can complete a purchase. → Guest checkout is supported. → Items must never be silently dropped."
 - `aspect/02-checkout.md`: "Checkout is a linear flow. → Each step validates before advancing. → Payment step retries on transient failure."
