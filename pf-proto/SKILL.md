@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
 ---
 
-> `/caveman` — see `../caveman/SKILL.md`.
+> Use `/caveman` for compressed output during this session.
 
 # VAO Prototype
 

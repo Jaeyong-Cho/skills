@@ -8,7 +8,7 @@ description: |
   Even if the user just says "review this" or "design this" in a context where pf has been mentioned or is the active working philosophy, apply this skill.
 ---
 
-> `/caveman` — see `../caveman/SKILL.md`.
+> Use `/caveman` for compressed output during this session.
 
 # VAO Skill
 

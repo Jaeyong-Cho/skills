@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-docs", "update the docs", "write documentation", "document this", after code review is confirmed and an ADR exists.
 ---
 
-> `/caveman` — see `../caveman/SKILL.md`.
+> Use `/caveman` for compressed output during this session.
 
 # VAO Documentation
 
