@@ -12,6 +12,39 @@ This leads to two types of classes: **domain objects** (what exists) and **aspec
 
 ---
 
+## Axiology (Value layer) — User Value (Why)
+
+The value layer encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
+
+This is the purpose layer — it exists to represent the user's goals, not the system's internals. In code it is the entry point: the use-case, command, or application service that says "the user needs X." Everything below it (aspect, object) exists to serve what the value layer defines.
+
+The value layer encodes:
+- Which user needs are worth satisfying (feature selection)
+- What a successful result looks like (evaluation)
+- What must never happen (validation)
+- Which aspect should deliver the result
+
+Because the value layer represents user intent, it delegates the *how* to the aspect layer. Keep it explicit in logic — if the user's need only lives in a comment or a ticket, it has not been encoded in the value layer yet.
+
+---
+
+## Epistemology (Aspect layer) — Algorithm / Aspect (How)
+
+The aspect layer has two responsibilities:
+
+1. **How to meet the need** — the algorithm, workflow, or strategy that realizes the user goal
+2. **Which objects to use and how to see them** — from what angle are the domain objects viewed? What subset of their properties matters here?
+
+This is where AOP thinking enters: different aspects see the same object differently, use only some of its properties, and combine objects in different ways. The aspect layer decides which objects are needed and how to compose them to produce the desired outcome.
+
+- An aspect does not need to use all domain objects.
+- An aspect may use only some properties of an object, not the whole thing.
+- The same object may look very different across aspects — this is correct, not a problem.
+
+Structure the aspect layer into composable units — strategies, workflows, pipelines — so that aspects can be swapped without changing the objects or the value definition.
+
+---
+
 ## Ontology (Object layer) — Existence (What)
 
 Domain objects are the things that must exist to satisfy both the user need and the aspect. They are not an arbitrary catalog of domain things — they are the objects that the aspect selects and uses, shaped to serve the concerns that the value layer defines.
@@ -40,39 +73,6 @@ Domain objects are the stable foundation. Multiple aspect-layer components can u
 ### Relationships
 
 For each relationship, decide: cardinality, ownership (who controls the lifecycle), navigability (which direction), and aggregate boundary (what changes atomically together). View-specific joins belong in the aspect layer, not the object.
-
----
-
-## Epistemology (Aspect layer) — Algorithm / Aspect (How)
-
-The aspect layer has two responsibilities:
-
-1. **How to meet the need** — the algorithm, workflow, or strategy that realizes the user goal
-2. **Which objects to use and how to see them** — from what angle are the domain objects viewed? What subset of their properties matters here?
-
-This is where AOP thinking enters: different aspects see the same object differently, use only some of its properties, and combine objects in different ways. The aspect layer decides which objects are needed and how to compose them to produce the desired outcome.
-
-- An aspect does not need to use all domain objects.
-- An aspect may use only some properties of an object, not the whole thing.
-- The same object may look very different across aspects — this is correct, not a problem.
-
-Structure the aspect layer into composable units — strategies, workflows, pipelines — so that aspects can be swapped without changing the objects or the value definition.
-
----
-
-## Axiology (Value layer) — User Value (Why)
-
-The value layer encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
-
-This is the purpose layer — it exists to represent the user's goals, not the system's internals. In code it is the entry point: the use-case, command, or application service that says "the user needs X." Everything below it (aspect, object) exists to serve what the value layer defines.
-
-The value layer encodes:
-- Which user needs are worth satisfying (feature selection)
-- What a successful result looks like (evaluation)
-- What must never happen (validation)
-- Which aspect should deliver the result
-
-Because the value layer represents user intent, it delegates the *how* to the aspect layer. Keep it explicit in logic — if the user's need only lives in a comment or a ticket, it has not been encoded in the value layer yet.
 
 ---
 
