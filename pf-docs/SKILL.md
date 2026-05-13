@@ -87,7 +87,19 @@ Example (checkout component):
 
 - Update each layer's `index.md` component list (`value/index.md`, `aspect/index.md`, `object/index.md`)
 - Update `docs/index.md` if the layer directories are new
-- Add entries to `.pf/src/SUMMARY.md`
+- Add the new component as a sub-chapter under each layer in `.pf/src/SUMMARY.md`:
+
+```markdown
+- [Documentation](./docs/index.md)
+  - [Value](./docs/value/index.md)
+    - [Component Name](./docs/value/01-<component>.md)
+  - [Aspect](./docs/aspect/index.md)
+    - [Component Name](./docs/aspect/01-<component>.md)
+  - [Object](./docs/object/index.md)
+    - [Component Name](./docs/object/01-<component>.md)
+```
+
+If the layer entries already exist in SUMMARY.md, append the new component line under the correct layer — do not duplicate the layer entry itself.
 
 Then build:
 
