@@ -9,12 +9,12 @@ description: |
 
 # AEO Docs Migration
 
-Converts `.aeo/src/docs/` from feature-centric chapters to layer-centric chapters. Run once per project.
+Converts `.pf/src/docs/` from feature-centric chapters to layer-centric chapters. Run once per project.
 
 ## Step 1: Detect old-format docs
 
 ```bash
-find .aeo/src/docs -mindepth 2 -name "01-value.md" 2>/dev/null
+find .pf/src/docs -mindepth 2 -name "01-value.md" 2>/dev/null
 ```
 
 If nothing is found, tell the user their docs are already in the new format and stop.
@@ -36,7 +36,7 @@ For each old chapter directory found (e.g. `docs/01-auth/`, `docs/02-checkout/`)
 Create the layer directories if they don't exist:
 
 ```bash
-mkdir -p .aeo/src/docs/value .aeo/src/docs/aspect .aeo/src/docs/object
+mkdir -p .pf/src/docs/value .pf/src/docs/aspect .pf/src/docs/object
 ```
 
 For each component, write its content into the corresponding layer file:
@@ -51,7 +51,7 @@ Preserve all content verbatim — do not rewrite or summarize.
 ## Step 4: Delete old chapter directories
 
 ```bash
-rm -rf .aeo/src/docs/<old-chapter-dir>
+rm -rf .pf/src/docs/<old-chapter-dir>
 ```
 
 Delete only the old numbered chapter directories. Do not touch `docs/index.md` yet.
@@ -93,7 +93,7 @@ The user goals and outcomes the system exists to deliver.
 
 ## Step 6: Rewrite SUMMARY.md docs entries
 
-Replace the old docs section in `.aeo/src/SUMMARY.md` with:
+Replace the old docs section in `.pf/src/SUMMARY.md` with:
 
 ```markdown
 - [Documentation](./docs/index.md)
@@ -112,7 +112,7 @@ Add one entry per component under each layer.
 ## Step 7: Build check
 
 ```bash
-cd .aeo && mdbook build 2>&1
+cd .pf && mdbook build 2>&1
 ```
 
 Fix all errors before reporting to the user.

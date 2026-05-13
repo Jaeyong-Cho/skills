@@ -30,7 +30,7 @@ PF (Positive Feedback) applies the AEO (Axiology–Epistemology–Ontology) thre
 
 | Skill | When to use |
 |-------|-------------|
-| `pf-init` | First time — initialize the `.aeo/` book in the project |
+| `pf-init` | First time — initialize the `.pf/` book in the project |
 | `pf-proto` | Design question is unresolved — build a throwaway prototype, write a PoC document |
 | `pf` | Design is clear — run grill-me (or read PoC), write and confirm an ADR |
 | `pf-impl` | ADR is confirmed — TDD implementation, RED → GREEN → REFACTOR |
@@ -40,7 +40,7 @@ PF (Positive Feedback) applies the AEO (Axiology–Epistemology–Ontology) thre
 ### Artifacts
 
 ```
-.aeo/
+.pf/
 ├── src/
 │   ├── adr/    # Architectural Decision Records (0001-slug.md)
 │   ├── poc/    # Proof of Concept documents (0001-slug.md)

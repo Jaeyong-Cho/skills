@@ -11,11 +11,11 @@ description: |
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
-PoC documents are stored at `.aeo/src/poc/<ID>-<slug>.md`.
+PoC documents are stored at `.pf/src/poc/<ID>-<slug>.md`.
 
 Assign ID with:
 ```bash
-ls .aeo/src/poc/*.md 2>/dev/null | wc -l
+ls .pf/src/poc/*.md 2>/dev/null | wc -l
 ```
 Zero-padded 4-digit format: `0001`, `0002`, etc.
 
@@ -57,9 +57,9 @@ Once agreed, determine the prototype type:
 
 Read `references/poc-template.md` for the document structure.
 
-Write `.aeo/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, aspect, object — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
+Write `.pf/src/poc/<ID>-<slug>.md` with sections: What was built, Findings, Architecture (fill the AEO layers — value, aspect, object — from the prototype findings), User feedback (leave blank for now), Decisions, Open questions, Out of scope.
 
-Add to `.aeo/src/SUMMARY.md`:
+Add to `.pf/src/SUMMARY.md`:
 ```markdown
   - [[<ID>] <title>](./poc/<ID>-<slug>.md)
 ```
@@ -89,5 +89,5 @@ Suggest a commit message using `../pf/references/commit.md`.
 
 Then tell the user:
 
-> "PoC written at `.aeo/src/poc/<ID>-<slug>.md`. Use `/pf` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
+> "PoC written at `.pf/src/poc/<ID>-<slug>.md`. Use `/pf` to turn this into an ADR — the Architecture sketch and PoC findings will be the starting context for grill-me."
 

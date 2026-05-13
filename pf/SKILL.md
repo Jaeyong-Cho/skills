@@ -31,7 +31,7 @@ For layer details including the OOP/AOP origin, object sizing by concern, and as
 Check whether the AEO book exists:
 
 ```bash
-ls .aeo/book.toml 2>/dev/null
+ls .pf/book.toml 2>/dev/null
 ```
 
 If it does **not** exist: use the `pf-init` skill to initialize the book first, then proceed.
@@ -56,7 +56,7 @@ If it does **not** exist: use the `pf-init` skill to initialize the book first, 
                                pf-docs  ──→  documentation updated
 ```
 
-1. **Prototype first (optional)** — if the design question is unresolved, use the `pf-proto` skill. It builds a throwaway prototype and writes a PoC document at `.aeo/src/poc/<ID>-<slug>.md`.
+1. **Prototype first (optional)** — if the design question is unresolved, use the `pf-proto` skill. It builds a throwaway prototype and writes a PoC document at `.pf/src/poc/<ID>-<slug>.md`.
 2. **Write an ADR** — read `references/deep-modules.md` and `references/adr.md`. If the user provided a scenario with the command, use it as the starting context for grill-me. If coming from `pf-proto`, read the PoC document first and use its findings and open questions instead. Ask the user to confirm before writing any code.
 3. **Implement with TDD** — use the `pf-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
 4. **Code review confirmed** — use the `pf-docs` skill to update the documentation.
@@ -78,7 +78,7 @@ A["line one<br/>line two"]
 After finishing, build the book:
 
 ```bash
-cd .aeo && mdbook build 2>&1
+cd .pf && mdbook build 2>&1
 ```
 
 Fix all errors before reporting to the user.

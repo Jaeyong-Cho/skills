@@ -20,7 +20,7 @@ Read `../pf/references/docs.md` for the full structure, file templates, and SUMM
 If the user names an ADR (e.g. "adr-001", "0001", "auth-flow"), find it:
 
 ```bash
-ls .aeo/src/adr/ | grep 0001
+ls .pf/src/adr/ | grep 0001
 ```
 
 If no ADR is specified, list available ADRs and ask which one to document.
@@ -34,7 +34,7 @@ Read the ADR. Focus on: what was actually built, the user stories, and the entit
 Check what already exists in the layer directories:
 
 ```bash
-ls .aeo/src/docs/value/ .aeo/src/docs/aspect/ .aeo/src/docs/object/ 2>/dev/null
+ls .pf/src/docs/value/ .pf/src/docs/aspect/ .pf/src/docs/object/ 2>/dev/null
 ```
 
 Decide:
@@ -78,12 +78,12 @@ Example (checkout component):
 
 - Update each layer's `index.md` component list (`value/index.md`, `aspect/index.md`, `object/index.md`)
 - Update `docs/index.md` if the layer directories are new
-- Add entries to `.aeo/src/SUMMARY.md`
+- Add entries to `.pf/src/SUMMARY.md`
 
 Then build:
 
 ```bash
-cd .aeo && mdbook build 2>&1
+cd .pf && mdbook build 2>&1
 ```
 
 Fix all errors before reporting to the user.

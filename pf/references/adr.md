@@ -4,7 +4,7 @@ Every change — new feature, refactoring, or architecture design — is an ADR.
 
 **One ADR = one problem.** If the scope covers multiple independent problems, split into separate ADRs before starting. A sign of too-broad scope: the grill-me branches into unrelated decision trees.
 
-Output: `.aeo/src/adr/<ID>-<slug>.md`
+Output: `.pf/src/adr/<ID>-<slug>.md`
 
 For layer definitions, read `references/layers.md`.
 For deep module principles, read `references/deep-modules.md`.
@@ -12,7 +12,7 @@ For deep module principles, read `references/deep-modules.md`.
 ## ID assignment
 
 ```bash
-ls .aeo/src/adr/*.md 2>/dev/null | wc -l
+ls .pf/src/adr/*.md 2>/dev/null | wc -l
 ```
 
 Zero-padded 4-digit format: `0001`, `0002`, etc.

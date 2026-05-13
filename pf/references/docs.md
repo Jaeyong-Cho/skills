@@ -2,12 +2,12 @@
 
 The documentation is the living documentation of the system — updated after each confirmed implementation, not per-decision. It describes the current state of the system, not the history of decisions (that is what ADRs are for).
 
-Output: `.aeo/src/docs/`
+Output: `.pf/src/docs/`
 
 ## Structure
 
 ```
-.aeo/src/docs/
+.pf/src/docs/
 ├── index.md              — introduction and chapter links
 ├── value/
 │   ├── index.md          — chapter intro: what user goals the system serves
