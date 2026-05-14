@@ -127,7 +127,7 @@ setup_copilot() {
   echo "→ GitHub Copilot CLI"
 
   mkdir -p "$HOME/.copilot"
-  ln -sf "$SKILLS_DIR/AGENTS.md" "$HOME/.copilot/copilot-instructions.md"
+  ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
 
   setup_pfj_path
