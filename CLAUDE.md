@@ -34,17 +34,13 @@ Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`)
 
 ## Skill Feedback
 
-After logging the session summary, ask the user for feedback using the `AskUserQuestion` tool:
+After logging the session summary, ask for feedback using the `AskUserQuestion` tool. Generate 2–4 options relevant to what actually happened in this session — not a fixed list. Think about what could have gone better: was it slow, confusing, off-target, missing context, too many questions, wrong output format? Pick the options most likely to matter for this specific session.
 
 ```
 question: "How did this session feel?"
 header: "Feedback"
 multiSelect: true
-options:
-  - label: "Worked well"
-  - label: "Too slow / verbose"
-  - label: "Questions were off"
-  - label: "Output missed the mark"
+options: <generated based on session>
 ```
 
 If the user gives feedback, note it in the summary under a **Feedback** field. This feedback is for improving the skill itself, not just the session outcome.

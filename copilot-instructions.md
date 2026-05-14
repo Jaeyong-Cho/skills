@@ -34,11 +34,6 @@ Use 24h time. Use a short label for the session (e.g. `debug`, `refactor`, `feat
 
 ## Session Feedback
 
-After logging the session summary, ask the user for feedback using the `ask_user` tool with these options (multi-select):
-
-- Worked well
-- Too slow / verbose
-- Questions were off
-- Output missed the mark
+After logging the session summary, ask for feedback using the `ask_user` tool. Generate 2–4 options relevant to what actually happened in this session — not a fixed list. Think about what could have gone better: was it slow, confusing, off-target, missing context, too many questions, wrong output format? Pick the options most likely to matter for this specific session. Use multi-select.
 
 If the user gives feedback, note it in the summary under a **Feedback** field.
