@@ -26,7 +26,7 @@ detect() {
 }
 
 detect "claude"   "Claude Code        (claude CLI)"          "command -v claude"
-detect "copilot"  "GitHub Copilot CLI (gh copilot)"          "gh extension list 2>/dev/null | grep -q copilot"
+detect "copilot"  "GitHub Copilot CLI (copilot)"             "command -v copilot"
 detect "vscode"   "VS Code + Copilot  (code)"                \
   "[ -f \"$HOME/Library/Application Support/Code/User/settings.json\" ]" \
   "[ -f \"$HOME/.config/Code/User/settings.json\" ]"
@@ -103,17 +103,23 @@ print('  ✓ PFJ_PATH =', '$PFJ_PATH')
 
 setup_copilot() {
   echo "→ GitHub Copilot CLI"
+
+  # AGENTS.md symlink in ~/.claude (copilot reads AGENTS.md from COPILOT_CUSTOM_INSTRUCTIONS_DIRS)
+  ln -sf "$SKILLS_DIR/AGENTS.md" "$CLAUDE_DIR/AGENTS.md"
+  echo "  ✓ ~/.claude/AGENTS.md → $SKILLS_DIR/AGENTS.md"
+
+  # Set COPILOT_CUSTOM_INSTRUCTIONS_DIRS in shell rc
   SHELL_RC=""
   case "$SHELL" in
     */zsh)  SHELL_RC="$HOME/.zshrc" ;;
     */bash) SHELL_RC="$HOME/.bashrc" ;;
   esac
-  MARKER="# gh copilot aliases (added by skills/install.sh)"
+  MARKER="# copilot custom instructions (added by skills/install.sh)"
   if [ -n "$SHELL_RC" ] && ! grep -qF "$MARKER" "$SHELL_RC" 2>/dev/null; then
     { echo ""; echo "$MARKER"
-      echo 'eval "$(gh copilot alias -- "${SHELL##*/}" 2>/dev/null)"'
+      echo "export COPILOT_CUSTOM_INSTRUCTIONS_DIRS=\"\$HOME/.claude\""
     } >> "$SHELL_RC"
-    echo "  ✓ added ghcs/ghce aliases to $SHELL_RC"
+    echo "  ✓ COPILOT_CUSTOM_INSTRUCTIONS_DIRS set in $SHELL_RC"
     echo "  reload shell or: source $SHELL_RC"
   else
     echo "  already configured"

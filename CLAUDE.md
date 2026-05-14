@@ -2,7 +2,7 @@
 
 ## Skill Session Logging
 
-After completing any skill session, log a summary to the journal.
+After completing any skill or significant AI-assisted work session, log a summary to the journal.
 
 **Check config:**
 ```bash
@@ -23,9 +23,19 @@ If it exists, append at the bottom of `$PFJ_PATH/today.md`:
 ```markdown
 ## HH:MM:SS (skill-name)
 
-**Summary**: what was done this session — concrete outcomes, files changed, decisions made
+**Summary**: concrete outcomes — what was built, changed, or decided; which files were affected
 
-**Lessons**: key insights, patterns noticed, or things to do differently next time
+**Lessons**: what worked well, what was harder than expected, what to do differently next time, patterns worth remembering
 ```
 
-Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`). Keep both fields tight — this is a reflection entry, not a report.
+Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`). For non-skill sessions use a short label (e.g. `debug`, `refactor`).
+
+**What makes a good lesson**: not "it worked" — but *why* it worked, or what surprised you, or what you'd tell yourself before starting. One sharp observation beats three vague ones.
+
+## Skill Feedback
+
+After logging the session summary, ask the user for feedback on the skill:
+
+> "How did this session feel? Anything the skill should do differently — steps that were slow, questions that were off, output that missed the mark?"
+
+If the user gives feedback, note it in the summary under a **Feedback** field. This feedback is for improving the skill itself, not just the session outcome.
