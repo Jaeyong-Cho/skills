@@ -13,7 +13,13 @@ description: |
 
 ## Source of Truth
 
-**The human's journal text is always correct. Everything else is an AI inference that may be wrong.**
+**Human-written journal text is always correct. AI-written entries (labeled sections) are structured summaries — accurate but not ground truth. Everything else is an AI inference that may be wrong.**
+
+Not all journal text is human-written. Labeled sections (`## HH:MM:SS (skill-name)`) are appended by AI skills, not the user. When resolving conflicts, apply the right trust level:
+
+- Human-written text wins over everything else.
+- AI-written entries win over goal files, wiki, archive, and reports — but lose to human-written text.
+- Never treat an AI-written entry as the user's personal voice, reflection, or experience.
 
 When the journal conflicts with a goal file, wiki entry, archive, or report — the journal wins. Correct the other file, not the journal. Specifically:
 
