@@ -23,6 +23,23 @@ When the journal conflicts with a goal file, wiki entry, archive, or report — 
 - If the journal describes a different scope, priority, or outcome than what the goal files assumed → update the goal files.
 - Never silently ignore a mismatch. Either fix it or leave a note explaining the discrepancy.
 
+### AI-written vs human-written entries
+
+Some journal sections are written by AI, not by the user. Identify them by the label in the section header:
+
+- **Human-written**: `## HH:MM:SS` with no label, or freeform text below `<!-- Write freely below -->` — the user's own voice. Treat as ground truth.
+- **AI-written**: `## HH:MM:SS (label)` where label is a skill name — e.g. `(grill)`, `(pf)`, `(pf-impl)`, `(pfj-grill)`, `(debug)`, `(refactor)` — these are AI-generated summaries appended by skills.
+
+Apply different trust rules per type:
+
+| Aspect | Human-written | AI-written |
+|--------|--------------|------------|
+| Factual accuracy | Ground truth | Likely accurate, but verify against human sections if conflict |
+| Personal feelings / energy / frustration | Authoritative | Not present — do not infer personal state from AI entries |
+| Task completion claims | Authoritative | Trust unless contradicted by human section |
+| Decisions and outcomes | Authoritative | Trust — these record agreed conclusions |
+| Lessons / reflections | Authoritative | These are AI observations, not the user's personal insight — use as supporting context, not as the user's own reflection |
+
 ---
 
 ## Step 1: Load today's files and full goal hierarchy
@@ -115,7 +132,7 @@ Append to the end of `today.md`. Do not modify anything above. If a `## Daily Re
 
 Fill every section with real content. The Next Work Plan should be specific enough to start tomorrow without re-reading anything — infer from unfinished tasks, open questions, and logical next steps.
 
-**Personal Reflection guidance**: Draw from the full journal text — look for moments of frustration, flow, surprise, or pride. "Went well" should name a specific behavior, not just an outcome ("broke the task into 30-min blocks" not "was productive"). "Do differently" should be actionable tomorrow. "Pattern noticed" is optional but powerful — skip it rather than force it if nothing real stands out.
+**Personal Reflection guidance**: Draw only from human-written sections (no label in header, or freeform text below `<!-- Write freely below -->`). Do not source reflections from AI-written entries — those are structured summaries, not the user's voice. Look for moments of frustration, flow, surprise, or pride in the human text. "Went well" should name a specific behavior, not just an outcome ("broke the task into 30-min blocks" not "was productive"). "Do differently" should be actionable tomorrow. "Pattern noticed" is optional but powerful — skip it rather than force it if nothing real stands out.
 
 **Sub-tasks**: Break each task into 1-level sub-steps (indented `  - [ ]`). Sub-steps are concrete, sequential actions that make the task executable without further thought. Aim for 2–4 sub-steps per task; omit sub-steps only if the task is already a single atomic action.
 
