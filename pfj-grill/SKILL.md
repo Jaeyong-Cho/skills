@@ -63,4 +63,4 @@ If the discussion produced concrete tasks, add them to the `## Goals` section at
 ls ~/.claude/skills/
 ```
 
-Reference the skill by name in the ai field — e.g. `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`, `*(ai: /pfj-grill — think through this concern)*`. If no skill fits, describe how AI helps instead.
+Reference the skill by name in the ai field — e.g. `*(ai: /pf-proto - protoryping and poc)*`, `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`, `*(ai: /pfj-grill — think through this concern)*`. If no skill fits, describe how AI helps instead.
