@@ -19,7 +19,7 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ---
 
-Before starting this session see ../caveman/SKILL.md and follow this rule at the chat and poc document.
+Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat and poc document.
 
 ## Step 1: Sharpen the question (interactive)
 
