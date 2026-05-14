@@ -17,11 +17,8 @@ The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
 |-------|----------------------|
-| Claude Code | `~/.claude/CLAUDE.md` symlink + `PFJ_PATH` in `settings.json` |
-| GitHub Copilot CLI | `~/.copilot/AGENTS.md` symlink + `COPILOT_CUSTOM_INSTRUCTIONS_DIRS` + `PFJ_PATH` in shell rc |
-| VS Code + Copilot | `CLAUDE.md` reference in VS Code settings |
-| Cursor | `~/.cursor/rules/global.md` symlink |
-| Windsurf | `~/.codeium/windsurf/global_rules.md` symlink |
+| Claude Code | `~/.claude/CLAUDE.md` symlink + `PFJ_PATH` in `settings.json` and shell rc |
+| GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` symlink + `PFJ_PATH` in shell rc |
 
 `PFJ_PATH` is exported in `.zshrc`/`.bashrc` and points to your journal directory (default: `~/pofe`).
 
