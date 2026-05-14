@@ -138,9 +138,10 @@ else:
 setup_copilot() {
   echo "→ GitHub Copilot CLI"
 
-  # AGENTS.md symlink (copilot reads AGENTS.md from COPILOT_CUSTOM_INSTRUCTIONS_DIRS)
-  ln -sf "$SKILLS_DIR/AGENTS.md" "$CLAUDE_DIR/AGENTS.md"
-  echo "  ✓ ~/.claude/AGENTS.md → $SKILLS_DIR/AGENTS.md"
+  # AGENTS.md symlink in ~/.copilot (copilot's own config dir)
+  mkdir -p "$HOME/.copilot"
+  ln -sf "$SKILLS_DIR/AGENTS.md" "$HOME/.copilot/AGENTS.md"
+  echo "  ✓ ~/.copilot/AGENTS.md → $SKILLS_DIR/AGENTS.md"
 
   # PFJ_PATH in shell rc (shared)
   setup_pfj_path
@@ -151,9 +152,9 @@ setup_copilot() {
   local marker="# copilot custom instructions (added by skills/install.sh)"
   if [ -n "$rc" ] && ! grep -qF "$marker" "$rc" 2>/dev/null; then
     { echo ""; echo "$marker"
-      echo "export COPILOT_CUSTOM_INSTRUCTIONS_DIRS=\"\$HOME/.claude\""
+      echo "export COPILOT_CUSTOM_INSTRUCTIONS_DIRS=\"\$HOME/.copilot\""
     } >> "$rc"
-    echo "  ✓ COPILOT_CUSTOM_INSTRUCTIONS_DIRS → $rc"
+    echo "  ✓ COPILOT_CUSTOM_INSTRUCTIONS_DIRS=~/.copilot → $rc"
   else
     echo "  COPILOT_CUSTOM_INSTRUCTIONS_DIRS already configured"
   fi
