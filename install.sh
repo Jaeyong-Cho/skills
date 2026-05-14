@@ -25,17 +25,15 @@ detect() {
   done
 }
 
-detect "claude"   "Claude Code        (claude CLI)"          "command -v claude"
-detect "copilot"  "GitHub Copilot CLI (copilot)"             "command -v copilot"
-detect "vscode"   "VS Code + Copilot  (code)"                \
+detect "claude"   "Claude Code        (claude CLI)"  "command -v claude"
+detect "copilot"  "GitHub Copilot CLI (copilot)"     "command -v copilot"
+detect "vscode"   "VS Code + Copilot  (code)"        \
   "[ -f \"$HOME/Library/Application Support/Code/User/settings.json\" ]" \
   "[ -f \"$HOME/.config/Code/User/settings.json\" ]"
-detect "cursor"   "Cursor             (cursor)"              \
-  "command -v cursor" \
-  "[ -d '/Applications/Cursor.app' ]"
-detect "windsurf" "Windsurf           (windsurf)"            \
-  "command -v windsurf" \
-  "[ -d '/Applications/Windsurf.app' ]"
+detect "cursor"   "Cursor             (cursor)"      \
+  "command -v cursor" "[ -d '/Applications/Cursor.app' ]"
+detect "windsurf" "Windsurf           (windsurf)"    \
+  "command -v windsurf" "[ -d '/Applications/Windsurf.app' ]"
 
 if [ ${#DETECTED_KEYS[@]} -eq 0 ]; then
   echo "No supported AI agents detected. Exiting."
@@ -52,14 +50,59 @@ SELECTION="${SELECTION:-all}"
 
 selected() {
   local key="$1"
-  if [ "$SELECTION" = "all" ]; then return 0; fi
+  [ "$SELECTION" = "all" ] && return 0
   for i in "${!DETECTED_KEYS[@]}"; do
     if [ "${DETECTED_KEYS[$i]}" = "$key" ]; then
-      local n=$((i+1))
-      echo " $SELECTION " | grep -qw "$n" && return 0
+      echo " $SELECTION " | grep -qw "$((i+1))" && return 0
     fi
   done
   return 1
+}
+
+# ── Shared: shell rc path ─────────────────────────────────────────────────────
+
+shell_rc() {
+  case "$SHELL" in
+    */zsh)  echo "$HOME/.zshrc" ;;
+    */bash) echo "$HOME/.bashrc" ;;
+    *)      echo "" ;;
+  esac
+}
+
+# ── Shared: PFJ_PATH ──────────────────────────────────────────────────────────
+
+PFJ_PATH_VALUE=""
+
+setup_pfj_path() {
+  local rc
+  rc="$(shell_rc)"
+
+  # Already in shell rc?
+  if [ -n "$rc" ] && grep -q 'export PFJ_PATH=' "$rc" 2>/dev/null; then
+    PFJ_PATH_VALUE=$(grep 'export PFJ_PATH=' "$rc" | tail -1 | sed 's/export PFJ_PATH="\(.*\)"/\1/' | sed "s/export PFJ_PATH='\(.*\)'/\1/" | sed 's/export PFJ_PATH=//')
+    echo "  PFJ_PATH already in $rc: $PFJ_PATH_VALUE"
+    return
+  fi
+
+  # Already in environment?
+  if [ -n "$PFJ_PATH" ]; then
+    PFJ_PATH_VALUE="$PFJ_PATH"
+    echo "  PFJ_PATH already set in environment: $PFJ_PATH"
+    return
+  fi
+
+  read -rp "  pfj directory path [~/pofe]: " PFJ_INPUT
+  PFJ_PATH_VALUE="${PFJ_INPUT:-$HOME/pofe}"
+  PFJ_PATH_VALUE="${PFJ_PATH_VALUE/#\~/$HOME}"
+
+  if [ -n "$rc" ]; then
+    local marker="# PFJ_PATH — journal directory (added by skills/install.sh)"
+    { echo ""; echo "$marker"
+      echo "export PFJ_PATH=\"$PFJ_PATH_VALUE\""
+    } >> "$rc"
+    echo "  ✓ PFJ_PATH=$PFJ_PATH_VALUE → $rc"
+    echo "  reload shell or: source $rc"
+  fi
 }
 
 # ── Setup functions ───────────────────────────────────────────────────────────
@@ -75,54 +118,44 @@ setup_claude() {
   ln -sf "$CLAUDE_MD" "$CLAUDE_DIR/CLAUDE.md"
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
 
-  # PFJ_PATH
-  [ ! -f "$CLAUDE_SETTINGS" ] && echo '{}' > "$CLAUDE_SETTINGS"
-  EXISTING=$(python3 -c "
-import json
-try:
-    d = json.load(open('$CLAUDE_SETTINGS'))
-    print(d.get('env', {}).get('PFJ_PATH', ''))
-except: print('')
-" 2>/dev/null || echo "")
+  # PFJ_PATH in shell rc (shared)
+  setup_pfj_path
 
-  if [ -n "$EXISTING" ]; then
-    echo "  PFJ_PATH already set: $EXISTING"
-  else
-    read -rp "  pfj directory path [~/pofe]: " PFJ_INPUT
-    PFJ_PATH="${PFJ_INPUT:-$HOME/pofe}"
-    PFJ_PATH="${PFJ_PATH/#\~/$HOME}"
-    python3 -c "
+  # Also mirror into Claude settings.json (Claude Code reads env from here)
+  [ ! -f "$CLAUDE_SETTINGS" ] && echo '{}' > "$CLAUDE_SETTINGS"
+  python3 -c "
 import json
 with open('$CLAUDE_SETTINGS') as f: d = json.load(f)
-d.setdefault('env', {})['PFJ_PATH'] = '$PFJ_PATH'
-with open('$CLAUDE_SETTINGS', 'w') as f: json.dump(d, f, indent=2)
-print('  ✓ PFJ_PATH =', '$PFJ_PATH')
+if d.get('env', {}).get('PFJ_PATH') != '$PFJ_PATH_VALUE':
+    d.setdefault('env', {})['PFJ_PATH'] = '$PFJ_PATH_VALUE'
+    with open('$CLAUDE_SETTINGS', 'w') as f: json.dump(d, f, indent=2)
+    print('  ✓ PFJ_PATH mirrored to ~/.claude/settings.json')
+else:
+    print('  settings.json already up to date')
 "
-  fi
 }
 
 setup_copilot() {
   echo "→ GitHub Copilot CLI"
 
-  # AGENTS.md symlink in ~/.claude (copilot reads AGENTS.md from COPILOT_CUSTOM_INSTRUCTIONS_DIRS)
+  # AGENTS.md symlink (copilot reads AGENTS.md from COPILOT_CUSTOM_INSTRUCTIONS_DIRS)
   ln -sf "$SKILLS_DIR/AGENTS.md" "$CLAUDE_DIR/AGENTS.md"
   echo "  ✓ ~/.claude/AGENTS.md → $SKILLS_DIR/AGENTS.md"
 
-  # Set COPILOT_CUSTOM_INSTRUCTIONS_DIRS in shell rc
-  SHELL_RC=""
-  case "$SHELL" in
-    */zsh)  SHELL_RC="$HOME/.zshrc" ;;
-    */bash) SHELL_RC="$HOME/.bashrc" ;;
-  esac
-  MARKER="# copilot custom instructions (added by skills/install.sh)"
-  if [ -n "$SHELL_RC" ] && ! grep -qF "$MARKER" "$SHELL_RC" 2>/dev/null; then
-    { echo ""; echo "$MARKER"
+  # PFJ_PATH in shell rc (shared)
+  setup_pfj_path
+
+  # COPILOT_CUSTOM_INSTRUCTIONS_DIRS in shell rc
+  local rc
+  rc="$(shell_rc)"
+  local marker="# copilot custom instructions (added by skills/install.sh)"
+  if [ -n "$rc" ] && ! grep -qF "$marker" "$rc" 2>/dev/null; then
+    { echo ""; echo "$marker"
       echo "export COPILOT_CUSTOM_INSTRUCTIONS_DIRS=\"\$HOME/.claude\""
-    } >> "$SHELL_RC"
-    echo "  ✓ COPILOT_CUSTOM_INSTRUCTIONS_DIRS set in $SHELL_RC"
-    echo "  reload shell or: source $SHELL_RC"
+    } >> "$rc"
+    echo "  ✓ COPILOT_CUSTOM_INSTRUCTIONS_DIRS → $rc"
   else
-    echo "  already configured"
+    echo "  COPILOT_CUSTOM_INSTRUCTIONS_DIRS already configured"
   fi
 }
 
