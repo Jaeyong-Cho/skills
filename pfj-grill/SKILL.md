@@ -56,3 +56,11 @@ If the discussion produced concrete tasks, add them to the `## Goals` section at
 - Ask the user if unclear
 - Format: `- [ ] Task *(Priority)* *(ai: how AI helps)* — rationale *(→ Weekly: deliverable)*`
 - Place in correct topic section at correct priority position
+
+**Skills**: When filling `*(ai: ...)*`, consider which skill best fits the task. Check available skills:
+
+```bash
+ls ~/.claude/skills/
+```
+
+Reference the skill by name in the ai field — e.g. `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`, `*(ai: /pfj-grill — think through this concern)*`. If no skill fits, describe how AI helps instead.
