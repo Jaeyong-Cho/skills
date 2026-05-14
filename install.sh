@@ -54,62 +54,34 @@ print('  ✓ PFJ_PATH =', '$PFJ_PATH')
 "
 fi
 
-# ── 3. GitHub Copilot (VS Code) ───────────────────────────────────────────────
+# ── 3. GitHub Copilot CLI ─────────────────────────────────────────────────────
 
 echo ""
-echo "→ GitHub Copilot (VS Code)"
+echo "→ GitHub Copilot CLI"
 
-VSCODE_SETTINGS=""
-for candidate in \
-  "$HOME/Library/Application Support/Code/User/settings.json" \
-  "$HOME/Library/Application Support/Code - Insiders/User/settings.json" \
-  "$HOME/.config/Code/User/settings.json"
-do
-  if [ -f "$candidate" ]; then
-    VSCODE_SETTINGS="$candidate"
-    break
-  fi
-done
-
-if [ -z "$VSCODE_SETTINGS" ]; then
-  echo "  VS Code settings not found — skipping Copilot setup"
+if ! command -v gh &>/dev/null; then
+  echo "  gh not found — skipping Copilot CLI setup"
 else
-  CLAUDE_MD_PATH="$CLAUDE_DIR/CLAUDE.md"
-  python3 - "$VSCODE_SETTINGS" "$CLAUDE_MD_PATH" <<'PYEOF'
-import json, sys
+  # Detect shell rc file
+  SHELL_RC=""
+  case "$SHELL" in
+    */zsh)  SHELL_RC="$HOME/.zshrc" ;;
+    */bash) SHELL_RC="$HOME/.bashrc" ;;
+  esac
 
-settings_path, claude_md_path = sys.argv[1], sys.argv[2]
+  MARKER="# gh copilot aliases (added by skills/install.sh)"
 
-with open(settings_path) as f:
-    content = f.read()
-
-try:
-    settings = json.loads(content)
-except json.JSONDecodeError:
-    print("  WARNING: VS Code settings.json is not valid JSON — skipping")
-    sys.exit(0)
-
-entry = {"file": claude_md_path}
-keys = [
-    "github.copilot.chat.codeGeneration.instructions",
-    "github.copilot.chat.reviewSelection.instructions",
-]
-
-changed = False
-for key in keys:
-    instructions = settings.get(key, [])
-    if not any(i.get("file") == claude_md_path for i in instructions):
-        instructions.append(entry)
-        settings[key] = instructions
-        changed = True
-
-if changed:
-    with open(settings_path, "w") as f:
-        json.dump(settings, f, indent=2)
-    print(f"  ✓ added CLAUDE.md reference to Copilot instructions")
-else:
-    print(f"  already configured")
-PYEOF
+  if [ -n "$SHELL_RC" ] && ! grep -qF "$MARKER" "$SHELL_RC" 2>/dev/null; then
+    {
+      echo ""
+      echo "$MARKER"
+      echo 'eval "$(gh copilot alias -- zsh 2>/dev/null || gh copilot alias -- bash 2>/dev/null)"'
+    } >> "$SHELL_RC"
+    echo "  ✓ added gh copilot aliases to $SHELL_RC (ghcs = suggest, ghce = explain)"
+    echo "  reload shell or run: source $SHELL_RC"
+  else
+    echo "  already configured"
+  fi
 fi
 
 echo ""
