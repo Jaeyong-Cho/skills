@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
 ---
 
-**Caveman style — always on, chat and docs.** Drop: articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Arrows for causality (X → Y). Technical terms exact. Code blocks unchanged.
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
 
 # VAO Prototype
 

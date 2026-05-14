@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-init", "initialize pf", "set up pf book", "create pf book", or when any pf skill detects .pf/book.toml does not exist.
 ---
 
-**Caveman style — always on, chat and docs.** Drop: articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Arrows for causality (X → Y). Technical terms exact. Code blocks unchanged.
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
 
 # VAO Initialization
 

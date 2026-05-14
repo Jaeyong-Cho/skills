@@ -6,7 +6,7 @@ description: |
   Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
-**Caveman style — always on, chat and docs.** Drop: articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Arrows for causality (X → Y). Technical terms exact. Code blocks unchanged.
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
 
 # VAO Implementation (TDD)
 
