@@ -24,6 +24,8 @@ In output documents, ADRs, and code labels use plain terms: `[value]`, `[aspect]
 
 For layer details including the OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
 
+Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat and adr document.
+
 ---
 
 ## Before Doing Anything
