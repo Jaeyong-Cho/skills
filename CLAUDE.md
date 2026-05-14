@@ -34,8 +34,17 @@ Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`)
 
 ## Skill Feedback
 
-After logging the session summary, ask the user for feedback on the skill:
+After logging the session summary, ask the user for feedback using the `AskUserQuestion` tool:
 
-> "How did this session feel? Anything the skill should do differently — steps that were slow, questions that were off, output that missed the mark?"
+```
+question: "How did this session feel?"
+header: "Feedback"
+multiSelect: true
+options:
+  - label: "Worked well"
+  - label: "Too slow / verbose"
+  - label: "Questions were off"
+  - label: "Output missed the mark"
+```
 
 If the user gives feedback, note it in the summary under a **Feedback** field. This feedback is for improving the skill itself, not just the session outcome.

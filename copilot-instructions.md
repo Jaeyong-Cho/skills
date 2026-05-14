@@ -34,8 +34,11 @@ Use 24h time. Use a short label for the session (e.g. `debug`, `refactor`, `feat
 
 ## Session Feedback
 
-After logging the session summary, ask the user for feedback:
+After logging the session summary, ask the user for feedback using the `ask_user` tool with these options (multi-select):
 
-> "How did this session feel? Anything I should do differently — steps that were slow, questions that were off, output that missed the mark?"
+- Worked well
+- Too slow / verbose
+- Questions were off
+- Output missed the mark
 
 If the user gives feedback, note it in the summary under a **Feedback** field.
