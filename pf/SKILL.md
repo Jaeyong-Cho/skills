@@ -8,8 +8,6 @@ description: |
   Even if the user just says "review this" or "design this" in a context where pf has been mentioned or is the active working philosophy, apply this skill.
 ---
 
-> Use `/caveman` for compressed output during this session.
-
 # VAO Skill
 
 A program is an automation tool for making decisions to achieve a goal. VAO structures this around three layers:
