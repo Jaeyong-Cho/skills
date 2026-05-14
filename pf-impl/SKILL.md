@@ -42,8 +42,6 @@ Example behavior list extracted from an ADR:
 4. User object validates its own password hash
 ```
 
-Confirm the behavior list and priority with the user before writing any code.
-
 ---
 
 ## Step 2: Implement — one behavior at a time
