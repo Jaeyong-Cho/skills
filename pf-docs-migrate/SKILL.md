@@ -5,7 +5,7 @@ description: |
   Triggers: "pf-docs-migrate", "migrate docs", "update docs format", "convert docs structure", or when old-format docs are detected.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
+**Caveman style — always on, chat and docs.** Drop: articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Arrows for causality (X → Y). Technical terms exact. Code blocks unchanged.
 
 # VAO Docs Migration
 
