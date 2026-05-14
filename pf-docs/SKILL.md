@@ -5,12 +5,13 @@ description: |
   Triggers: "pf-docs", "update the docs", "write documentation", "document this", after code review is confirmed and an ADR exists.
 ---
 
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
+
 # VAO Documentation
 
 Documentation describes the **current state of the system**, not the history of decisions (that is what ADRs are for). Update after code review is confirmed — never before.
 
 Read `../pf/references/layers.md` to understand the value/aspect/object philosophy, then read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
-Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat and document.
 
 ---
 

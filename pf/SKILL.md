@@ -8,6 +8,8 @@ description: |
   Even if the user just says "review this" or "design this" in a context where pf has been mentioned or is the active working philosophy, apply this skill.
 ---
 
+Read `references/caveman.md` and apply caveman style throughout — including in all output documents.
+
 # VAO Skill
 
 A program is an automation tool for making decisions to achieve a goal. VAO structures this around three layers:
@@ -21,8 +23,6 @@ Design direction: **Value → Aspect → Object** (iterative in practice).
 In output documents, ADRs, and code labels use plain terms: `[value]`, `[aspect]`, `[object]` instead of the philosophical names.
 
 For layer details including the OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
-
-Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat and adr document.
 
 ---
 

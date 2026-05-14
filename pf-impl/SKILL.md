@@ -6,6 +6,8 @@ description: |
   Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
+
 # VAO Implementation (TDD)
 
 For TDD philosophy and the RED→GREEN→REFACTOR loop, read `references/tdd.md`.
@@ -19,8 +21,6 @@ ls .pf/src/adr/ | grep 0001
 ```
 
 If no ADR is specified, list available ADRs and ask which one to implement.
-
-Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat.
 
 ---
 

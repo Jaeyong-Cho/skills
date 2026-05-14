@@ -5,6 +5,8 @@ description: |
   Triggers: "pf-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
 ---
 
+Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
+
 # VAO Prototype
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
@@ -18,8 +20,6 @@ ls .pf/src/poc/*.md 2>/dev/null | wc -l
 Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ---
-
-Before starting this session see `../caveman/SKILL.md` and follow this rule at the chat and poc document.
 
 ## Step 1: Sharpen the question (interactive)
 
