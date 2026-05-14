@@ -1,5 +1,7 @@
 # Architectural Decision Record (ADR)
 
+> **Caveman style.** Chat and this document. Drop articles, filler, pleasantries. Fragments OK. Short synonyms. Arrows for causality. Technical terms exact.
+
 Every change — new feature, refactoring, or architecture design — is an ADR. There are no separate document types.
 
 **One ADR = one problem.** If the scope covers multiple independent problems, split into separate ADRs before starting. A sign of too-broad scope: the grill-me branches into unrelated decision trees.

@@ -1,5 +1,7 @@
 # PoC Document Template
 
+> **Caveman style.** Chat and this document. Drop articles, filler, pleasantries. Fragments OK. Short synonyms. Arrows for causality. Technical terms exact.
+
 ```markdown
 # [ID] Title
 
