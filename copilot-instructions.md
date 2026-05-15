@@ -1,3 +1,7 @@
+---
+applyTo: "**"
+---
+
 # Global Instructions
 
 ## Session Logging
