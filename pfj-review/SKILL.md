@@ -276,154 +276,7 @@ Tag guidelines:
 
 ---
 
-## Step 6: Update work statistics
-
-Read `stats.md`. Based on today's journal:
-
-**1. Classify today's work into types.**
-
-Standard types — use these before inventing new ones:
-
-| Type | What counts |
-|------|-------------|
-| `research` | reading papers, exploring new tools/techniques, literature review |
-| `implementation` | writing new code, building features |
-| `debugging` | fixing bugs, diagnosing failures, investigating unexpected behavior |
-| `experiment` | running trials, training models, evaluating results |
-| `writing` | documentation, reports, notes, planning docs |
-| `review` | code review, reading others' code, PR feedback |
-| `devops` | CI/CD, infra, deployment, environment setup |
-| `meeting` | sync, discussion, pair work |
-| `reading` | books, articles, non-paper content |
-
-A day may have multiple types. Assign each type that had meaningful time today.
-
-**2. Estimate hours per type.**
-
-Scan the journal for explicit time mentions (`"spent 2h"`, `"all morning"`, `"quick 30 min"`). Use those directly. For types with no explicit mention, estimate proportionally: divide the working day (assume ~6h if no total is mentioned) across the types based on how much journal content describes each.
-
-Round to the nearest 0.5h. Record `~` prefix when estimated (e.g., `~2.0`).
-
-**3. Update the four stats files.**
-
-Stats live in separate files mirroring the goal hierarchy:
-
-| File | Scope |
-|------|-------|
-| `stats/stats.md` | All-time totals + Insights + Automation Candidates |
-| `stats/YYYY/stats.md` | Yearly totals |
-| `stats/YYYY/stats-MM.md` | Monthly totals |
-| `stats/YYYY/stats-MM-WNN.md` | Weekly totals |
-
-For each of the four files, for each type active today:
-- Increment `Sessions` by 1
-- Add today's hours to `Est. Hours`
-- Update `Last Active` to today's date (all-time file only)
-- Create a new row if the type doesn't exist yet
-- Keep rows sorted by `Est. Hours` descending
-
-**New period**: if the current week, month, or year file doesn't exist yet, create it from the seed format before writing. Never modify a past period's file.
-
-**4. Update Insights.**
-
-Rewrite the `## Insights` section using all four period levels:
-- **All time**: most time-consuming type; most frequent type; effectiveness ratio (high-value vs overhead — flag if overhead > 30%)
-- **Trend**: compare the current week's top type against last week's (or current month vs last month) — note any shift in focus
-- Any notable ratio across periods (e.g., "this week is 80% experiment vs monthly avg of 50%")
-
-Overwrite the previous Insights — it should always reflect the current totals, not accumulate stale notes.
-
-**5. Update Automation Candidates.**
-
-Rewrite the `## Automation Candidates` section. For each type where the data suggests time or attention is being spent on repetitive, low-value, or scriptable work, write one bullet:
-
-```
-- TypeName (Xh, N sessions) — what specifically could be automated or made faster — concrete suggestion
-```
-
-Use these heuristics to identify candidates:
-
-| Signal | What it suggests |
-|--------|-----------------|
-| `devops` with many sessions and low hours each | repetitive manual setup steps → write scripts or use a Makefile |
-| `debugging` with high total hours | insufficient logging or test coverage → add structured logs, increase test coverage |
-| `review` with many sessions | checklist-driven work → automate with linters, formatters, or review templates |
-| `experiment` with many sessions | manual trial setup → parameterize and script experiment runs |
-| `writing` with many sessions | recurring doc patterns → create templates |
-| `meeting` with high hours relative to implementation | scheduling overhead or lack of async → consider async updates |
-| any type where hours/session is low but sessions are high | frequent context-switching → batch similar work into blocks |
-
-Only include types where the data actually supports the signal. Skip types with fewer than 3 sessions — not enough data. If no candidates exist yet, write `_Not enough data yet._`.
-
-**6. Update the `Last updated` date in each file.**
-
-**stats/stats.md**:
-```markdown
-# Stats · All Time
-
-| Type | Sessions | Est. Hours | Last Active |
-|------|----------|------------|-------------|
-| experiment | 14 | 42.0 | 2026-04-30 |
-| research | 20 | 38.5 | 2026-04-29 |
-| implementation | 10 | 18.0 | 2026-04-28 |
-| debugging | 8 | 12.0 | 2026-04-27 |
-| devops | 6 | 4.5 | 2026-04-25 |
-
-## Insights
-
-- Most hours: experiment (42h, ~3h/session avg); most frequent: research (20 sessions)
-- Effectiveness: 85% high-value; this week → experiment dominant, research sessions dropped vs last week
-- This month: debugging high (4 sessions) — may indicate unstable experiment pipeline
-
-## Automation Candidates
-
-- devops (4.5h, 6 sessions, ~0.75h each) — frequent short setup tasks → write a Makefile or setup script
-- debugging (12h, 8 sessions) — high total hours → add structured logging and expand test coverage
-
-*Last updated: 2026-04-30*
-```
-
-**stats/2026/stats.md**:
-```markdown
-# Stats · 2026
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
-| experiment | 14 | 42.0 |
-| research | 20 | 38.5 |
-| implementation | 10 | 18.0 |
-
-*Last updated: 2026-04-30*
-```
-
-**stats/2026/stats-04.md**:
-```markdown
-# Stats · 2026-04
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
-| experiment | 8 | 24.0 |
-| research | 7 | 14.0 |
-| debugging | 4 | 6.5 |
-
-*Last updated: 2026-04-30*
-```
-
-**stats/2026/stats-04-W18.md**:
-```markdown
-# Stats · 2026 W18 · Apr 28 – May 4
-
-| Type | Sessions | Est. Hours |
-|------|----------|------------|
-| experiment | 3 | 9.0 |
-| research | 2 | 4.0 |
-
-*Last updated: 2026-04-30*
-```
-
----
-
-## Step 7: Update achievement archive
+## Step 6: Update achievement archive
 
 Append today's achievements to the archive files. Each entry must explain **why the achievement is meaningful** for the final goal — not just what was done, but what it moves forward.
 
@@ -447,14 +300,11 @@ If the weekly or monthly goal was completed today, update the Goal Completion ta
 | Goal | Status | Notes |
 |------|--------|-------|
 | ... | done / partial / skipped | ... |
-
-## Patterns Observed
-- ...
 ```
 
 ---
 
-## Step 8: Archive today.md and seed tomorrow
+## Step 7: Archive today.md and seed tomorrow
 
 1. Create `Journal/YYYY/` if needed.
 2. Move `today.md` → `Journal/YYYY/MM-DD.md`.
@@ -498,7 +348,7 @@ If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for
 
 ---
 
-## Step 9: Update SUMMARY.md
+## Step 8: Update SUMMARY.md
 
 - Add archived journal: `- [YYYY-MM-DD](Journal/YYYY/MM-DD.md)` under Journal, descending order.
 - Add new wiki entries under Wiki, alphabetically.
@@ -506,7 +356,7 @@ If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for
 
 ---
 
-## Step 10: Show the commit message
+## Step 9: Show the commit message
 
 Do **not** commit — just show:
 
