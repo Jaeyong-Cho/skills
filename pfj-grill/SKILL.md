@@ -44,9 +44,18 @@ Append at the bottom of `today.md`:
 Brief reasoning chain — key points that led to the outcome. Enough context for future-you to understand why, not a full transcript.
 
 **Outcome**: decisions made / plan formed / concerns resolved / open questions remaining
+
+**Steps**: (omit if no concrete steps surfaced)
+1. Step one
+2. Step two
+   ```bash
+   exact command here
+   ```
 ```
 
 Use 24h time. Keep it tight — this is a journal entry, not a report.
+
+**Detail rule**: if the discussion produced specific commands, code snippets, config values, or ordered steps — write them verbatim under **Steps**. Do not summarize or paraphrase concrete technical details. A future reader must be able to execute without re-researching.
 
 ## Step 5: Update Goals (if tasks identified)
 
