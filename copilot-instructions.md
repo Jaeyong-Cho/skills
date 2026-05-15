@@ -31,9 +31,3 @@ If it exists, append at the bottom of `$PFJ_PATH/today.md`:
 Use 24h time. Use a short label for the session (e.g. `debug`, `refactor`, `feature-name`).
 
 **What makes a good lesson**: not "it worked" — but *why* it worked, or what surprised you, or what you'd tell yourself before starting. One sharp observation beats three vague ones.
-
-## Session Feedback
-
-After logging the session summary, ask for feedback using the `ask_user` tool. Generate 2–4 options relevant to what actually happened in this session — not a fixed list. Think about what could have gone better: was it slow, confusing, off-target, missing context, too many questions, wrong output format? Pick the options most likely to matter for this specific session. Use multi-select.
-
-If the user gives feedback, note it in the summary under a **Feedback** field.

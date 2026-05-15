@@ -31,16 +31,3 @@ If it exists, append at the bottom of `$PFJ_PATH/today.md`:
 Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`). For non-skill sessions use a short label (e.g. `debug`, `refactor`).
 
 **What makes a good lesson**: not "it worked" — but *why* it worked, or what surprised you, or what you'd tell yourself before starting. One sharp observation beats three vague ones.
-
-## Skill Feedback
-
-After logging the session summary, ask for feedback using the `AskUserQuestion` tool. Generate 2–4 options relevant to what actually happened in this session — not a fixed list. Think about what could have gone better: was it slow, confusing, off-target, missing context, too many questions, wrong output format? Pick the options most likely to matter for this specific session.
-
-```
-question: "How did this session feel?"
-header: "Feedback"
-multiSelect: true
-options: <generated based on session>
-```
-
-If the user gives feedback, note it in the summary under a **Feedback** field. This feedback is for improving the skill itself, not just the session outcome.
