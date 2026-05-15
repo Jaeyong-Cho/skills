@@ -21,13 +21,13 @@ If today.md does not exist: skip silently.
 If it exists, append at the bottom of `$PFJ_PATH/today.md`:
 
 ```markdown
-## HH:MM:SS (skill-name)
+## HH:MM:SS (pf-impl)
 
 **Summary**: concrete outcomes — what was built, changed, or decided; which files were affected
 
 **Lessons**: what worked well, what was harder than expected, what to do differently next time, patterns worth remembering
 ```
 
-Use 24h time. Use the skill name as the mark (e.g. `pf`, `pf-impl`, `pfj-grill`). For non-skill sessions use a short label (e.g. `debug`, `refactor`).
+Use 24h time. Replace `pf-impl` with the actual skill name invoked (e.g. `pf`, `pf-impl`, `pfj-grill`). For non-skill sessions use a short label (e.g. `debug`, `refactor`).
 
 **What makes a good lesson**: not "it worked" — but *why* it worked, or what surprised you, or what you'd tell yourself before starting. One sharp observation beats three vague ones.

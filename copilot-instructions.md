@@ -25,13 +25,13 @@ If today.md does not exist: skip silently.
 If it exists, append at the bottom of `$PFJ_PATH/today.md`:
 
 ```markdown
-## HH:MM:SS (session-label)
+## HH:MM:SS (refactor)
 
 **Summary**: concrete outcomes — what was built, changed, or decided; which files were affected
 
 **Lessons**: what worked well, what was harder than expected, what to do differently next time, patterns worth remembering
 ```
 
-Use 24h time. Use a short label for the session (e.g. `debug`, `refactor`, `feature-name`).
+Use 24h time. Replace `refactor` with the actual skill or session name (e.g. `debug`, `refactor`, `feature-name`).
 
 **What makes a good lesson**: not "it worked" — but *why* it worked, or what surprised you, or what you'd tell yourself before starting. One sharp observation beats three vague ones.
