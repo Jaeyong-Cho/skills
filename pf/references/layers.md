@@ -41,6 +41,12 @@ This is where AOP thinking enters: different aspects see the same object differe
 - An aspect may use only some properties of an object, not the whole thing.
 - The same object may look very different across aspects — this is correct, not a problem.
 
+**Aspects as cross-cutting concerns**: each aspect owns exactly one concern — auth, billing, caching, auditing — and applies it across whatever objects it needs. Objects know nothing about these concerns. The value layer composes aspects, deciding which concerns apply to each user action and in what order.
+
+When designing an aspect, ask: what is the *single concern* this aspect owns, and what is the minimal slice of each object it needs?
+
+For the full cross-cutting concern model with code examples, read `references/aop.md`.
+
 Structure the aspect layer into composable units — strategies, workflows, pipelines — so that aspects can be swapped without changing the objects or the value definition.
 
 ---
