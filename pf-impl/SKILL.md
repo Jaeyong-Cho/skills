@@ -8,6 +8,14 @@ description: |
 
 Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
 
+Check for today's journal context:
+
+```bash
+[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
+```
+
+If today.md is found, read it to understand the user's current focus, active goals, and any blockers for today. Use this to orient your work — not to override the task, but to connect the implementation to the user's broader context.
+
 # VAO Implementation (TDD)
 
 For TDD philosophy and the RED→GREEN→REFACTOR loop, read `references/tdd.md`.

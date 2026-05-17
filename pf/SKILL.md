@@ -28,6 +28,14 @@ For layer details including the OOP/AOP origin, object sizing by concern, and as
 
 ## Before Doing Anything
 
+Check for today's journal context:
+
+```bash
+[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
+```
+
+If today.md is found, read it to understand the user's current focus, active goals, and any blockers for today. Use this to orient your work — not to override the task, but to connect the design to the user's broader context.
+
 Check whether the VAO book exists:
 
 ```bash
