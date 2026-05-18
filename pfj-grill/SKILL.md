@@ -18,19 +18,26 @@ Pull in other files (wiki, goals, weekly/monthly goal files) only as the convers
 
 ## Step 2: Grill
 
-Ask questions one at a time. No maximum. For each question, provide your recommended answer so the user can react rather than invent from scratch.
+Ask questions one at a time using the `AskUserQuestion` tool. No maximum questions.
+
+For each question:
+- Frame it as a single-select question with 2–4 options representing likely answers or directions
+- Put your recommended answer **first** and append `(Recommended)` to its label
+- Keep option labels short (1–5 words); use the description field to explain the tradeoff or implication
+- The user can always pick "Other" for a free-form answer — no need to add it yourself
 
 Walk every branch until the concern is resolved, a plan is formed, or a decision is made. Keep going until there is nothing left to resolve.
 
-If the user says "wrap up", skip remaining branches and move to Step 3.
+If the user picks "Other" and types "wrap up", skip remaining branches and move to Step 3.
 
 ## Step 3: Detect conclusion
 
-When a natural conclusion appears — decision reached, plan formed, concern resolved — propose:
+When a natural conclusion appears — decision reached, plan formed, concern resolved — ask using `AskUserQuestion`:
 
-> "Think we've reached a conclusion. Record this in today.md?"
+- Question: "Think we've reached a conclusion. Record this in today.md?"
+- Options: "Yes, record it" (Recommended) / "Keep going"
 
-Wait for confirmation before writing anything.
+Only proceed to Step 4 if the user confirms.
 
 ## Step 4: Append to today.md
 
