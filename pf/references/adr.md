@@ -1,7 +1,5 @@
 # Architectural Decision Record (ADR)
 
-> **Caveman style.** Chat and this document. Drop articles, filler, pleasantries. Fragments OK. Short synonyms. Arrows for causality. Technical terms exact.
-
 Every change — new feature, refactoring, or architecture design — is an ADR. There are no separate document types.
 
 **One ADR = one problem.** If the scope covers multiple independent problems, split into separate ADRs before starting. A sign of too-broad scope: the grill-me branches into unrelated decision trees.
@@ -22,17 +20,9 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ---
 
-## Step 1: Grill-me (reach shared understanding before writing)
+## Step 1: Grill-me
 
-Interview me relentlessly about every aspect of this plan until reaching shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one by one.
-
-- Ask questions **one at a time**
-- For each question, provide your **recommended answer** so the user can confirm, correct, or refine
-- Start from the highest-level perspective and narrow down to details.
-
-If a question can be answered by exploring the codebase, explore the codebase instead.
-
-There is no maximum number of questions. Keep going until every branch of the decision tree is resolved. The user can stop at any time or say "wrap up" to summarise and move on.
+Run the `grill-me` skill to reach shared understanding before writing.
 
 ---
 
@@ -98,8 +88,6 @@ What is explicitly not part of this decision.
 
 Show the current structure and the target structure.
 For a greenfield decision, show only the target.
-Keep each diagram focused on one concern — split if it gets large.
-
 In the **After** diagram, mark every node that is new or changed with a highlight style so the delta is immediately visible:
 
 ```

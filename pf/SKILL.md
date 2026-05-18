@@ -65,11 +65,9 @@ If it does **not** exist: use the `pf-init` skill to initialize the book first, 
 ```
 
 1. **Prototype first (optional)** — if the design question is unresolved, use the `pf-proto` skill. It builds a throwaway prototype and writes a PoC document at `.pf/src/poc/<ID>-<slug>.md`.
-2. **Write an ADR** — read `references/deep-modules.md`, `references/aop.md`, and `references/adr.md`. Run the `grill-me` skill. If the user provided a scenario with the command, use it as the starting context. If coming from `pf-proto`, read the PoC document first and use its findings and open questions as the starting context instead. Ask the user to confirm before writing any code.
+2. **Write an ADR** — read `references/deep-modules.md`, `references/aop.md`, and `references/adr.md`. Run the `grill-me` skill. If the user provided a scenario with the command, use it as the starting context. If coming from `pf-proto`, read the PoC document first and use its findings and open questions as the starting context instead.
 3. **Implement with TDD** — use the `pf-impl` skill. It reads the confirmed ADR and implements one behavior at a time: RED → GREEN → REFACTOR.
 4. **Code review confirmed** — use the `pf-docs` skill to update the documentation.
-
-For VAO layer details, read `references/layers.md`.
 
 ## Mermaid Diagrams
 
