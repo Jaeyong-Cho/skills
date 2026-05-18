@@ -130,14 +130,3 @@ The value layer decides *which* concerns apply to this action and in what order 
 | **Object shaped for one aspect** | `user.authContext`, `user.billingView` | Aspect-specific fields leaked into object |
 | **Value layer skips the aspect** | Command directly checks `user.role === 'admin'` | Concern escaped into the value layer |
 
----
-
-## In VAO
-
-The Aspect layer in VAO *is* the cross-cutting concern layer:
-
-- Objects live in the **object layer** — stable, concern-agnostic
-- Concerns live in the **aspect layer** — each aspect owns one cross-cutting concern
-- The **value layer** composes aspects: decides which concerns apply to each user action
-
-When designing an aspect, always ask: **what is the single concern this aspect owns, and what is the minimal slice of the object it needs to do its job?**
