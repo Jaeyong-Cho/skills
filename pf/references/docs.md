@@ -8,28 +8,27 @@ Output: `.pf/src/docs/`
 
 ```
 .pf/src/docs/
-├── index.md              — introduction and chapter links
+├── index.md                  — introduction and chapter links
 ├── value/
-│   ├── index.md          — chapter intro: what user goals the system serves
-│   ├── 01-<component>.md — value for component 1
-│   ├── 02-<component>.md — value for component 2
+│   ├── index.md              — chapter intro: what user goals the system serves
+│   ├── 01-<entry-point>.md   — one file per value entry point / command / use case
 │   └── ...
 ├── aspect/
-│   ├── index.md          — chapter intro: how the system works end-to-end
-│   ├── 01-<component>.md — aspect for component 1
+│   ├── index.md              — chapter intro: how the system works end-to-end
+│   ├── 01-<concern>.md       — one file per concern handler (auth, billing, etc.)
 │   └── ...
 └── object/
-    ├── index.md          — chapter intro: which objects exist and what they own
-    ├── 01-<component>.md — object for component 1
+    ├── index.md              — chapter intro: which objects exist and what they own
+    ├── 01-<entity>.md        — one file per domain entity / aggregate
     └── ...
 ```
 
-Number component files so they sort correctly in the sidebar. Use kebab-case for all names.
+Number files so they sort correctly in the sidebar. Use kebab-case for all names. One file per individual entity — not one file per component covering multiple entities.
 
-Each layer chapter covers **every component** from that single angle:
-- **Value** — user needs, goals, success criteria, what must never happen
-- **Aspect** — workflows, decision logic, composable strategies, entry points
-- **Object** — entities, properties, behaviors, relationships, invariants
+Each file covers one entity from its layer's angle:
+- **Value** — the user need this entry point serves: what it does, success criteria, what must never happen
+- **Aspect** — how this concern is handled: algorithm, workflow, which objects used and from what angle
+- **Object** — this entity's full identity: properties, actions, behaviors, relationships, invariants
 
 ---
 
@@ -62,15 +61,15 @@ One paragraph on what this chapter covers — the user goals and outcomes the sy
 
 (Same pattern for `aspect/index.md` and `object/index.md`.)
 
-## Component files
+## Entity files
 
-Within each component file, order content from **broad scope to narrow** — start with the overall picture, then zoom into specifics.
+Within each file, order content from **broad scope to narrow** — start with the overall picture, then zoom into specifics.
 
-**value/<component>.md** — user needs this component serves, what success looks like, what must never happen. Start with the overall goal, narrow to specific constraints.
+**value/<entry-point>.md** — the user need this entry point serves, what success looks like, what must never happen. Start with the overall goal, narrow to specific constraints.
 
-**aspect/<component>.md** — how this component's need is met: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
+**aspect/<concern>.md** — how this concern is handled: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
 
-**object/<component>.md** — the objects that exist for this component: start with the top-level aggregate, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for object relationships.
+**object/<entity>.md** — this entity's full identity: start with the top-level role, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for relationships.
 
 ---
 
@@ -92,12 +91,13 @@ Create a numbered file in each of the three layer directories and update each la
 ```markdown
 - [Documentation](./docs/index.md)
   - [Value](./docs/value/index.md)
-    - [Component 1](./docs/value/01-<component>.md)
-    - [Component 2](./docs/value/02-<component>.md)
+    - [Login Command](./docs/value/01-login-command.md)
+    - [Checkout Command](./docs/value/02-checkout-command.md)
   - [Aspect](./docs/aspect/index.md)
-    - [Component 1](./docs/aspect/01-<component>.md)
-    - [Component 2](./docs/aspect/02-<component>.md)
+    - [Auth Aspect](./docs/aspect/01-auth-aspect.md)
+    - [Billing Aspect](./docs/aspect/02-billing-aspect.md)
   - [Object](./docs/object/index.md)
-    - [Component 1](./docs/object/01-<component>.md)
-    - [Component 2](./docs/object/02-<component>.md)
+    - [User](./docs/object/01-user.md)
+    - [Order](./docs/object/02-order.md)
+    - [Line Item](./docs/object/03-line-item.md)
 ```

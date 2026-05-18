@@ -94,18 +94,23 @@ Check what already exists:
 ls .pf/src/docs/value/ .pf/src/docs/aspect/ .pf/src/docs/object/ 2>/dev/null
 ```
 
-Create or update one file per layer for this component. Each file covers the same component from one angle only. Write in present tense — describe what **is**, not what was decided.
+From the ADR's Decision section, identify every individual entity in each layer:
+- **Value** — each entry point, command, or use case
+- **Aspect** — each concern handler (auth, billing, logging, etc.)
+- **Object** — each domain entity/aggregate
 
-**`value/<N>-<component>.md`** — user need this component serves: broad goal → specific success criteria and constraints.
+Create one file per entity within its layer directory. Write in present tense — describe what **is**, not what was decided.
 
-**`aspect/<N>-<component>.md`** — how this component works: overall workflow → decision logic, strategies, flows. Mermaid diagrams for flows.
+**`value/<N>-<entry-point>.md`** — the user need this entry point serves: what it does, what success looks like, what must never happen.
 
-**`object/<N>-<component>.md`** — which objects belong here: top-level aggregate → properties, behaviors, relationships, invariants. Mermaid diagrams for relationships.
+**`aspect/<N>-<concern>.md`** — how this concern is handled: the algorithm or workflow, which objects it uses and from what angle. Mermaid diagrams for flows.
 
-At the bottom of each layer file, add a **Related files** section listing source and test files for this component:
+**`object/<N>-<entity>.md`** — this entity's full identity: properties, actions, behaviors, relationships, invariants. Mermaid diagrams for relationships.
+
+At the bottom of each file, add a **Related files** section with the source and test files for that entity:
 
 ```bash
-grep -rl "<ComponentName>" src/ --include="*.ts" --include="*.py" --include="*.go"
+grep -rl "<EntityName>" src/ --include="*.ts" --include="*.py" --include="*.go"
 ```
 
 Update indexes and SUMMARY.md, then build:
