@@ -55,7 +55,7 @@ For each User Story in the ADR, do the following in order:
 
 1. **State the story** — re-read it: "Story N: As a `<actor>`, I want `<feature>`, so that `<benefit>`."
 2. **Trace the code** — find the entry point, aspect logic, and objects involved. Note exact file paths and line numbers.
-3. **Ask one focused question** using `AskUserQuestion` — frame it around the story, cite `file:line`, and offer concrete options. Put your assessment first (Recommended).
+3. **Ask questions** using `AskUserQuestion` — one at a time, no maximum. Frame each question around the story, cite `file:line`, and offer concrete options. Put your assessment first (Recommended). Keep asking until the story is fully confirmed or all issues are surfaced.
 
 Draw questions from what you actually see in the code:
 
@@ -65,23 +65,11 @@ Draw questions from what you actually see in the code:
 - `User.verifyPassword()` at `src/models/user.ts:31` — right layer for this logic, or should it be in the aspect?
 - Does this story have a test, and does it cover external behavior rather than internal implementation?
 
-Walk every user story. Do not skip any.
+The user can say "wrap up" at any time to skip remaining questions and move to the next story. Walk every user story. Do not skip any.
 
 ---
 
-## Step 4: Layer check
-
-After the story walk, ask one `AskUserQuestion` per layer:
-
-**Value** — "Does every user story have a clear entry point in the value layer, or is story logic leaking into aspect or object files?" Cite any specific files where you see leakage.
-
-**Aspect** — "Are cross-cutting concerns (auth, logging, billing, etc.) each isolated in one place, or scattered?" Cite the files.
-
-**Object** — "Are domain objects concern-agnostic, or is any object shaped around a specific aspect's needs?" Cite the files.
-
----
-
-## Step 5: Confirm and decide
+## Step 4: Confirm and decide
 
 Use `AskUserQuestion`:
 
@@ -90,7 +78,7 @@ Use `AskUserQuestion`:
 
 ---
 
-## Step 6: Update documentation (if confirmed)
+## Step 5: Update documentation (if confirmed)
 
 Read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
 
@@ -124,6 +112,6 @@ Fix all errors before reporting to the user.
 
 ---
 
-## Step 7: Done
+## Step 6: Done
 
 Mark the ADR status as `Accepted`. Show the user which files were created or updated. Suggest a commit message using `../pf/references/commit.md`.
