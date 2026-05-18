@@ -45,6 +45,8 @@ A numbered list covering all aspects of the change from the user's perspective.
 1. As a <actor>, I want <feature>, so that <benefit>
 2. ...
 
+Express with diagram
+
 ## Decision
 
 What was decided and why. Walk through the three layers:
@@ -65,20 +67,6 @@ For each relationship: cardinality, ownership, navigability, aggregate boundary.
 View-specific joins belong in the aspect layer.
 
 Call out any leakage between layers.
-
-## Alternatives Considered
-
-Other options evaluated and why they were ruled out.
-
-## Consequences
-
-Trade-offs, risks, and what this decision makes easier or harder.
-
-## Testing Decisions
-
-- What makes a good test for this change (test external behavior, not implementation details)
-- Which modules will be tested and why
-- Prior art in the codebase for similar tests
 
 ## Out of Scope
 
