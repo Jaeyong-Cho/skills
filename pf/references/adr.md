@@ -139,7 +139,7 @@ After writing the ADR, ask the user to confirm before writing any code.
 
 Once the user has reviewed the code:
 
-1. Use the `pf-docs` skill to update the documentation
+1. Use the `pf-review` skill to review the implementation and update the documentation
 2. Mark the ADR status as `Accepted`
 
 ## SUMMARY.md entry
