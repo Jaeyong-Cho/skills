@@ -69,16 +69,28 @@ The user can say "wrap up" at any time to skip remaining questions and move to t
 
 ---
 
-## Step 4: Confirm and decide
+## Step 4: Fix issues from the review
 
-Use `AskUserQuestion`:
+Collect every issue surfaced during Step 3 — incorrect behavior, wrong layer placement, missing error handling, thin objects, scattered concerns, missing tests, etc.
 
-- Question: "Review complete. What next?"
-- Options: "Update documentation" (Recommended) / "Fix issues first, then review again" / "Done — skip docs"
+For each issue:
+1. Fix the code at the cited `file:line`
+2. Update the ADR to reflect what actually changed — correct the Decision section (Value/Aspect/Object), User Stories if the behavior shifted, and the Step-by-Step Plan if files or layers changed
+
+Apply all fixes before moving on. Do not ask the user to confirm each fix individually — batch them and show a summary after.
 
 ---
 
-## Step 5: Update documentation (if confirmed)
+## Step 5: Confirm and decide
+
+Use `AskUserQuestion`:
+
+- Question: "Issues fixed. What next?"
+- Options: "Update documentation" (Recommended) / "Re-review the fixes" / "Done — skip docs"
+
+---
+
+## Step 6: Update documentation (if confirmed)
 
 Read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
 
@@ -112,6 +124,6 @@ Fix all errors before reporting to the user.
 
 ---
 
-## Step 6: Done
+## Step 7: Done
 
 Mark the ADR status as `Accepted`. Show the user which files were created or updated. Suggest a commit message using `../pf/references/commit.md`.
