@@ -57,19 +57,7 @@ For each User Story in the ADR, do the following in order:
 2. **Trace the code** — find the entry point, aspect logic, and objects involved. Note exact file paths and line numbers.
 3. **Ask questions** using `AskUserQuestion` — one at a time, no maximum. Frame each question around the story, cite `file:line`, and offer concrete options. Put your assessment first (Recommended). Keep asking until the story is fully confirmed or all issues are surfaced.
 
-Cover both angles in order — basic functionality first, then edge cases:
-
-**Basic functionality** (does the happy path work as the story describes?):
-- Does the entry point at `file:line` correctly represent this user need, or is business logic leaking in?
-- Does the aspect at `file:line` produce the expected outcome for the normal case?
-- Is the object at `file:line` doing what the story requires — right properties, right actions?
-- Does this story have a test that covers the happy path through the public interface?
-
-**Edge cases** (what happens when things go wrong or inputs are unusual?):
-- What happens at `file:line` if the input is empty, null, or out of range?
-- Is the error case at `file:line` handled for all failure modes in this story?
-- Are boundary conditions (limits, timeouts, concurrency, duplicates) covered?
-- Does the test suite cover these edge cases, or only the happy path?
+For each story, ask about both basic functionality (does the happy path work?) and edge cases (what happens when inputs are invalid, missing, or boundary conditions are hit?). Draw questions from what you actually see in the code — cite `file:line` in every question.
 
 The user can say "wrap up" at any time to skip remaining questions and move to the next story. Walk every user story. Do not skip any.
 
