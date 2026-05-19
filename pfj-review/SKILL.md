@@ -130,3 +130,43 @@ pfj: YYYY-MM-DD — <one-line summary of today's main work>
 - wiki/slug.md (new/updated)
 - reflections/slug.md (new/updated)
 ```
+
+---
+
+## Step 8: Archive today.md
+
+Read the date from the `<!-- today: YYYY-MM-DD -->` marker at the top of `today.md`.
+
+Copy the full content of `today.md` to `Journal/YYYY/MM-DD.md` (e.g. `Journal/2026/05-19.md`). Create the year directory if it doesn't exist. Do not modify the archived file — it is an exact copy.
+
+---
+
+## Step 9: Reset today.md for tomorrow
+
+Compute tomorrow's date (today's date + 1 day). Determine the correct weekly goal file path for tomorrow (`goals/YYYY/goal-MM-WNN.md`). Read that file and extract all incomplete tasks (unchecked `- [ ]` lines with their sub-tasks).
+
+Write a fresh `today.md` with the date set to tomorrow:
+
+```markdown
+<!-- today: YYYY-MM-DD -->
+
+## Goals
+
+> [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
+
+### (Topic)
+- [ ] ... (carry over incomplete tasks from weekly goal, preserving topic sections and priority order)
+
+## Adjustment Log
+
+---
+
+<!-- Write freely below. No format required. -->
+```
+
+Rules:
+- Carry over only incomplete (`- [ ]`) tasks from the weekly goal — not done tasks, not dropped tasks.
+- Preserve topic sections (`###`) and priority order (High → Medium → Low).
+- Include sub-tasks under their parent.
+- If tomorrow crosses into a new week, use the new week's goal file. If that file doesn't exist yet, leave the Goals section with just the weekly/monthly links and a blank topic section.
+- Do **not** carry over the Adjustment Log or any freeform journal text from today.
