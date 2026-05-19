@@ -143,7 +143,9 @@ Copy the full content of `today.md` to `Journal/YYYY/MM-DD.md` (e.g. `Journal/20
 
 ## Step 9: Reset today.md for tomorrow
 
-Compute tomorrow's date (today's date + 1 day). Determine the correct weekly goal file path for tomorrow (`goals/YYYY/goal-MM-WNN.md`). Read that file and extract all incomplete tasks (unchecked `- [ ]` lines with their sub-tasks).
+Compute tomorrow's date (today's date + 1 day). Determine the correct weekly goal file path for tomorrow (`goals/YYYY/goal-MM-WNN.md`).
+
+Extract incomplete tasks from today's `today.md` — read the `## Goals` section and keep only unchecked `- [ ]` lines with their sub-tasks. Drop any `- [x]` or dropped tasks.
 
 Write a fresh `today.md` with the date set to tomorrow:
 
@@ -155,7 +157,7 @@ Write a fresh `today.md` with the date set to tomorrow:
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
 ### (Topic)
-- [ ] ... (carry over incomplete tasks from weekly goal, preserving topic sections and priority order)
+- [ ] ... (carry over incomplete tasks from today's Goals section, preserving topic sections and priority order)
 
 ## Adjustment Log
 
@@ -165,8 +167,8 @@ Write a fresh `today.md` with the date set to tomorrow:
 ```
 
 Rules:
-- Carry over only incomplete (`- [ ]`) tasks from the weekly goal — not done tasks, not dropped tasks.
-- Preserve topic sections (`###`) and priority order (High → Medium → Low).
+- Carry over only incomplete (`- [ ]`) tasks from today's `today.md` Goals section — not done (`- [x]`) or dropped tasks.
+- Preserve topic sections (`###`) and priority order.
 - Include sub-tasks under their parent.
-- If tomorrow crosses into a new week, use the new week's goal file. If that file doesn't exist yet, leave the Goals section with just the weekly/monthly links and a blank topic section.
+- If tomorrow crosses into a new week, update the weekly goal link to the new week's file.
 - Do **not** carry over the Adjustment Log or any freeform journal text from today.
