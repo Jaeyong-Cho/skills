@@ -46,6 +46,8 @@ If it does **not** exist: use the `pf-init` skill to initialize the book first, 
 
 ---
 
+When referencing existing source code, always cite the exact `file:line` so the user can navigate directly to it.
+
 ## Workflow
 
 ```
