@@ -1,210 +1,50 @@
 ---
 name: pfj-review
 description: |
-  End-of-day review for the POFE knowledge base. Reads today.md and today's goal file, writes a structured daily report, marks goal progress, propagates completions to weekly/monthly goals, extracts wiki entries and insights, updates work statistics, archives today.md, seeds tomorrow's goal and today.md with the next plan, and suggests a git commit message.
-  Triggers: "end of day", "daily review", "review today", "pfj review", "wrap up today", "end of work", or any request to summarize today's journal and plan tomorrow.
+  End-of-day review for the POFE knowledge base. Reads today.md, extracts wiki and experience entries worth keeping, and recommends what to work on next. The human writes their own todo list.
+  Triggers: "end of day", "daily review", "review today", "pfj review", "wrap up today", "end of work", or any request to summarize today's journal.
 ---
 
 # pfj-review: End-of-Day Review
 
-**Goal**: Close the day — assess progress against the full goal hierarchy, adjust goals based on what was learned, grow the knowledge base, update achievement archive, analyze work patterns, and hand off a clean starting point for tomorrow.
+Read today's journal, extract knowledge worth keeping, and surface recommendations — the human decides what to do with them.
 
 ---
 
 ## Source of Truth
 
-**Human-written journal text is always correct. AI-written entries (labeled sections) are structured summaries — accurate but not ground truth. Everything else is an AI inference that may be wrong.**
+Human-written journal text is always correct. Labeled sections (`## HH:MM:SS (skill-name)`) are AI-generated summaries — accurate but not ground truth.
 
-Not all journal text is human-written. Labeled sections (`## HH:MM:SS (skill-name)`) are appended by AI skills, not the user. When resolving conflicts, apply the right trust level:
-
-- Human-written text wins over everything else.
-- AI-written entries win over goal files, wiki, archive, and reports — but lose to human-written text.
-- Never treat an AI-written entry as the user's personal voice, reflection, or experience.
-
-When the journal conflicts with a goal file, wiki entry, archive, or report — the journal wins. Correct the other file, not the journal. Specifically:
-
-- If the journal describes work that contradicts a goal's stated direction → update the goal to match reality.
-- If the journal says a task is done but the goal file says it isn't (or vice versa) → trust the journal.
-- If the journal reveals that a wiki entry contains an error or outdated information → correct the wiki entry.
-- If the journal describes a different scope, priority, or outcome than what the goal files assumed → update the goal files.
-- Never silently ignore a mismatch. Either fix it or leave a note explaining the discrepancy.
-
-### AI-written vs human-written entries
-
-Some journal sections are written by AI, not by the user. Identify them by the label in the section header:
-
-- **Human-written**: `## HH:MM:SS` with no label, or freeform text below `<!-- Write freely below -->` — the user's own voice. Treat as ground truth.
-- **AI-written**: `## HH:MM:SS (label)` where label is a skill name — e.g. `(grill)`, `(pf)`, `(pf-impl)`, `(pfj-grill)`, `(debug)`, `(refactor)` — these are AI-generated summaries appended by skills.
-
-Apply different trust rules per type:
-
-| Aspect | Human-written | AI-written |
-|--------|--------------|------------|
-| Factual accuracy | Ground truth | Likely accurate, but verify against human sections if conflict |
-| Personal feelings / energy / frustration | Authoritative | Not present — do not infer personal state from AI entries |
-| Task completion claims | Authoritative | Trust unless contradicted by human section |
-| Decisions and outcomes | Authoritative | Trust — these record agreed conclusions |
-| Lessons / reflections | Authoritative | These are AI observations, not the user's personal insight — use as supporting context, not as the user's own reflection |
+- **Human-written**: `## HH:MM:SS` with no label, or freeform text below `<!-- Write freely below -->` — treat as ground truth.
+- **AI-written**: `## HH:MM:SS (label)` — trust for facts and outcomes, not for personal voice or reflection.
 
 ---
 
-## Step 1: Load today's files and full goal hierarchy
+## Step 1: Load today's files
 
-1. Find `today.md` in the repo root. If missing, stop and tell the user.
-2. Determine today's date (from the `<!-- today: YYYY-MM-DD -->` comment, or current date).
-3. Read the daily goals from the `## Goals` section at the top of `today.md`.
-4. Load N most recent archived journals from `Journal/` for context (default N=5; override if user specifies).
-5. Load the **persistent goal hierarchy** — check each file:
-   - `goals/goal.md` (total/lifetime)
-   - `goals/YYYY/goal.md` (yearly)
-   - `goals/YYYY/goal-MM.md` (monthly)
-   - `goals/YYYY/goal-MM-WNN.md` (weekly)
-
-   **If any file is missing or empty**, do not stop — proceed to Step 1b.
-
----
-
-## Step 1b: Bootstrap missing goal files from journal
-
-For each goal file that is missing or empty, infer its content from `today.md` and the recent journals. Read the work done, topics covered, and direction implied — then create the file with content appropriate to its scope:
-
-- **Total (`goals/goal.md`)**: Infer the user's overarching long-term direction. Write 1–3 abstract goal titles with an **Effect** line each. These should capture the ultimate "why" behind all the work observed in the journal.
-- **Yearly (`goals/YYYY/goal.md`)**: Infer major milestones the user is working toward this year. Each milestone should state what success looks like by year end and why it advances a total goal. Include `*(→ Total: goal title)*` reference.
-- **Monthly (`goals/YYYY/goal-MM.md`)**: Infer concrete objectives for this month from the journal. Each task should explain why it advances the yearly milestone. Include `*(→ Yearly: milestone name)*` reference.
-- **Weekly (`goals/YYYY/goal-MM-WNN.md`)**: Infer specific deliverables for this week. Each task should explain why it serves the monthly objective. Include `*(→ Monthly: objective name)*` reference.
-
-If a file already exists and has content, load it normally — do not overwrite. Updates to existing goals happen in Step 4c.
-
-After creating any missing files, also create the corresponding empty archive files if they don't exist:
-- `archive/YYYY/archive-MM.md`
-- `archive/YYYY/archive-MM-WNN.md`
-
-Reading the full hierarchy is essential — the next-day plan and goal adjustments must stay aligned with the bigger picture, not just today's leftover tasks.
+1. Find `today.md`. If missing, stop and tell the user.
+2. Read the full journal.
+3. Load N most recent archived journals from `Journal/` for context (default N=3).
 
 ---
 
 ## Step 2: Load related wiki entries
 
-Infer key topics/tags from today's journal and goal file. Scan the first 3 lines of each file in `wiki/` to find the tag line. Fully read only the files whose tags overlap with today's topics. This keeps context lean as the wiki grows.
+Infer key topics from today's journal. Scan the first 3 lines of each file in `wiki/` to find the tag line. Fully read only the files whose tags overlap with today's topics.
 
 ---
 
-## Step 3: Write the Daily Report
+## Step 3: Extract and save wiki entries
 
-Append to the end of `today.md`. Do not modify anything above. If a `## Daily Report` section already exists, overwrite it rather than appending a second one.
-
-```markdown
----
-
-## Daily Report · YYYY-MM-DD
-
-### Achievements
-- ...
-
-### Goal Progress
-| Task | Topic | Status | Notes |
-|------|-------|--------|-------|
-| ... | ... | done / partial / skipped | ... |
-
-### Personal Reflection
-- **Went well**: what worked — a decision, habit, or approach that paid off today
-- **Do differently**: one concrete thing to change or try tomorrow
-- **Pattern noticed**: any recurring behavior, tendency, or theme observed across today (or recent days)
-
-### Related Knowledge
-- [title](../wiki/slug.md) — why relevant
-
-### Knowledge Saved
-- [title](../wiki/slug.md) — one-line summary
-
-### Experience Saved
-- [title](../reflections/slug.md) — one-line summary
-
-### Next Work Plan
-
-> Trigger first (background):
-> - Task name — estimated duration; start immediately so it runs while other work proceeds
-
-#### (Topic)
-- [ ] Task *(High)*
-  - [ ] Sub-step one
-  - [ ] Sub-step two
-- [ ] Task *(Medium)*
-  - [ ] Sub-step one
-
-#### (Topic)
-- [ ] Task *(High)*
-```
-
-Fill every section with real content. The Next Work Plan should be specific enough to start tomorrow without re-reading anything — infer from unfinished tasks, open questions, and logical next steps.
-
-**Personal Reflection guidance**: Draw only from human-written sections (no label in header, or freeform text below `<!-- Write freely below -->`). Do not source reflections from AI-written entries — those are structured summaries, not the user's voice. Look for moments of frustration, flow, surprise, or pride in the human text. "Went well" should name a specific behavior, not just an outcome ("broke the task into 30-min blocks" not "was productive"). "Do differently" should be actionable tomorrow. "Pattern noticed" is optional but powerful — skip it rather than force it if nothing real stands out.
-
-**Sub-tasks**: Break each task into 1-level sub-steps (indented `  - [ ]`). Sub-steps are concrete, sequential actions that make the task executable without further thought. Aim for 2–4 sub-steps per task; omit sub-steps only if the task is already a single atomic action.
-
-**Background task identification**: Before listing topics, scan tomorrow's tasks for anything that runs independently and takes significant time (tests, builds, downloads, training runs, long scripts). List these under `> Trigger first (background):` so they get started at the beginning of the day and run in parallel with other work. Omit this block if no background tasks exist.
-
----
-
-## Step 4: Update and adjust the full goal hierarchy
-
-### 4a — Mark today's goal progress
-Update the `## Goals` section in `today.md` (in place, before archiving):
-- Check off completed tasks: `- [x]`
-- Add `*(partial)*` or `*(skipped)*` annotations to incomplete ones
-
-### 4b — Propagate completions upward
-- `goals/YYYY/goal-MM-WNN.md` — check off tasks completed this week
-- `goals/YYYY/goal-MM.md` — same for month
-- `goals/YYYY/goal.md` — same for year
-
-Only mark a higher-level task done if fully achieved, not just started.
-
-### 4c — Reconcile and adjust goals based on journal
-
-**First, reconcile**: compare the journal with each loaded goal file. Look for mismatches — tasks marked in the wrong state, goals that describe a direction the journal contradicts, scope that no longer reflects what is actually being worked on. Fix every mismatch in favor of the journal. Log each correction in the Adjustment Log with `*(reconciled: reason)*`.
-
-Then adjust for new insights. Read `today.md` and the recent journals carefully. The journal often reveals things that should change higher-level goals — act on them. When deciding which level to update, respect each level's scope:
-
-| Level | Scope | Contains |
-|-------|-------|----------|
-| Total (`goal.md`) | Lifetime direction | Abstract goal titles + Effect (impact). Never tasks. |
-| Yearly | Major milestones | Outcomes for the year. Update only if direction fundamentally changes. |
-| Monthly | Concrete objectives | Measurable goals for the month. Update when scope or priorities shift. |
-| Weekly | Specific deliverables | Tasks completable in 1–3 days. Update freely based on weekly progress. |
-| Daily (today.md) | Actionable steps | Single concrete actions executable today. Generated fresh each day. |
-
-**Scope violations to avoid**: don't add vague milestones to the weekly goal, don't add single-day tasks to the monthly goal, don't add "Effect" language to weekly/daily.
-
-Adjustments to make:
-- **New objective discovered** → add at the right level. If it spans multiple months → yearly. If it's this month's work → monthly. If it's this week → weekly.
-- **Goal no longer relevant** → mark `*(dropped: reason)*` at its level
-- **Task too large** → split into sub-tasks one level down (monthly task → weekly deliverables)
-- **Priority shift** → reorder within topic section at the appropriate level
-- **Blocked** → add `*(blocked: reason)*` at weekly or monthly level
-
-After adjusting, write a brief **Goal Adjustment Log** entry at the bottom of each modified goal file:
-```markdown
-## Adjustment Log
-- YYYY-MM-DD — <what changed> — <why, inferred from journal>
-```
-
----
-
-## Step 5: Extract and save wiki entries
-
-Identify knowledge worth preserving — good candidates:
+Identify technical knowledge worth preserving — good candidates:
 
 - A technique, pattern, or approach that solved a non-obvious problem
 - A tool, library, or API insight that took real effort to figure out
 - A design decision and the reasoning behind it
 - A research finding, mental model, or concept that clarified something
 - A recurring workflow or setup step worth referencing again
-- An insight — an observation, hypothesis, or "aha" moment, even if tentative
 
-Skip obvious or ephemeral things. Check filenames and tag-matched files already loaded before creating a new entry.
-
-**Reconcile existing entries**: if a loaded wiki entry conflicts with what the journal says — wrong technique, outdated approach, incorrect conclusion — correct the wiki entry to match the journal. Note the correction with `*Updated: YYYY-MM-DD — reason*` at the bottom of the entry.
+Skip obvious or ephemeral things. Update existing entries rather than creating duplicates.
 
 **Wiki entry format** (`wiki/<slug>.md`):
 ```markdown
@@ -217,34 +57,23 @@ Clear explanation for your future self.
 ## Details
 
 Code snippets, diagrams, examples.
-Use mermaid blocks when a visual genuinely helps.
 
 ---
 *First noted: YYYY-MM-DD*
 ```
 
-Tag guidelines:
-- Use specific reusable tags: `#rust`, `#debugging`, `#ml`, `#architecture`, `#research`, `#devops`, `#insight`
-- Use `#insight` for observations and hypotheses
-- 2–5 tags per entry; prefer existing tags over new ones
-
-Update existing entries rather than creating duplicates — add new learnings in a sub-section and update the date footer.
+If a loaded wiki entry conflicts with the journal, correct the wiki entry and note `*Updated: YYYY-MM-DD — reason*`.
 
 ---
 
-## Step 5b: Extract and save experience entries
+## Step 4: Extract and save experience entries
 
-After saving wiki entries, scan the journal for personal and professional experience worth keeping — things that would help your future self work and grow better. These are distinct from technical wiki entries: the focus is on *how you work*, not *what you know*.
+Scan for personal and professional experience worth keeping — how you work, not what you know:
 
-Good candidates:
 - A work habit or approach that made a noticeable difference
 - A decision pattern — what led to a good or bad call
-- A communication or collaboration insight
-- A mistake you'd like to avoid repeating, with the root cause understood
-- A mental shift — a belief, assumption, or mindset that changed
-- A personal working condition insight (energy, focus, environment, time of day)
-
-Skip things already obvious to you, or too ephemeral to matter next week.
+- A mistake with the root cause understood
+- A mental shift — a belief or assumption that changed
 
 **Experience entry format** (`reflections/<slug>.md`):
 ```markdown
@@ -252,11 +81,11 @@ Skip things already obvious to you, or too ephemeral to matter next week.
 
 #tag1 #tag2 #tag3
 
-What happened and what you learned from it — written for your future self.
+What happened and what you learned from it.
 
 ## Context
 
-The situation that revealed this. Enough detail to make the lesson concrete.
+The situation that revealed this.
 
 ## What to apply
 
@@ -266,97 +95,32 @@ One or two sentences on how to act on this going forward.
 *First noted: YYYY-MM-DD*
 ```
 
-Tag guidelines:
-- Use `#habit`, `#decision`, `#communication`, `#mistake`, `#growth`, `#focus`, `#energy`, `#career`
-- 2–4 tags per entry; prefer existing tags over new ones
-
-**Before creating a new entry**, scan `reflections/` filenames and the first 3 lines of any tag-matched files. If a relevant entry already exists, append a new dated sub-section rather than duplicating it — patterns strengthen when accumulated, not scattered.
-
-**Reconcile existing entries**: if the journal contradicts an existing reflection (the lesson turned out wrong, the habit no longer applies), update the entry and note `*Revised: YYYY-MM-DD — reason*`.
+Before creating a new entry, scan `reflections/` for an existing match — append a dated sub-section rather than duplicating.
 
 ---
 
-## Step 6: Update achievement archive
+## Step 5: Update SUMMARY.md
 
-Append today's achievements to the archive files. Each entry must explain **why the achievement is meaningful** for the final goal — not just what was done, but what it moves forward.
+Add new wiki entries under Wiki (alphabetically) and new reflection entries under Reflections (alphabetically). Create the Reflections section if it doesn't exist yet.
 
-**archive/YYYY/archive-MM-WNN.md** — append under `## Achievements`:
-```markdown
-- YYYY-MM-DD — what was accomplished — why this matters for the final goal `#tag` *(→ Total: goal title)*
+---
+
+## Step 6: Recommend next tasks
+
+Based on what was done today, what's incomplete, and what open questions remain — output a short recommended plan. Do not write it anywhere. The human will write their own todo list.
+
+Format:
+```
+## Recommended next
+- <task> — <why: what it unblocks or advances>
+- <task> — <why>
 ```
 
-**archive/YYYY/archive-MM.md** — same format.
-
-If the weekly or monthly goal was completed today, update the Goal Completion table in the respective archive file.
-
-**Archive file format** (for reference when creating new files):
-```markdown
-# Archive · YYYY-MM (or WNN or YYYY)
-
-## Achievements
-- YYYY-MM-DD — what was accomplished — why it matters `#tag` *(→ Total: goal title)*
-
-## Goal Completion
-| Goal | Status | Notes |
-|------|--------|-------|
-| ... | done / partial / skipped | ... |
-```
+Keep it short. Surface the highest-value next steps only.
 
 ---
 
-## Step 7: Archive today.md and seed tomorrow
-
-1. Create `Journal/YYYY/` if needed.
-2. Move `today.md` → `Journal/YYYY/MM-DD.md`.
-3. Create a fresh `today.md` with tomorrow's daily goals at the top, seeded from the full hierarchy:
-   - Start with uncompleted High tasks from the weekly goal not yet done
-   - Add carried-over tasks from today (partial or skipped)
-   - Pull in monthly goal tasks due this week
-   - Respect topic structure and high→medium→low order
-   - **Each task must include a rationale** — one phrase explaining why this action matters and which weekly deliverable it advances. Carry rationale forward from the weekly goal when available; write new rationale when breaking a task down further.
-   - **Background tasks**: mark any long-running independent task with `*(bg)*` and place it first within its topic. Also list it under `> Trigger first` at the top of Goals so it gets started immediately.
-   - **AI leverage**: for each task, consider whether AI assistance would meaningfully accelerate it. If yes, add `*(ai)*` after the priority annotation and append a brief note on how — e.g., `*(ai: draft the lit review section)*`, `*(ai: generate boilerplate, you review)*`, `*(ai: suggest debugging hypotheses)*`. Only add `*(ai)*` where it genuinely saves time; skip for tasks that require your own judgment or domain knowledge exclusively.
-
-```markdown
-<!-- today: YYYY-MM-DD -->
-
-## Goals
-
-> [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
-
-> Trigger first (background):
-> - Task name *(~Xh)* — start now; runs while other work proceeds
-
-### (Topic)
-- [ ] Long-running task *(High)* *(bg)* — rationale *(→ Weekly: deliverable name)*
-  - [ ] Sub-step one
-- [ ] Specific action *(High)* *(ai: how AI helps here)* — why this completes/advances the weekly deliverable *(→ Weekly: deliverable name)*
-  - [ ] Sub-step one
-  - [ ] Sub-step two
-- [ ] Specific action *(Medium)* — rationale *(→ Weekly: deliverable name)*
-  - [ ] Sub-step one
-
-## Adjustment Log
-
----
-
-<!-- Write freely below. No format required. -->
-
-```
-
-If tomorrow crosses into a new week, also create `goals/YYYY/goal-MM-WNN.md` for that week, seeded from the monthly goal's remaining tasks and the yearly goal's priorities for this period.
-
----
-
-## Step 8: Update SUMMARY.md
-
-- Add archived journal: `- [YYYY-MM-DD](Journal/YYYY/MM-DD.md)` under Journal, descending order.
-- Add new wiki entries under Wiki, alphabetically.
-- Add new reflection entries under Reflections, alphabetically. Create the Reflections section if it doesn't exist yet.
-
----
-
-## Step 9: Show the commit message
+## Step 7: Show the commit message
 
 Do **not** commit — just show:
 
@@ -364,13 +128,5 @@ Do **not** commit — just show:
 pfj: YYYY-MM-DD — <one-line summary of today's main work>
 
 - wiki/slug.md (new/updated)
+- reflections/slug.md (new/updated)
 ```
-
----
-
-## Notes
-
-- Never modify the original diary text in today.md — only append the report section.
-- For research days with no code: plan should reference papers, experiments, analysis — not code tasks.
-- After a vacation gap, the skill still works — it uses the last N archived journals regardless of date gap.
-- Mermaid diagrams in wiki entries should add real clarity, not decoration.
