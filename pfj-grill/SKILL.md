@@ -66,7 +66,21 @@ Write the file, then print the path so the user can open it:
 Report saved: /path/to/discuss/YYYY/MM-DD-topic-slug.html
 ```
 
-## Step 5: Append to today.md
+## Step 5: Continue into a skill (if outcome warrants it)
+
+If the discussion concluded with a clear next action, offer to run the matching skill immediately via `AskUserQuestion`:
+
+| Outcome | Skill to offer |
+|---------|---------------|
+| Need to write an ADR | `/pf` |
+| Need to prototype before deciding | `/pf-proto` |
+| ADR exists, ready to implement | `/pf-impl` |
+
+Ask: *"Continue into [skill name] now?"* — if yes, invoke the skill via the `Skill` tool and pass the discussion conclusions as context.
+
+Skip this step if no skill clearly maps to the outcome.
+
+## Step 6: Append to today.md
 
 ```markdown
 ## HH:MM:SS (grill)
@@ -88,20 +102,6 @@ Report saved: /path/to/discuss/YYYY/MM-DD-topic-slug.html
 Use 24h time. Keep it tight — this is a journal entry, not a report.
 
 **Detail rule**: if the discussion produced specific commands, code snippets, config values, or ordered steps — write them verbatim under **Steps**. Do not summarize or paraphrase concrete technical details.
-
-## Step 6: Continue into a skill (if outcome warrants it)
-
-If the discussion concluded with a clear next action, offer to run the matching skill immediately via `AskUserQuestion`:
-
-| Outcome | Skill to offer |
-|---------|---------------|
-| Need to write an ADR | `/pf` |
-| Need to prototype before deciding | `/pf-proto` |
-| ADR exists, ready to implement | `/pf-impl` |
-
-Ask: *"Continue into [skill name] now?"* — if yes, invoke the skill via the `Skill` tool and pass the discussion conclusions as context.
-
-Skip this step if no skill clearly maps to the outcome.
 
 ## Step 7: Update Goals (if tasks identified)
 
