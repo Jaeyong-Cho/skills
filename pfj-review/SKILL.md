@@ -124,7 +124,7 @@ Review saved: $PFJ_PATH/review/YYYY/MM-DD.html
 Don't commit. Just show:
 
 ```
-pfj: YYYY-MM-DD — <one-line summary>
+review: YYYY-MM-DD — <one-line summary>
 
 - wiki/slug.md (new/updated)
 - review/YYYY/MM-DD.html (generated)
