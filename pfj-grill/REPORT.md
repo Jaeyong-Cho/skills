@@ -13,18 +13,25 @@ Generate a **single self-contained HTML file** — no external CDN, no network r
 
 **Body is free-form.** Choose whatever structure communicates the discussion most clearly. You are not constrained to a fixed section order or set of sections. Ask: *what does someone need to understand about this topic after reading?* Then design the page around that answer.
 
-Elements to draw from (use what fits, skip what doesn't):
+**Always include at least one diagram.** Diagrams are the primary way to make a discussion scannable and memorable. Before writing prose, ask: what can a diagram show that text cannot? Use inline `<canvas>` or pure CSS/SVG — no libraries.
+
+Good diagram candidates for any discussion:
+- Decision tree / branching paths taken
+- Before / after comparison (two-column layout or flow)
+- Timeline of decisions or steps
+- Relationship map between concepts
+- Trade-off matrix (axes: effort vs. impact, risk vs. value, etc.)
+- Flow diagram of a process or architecture
+
+Other elements to draw from (use what fits):
 - Narrative prose for context or reasoning
-- Decision tree — when branching paths matter
 - Q&A transcript — when the dialogue itself is the insight
 - Tables — when comparing options or trade-offs
-- Timeline / steps — when sequence matters
 - Action items with JS checkboxes — when concrete next steps surfaced
-- Diagrams — when spatial relationships help
 - Callout boxes — for key decisions, warnings, or open questions
 - Code blocks — for commands, snippets, config verbatim from the discussion
 
-**Default when in doubt**: narrative summary of the reasoning → key decisions → action items. No more structure than necessary.
+**Default when in doubt**: one diagram of the decision space → narrative summary → action items.
 
 ---
 
@@ -33,8 +40,6 @@ Elements to draw from (use what fits, skip what doesn't):
 Read [`kanagawa.css`](kanagawa.css) and embed its full contents verbatim inside the report's `<style>` tag.
 
 **Layout**: max-width 900px, centered. Sections separated by subtle `<hr>`.
-
-**Charts / Diagrams**: Use inline `<canvas>` with vanilla JS (no libraries). Only add if the data warrants it.
 
 **Interactivity** (use what fits the content):
 - Collapsible tree nodes
