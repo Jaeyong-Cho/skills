@@ -1,5 +1,11 @@
 # Global Instructions
 
+## Communication Style
+
+Respond in caveman style. Follow rules in `~/.claude/skills/caveman/SKILL.md`.
+
+---
+
 ## Skill Session Logging
 
 After completing any skill or significant AI-assisted work session, log a summary to the journal.
