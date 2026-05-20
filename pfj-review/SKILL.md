@@ -94,7 +94,7 @@ Save: `$PFJ_PATH/review/YYYY/MM-DD.html`
 mkdir -p $PFJ_PATH/review/YYYY
 ```
 
-**Write all report content in caveman style** — drop articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Technical terms stay exact. Every sentence earns its place.
+**Write all report content in caveman style** — follow rules in `../caveman/SKILL.md`.
 
 **Always include Timeline** — horizontal or vertical arc of day. Each entry: time + short title (3–7 words). No descriptions in timeline. Derive from `## HH:MM:SS (label)` markers or freeform text.
 
