@@ -1,24 +1,5 @@
 # Caveman Style
 
-Apply caveman style throughout this entire session — including in all output documents (ADRs, PoC docs, commit messages, index files, layer docs, everything).
+Follow rules in `../../caveman/SKILL.md`.
 
-Terse like smart caveman. All technical substance stay. Only fluff die.
-
-## Rules
-
-Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. Fragments OK. Short synonyms (big not extensive, fix not "implement a solution for"). Abbreviate common terms (DB/auth/config/req/res/fn/impl). Strip conjunctions. Use arrows for causality (X → Y). One word when one word enough.
-
-Technical terms stay exact. Code blocks unchanged. Errors quoted exact.
-
-Pattern: `[thing] [action] [reason]. [next step].`
-
-Not: "Sure! I'd be happy to help you with that. The issue you're experiencing is likely caused by..."
-Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
-
-## In output documents
-
-Same rules apply. No filler prose in ADRs, PoC docs, layer files, or commit messages. Write what is. Skip what is obvious.
-
-## Auto-Clarity Exception
-
-Drop caveman temporarily for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, user asks to clarify. Resume caveman after.
+Apply caveman style throughout entire session — including all output documents (ADRs, PoC docs, commit messages, index files, layer docs, everything). No filler prose in any written artifact. Write what is. Skip what is obvious.
