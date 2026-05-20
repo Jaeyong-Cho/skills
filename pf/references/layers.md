@@ -2,79 +2,79 @@
 
 ## Origin
 
-VAO is a software design philosophy inspired by OOP and AOP. A program is an automation tool for making decisions to achieve a goal. Designing it well requires three kinds of thinking:
+VAO = software design philosophy inspired by OOP and AOP. Program = automation tool for making decisions to achieve goal. Designing it well requires three kinds of thinking:
 
-1. **What is the user goal worth automating?** → value layer
+1. **What is user goal worth automating?** → value layer
 2. **What algorithm and objects realize that goal?** → aspect layer
-3. **What stable objects does the system operate on?** → object layer
+3. **What stable objects does system operate on?** → object layer
 
-This leads to two types of classes: **domain objects** (what exists) and **aspect objects** (how things are viewed and used to achieve a goal). The value layer sits above both, determining which user goals are worth pursuing.
+Two types of classes: **domain objects** (what exists) and **aspect objects** (how things are viewed and used to achieve goal). Value layer sits above both, determining which user goals are worth pursuing.
 
 ---
 
 ## Value layer — User Value (Why)
 
-The value layer encodes **what the end user needs** from this software. It answers: which features are worth building? Which results do users actually need? What does a good outcome look like from their perspective?
+Value layer encodes **what end user needs** from software. Answers: which features worth building? Which results do users actually need? What does good outcome look like from their perspective?
 
-This is the purpose layer — it exists to represent the user's goals, not the system's internals. In code it is the entry point: the use-case, command, or application service that says "the user needs X." Everything below it (aspect, object) exists to serve what the value layer defines.
+Purpose layer — exists to represent user's goals, not system's internals. In code it is entry point: use-case, command, or application service that says "user needs X." Everything below it (aspect, object) exists to serve what value layer defines.
 
-The value layer encodes:
+Value layer encodes:
 - Which user needs are worth satisfying (feature selection)
-- What a successful result looks like (evaluation)
+- What successful result looks like (evaluation)
 - What must never happen (validation)
-- Which aspect should deliver the result
+- Which aspect should deliver result
 
-Because the value layer represents user intent, it delegates the *how* to the aspect layer. Keep it explicit in logic — if the user's need only lives in a comment or a ticket, it has not been encoded in the value layer yet.
+Value layer represents user intent, delegates *how* to aspect layer. Keep explicit in logic — if user's need only lives in comment or ticket, it has not been encoded in value layer yet.
 
 ---
 
 ## Aspect layer — Algorithm / Aspect (How)
 
-The aspect layer has two responsibilities:
+Aspect layer has two responsibilities:
 
-1. **How to meet the need** — the algorithm, workflow, or strategy that realizes the user goal
-2. **Which objects to use and how to see them** — from what angle are the domain objects viewed? What subset of their properties matters here?
+1. **How to meet need** — algorithm, workflow, or strategy that realizes user goal
+2. **Which objects to use and how to see them** — from what angle are domain objects viewed? What subset of properties matters here?
 
-This is where AOP thinking enters: different aspects see the same object differently, use only some of its properties, and combine objects in different ways. The aspect layer decides which objects are needed and how to compose them to produce the desired outcome.
+AOP thinking: different aspects see same object differently, use only some properties, combine objects in different ways. Aspect layer decides which objects needed and how to compose them to produce desired outcome.
 
-- An aspect does not need to use all domain objects.
-- An aspect may use only some properties of an object, not the whole thing.
-- The same object may look very different across aspects — this is correct, not a problem.
+- Aspect does not need to use all domain objects.
+- Aspect may use only some properties of object, not whole thing.
+- Same object may look very different across aspects — correct, not problem.
 
 For cross-cutting concern design with code examples, read `references/aop.md`.
 
-Structure the aspect layer into composable units — strategies, workflows, pipelines — so that aspects can be swapped without changing the objects or the value definition.
+Structure aspect layer into composable units — strategies, workflows, pipelines — so aspects can be swapped without changing objects or value definition.
 
 ---
 
 ## Object layer — Existence (What)
 
-Domain objects are the things that must exist to satisfy both the user need and the aspect. They are not an arbitrary catalog of domain things — they are the objects that the aspect selects and uses, shaped to serve the concerns that the value layer defines.
+Domain objects = things that must exist to satisfy both user need and aspect. Not arbitrary catalog of domain things — objects that aspect selects and uses, shaped to serve concerns value layer defines.
 
-A domain object is not just a data container. It defines the full identity of a domain target:
+Domain object is not data container. Defines full identity of domain target:
 
-- **Properties** — the state it holds
+- **Properties** — state it holds
 - **Actions** — what it can do (methods, commands, transitions)
 - **Behaviors** — how it responds to events or conditions
 - **Relationships** — how it connects to other objects
 
-A class that only holds data with no actions or behaviors is a data bag, not a domain object. If the logic that belongs to an object is scattered across service or aspect-layer classes instead, that is a leakage smell — the object is too thin.
+Class that only holds data with no actions or behaviors is data bag, not domain object. If logic that belongs to object is scattered across service or aspect-layer classes, that is leakage smell — object is too thin.
 
-**The key design question**: What distinguishes this object from others, and is it the right abstraction for the concern being served?
+**Key design question**: What distinguishes this object from others, and is it right abstraction for concern being served?
 
-**The key design constraint**: Size must match the concern.
+**Key design constraint**: Size must match concern.
 
-- If the concern is `DNA`, defining an `Atom` object is reasonable.
-- If the concern is `Animal`, `Atom` is too small — define `Arm`, `Head`, `Body` instead.
-- The object must not be too large (covering things outside the concern) or too small (forcing callers to reconstruct meaning).
+- If concern is `DNA`, defining `Atom` object is reasonable.
+- If concern is `Animal`, `Atom` is too small — define `Arm`, `Head`, `Body` instead.
+- Object must not be too large (covering things outside concern) or too small (forcing callers to reconstruct meaning).
 
-**The invariance principle**: A domain object must remain the same regardless of which aspect is looking at it. If the object changes shape for a specific use case, it has leaked into the aspect layer.
+**Invariance principle**: Domain object must remain same regardless of which aspect is looking at it. If object changes shape for specific use case, it has leaked into aspect layer.
 
-Domain objects are the stable foundation. Multiple aspect-layer components can use the same object from different angles without the object knowing or caring.
+Domain objects are stable foundation. Multiple aspect-layer components can use same object from different angles without object knowing or caring.
 
 ### Relationships
 
-For each relationship, decide: cardinality, ownership (who controls the lifecycle), navigability (which direction), and aggregate boundary (what changes atomically together). View-specific joins belong in the aspect layer, not the object.
+For each relationship, decide: cardinality, ownership (who controls lifecycle), navigability (which direction), and aggregate boundary (what changes atomically together). View-specific joins belong in aspect layer, not object.
 
 ---
 
@@ -88,11 +88,11 @@ aspect layer  →  defines how to do it, from which aspect
 object layer  →  defines what exists to operate on
 ```
 
-- The aspect layer uses objects to realize the value.
-- The value layer influences the aspect layer through selection, evaluation, and validation.
-- Objects remain stable — they are not shaped by any single aspect or value concern.
+- Aspect layer uses objects to realize value.
+- Value layer influences aspect layer through selection, evaluation, and validation.
+- Objects remain stable — not shaped by any single aspect or value concern.
 
-**Design order**: define value first → design aspects second → define/refine objects last. In practice this is iterative, but the conceptual direction stays the same.
+**Design order**: define value first → design aspects second → define/refine objects last. Iterative in practice, but conceptual direction stays same.
 
 ---
 

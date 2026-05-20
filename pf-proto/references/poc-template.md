@@ -11,11 +11,11 @@
 
 ## What was built
 
-Brief description of the prototype.
+Brief description of prototype.
 
 ## Findings
 
-What the prototype revealed — validated, invalidated, and surprising.
+What prototype revealed — validated, invalidated, and surprising.
 
 ## Decisions
 
@@ -25,23 +25,23 @@ Concrete decisions this prototype enables:
 
 ## Architecture
 
-VAO shape derived from the prototype findings:
+VAO shape derived from prototype findings:
 
 **Value** — what user goal does this serve? what must succeed, what must never happen?
 
-**Aspect** — which workflows or decision logic connect objects to the user's goal?
+**Aspect** — which workflows or decision logic connect objects to user's goal?
 
 **Object** — which stable objects emerged? what do they own (properties, behaviors)?
 
-**Views** — whichever views illuminate the findings for the stakeholders who will act on this PoC. See `../pf/references/views.md` for guidance on which to choose. Omit if the VAO shape above already makes everything clear.
+**Views** — whichever views illuminate findings for stakeholders who will act on this PoC. See `../pf/references/views.md` for guidance on which to choose. Omit if VAO shape above already makes everything clear.
 
 ## User feedback
 
-What the user observed while running the prototype — reactions, surprises, corrections, and things that felt wrong. Captured directly from the user, not inferred.
+What user observed while running prototype — reactions, surprises, corrections, things that felt wrong. Captured directly from user, not inferred.
 
 ## Open questions
 
-What remains unresolved — to be explored in the ADR grill-me.
+What remains unresolved — to be explored in ADR grill-me.
 
 ## Out of scope
 

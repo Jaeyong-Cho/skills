@@ -5,9 +5,9 @@ description: |
   Triggers: "init pfj", "set up knowledge base", "initialize journal", "create knowledge base", "start my productivity system", or any request to bootstrap a personal journal/wiki/goal system.
 ---
 
-# pfj-init: Initialize the POFE Knowledge Base
+# pfj-init: Initialize POFE Knowledge Base
 
-**Goal**: Bootstrap a clean repo with mdbook structure, daily journal, wiki, goal hierarchy, achievement archive, and work pattern tracking. Run once.
+**Goal**: Bootstrap clean repo with mdbook structure, daily journal, wiki, goal hierarchy, achievement archive, and work pattern tracking. Run once.
 
 ---
 
@@ -18,7 +18,7 @@ which mdbook || cargo install mdbook
 which mdbook-mermaid || cargo install mdbook-mermaid
 ```
 
-If `cargo` is not available:
+If `cargo` not available:
 > Install Rust: https://www.rust-lang.org/tools/install  
 > Then: `cargo install mdbook mdbook-mermaid`
 
@@ -99,7 +99,7 @@ command = "mdbook-mermaid"
 
 ## Step 5: Create seed files
 
-**today.md** — daily goal at top: single concrete actions executable today. Each task states which weekly deliverable it fulfills and why doing it today is the right move. Long-running independent tasks are marked `*(bg)*` and listed under `> Trigger first` so they start at the top of the day and run in parallel with other work.
+**today.md** — daily goal at top: single concrete actions executable today. Each task states which weekly deliverable it fulfills and why doing it today is right move. Long-running independent tasks marked `*(bg)*` and listed under `> Trigger first` so they start at top of day and run in parallel with other work.
 ```markdown
 <!-- today: YYYY-MM-DD -->
 
@@ -175,7 +175,7 @@ _Not enough data yet._
 *Last updated: YYYY-MM-DD*
 ```
 
-**goals/goal.md** — abstract, direction-setting. Each goal is a title + the effect of achieving it. No task lists here.
+**goals/goal.md** — abstract, direction-setting. Each goal is title + effect of achieving it. No task lists here.
 ```markdown
 # Goals
 
@@ -186,7 +186,7 @@ _Not enough data yet._
 **Effect**: ...
 ```
 
-**goals/YYYY/goal.md** (current year) — major milestones that move each total goal forward this year. Each milestone states what success looks like and why it matters toward the total goal.
+**goals/YYYY/goal.md** (current year) — major milestones that move each total goal forward this year. Each milestone states what success looks like and why it matters toward total goal.
 ```markdown
 # YYYY
 
@@ -198,7 +198,7 @@ _Not enough data yet._
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM.md** (current month) — concrete objectives measurable within a month. Each task states which yearly milestone it advances and why it is the right step now.
+**goals/YYYY/goal-MM.md** (current month) — concrete objectives measurable within month. Each task states which yearly milestone it advances and why it is right step now.
 ```markdown
 # YYYY-MM
 
@@ -213,7 +213,7 @@ _Not enough data yet._
 ## Adjustment Log
 ```
 
-**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date) — specific deliverables completable in 1–3 days. Each task explains which monthly objective it serves and why it is the right piece this week.
+**goals/YYYY/goal-MM-WNN.md** (current week — compute WNN from today's date) — specific deliverables completable in 1–3 days. Each task explains which monthly objective it serves and why it is right piece this week.
 ```markdown
 # YYYY WNN · Mon DD – Sun DD
 
@@ -255,24 +255,24 @@ Personal and professional experience entries — work habits, decision patterns,
 
 ## Step 6: Initialize git
 
-If not already a repo:
+If not already repo:
 ```bash
 git init
 git add .
 ```
 
-Show the suggested first commit message — do not commit:
+Show suggested first commit message — do not commit:
 ```
 chore: initialize POFE knowledge base
 ```
 
 ---
 
-## Step 7: Tell the user what's next
+## Step 7: Tell user what's next
 
 > POFE initialized.
-> - Set your goals in `goals/YYYY/goal-MM-WNN.md` and `goals/YYYY/goal-MM.md`.
-> - Each day, write your daily goals at the top of `today.md`, then journal freely below.
+> - Set goals in `goals/YYYY/goal-MM-WNN.md` and `goals/YYYY/goal-MM.md`.
+> - Each day, write daily goals at top of `today.md`, then journal freely below.
 > - Run `/pfj-review` at end of day to archive, update goals, extract knowledge, and seed tomorrow.
 > - Run `/pfj-adjust` mid-day if priorities change.
-> - Run `mdbook serve` to preview the book.
+> - Run `mdbook serve` to preview book.

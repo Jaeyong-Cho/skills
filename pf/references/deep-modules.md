@@ -28,8 +28,8 @@ From "A Philosophy of Software Design":
 
 When designing interfaces, ask:
 
-- Can I reduce the number of methods?
-- Can I simplify the parameters?
+- Can I reduce number of methods?
+- Can I simplify parameters?
 - Can I hide more complexity inside?
 
 ## Interface Design for Testability
@@ -70,10 +70,10 @@ Good interfaces make testing natural:
 
 | Smell | What to look for |
 |---|---|
-| **Shallow module** | Interface nearly as wide as the implementation — many tiny methods |
+| **Shallow module** | Interface nearly as wide as implementation — many tiny methods |
 | **Duplicated logic** | Same rule or algorithm in more than one place |
 | **Information leakage** | Same knowledge scattered across call sites instead of owned by one module |
 | **Temporal decomposition** | Split by execution order rather than responsibility |
-| **Pass-through method** | A function that just calls another with the same arguments |
-| **Leaky interface** | Callers must know internal details to use the module correctly |
+| **Pass-through method** | Function that just calls another with same arguments |
+| **Leaky interface** | Callers must know internal details to use module correctly |
 | **Conjoined twins** | Two modules always edited together — should probably be one |

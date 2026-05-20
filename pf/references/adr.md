@@ -1,8 +1,8 @@
 # Architectural Decision Record (ADR)
 
-Every change — new feature, refactoring, or architecture design — is an ADR. There are no separate document types.
+Every change — new feature, refactoring, or architecture design — is an ADR. No separate document types.
 
-**One ADR = one problem.** If the scope covers multiple independent problems, split into separate ADRs before starting. A sign of too-broad scope: the grill-me branches into unrelated decision trees.
+**One ADR = one problem.** If scope covers multiple independent problems, split into separate ADRs before starting. Sign of too-broad scope: grill-me branches into unrelated decision trees.
 
 Output: `.pf/src/adr/<ID>-<slug>.md`
 
@@ -22,7 +22,7 @@ Zero-padded 4-digit format: `0001`, `0002`, etc.
 
 ## Step 1: Grill-me
 
-Run the `grill-me` skill to reach shared understanding before writing.
+Run `grill-me` skill to reach shared understanding before writing.
 
 ---
 
@@ -51,20 +51,20 @@ Express with diagram
 
 What was decided and why. Walk through the three layers:
 
-**Value** — What does the end user need from this? Which features are worth
+**Value** — What does end user need from this? Which features worth
 building? What does success look like? What must never happen?
 
-**Aspect** — How is the need met? Which objects are used and from which angle?
-What algorithm or workflow produces the outcome?
+**Aspect** — How is need met? Which objects used and from which angle?
+What algorithm or workflow produces outcome?
 
 **Object** — What objects must exist? Each object must have more than just
 data — it should own properties, actions, behaviors, and relationships relevant
-to its concern. If logic that belongs to an object lives outside it, the object
-is too thin. Are the objects stable and invariant across different uses? Is the
+to its concern. If logic that belongs to object lives outside it, object
+is too thin. Are objects stable and invariant across different uses? Is
 abstraction level right — not too large, not too small?
 
 For each relationship: cardinality, ownership, navigability, aggregate boundary.
-View-specific joins belong in the aspect layer.
+View-specific joins belong in aspect layer.
 
 Call out any leakage between layers.
 
@@ -72,16 +72,16 @@ Call out any leakage between layers.
 
 For view selection guidance, read `references/views.md`.
 
-Identify who needs to understand this decision and draw the views that answer their questions. Not every ADR needs all views — include only those that add clarity.
+Identify who needs to understand this decision and draw views that answer their questions. Not every ADR needs all views — include only those that add clarity.
 
-For each view included, label the stakeholder and what question the view answers:
+For each view included, label stakeholder and what question view answers:
 
 ```
-**Module view** (developers) — shows how X is decomposed and where the new Y lives
-**C&C view** (architects) — shows the runtime data flow through the new pipeline
+**Module view** (developers) — shows how X is decomposed and where new Y lives
+**C&C view** (architects) — shows runtime data flow through new pipeline
 ```
 
-Use Mermaid diagrams. Each view is one focused diagram. Omit views that are obvious from the VAO decision or add no new information.
+Use Mermaid diagrams. Each view is one focused diagram. Omit views obvious from VAO Decision or that add no new information.
 
 ## Out of Scope
 
@@ -89,16 +89,16 @@ What is explicitly not part of this decision.
 
 ## Before / After
 
-Show the current structure and the target structure.
-For a greenfield decision, show only the target.
-In the **After** diagram, mark every node that is new or changed with a highlight style so the delta is immediately visible:
+Show current structure and target structure.
+For greenfield decision, show only target.
+In **After** diagram, mark every node that is new or changed with highlight style so delta is immediately visible:
 
 ```
 classDef changed fill:#f5a623,stroke:#c97d0a,color:#000
 class NewNode,ChangedNode changed
 ```
 
-Use orange (`#f5a623`) as the default highlight. Nodes that are unchanged carry no class.
+Use orange (`#f5a623`) as default highlight. Unchanged nodes carry no class.
 
 **Before:**
 ```mermaid
@@ -116,10 +116,10 @@ graph TD
 
 ## Step-by-Step Plan
 
-Each item is one RED→GREEN TDD cycle. Order from the most end-to-end behavior (tracer bullet) to the most specific.
+Each item is one RED→GREEN TDD cycle. Order from most end-to-end behavior (tracer bullet) to most specific.
 
 For each item:
-- **Behavior** — what the system does (maps to a User Story)
+- **Behavior** — what system does (maps to User Story)
 - **Test target** — which public interface to test through (value entry point, entity action)
 - **File** — what to create or modify, and which layer `[value|method|entity]`
 
@@ -134,16 +134,16 @@ Example:
 3. ...
 ```
 
-After writing the ADR, ask the user to confirm before writing any code.
+After writing ADR, ask user to confirm before writing any code.
 
 ---
 
 ## After implementation is confirmed
 
-Once the user has reviewed the code:
+Once user has reviewed code:
 
-1. Use the `pf-review` skill to review the implementation and update the documentation
-2. Mark the ADR status as `Accepted`
+1. Use `pf-review` skill to review implementation and update documentation
+2. Mark ADR status as `Accepted`
 
 ## SUMMARY.md entry
 

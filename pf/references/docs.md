@@ -1,6 +1,6 @@
 # Documentation
 
-The documentation is the living documentation of the system — updated after each confirmed implementation, not per-decision. It describes the current state of the system, not the history of decisions (that is what ADRs are for).
+Documentation is living documentation of system — updated after each confirmed implementation, not per-decision. Describes current state of system, not history of decisions (that is what ADRs are for).
 
 Output: `.pf/src/docs/`
 
@@ -10,11 +10,11 @@ Output: `.pf/src/docs/`
 .pf/src/docs/
 ├── index.md                  — introduction and chapter links
 ├── value/
-│   ├── index.md              — chapter intro: what user goals the system serves
+│   ├── index.md              — chapter intro: what user goals system serves
 │   ├── 01-<entry-point>.md   — one file per value entry point / command / use case
 │   └── ...
 ├── aspect/
-│   ├── index.md              — chapter intro: how the system works end-to-end
+│   ├── index.md              — chapter intro: how system works end-to-end
 │   ├── 01-<concern>.md       — one file per concern handler (auth, billing, etc.)
 │   └── ...
 └── object/
@@ -23,12 +23,12 @@ Output: `.pf/src/docs/`
     └── ...
 ```
 
-Number files so they sort correctly in the sidebar. Use kebab-case for all names. One file per individual entity — not one file per component covering multiple entities.
+Number files so they sort correctly in sidebar. Use kebab-case for all names. One file per individual entity — not one file per component covering multiple entities.
 
 Each file covers one entity from its layer's angle:
-- **Value** — the user need this entry point serves: what it does, success criteria, what must never happen
-- **Aspect** — how this concern is handled: algorithm, workflow, which objects used and from what angle
-- **Object** — this entity's full identity: properties, actions, behaviors, relationships, invariants
+- **Value** — user need this entry point serves: what it does, success criteria, what must never happen
+- **Aspect** — how concern is handled: algorithm, workflow, which objects used and from what angle
+- **Object** — entity's full identity: properties, actions, behaviors, relationships, invariants
 
 ---
 
@@ -51,7 +51,7 @@ This manual documents the current system design using the VAO framework.
 ```markdown
 # Value
 
-One paragraph on what this chapter covers — the user goals and outcomes the system exists to deliver.
+One paragraph on what this chapter covers — user goals and outcomes system exists to deliver.
 
 ## Components
 
@@ -63,28 +63,28 @@ One paragraph on what this chapter covers — the user goals and outcomes the sy
 
 ## Entity files
 
-Within each file, order content from **broad scope to narrow** — start with the overall picture, then zoom into specifics.
+Within each file, order content from **broad scope to narrow** — start with overall picture, then zoom into specifics.
 
-**value/<entry-point>.md** — the user need this entry point serves, what success looks like, what must never happen. Start with the overall goal, narrow to specific constraints.
+**value/<entry-point>.md** — user need this entry point serves, what success looks like, what must never happen. Start with overall goal, narrow to specific constraints.
 
-**aspect/<concern>.md** — how this concern is handled: start with the overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
+**aspect/<concern>.md** — how concern is handled: start with overall workflow, then narrow to decision logic and composable strategies. Include Mermaid diagrams for flows and interactions.
 
-**object/<entity>.md** — this entity's full identity: start with the top-level role, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for relationships.
+**object/<entity>.md** — entity's full identity: start with top-level role, then narrow to properties, behaviors, relationships, and invariants. Include Mermaid diagrams for relationships.
 
 ---
 
 ## When to update
 
-Update the manual **after** a code review is confirmed — not before. The manual reflects what is actually in the code, not what was planned. If an ADR was partially implemented or changed during implementation, the manual should reflect what was actually built.
+Update manual **after** code review is confirmed — not before. Manual reflects what is actually in code, not what was planned. If ADR was partially implemented or changed during implementation, manual should reflect what was actually built.
 
 When updating:
-- Find the component file in each layer (or create one if this component is new)
-- Update only the sections that changed
-- Keep language describing the current system, not the history of changes
+- Find component file in each layer (or create one if component is new)
+- Update only sections that changed
+- Keep language describing current system, not history of changes
 
 ## Adding a new component
 
-Create a numbered file in each of the three layer directories and update each layer's `index.md` and `SUMMARY.md`.
+Create numbered file in each of three layer directories and update each layer's `index.md` and `SUMMARY.md`.
 
 ## SUMMARY.md entries
 

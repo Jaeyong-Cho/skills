@@ -14,8 +14,8 @@ it("user can checkout with a valid cart", async () => {
 })
 ```
 
-- Tests a user-facing outcome
-- Uses only the public interface (`checkout`)
+- Tests user-facing outcome
+- Uses only public interface (`checkout`)
 - Survives any internal refactor
 
 ## Bad test
@@ -31,9 +31,9 @@ it("calls PaymentGateway.charge", async () => {
 
 - Tests how, not what
 - Breaks when you rename or restructure internals
-- Passes even if the behavior is wrong
+- Passes even if behavior is wrong
 
 ## Rule
 
-If the test breaks after a refactor but the behavior hasn't changed, the test was wrong.
-A good test reads like a specification — it says what the system can do, not how it does it.
+If test breaks after refactor but behavior hasn't changed, test was wrong.
+Good test reads like specification — says what system can do, not how it does it.

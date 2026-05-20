@@ -16,7 +16,7 @@ which mdbook || cargo install mdbook
 which mdbook-mermaid || cargo install mdbook-mermaid
 ```
 
-If `cargo` is not available, tell the user to install Rust first: https://www.rust-lang.org/tools/install
+If `cargo` not available, tell user to install Rust first: https://www.rust-lang.org/tools/install
 
 ## Step 2: Initialize mdbook
 
@@ -31,7 +31,7 @@ mdbook-mermaid install .pf/
 cd .pf && mdbook init --theme
 ```
 
-Replace the existing `--content-max-width` in `.pf/theme/css/variables.css` — do not add a new line:
+Replace existing `--content-max-width` in `.pf/theme/css/variables.css` — do not add new line:
 
 ```bash
 sed -i '' 's/--content-max-width:[^;]*/--content-max-width: 80%/' .pf/theme/css/variables.css
@@ -61,7 +61,7 @@ additional-css = ["theme/css/variables.css"]
 mkdir -p .pf/src/adr .pf/src/poc .pf/src/docs/value .pf/src/docs/aspect .pf/src/docs/object
 ```
 
-Find the pf-init skill directory (typically `~/.claude/skills/pf-init/`) and copy:
+Find pf-init skill directory (typically `~/.claude/skills/pf-init/`) and copy:
 
 ```bash
 cp <skill-path>/templates/SUMMARY.md .pf/src/SUMMARY.md
@@ -83,18 +83,17 @@ Fix all errors before continuing.
 
 ## Step 7: Copy serve script
 
-Find the pf skill directory (where this skill lives, typically `~/.claude/skills/pf/`) and copy:
+Find pf skill directory (where this skill lives, typically `~/.claude/skills/pf/`) and copy:
 
 ```bash
 cp <skill-path>/scripts/serve.sh .pf/serve.sh
 chmod +x .pf/serve.sh
 ```
 
-Tell the user they can start the book server anytime with:
+Tell user they can start book server anytime with:
 
 ```bash
 .pf/serve.sh
 ```
 
-Then return to the task that triggered initialization.
-
+Then return to task that triggered initialization.

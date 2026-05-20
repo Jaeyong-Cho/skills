@@ -2,9 +2,9 @@
 
 From Aspect-Oriented Programming:
 
-A **cross-cutting concern** is a behavior that multiple domain objects need, but that does not belong to any one of them. Authentication, logging, billing, caching, rate-limiting — these cut across `User`, `Order`, `Product` alike. The objects shouldn't know about them.
+**Cross-cutting concern** = behavior multiple domain objects need, but that belongs to none of them. Authentication, logging, billing, caching, rate-limiting — these cut across `User`, `Order`, `Product` alike. Objects shouldn't know about them.
 
-**Aspect** = a cross-cutting concern implemented in one place, applied to many objects from the outside.
+**Aspect** = cross-cutting concern implemented in one place, applied to many objects from outside.
 
 ```
         User          Order         Product
@@ -21,21 +21,21 @@ A **cross-cutting concern** is a behavior that multiple domain objects need, but
    └──────────────────────────────────────────┘
 ```
 
-Objects stay the same. Aspects weave in from outside.
+Objects stay same. Aspects weave in from outside.
 
 ---
 
-## The Core Rule
+## Core Rule
 
-**Objects are concern-agnostic. Aspects own the concern.**
+**Objects are concern-agnostic. Aspects own concern.**
 
-A `User` object should not know it is being audited, billed, or rate-limited. Those concerns live in aspects that use `User` as raw material. When a concern leaks into an object — the object starts checking auth, recording audit logs, or formatting for a specific view — the object has been contaminated.
+`User` object should not know it is being audited, billed, or rate-limited. Those concerns live in aspects that use `User` as raw material. When concern leaks into object — object starts checking auth, recording audit logs, or formatting for specific view — object has been contaminated.
 
 ---
 
 ## Design Pattern
 
-Design each aspect around one question it asks of the object:
+Design each aspect around one question it asks of object:
 
 | Aspect | Concern | What it reads from objects |
 |--------|---------|---------------------------|
@@ -44,7 +44,7 @@ Design each aspect around one question it asks of the object:
 | `AuditAspect` | "What happened and who did it?" | `user.id`, `order.id`, `order.status` |
 | `CacheAspect` | "Is this result fresh?" | `product.id`, `product.updatedAt` |
 
-The same object appears in multiple aspects. Each aspect uses only the properties relevant to its concern.
+Same object appears in multiple aspects. Each aspect uses only properties relevant to its concern.
 
 ---
 
@@ -66,7 +66,7 @@ class User {
 }
 ```
 
-`User` defines what it *is* — properties, actions, behaviors. It has no idea who is asking or why.
+`User` defines what it *is* — properties, actions, behaviors. No idea who is asking or why.
 
 **Aspect: uses User with one concern**
 
@@ -97,7 +97,7 @@ class AuditAspect {
 }
 ```
 
-Each aspect is narrow. It reads only what it needs. It doesn't store concern-specific state on the object.
+Each aspect narrow. Reads only what it needs. Does not store concern-specific state on object.
 
 **Value layer: composes aspects**
 
@@ -116,7 +116,7 @@ class DeleteOrderCommand {
 }
 ```
 
-The value layer decides *which* concerns apply to this action and in what order — it is the composition point.
+Value layer decides *which* concerns apply to action and in what order — it is composition point.
 
 ---
 
@@ -124,9 +124,8 @@ The value layer decides *which* concerns apply to this action and in what order 
 
 | Smell | What it looks like | What's wrong |
 |-------|-------------------|--------------|
-| **Concern in object** | `user.logAccess()`, `order.checkBilling()` | Object knows about a cross-cutting concern — it shouldn't |
-| **Duplicated concern** | Auth check copy-pasted across 5 commands | Concern not extracted into an aspect |
+| **Concern in object** | `user.logAccess()`, `order.checkBilling()` | Object knows about cross-cutting concern — it shouldn't |
+| **Duplicated concern** | Auth check copy-pasted across 5 commands | Concern not extracted into aspect |
 | **Aspect doing too much** | `SecurityAspect` handles auth, billing, and rate-limiting | One aspect, multiple concerns — split it |
 | **Object shaped for one aspect** | `user.authContext`, `user.billingView` | Aspect-specific fields leaked into object |
-| **Value layer skips the aspect** | Command directly checks `user.role === 'admin'` | Concern escaped into the value layer |
-
+| **Value layer skips aspect** | Command directly checks `user.role === 'admin'` | Concern escaped into value layer |

@@ -13,7 +13,7 @@ Check for today's journal context:
 [ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
 ```
 
-If today.md is found, read it to understand the user's current focus, active goals, and any blockers for today. Use this to orient your work — not to override the task, but to connect the migration to the user's broader context.
+If today.md found, read to understand user's current focus, active goals, blockers. Use to orient work — not to override task, but to connect migration to user's broader context.
 
 # VAO Docs Migration
 
@@ -25,7 +25,7 @@ Converts `.pf/src/docs/` from feature-centric chapters to layer-centric chapters
 find .pf/src/docs -mindepth 2 -name "01-value.md" 2>/dev/null
 ```
 
-If nothing is found, tell the user their docs are already in the new format and stop.
+If nothing found, tell user docs already in new format and stop.
 
 ---
 
@@ -33,21 +33,21 @@ If nothing is found, tell the user their docs are already in the new format and 
 
 For each old chapter directory found (e.g. `docs/01-auth/`, `docs/02-checkout/`):
 
-1. Record the component slug — strip the leading number prefix from the directory name (e.g. `01-auth` → `auth`)
-2. Assign a number for the new files based on order (first chapter = `01`, second = `02`, etc.)
+1. Record component slug — strip leading number prefix from directory name (e.g. `01-auth` → `auth`)
+2. Assign number for new files based on order (first chapter = `01`, second = `02`, etc.)
 3. Read all three section files: `01-value.md`, `02-aspect.md`, `03-object.md`
 
 ---
 
 ## Step 3: Write new layer files
 
-Create the layer directories if they don't exist:
+Create layer directories if they don't exist:
 
 ```bash
 mkdir -p .pf/src/docs/value .pf/src/docs/aspect .pf/src/docs/object
 ```
 
-For each component, write its content into the corresponding layer file:
+For each component, write its content into corresponding layer file:
 - Old `01-auth/01-value.md` → new `value/01-auth.md`
 - Old `01-auth/02-aspect.md` → new `aspect/01-auth.md`
 - Old `01-auth/03-object.md` → new `object/01-auth.md`
@@ -62,7 +62,7 @@ Preserve all content verbatim — do not rewrite or summarize.
 rm -rf .pf/src/docs/<old-chapter-dir>
 ```
 
-Delete only the old numbered chapter directories. Do not touch `docs/index.md` yet.
+Delete only old numbered chapter directories. Do not touch `docs/index.md` yet.
 
 ---
 
@@ -82,7 +82,7 @@ This manual documents the current system design using the VAO framework.
 - [Object — What](./object/index.md)
 ```
 
-Write (or overwrite) each layer's `index.md` listing the migrated components:
+Write (or overwrite) each layer's `index.md` listing migrated components:
 
 ```markdown
 # Value
@@ -101,7 +101,7 @@ The user goals and outcomes the system exists to deliver.
 
 ## Step 6: Rewrite SUMMARY.md docs entries
 
-Replace the old docs section in `.pf/src/SUMMARY.md` with:
+Replace old docs section in `.pf/src/SUMMARY.md` with:
 
 ```markdown
 - [Documentation](./docs/index.md)
@@ -123,10 +123,10 @@ Add one entry per component under each layer.
 cd .pf && mdbook build 2>&1
 ```
 
-Fix all errors before reporting to the user.
+Fix all errors before reporting to user.
 
 ---
 
 ## Step 8: Done
 
-Show the user a summary of what was migrated. Suggest a commit message using `../pf/references/commit.md`.
+Show user summary of what was migrated. Suggest commit message using `../pf/references/commit.md`.

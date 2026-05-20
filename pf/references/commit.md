@@ -1,6 +1,6 @@
 # Commit Message Format
 
-After each session, show the user a recommended commit message:
+After each session, show user recommended commit message:
 
 ```
 <type>(pf): <short description>
@@ -12,7 +12,7 @@ How: <what method or approach was applied>
 
 `<type>`: `feat` (new design/impl/review/docs), `refact` (refactoring plan), `fix` (correction to existing content).
 
-The subject line should name the specific artifact produced, e.g.:
+Subject line should name specific artifact produced, e.g.:
 
 ```
 feat(pf): add design 0001 auth-flow
