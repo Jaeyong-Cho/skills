@@ -19,9 +19,12 @@ Good diagram candidates for any discussion:
 - Decision tree / branching paths taken
 - Before / after comparison (two-column layout or flow)
 - Timeline of decisions or steps
-- Relationship map between concepts
 - Trade-off matrix (axes: effort vs. impact, risk vs. value, etc.)
-- Flow diagram of a process or architecture
+
+Include these when the topic involves them:
+- **Algorithm** — step-by-step flow of a process or computation; use a flowchart or pseudocode-annotated diagram
+- **Interactions** — who calls what, in what order; use a sequence diagram (boxes + arrows, left to right or top to bottom)
+- **Relationships** — how concepts, components, or entities relate; use a node-edge graph or entity map
 
 Other elements to draw from (use what fits):
 - Narrative prose for context or reasoning
