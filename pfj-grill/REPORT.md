@@ -52,6 +52,12 @@ Read [`kanagawa.css`](kanagawa.css) and embed its full contents verbatim inside 
 
 ---
 
+## Writing Style
+
+Write all report content in caveman style — follow rules in `../caveman/SKILL.md`.
+
+---
+
 ## Generation Rules
 
 - **Do not hallucinate** content not in the discussion. Every Q&A entry must come from the actual session.
