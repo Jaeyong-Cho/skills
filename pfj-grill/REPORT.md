@@ -30,9 +30,7 @@ Elements to draw from (use what fits, skip what doesn't):
 
 ## Styling Guidelines
 
-**Theme**: Kanagawa Wave dark. Use a clean sans-serif (system-ui). Code/commands in monospace (`'JetBrains Mono', 'Fira Code', monospace`).
-
-Read [`kanagawa.css`](kanagawa.css) and embed its full contents verbatim inside the report's `<style>` tag. The file contains the complete `:root` variable block and semantic mapping comments.
+Read [`kanagawa.css`](kanagawa.css) and embed its full contents verbatim inside the report's `<style>` tag.
 
 **Layout**: max-width 900px, centered. Sections separated by subtle `<hr>`.
 
