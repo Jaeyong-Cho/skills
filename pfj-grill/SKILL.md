@@ -1,49 +1,77 @@
 ---
 name: pfj-grill
 description: |
-  Grill the user about any concern, plan, or decision using today.md as context — then record the outcome in the journal.
-  Use whenever the user wants to think something through, resolve a concern, make a decision, plan next steps, or get unstuck. The grilling surfaces the user's own reasoning and ends with a recorded conclusion.
-  Triggers: "pfj-grill", "grill me about", "I want to think through", "help me decide", "I'm concerned about", "what should I do about", "I'm stuck on", "let's figure out", or any request to reason through a problem and record the result in the journal.
+  Grill the user about any concern, plan, or decision using today.md as context — ends with a rich standalone HTML report and a journal entry.
+  No limit on questions. Use whenever the user wants to think something through, resolve a concern, make a decision, plan next steps, or get unstuck.
+  Triggers: "pfj-grill", "grill me about", "I want to think through", "help me decide", "I'm concerned about", "what should I do about", "I'm stuck on", "let's figure out", "pfj-discuss", "discuss", "deep dive on", or any request to reason through a problem and record the result.
 ---
 
 # pfj-grill
 
-Think something through with the user. Grill until conclusion. Record in today.md.
+Grill the user without limit using today.md as context. Generate a rich standalone HTML report and append a journal entry at the end.
 
 ## Step 1: Load context
 
-Read `today.md` in full — the `## Goals` section shows today's plan, the journal shows what has happened.
+```bash
+cat $PFJ_PATH/today.md
+```
 
-Pull in other files (wiki, goals, weekly/monthly goal files) only as the conversation requires. Do not preload everything.
+Extract the discussion topic from the user's args. If unclear, ask once before proceeding.
 
-## Step 2: Grill
+Pull additional files (wiki, goals) only as the conversation requires.
 
-Ask questions one at a time using the `AskUserQuestion` tool. No maximum. For each question, provide your recommended answer so the user can react rather than invent from scratch.
+## Step 2: Grill — no limit
 
-Walk every branch until the concern is resolved, a plan is formed, or a decision is made. Keep going until there is nothing left to resolve.
+Ask questions one at a time using `AskUserQuestion`. For each question:
+- Provide your recommended answer so the user can react rather than invent from scratch
+- Walk every branch of the decision tree
+- Surface assumptions, risks, and alternatives
+- Resolve dependencies between decisions before moving on
 
-If the user says "wrap up", skip remaining branches and move to Step 3.
+Track internally as you go:
+- Every question and the user's answer
+- Branches explored vs. explicitly skipped
+- Conclusions reached at each branch
+- Action items that surface
+- Key tensions or trade-offs named
 
-## Step 3: Detect conclusion
+Keep going until every branch is resolved, or the user says **"wrap up"** to skip remaining branches.
 
-When a natural conclusion appears — decision reached, plan formed, concern resolved — propose using the `AskUserQuestion` tool:
+## Step 3: Confirm report
 
-> "Think we've reached a conclusion. Record this in today.md?"
+When the discussion reaches a natural end, ask via `AskUserQuestion`:
+> "Ready to generate the HTML report?"
 
-Wait for confirmation before writing anything.
+Wait for confirmation.
 
-## Step 4: Append to today.md
+## Step 4: Generate the HTML report
 
-Append at the bottom of `today.md`:
+See [REPORT.md](REPORT.md) for structure and styling spec.
+
+Derive the topic slug: lowercase, hyphens, max 40 chars (e.g. `api-auth-strategy`).
+Compute the save path:
+```
+$PFJ_PATH/discuss/YYYY/MM-DD-<topic-slug>.html
+```
+
+Create parent directories if needed:
+```bash
+mkdir -p $PFJ_PATH/discuss/YYYY
+```
+
+Write the file, then print the path so the user can open it:
+```
+Report saved: /path/to/discuss/YYYY/MM-DD-topic-slug.html
+```
+
+## Step 5: Append to today.md
 
 ```markdown
 ## HH:MM:SS (grill)
 
 **Topic**: one-line description of what was discussed
 
-Brief reasoning chain — key points that led to the outcome. Enough context for future-you to understand why, not a full transcript.
-
-**Outcome**: decisions made / plan formed / concerns resolved / open questions remaining
+**Outcome**: key decisions / conclusions reached
 
 **Steps**: (omit if no concrete steps surfaced)
 1. Step one
@@ -51,13 +79,15 @@ Brief reasoning chain — key points that led to the outcome. Enough context for
    ```bash
    exact command here
    ```
+
+**Report**: $PFJ_PATH/discuss/YYYY/MM-DD-topic-slug.html
 ```
 
 Use 24h time. Keep it tight — this is a journal entry, not a report.
 
-**Detail rule**: if the discussion produced specific commands, code snippets, config values, or ordered steps — write them verbatim under **Steps**. Do not summarize or paraphrase concrete technical details. A future reader must be able to execute without re-researching.
+**Detail rule**: if the discussion produced specific commands, code snippets, config values, or ordered steps — write them verbatim under **Steps**. Do not summarize or paraphrase concrete technical details.
 
-## Step 5: Update Goals (if tasks identified)
+## Step 6: Update Goals (if tasks identified)
 
 If the discussion produced concrete tasks, add them to the `## Goals` section at the top of `today.md`:
 
@@ -66,10 +96,10 @@ If the discussion produced concrete tasks, add them to the `## Goals` section at
 - Format: `- [ ] Task *(Priority)* *(ai: how AI helps)* — rationale *(→ Weekly: deliverable)*`
 - Place in correct topic section at correct priority position
 
-**Skills**: When filling `*(ai: ...)*`, consider which skill best fits the task. Check available skills:
+**Skills**: When filling `*(ai: ...)*`, check available skills:
 
 ```bash
 ls ~/.claude/skills/
 ```
 
-Reference the skill by name in the ai field — e.g. `*(ai: /pf-proto - protoryping and poc)*`, `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`, `*(ai: /pfj-grill — think through this concern)*`. If no skill fits, describe how AI helps instead.
+Reference the skill by name in the ai field — e.g. `*(ai: /pf-proto — prototyping and poc)*`, `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`. If no skill fits, describe how AI helps instead.

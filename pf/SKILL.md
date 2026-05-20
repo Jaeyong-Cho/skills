@@ -48,7 +48,7 @@ If it does **not** exist: use the `pf-init` skill to initialize the book first, 
 
 ## Write an ADR
 
-Read `references/deep-modules.md`, `references/aop.md`, and `references/adr.md`. Run the `grill-me` skill. If the user provided a scenario, use it as starting context. If coming from `pf-proto`, read the PoC document first and use its findings as starting context instead.
+Read `references/deep-modules.md`, `references/aop.md`, `references/adr.md`, and `references/views.md`. Run the `grill-me` skill. If the user provided a scenario, use it as starting context. If coming from `pf-proto`, read the PoC document first and use its findings as starting context instead.
 
 When referencing existing source code, always cite the exact `file:line` so the user can navigate directly to it.
 

@@ -33,6 +33,8 @@ VAO shape derived from the prototype findings:
 
 **Object** — which stable objects emerged? what do they own (properties, behaviors)?
 
+**Views** — whichever views illuminate the findings for the stakeholders who will act on this PoC. See `../pf/references/views.md` for guidance on which to choose. Omit if the VAO shape above already makes everything clear.
+
 ## User feedback
 
 What the user observed while running the prototype — reactions, surprises, corrections, and things that felt wrong. Captured directly from the user, not inferred.

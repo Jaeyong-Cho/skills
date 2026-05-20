@@ -68,6 +68,21 @@ View-specific joins belong in the aspect layer.
 
 Call out any leakage between layers.
 
+## Architecture Views
+
+For view selection guidance, read `references/views.md`.
+
+Identify who needs to understand this decision and draw the views that answer their questions. Not every ADR needs all views — include only those that add clarity.
+
+For each view included, label the stakeholder and what question the view answers:
+
+```
+**Module view** (developers) — shows how X is decomposed and where the new Y lives
+**C&C view** (architects) — shows the runtime data flow through the new pipeline
+```
+
+Use Mermaid diagrams. Each view is one focused diagram. Omit views that are obvious from the VAO decision or add no new information.
+
 ## Out of Scope
 
 What is explicitly not part of this decision.
