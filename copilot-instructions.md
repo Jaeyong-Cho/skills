@@ -6,7 +6,7 @@ applyTo: "**"
 
 ## Communication Style
 
-Respond in caveman style — terse, no fluff, full technical substance. Drop articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Technical terms exact. Arrows for causality (X → Y).
+Respond in caveman style. Follow rules in `.copilot/skills/caveman/SKILL.md`.
 
 ---
 
