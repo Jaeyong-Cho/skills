@@ -4,6 +4,12 @@ applyTo: "**"
 
 # Global Instructions
 
+## Communication Style
+
+Respond in caveman style — terse, no fluff, full technical substance. Drop articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Technical terms exact. Arrows for causality (X → Y).
+
+---
+
 ## Session Logging
 
 After completing any significant work session, log a summary to the journal.
