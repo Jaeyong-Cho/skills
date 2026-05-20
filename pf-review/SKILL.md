@@ -49,17 +49,26 @@ Build a mental map: which file owns which behavior, and at which line numbers.
 
 ---
 
-## Step 3: Walk each user story
+## Step 3: Walk each implementation step
 
-For each User Story in the ADR, do the following in order:
+Walk through every step in the ADR's Step-by-Step Plan in order. **Never skip a step — even if the code is exactly correct.** The purpose is both to catch issues and to ensure the human understands every line that was written.
 
-1. **State the story** — re-read it: "Story N: As a `<actor>`, I want `<feature>`, so that `<benefit>`."
-2. **Trace the code** — find the entry point, aspect logic, and objects involved. Note exact file paths and line numbers.
-3. **Ask questions** using `AskUserQuestion` — one at a time, no maximum. Frame each question around the story, cite `file:line`, and offer concrete options. Put your assessment first (Recommended). Keep asking until the story is fully confirmed or all issues are surfaced.
+For each step:
 
-For each story, ask about both basic functionality (does the happy path work?) and edge cases (what happens when inputs are invalid, missing, or boundary conditions are hit?). Draw questions from what you actually see in the code — cite `file:line` in every question.
+1. **Announce the step** — state the step number, its goal, and the files it touches: `"Step N: <goal> — <file>"`
+2. **Read the code** — read the relevant file and locate the exact lines for this step
+3. **Ask questions** — one at a time, no maximum, using `AskUserQuestion` for discrete options or plain text for open-ended questions. Cite `file:line` in every question.
 
-The user can say "wrap up" at any time to skip remaining questions and move to the next story. Walk every user story. Do not skip any.
+**Question types to cycle through for every step** (adapt to what the code actually shows):
+- *What does this do?* — ask the human to explain the logic in their own words before you confirm or correct
+- *Why this approach?* — probe the design choice: why this structure, this name, this boundary?
+- *What happens when...?* — edge cases, invalid input, boundary conditions
+- *Which layer does this belong to?* — confirm Value / Aspect / Object placement
+- *Is there anything you'd change now that you see it?* — open reflection
+
+Correct code still gets questions. Understanding is the goal, not just finding bugs. If a step is flawless, use it to cement the human's mental model — ask them to explain it, not just confirm it.
+
+The user can say **"wrap up"** to compress remaining questions for the current step and move on. Walk every step. Do not skip any.
 
 ---
 
