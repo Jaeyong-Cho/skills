@@ -96,15 +96,25 @@ mkdir -p $PFJ_PATH/review/YYYY
 
 **Write all report content in caveman style** — follow rules in `../caveman/SKILL.md`.
 
-**Always include Timeline** — horizontal or vertical arc of day. Each entry: time + short title (3–7 words). No descriptions in timeline. Derive from `## HH:MM:SS (label)` markers or freeform text.
+All diagrams: inline `<canvas>` or pure CSS/SVG — no libraries. Each focused on one context.
 
-Optional diagrams:
-- **Relationships** — today's work → ongoing goals/projects
-- **Algorithm/flow** — if process/system designed or debugged
+**Always include:**
+- **Timeline** — horizontal or vertical arc of day. Each entry: time + short title (3–7 words). No descriptions. Derive from `## HH:MM:SS (label)` markers or freeform text.
+- **Task Progress** visual — progress bar or donut chart per topic group.
+
+**Include when content warrants:**
+- **Goal relationship map** — today's tasks → weekly → monthly → yearly goals. Node-edge or tree.
+- **Focus heatmap** — time spent per topic/domain. Bar or area chart from session durations.
+- **Decision tree** — if decisions or trade-offs were made today. Branches + outcomes.
+- **Algorithm/flow** — if process or system was designed or debugged. Flowchart or sequence diagram.
+- **Before/after** — if refactor or migration happened. Two-column or side-by-side.
+- **Knowledge graph** — if multiple wiki entries written. Show how concepts connect.
+
+Default when day is light: Timeline + Task Progress only. Add others when today's journal gives enough material.
 
 Required sections:
 - Header — date + one-line day summary
-- **Task Progress** — `- [x]` vs `- [ ]` from `## Goals`; progress bar or donut per topic
+- **Task Progress** — `- [x]` vs `- [ ]` from `## Goals`; use diagram from above
 - **Accomplished** — highlights, not transcript
 - **Knowledge extracted** — wiki entries written today (file paths)
 - **Reflections** — work habits, decisions, mistakes, mental shifts
