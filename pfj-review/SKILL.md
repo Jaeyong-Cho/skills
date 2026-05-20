@@ -97,9 +97,12 @@ Save to: `$PFJ_PATH/review/YYYY/MM-DD.html`
 mkdir -p $PFJ_PATH/review/YYYY
 ```
 
-**Report is free-form** — design it around what today actually contained. Always include at least one diagram. Good candidates:
+**Report is free-form** — design it around what today actually contained.
 
-- **Timeline** — visual arc of the day's activities in chronological order (always useful)
+**Always include the Timeline diagram** — a horizontal or vertical visual arc of the day's activities in chronological order. Each entry shows only a short brief title (3–7 words max), derived from the `## HH:MM:SS (label)` markers or freeform text. No descriptions in the timeline itself — just time + title.
+
+Additional optional diagrams:
+
 - **Relationships** — how today's work connected to ongoing goals or projects
 - **Algorithm / flow** — if a process or system was designed or debugged today
 
