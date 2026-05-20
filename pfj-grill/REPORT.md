@@ -20,7 +20,7 @@ Elements to draw from (use what fits, skip what doesn't):
 - Tables — when comparing options or trade-offs
 - Timeline / steps — when sequence matters
 - Action items with JS checkboxes — when concrete next steps surfaced
-- Diagrams (ASCII or canvas) — when spatial relationships help
+- Diagrams — when spatial relationships help
 - Callout boxes — for key decisions, warnings, or open questions
 - Code blocks — for commands, snippets, config verbatim from the discussion
 
