@@ -37,7 +37,7 @@ Track internally as you go:
 - Action items that surface
 - Key tensions or trade-offs named
 
-Keep going until every branch is resolved, or the user says **"wrap up"** to skip remaining branches.
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some topics need three questions, some need fifty. The user can stop at any time or say **"wrap up"** to skip remaining branches and move on.
 
 ## Step 3: Confirm report
 
