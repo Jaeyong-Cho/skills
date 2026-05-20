@@ -49,26 +49,46 @@ Build a mental map: which file owns which behavior, and at which line numbers.
 
 ---
 
-## Step 3: Walk each implementation step
+## Step 3: Trace the execution flow — entry point to end
 
-Walk through every step in the ADR's Step-by-Step Plan in order. **Never skip a step — even if the code is exactly correct.** The purpose is both to catch issues and to ensure the human understands every line that was written.
+Follow the actual runtime path of the code, not the ADR's writing order. Start at the entry point (the first thing that runs when a user triggers the feature) and trace every hop until the response or side effect is complete.
 
-For each step:
+**Never skip a point in the trace — even if the code is exactly correct.** The purpose is both to catch issues and to build the human's understanding of their own code.
 
-1. **Announce the step** — state the step number, its goal, and the files it touches: `"Step N: <goal> — <file>"`
-2. **Read the code** — read the relevant file and locate the exact lines for this step
-3. **Ask questions** — one at a time, no maximum, using `AskUserQuestion` for discrete options or plain text for open-ended questions. Cite `file:line` in every question.
+### 3a. Map the trace first
 
-**Question types to cycle through for every step** (adapt to what the code actually shows):
-- *What does this do?* — ask the human to explain the logic in their own words before you confirm or correct
-- *Why this approach?* — probe the design choice: why this structure, this name, this boundary?
-- *What happens when...?* — edge cases, invalid input, boundary conditions
-- *Which layer does this belong to?* — confirm Value / Aspect / Object placement
-- *Is there anything you'd change now that you see it?* — open reflection
+Before asking anything, read all implementation files and map the full execution path:
 
-Correct code still gets questions. Understanding is the goal, not just finding bugs. If a step is flawless, use it to cement the human's mental model — ask them to explain it, not just confirm it.
+```
+Entry point (file:line)
+  → Aspect 1 (file:line)
+  → Aspect 2 (file:line)
+  → Object method (file:line)
+  → ...
+  → Response / side effect (file:line)
+```
 
-The user can say **"wrap up"** to compress remaining questions for the current step and move on. Walk every step. Do not skip any.
+Print this map so the human can see the full journey before you begin.
+
+### 3b. Walk each hop
+
+For each hop in the trace, in execution order:
+
+1. **Announce the hop** — `"Now at: file:line — <what this hop does>"`
+2. **Read the exact lines** — quote the relevant code snippet
+3. **Ask questions** — one at a time, no maximum. Use `AskUserQuestion` for discrete options, plain text for open-ended. Cite `file:line` in every question.
+
+**Question types to draw from at each hop** (use what fits):
+- *Explain it* — ask the human to describe what this code does in their own words, before you confirm or correct
+- *Why here?* — why does this logic live at this hop, in this layer?
+- *What comes in / what goes out?* — inputs, outputs, side effects at this exact point
+- *What happens when...?* — edge cases, invalid input, null, empty, concurrent access
+- *Layer check* — is this Value, Aspect, or Object code? Does it belong here?
+- *Anything you'd change?* — open reflection after seeing it in context
+
+Correct code still gets questions. If a hop is flawless, use it to cement understanding — ask the human to explain it rather than just confirm it.
+
+The user can say **"wrap up"** to compress remaining questions for the current hop and move to the next. Walk every hop. Do not skip any.
 
 ---
 
