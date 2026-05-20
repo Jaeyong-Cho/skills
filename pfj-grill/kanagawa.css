@@ -1,0 +1,76 @@
+:root {
+  /* Backgrounds */
+  --sumi-0: #16161D;
+  --sumi-1: #181820;
+  --sumi-2: #1a1a22;
+  --sumi-3: #1F1F28;
+  --sumi-4: #2A2A37;
+  --sumi-5: #363646;
+  --sumi-6: #54546D;
+
+  /* Popups / floats */
+  --wave-blue-1: #223249;
+  --wave-blue-2: #2D4F67;
+
+  /* Diff / git */
+  --winter-green:  #2B3328;
+  --winter-yellow: #49443C;
+  --winter-red:    #43242B;
+  --winter-blue:   #252535;
+  --autumn-green:  #76946A;
+  --autumn-red:    #C34043;
+  --autumn-yellow: #DCA561;
+
+  /* Diagnostics */
+  --samurai-red:  #E82424;
+  --ronin-yellow: #FF9E3B;
+  --wave-aqua-1:  #6A9589;
+  --dragon-blue:  #658594;
+
+  /* Foreground / text */
+  --old-white:  #C8C093;
+  --fuji-white: #DCD7BA;
+  --fuji-gray:  #727169;
+
+  /* Accents */
+  --oni-violet:      #957FB8;
+  --oni-violet-2:    #b8b4d0;
+  --crystal-blue:    #7E9CD8;
+  --spring-violet-1: #938AA9;
+  --spring-violet-2: #9CABCA;
+  --spring-blue:     #7FB4CA;
+  --wave-aqua-2:     #7AA89F;
+  --spring-green:    #98BB6C;
+  --boat-yellow-1:   #938056;
+  --boat-yellow-2:   #C0A36E;
+  --carp-yellow:     #E6C384;
+  --sakura-pink:     #D27E99;
+  --wave-red:        #E46876;
+  --peach-red:       #FF5D62;
+  --surimi-orange:   #FFA066;
+  --katana-gray:     #717C7C;
+}
+
+/*
+  Semantic mappings — reference these when building report styles:
+
+  Page background        → var(--sumi-3)
+  Deeper bg / code       → var(--sumi-0)
+  Card / panel           → var(--sumi-4)
+  Border / separator     → var(--sumi-5)
+  Muted / disabled text  → var(--sumi-6)
+  Body text              → var(--fuji-white)
+  Secondary text         → var(--old-white)
+  Comments / footnotes   → var(--fuji-gray)
+  Primary accent         → var(--crystal-blue)
+  Success / taken branch → var(--spring-green)
+  Warning / open branch  → var(--carp-yellow)
+  Emphasis / hot path    → var(--ronin-yellow)
+  Error / blocked        → var(--autumn-red)
+  Secondary accent       → var(--oni-violet)
+  Info / teal            → var(--wave-aqua-2)
+  Q label "Claude"       → var(--crystal-blue)
+  A label "You"          → var(--wave-aqua-2)
+  Diff added             → var(--winter-green) bg + var(--autumn-green) text
+  Diff removed           → var(--winter-red) bg + var(--autumn-red) text
+*/

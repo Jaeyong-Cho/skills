@@ -32,94 +32,17 @@ Elements to draw from (use what fits, skip what doesn't):
 
 **Theme**: Kanagawa Wave dark. Use a clean sans-serif (system-ui). Code/commands in monospace (`'JetBrains Mono', 'Fira Code', monospace`).
 
-Embed this CSS variables block verbatim inside every report's `<style>` tag:
+Read [`kanagawa.css`](kanagawa.css) and embed its full contents verbatim inside the report's `<style>` tag. The file contains the complete `:root` variable block and semantic mapping comments.
 
-```css
-:root {
-  /* Backgrounds */
-  --sumi-0: #16161D;
-  --sumi-1: #181820;
-  --sumi-2: #1a1a22;
-  --sumi-3: #1F1F28;
-  --sumi-4: #2A2A37;
-  --sumi-5: #363646;
-  --sumi-6: #54546D;
+**Layout**: max-width 900px, centered. Sections separated by subtle `<hr>`.
 
-  /* Popups / floats */
-  --wave-blue-1: #223249;
-  --wave-blue-2: #2D4F67;
+**Charts / Diagrams**: Use inline `<canvas>` with vanilla JS (no libraries). Only add if the data warrants it.
 
-  /* Diff / git */
-  --winter-green:  #2B3328;
-  --winter-yellow: #49443C;
-  --winter-red:    #43242B;
-  --winter-blue:   #252535;
-  --autumn-green:  #76946A;
-  --autumn-red:    #C34043;
-  --autumn-yellow: #DCA561;
-
-  /* Diagnostics */
-  --samurai-red:  #E82424;
-  --ronin-yellow: #FF9E3B;
-  --wave-aqua-1:  #6A9589;
-  --dragon-blue:  #658594;
-
-  /* Foreground / text */
-  --old-white:  #C8C093;
-  --fuji-white: #DCD7BA;
-  --fuji-gray:  #727169;
-
-  /* Accents */
-  --oni-violet:     #957FB8;
-  --oni-violet-2:   #b8b4d0;
-  --crystal-blue:   #7E9CD8;
-  --spring-violet-1:#938AA9;
-  --spring-violet-2:#9CABCA;
-  --spring-blue:    #7FB4CA;
-  --wave-aqua-2:    #7AA89F;
-  --spring-green:   #98BB6C;
-  --boat-yellow-1:  #938056;
-  --boat-yellow-2:  #C0A36E;
-  --carp-yellow:    #E6C384;
-  --sakura-pink:    #D27E99;
-  --wave-red:       #E46876;
-  --peach-red:      #FF5D62;
-  --surimi-orange:  #FFA066;
-  --katana-gray:    #717C7C;
-}
-```
-
-**Apply these semantic mappings:**
-- Page background → `--sumi-3`
-- Deeper bg (code blocks, inset panels) → `--sumi-0`
-- Card / panel background → `--sumi-4`
-- Border / separator → `--sumi-5`
-- Muted / disabled text → `--sumi-6`
-- Body text → `--fuji-white`
-- Secondary text → `--old-white`
-- Comments / footnotes → `--fuji-gray`
-- Primary accent (links, headings) → `--crystal-blue`
-- Success / taken branch → `--spring-green`
-- Warning / open branch → `--carp-yellow`
-- Emphasis / hot path → `--ronin-yellow`
-- Error / blocked → `--autumn-red`
-- Secondary accent → `--oni-violet`
-- Info / teal → `--wave-aqua-2`
-- Q label "Claude" → `--crystal-blue`
-- A label "You" → `--wave-aqua-2`
-- Action items (checked) → strikethrough, color fades to `--fuji-gray`
-- Diff added → `--winter-green` bg + `--autumn-green` text
-- Diff removed → `--winter-red` bg + `--autumn-red` text
-
-**Layout**: max-width 900px, centered. Stats cards in a 4-column flex row. Sections separated by subtle `<hr>`.
-
-**Charts / Diagrams**: Use inline `<canvas>` with vanilla JS (no libraries) for any statistics charts. Keep them optional — only add if the data warrants it (e.g. >10 questions, multiple branches). Bar charts showing question counts per topic cluster are always welcome.
-
-**Interactivity**:
-- Collapsible decision tree nodes
+**Interactivity** (use what fits the content):
+- Collapsible tree nodes
 - Checkable action items
-- Smooth scroll to section via a sticky nav bar at the top
-- "Copy to clipboard" button on the conclusions section
+- Smooth scroll via sticky nav
+- Copy-to-clipboard on key sections
 
 ---
 
