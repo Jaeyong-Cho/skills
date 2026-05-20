@@ -100,7 +100,7 @@ All diagrams: inline `<canvas>` or pure CSS/SVG — no libraries. Each focused o
 
 **Always include:**
 - **Timeline** — horizontal or vertical arc of day. Each entry: time + short title (3–7 words). No descriptions. Derive from `## HH:MM:SS (label)` markers or freeform text.
-- **Task Progress** — progress bar per topic group.
+- **Task Progress** visual — progress bar or donut chart per topic group.
 
 **Include when content warrants:**
 - **Goal relationship map** — today's tasks → weekly → monthly → yearly goals. Node-edge or tree.
@@ -114,7 +114,7 @@ Default when day is light: Timeline + Task Progress only. Add others when today'
 
 Required sections:
 - Header — date + one-line day summary
-- **Task Progress** — `- [x]` vs `- [ ]` from `## Goals`; progress bar per topic
+- **Task Progress** — `- [x]` vs `- [ ]` from `## Goals`; use diagram from above
 - **Accomplished** — highlights, not transcript
 - **Knowledge extracted** — wiki entries written today (file paths)
 - **Reflections** — work habits, decisions, mistakes, mental shifts
