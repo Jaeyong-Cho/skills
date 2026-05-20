@@ -1,58 +1,56 @@
 ---
 name: pfj-review
 description: |
-  End-of-day review for the POFE knowledge base. Reads today.md, extracts wiki and experience entries worth keeping, and recommends what to work on next. The human writes their own todo list.
+  End-of-day review for POFE knowledge base. Reads today.md, extracts wiki entries, recommends next tasks. Human writes own todo list.
   Triggers: "end of day", "daily review", "review today", "pfj review", "wrap up today", "end of work", or any request to summarize today's journal.
 ---
 
 # pfj-review: End-of-Day Review
 
-Read today's journal, extract knowledge worth keeping, and surface recommendations — the human decides what to do with them.
+Read journal. Extract knowledge. Surface next steps. Human decides.
 
 ---
 
 ## Source of Truth
 
-Human-written journal text is always correct. Labeled sections (`## HH:MM:SS (skill-name)`) are AI-generated summaries — accurate but not ground truth.
-
-- **Human-written**: `## HH:MM:SS` with no label, or freeform text below `<!-- Write freely below -->` — treat as ground truth.
-- **AI-written**: `## HH:MM:SS (label)` — trust for facts and outcomes, not for personal voice or reflection.
+- **Human-written**: `## HH:MM:SS` no label, or freeform below `<!-- Write freely below -->` → ground truth.
+- **AI-written**: `## HH:MM:SS (label)` → trust facts/outcomes, not voice/reflection.
 
 ---
 
-## Step 1: Load today's files
+## Step 1: Load files
 
-1. Find `today.md`. If missing, stop and tell the user.
-2. Read the full journal.
-3. Load N most recent archived journals from `Journal/` for context (default N=3).
-
----
-
-## Step 2: Load related wiki entries
-
-Infer key topics from today's journal. Scan the first 3 lines of each file in `wiki/` to find the tag line. Fully read only the files whose tags overlap with today's topics.
+1. Find `today.md`. Missing → stop, tell user.
+2. Read full journal.
+3. Load 3 most recent `Journal/` archives for context.
 
 ---
 
-## Step 3: Extract and save wiki entries
+## Step 2: Load wiki
 
-Identify technical knowledge worth preserving — good candidates:
+Infer topics from journal. Scan first 3 lines of each `wiki/` file for tag line. Read only files with matching tags.
 
-- A technique, pattern, or approach that solved a non-obvious problem
-- A tool, library, or API insight that took real effort to figure out
-- A design decision and the reasoning behind it
-- A research finding, mental model, or concept that clarified something
-- A recurring workflow or setup step worth referencing again
+---
 
-Skip obvious or ephemeral things. Update existing entries rather than creating duplicates.
+## Step 3: Extract wiki entries
 
-**Wiki entry format** (`wiki/<slug>.md`):
+Save knowledge worth keeping:
+
+- Non-obvious technique/pattern that solved problem
+- Tool/lib/API insight that took effort
+- Design decision + reasoning
+- Research finding or mental model
+- Recurring workflow worth referencing
+
+Skip obvious/ephemeral. Update existing, no duplicates.
+
+**Format** (`wiki/<slug>.md`):
 ```markdown
 # Title
 
 #tag1 #tag2 #tag3
 
-Clear explanation for your future self.
+Clear explanation for future self.
 
 ## Details
 
@@ -62,74 +60,69 @@ Code snippets, diagrams, examples.
 *First noted: YYYY-MM-DD*
 ```
 
-If a loaded wiki entry conflicts with the journal, correct the wiki entry and note `*Updated: YYYY-MM-DD — reason*`.
+Wiki conflicts journal → fix wiki, add `*Updated: YYYY-MM-DD — reason*`.
 
 ---
 
 ## Step 4: Update SUMMARY.md
 
-Add new wiki entries under Wiki (alphabetically).
+Add new wiki entries under Wiki section (alphabetical).
 
 ---
 
 ## Step 5: Recommend next tasks
 
-Based on what was done today, what's incomplete, and what open questions remain — output a short recommended plan. Do not write it anywhere. The human will write their own todo list.
+Output only. Human writes their own list.
 
-Format:
 ```
 ## Recommended next
-- <task> — <why: what it unblocks or advances>
+- <task> — <why: what it unblocks>
 - <task> — <why>
 ```
 
-Keep it short. Surface the highest-value next steps only.
+High-value only. Keep short.
 
 ---
 
-## Step 6: Generate the daily review HTML report
+## Step 6: HTML report
 
-Read `../pfj-grill/kanagawa.css` and embed its full contents verbatim inside the report's `<style>` tag.
+Read `../pfj-grill/kanagawa.css`. Embed verbatim in `<style>` tag.
 
-Save to: `$PFJ_PATH/review/YYYY/MM-DD.html`
+Save: `$PFJ_PATH/review/YYYY/MM-DD.html`
 
 ```bash
 mkdir -p $PFJ_PATH/review/YYYY
 ```
 
-**Report is free-form** — design it around what today actually contained.
+**Always include Timeline** — horizontal or vertical arc of day. Each entry: time + short title (3–7 words). No descriptions in timeline. Derive from `## HH:MM:SS (label)` markers or freeform text.
 
-**Always include the Timeline diagram** — a horizontal or vertical visual arc of the day's activities in chronological order. Each entry shows only a short brief title (3–7 words max), derived from the `## HH:MM:SS (label)` markers or freeform text. No descriptions in the timeline itself — just time + title.
+Optional diagrams:
+- **Relationships** — today's work → ongoing goals/projects
+- **Algorithm/flow** — if process/system designed or debugged
 
-Additional optional diagrams:
-
-- **Relationships** — how today's work connected to ongoing goals or projects
-- **Algorithm / flow** — if a process or system was designed or debugged today
-
-Required sections (adapt layout freely):
-- Header — date, one-sentence summary of the day
-- **Task Progress** — goals from today's `## Goals` section: completed (`- [x]`) vs incomplete (`- [ ]`); include a visual (progress bar or donut chart) per topic group
-- **What was accomplished** — highlights from the journal, not a transcript
-- **Knowledge extracted** — wiki entries written today (link to file paths)
-- **Reflections** — personal experience insights: work habits, decision patterns, mistakes understood, mental shifts; written directly here
-- **Retrospective** — honest look at the day: what went well, what didn't, what to do differently tomorrow
-- **Recommended next** — the output from Step 5
-- **Archive** — where today.md was saved (`Journal/YYYY/MM-DD.md`), link if possible
+Required sections:
+- Header — date + one-line day summary
+- **Task Progress** — `- [x]` vs `- [ ]` from `## Goals`; progress bar or donut per topic
+- **Accomplished** — highlights, not transcript
+- **Knowledge extracted** — wiki entries written today (file paths)
+- **Reflections** — work habits, decisions, mistakes, mental shifts
+- **Retrospective** — what went well, what didn't, change tomorrow
+- **Recommended next** — Step 5 output
+- **Archive** — path to `Journal/YYYY/MM-DD.md`
 - Footer — `Generated by pfj-review · date`
 
-Print the path after saving:
 ```
 Review saved: $PFJ_PATH/review/YYYY/MM-DD.html
 ```
 
 ---
 
-## Step 7: Show the commit message
+## Step 7: Show commit message
 
-Do **not** commit — just show:
+Don't commit. Just show:
 
 ```
-pfj: YYYY-MM-DD — <one-line summary of today's main work>
+pfj: YYYY-MM-DD — <one-line summary>
 
 - wiki/slug.md (new/updated)
 - review/YYYY/MM-DD.html (generated)
@@ -139,19 +132,17 @@ pfj: YYYY-MM-DD — <one-line summary of today's main work>
 
 ## Step 8: Archive today.md
 
-Read the date from the `<!-- today: YYYY-MM-DD -->` marker at the top of `today.md`.
+Read date from `<!-- today: YYYY-MM-DD -->`.
 
-Copy the full content of `today.md` to `Journal/YYYY/MM-DD.md` (e.g. `Journal/2026/05-19.md`). Create the year directory if it doesn't exist. Do not modify the archived file — it is an exact copy.
+Copy `today.md` → `Journal/YYYY/MM-DD.md`. Create year dir if needed. Exact copy, no edits.
 
 ---
 
-## Step 9: Reset today.md for tomorrow
+## Step 9: Reset today.md
 
-Compute tomorrow's date (today's date + 1 day). Determine the correct weekly goal file path for tomorrow (`goals/YYYY/goal-MM-WNN.md`).
+Compute tomorrow (today + 1). Find weekly goal path for tomorrow (`goals/YYYY/goal-MM-WNN.md`).
 
-Extract incomplete tasks from today's `today.md` — read the `## Goals` section and keep only unchecked `- [ ]` lines with their sub-tasks. Drop any `- [x]` or dropped tasks.
-
-Write a fresh `today.md` with the date set to tomorrow:
+Carry over only `- [ ]` tasks from `## Goals`. Drop `- [x]` and dropped.
 
 ```markdown
 <!-- today: YYYY-MM-DD -->
@@ -161,7 +152,7 @@ Write a fresh `today.md` with the date set to tomorrow:
 > [Weekly](goals/YYYY/goal-MM-WNN.md) · [Monthly](goals/YYYY/goal-MM.md)
 
 ### (Topic)
-- [ ] ... (carry over incomplete tasks from today's Goals section, preserving topic sections and priority order)
+- [ ] ... (incomplete tasks, preserve sections + priority order)
 
 ## Adjustment Log
 
@@ -171,8 +162,8 @@ Write a fresh `today.md` with the date set to tomorrow:
 ```
 
 Rules:
-- Carry over only incomplete (`- [ ]`) tasks from today's `today.md` Goals section — not done (`- [x]`) or dropped tasks.
-- Preserve topic sections (`###`) and priority order.
-- Include sub-tasks under their parent.
-- If tomorrow crosses into a new week, update the weekly goal link to the new week's file.
-- Do **not** carry over the Adjustment Log or any freeform journal text from today.
+- `- [ ]` only → no done/dropped.
+- Keep `###` sections + priority order.
+- Sub-tasks under parent.
+- New week → update weekly link.
+- No Adjustment Log or freeform text carry-over.
