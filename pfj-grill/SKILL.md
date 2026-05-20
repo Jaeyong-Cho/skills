@@ -22,11 +22,13 @@ Pull additional files (wiki, goals) only as the conversation requires.
 
 ## Step 2: Grill — no limit
 
-Ask questions one at a time using `AskUserQuestion`. For each question:
-- Provide your recommended answer so the user can react rather than invent from scratch
-- Walk every branch of the decision tree
-- Surface assumptions, risks, and alternatives
-- Resolve dependencies between decisions before moving on
+Ask questions one at a time. For each question, provide your recommended answer so the user can react rather than invent from scratch.
+
+- When a question has clear discrete options → use `AskUserQuestion`, recommended option first marked "(Recommended)"
+- When a question is open-ended with no clear options → ask in plain text
+- When a question can be answered by exploring the codebase or files → explore instead of asking
+
+Walk every branch of the decision tree. Surface assumptions, risks, and alternatives. Resolve dependencies between decisions before moving on.
 
 Track internally as you go:
 - Every question and the user's answer
