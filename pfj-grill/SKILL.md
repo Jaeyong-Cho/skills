@@ -76,9 +76,26 @@ If discussion concluded with clear next action, offer to run matching skill imme
 | Need to prototype before deciding | `/pf-proto` |
 | ADR exists, ready to implement | `/pf-impl` |
 
-Ask: *"Continue into [skill name] now?"* — if yes, invoke skill via `Skill` tool and pass discussion conclusions as context.
-
 Skip this step if no skill clearly maps to outcome.
+
+**Before invoking any pf-* skill, resolve the project workspace:**
+
+1. Check if discussion mentioned a project path. If yes, use it.
+2. Otherwise check cwd for `.pf/book.toml`:
+```bash
+ls .pf/book.toml 2>/dev/null
+```
+3. If not found, ask user:
+```
+AskUserQuestion: "Which project to run [skill] in? Provide the path."
+```
+4. Verify `.pf/book.toml` exists at that path:
+```bash
+ls <project-path>/.pf/book.toml 2>/dev/null
+```
+If missing → tell user to run `/pf-init` there first. Stop.
+
+5. `cd` to project path, then invoke skill via `Skill` tool and pass discussion conclusions as context.
 
 ## Step 6: Append to today.md
 
