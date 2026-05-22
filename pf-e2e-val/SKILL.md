@@ -35,9 +35,9 @@ validate/<slug>/
 
 ---
 
-## Step 1: Resolve slug + source
+## Step 1: Understand concern + derive slug
 
-If user provides feature name or slug, use it. Otherwise ask.
+User provides a concern or feature description. Read it. Derive slug from it (lowercase, hyphens, max 40 chars).
 
 Check if scaffold already exists:
 
@@ -49,8 +49,8 @@ If exists → skip to Step 4 (run).
 
 **Source of cases** — use first available:
 1. Grill/impl conclusions already in conversation context → extract from there.
-2. ADR exists at `.pf/src/adr/` → read it, derive cases from User Stories and Step-by-Step Plan.
-3. Neither → run `grill-me` skill. Focus on: what inputs the feature accepts, what outputs it produces, what must never happen, known edge/error scenarios. Conclude with a clear behavior list before proceeding.
+2. ADR exists at `.pf/src/adr/` matching the concern → read it, derive cases from User Stories and Step-by-Step Plan.
+3. Neither → run `grill-me` skill. Focus on: what inputs the feature accepts, what outputs it produces, what must never happen, known edge/error scenarios. Conclude with clear behavior list before proceeding.
 
 ---
 
