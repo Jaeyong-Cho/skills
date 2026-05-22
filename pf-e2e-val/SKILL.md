@@ -47,10 +47,11 @@ ls validate/<slug>/ 2>/dev/null
 
 If exists → skip to Step 4 (run).
 
-**Source of cases** — use first available:
-1. Grill/impl conclusions already in conversation context → extract from there.
-2. ADR exists at `.pf/src/adr/` matching the concern → read it, derive cases from User Stories and Step-by-Step Plan.
-3. Neither → run `grill-me` skill. Focus on: what inputs the feature accepts, what outputs it produces, what must never happen, known edge/error scenarios. Conclude with clear behavior list before proceeding.
+**Source of cases** — source code is truth:
+1. Find relevant source files from the concern description (grep, find).
+2. Read them. Understand entry points, inputs, outputs, error paths.
+3. Run `grill-me` skill to sharpen understanding — focus on: what inputs accepted, what outputs produced, what must never happen, known edge/error scenarios.
+4. Derive cases from actual code behavior, not documentation.
 
 ---
 
