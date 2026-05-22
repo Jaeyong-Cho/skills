@@ -1,8 +1,8 @@
 ---
-name: e2e-val-run
+name: pf-e2e-val-run
 description: |
-  Run existing E2E validation cases and generate a rich HTML analysis report. Use when e2e-val scaffold already exists and you want to re-run after fixing failures.
-  Triggers: "e2e-val-run", "re-run E2E", "run E2E again", "re-validate", "check validation results", or any request to re-run existing E2E test cases.
+  Run existing E2E validation cases and generate a rich HTML analysis report. Use when pf-e2e-val scaffold already exists and you want to re-run after fixing failures.
+  Triggers: "pf-e2e-val-run", "re-run E2E", "run E2E again", "re-validate", "check validation results", or any request to re-run existing E2E test cases.
 ---
 
 Read `../pf/references/caveman.md` and apply caveman style throughout.
