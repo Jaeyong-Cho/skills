@@ -1,0 +1,111 @@
+---
+name: pf-grill-impl
+description: |
+  Design and implement a feature in one session using VAO + TDD — no ADR written.
+  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time via RED→GREEN→REFACTOR.
+  Use when the user wants to think through a design and implement immediately without writing a formal ADR.
+  Triggers: "pf-grill-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement".
+---
+
+Read `../pf/references/caveman.md` and apply caveman style throughout.
+
+Check journal context:
+
+```bash
+[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
+```
+
+If today.md found, use to orient work — connect design+impl to user's broader context.
+
+Check VAO book:
+
+```bash
+ls .pf/book.toml 2>/dev/null
+```
+
+Not found → run `pf-init` first, then proceed.
+
+For layer definitions, read `../pf/references/layers.md`.
+For TDD philosophy, read `../pf-impl/references/tdd.md`.
+
+---
+
+# VAO Design + Implement (No ADR)
+
+Design direction: **Value → Aspect → Object** (iterative in practice).
+
+---
+
+## Step 1: Grill the design
+
+Read `../pf/references/deep-modules.md`, `../pf/references/aop.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context.
+
+Goal: reach shared understanding of:
+- **Value** — what user need this solves; entry point shape
+- **Aspect** — how it works; which objects it orchestrates and from what angle
+- **Object** — which stable domain objects are needed; their invariants
+
+When referencing existing source code, cite exact `file:line`.
+
+User can say **"wrap up"** to compress remaining branches and move on.
+
+---
+
+## Step 2: Extract behavior list
+
+From grill session conclusions, derive:
+
+1. **Behavior list** — ordered by implementation priority; tracer bullet first
+2. **Test targets** — which layers and modules get tests
+3. **Layer map** — which files own which layer (`[value]`, `[aspect]`, `[object]`)
+
+Show to user before implementing:
+
+```
+Behavior list:
+1. <tracer bullet behavior>    [value]
+2. <next behavior>             [aspect]
+3. <next behavior>             [object]
+...
+
+Test targets:
+- <file> → <what gets tested>
+```
+
+Ask via `AskUserQuestion`: "Ready to implement?" — adjust list if needed before proceeding.
+
+---
+
+## Step 3: Implement — one behavior at a time
+
+For test writing examples, read `../pf-impl/references/tdd-tests.md`.
+For mocking guidelines, read `../pf-impl/references/tdd-mocking.md`.
+
+For each behavior in list:
+
+```
+RED:   Write test that describes behavior using public interface → confirm it fails
+GREEN: Write minimal code to make it pass → confirm it passes
+```
+
+- Test only through public interfaces (value entry points, object public actions)
+- Do not write next test until current one is green
+
+---
+
+## Step 4: Refactor (after all behaviors green)
+
+For refactoring guidelines, read `../pf-impl/references/tdd-refactoring.md`.
+For interface design principles, read `../pf/references/deep-modules.md`.
+
+- [ ] Interface narrowable?
+- [ ] Complexity hidden or exposed?
+- [ ] Duplication to extract?
+
+Run all tests after each refactor step. Never refactor while RED.
+
+---
+
+## Step 5: Done
+
+Show user summary of what was built. Suggest commit message using `../pf/references/commit.md`.
