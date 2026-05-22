@@ -1,8 +1,8 @@
 ---
 name: pf-e2e-val
 description: |
-  Scaffold, run, and report E2E validation for a feature — generates test cases from grill/impl conclusions, runs each standalone, writes a lightweight HTML stats report (run_all.py) and a rich analysis HTML report (skill).
-  Use whenever the user wants to E2E test, validate, or smoke-test implemented code with real sample data. Triggers: "pf-e2e-val", "e2e test", "end-to-end test", "validate this feature", "add E2E", "sample test", "run validation", or any request to test implemented code with real inputs and check outputs.
+  Create new E2E validation from a user concern or feature — derives test cases from the concern/feature description or grill/impl conclusions, scaffolds standalone case scripts, runs them, and generates reports.
+  Use when the user has a new feature or concern they want to validate with real data for the first time. Triggers: "pf-e2e-val", "add E2E for this", "create validation", "validate this feature", "e2e this concern", "new E2E test", or any request to set up E2E testing for a feature or concern from scratch.
 ---
 
 Read `../pf/references/caveman.md` and apply caveman style throughout.
