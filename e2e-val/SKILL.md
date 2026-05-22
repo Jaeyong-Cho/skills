@@ -144,12 +144,18 @@ sys.exit(0 if passed else 1)
 
 **`validate/<slug>/run_all.py`** — runs all cases, collects results, writes `report.html`:
 
+When generating this file, read `~/.claude/skills/pfj-grill/kanagawa.css` and embed its full contents as the `KANAGAWA_CSS` string literal below. Do not reference the file path at runtime — embed verbatim.
+
 ```python
 #!/usr/bin/env python3
-"""Run all validation cases for <slug>."""
+"""Run all E2E validation cases for <slug>."""
 
 import subprocess, json, glob, os, sys
 from datetime import datetime
+
+KANAGAWA_CSS = """
+<embed full contents of ~/.claude/skills/pfj-grill/kanagawa.css here verbatim>
+"""
 
 base = os.path.dirname(__file__)
 case_dirs = sorted(glob.glob(os.path.join(base, 'cases', '*')))
@@ -160,7 +166,7 @@ for case_dir in case_dirs:
     if not os.path.exists(run_py):
         continue
     print(f"\n→ {os.path.basename(case_dir)}")
-    proc = subprocess.run([sys.executable, run_py], capture_output=False)
+    subprocess.run([sys.executable, run_py], capture_output=False)
     result_path = os.path.join(case_dir, 'result.json')
     if os.path.exists(result_path):
         with open(result_path) as f:
@@ -173,29 +179,29 @@ failed = total - passed
 print(f"\n{'='*40}")
 print(f"Results: {passed}/{total} passed")
 
-# --- lightweight HTML report ---
+# --- HTML report (kanagawa theme, stats only) ---
 rows = ''.join(
     f"<tr><td>{r['case']}</td>"
     f"<td>{'✅ PASS' if r['passed'] else '❌ FAIL'}</td>"
-    f"<td>{r.get('logs', [''])[-1] if r.get('logs') else ''}</td></tr>"
+    f"<td><code>{r.get('logs', [''])[-1] if r.get('logs') else ''}</code></td></tr>"
     for r in results
 )
 pct = int(passed / total * 100) if total else 0
 html = f"""<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>validate: <slug></title>
-<style>
-body{{font-family:monospace;max-width:800px;margin:2rem auto;padding:1rem}}
-table{{width:100%;border-collapse:collapse}}
-th,td{{border:1px solid #ccc;padding:.5rem;text-align:left}}
-th{{background:#f4f4f4}}
-.bar-wrap{{background:#eee;border-radius:4px;height:1.2rem;margin:.5rem 0}}
-.bar{{background:#4caf50;height:100%;border-radius:4px;width:{pct}%}}
+<html><head><meta charset="utf-8">
+<title>e2e-val: <slug></title>
+<style>{KANAGAWA_CSS}
+.bar-wrap{{background:var(--bg-dim,#1f1f28);border-radius:4px;height:1rem;margin:.5rem 0}}
+.bar{{background:var(--green,#76946a);height:100%;border-radius:4px;width:{pct}%}}
 </style></head><body>
-<h1>validate: <slug></h1>
+<h1>e2e-val: <slug></h1>
 <p>{datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
 <div class="bar-wrap"><div class="bar"></div></div>
 <p>{passed}/{total} passed ({pct}%)</p>
-<table><tr><th>Case</th><th>Result</th><th>Last log</th></tr>{rows}</table>
+<table>
+<tr><th>Case</th><th>Result</th><th>Last log</th></tr>
+{rows}
+</table>
 <hr><footer>run_all.py · {datetime.now().strftime('%Y-%m-%d')}</footer>
 </body></html>"""
 
