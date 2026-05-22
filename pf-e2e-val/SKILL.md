@@ -47,7 +47,10 @@ ls validate/<slug>/ 2>/dev/null
 
 If exists → skip to Step 4 (run).
 
-Read grill/impl conclusions from context. If not in context, ask user to describe the feature's happy path, edge cases, and error cases.
+**Source of cases** — use first available:
+1. Grill/impl conclusions already in conversation context → extract from there.
+2. ADR exists at `.pf/src/adr/` → read it, derive cases from User Stories and Step-by-Step Plan.
+3. Neither → run `grill-me` skill. Focus on: what inputs the feature accepts, what outputs it produces, what must never happen, known edge/error scenarios. Conclude with a clear behavior list before proceeding.
 
 ---
 
