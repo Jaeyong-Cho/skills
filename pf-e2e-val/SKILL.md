@@ -45,7 +45,11 @@ Check if scaffold already exists:
 ls validate/<slug>/ 2>/dev/null
 ```
 
-If exists → skip to Step 4 (run).
+If exists → ask via `AskUserQuestion`:
+- "Run existing cases" → skip to Step 4
+- "Add new cases" → skip to Step 2 (derive additional cases, append to existing)
+- "Edit existing case" → ask which case, open its `run.py` / `input.json` / `expected.json`, apply changes, then Step 4
+- "Remove a case" → ask which, delete its directory, then Step 4
 
 **Source of cases** — source code is truth:
 1. Find relevant source files from the concern description (grep, find).
