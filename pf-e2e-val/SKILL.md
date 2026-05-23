@@ -1,8 +1,8 @@
 ---
 name: pf-e2e-val
 description: |
-  Create new E2E validation from a user concern or feature — derives test cases from the concern/feature description or grill/impl conclusions, scaffolds standalone case scripts, runs them, and generates reports.
-  Use when the user has a new feature or concern they want to validate with real data for the first time. Triggers: "pf-e2e-val", "add E2E for this", "create validation", "validate this feature", "e2e this concern", "new E2E test", or any request to set up E2E testing for a feature or concern from scratch.
+  Create, edit, or run E2E validation for a feature or concern — grills the user first to understand the code behavior, then scaffolds/edits/runs cases and generates reports.
+  Use when the user has a feature or concern to validate with real data. Triggers: "pf-e2e-val", "add E2E for this", "create validation", "validate this feature", "e2e this concern", "update validation", "edit E2E cases", or any request to set up or manage E2E testing for a feature.
 ---
 
 Read `../pf/references/caveman.md` and apply caveman style throughout.
@@ -17,7 +17,7 @@ For layer definitions, read `../pf/references/layers.md`.
 
 ---
 
-# VAO Validation
+# VAO E2E Validation
 
 ## Directory structure
 
@@ -37,49 +37,56 @@ validate/<slug>/
 
 ## Step 1: Understand concern + derive slug
 
-User provides a concern or feature description. Read it. Derive slug from it (lowercase, hyphens, max 40 chars).
-
-Check if scaffold already exists:
-
-```bash
-ls validate/<slug>/ 2>/dev/null
-```
-
-If exists → infer intent from user's description:
-- User describes new scenario / "add" / mentions untested behavior → Step 2 (add cases)
-- User mentions specific case, wrong result, wants to fix → edit that case's `run.py` / `input.json` / `expected.json`, then Step 4
-- User wants to remove / says case no longer relevant → delete its directory, then Step 4
-- User just wants to run / "check" / "re-run" → Step 4
-
-If intent is ambiguous, ask one plain-text question to clarify before proceeding.
-
-**Source of cases** — source code is truth:
-1. Find relevant source files from the concern description (grep, find).
-2. Read them. Understand entry points, inputs, outputs, error paths.
-3. Run `grill-me` skill to sharpen understanding — focus on: what inputs accepted, what outputs produced, what must never happen, known edge/error scenarios.
-4. Derive cases from actual code behavior, not documentation.
+Read user's concern or feature description. Derive slug (lowercase, hyphens, max 40 chars).
 
 ---
 
-## Step 2: Derive cases
+## Step 2: Grill
 
-From conclusions, derive all cases. Number sequentially across all types:
+Find relevant source files from concern:
+
+```bash
+grep -rn "<keyword>" src/ 2>/dev/null
+```
+
+Read them. Understand entry points, inputs, outputs, error paths. Source code is truth — not docs or ADR.
+
+Run `grill-me` skill. Focus on:
+- What inputs accepted
+- What outputs produced
+- What must never happen
+- Known edge/error scenarios
+- Any specific behavior the user wants to verify
+
+---
+
+## Step 3: Decide action
+
+After grill concludes, infer from the full context what to do next:
+
+- **Create** — no scaffold exists, or user wants new cases → Step 4
+- **Edit** — scaffold exists, user wants to fix/update specific case → Step 5
+- **Remove** — user says a case is no longer relevant → delete its dir, jump to Step 6
+- **Run only** — scaffold exists, user just wants to re-run → Step 6
+
+If ambiguous, ask one plain-text question.
+
+---
+
+## Step 4: Derive + scaffold cases
+
+Derive all cases from grill conclusions. Number sequentially across all types:
 
 ```
 01-<name>   [happy]  — normal input, expect success
 02-<name>   [edge]   — boundary or unusual input
 03-<name>   [error]  — invalid input, missing data, failure scenario
-04-<name>   [happy]  — another success path
 ...
 ```
 
 Show list. Ask via `AskUserQuestion`: "Add or remove any cases?" — adjust before scaffolding.
 
----
-
-## Step 3: Scaffold
-
-Create directory structure:
+Create structure:
 
 ```bash
 mkdir -p validate/<slug>/cases
@@ -87,19 +94,31 @@ mkdir -p validate/<slug>/cases
 
 For each case, create `validate/<slug>/cases/<N>-<name>/`:
 
-**`input.json`** — sample input data derived from case description.
+**`input.json`** — sample input derived from case description.
 
-**`expected.json`** — expected output or response derived from feature design.
+**`expected.json`** — expected output derived from code behavior.
 
-**`run.py`** — use `templates/run.py`. Replace `<name>`, `<N>-<name>` placeholders with actual case name and number. Fill in the feature call under `# TODO`.
+**`run.py`** — use `templates/run.py`. Replace `<name>`, `<N>-<name>` placeholders. Fill feature call under `# TODO`.
 
 **`validate/<slug>/run_all.py`** — use `templates/run_all.py`. Replace:
 - `<slug>` → feature slug
-- `<KANAGAWA_CSS_PLACEHOLDER>` → full contents of `~/.claude/skills/pfj-grill/kanagawa.css` (read and embed verbatim at scaffold time)
+- `<KANAGAWA_CSS_PLACEHOLDER>` → full contents of `~/.claude/skills/pfj-grill/kanagawa.css` (read and embed verbatim)
 
 ---
 
-## Step 4: Run
+## Step 5: Edit case
+
+List existing cases:
+
+```bash
+ls validate/<slug>/cases/
+```
+
+Ask which case to edit. Open its `run.py`, `input.json`, `expected.json`. Apply changes from grill conclusions.
+
+---
+
+## Step 6: Run
 
 ```bash
 cd <project-root>
@@ -110,7 +129,7 @@ Print stdout as it runs. Show final pass/fail count.
 
 ---
 
-## Step 5: Rich HTML report
+## Step 7: Rich HTML report
 
 Follow `../pfj-grill/REPORT.md` for structure, styling, interactivity, and generation rules.
 
@@ -122,8 +141,8 @@ Save: `.pf/reports/validate/YYYY/MM-DD-<slug>.html`
 mkdir -p .pf/reports/validate/YYYY
 ```
 
-Header: `validate: <slug>` · date · one-line outcome.
-Footer: `Generated by pf-validate · date · slug`
+Header: `e2e-val: <slug>` · date · one-line outcome.
+Footer: `Generated by pf-e2e-val · date · slug`
 
 **Always include:**
 - **Pass rate** — progress bar: passed / total, broken down by type (happy/edge/error)
@@ -131,9 +150,9 @@ Footer: `Generated by pf-validate · date · slug`
 - **Failure analysis** — for each failed case: actual vs expected diff, log trace, likely cause
 
 **Include when content warrants:**
-- **Pattern analysis** — which layer (value/aspect/object) has most failures → where the bug lives
-- **Log patterns** — recurring log messages across cases; signal vs noise
-- **Coverage map** — which scenarios covered vs missing; gaps to add next
+- **Pattern analysis** — which layer (value/aspect/object) has most failures → where bug lives
+- **Log patterns** — recurring messages across cases; signal vs noise
+- **Coverage map** — scenarios covered vs missing; gaps to add next
 
 Print path:
 ```
