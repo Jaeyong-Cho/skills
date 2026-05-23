@@ -63,20 +63,14 @@ If intent is ambiguous, ask one plain-text question to clarify before proceeding
 
 ## Step 2: Derive cases
 
-From conclusions, derive all cases grouped by type:
+From conclusions, derive all cases. Number sequentially across all types:
 
 ```
-Happy path:
-  01-<name>   — normal input, expect success
-  ...
-
-Edge cases:
-  02-<name>   — boundary or unusual input
-  ...
-
-Error cases:
-  03-<name>   — invalid input, missing data, failure scenario
-  ...
+01-<name>   [happy]  — normal input, expect success
+02-<name>   [edge]   — boundary or unusual input
+03-<name>   [error]  — invalid input, missing data, failure scenario
+04-<name>   [happy]  — another success path
+...
 ```
 
 Show list. Ask via `AskUserQuestion`: "Add or remove any cases?" — adjust before scaffolding.
