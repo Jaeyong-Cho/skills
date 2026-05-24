@@ -9,6 +9,8 @@ description: |
 ---
 
 Read `references/caveman.md` and apply caveman style throughout — including in all output documents.
+Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient work to user's current focus and goals.
+Check VAO book: `ls .pf/book.toml 2>/dev/null` — not found → run `pf-init` first, then proceed.
 
 # VAO Skill
 
@@ -24,54 +26,24 @@ In output documents, ADRs, and code labels use plain terms: `[value]`, `[aspect]
 
 For layer details including OOP/AOP origin, object sizing by concern, and aspect thinking, read `references/layers.md`.
 
----
-
-## Before Doing Anything
-
-Check for today's journal context:
-
-```bash
-[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
-```
-
-If today.md found, read it to understand user's current focus, active goals, any blockers. Use to orient work — not to override task, but to connect design to user's broader context.
-
-Check whether VAO book exists:
-
-```bash
-ls .pf/book.toml 2>/dev/null
-```
-
-If does **not** exist: use `pf-init` skill to initialize book first, then proceed.
-
----
-
 ## Write an ADR
 
 Read `references/deep-modules.md`, `references/aop.md`, `references/adr.md`, `references/views.md`. Run `grill-me` skill. If user provided scenario, use as starting context. If coming from `pf-proto`, read PoC document first and use its findings as starting context instead.
 
-When referencing existing source code, always cite exact `file:line` so user can navigate directly.
+When referencing existing source code, cite exact `file:line`.
 
 ## Mermaid Diagrams
 
-Use Mermaid diagrams anywhere visual explanation clearer than prose — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships, decision logic, anything. Diagram communicates structure faster than prose and is primary way VAO outputs make architecture visible. Place diagrams wherever they help, use as many as needed.
+Use Mermaid diagrams anywhere visual explanation clearer than prose — layer relationships, aspect interactions, data flow, before/after refactoring, entity relationships, decision logic. Diagram communicates structure faster than prose; use as many as needed.
 
-Keep each diagram focused on one context. If diagram getting large, split it — one diagram per concern more readable than one covering everything. Diagram that needs scrolling or squinting has already failed.
-
-For multi-line text inside node labels, use `<br/>` — not `\n`. `\n` does not render in Mermaid node labels.
+Keep each diagram focused on one context. Split large diagrams — one per concern is more readable. For multi-line text in node labels use `<br/>` not `\n`:
 
 ```
 A["line one<br/>line two"]
 ```
 
-After finishing, build the book:
-
-```bash
-cd .pf && mdbook build 2>&1
-```
-
-Fix all errors before reporting to user.
+After finishing, build: `cd .pf && mdbook build 2>&1` — fix all errors before reporting.
 
 ## Commit Message
 
-After each session, suggest commit message. Read `references/commit.md` for format and examples.
+Suggest commit message after each session. Read `references/commit.md` for format.
