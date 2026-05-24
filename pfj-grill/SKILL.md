@@ -45,25 +45,11 @@ Write file, print path:
 Report saved: /path/to/discuss/YYYY/MM-DD-topic-slug.html
 ```
 
-## Step 5: Continue into skill (if outcome warrants it)
-
-If discussion concluded with clear next action, offer matching skill via `AskUserQuestion`:
-
-| Outcome | Skill |
-|---------|-------|
-| Need to write ADR | `/pf` |
-| Need to prototype | `/pf-proto` |
-| ADR exists, ready to implement | `/pf-impl` |
-
-Skip if no skill clearly maps to outcome.
-
-Before invoking any pf-* skill, resolve the project workspace — see [REFERENCE.md](REFERENCE.md#workspace-resolution). Then `cd` to project path and invoke skill via `Skill` tool, passing discussion conclusions as context.
-
-## Step 6: Append to today.md
+## Step 5: Append to today.md
 
 See [REFERENCE.md](REFERENCE.md#journal-entry-format) for format. Use 24h time. Keep tight — journal entry, not report. Write concrete commands/code/config verbatim under **Steps**; never paraphrase technical details.
 
-## Step 7: Update Goals (if tasks identified)
+## Step 6: Update Goals (if tasks identified)
 
 If discussion produced concrete tasks, add to `## Goals` in today.md. See [REFERENCE.md](REFERENCE.md#goals-format) for format. Infer topic section and priority from context; ask if unclear.
 

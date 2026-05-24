@@ -1,16 +1,5 @@
 # pfj-grill Reference
 
-## Workspace Resolution
-
-Before invoking any pf-* skill:
-
-1. Check if discussion mentioned a project path — if yes, use it.
-2. Otherwise check cwd: `ls .pf/book.toml 2>/dev/null`
-3. If not found, ask via `AskUserQuestion`: "Which project to run [skill] in? Provide the path."
-4. Verify: `ls <project-path>/.pf/book.toml 2>/dev/null` — if missing, tell user to run `/pf-init` there first. Stop.
-
----
-
 ## Journal Entry Format
 
 Append to `$PFJ_PATH/today.md`:
