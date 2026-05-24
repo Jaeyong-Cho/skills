@@ -132,6 +132,10 @@ PFJ is a personal productivity system: daily journaling, goal management, wiki, 
                         ↓
           pfj-research  ──→  markdown research note written
                         ↓
+        [what notes are due for review today?]
+                        ↓
+        pfj-retention  ──→  daily spaced repetition report
+                        ↓
               [end of day]
                         ↓
              pfj-review  ──→  daily report written
@@ -167,8 +171,11 @@ $PFJ_PATH/
 ├── discuss/              # pfj-grill HTML reports
 ├── review/               # pfj-review HTML reports
 └── research/             # pfj-research markdown notes + HTML reports
-    └── YYYY/
-        └── MM-DD-<slug>.md
+    ├── YYYY/
+    │   └── MM-DD-<slug>.md
+    └── reports/
+        ├── MM-DD-<scope>.html     # pfj-research-report
+        └── retention-YYYY-MM-DD.html  # pfj-retention
 ```
 
 ---
