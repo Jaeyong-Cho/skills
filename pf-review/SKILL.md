@@ -5,217 +5,73 @@ description: |
   Use after pf-impl is done. Triggers: "pf-review", "review the implementation", "review the code", "code review", "let's review", after implementation is complete.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
-
-Check for today's journal context:
-
-```bash
-[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
-```
-
-If today.md is found, use it to orient the review to today's focus and goals.
+Read `../pf/references/caveman.md` and apply caveman style throughout — including all output documents.
+Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient review to today's focus.
 
 # VAO Code Review
 
-Review the implementation against the ADR — user story by user story. Use `AskUserQuestion` throughout. Reference source files and line numbers in every question.
-
----
+Review implementation against ADR — user story by user story. Use `AskUserQuestion` throughout. Cite `file:line` in every question.
 
 ## Step 1: Load the ADR
 
-If the user names an ADR (e.g. "adr-001", "0001", "auth-flow"), find it:
+User names an ADR → find it: `ls .pf/src/adr/ | grep <id>`. Otherwise list and ask which to review.
 
-```bash
-ls .pf/src/adr/ | grep 0001
-```
+Read ADR. Focus on: User Stories, Decision section (Value/Aspect/Object layers), Step-by-Step Plan.
 
-If no ADR is specified, list available ADRs and ask which one to review.
+## Step 2: Find implementation files
 
-Read the ADR. Focus on: User Stories, the Decision section (Value/Aspect/Object layers), and the Step-by-Step Plan.
+From ADR Step-by-Step Plan, collect all listed files + their layer (`[value]`, `[aspect]`, `[object]`). Read each in full.
 
----
+Find test files: `grep -rl "<ComponentName>" tests/ 2>/dev/null`
 
-## Step 2: Find the implementation files
+Build mental map: which file owns which behavior, at which line numbers.
 
-From the ADR's Step-by-Step Plan, collect all listed files and their assigned layer (`[value]`, `[aspect]`, `[object]`). Read each file in full.
+## Step 3: Trace execution — entry to end
 
-Also find test files:
+**Map first** — before asking anything, read all files and map the full execution path (see [REFERENCE.md](REFERENCE.md#execution-trace-map)). Print map so user sees the full journey.
 
-```bash
-grep -rl "<ComponentName>" tests/ 2>/dev/null
-```
+For each hop in order:
+1. **Announce** — `"Now at: file:line — <what this hop does>"`
+2. **Quote** exact relevant lines
+3. **Grill** — one question at a time via `AskUserQuestion` (discrete) or plain text (open). Types: explain it, why here, inputs/outputs, edge cases, layer check, what would you change? Cite `file:line` in every question.
 
-Build a mental map: which file owns which behavior, and at which line numbers.
-
----
-
-## Step 3: Trace the execution flow — entry point to end
-
-Follow the actual runtime path of the code, not the ADR's writing order. Start at the entry point (the first thing that runs when a user triggers the feature) and trace every hop until the response or side effect is complete.
-
-**Never skip a point in the trace — even if the code is exactly correct.** The purpose is both to catch issues and to build the human's understanding of their own code.
-
-### 3a. Map the trace first
-
-Before asking anything, read all implementation files and map the full execution path:
-
-```
-Entry point (file:line)
-  → Aspect 1 (file:line)
-  → Aspect 2 (file:line)
-  → Object method (file:line)
-  → ...
-  → Response / side effect (file:line)
-```
-
-Print this map so the human can see the full journey before you begin.
-
-### 3b. Walk each hop
-
-For each hop in the trace, in execution order:
-
-1. **Announce the hop** — `"Now at: file:line — <what this hop does>"`
-2. **Read the exact lines** — quote the relevant code snippet
-3. **Ask questions** — one at a time, no maximum. Use `AskUserQuestion` for discrete options, plain text for open-ended. Cite `file:line` in every question.
-
-**Question types to draw from at each hop** (use what fits):
-- *Explain it* — ask the human to describe what this code does in their own words, before you confirm or correct
-- *Why here?* — why does this logic live at this hop, in this layer?
-- *What comes in / what goes out?* — inputs, outputs, side effects at this exact point
-- *What happens when...?* — edge cases, invalid input, null, empty, concurrent access
-- *Layer check* — is this Value, Aspect, or Object code? Does it belong here?
-- *Anything you'd change?* — open reflection after seeing it in context
-
-Correct code still gets questions. If a hop is flawless, use it to cement understanding — ask the human to explain it rather than just confirm it.
-
-The user can say **"wrap up"** to compress remaining questions for the current hop and move to the next. Walk every hop. Do not skip any.
-
----
+Correct code still gets questions — use to cement understanding. User can say **"wrap up"** to skip to next hop. Walk every hop. Never skip.
 
 ## Step 4: Simulate scenarios
 
-Derive all scenarios from ADR User Stories + edge cases found during trace. Run each mentally against actual code (cite `file:line` for every code path hit).
+Derive scenarios from ADR User Stories + edge cases found during trace. See [REFERENCE.md](REFERENCE.md#scenario-list-format) for list format.
 
-### 4a. Scenario list
+Ask via `AskUserQuestion`: "Add any missing scenarios?" — user can add or say "looks good".
 
-Before running, output the full list grouped by type:
+For each scenario: trace code path (`file:line` per hop), state expected vs actual, mark: Pass / Fail / Partial / Untestable. Collect failures/partials as issues.
 
-```
-Happy path:
-  [ ] User logs in with valid credentials
-  [ ] ...
-
-Edge cases:
-  [ ] Login with unknown email
-  [ ] Login with wrong password
-  [ ] Concurrent login attempts
-  [ ] ...
-
-Error cases:
-  [ ] DB unavailable
-  [ ] Malformed input
-  [ ] ...
-```
-
-Ask user via `AskUserQuestion`: "Add any missing scenarios before simulation?" — user can add or say "looks good".
-
-### 4b. Run each scenario
-
-For each scenario:
-1. Trace code path step by step (`file:line` at each hop)
-2. State expected outcome vs actual outcome
-3. Mark result: ✅ Pass / ❌ Fail / ⚠️ Partial / ❓ Untestable
-
-Collect all failures and partials as issues.
-
-### 4c. Generate scenario HTML report
-
-Read `../pfj-grill/kanagawa.css`. Embed verbatim in `<style>` tag. Write all content in caveman style — follow `../caveman/SKILL.md`. All diagrams inline `<canvas>` or pure CSS/SVG, no libraries.
-
+Generate HTML report — see [REFERENCE.md](REFERENCE.md#scenario-html-report) for spec.
 Save: `.pf/review/YYYY-MM-DD-<adr-slug>.html`
 
-```bash
-mkdir -p .pf/review
-```
-
-**Always include:**
-- **Scenario results table** — scenario name, type (happy/edge/error), result (✅/❌/⚠️/❓), one-line finding
-- **Pass rate** — progress bar: passed / total per scenario type
-- **Execution flow diagram** — for each failed scenario, show the code path as a flowchart with the failure point highlighted
-
-**Include when content warrants:**
-- **Issue map** — all failures grouped by layer (value/aspect/object); node-edge diagram
-- **Coverage gaps** — untestable or untested scenarios; listed with reason
-
-Footer: `Generated by pf-review · date · adr-slug`
-
-Print path after saving:
 ```
 Scenario report: .pf/review/YYYY-MM-DD-<adr-slug>.html
 ```
 
----
+## Step 5: Fix issues
 
-## Step 5: Fix issues from the review
+Collect every issue from Step 3 — wrong behavior, wrong layer, missing error handling, scattered concerns, missing tests.
 
-Collect every issue surfaced during Step 3 — incorrect behavior, wrong layer placement, missing error handling, thin objects, scattered concerns, missing tests, etc.
-
-For each issue:
-1. Fix the code at the cited `file:line`
-2. Update the ADR to reflect what actually changed — correct the Decision section (Value/Aspect/Object), User Stories if the behavior shifted, and the Step-by-Step Plan if files or layers changed
-
-Apply all fixes before moving on. Do not ask the user to confirm each fix individually — batch them and show a summary after.
-
----
+For each: fix code at cited `file:line`, update ADR to reflect changes (Decision, User Stories if behavior shifted, Step-by-Step Plan if files/layers changed). Batch fixes, show summary after.
 
 ## Step 6: Confirm and decide
 
-Use `AskUserQuestion`:
-
-- Question: "Issues fixed. What next?"
-- Options: "Update documentation" (Recommended) / "Re-review the fixes" / "Done — skip docs"
-
----
+Ask via `AskUserQuestion`: "Issues fixed. What next?" — options: "Update documentation" (Recommended) / "Re-review the fixes" / "Done — skip docs".
 
 ## Step 7: Update documentation (if confirmed)
 
-Read `../pf/references/docs.md` for the full structure, file templates, and SUMMARY.md format.
+Read `../pf/references/docs.md` for full structure and SUMMARY.md format.
 
-Check what already exists:
+Check existing: `ls .pf/src/docs/value/ .pf/src/docs/aspect/ .pf/src/docs/object/ 2>/dev/null`
 
-```bash
-ls .pf/src/docs/value/ .pf/src/docs/aspect/ .pf/src/docs/object/ 2>/dev/null
-```
+From ADR Decision section, create one file per entity per layer. See [REFERENCE.md](REFERENCE.md#doc-file-formats) for file format. Write in present tense. Add **Related files** section per entity: `grep -rl "<EntityName>" src/`
 
-From the ADR's Decision section, identify every individual entity in each layer:
-- **Value** — each entry point, command, or use case
-- **Aspect** — each concern handler (auth, billing, logging, etc.)
-- **Object** — each domain entity/aggregate
-
-Create one file per entity within its layer directory. Write in present tense — describe what **is**, not what was decided.
-
-**`value/<N>-<entry-point>.md`** — the user need this entry point serves: what it does, what success looks like, what must never happen.
-
-**`aspect/<N>-<concern>.md`** — how this concern is handled: the algorithm or workflow, which objects it uses and from what angle. Mermaid diagrams for flows.
-
-**`object/<N>-<entity>.md`** — this entity's full identity: properties, actions, behaviors, relationships, invariants. Mermaid diagrams for relationships.
-
-At the bottom of each file, add a **Related files** section with the source and test files for that entity:
-
-```bash
-grep -rl "<EntityName>" src/ --include="*.ts" --include="*.py" --include="*.go"
-```
-
-Update indexes and SUMMARY.md, then build:
-
-```bash
-cd .pf && mdbook build 2>&1
-```
-
-Fix all errors before reporting to the user.
-
----
+Update indexes and SUMMARY.md, then build: `cd .pf && mdbook build 2>&1` — fix all errors before reporting.
 
 ## Step 8: Done
 
-Mark the ADR status as `Accepted`. Show the user which files were created or updated. Suggest a commit message using `../pf/references/commit.md`.
+Mark ADR status as `Accepted`. Show files created/updated. Suggest commit message using `../pf/references/commit.md`.
