@@ -49,3 +49,5 @@ Include when warrants: pattern analysis by layer, log patterns, coverage map (mo
 ```
 Report: .pf/reports/validate/YYYY/MM-DD-<slug>.html
 ```
+
+If failures or patterns revealed unexpected behavior → suggest running `/pf-research` to record it.

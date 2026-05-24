@@ -82,3 +82,5 @@ Report: .pf/reports/impl/YYYY/MM-DD-<slug>.html
 ## Step 6: Done
 
 Show summary of what was built. Suggest commit message using `../pf/references/commit.md`.
+
+If implementation surfaced unexpected behavior or design insight → suggest running `/pf-research` to record it.

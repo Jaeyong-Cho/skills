@@ -54,3 +54,5 @@ See [REFERENCE.md](REFERENCE.md#journal-entry-format) for format. Use 24h time. 
 If discussion produced concrete tasks, add to `## Goals` in today.md. See [REFERENCE.md](REFERENCE.md#goals-format) for format. Infer topic section and priority from context; ask if unclear.
 
 Check available skills: `ls ~/.claude/skills/` — reference by name in `*(ai: ...)*` field.
+
+If insights, observations, or unexpected findings surfaced during this session → suggest running `/pf-research` to record them.
