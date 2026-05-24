@@ -54,7 +54,7 @@ Sections (in order):
 3. **Upcoming (7 days)** — title, next review date, days until due
 4. **All notes** — full table: title, date, age, stage, retention %, next review date
 
-For each note in overdue + due today: show observation + key findings inline for review.
+For each note in overdue + due today: show full note content inline — observation, interpretation, key findings, open questions, next experiments.
 
 Forgetting curve chart per note (canvas, no libraries):
 - X axis: log scale, 1d → 18,250d. Labels: 1d, 1w, 1mo, 6mo, 1y, 2y, 5y, 10y, 25y, 50y.
