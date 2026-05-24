@@ -148,6 +148,7 @@ PFJ is a personal productivity system: daily journaling, goal management, wiki, 
 | `pfj-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
 | `pfj-research` | Any time — capture experiment, observation, or insight as markdown note |
 | `pfj-research-report` | Generate HTML report from one or more research notes (by date or topic) |
+| `pfj-retention` | Any time — daily spaced repetition report; shows which research notes are due for review today |
 | `pfj-review` | End of day — close the day, extract wiki entries, seed tomorrow |
 
 ### Journal structure
