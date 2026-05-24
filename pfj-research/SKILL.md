@@ -88,4 +88,4 @@ Print path:
 Note: $PFJ_PATH/research/YYYY/MM-DD-<slug>.md
 ```
 
-To generate HTML report from this note, run `/pfj-research-view`.
+To generate HTML report from this note, run `/pfj-research-report`.
