@@ -83,4 +83,4 @@ Report: .pf/reports/impl/YYYY/MM-DD-<slug>.html
 
 Show summary of what was built. Suggest commit message using `../pf/references/commit.md`.
 
-If implementation surfaced unexpected behavior or design insight → suggest running `/pf-research` to record it.
+If implementation surfaced unexpected behavior or design insight → suggest running `/pfj-research` to record it.

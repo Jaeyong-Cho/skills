@@ -73,4 +73,4 @@ Include when warrants: branch map (decision tree), state diagram, before/after, 
 Report: .pf/reports/sim/YYYY/MM-DD-<slug>.html
 ```
 
-If findings revealed unexpected behavior or new understanding → suggest running `/pf-research` to record it.
+If findings revealed unexpected behavior or new understanding → suggest running `/pfj-research` to record it.

@@ -55,4 +55,4 @@ If discussion produced concrete tasks, add to `## Goals` in today.md. See [REFER
 
 Check available skills: `ls ~/.claude/skills/` — reference by name in `*(ai: ...)*` field.
 
-If insights, observations, or unexpected findings surfaced during this session → suggest running `/pf-research` to record them.
+If insights, observations, or unexpected findings surfaced during this session → suggest running `/pfj-research` to record them.
