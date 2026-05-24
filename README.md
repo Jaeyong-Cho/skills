@@ -174,8 +174,9 @@ $PFJ_PATH/
     ├── YYYY/
     │   └── MM-DD-<slug>.md
     └── reports/
-        ├── MM-DD-<scope>.html     # pfj-research-report
-        └── retention-YYYY-MM-DD.html  # pfj-retention
+        └── YYYY/
+            ├── MM-DD-<scope>.html          # pfj-research-report
+            └── retention-MM-DD.html        # pfj-retention
 ```
 
 ---
