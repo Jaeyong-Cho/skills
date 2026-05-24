@@ -16,123 +16,55 @@ Grill user without limit using today.md as context. Generate rich standalone HTM
 cat $PFJ_PATH/today.md
 ```
 
-Extract discussion topic from user's args. If unclear, ask once before proceeding.
-
-Pull additional files (wiki, goals) only as conversation requires.
+Extract discussion topic from user's args. If unclear, ask once. Pull wiki/goals only as conversation requires.
 
 ## Step 2: Grill — no limit
 
-Ask questions one at a time. For each question, provide recommended answer so user can react rather than invent from scratch.
+One question at a time with recommended answer. Use `AskUserQuestion` for discrete options (recommended first), plain text for open-ended, explore files instead of asking when possible.
 
-- When question has clear discrete options → use `AskUserQuestion`, recommended option first marked "(Recommended)"
-- When question is open-ended with no clear options → ask in plain text
-- When question can be answered by exploring codebase or files → explore instead of asking
+Walk every branch of decision tree. Surface assumptions, risks, alternatives. Resolve dependencies before moving on.
 
-Walk every branch of decision tree. Surface assumptions, risks, alternatives. Resolve dependencies between decisions before moving on.
+Track: questions + answers, branches explored/skipped, conclusions, action items, tensions.
 
-Track internally as you go:
-- Every question and user's answer
-- Branches explored vs. explicitly skipped
-- Conclusions reached at each branch
-- Action items that surface
-- Key tensions or trade-offs named
-
-No maximum number of questions. Keep going until every branch of decision tree is resolved — some topics need three questions, some need fifty. User can stop at any time or say **"wrap up"** to skip remaining branches and move on.
+No maximum. Keep until every branch resolved. User can say **"wrap up"** to skip remaining branches.
 
 ## Step 3: Confirm report
 
-When discussion reaches natural end, ask via `AskUserQuestion`:
-> "Ready to generate the HTML report?"
-
-Wait for confirmation.
+When discussion ends, ask via `AskUserQuestion`: "Ready to generate the HTML report?"
 
 ## Step 4: Generate HTML report
 
 See [REPORT.md](REPORT.md) for structure and styling spec.
 
-Derive topic slug: lowercase, hyphens, max 40 chars (e.g. `api-auth-strategy`).
-Compute save path:
-```
-$PFJ_PATH/discuss/YYYY/MM-DD-<topic-slug>.html
-```
+Derive topic slug: lowercase, hyphens, max 40 chars. Save path: `$PFJ_PATH/discuss/YYYY/MM-DD-<topic-slug>.html`
 
-Create parent directories if needed:
-```bash
-mkdir -p $PFJ_PATH/discuss/YYYY
-```
+`mkdir -p $PFJ_PATH/discuss/YYYY`
 
-Write file, then print path so user can open it:
+Write file, print path:
 ```
 Report saved: /path/to/discuss/YYYY/MM-DD-topic-slug.html
 ```
 
 ## Step 5: Continue into skill (if outcome warrants it)
 
-If discussion concluded with clear next action, offer to run matching skill immediately via `AskUserQuestion`:
+If discussion concluded with clear next action, offer matching skill via `AskUserQuestion`:
 
-| Outcome | Skill to offer |
-|---------|---------------|
+| Outcome | Skill |
+|---------|-------|
 | Need to write ADR | `/pf` |
-| Need to prototype before deciding | `/pf-proto` |
+| Need to prototype | `/pf-proto` |
 | ADR exists, ready to implement | `/pf-impl` |
 
-Skip this step if no skill clearly maps to outcome.
+Skip if no skill clearly maps to outcome.
 
-**Before invoking any pf-* skill, resolve the project workspace:**
-
-1. Check if discussion mentioned a project path. If yes, use it.
-2. Otherwise check cwd for `.pf/book.toml`:
-```bash
-ls .pf/book.toml 2>/dev/null
-```
-3. If not found, ask user:
-```
-AskUserQuestion: "Which project to run [skill] in? Provide the path."
-```
-4. Verify `.pf/book.toml` exists at that path:
-```bash
-ls <project-path>/.pf/book.toml 2>/dev/null
-```
-If missing → tell user to run `/pf-init` there first. Stop.
-
-5. `cd` to project path, then invoke skill via `Skill` tool and pass discussion conclusions as context.
+Before invoking any pf-* skill, resolve the project workspace — see [REFERENCE.md](REFERENCE.md#workspace-resolution). Then `cd` to project path and invoke skill via `Skill` tool, passing discussion conclusions as context.
 
 ## Step 6: Append to today.md
 
-```markdown
-## HH:MM:SS (grill)
-
-**Topic**: one-line description of what was discussed
-
-**Outcome**: key decisions / conclusions reached
-
-**Steps**: (omit if no concrete steps surfaced)
-1. Step one
-2. Step two
-   ```bash
-   exact command here
-   ```
-
-**Report**: $PFJ_PATH/discuss/YYYY/MM-DD-topic-slug.html
-```
-
-Use 24h time. Keep tight — journal entry, not report.
-
-**Detail rule**: if discussion produced specific commands, code snippets, config values, or ordered steps — write them verbatim under **Steps**. Do not summarize or paraphrase concrete technical details.
+See [REFERENCE.md](REFERENCE.md#journal-entry-format) for format. Use 24h time. Keep tight — journal entry, not report. Write concrete commands/code/config verbatim under **Steps**; never paraphrase technical details.
 
 ## Step 7: Update Goals (if tasks identified)
 
-If discussion produced concrete tasks, add to `## Goals` section at top of `today.md`:
+If discussion produced concrete tasks, add to `## Goals` in today.md. See [REFERENCE.md](REFERENCE.md#goals-format) for format. Infer topic section and priority from context; ask if unclear.
 
-- Infer topic section and priority from context
-- Ask user if unclear
-- Format: `- [ ] Task *(Priority)* *(ai: how AI helps)* — rationale *(→ Weekly: deliverable)*`
-- Place in correct topic section at correct priority position
-
-**Skills**: When filling `*(ai: ...)*`, check available skills:
-
-```bash
-ls ~/.claude/skills/
-```
-
-Reference skill by name in ai field — e.g. `*(ai: /pf-proto — prototyping and poc)*`, `*(ai: /pf-impl — implement ADR step by step)*`, `*(ai: /pf — write ADR for this design)*`. If no skill fits, describe how AI helps instead.
+Check available skills: `ls ~/.claude/skills/` — reference by name in `*(ai: ...)*` field.
