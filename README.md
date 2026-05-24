@@ -26,27 +26,16 @@ The script detects which AI agents are installed and sets up each one:
 
 ## Global Instructions
 
-`CLAUDE.md` (Claude Code) and `AGENTS.md` (Copilot CLI) define global behaviors active in every session:
+`CLAUDE.md` defines global behaviors active in every session:
 
+- **Caveman style** — terse, no filler, fragments ok, technical terms exact
 - **Session logging** — after any skill session, append a timestamped summary + lessons to `$PFJ_PATH/today.md`
-- **Skill feedback** — ask for feedback on the skill after logging, to surface improvement ideas
-
-Format in today.md:
-```markdown
-## HH:MM:SS (skill-name)
-
-**Summary**: what was done — outcomes, files changed, decisions made
-**Lessons**: what to carry forward
-**Feedback**: (if given)
-```
 
 ---
 
 ## PF — Architecture Workflow
 
 PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Value** (why — user goals), **Aspect** (how — composable algorithms), **Object** (what — stable domain objects).
-
-All pf-* skills follow caveman style — terse, no filler, including in output documents.
 
 ### Workflow
 
@@ -61,9 +50,21 @@ All pf-* skills follow caveman style — terse, no filler, including in output d
                         ↓
                    pf-impl  ──→  TDD implementation
                                         ↓
-                              code review confirmed
-                                        ↓
-                               pf-docs  ──→  documentation updated
+                               pf-review  ──→  code review + docs updated
+
+[design + implement without ADR]
+        ↓
+  pf-grill-impl  ──→  TDD implementation (no ADR)
+
+[validate with real data]
+        ↓
+  pf-e2e-val  ──→  create/edit cases + run affected
+                        ↓
+             pf-e2e-val-run  ──→  re-run specific or all cases
+
+[trace a scenario through code]
+        ↓
+    pf-sim  ──→  execution trace + verdict
 ```
 
 ### Skills
@@ -74,7 +75,11 @@ All pf-* skills follow caveman style — terse, no filler, including in output d
 | `pf-proto` | Design question unresolved — throwaway prototype + PoC document |
 | `pf` | Design clear — grill-me session, write and confirm an ADR |
 | `pf-impl` | ADR confirmed — TDD implementation, RED → GREEN → REFACTOR |
-| `pf-docs` | Implementation reviewed — write or update project documentation |
+| `pf-grill-impl` | Design + implement in one session — no ADR written |
+| `pf-review` | Implementation done — code review, scenario simulation, docs update |
+| `pf-e2e-val` | Create or edit E2E validation cases; runs affected case(s) only |
+| `pf-e2e-val-run` | Re-run specific or all existing E2E cases; generates analysis report |
+| `pf-sim` | Trace a scenario through source code step by step; confirm/deny hypothesis |
 | `pf-docs-migrate` | One-time — migrate old feature-centric docs to layer-centric format |
 
 ### Artifacts
@@ -89,13 +94,22 @@ All pf-* skills follow caveman style — terse, no filler, including in output d
 │       ├── aspect/   # How — workflows per component
 │       └── object/   # What — domain objects per component
 └── serve.sh    # Start the book server
+
+validate/<slug>/
+└── cases/
+    └── NN-<name>/   # run.py · input.json · expected.json · result.json
+
+.pf/reports/
+├── impl/     # pf-grill-impl session reports
+├── validate/ # pf-e2e-val / pf-e2e-val-run reports
+└── sim/      # pf-sim scenario reports
 ```
 
 ---
 
 ## PFJ — Daily Journal Workflow
 
-PFJ is a personal productivity system: daily journaling, goal management, achievement tracking, wiki, and work pattern analysis, rendered via mdbook.
+PFJ is a personal productivity system: daily journaling, goal management, wiki, and research notes, rendered via mdbook.
 
 ### Workflow
 
@@ -114,10 +128,14 @@ PFJ is a personal productivity system: daily journaling, goal management, achiev
                         ↓
              pfj-adjust  ──→  today's goal updated
                         ↓
+        [experiment or insight to capture?]
+                        ↓
+          pfj-research  ──→  markdown research note written
+                        ↓
               [end of day]
                         ↓
              pfj-review  ──→  daily report written
-                               goal progress marked
+                               wiki entries extracted
                                tomorrow seeded
 ```
 
@@ -126,14 +144,16 @@ PFJ is a personal productivity system: daily journaling, goal management, achiev
 | Skill | When to use |
 |-------|-------------|
 | `pfj-init` | First time — initialize the knowledge base repo |
-| `pfj-grill` | Any time — think through a concern, plan, or decision; records conclusion in today.md |
+| `pfj-grill` | Any time — think through a concern, plan, or decision |
 | `pfj-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
-| `pfj-review` | End of day — close the day, propagate goal progress, seed tomorrow |
+| `pfj-research` | Any time — capture experiment, observation, or insight as markdown note |
+| `pfj-research-report` | Generate HTML report from one or more research notes (by date or topic) |
+| `pfj-review` | End of day — close the day, extract wiki entries, seed tomorrow |
 
 ### Journal structure
 
 ```
-~/pofe/
+$PFJ_PATH/
 ├── today.md              # daily goals + journal
 ├── goals/
 │   ├── goal.md           # lifetime goals
@@ -141,10 +161,13 @@ PFJ is a personal productivity system: daily journaling, goal management, achiev
 │       ├── goal.md       # yearly
 │       ├── goal-MM.md    # monthly
 │       └── goal-MM-WNN.md # weekly
-├── wiki/                 # persistent knowledge
+├── wiki/                 # persistent knowledge entries
 ├── Journal/              # archived daily entries
-├── stats/                # work pattern data
-└── archive/              # completed goals
+├── discuss/              # pfj-grill HTML reports
+├── review/               # pfj-review HTML reports
+└── research/             # pfj-research markdown notes + HTML reports
+    └── YYYY/
+        └── MM-DD-<slug>.md
 ```
 
 ---
@@ -155,10 +178,4 @@ PFJ is a personal productivity system: daily journaling, goal management, achiev
 |-------|-------------|
 | `grill-me` | Interview relentlessly about any plan or design until shared understanding is reached |
 | `caveman` | Ultra-compressed output mode — ~75% fewer tokens, no filler |
-| `write-a-skill` | Create new agent skills with proper structure and review checklist |
-
----
-
-## Deprecated
-
-Skills in `deprecated/` are no longer actively used. The `sophist-*` documentation skills have been superseded by the PF workflow.
+| `write-a-skill` | Create or review agent skills with proper structure and checklist |
