@@ -60,7 +60,7 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
         ↓
   pf-e2e-val  ──→  create/edit cases + run affected
                         ↓
-             pf-e2e-val-run  ──→  re-run specific or all cases
+             pf-e2e-val-report  ──→  re-run specific or all cases
 
 [trace a scenario through code]
         ↓
@@ -78,7 +78,7 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 | `pf-grill-impl` | Design + implement in one session — no ADR written |
 | `pf-review` | Implementation done — code review, scenario simulation, docs update |
 | `pf-e2e-val` | Create or edit E2E validation cases; runs affected case(s) only |
-| `pf-e2e-val-run` | Re-run specific or all existing E2E cases; generates analysis report |
+| `pf-e2e-val-report` | Re-run specific or all existing E2E cases; generates analysis report |
 | `pf-sim` | Trace a scenario through source code step by step; confirm/deny hypothesis |
 | `pf-docs-migrate` | One-time — migrate old feature-centric docs to layer-centric format |
 
@@ -101,7 +101,7 @@ validate/<slug>/
 
 .pf/reports/
 ├── impl/     # pf-grill-impl session reports
-├── validate/ # pf-e2e-val / pf-e2e-val-run reports
+├── validate/ # pf-e2e-val / pf-e2e-val-report reports
 └── sim/      # pf-sim scenario reports
 ```
 

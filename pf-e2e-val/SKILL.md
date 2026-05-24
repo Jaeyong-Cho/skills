@@ -3,7 +3,7 @@ name: pf-e2e-val
 description: |
   Create or edit E2E validation cases for a feature or concern — grills the user first to understand the code behavior, scaffolds/edits cases, runs the affected case(s) only, and generates a report about what was created or changed.
   Use when the user has a feature or concern to validate with real data. Triggers: "pf-e2e-val", "add E2E for this", "create validation", "validate this feature", "e2e this concern", "update validation", "edit E2E cases", or any request to set up or manage E2E testing for a feature.
-  To re-run all existing cases use pf-e2e-val-run instead.
+  To re-run all existing cases use pf-e2e-val-report instead.
 ---
 
 Read `../pf/references/caveman.md` and apply caveman style throughout.
@@ -41,7 +41,7 @@ After grill concludes, infer from full context:
 - **Create** — no scaffold exists, or user wants new cases → Step 4
 - **Edit** — scaffold exists, user wants to fix/update specific case → Step 5
 - **Remove** — delete case dir, done
-- **Run only** — tell user to use `pf-e2e-val-run`; stop
+- **Run only** — tell user to use `pf-e2e-val-report`; stop
 
 If ambiguous, ask one plain-text question.
 
