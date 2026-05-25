@@ -18,14 +18,7 @@ Design direction: **Value → Aspect → Object** (iterative in practice).
 
 ## Step 1: Grill the design
 
-Read `../pf/references/deep-modules.md`, `../pf/references/aop.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context. No maximum questions — keep going until every branch is resolved.
-
-Goal: reach shared understanding of:
-- **Value** — what user need this solves; entry point shape
-- **Aspect** — how it works; which objects it orchestrates and from what angle
-- **Object** — which stable domain objects are needed; their invariants
-
-Cite exact `file:line` when referencing source. User can say **"wrap up"** to move on.
+Read `../pf/references/deep-modules.md`, `../pf/references/aop.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context. No maximum questions — keep going until all ambiguity is gone and consensus is reached. Cite exact `file:line` when referencing source. User can say **"wrap up"** to move on.
 
 ## Step 2: Extract behavior list
 
