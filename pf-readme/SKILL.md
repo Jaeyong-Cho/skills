@@ -21,9 +21,21 @@ find . -mindepth 1 -maxdepth 2 -type d | grep -v -E '(node_modules|\.git|__pycac
 
 List found directories. Ask via `AskUserQuestion` (multi-select): which to document, or "All".
 
-## Step 2: Inspect each directory
+## Step 2: Check project state
 
-For each target:
+```bash
+find . -mindepth 1 -maxdepth 3 -type f | grep -v -E '(node_modules|\.git|__pycache__|\.pf|venv|dist|build)' | wc -l
+```
+
+If project is empty (0–3 files) → grill about the project first (plain text, one at a time):
+- What is this project? What does it do?
+- Why does it exist? What problem does it solve?
+- Who will use it?
+- What are the planned top-level directories and their purpose?
+
+Use answers to inform all subsequent READMEs. Write root `./README.md` as well.
+
+For each target directory:
 
 ```bash
 ls -la <dir>/
