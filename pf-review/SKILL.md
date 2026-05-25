@@ -1,7 +1,7 @@
 ---
 name: pf-review
 description: |
-  Review a VAO ADR implementation — walk through each user story scenario step by step, grill the user with targeted questions referencing actual source files and line numbers, and confirm the implementation matches the design intent. Then update the documentation.
+  Review a VAO ADR implementation — walk through each user story scenario step by step, grill the user with targeted questions referencing actual source files and line numbers, and confirm the implementation matches the design intent.
   Use after pf-impl is done. Triggers: "pf-review", "review the implementation", "review the code", "code review", "let's review", after implementation is complete.
 ---
 
@@ -58,20 +58,8 @@ Collect every issue from Step 3 — wrong behavior, wrong layer, missing error h
 
 For each: fix code at cited `file:line`, update ADR to reflect changes (Decision, User Stories if behavior shifted, Step-by-Step Plan if files/layers changed). Batch fixes, show summary after.
 
-## Step 6: Confirm and decide
+## Step 6: Done
 
-Ask via `AskUserQuestion`: "Issues fixed. What next?" — options: "Update documentation" (Recommended) / "Re-review the fixes" / "Done — skip docs".
-
-## Step 7: Update documentation (if confirmed)
-
-Read `../pf/references/docs.md` for full structure and SUMMARY.md format.
-
-Check existing: `ls .pf/src/docs/value/ .pf/src/docs/aspect/ .pf/src/docs/object/ 2>/dev/null`
-
-From ADR Decision section, create one file per entity per layer. See [REFERENCE.md](REFERENCE.md#doc-file-formats) for file format. Write in present tense. Add **Related files** section per entity: `grep -rl "<EntityName>" src/`
-
-Update indexes and SUMMARY.md, then build: `cd .pf && mdbook build 2>&1` — fix all errors before reporting.
-
-## Step 8: Done
+Ask via `AskUserQuestion`: "Issues fixed. What next?" — options: "Re-review the fixes" / "Done".
 
 Mark ADR status as `Accepted`. Show files created/updated. Suggest commit message using `../pf/references/commit.md`.
