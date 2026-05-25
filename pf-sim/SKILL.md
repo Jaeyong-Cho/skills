@@ -33,7 +33,7 @@ Read entry point file in full. Map first hop: `Scenario input → entry point (f
 Trace execution from entry point forward. For each hop — stop, ask, wait for answer, then proceed:
 
 1. **Announce** — `"Now at: file:line — <what this code does>"`
-2. **Quote** exact relevant lines
+2. **Quote** — show the exact relevant lines with `file:line` header inline
 3. **Ask** — one question via `AskUserQuestion` (discrete) or plain text (open): what do you expect here, which branch will be taken, what state changes, does this match your hypothesis?
 4. **Confirm** — after user answers, state whether they were right and why, then move to next hop
 

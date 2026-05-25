@@ -33,7 +33,7 @@ Build mental map: which file owns which behavior, at which line numbers.
 For each hop in order:
 1. **Announce** — `"Now at: file:line — <what this hop does>"`
 2. **Quote** exact relevant lines
-3. **Grill** — one question at a time via `AskUserQuestion` (discrete) or plain text (open). Types: explain it, why here, inputs/outputs, edge cases, layer check, what would you change? Cite `file:line` in every question.
+3. **Grill** — one question at a time via `AskUserQuestion` (discrete) or plain text (open). Types: explain it, why here, inputs/outputs, edge cases, layer check, what would you change? Always show the relevant code snippet inline (with `file:line` header) before asking.
 
 Correct code still gets questions — use to cement understanding. User can say **"wrap up"** to skip to next hop. Walk every hop. Never skip.
 
