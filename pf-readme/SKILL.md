@@ -27,13 +27,7 @@ List found directories. Ask via `AskUserQuestion` (multi-select): which to docum
 find . -mindepth 1 -maxdepth 3 -type f | grep -v -E '(node_modules|\.git|__pycache__|\.pf|venv|dist|build)' | wc -l
 ```
 
-If project is empty (0–3 files) → grill about the project first (plain text, one at a time):
-- What is this project? What does it do?
-- Why does it exist? What problem does it solve?
-- Who will use it?
-- What are the planned top-level directories and their purpose?
-
-Use answers to inform all subsequent READMEs. Write root `./README.md` as well.
+If project is empty (0–3 files) → run `grill-me` focused on: what is this project, why it exists, who uses it, planned directory structure. Use answers to inform all READMEs. Write root `./README.md` as well.
 
 For each target directory:
 
@@ -45,11 +39,7 @@ Read key files — entry points, index, main module, any existing README. Note: 
 
 ## Step 3: Grill
 
-For each directory, one question at a time (plain text):
-- What is the main purpose of `<dir>/`?
-- What must a new contributor know before touching this?
-- Any conventions, naming rules, or gotchas?
-- What does NOT belong here?
+For each directory, run `grill-me` focused on: purpose of `<dir>/`, what a new contributor must know, conventions and naming rules, what does NOT belong here.
 
 User can say **"wrap up"** to skip to writing.
 
