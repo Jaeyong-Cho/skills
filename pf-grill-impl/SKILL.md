@@ -18,7 +18,7 @@ Design direction: **Value → Aspect → Object** (iterative in practice).
 
 ## Step 1: Grill the design
 
-Read `../pf/references/deep-modules.md`, `../pf/references/aop.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context.
+Read `../pf/references/deep-modules.md`, `../pf/references/aop.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context. No maximum questions — keep going until every branch is resolved.
 
 Goal: reach shared understanding of:
 - **Value** — what user need this solves; entry point shape
