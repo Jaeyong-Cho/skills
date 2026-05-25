@@ -30,12 +30,14 @@ Build mental map: which file owns which behavior, at which line numbers.
 
 **Map first** — before asking anything, read all files and map the full execution path (see [REFERENCE.md](REFERENCE.md#execution-trace-map)). Print map so user sees the full journey.
 
-For each hop in order:
-1. **Announce** — `"Now at: file:line — <what this hop does>"`
-2. **Quote** exact relevant lines
-3. **Check understanding** — ask via `AskUserQuestion`: "Is this clear, or do you want me to explain?" If user wants explanation, explain the code at this hop fully, then move on. If clear, move on.
+For each hop — stop, ask, wait for answer, then proceed:
 
-Correct code still gets questions — use to cement understanding. User can say **"wrap up"** to skip to next hop. Walk every hop. Never skip.
+1. **Announce** — `"Now at: file:line — <what this hop does>"`
+2. **Show** — display the relevant code snippet inline with `file:line` header
+3. **Ask** — one specific question about this code via `AskUserQuestion` (discrete) or plain text: what does this do, which branch is taken, what is the input/output, why is this here?
+4. **Confirm** — after user answers: confirm if correct and explain why, or correct and explain the actual behavior. Then move to next hop.
+
+Do not advance until user has answered. User can say **"wrap up"** to skip remaining hops. Walk every hop. Never skip.
 
 ## Step 4: Simulate scenarios
 
