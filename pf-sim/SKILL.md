@@ -30,12 +30,14 @@ Read entry point file in full. Map first hop: `Scenario input → entry point (f
 
 ## Step 3: Simulate — step by step
 
-Trace execution from entry point forward. At each hop:
+Trace execution from entry point forward. For each hop — stop, ask, wait for answer, then proceed:
+
 1. **Announce** — `"Now at: file:line — <what this code does>"`
 2. **Quote** exact relevant lines
-3. **Grill** — one question at a time via `AskUserQuestion` (discrete) or plain text (open): which branch, what state changes, does this match hypothesis, what would change behavior?
+3. **Ask** — one question via `AskUserQuestion` (discrete) or plain text (open): what do you expect here, which branch will be taken, what state changes, does this match your hypothesis?
+4. **Confirm** — after user answers, state whether they were right and why, then move to next hop
 
-Track internally: hop + what it does with scenario input, branch taken + why, state, matches/diverges from hypothesis, surprises.
+Do not advance to the next hop until the user has responded. Track: branch taken + why, state changes, matches/diverges from hypothesis, surprises.
 
 User can say **"wrap up"** to compress remaining hops and jump to conclusions.
 
