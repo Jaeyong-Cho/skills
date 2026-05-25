@@ -41,7 +41,13 @@ Do not advance to the next hop until the user has responded. Track: branch taken
 
 User can say **"wrap up"** to compress remaining hops and jump to conclusions.
 
-## Step 4: Conclude
+## Step 4: Deep-dive questions
+
+After all hops are traced, ask follow-up questions about the simulation — no limit. One at a time via `AskUserQuestion` or plain text. Examples: why did this branch win, what would happen if this input changed, is this the right layer for this logic, what edge cases does this miss, what surprised you?
+
+Keep going until the user says **"done"** or **"wrap up"**.
+
+## Step 5: Conclude
 
 ```
 Hypothesis: <what user expected>
@@ -58,7 +64,7 @@ Open questions:
 
 Ask via `AskUserQuestion`: "Ready to generate the HTML report?"
 
-## Step 5: HTML report
+## Step 6: HTML report
 
 Follow `../pfj-grill/REPORT.md` for structure, styling, interactivity, and generation rules.
 
