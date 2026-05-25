@@ -16,8 +16,10 @@ Grill to extract what user observed and challenge their reasoning. Write markdow
 
 Read user's description. Extract:
 - **Experiment / context** — what was tried, what setup, what action
+- **Hypothesis** — what the user expected to happen
 - **Observation** — what actually happened (output, behavior, phenomenon)
-- **Initial thinking** — what user thinks it means, their hypothesis or concern
+- **Result** — did it match? what was confirmed or refuted?
+- **Initial thinking** — what user thinks it means
 
 If any part is missing, ask once in plain text.
 
@@ -62,9 +64,17 @@ Date: YYYY-MM-DD
 Confidence: high / medium / low
 Tags: #tag1 #tag2
 
+## Hypothesis
+
+<what was expected before the experiment>
+
 ## Observation
 
-<what happened — inputs, context, action>
+<what actually happened — inputs, context, action>
+
+## Result
+
+<did it match the hypothesis? what was confirmed or refuted?>
 
 ## Interpretation
 
