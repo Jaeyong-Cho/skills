@@ -91,5 +91,3 @@ Include when warrants: failure analysis with source location, coverage map for g
 ```
 Report: .pf/reports/validate/YYYY/MM-DD-<slug>.html
 ```
-
-If failures revealed unexpected behavior or a new insight → suggest running `/pfj-research` to record it.

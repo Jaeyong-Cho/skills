@@ -75,5 +75,3 @@ Update indexes and SUMMARY.md, then build: `cd .pf && mdbook build 2>&1` — fix
 ## Step 8: Done
 
 Mark ADR status as `Accepted`. Show files created/updated. Suggest commit message using `../pf/references/commit.md`.
-
-If review surfaced surprising findings or insights worth keeping → suggest running `/pfj-research` to record them.
