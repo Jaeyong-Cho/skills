@@ -65,6 +65,10 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 [trace a scenario through code]
         ↓
     pf-sim  ──→  execution trace + verdict
+
+[observe runtime behavior — logs, data, state, config]
+        ↓
+  pf-observe  ──→  observation scripts + cause analysis
 ```
 
 ### Skills
