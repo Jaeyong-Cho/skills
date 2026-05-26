@@ -10,6 +10,8 @@ Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 
 # System Observation
 
+For what to observe and how to implement CLI flags, logging, and output file conventions — read [REFERENCE.md](REFERENCE.md).
+
 Clarify what's unknown. Identify observables. Build scripts to surface differences, patterns, causes.
 
 ## Step 1: Capture the unknown

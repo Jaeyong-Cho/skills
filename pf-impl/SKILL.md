@@ -52,7 +52,7 @@ For refactoring guidelines read `references/tdd-refactoring.md`. For interface d
 - [ ] Complexity hidden or exposed?
 - [ ] Duplication to extract?
 
-**Observability checklist:**
+**Observability checklist** (see `../pf-observe/REFERENCE.md` for patterns and CLI flag conventions):
 - [ ] Logs key inputs, outputs, and state changes at appropriate level?
 - [ ] Logs environment info (runtime version, env name, config values) on startup or entry?
 - [ ] Logs dependency versions where relevant?
