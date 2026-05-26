@@ -32,9 +32,9 @@ Grill (one at a time, no limit) until clear:
 Ask which of these are accessible and most likely to reveal the cause:
 - **Logs** — app, system, access logs
 - **Data outputs** — query results, API responses, file contents
-- **Runtime state** — process list, memory, CPU, open files/sockets
+- **Runtime state** — process list, memory, CPU, open files/sockets, runtime state data
 - **Dependencies** — versions, installed packages, service status
-- **Inputs/requests** — HTTP requests, function args, events
+- **Inputs/requests** — HTTP requests, function args, events, cli input
 - **Config/flags** — env vars, feature flags, config files
 
 ## Step 3: Build observation scripts
