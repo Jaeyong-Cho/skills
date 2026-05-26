@@ -61,6 +61,7 @@ Read `../pf-impl/references/tdd-refactoring.md`, `../pf/references/deep-modules.
 - [ ] Logs dependency versions where relevant?
 - [ ] Writes important runtime state to a file (structured log, snapshot, or output file) for later inspection?
 - [ ] Errors include enough context (input values, state) to diagnose without a debugger?
+- [ ] Existing `observe/` scripts still compatible? (`ls observe/ 2>/dev/null` — check each script still targets valid paths, interfaces, and output formats)
 
 Run all tests after each refactor step. Never refactor while RED.
 
