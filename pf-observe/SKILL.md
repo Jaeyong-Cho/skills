@@ -64,7 +64,18 @@ Run scripts. Show output. For each result:
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 
-## Step 5: Done
+## Step 5: Discover unexpected
 
-List all scripts written. Summarize: observation → pattern → cause (or still unknown).
-Suggest `/pfj-research` to record findings as a research note.
+After the original question is answered (or exhausted), scan all collected output for anything that wasn't the target but stands out:
+- Values that look wrong, unusually high/low, or inconsistent
+- Patterns that appear where they shouldn't (or are absent where expected)
+- Dependencies, versions, or config that differ from what's assumed
+- Errors or warnings not related to the original hypothesis
+
+Write a discovery script if needed: `observe/discover.py` — reads all output files in `observe/output/`, flags outliers and anomalies.
+
+Report unexpected findings separately. These often reveal deeper issues or future bugs.
+
+## Step 6: Done
+
+List all scripts written. Summarize: observation → pattern → cause (or still unknown). Note any unexpected discoveries separately.
