@@ -65,7 +65,7 @@ Run scripts. Show output. For each result, look beyond the expected:
 - Any pattern that appears where it shouldn't, or is missing where it should be?
 - Does this confirm or deny the hypothesis — and does it reveal something else?
 
-Surface unexpected findings explicitly, even if unrelated to the original question. These often point to deeper issues.
+Surface unexpected findings explicitly — including things that seem unrelated to the original question. Unrelated observations often carry the most interesting patterns: a dependency version mismatch, an env var set to an unexpected value, a log line that appears too often or not at all. Do not dismiss anything as irrelevant before examining it.
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 
