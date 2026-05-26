@@ -52,6 +52,13 @@ For refactoring guidelines read `references/tdd-refactoring.md`. For interface d
 - [ ] Complexity hidden or exposed?
 - [ ] Duplication to extract?
 
+**Observability checklist:**
+- [ ] Logs key inputs, outputs, and state changes at appropriate level?
+- [ ] Logs environment info (runtime version, env name, config values) on startup or entry?
+- [ ] Logs dependency versions where relevant?
+- [ ] Writes important runtime state to a file (structured log, snapshot, or output file) for later inspection?
+- [ ] Errors include enough context (input values, state) to diagnose without a debugger?
+
 Run all tests after each refactor step. Never refactor while RED.
 
 ## Step 4: Done
