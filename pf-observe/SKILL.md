@@ -12,20 +12,9 @@ Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 
 For what to observe and how to implement CLI flags, logging, and output file conventions — read [REFERENCE.md](REFERENCE.md).
 
-Clarify what's unknown. Identify observables. Build scripts to surface differences, patterns, causes.
+## Step 1: Grill
 
-## Step 1: Capture the unknown
-
-Read user's description. Extract:
-- **System** — what component, service, or behavior
-- **Unknown** — what they don't understand or want to verify
-- **Hypothesis** — what they suspect is the cause
-
-Grill (one at a time, no limit) until clear:
-- What exactly are you trying to observe?
-- What do you already see vs. what's hidden?
-- What difference or change would tell you something meaningful?
-- What's your current theory about the cause?
+Run `grill-me` focused on: what system, what's unknown, what's already visible, what difference would reveal the cause, what the hypothesis is. No maximum questions — keep going until fully understood.
 
 ## Step 2: Identify observables
 

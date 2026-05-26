@@ -11,7 +11,11 @@ Read `../pf/references/caveman.md` and apply caveman style throughout.
 
 Run observe/ scripts. Collect output. Report findings, patterns, anomalies.
 
-## Step 1: Discover scripts
+## Step 1: Grill
+
+Run `grill-me` focused on: what the user wants to understand, what they expect to find, what would count as an interesting or unexpected result. No maximum questions — keep going until fully understood.
+
+## Step 3: Discover scripts
 
 ```bash
 ls observe/ 2>/dev/null
@@ -21,7 +25,7 @@ If no `observe/` or empty → tell user to run `/pf-observe` first.
 
 List scripts found. Ask via `AskUserQuestion`: run all or select specific ones.
 
-## Step 2: Run scripts
+## Step 4: Run scripts
 
 For each selected script:
 
@@ -35,7 +39,7 @@ Pass `--debug-path observe/output --debug-level debug` if the script accepts it.
 
 Note: pass / fail / no output for each.
 
-## Step 3: Analyze output
+## Step 5: Analyze output
 
 For all collected output, look for:
 - **Confirmed** — values or patterns that match expectations
@@ -46,7 +50,7 @@ For all collected output, look for:
 
 Do not dismiss anything as irrelevant before examining it.
 
-## Step 4: Generate HTML report
+## Step 6: Generate HTML report
 
 Follow `../pfj-grill/REPORT.md` for structure and styling.
 
