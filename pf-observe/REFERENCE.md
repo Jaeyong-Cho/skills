@@ -48,27 +48,20 @@ Snapshots of what the system holds in memory or on disk.
 
 ## CLI Debug Options
 
-Implement these flags in entry points to enable observation without code changes:
+Two flags. Add to every entry point.
 
-| Flag | Purpose | Example |
-|------|---------|---------|
-| `--debug-path <dir>` | Write all debug output to this directory | `--debug-path ./observe/output` |
-| `--debug-level <level>` | Verbosity: `off`, `info`, `debug`, `trace` | `--debug-level debug` |
-| `--log-inputs` | Capture and write all inputs to file | |
-| `--snapshot-state` | Write runtime state snapshot to file at exit | |
-| `--dry-run` | Run without side effects, log what would happen | |
-
-Example entry point pattern:
+| Flag | Purpose | Values |
+|------|---------|--------|
+| `--debug-path <dir>` | Directory to write all debug output | any path, e.g. `observe/output` |
+| `--debug-level <level>` | Verbosity of what gets written | `off` · `info` · `debug` · `trace` |
 
 ```python
-import argparse, json, os
+import argparse, json
 from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--debug-path", default=None)
 parser.add_argument("--debug-level", default="off", choices=["off", "info", "debug", "trace"])
-parser.add_argument("--log-inputs", action="store_true")
-parser.add_argument("--snapshot-state", action="store_true")
 args = parser.parse_args()
 
 debug_path = Path(args.debug_path) if args.debug_path else None
