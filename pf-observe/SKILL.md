@@ -47,35 +47,28 @@ mkdir -p observe
 
 Save all scripts directly in `observe/`. No subdirectories — observation often spans multiple concerns and shouldn't be constrained by category.
 
-For each observable, write a targeted script:
-- **Snapshot** — capture current state
-- **Delta** — detect differences over time or across environments
-- **Pattern** — grep, aggregate, sort to surface signal from noise
+For each observable, think beyond the obvious target. Consider multiple angles:
+- **Snapshot** — current state
+- **Delta** — difference over time, across envs, or between versions
+- **Distribution** — value ranges, frequencies, outliers
+- **Absence** — what's missing that should be there
+- **Correlation** — two observables that should move together but don't
 
-One script per purpose. Shell for quick captures, Python for structured analysis. Name scripts descriptively: `observe/check-versions.py`, `observe/tail-errors.sh`, `observe/diff-config.sh`.
+Write scripts that surface these patterns, not just confirm the hypothesis. One script per angle. Shell for quick captures, Python for structured analysis.
 
 ## Step 4: Run and interpret
 
-Run scripts. Show output. For each result:
+Run scripts. Show output. For each result, look beyond the expected:
 - What's present vs. expected?
-- What pattern or difference appears?
-- Does this confirm or deny the hypothesis?
-- What principle or cause does this point to?
+- What's absent that should be there?
+- Any value that looks wrong — too high, too low, or inconsistent?
+- Any pattern that appears where it shouldn't, or is missing where it should be?
+- Does this confirm or deny the hypothesis — and does it reveal something else?
+
+Surface unexpected findings explicitly, even if unrelated to the original question. These often point to deeper issues.
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 
-## Step 5: Discover unexpected
+## Step 5: Done
 
-After the original question is answered (or exhausted), scan all collected output for anything that wasn't the target but stands out:
-- Values that look wrong, unusually high/low, or inconsistent
-- Patterns that appear where they shouldn't (or are absent where expected)
-- Dependencies, versions, or config that differ from what's assumed
-- Errors or warnings not related to the original hypothesis
-
-Write a discovery script if needed: `observe/discover.py` — reads all output files in `observe/output/`, flags outliers and anomalies.
-
-Report unexpected findings separately. These often reveal deeper issues or future bugs.
-
-## Step 6: Done
-
-List all scripts written. Summarize: observation → pattern → cause (or still unknown). Note any unexpected discoveries separately.
+List all scripts written. Summarize: observation → pattern → cause (or still unknown).
