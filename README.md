@@ -105,13 +105,7 @@ validate/<slug>/
 └── cases/
     └── NN-<name>/   # run.py · input.json · expected.json · result.json
 
-observe/
-├── logs/      # log capture and analysis scripts
-├── data/      # data output scripts
-├── state/     # runtime state snapshots
-├── deps/      # version and dependency checks
-├── inputs/    # input and request capture
-└── config/    # env vars, flags, config dumps
+observe/          # observation scripts (flat — no subdirs)
 
 .pf/reports/
 ├── impl/     # pf-grill-impl session reports

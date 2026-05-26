@@ -40,26 +40,17 @@ Ask which of these are accessible and most likely to reveal the cause:
 Scaffold directory if not exists:
 
 ```bash
-mkdir -p observe/logs observe/data observe/state observe/deps observe/inputs observe/config
+mkdir -p observe
 ```
 
-Structure:
-```
-observe/
-├── logs/      # log capture and analysis
-├── data/      # data output and query scripts
-├── state/     # runtime state snapshots
-├── deps/      # version and dependency checks
-├── inputs/    # input and request capture
-└── config/    # env vars, flags, config dumps
-```
+Save all scripts directly in `observe/`. No subdirectories — observation often spans multiple concerns and shouldn't be constrained by category.
 
-For each observable, write a targeted script to its category directory:
+For each observable, write a targeted script:
 - **Snapshot** — capture current state
 - **Delta** — detect differences over time or across environments
 - **Pattern** — grep, aggregate, sort to surface signal from noise
 
-One script per observable. Shell for quick captures, Python for structured analysis. Name scripts descriptively: `observe/logs/tail-errors.sh`, `observe/deps/check-versions.py`.
+One script per purpose. Shell for quick captures, Python for structured analysis. Name scripts descriptively: `observe/check-versions.py`, `observe/tail-errors.sh`, `observe/diff-config.sh`.
 
 ## Step 4: Run and interpret
 
