@@ -69,6 +69,8 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 [observe runtime behavior — logs, data, state, config]
         ↓
   pf-observe  ──→  observation scripts + cause analysis
+                        ↓
+          pf-observe-report  ──→  run scripts + HTML findings report
 ```
 
 ### Skills
@@ -85,6 +87,7 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 | `pf-e2e-val-report` | Re-run specific or all existing E2E cases; generates analysis report |
 | `pf-sim` | Trace a scenario through source code step by step; confirm/deny hypothesis |
 | `pf-observe` | Build observation scripts to surface differences, patterns, and causes in a running system |
+| `pf-observe-report` | Run observe/ scripts and generate an HTML report of findings and anomalies |
 | `pf-docs-migrate` | One-time — migrate old feature-centric docs to layer-centric format |
 | `pf-readme` | Write or update per-directory README.md files via grill-me |
 
