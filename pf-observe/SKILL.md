@@ -37,12 +37,29 @@ Ask which of these are accessible and most likely to reveal the cause:
 
 ## Step 3: Build observation scripts
 
-For each observable, write a targeted script:
+Scaffold directory if not exists:
+
+```bash
+mkdir -p observe/logs observe/data observe/state observe/deps observe/inputs observe/config
+```
+
+Structure:
+```
+observe/
+├── logs/      # log capture and analysis
+├── data/      # data output and query scripts
+├── state/     # runtime state snapshots
+├── deps/      # version and dependency checks
+├── inputs/    # input and request capture
+└── config/    # env vars, flags, config dumps
+```
+
+For each observable, write a targeted script to its category directory:
 - **Snapshot** — capture current state
 - **Delta** — detect differences over time or across environments
 - **Pattern** — grep, aggregate, sort to surface signal from noise
 
-One script per observable. Shell for quick captures, Python for structured analysis.
+One script per observable. Shell for quick captures, Python for structured analysis. Name scripts descriptively: `observe/logs/tail-errors.sh`, `observe/deps/check-versions.py`.
 
 ## Step 4: Run and interpret
 
