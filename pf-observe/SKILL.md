@@ -14,7 +14,7 @@ For what to observe and how to implement CLI flags, logging, and output file con
 
 ## Step 1: Grill
 
-Run `grill-me`. No maximum questions. Keep going until the system, the unknown, and the user's mental model are fully understood.
+Read user's concern, known things, and problem. Run `grill-me` focused on those — ask questions to deepen understanding of each. No maximum questions. Keep going until the concern is precise, the known baseline is clear, and the problem is fully understood.
 
 ## Step 2: Explore codebase and existing output
 
@@ -58,7 +58,7 @@ For each observable, think beyond the obvious target. Consider multiple angles:
 - **Absence** — what's missing that should be there
 - **Correlation** — two observables that should move together but don't
 
-Write scripts that surface these patterns. Use grill findings as guide: write at least one script that challenges each concern, one that tests each expectation, and one that goes beyond what's already known. One script per angle. Shell for quick captures, Python for structured analysis.
+Write scripts targeted at what the grill revealed — designed to discover patterns, differences, and trends around the user's concern and problem. One script per angle. Shell for quick captures, Python for structured analysis.
 
 ## Step 4: Run and interpret
 
