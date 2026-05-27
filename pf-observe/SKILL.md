@@ -21,15 +21,30 @@ Run `grill-me` focused on extracting:
 
 No maximum questions. Keep going until all three are clear. These become the baseline — scripts will be built to confirm, challenge, or go beyond what's already known.
 
-## Step 2: Identify observables
+## Step 2: Explore codebase and existing output
 
-Ask which of these are accessible and most likely to reveal the cause:
-- **Logs** — app, system, access logs
-- **Data outputs** — query results, API responses, file contents
-- **Runtime state** — process list, memory, CPU, open files/sockets, runtime state data
-- **Dependencies** — versions, installed packages, service status
-- **Inputs/requests** — HTTP requests, function args, events, cli input
-- **Config/flags** — env vars, feature flags, config files
+Search the codebase to understand what data already flows through the system:
+
+```bash
+# Entry points and CLI args
+grep -rn "argparse\|click\|argv\|optparse" src/ 2>/dev/null | head -30
+# Logging calls
+grep -rn "logging\|logger\|log\.\(info\|debug\|error\|warning\)" src/ 2>/dev/null | head -30
+# Output file writes
+grep -rn "open(\|write(\|json.dump\|to_csv\|to_json" src/ 2>/dev/null | head -30
+# Config and env reads
+grep -rn "os.environ\|os.getenv\|config\[" src/ 2>/dev/null | head -20
+```
+
+Also inspect existing output data:
+```bash
+ls observe/output/ 2>/dev/null
+find . -name "*.log" -o -name "*.jsonl" -o -name "*.json" 2>/dev/null | grep -v node_modules | head -20
+```
+
+Read key output files to understand structure — field names, value types, patterns already present.
+
+From this, identify what the system already exposes and what's hidden. Use to inform script design.
 
 ## Step 3: Build observation scripts
 
