@@ -62,14 +62,7 @@ Write scripts that surface these patterns. Use grill findings as guide: write at
 
 ## Step 4: Run and interpret
 
-Run scripts. Show output. For each result, look beyond the expected:
-- What's present vs. expected?
-- What's absent that should be there?
-- Any value that looks wrong — too high, too low, or inconsistent?
-- Any pattern that appears where it shouldn't, or is missing where it should be?
-- Does this confirm or deny the hypothesis — and does it reveal something else?
-
-Surface unexpected findings explicitly — including things that seem unrelated to the original question. Unrelated observations often carry the most interesting patterns: a dependency version mismatch, an env var set to an unexpected value, a log line that appears too often or not at all. Do not dismiss anything as irrelevant before examining it.
+Run scripts. Show output. Interpret each result — look beyond what was asked. Surface unexpected findings, including things that seem unrelated. Do not dismiss anything before examining it.
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 
