@@ -63,7 +63,7 @@ For each observable, think beyond the obvious target. Consider multiple angles:
 - **Absence** — what's missing that should be there
 - **Correlation** — two observables that should move together but don't
 
-Write scripts that surface these patterns, not just confirm the hypothesis. One script per angle. Shell for quick captures, Python for structured analysis.
+Write scripts that surface these patterns. Use grill findings as guide: write at least one script that challenges each concern, one that tests each expectation, and one that goes beyond what's already known. One script per angle. Shell for quick captures, Python for structured analysis.
 
 ## Step 4: Run and interpret
 
