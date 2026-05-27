@@ -14,12 +14,7 @@ For what to observe and how to implement CLI flags, logging, and output file con
 
 ## Step 1: Grill
 
-Run `grill-me` focused on extracting:
-- **Concerns** — what worries the user, what feels wrong or uncertain
-- **Already known** — what they've already observed or confirmed
-- **Expected** — what they expect to see when they look
-
-No maximum questions. Keep going until all three are clear. These become the baseline — scripts will be built to confirm, challenge, or go beyond what's already known.
+Run `grill-me`. No maximum questions. Keep going until the system, the unknown, and the user's mental model are fully understood.
 
 ## Step 2: Explore codebase and existing output
 
