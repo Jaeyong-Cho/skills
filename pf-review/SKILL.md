@@ -5,7 +5,6 @@ description: |
   Use after pf-impl is done. Triggers: "pf-review", "review the implementation", "review the code", "code review", "let's review", after implementation is complete.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including all output documents.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient review to today's focus.
 
 # VAO Code Review
@@ -46,6 +45,8 @@ Derive scenarios from ADR User Stories + edge cases found during trace. See [REF
 Ask via `AskUserQuestion`: "Add any missing scenarios?" — user can add or say "looks good".
 
 For each scenario: trace code path (`file:line` per hop), state expected vs actual, mark: Pass / Fail / Partial / Untestable. Collect failures/partials as issues.
+
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and go to Step 5.
 
 Generate HTML report — see [REFERENCE.md](REFERENCE.md#scenario-html-report) for spec.
 Save: `.pf/review/YYYY-MM-DD-<adr-slug>.html`

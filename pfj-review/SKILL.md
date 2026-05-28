@@ -45,8 +45,6 @@ High-value only. Keep short.
 ## Step 6: HTML report
 
 Read `../pfj-grill/kanagawa.css`. Embed verbatim in `<style>` tag.
-Write all report content in caveman style — follow `../caveman/SKILL.md`.
-
 Save: `$PFJ_PATH/review/YYYY/MM-DD.html`
 
 See [REFERENCE.md](REFERENCE.md#html-report-spec) for diagram rules and required sections.

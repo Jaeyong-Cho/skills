@@ -4,58 +4,36 @@ Software systems are not fully knowable in advance. Observability is the practic
 
 ---
 
-## What to Observe
+## Part 1: Instrumenting the App
 
-### Logs
-Structured records of what happened. Write to file, not just stdout.
+These patterns add debug output *to the app itself* so observation scripts can analyze the results.
 
-- Entry/exit of key operations with inputs and outputs
-- Branch decisions and the reason taken
-- Errors with full context (input values, state at time of failure)
-- Performance-relevant events (slow queries, retries, cache misses)
+### What to Observe
 
-### Environment
-Captured once at startup or entry point.
+| Category | Examples |
+|----------|---------|
+| **Logs** | Entry/exit of key operations with inputs and outputs; branch decisions; errors with full context; slow queries, retries, cache misses |
+| **Environment** | Runtime version, env name (`dev`/`staging`/`prod`), hostname, active feature flags |
+| **Versions** | App version, git commit hash, key dependency versions, lock file checksum |
+| **Inputs** | HTTP request (method, path, headers, body — redact secrets); function arguments; event payloads |
+| **Runtime state** | In-memory caches, DB row counts, file system state, CPU/memory/connections |
 
-- Runtime version (Python 3.11.2, Node 20.5.0, etc.)
-- Environment name (`development`, `staging`, `production`)
-- Hostname, OS, architecture
-- Active feature flags and their values
+### Adding Debug CLI Options
 
-### Versions and Dependencies
-Captured at startup or in a dedicated script.
-
-- Application version / git commit hash
-- Key dependency versions (framework, database client, etc.)
-- Lock file hash or checksum for reproducibility
-
-### Inputs and Requests
-Captures what entered the system.
-
-- HTTP request: method, path, headers, body (redact secrets)
-- Function arguments for key entry points
-- Event payloads, queue messages, file contents
-
-### Runtime State
-Snapshots of what the system holds in memory or on disk.
-
-- In-memory caches, queues, connection pools
-- Database query results and row counts
-- File system state (existence, size, modification time)
-- Resource usage: CPU, memory, open file descriptors, network connections
-
----
-
-## CLI Debug Options
-
-Two flags. Add to every entry point.
+Two flags to add to every app entry point — caller decides where output goes, never hardcoded:
 
 | Flag | Purpose | Values |
 |------|---------|--------|
-| `--debug-path <dir>` | Directory to write all debug output | any path, e.g. `observe/output` |
-| `--debug-level <level>` | Verbosity of what gets written | `off` · `info` · `debug` · `trace` |
+| `--debug-path <dir>` | Directory to write all debug output | any path |
+| `--debug-level <level>` | Verbosity | `off` · `info` · `debug` · `trace` |
+
+The pattern (adapt to any language):
+1. Parse the two flags
+2. If `--debug-path` is set, create the directory
+3. Route all debug writes there as structured JSON/JSONL files
 
 ```python
+# Python example
 import argparse, json
 from pathlib import Path
 
@@ -73,11 +51,43 @@ def debug_write(name: str, data: dict):
         (debug_path / name).write_text(json.dumps(data, indent=2, default=str))
 ```
 
----
+```go
+// Go example
+debugPath := flag.String("debug-path", "", "directory to write debug output")
+debugLevel := flag.String("debug-level", "off", "off|info|debug|trace")
+flag.Parse()
+if *debugPath != "" {
+    os.MkdirAll(*debugPath, 0755)
+}
+```
 
-## Observation File Conventions
+### Writing Structured Logs
 
-Write structured files (JSON or JSONL) to `observe/output/` during debug runs:
+Never rely solely on stdout. Write a structured log file (JSONL) so diffs and patterns can be detected later. Each entry needs: timestamp, level, event name, key-value context.
+
+```python
+# Python example
+import json, time
+from pathlib import Path
+
+class StructuredLogger:
+    def __init__(self, path: Path | None, level: str = "info"):
+        self.path = path
+        self._levels = {"off": 0, "info": 1, "debug": 2, "trace": 3}
+        self.level = level
+
+    def log(self, level: str, event: str, **kwargs):
+        if self._levels.get(level, 0) > self._levels.get(self.level, 1):
+            return
+        entry = {"t": time.time(), "level": level, "event": event, **kwargs}
+        if self.path:
+            with open(self.path / "run.jsonl", "a") as f:
+                f.write(json.dumps(entry, default=str) + "\n")
+```
+
+### Output File Conventions
+
+Write structured files to the `--debug-path` directory during debug runs:
 
 | File | Contents |
 |------|---------|
@@ -89,36 +99,53 @@ Write structured files (JSON or JSONL) to `observe/output/` during debug runs:
 
 ---
 
-## Logging to File
+## Part 2: Writing Observation Scripts
 
-Never rely solely on stdout. Write a structured log file so diffs and patterns can be detected later.
+These are standalone scripts in `observe/` that *analyze* the output produced by the instrumented app.
+
+### Script Rules
+
+- **Accept all paths and config as CLI options** — never hardcode file paths, thresholds, or env-specific values
+- Print human-readable diffs, summaries, or patterns — not raw JSON
+- Runnable standalone with no project imports
+- Exit 0 even if nothing found; print `"no data"` if input is missing
+
+### Templates
 
 ```python
-import json, time
+# Python template
+import argparse, json, sys
 from pathlib import Path
 
-class StructuredLogger:
-    def __init__(self, path: Path | None, level: str = "info"):
-        self.path = path
-        self.level = level
-        self._levels = {"off": 0, "info": 1, "debug": 2, "trace": 3}
+parser = argparse.ArgumentParser()
+parser.add_argument("--input-dir", required=True, help="debug output directory to analyze")
+parser.add_argument("--output-dir", default=None, help="where to write results (optional)")
+parser.add_argument("--since", default=None, help="ISO timestamp lower bound")
+args = parser.parse_args()
 
-    def log(self, level: str, event: str, **kwargs):
-        if self._levels.get(level, 0) > self._levels.get(self.level, 1):
-            return
-        entry = {"t": time.time(), "level": level, "event": event, **kwargs}
-        if self.path:
-            with open(self.path / "run.jsonl", "a") as f:
-                f.write(json.dumps(entry, default=str) + "\n")
+input_dir = Path(args.input_dir)
+if not input_dir.exists():
+    print("no data")
+    sys.exit(0)
+
+# ... analysis logic here ...
 ```
 
----
+```bash
+# Shell template
+#!/usr/bin/env bash
+INPUT_DIR="${1:?usage: $0 <input-dir> [output-dir]}"
+OUTPUT_DIR="${2:-}"
 
-## Observe Script Conventions
+[ -d "$INPUT_DIR" ] || { echo "no data"; exit 0; }
 
-Scripts in `observe/` should:
+# ... analysis logic here ...
+```
 
-- Accept `--path` to point at an output directory from a debug run
-- Print human-readable diffs, summaries, or patterns — not raw JSON
-- Be runnable standalone with no project imports
-- Exit 0 even if nothing found; print `"no data"` if output dir is missing
+### Visualizing Output
+
+When a visual communicates the observation faster or more clearly than text — use it. No constraint on method or format: ASCII, table, SVG, HTML, Mermaid, any library. Pick whatever fits the data and the question being asked.
+
+Save output files to `observe/` and print the path so the user can open them.
+
+Useful libraries: `matplotlib` (SVG/PNG charts), `rich` (terminal tables, progress), `plotly` (interactive HTML). Install as needed.

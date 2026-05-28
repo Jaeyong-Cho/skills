@@ -5,7 +5,6 @@ description: |
   Use when the user wants to execute observation scripts and see a consolidated report of what was found. Triggers: "pf-observe-report", "run observe scripts", "observation report", "what did observe find", "generate observation report", "run all observe".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 
 # Observation Report
 
@@ -49,6 +48,8 @@ For all collected output, look for:
 - **Unresolved** — output that doesn't clearly point anywhere
 
 Do not dismiss anything as irrelevant before examining it.
+
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and stop.
 
 ## Step 6: Generate HTML report
 

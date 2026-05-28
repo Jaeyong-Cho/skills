@@ -5,7 +5,6 @@ description: |
   Use when the user ran an experiment, observed unexpected output, noticed a phenomenon, or has raw insights and thinking they want to crystallize. Triggers: "pfj-research", "I tried something", "I observed this", "research note", "capture this finding", "I have an insight", "I want to document this experiment".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 
 # Research Notes

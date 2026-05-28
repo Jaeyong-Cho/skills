@@ -5,8 +5,6 @@ description: |
   Use when the user wants to know what to review today. Triggers: "pfj-retention", "what should I review", "spaced repetition", "daily review", "retention report", "what's due for review", "forgetting curve report".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
-
 # Daily Retention Report
 
 Scan research notes. Calculate retention. Show what's due for review.

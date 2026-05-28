@@ -5,7 +5,6 @@ description: |
   Use when the user has a scenario, hypothesis, or "what happens when..." question and wants to understand why the code behaves a certain way. Triggers: "pf-sim", "simulate this", "what happens when", "trace this scenario", "why does this happen", "explore this hypothesis", "step through this", or any request to understand code behavior through scenario exploration.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 For layer definitions read `../pf/references/layers.md`.
 
@@ -62,7 +61,7 @@ Open questions:
 - <anything unresolved>
 ```
 
-Ask via `AskUserQuestion`: "Ready to generate the HTML report?"
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip Step 6 and stop.
 
 ## Step 6: HTML report
 

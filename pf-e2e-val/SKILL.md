@@ -6,7 +6,6 @@ description: |
   To re-run all existing cases use pf-e2e-val-report instead.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 For layer definitions read `../pf/references/layers.md`.
 
@@ -74,6 +73,8 @@ python run.py
 ```
 
 Print stdout. Note pass or fail per case.
+
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and stop.
 
 ## Step 7: HTML report
 

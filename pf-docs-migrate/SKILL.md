@@ -5,8 +5,6 @@ description: |
   Triggers: "pf-docs-migrate", "migrate docs", "update docs format", "convert docs structure", or when old-format docs are detected.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
-
 Check for today's journal context:
 
 ```bash

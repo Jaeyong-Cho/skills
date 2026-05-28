@@ -5,7 +5,6 @@ description: |
   Use when the user wants to see validation results or generate a report for a feature. Triggers: "pf-e2e-val-report", "show validation results", "E2E report", "what's the validation status", "report on validation", or any request to view or report on existing E2E test results.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 
 # VAO Validation — Report
@@ -46,6 +45,8 @@ python run.py
 
 Print stdout per case. Note pass or fail. Each `run.py` writes its own `result.json`.
 Show updated pass/fail count.
+
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and stop.
 
 ## Step 4: Generate HTML report
 

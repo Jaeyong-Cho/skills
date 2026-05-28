@@ -5,8 +5,6 @@ description: |
   Use when the user wants to document directory structure, add per-directory READMEs, or update existing ones. Triggers: "pf-readme", "document directories", "write directory readme", "add readme", "explain directory structure", "document this folder", "readme for src", "readme for tests".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
-
 # PF README
 
 Write per-directory README.md files. Read code, grill user, write docs.

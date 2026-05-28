@@ -7,7 +7,6 @@ description: |
   Triggers: "pf-grill-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — if found, orient work to user's broader context.
 Check VAO book: `ls .pf/book.toml 2>/dev/null` — not found → run `pf-init` first.
 For layer definitions read `../pf/references/layers.md`. For TDD philosophy read `../pf-impl/references/tdd.md`.
@@ -64,6 +63,8 @@ Read `../pf-impl/references/tdd-refactoring.md`, `../pf/references/deep-modules.
 - [ ] Existing `observe/` scripts still compatible? (`ls observe/ 2>/dev/null` — check each script still targets valid paths, interfaces, and output formats)
 
 Run all tests after each refactor step. Never refactor while RED.
+
+Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and go to Step 6.
 
 ## Step 5: HTML report
 

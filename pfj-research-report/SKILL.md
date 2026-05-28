@@ -5,8 +5,6 @@ description: |
   Use when the user wants to view or export research notes. Triggers: "pfj-research-report", "show my research", "today's research", "research on X", "make a report for my research", "show research notes", or any request to view, browse, or report on existing research notes.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout.
-
 # Research Note Viewer
 
 Find notes matching user's scope. Display inline. Generate combined HTML report on request.

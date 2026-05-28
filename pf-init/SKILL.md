@@ -5,8 +5,6 @@ description: |
   Triggers: "pf-init", "initialize pf", "set up pf book", "create pf book", or when any pf skill detects .pf/book.toml does not exist.
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
-
 # VAO Initialization
 
 ## Step 1: Install tooling if needed

@@ -5,7 +5,6 @@ description: |
   Triggers: "pf-proto", "prototype this", "let's prototype", "explore this idea", "validate this design", "I want to try something before deciding".
 ---
 
-Read `../pf/references/caveman.md` and apply caveman style throughout — including in all output documents.
 Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient work to user's current focus and goals.
 
 # VAO Prototype
