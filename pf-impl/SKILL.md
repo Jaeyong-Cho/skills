@@ -11,7 +11,7 @@ description: |
 
 For TDD philosophy and RED→GREEN→REFACTOR loop, read `references/tdd.md`.
 
-ADRs stored at `.pf/src/adr/<ID>-<slug>.md`. If user names ADR (e.g. "adr-001", "0001", "auth-flow"): `ls .pf/src/adr/ | grep 0001`. If none specified, list and ask which to implement.
+Find the ADR file — search the project for markdown files matching the name or ID the user gives (`find . -name "*.md" | grep <id>`). If none specified, list candidates and ask which to implement.
 
 ## Step 1: Extract behaviors from ADR
 
