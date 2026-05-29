@@ -96,6 +96,7 @@ flowchart TD
 | `pf-mutate` | Mutate the software one step toward a goal |
 | `pf-evaluate` | Run the eval script end-to-end; score functional, performance, and taste |
 | `pf-observe` | Watch the living software — scripts, patterns, causes; findings feed back as forces |
+| `pf-scenario` | Set up a named, reusable end-to-end scenario runner — parameterized, not hardcoded |
 
 ### Artifacts
 
@@ -106,6 +107,11 @@ evolve/
     ├── eval/             # eval command (single CLI entry point, any internal structure)
     ├── N_mutation.md     # hypothesis · change · how to evaluate · status
     └── N_evaluation.md   # actual output · functional · taste · verdict
+
+scenarios/
+└── <slug>/               # e.g. auth-flow
+    ├── scenario.md       # What it runs, Input, Expected behavior, How to run
+    └── run/              # parameterized CLI entry point
 ```
 
 ---
