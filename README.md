@@ -102,7 +102,7 @@ flowchart TD
 
 ```
 evolve/
-└── <id>-<slug>/          # e.g. 01-response-quality
+└── <id>-<slug>/          # e.g. 0001-response-quality
     ├── goal.md           # Input, Expected output, History
     ├── eval/             # eval command (single CLI entry point, any internal structure)
     ├── N_mutation.md     # hypothesis · change · how to evaluate · status
