@@ -8,7 +8,7 @@ Output: `.pf/src/adr/<ID>-<slug>.md`
 
 For layer definitions, read `references/layers.md`.
 For deep module principles, read `references/deep-modules.md`.
-For cross-cutting concern design, read `references/aop.md`.
+For cross-cutting concern design, read `references/layers.md`.
 
 ## ID assignment
 

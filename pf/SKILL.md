@@ -28,7 +28,7 @@ For layer details including OOP/AOP origin, object sizing by concern, and aspect
 
 ## Write an ADR
 
-Read `references/deep-modules.md`, `references/aop.md`, `references/adr.md`, `references/views.md`. Run `grill-me` skill. If user provided scenario, use as starting context. If coming from `pf-proto`, read PoC document first and use its findings as starting context instead.
+Read `references/deep-modules.md`, `references/layers.md`, `references/adr.md`, `references/views.md`. Run `grill-me` skill. If user provided scenario, use as starting context. If coming from `pf-proto`, read PoC document first and use its findings as starting context instead.
 
 When referencing existing source code, cite exact `file:line`.
 

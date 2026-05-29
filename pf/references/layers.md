@@ -1,8 +1,4 @@
-# VAO Layers in Detail
-
-## Origin
-
-VAO = software design philosophy inspired by OOP and AOP. Three layers, each answering a different question:
+# VAO Layers
 
 | Layer | Question |
 |-------|----------|
@@ -10,72 +6,62 @@ VAO = software design philosophy inspired by OOP and AOP. Three layers, each ans
 | **Aspect** | What algorithm realizes that goal, and from which angle? |
 | **Object** | What stable domain things does the system operate on? |
 
-Each class belongs to the layer that matches its responsibility. If a class is hard to place, the layer boundary is probably wrong.
+Each class belongs to exactly one layer. If a class is hard to place, the boundary is probably wrong.
 
 ---
 
-## Value layer — User Value (Why)
+## Value — Why
 
-Value layer encodes **what end user needs** from software. Answers: which features worth building? Which results do users actually need? What does good outcome look like from their perspective?
-
-Purpose layer — exists to represent user's goals, not system's internals. In code it is entry point: use-case, command, or application service that says "user needs X." Everything below it (aspect, object) exists to serve what value layer defines.
-
-Value layer encodes:
-- Which user needs are worth satisfying (feature selection)
-- What successful result looks like (evaluation)
-- What must never happen (validation)
-- Which aspect should deliver result
-
-Value layer represents user intent, delegates *how* to aspect layer. Keep explicit in logic — if user's need only lives in comment or ticket, it has not been encoded in value layer yet.
+Encodes what end user needs. Entry point in code: use-case, command, or application service. Defines which needs are worth satisfying, what success looks like, what must never happen, and which aspect delivers the result. If user's need only lives in a comment or ticket, it hasn't been encoded yet.
 
 ---
 
-## Aspect layer — Algorithm / Aspect (How)
+## Aspect — How
 
-Aspect layer has two distinct roles — keep them separate in your thinking:
+Two roles — keep them separate:
 
-**Algorithm** — the workflow, strategy, or computation that realizes the user goal. What steps, in what order, with what logic. This is the "how."
+**Algorithm** — the workflow, strategy, or computation that realizes the user goal.
 
-**Lens** — which domain objects to use and which of their properties matter here. AOP thinking: different aspects see the same object differently. `AuthAspect` reads `user.role`. `BillingAspect` reads `user.plan`. Same object, different angles — correct, not a problem. Aspect does not need to use all objects, or all properties of any object.
+**Lens** — cross-cutting behavior that multiple objects need but belongs to none of them. Auth, logging, billing, caching — these cut across `User`, `Order`, `Product` alike. Each aspect asks one question of the object; reads only the properties relevant to its concern.
 
-For cross-cutting concern design with code examples, read `references/aop.md`.
+```
+        User          Order         Product
+          │              │               │
+          ▼              ▼               ▼
+   ┌──────────────────────────────────────────┐
+   │           AuthAspect                     │  ← cross-cutting
+   └──────────────────────────────────────────┘
+   ┌──────────────────────────────────────────┐
+   │           BillingAspect                  │  ← cross-cutting
+   └──────────────────────────────────────────┘
+```
 
-Structure aspect layer into composable units — strategies, workflows, pipelines — so aspects can be swapped without changing objects or value definition.
+**Core rule**: Objects are concern-agnostic. Aspects own concern. Aspects are injected into the Value layer via constructor — no proxies, no weaving.
 
----
+| Aspect | Concern | Reads from objects |
+|--------|---------|-------------------|
+| `AuthAspect` | "Is this user permitted?" | `user.role`, `user.sessionToken` |
+| `BillingAspect` | "Has this user paid?" | `user.plan`, `user.subscriptionStatus` |
+| `AuditAspect` | "What happened and who did it?" | `user.id`, `order.id`, `order.status` |
+| `CacheAspect` | "Is this result fresh?" | `product.id`, `product.updatedAt` |
 
-## Object layer — Existence (What)
-
-Domain objects = things that must exist to satisfy both user need and aspect. Not arbitrary catalog of domain things — objects that aspect selects and uses, shaped to serve concerns value layer defines.
-
-Domain object is not data container. Defines full identity of domain target:
-
-- **Properties** — state it holds
-- **Actions** — what it can do (methods, commands, transitions)
-- **Behaviors** — how it responds to events or conditions
-- **Relationships** — how it connects to other objects
-
-Class that only holds data with no actions or behaviors is data bag, not domain object. If logic that belongs to object is scattered across service or aspect-layer classes, that is leakage smell — object is too thin.
-
-**Key design question**: What distinguishes this object from others, and is it right abstraction for concern being served?
-
-**Key design constraint**: Size must match concern.
-
-- If concern is `DNA`, defining `Atom` object is reasonable.
-- If concern is `Animal`, `Atom` is too small — define `Arm`, `Head`, `Body` instead.
-- Object must not be too large (covering things outside concern) or too small (forcing callers to reconstruct meaning).
-
-**Invariance principle**: Domain object must remain same regardless of which aspect is looking at it. If object changes shape for specific use case, it has leaked into aspect layer.
-
-Domain objects are stable foundation. Multiple aspect-layer components can use same object from different angles without object knowing or caring.
-
-### Relationships
-
-For each relationship, decide: cardinality, ownership (who controls lifecycle), navigability (which direction), and aggregate boundary (what changes atomically together). View-specific joins belong in aspect layer, not object.
+Structure into composable units — strategies, workflows, pipelines — so aspects can be swapped without changing objects or value definition.
 
 ---
 
-## How the Three Relate
+## Object — What
+
+Domain objects are not data containers. Defines full identity: properties, actions, behaviors, relationships. Logic scattered upward into services or aspects is leakage — object is too thin.
+
+**Size must match concern**: too large covers things outside concern; too small forces callers to reconstruct meaning.
+
+**Invariance principle**: object must remain same regardless of which aspect looks at it. If object changes shape for a specific use case, it has leaked into the aspect layer.
+
+For relationships: decide cardinality, ownership (who controls lifecycle), navigability (which direction), aggregate boundary (what changes atomically together). View-specific joins belong in aspect layer, not object.
+
+---
+
+## How They Relate
 
 ```
 value layer   →  defines what is worth doing (user need)
@@ -85,24 +71,24 @@ aspect layer  →  defines how to do it, from which aspect
 object layer  →  defines what exists to operate on
 ```
 
-- Aspect layer uses objects to realize value.
-- Value layer influences aspect layer through selection, evaluation, and validation.
-- Objects remain stable — not shaped by any single aspect or value concern.
-
-**Design order**: define value first → design aspects second → define/refine objects last. Iterative in practice, but conceptual direction stays same.
+Objects remain stable — not shaped by any single aspect or value concern. Design order: value → aspects → objects (iterative in practice).
 
 ---
 
-## Common Design Smells
+## Design Smells
 
-| Smell | Layer | Likely cause |
-|---|---|---|
-| Selection logic duplicated across callers | Value | Value layer not extracted |
-| Algorithm hard-coded with magic thresholds | Value | Value mixed into aspect layer |
-| User need only in docs, not in code | Value | Value layer implicit rather than encoded |
-| Aspect with no clear algorithm — just routes calls | Aspect | Aspect is a pass-through, not a real layer |
-| Aspect duplicates logic that belongs on the object | Aspect | Object is too thin — logic leaked upward |
-| Aspect used as catch-all for unrelated behavior | Aspect | Single responsibility violated — split the aspect |
-| God object that evaluates, executes, and models | Object | No layer separation |
-| Object too large — covers multiple concerns | Object | Abstraction level mismatched to concern |
-| Object too small — callers must reconstruct meaning | Object | Abstraction level too fine-grained |
+| Smell | What it looks like | Layer |
+|-------|-------------------|-------|
+| Selection logic duplicated across callers | Value layer not extracted | Value |
+| Algorithm with magic thresholds | Value mixed into aspect layer | Value |
+| User need only in docs | Value layer implicit, not encoded | Value |
+| Aspect with no clear algorithm | Pass-through, not a real layer | Aspect |
+| Aspect duplicates object logic | Object too thin — logic leaked upward | Aspect |
+| Aspect doing too much | One aspect, multiple unrelated concerns | Aspect |
+| Aspect calls aspect | `AuthAspect` calls `AuditAspect` directly | Aspect |
+| Aspect holds domain state | `BillingAspect` stores `user.plan` internally | Aspect |
+| Value layer skips aspect | Command directly checks `user.role === 'admin'` | Value |
+| Concern in object | `user.logAccess()`, `order.checkBilling()` | Object |
+| Object shaped for one aspect | `user.authContext`, `user.billingView` | Object |
+| God object | Evaluates, executes, and models domain | Object |
+| Object size mismatch | Too large or too small for concern being served | Object |
