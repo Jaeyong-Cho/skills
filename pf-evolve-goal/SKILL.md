@@ -11,11 +11,13 @@ Goals live in `evolve/<slug>/goal.md`. Mutations and evaluations accumulate as `
 
 ## Create
 
-Grill user to extract:
+Run `grill-me` skill. Starting context: goal definition. Cover at minimum:
 - **Description** — what are we trying to achieve?
 - **Input** — what goes in?
 - **Expected output** — what should come out?
 - **Success criteria** — what does good look like at each layer (functional → performance → human taste)?
+
+No maximum questions — keep going until the goal is unambiguous. User can say **"wrap up"** to move on.
 
 Derive slug from description (lowercase, hyphens, max 30 chars).
 
@@ -37,14 +39,6 @@ Write `evolve/<slug>/goal.md`:
 ## Expected output
 <what should come out>
 
-## Success criteria
-- [ ] Functional: <works correctly>
-- [ ] Performance: <speed / efficiency target>
-- [ ] Human taste: <what good feels like>
-
-## Status
-active
-
 ## History
 - YYYY-MM-DD: created
 ```
@@ -64,7 +58,7 @@ For each goal directory, show:
 
 ## Update
 
-User names a goal → read its `goal.md` → grill on what changed and why → update the relevant fields → append to History:
+User names a goal → read its `goal.md` → run `grill-me` skill with the current goal as context, focused on what changed and why → update the relevant fields → append to History:
 
 ```markdown
 - YYYY-MM-DD: updated — <reason>
