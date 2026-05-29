@@ -57,9 +57,11 @@ Write `scenarios/<slug>/scenario.md`:
 ```
 
 Create `scenarios/<slug>/run/` — the single CLI entry point:
-- Wire all inputs from `scenario.md` as fixed arguments
+- Accepts inputs as parameters (args, env vars, or config file) — not hardcoded
 - Language and internal structure: unconstrained
 - Entry point must be one invocable command
+
+`scenario.md` documents the specific inputs to use; the runner itself stays general.
 
 ## Step 4: Verify
 
