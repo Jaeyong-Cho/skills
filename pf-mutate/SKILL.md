@@ -35,7 +35,9 @@ Read the source files relevant to the goal. Use the goal's description and input
 
 ## Step 4: Grill the intent
 
-Run `grill-me` skill using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand the intent behind the mutation and what the change should achieve. Starting context: the user's reason for mutating (evaluation result, shifted goal, new insight). Ask one question at a time using `AskUserQuestion`. No maximum questions. User can say **"wrap up"** to move on.
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand the intent behind the mutation and what the change should achieve. Starting context: the user's reason for mutating (evaluation result, shifted goal, new insight).
+
+Interview relentlessly until reaching shared understanding. Walk down each branch of the decision tree one-by-one. For each question provide your recommended answer. Ask one at a time — use `AskUserQuestion` for discrete options (recommended first, marked "(Recommended)"), plain text for open-ended. No maximum questions. User can say **"wrap up"** to move on.
 
 ## Step 5: Propose the mutation
 

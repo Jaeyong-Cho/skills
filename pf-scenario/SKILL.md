@@ -11,7 +11,9 @@ A scenario = a named, reproducible setup for the real system. Not tied to evolut
 
 ## Step 1: Grill the scenario
 
-Run `grill-me` skill using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what to run, what inputs it needs, and what behavior to expect. Ask one question at a time using `AskUserQuestion`. No maximum questions. User can say **"wrap up"** to move on.
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what to run, what inputs it needs, and what behavior to expect.
+
+Interview relentlessly until reaching shared understanding. Walk down each branch of the decision tree one-by-one. For each question provide your recommended answer. Ask one at a time — use `AskUserQuestion` for discrete options (recommended first, marked "(Recommended)"), plain text for open-ended. No maximum questions. User can say **"wrap up"** to move on.
 
 ## Step 2: Check existing scenarios
 
