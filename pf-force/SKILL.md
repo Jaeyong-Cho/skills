@@ -53,7 +53,7 @@ Goals must be end-to-end and appropriately scoped:
 
 If the user defines a goal in terms of internal structure ("refactor", "clean up") — push back. Ask: what input changes, and how does the output differ?
 
-Assign `id` = count of existing `evolve/` directories + 1 (zero-padded: `01`, `02`, …). Derive slug from description (lowercase, hyphens, max 30 chars).
+Assign `id` = count of existing `evolve/` directories + 1 (zero-padded to 4 digits: `0001`, `0002`, …). Derive slug from description (lowercase, hyphens, max 30 chars).
 
 ```bash
 mkdir -p evolve/<id>-<slug>
