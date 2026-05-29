@@ -16,33 +16,14 @@ Read user's concern, known things, and problem. Run `grill-me` — start from th
 
 ## Step 2: Explore codebase and existing output
 
-Detect project language:
-```bash
-ls package.json go.mod Cargo.toml pyproject.toml setup.py Gemfile mix.exs pom.xml 2>/dev/null
-```
+Explore freely. Understand:
+- Project language and structure
+- Where logging, config reads, and file writes happen in source code
+- Key source files — entry points, core modules, anything that looks surprising
+- Existing output files (logs, JSON, JSONL)
+- Existing `observe/` scripts — what they cover, what CLI flags and output format they use (new scripts must follow the same conventions)
 
-Then grep for logging, file writes, and env/config reads using file extensions that match the detected language. Exclude `node_modules`, `vendor`, `.git`. Limit each to `head -20`. Examples by language:
-
-| Language | Extensions | Logging keywords | Config keywords |
-|----------|-----------|-----------------|----------------|
-| Python | `*.py` | `logging.`, `logger.` | `os.environ`, `os.getenv` |
-| Go | `*.go` | `log.`, `zap.`, `logrus.` | `os.Getenv`, `viper.` |
-| JS/TS | `*.js`, `*.ts` | `console.`, `winston`, `pino` | `process.env` |
-| Rust | `*.rs` | `log::`, `tracing::` | `std::env` |
-| Ruby | `*.rb` | `Rails.logger`, `logger.` | `ENV[` |
-
-Also inspect existing output files and the `observe/` directory:
-```bash
-find . \( -name "*.log" -o -name "*.jsonl" -o -name "*.json" \) \
-  -not -path "*/node_modules/*" -not -path "*/vendor/*" 2>/dev/null | head -20
-ls observe/ 2>/dev/null
-```
-
-Read existing `observe/` scripts. Note: what CLI flags they use, what output format they produce, what they already cover. This is the established convention — new scripts must follow it.
-
-Read key source files directly — entry points, core modules, frequently changed files. Note: structure, patterns, coupling, anything that looks surprising or inconsistent.
-
-Read key output files. From this, identify what the system already exposes and what's hidden — in both runtime data and the code itself.
+Use whatever tools fit. Identify what the system already exposes and what's hidden — in both runtime data and source code.
 
 ## Step 3: Build observation scripts
 
