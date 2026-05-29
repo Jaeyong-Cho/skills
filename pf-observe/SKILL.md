@@ -41,7 +41,7 @@ Save all scripts directly in `observe/`. No subdirectories — observation often
 Bad: `LOG_PATH = "/var/log/app.log"` or `OUTPUT = "observe/output/run.jsonl"`
 Good: `--log-path`, `--output-dir`, `--since`, `--env` — caller decides. See [REFERENCE.md](REFERENCE.md) for the pattern.
 
-Observables include both **runtime** (logs, outputs, state, config) and **source code** (structure, patterns, coupling, call frequency, dead code, duplication). Don't limit to one kind.
+Observables include **runtime** (logs, outputs, state, config), **source code** (structure, patterns, coupling, call frequency, dead code, duplication), and **data** (shape, value ranges, missing fields, unexpected nulls, distribution of real values). Don't limit to one kind.
 
 For each observable, consider multiple angles:
 - **Snapshot** — current state
@@ -50,6 +50,7 @@ For each observable, consider multiple angles:
 - **Absence** — what's missing that should be there
 - **Correlation** — two observables that should move together but don't
 - **Code pattern** — grep for usage, count call sites, find duplication, trace coupling
+- **Data pattern** — what values actually appear, what the data reveals about real usage
 
 Write scripts to discover patterns, differences, and trends — start from the grill findings but don't stop there. Scripts that look at unrelated areas are encouraged. Unexpected findings from outside the original concern are often the most valuable. One script per angle. Shell for quick captures, Python for structured analysis.
 
