@@ -52,6 +52,7 @@ Good: `--log-path`, `--output-dir`, `--since`, `--env` — caller decides. See [
 - **Snapshot** — what does it look like right now?
 - **Delta** — what changed over time, across envs, or between versions?
 - **Distribution** — what are the value ranges, frequencies, outliers?
+- **Pattern** — what recurring structures, regularities, or anomalies appear?
 - **Absence** — what's missing that should be there?
 - **Correlation** — two things that should move together but don't
 
