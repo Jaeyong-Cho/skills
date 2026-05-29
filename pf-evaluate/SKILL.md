@@ -1,7 +1,7 @@
 ---
 name: pf-evaluate
 description: |
-  Evaluate a mutation end-to-end using a per-goal CLI eval script, reporting from the whole-goal perspective first, then recording the result as N_evaluation.md. Creates the eval script once per goal; reuses it on every subsequent evaluation.
+  Evaluate a mutation end-to-end using the goal's eval script, reporting from the whole-goal perspective first, then recording the result as N_evaluation.md. The eval script is created by pf-force at goal creation time.
   Use when the user wants to evaluate a mutation, check if a change works, score a result, or decide whether to keep or discard. Triggers: "pf-evaluate", "evaluate mutation", "evaluate goal", "check the output", "does it work", "score this mutation", "keep or discard".
 ---
 
@@ -25,20 +25,14 @@ ls evolve/<id>-<slug>/*_mutation.md 2>/dev/null | sort -V | tail -1
 
 Read the latest `N_mutation.md`. Confirm `Status: applied — awaiting evaluation`. Show the user the **Change** section — what files, what summary — so it's clear what this evaluation is testing.
 
-## Step 3: Ensure eval runner exists
+## Step 3: Verify eval command
 
-Check for `evolve/<id>-<slug>/eval.*` (any language — shell, Python, Go, etc.). If missing, create one in whatever language best fits the project:
-- Read the codebase to understand how to invoke the system
-- Wire the goal's **Input** as the fixed argument(s)
-- Capture full stdout/stderr
-- Make it executable if needed
-
-The runner is the single canonical way to run this goal's evaluation. It must be deterministic: same input every time.
+Confirm `evolve/<id>-<slug>/eval/` exists with a runnable entry point. If missing, it was not created at goal time — stop and run `pf-force` to create the goal properly before evaluating.
 
 ## Step 4: Run
 
 ```bash
-evolve/<id>-<slug>/eval.<ext>
+<entry point from evolve/<id>-<slug>/eval/>
 ```
 
 Capture the full output.

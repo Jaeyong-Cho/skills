@@ -75,6 +75,15 @@ Write `evolve/<id>-<slug>/goal.md`:
 - YYYY-MM-DD: created
 ```
 
+Then create the eval command for this goal under `evolve/<id>-<slug>/eval/`:
+- Read the codebase to understand how to invoke the system
+- Wire the goal's **Input** as fixed argument(s)
+- Capture full stdout/stderr
+- Entry point must be a single CLI command (e.g. `./eval/run.sh`, `python eval/main.py`, `go run ./eval`)
+- Internal structure (single file or multi-file project) is unconstrained — use whatever fits
+
+The command must be deterministic: same input every time.
+
 ### Update
 
 Edit the relevant fields in `goal.md`. Append to History:
