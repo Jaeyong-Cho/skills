@@ -6,7 +6,6 @@ description: |
   To re-run all existing cases use pf-e2e-val-report instead.
 ---
 
-Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 For layer definitions read `../pf/references/layers.md`.
 
 # VAO E2E Validation

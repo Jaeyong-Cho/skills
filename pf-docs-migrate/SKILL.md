@@ -5,14 +5,6 @@ description: |
   Triggers: "pf-docs-migrate", "migrate docs", "update docs format", "convert docs structure", or when old-format docs are detected.
 ---
 
-Check for today's journal context:
-
-```bash
-[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null
-```
-
-If today.md found, read to understand user's current focus, active goals, blockers. Use to orient work — not to override task, but to connect migration to user's broader context.
-
 # VAO Docs Migration
 
 Converts `.pf/src/docs/` from feature-centric chapters to layer-centric chapters. Run once per project.

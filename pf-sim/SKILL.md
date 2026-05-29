@@ -5,7 +5,6 @@ description: |
   Use when the user has a scenario, hypothesis, or "what happens when..." question and wants to understand why the code behaves a certain way. Triggers: "pf-sim", "simulate this", "what happens when", "trace this scenario", "why does this happen", "explore this hypothesis", "step through this", or any request to understand code behavior through scenario exploration.
 ---
 
-Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null`
 For layer definitions read `../pf/references/layers.md`.
 
 # VAO Scenario Simulation

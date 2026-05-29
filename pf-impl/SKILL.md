@@ -6,7 +6,6 @@ description: |
   Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
 ---
 
-Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient work to user's current focus and goals.
 
 # VAO Implementation (TDD)
 

@@ -5,7 +5,6 @@ description: |
   Use after pf-impl is done. Triggers: "pf-review", "review the implementation", "review the code", "code review", "let's review", after implementation is complete.
 ---
 
-Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — use to orient review to today's focus.
 
 # VAO Code Review
 

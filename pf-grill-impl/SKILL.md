@@ -7,7 +7,6 @@ description: |
   Triggers: "pf-grill-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement".
 ---
 
-Check journal: `[ -n "$PFJ_PATH" ] && cat "$PFJ_PATH/today.md" 2>/dev/null` — if found, orient work to user's broader context.
 Check VAO book: `ls .pf/book.toml 2>/dev/null` — not found → run `pf-init` first.
 For layer definitions read `../pf/references/layers.md`. For TDD philosophy read `../pf-impl/references/tdd.md`.
 
