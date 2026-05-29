@@ -23,7 +23,7 @@ For each goal show: id-slug, mutation count, evaluation count, last history entr
 
 ## Step 2: Grill the force
 
-Run `grill-me` skill. Purpose: understand what the force is and how it reshapes the goal landscape. Starting context: the user's force — their idea, observation, or issue. Ask one question at a time using `AskUserQuestion`. No maximum questions. User can say **"wrap up"** to move on.
+Run `grill-me` skill using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what the force is and how it reshapes the goal landscape. Starting context: the user's force — their idea, observation, or issue. Ask one question at a time using `AskUserQuestion`. No maximum questions. User can say **"wrap up"** to move on.
 
 ## Step 3: Judge
 
