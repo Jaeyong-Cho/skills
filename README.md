@@ -57,7 +57,10 @@ A goal is rarely reached in one step. You mutate the software toward the goal, e
 
 ```mermaid
 flowchart TD
-    F["External Force\nuser taste · issue · observation · finding"]
+    F["External Force"]
+    FI["· user taste changed\n· bug reported\n· performance regression\n· better approach found\n· requirement shifted\n· evaluation result"]
+
+    FI --> F
     F --> PFF["pf-force\nRead goals · Grill · Judge"]
 
     PFF -->|create| G
@@ -72,6 +75,8 @@ flowchart TD
     E -->|not there yet| M
     E -->|goal reached| S["Software\n(alive)"]
 
+    S --> OBS["pf-observe\nScripts · Patterns · Causes"]
+    OBS -.->|findings become force| F
     S -.->|new force| F
 ```
 
