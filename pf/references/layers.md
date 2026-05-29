@@ -2,13 +2,15 @@
 
 ## Origin
 
-VAO = software design philosophy inspired by OOP and AOP. Program = automation tool for making decisions to achieve goal. Designing it well requires three kinds of thinking:
+VAO = software design philosophy inspired by OOP and AOP. Three layers, each answering a different question:
 
-1. **What is user goal worth automating?** → value layer
-2. **What algorithm and objects realize that goal?** → aspect layer
-3. **What stable objects does system operate on?** → object layer
+| Layer | Question |
+|-------|----------|
+| **Value** | What user goal is worth automating? |
+| **Aspect** | What algorithm realizes that goal, and from which angle? |
+| **Object** | What stable domain things does the system operate on? |
 
-Two types of classes: **domain objects** (what exists) and **aspect objects** (how things are viewed and used to achieve goal). Value layer sits above both, determining which user goals are worth pursuing.
+Each class belongs to the layer that matches its responsibility. If a class is hard to place, the layer boundary is probably wrong.
 
 ---
 
@@ -30,16 +32,11 @@ Value layer represents user intent, delegates *how* to aspect layer. Keep explic
 
 ## Aspect layer — Algorithm / Aspect (How)
 
-Aspect layer has two responsibilities:
+Aspect layer has two distinct roles — keep them separate in your thinking:
 
-1. **How to meet need** — algorithm, workflow, or strategy that realizes user goal
-2. **Which objects to use and how to see them** — from what angle are domain objects viewed? What subset of properties matters here?
+**Algorithm** — the workflow, strategy, or computation that realizes the user goal. What steps, in what order, with what logic. This is the "how."
 
-AOP thinking: different aspects see same object differently, use only some properties, combine objects in different ways. Aspect layer decides which objects needed and how to compose them to produce desired outcome.
-
-- Aspect does not need to use all domain objects.
-- Aspect may use only some properties of object, not whole thing.
-- Same object may look very different across aspects — correct, not problem.
+**Lens** — which domain objects to use and which of their properties matter here. AOP thinking: different aspects see the same object differently. `AuthAspect` reads `user.role`. `BillingAspect` reads `user.plan`. Same object, different angles — correct, not a problem. Aspect does not need to use all objects, or all properties of any object.
 
 For cross-cutting concern design with code examples, read `references/aop.md`.
 
@@ -98,11 +95,14 @@ object layer  →  defines what exists to operate on
 
 ## Common Design Smells
 
-| Smell | Likely cause |
-|---|---|
-| Selection logic duplicated across callers | Value layer not extracted |
-| Algorithm hard-coded with magic thresholds | Value mixed into aspect layer |
-| God object that evaluates, executes, and models | No layer separation |
-| Object too large — covers multiple concerns | Abstraction level mismatched to concern |
-| Object too small — callers must reconstruct meaning | Abstraction level too fine-grained |
-| User need only in docs, not in code | Value layer implicit rather than encoded |
+| Smell | Layer | Likely cause |
+|---|---|---|
+| Selection logic duplicated across callers | Value | Value layer not extracted |
+| Algorithm hard-coded with magic thresholds | Value | Value mixed into aspect layer |
+| User need only in docs, not in code | Value | Value layer implicit rather than encoded |
+| Aspect with no clear algorithm — just routes calls | Aspect | Aspect is a pass-through, not a real layer |
+| Aspect duplicates logic that belongs on the object | Aspect | Object is too thin — logic leaked upward |
+| Aspect used as catch-all for unrelated behavior | Aspect | Single responsibility violated — split the aspect |
+| God object that evaluates, executes, and models | Object | No layer separation |
+| Object too large — covers multiple concerns | Object | Abstraction level mismatched to concern |
+| Object too small — callers must reconstruct meaning | Object | Abstraction level too fine-grained |

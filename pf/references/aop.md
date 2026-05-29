@@ -21,7 +21,7 @@ From Aspect-Oriented Programming:
    └──────────────────────────────────────────┘
 ```
 
-Objects stay unchanged. Aspects are injected into the Value layer via constructor — no proxies, no weaving. See `layers.md` for where each lives.
+Objects stay unchanged. Aspects are injected into the Value layer via constructor — no proxies, no weaving.
 
 ---
 
