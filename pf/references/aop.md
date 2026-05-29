@@ -2,9 +2,9 @@
 
 From Aspect-Oriented Programming:
 
-**Cross-cutting concern** = behavior multiple domain objects need, but that belongs to none of them. Authentication, logging, billing, caching, rate-limiting — these cut across `User`, `Order`, `Product` alike. Objects shouldn't know about them.
+**Cross-cutting concern** = behavior multiple domain objects need, but that belongs to none of them. Authentication, logging, billing, caching, rate-limiting — these cut across `User`, `Order`, `Product` alike.
 
-**Aspect** = cross-cutting concern implemented in one place, applied to many objects from outside.
+**Aspect** = cross-cutting concern implemented in one place, composed into the Value layer from outside.
 
 ```
         User          Order         Product
@@ -21,7 +21,7 @@ From Aspect-Oriented Programming:
    └──────────────────────────────────────────┘
 ```
 
-Objects stay same. Aspects weave in from outside.
+Objects stay unchanged. Aspects are injected into the Value layer via constructor — no proxies, no weaving. See `layers.md` for where each lives.
 
 ---
 
@@ -29,7 +29,7 @@ Objects stay same. Aspects weave in from outside.
 
 **Objects are concern-agnostic. Aspects own concern.**
 
-`User` object should not know it is being audited, billed, or rate-limited. Those concerns live in aspects that use `User` as raw material. When concern leaks into object — object starts checking auth, recording audit logs, or formatting for specific view — object has been contaminated.
+`User` object should not know it is being audited, billed, or rate-limited. Those concerns live in aspects that use `User` as raw material. When concern leaks into object — object starts checking auth, recording audit logs, or formatting for a specific view — object has been contaminated.
 
 ---
 
@@ -129,3 +129,5 @@ Value layer decides *which* concerns apply to action and in what order — it is
 | **Aspect doing too much** | `SecurityAspect` handles auth, billing, and rate-limiting | One aspect, multiple concerns — split it |
 | **Object shaped for one aspect** | `user.authContext`, `user.billingView` | Aspect-specific fields leaked into object |
 | **Value layer skips aspect** | Command directly checks `user.role === 'admin'` | Concern escaped into value layer |
+| **Aspect calls aspect** | `AuthAspect` calls `AuditAspect.record(...)` | Aspects should be independent — compose in Value layer, not in each other |
+| **Aspect holds domain state** | `BillingAspect` stores `user.plan` internally | Aspect owns behavior, not data — read from object each time |
