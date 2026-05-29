@@ -33,6 +33,10 @@ Confirm `evolve/<id>-<slug>/eval/` exists with a runnable entry point. If missin
 
 ## Step 4: Run
 
+If the goal's expected output is **UI / visual** — skip automated capture. Go to Step 5 (UI path).
+
+Otherwise:
+
 ```bash
 <entry point from evolve/<id>-<slug>/eval/>
 ```
@@ -41,7 +45,7 @@ Capture the output. Do not log everything — extract only what's relevant to th
 
 ## Step 5: Report — goal perspective first
 
-Lead with the big picture before mutation-level details:
+**CLI path** — lead with the big picture:
 
 | | |
 |---|---|
@@ -52,9 +56,11 @@ Lead with the big picture before mutation-level details:
 
 Then state which mutation this belongs to and what it changed.
 
+**UI path** — run the eval entry point to launch the UI (if applicable), then present a manual checklist to the user via `AskUserQuestion`. Derive checklist items from `N_mutation.md`'s `## How to evaluate` (functional + taste). Ask the user to check each item and report pass/fail.
+
 ## Step 6: Ask for taste
 
-Ask via `AskUserQuestion` using the taste question from `N_mutation.md`'s `## How to evaluate`. Wait for verdict.
+Ask via `AskUserQuestion` using the taste question from `N_mutation.md`'s `## How to evaluate`. Wait for verdict. (Skip if already covered by the UI checklist in Step 5.)
 
 ## Step 7: Record N_evaluation.md
 
