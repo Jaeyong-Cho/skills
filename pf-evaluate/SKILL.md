@@ -37,7 +37,7 @@ Confirm `evolve/<id>-<slug>/eval/` exists with a runnable entry point. If missin
 <entry point from evolve/<id>-<slug>/eval/>
 ```
 
-Capture the full output.
+Capture the output. Do not log everything — extract only what's relevant to the goal's expected output.
 
 ## Step 5: Report — goal perspective first
 
@@ -67,7 +67,7 @@ Ask via `AskUserQuestion` using the taste question from `N_mutation.md`'s `## Ho
 N_mutation.md
 
 ## Actual output
-<verbatim output from eval.sh>
+<key output relevant to the goal — not full logs>
 
 ## Functional
 pass / fail — <notes>
