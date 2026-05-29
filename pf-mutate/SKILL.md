@@ -74,6 +74,11 @@ Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refact
 - [ ] Complexity hidden or exposed?
 - [ ] Duplication to extract?
 
+**Observability** (see `../pf-observe/REFERENCE.md`):
+- [ ] Logs key inputs, outputs, and state changes?
+- [ ] Errors include enough context to diagnose without a debugger?
+- [ ] Existing `observe/` scripts still compatible with changed paths/interfaces?
+
 ## Step 8: Record N_mutation.md
 
 `N` = count of existing `*_mutation.md` + 1. Write `evolve/<id>-<slug>/N_mutation.md`:
