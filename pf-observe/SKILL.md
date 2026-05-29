@@ -1,8 +1,8 @@
 ---
 name: pf-observe
 description: |
-  Build observation scripts and tools to understand system behavior — targets logs, data outputs, runtime state, dependencies, inputs, config, and resources. Grills to clarify what's unknown, writes targeted scripts to surface differences and patterns, then derives causes.
-  Use when the user wants to understand why a system behaves a certain way, detect unexpected changes, or build tooling to observe runtime behavior. Triggers: "pf-observe", "observe this", "why is this happening", "build observation script", "I want to understand the system", "detect patterns", "trace this behavior", "what's changing", "log analysis".
+  Build observation scripts and tools to understand system behavior — targets source code, logs, data outputs, runtime state, dependencies, inputs, config, and resources. Grills to clarify what's unknown, writes targeted scripts to surface differences and patterns, then derives causes.
+  Use when the user wants to understand why a system behaves a certain way, detect unexpected changes, or build tooling to observe runtime behavior or source code structure. Triggers: "pf-observe", "observe this", "why is this happening", "build observation script", "I want to understand the system", "detect patterns", "trace this behavior", "what's changing", "log analysis".
 ---
 
 
@@ -40,7 +40,9 @@ ls observe/ 2>/dev/null
 
 Read existing `observe/` scripts. Note: what CLI flags they use, what output format they produce, what they already cover. This is the established convention — new scripts must follow it.
 
-Read key output files. From this, identify what the system already exposes and what's hidden.
+Read key source files directly — entry points, core modules, frequently changed files. Note: structure, patterns, coupling, anything that looks surprising or inconsistent.
+
+Read key output files. From this, identify what the system already exposes and what's hidden — in both runtime data and the code itself.
 
 ## Step 3: Build observation scripts
 
@@ -58,12 +60,15 @@ Save all scripts directly in `observe/`. No subdirectories — observation often
 Bad: `LOG_PATH = "/var/log/app.log"` or `OUTPUT = "observe/output/run.jsonl"`
 Good: `--log-path`, `--output-dir`, `--since`, `--env` — caller decides. See [REFERENCE.md](REFERENCE.md) for the pattern.
 
-For each observable, think beyond the obvious target. Consider multiple angles:
+Observables include both **runtime** (logs, outputs, state, config) and **source code** (structure, patterns, coupling, call frequency, dead code, duplication). Don't limit to one kind.
+
+For each observable, consider multiple angles:
 - **Snapshot** — current state
 - **Delta** — difference over time, across envs, or between versions
 - **Distribution** — value ranges, frequencies, outliers
 - **Absence** — what's missing that should be there
 - **Correlation** — two observables that should move together but don't
+- **Code pattern** — grep for usage, count call sites, find duplication, trace coupling
 
 Write scripts to discover patterns, differences, and trends — start from the grill findings but don't stop there. Scripts that look at unrelated areas are encouraged. Unexpected findings from outside the original concern are often the most valuable. One script per angle. Shell for quick captures, Python for structured analysis.
 

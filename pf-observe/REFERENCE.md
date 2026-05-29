@@ -12,6 +12,7 @@ These patterns add debug output *to the app itself* so observation scripts can a
 
 | Category | Examples |
 |----------|---------|
+| **Source code** | Call site counts, coupling between modules, duplication, dead code, pattern frequency, layer violations |
 | **Logs** | Entry/exit of key operations with inputs and outputs; branch decisions; errors with full context; slow queries, retries, cache misses |
 | **Environment** | Runtime version, env name (`dev`/`staging`/`prod`), hostname, active feature flags |
 | **Versions** | App version, git commit hash, key dependency versions, lock file checksum |
