@@ -70,9 +70,9 @@ flowchart TD
     M --> E["pf-evaluate\nRun eval script · Compare output · Score"]
 
     E -->|not there yet| M
-    E -->|goal reached| DONE["✓ Goal achieved"]
+    E -->|goal reached| S["Software\n(alive)"]
 
-    F2["New force"] -.->|reshapes goal| PFF
+    S -.->|new force| F
 ```
 
 ### Philosophy
