@@ -25,7 +25,17 @@ List found directories. Ask via `AskUserQuestion` (multi-select): which to docum
 find . -mindepth 1 -maxdepth 3 -type f | grep -v -E '(node_modules|\.git|__pycache__|\.pf|venv|dist|build)' | wc -l
 ```
 
-If project is empty (0–3 files) → run `grill-me` focused on: what is this project, why it exists, who uses it, planned directory structure. No maximum questions — keep going until every aspect is resolved. Use answers to inform all READMEs. Write root `./README.md` as well.
+If project is empty (0–3 files) → interview using the Socratic method. Purpose: understand what this project is, why it exists, who uses it, planned directory structure. Starting context: the empty project.
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
+
+Use answers to inform all READMEs. Write root `./README.md` as well.
 
 For each target directory:
 
@@ -37,7 +47,15 @@ Read key files — entry points, index, main module, any existing README. Note: 
 
 ## Step 3: Grill
 
-For each directory, run `grill-me` focused on: purpose of `<dir>/`, what a new contributor must know, conventions and naming rules, what does NOT belong here. No maximum questions — keep going until fully understood. User can say **"wrap up"** to stop early.
+For each directory, interview using the Socratic method. Purpose: understand the purpose of `<dir>/`, what a new contributor must know, conventions and naming rules, what does NOT belong here. Starting context: the files read above.
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
 
 ## Step 4: Write README
 

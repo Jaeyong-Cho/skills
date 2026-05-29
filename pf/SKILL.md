@@ -28,7 +28,17 @@ For layer details including OOP/AOP origin, object sizing by concern, and aspect
 
 ## Write an ADR
 
-Read `references/deep-modules.md`, `references/layers.md`, `references/adr.md`, `references/views.md`. Run `grill-me` skill. If user provided scenario, use as starting context. If coming from `pf-proto`, read PoC document first and use its findings as starting context instead.
+Read `references/deep-modules.md`, `references/layers.md`, `references/adr.md`, `references/views.md`.
+
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: reach a clear VAO design for the ADR. Starting context: the user's scenario, or PoC findings if coming from `pf-proto`.
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
 
 When referencing existing source code, cite exact `file:line`.
 

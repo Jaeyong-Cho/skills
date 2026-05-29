@@ -12,7 +12,17 @@ For what to observe and how to implement CLI flags, logging, and output file con
 
 ## Step 1: Grill
 
-Read user's concern, known things, and problem. Run `grill-me` — start from those but follow any thread that opens up. No maximum questions. Unrelated topics are welcome — they often lead somewhere interesting.
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what's unknown and where to look. Starting context: the user's concern, known things, and problem.
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
+
+Unrelated topics are welcome — they often lead somewhere interesting.
 
 ## Step 2: Explore codebase and existing output
 

@@ -15,7 +15,17 @@ Design direction: **Value → Aspect → Object** (iterative in practice).
 
 ## Step 1: Grill the design
 
-Read `../pf/references/deep-modules.md`, `../pf/references/layers.md`. Run `grill-me` skill with user's scenario as starting context. No maximum questions — keep going until all ambiguity is gone and consensus is reached. When referencing source code, show the relevant snippet inline with `file:line` header before asking. User can say **"wrap up"** to move on.
+Read `../pf/references/deep-modules.md`, `../pf/references/layers.md`.
+
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: reach a clear VAO design before implementing. Starting context: the user's scenario.
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead. When referencing source code, show the relevant snippet inline with `file:line` header before asking.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
 
 ## Step 2: Extract behavior list
 
