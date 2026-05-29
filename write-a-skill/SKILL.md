@@ -105,6 +105,10 @@ Split into separate files when:
 - Content has distinct domains (finance vs sales schemas)
 - Advanced features are rarely needed
 
+## Diagrams in Markdown
+
+When writing any markdown document — skills, goal docs, mutation records, ADRs — prefer a Mermaid diagram over prose when it communicates more efficiently. Good candidates: flows, sequences, state machines, layer relationships, decision trees. If a diagram replaces two or more paragraphs of explanation, use it.
+
 ## Review Checklist
 
 After drafting, verify:
@@ -115,3 +119,4 @@ After drafting, verify:
 - [ ] Consistent terminology
 - [ ] Concrete examples included
 - [ ] References one level deep
+- [ ] Mermaid diagram used where more efficient than prose
