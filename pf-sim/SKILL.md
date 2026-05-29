@@ -65,7 +65,7 @@ Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip Step 6 an
 
 ## Step 6: HTML report
 
-Follow `../pfj-grill/REPORT.md` for structure, styling, interactivity, and generation rules.
+Follow `../pf/references/report.md` for structure, styling, interactivity, and generation rules.
 
 Derive slug from scenario (lowercase, hyphens, max 40 chars).
 

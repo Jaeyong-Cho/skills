@@ -68,7 +68,7 @@ Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and go to
 
 ## Step 5: HTML report
 
-Follow `../pfj-grill/REPORT.md` for structure, styling, interactivity, and generation rules.
+Follow `../pf/references/report.md` for structure, styling, interactivity, and generation rules.
 
 Save: `.pf/reports/impl/YYYY/MM-DD-<slug>.html` (slug = feature name, lowercase, hyphens, max 40 chars)
 Header: feature name · date · one-line impl outcome.

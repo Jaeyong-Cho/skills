@@ -53,7 +53,7 @@ Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and stop.
 
 ## Step 6: Generate HTML report
 
-Follow `../pfj-grill/REPORT.md` for structure and styling.
+Follow `../pf/references/report.md` for structure and styling.
 
 Save: `.pf/reports/observe/YYYY/MM-DD-<slug>.html` (slug from topic or "observe")
 

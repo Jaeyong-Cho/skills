@@ -1,4 +1,4 @@
-# HTML Report Spec for pfj-grill
+# HTML Report Spec
 
 Generate a **single self-contained HTML file** — no external CDN, no network requests required. All CSS in `<style>`, all JS in `<script>`. The file must render correctly when opened from disk (`file://`).
 

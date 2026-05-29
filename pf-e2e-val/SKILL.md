@@ -78,7 +78,7 @@ Ask via `AskUserQuestion`: "Generate the HTML report?" — if no, skip and stop.
 
 ## Step 7: HTML report
 
-Follow `../pfj-grill/REPORT.md` for structure, styling, and generation rules.
+Follow `../pf/references/report.md` for structure, styling, and generation rules.
 
 Report covers only this session's cases. Read their `result.json` files.
 
