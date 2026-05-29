@@ -23,7 +23,7 @@ For each goal show: id-slug, mutation count, evaluation count, last history entr
 
 ## Step 2: Grill the force
 
-Run `grill-me` skill. Starting context: the user's force — their idea, observation, or issue. Cover:
+Run `grill-me` skill. Starting context: the user's force — their idea, observation, or issue.
 - **What is the force** — what triggered this? Issue detected, better approach seen, goal drifted?
 - **Which goals does it touch** — one, many, or none of the existing goals?
 - **Direction** — does it sharpen an existing goal, replace it, make it obsolete, or require a new one?
