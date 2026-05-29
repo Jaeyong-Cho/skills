@@ -11,13 +11,7 @@ A scenario = a named, reproducible setup for the real system. Not tied to evolut
 
 ## Step 1: Grill the scenario
 
-Run `grill-me` skill.
-- **What to run** — which feature or entry point of the system?
-- **Input** — CLI args, config files, env vars, stdin, request body — what does it need to run?
-- **Expected behavior** — what should happen? (output, side effects, state change)
-- **Purpose** — exploration, verification, regression check, or demo?
-
-No maximum questions. User can say **"wrap up"** to move on.
+Run `grill-me` skill. User can say **"wrap up"** to move on.
 
 ## Step 2: Check existing scenarios
 
