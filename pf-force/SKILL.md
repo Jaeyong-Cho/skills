@@ -11,6 +11,8 @@ A force is an external pressure that acts on the goal landscape — a new insigh
 
 Goals live in `evolve/<id>-<slug>/goal.md`. Mutations and evaluations accumulate as `N_mutation.md` / `N_evaluation.md` in the same directory.
 
+When writing markdown: prefer Mermaid diagrams over prose when more efficient.
+
 ## Step 1: Read existing goals
 
 ```bash

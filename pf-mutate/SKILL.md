@@ -9,6 +9,8 @@ description: |
 
 One mutation = one focused change toward a goal — hill-climbing, one candidate at a time. Scope is **mutate only** — propose, apply, record. Scoring the result (functional → performance → taste) is the evaluation step's job.
 
+When writing markdown: prefer Mermaid diagrams over prose when more efficient.
+
 For VAO layer definitions read `../pf/references/layers.md`, `../pf/references/deep-modules.md`, `../pf/references/views.md`.
 
 ## Step 1: Select goal
