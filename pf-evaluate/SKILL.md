@@ -9,7 +9,7 @@ description: |
 
 Evaluation is end-to-end: a single CLI script runs the real system with the goal's input, captures actual output, and compares to expected. No mocks, no internal checks.
 
-When writing markdown: use Mermaid diagrams freely.
+When writing markdown: using Mermaid diagrams is recommended.
 
 ## Step 1: Select goal
 
