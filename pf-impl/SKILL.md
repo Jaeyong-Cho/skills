@@ -60,6 +60,18 @@ For refactoring guidelines read `references/tdd-refactoring.md`. For interface d
 
 Run all tests after each refactor step. Never refactor while RED.
 
-## Step 4: Done
+## Step 4: Markdown report
+
+Ask via `AskUserQuestion`: "Write the markdown report?" — if no, skip and go to Step 5.
+
+Save: `reports/impl/YYYY-MM-DD-<slug>.md` (slug from ADR name, lowercase, hyphens, max 40 chars)
+
+Free-form markdown — write what matters. Always include: behavior results table (behavior, GREEN/RED, test name). Include when warrants: refactor summary, open questions.
+
+```
+Report: reports/impl/YYYY-MM-DD-<slug>.md
+```
+
+## Step 5: Done
 
 Show summary of what was built. Ask user to confirm code review. On confirmation: update documentation and mark ADR status as `Accepted`.
