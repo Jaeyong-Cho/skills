@@ -25,7 +25,13 @@ For each goal show: id-slug, mutation count, evaluation count, last history entr
 
 Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what the force is and how it reshapes the goal landscape. Starting context: the user's force — their idea, observation, or issue.
 
-Interview relentlessly until reaching shared understanding. Walk down each branch of the decision tree one-by-one. For each question provide your recommended answer. Ask one at a time — use `AskUserQuestion` for discrete options (recommended first, marked "(Recommended)"), plain text for open-ended. No maximum questions. User can say **"wrap up"** to move on.
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
 
 ## Step 3: Judge
 
