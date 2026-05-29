@@ -71,7 +71,7 @@ Write scripts to discover patterns, differences, and trends — start from the g
 
 Run scripts. Show output. Interpret each result — look beyond what was asked. Surface unexpected findings, including things that seem unrelated. Do not dismiss anything before examining it.
 
-**If a visual would communicate the pattern faster than raw text — visualize.** Any method is fine: ASCII, table, SVG, HTML, diagram — whatever makes the observation clearest. See [REFERENCE.md](REFERENCE.md) for options. Save output files to `observe/` and print the path.
+**If a visual would communicate the pattern faster than raw text — visualize.** Any method is fine: ASCII, table, SVG, chart, diagram — whatever makes the observation clearest. See [REFERENCE.md](REFERENCE.md) for options. Save output files to `observe/` and print the path.
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 

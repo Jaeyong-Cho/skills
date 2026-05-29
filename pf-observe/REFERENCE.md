@@ -144,8 +144,8 @@ OUTPUT_DIR="${2:-}"
 
 ### Visualizing Output
 
-When a visual communicates the observation faster or more clearly than text — use it. No constraint on method or format: ASCII, table, SVG, HTML, Mermaid, any library. Pick whatever fits the data and the question being asked.
+When a visual communicates the observation faster or more clearly than text — use it. No constraint on method or format: ASCII, table, SVG, chart, Mermaid diagram, any library. Pick whatever fits the data and the question being asked.
 
 Save output files to `observe/` and print the path so the user can open them.
 
-Useful libraries: `matplotlib` (SVG/PNG charts), `rich` (terminal tables, progress), `plotly` (interactive HTML). Install as needed.
+Useful libraries: `matplotlib` (SVG/PNG charts), `rich` (terminal tables, progress). Install as needed.
