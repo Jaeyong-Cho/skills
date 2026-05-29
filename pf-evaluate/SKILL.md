@@ -56,13 +56,9 @@ Capture the output. Do not log everything — extract only what's relevant to th
 
 Then state which mutation this belongs to and what it changed.
 
-**UI path** — run the eval entry point to launch the UI (if applicable), then present a manual checklist to the user via `AskUserQuestion`. Derive checklist items from `N_mutation.md`'s `## How to evaluate` (functional + taste). Ask the user to check each item and report pass/fail.
+**UI path** — run the eval entry point to launch the UI (if applicable), then present a manual checklist to the user via `AskUserQuestion`. Derive checklist items from `N_mutation.md`'s `## How to evaluate` (functional + performance). Ask the user to check each item and report pass/fail.
 
-## Step 6: Ask for taste
-
-Ask via `AskUserQuestion` using the taste question from `N_mutation.md`'s `## How to evaluate`. Wait for verdict. (Skip if already covered by the UI checklist in Step 5.)
-
-## Step 7: Record N_evaluation.md
+## Step 6: Record N_evaluation.md
 
 `N` matches the mutation number. Write `evolve/<id>-<slug>/N_evaluation.md`:
 
@@ -81,9 +77,6 @@ pass / fail — <notes>
 ## Performance
 <measurement, if applicable>
 
-## Taste
-<user's verdict>
-
 ## Verdict
 kept / discarded
 
@@ -91,6 +84,6 @@ kept / discarded
 - YYYY-MM-DD: evaluated
 ```
 
-## Step 8: Update mutation status
+## Step 7: Update mutation status
 
 Edit `evolve/<id>-<slug>/N_mutation.md` — set `## Status` to `kept` or `discarded`.

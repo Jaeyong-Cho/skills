@@ -7,7 +7,7 @@ description: |
 
 # Evolutionary Mutation
 
-One mutation = one focused change toward a goal — hill-climbing, one candidate at a time. Scope is **mutate only** — propose, apply, record. Scoring the result (functional → performance → taste) is the evaluation step's job.
+One mutation = one focused change toward a goal — hill-climbing, one candidate at a time. Scope is **mutate only** — propose, apply, record. Scoring the result (functional → performance) is the evaluation step's job.
 
 When writing markdown: using Mermaid diagrams is recommended.
 
@@ -46,7 +46,6 @@ Form a hypothesis. State:
 - **Expected effect + how to measure** per tier:
   - functional — what must still hold / expected output
   - performance — what to measure
-  - taste — the subjective question for the human
 
 Show this, then ask via `AskUserQuestion`: **"Apply this mutation?"** — allow redirect. Do not edit until confirmed.
 
@@ -101,7 +100,6 @@ Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refact
 ## How to evaluate
 - functional: <what must still hold / expected output>
 - performance: <what to measure, which script/benchmark>
-- taste: <subjective question for the human>
 
 ## Status
 applied — awaiting evaluation
@@ -112,4 +110,4 @@ applied — awaiting evaluation
 
 ## Step 9: Hand off
 
-Report the path to `N_mutation.md` and the next step: **evaluate** (functional → performance → taste).
+Report the path to `N_mutation.md` and the next step: **evaluate** (functional → performance).
