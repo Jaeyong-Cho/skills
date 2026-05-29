@@ -7,25 +7,29 @@ description: |
 
 # Evolutionary Goal Management
 
-Goals live in `evolve/<slug>/goal.md`. Mutations and evaluations accumulate as `mutation_N.md` / `evaluation_N.md` in the same directory.
+Goals live in `evolve/<id>-<slug>/goal.md`. Mutations and evaluations accumulate as `N_mutation.md` / `N_evaluation.md` in the same directory.
 
 ## Create
 
+Goals must be **end-to-end**: a concrete input fed to the real system produces an observable output. Not "improve X internally" — but "given this input, the system should produce this output."
+
 Run `grill-me` skill. Starting context: goal definition. Cover at minimum:
-- **Description** — what are we trying to achieve?
-- **Input** — what goes in?
-- **Expected output** — what should come out?
-- **Success criteria** — what does good look like at each layer (functional → performance → human taste)?
+- **Input** — what exactly goes into the system? (file, string, request, stdin — must be concrete and reproducible)
+- **Expected output** — what does the system emit? (stdout, file, response body — must be observable and comparable)
+- **Why** — what's wrong or missing with the current output?
+- **Success criteria** — what does good look like (functional correctness, performance, human taste)?
 
-No maximum questions — keep going until the goal is unambiguous. User can say **"wrap up"** to move on.
+If the user defines a goal in terms of internal code structure ("refactor", "clean up", "improve coverage") — push back. Ask: what input changes, and how does the output differ?
 
-Derive slug from description (lowercase, hyphens, max 30 chars).
+No maximum questions. User can say **"wrap up"** to move on.
+
+Derive slug from description (lowercase, hyphens, max 30 chars). Assign `id` = count of existing `evolve/` directories + 1 (zero-padded to 2 digits: `01`, `02`, …).
 
 ```bash
-mkdir -p evolve/<slug>
+mkdir -p evolve/<id>-<slug>
 ```
 
-Write `evolve/<slug>/goal.md`:
+Write `evolve/<id>-<slug>/goal.md`:
 
 ```markdown
 # <Goal name>
@@ -53,8 +57,8 @@ ls evolve/ 2>/dev/null
 
 For each goal directory, show:
 - slug and status (from `goal.md`)
-- mutation count: `ls evolve/<slug>/mutation_*.md 2>/dev/null | wc -l`
-- evaluation count: `ls evolve/<slug>/evaluation_*.md 2>/dev/null | wc -l`
+- mutation count: `ls evolve/<id>-<slug>/*_mutation.md 2>/dev/null | wc -l`
+- evaluation count: `ls evolve/<id>-<slug>/*_evaluation.md 2>/dev/null | wc -l`
 
 ## Update
 
@@ -68,4 +72,4 @@ User names a goal → read its `goal.md` → run `grill-me` skill with the curre
 
 Ask for confirmation. Two options:
 - **Archive** — set status to `abandoned`, append reason to History, keep files
-- **Remove** — delete `evolve/<slug>/` entirely
+- **Remove** — delete `evolve/<id>-<slug>/` entirely
