@@ -61,4 +61,8 @@ Create `scenarios/<slug>/run/` — the single CLI entry point:
 - Language and internal structure: unconstrained
 - Entry point must be one invocable command
 
+## Step 4: Verify
+
+Run the entry point once. Confirm it invokes without crashing — correct output is not the goal here, just that the runner works. If it errors, fix the runner before handing off.
+
 Hand off: tell the user the command to run.
