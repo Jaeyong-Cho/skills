@@ -2,7 +2,7 @@
 name: pf-force
 description: |
   Apply an external force — a new insight, detected issue, or better direction — to the goal landscape. Reads existing goals, grills the user to shared understanding, then judges whether to create, update, or delete goals. All changes preserve history.
-  Use when the user has a thought, observation, or issue that might reshape one or more goals. Triggers: "pf-force", "pf-evolve-goal", "apply force", "I noticed something", "new direction", "something better", "rethink goals", "new goal", "create goal", "update goal", "delete goal", "list goals", "what are my goals".
+  Use when the user has a thought, observation, or issue that might reshape one or more goals. Triggers: "pf-force", "apply force", "I noticed something", "new direction", "something better", "rethink goals", "new goal", "create goal", "update goal", "delete goal", "list goals", "what are my goals".
 ---
 
 # Evolutionary Force
