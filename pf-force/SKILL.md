@@ -23,7 +23,7 @@ For each goal show: id-slug, mutation count, evaluation count, last history entr
 
 ## Step 2: Grill the force
 
-Run `grill-me` skill. Starting context: the user's force — their idea, observation, or issue. User can say **"wrap up"** to move on.
+Run `grill-me` skill. Purpose: understand what the force is and how it reshapes the goal landscape. Starting context: the user's force — their idea, observation, or issue. No maximum questions. User can say **"wrap up"** to move on.
 
 ## Step 3: Judge
 
