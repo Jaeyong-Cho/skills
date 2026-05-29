@@ -118,6 +118,61 @@ observe/          # observation scripts (flat — no subdirs)
 
 ---
 
+## Evolutionary Software
+
+Software evolves. External forces — user taste, detected issues, observations, new findings — create pressure on what the software should do. That pressure shapes goals. Goals are end-to-end targets: given a concrete input, the system should produce a specific output.
+
+A goal is rarely reached in one step. You mutate the software toward the goal, evaluate the result against the real input/output, and iterate until it converges.
+
+```mermaid
+flowchart TD
+    F["External Force\nuser taste · issue · observation · finding"]
+    F --> PFF["pf-force\nRead goals · Grill · Judge"]
+
+    PFF -->|create| G
+    PFF -->|update| G
+    PFF -->|delete| G
+
+    G["Goal\nInput ──→ Output\n(end-to-end, scoped, evaluatable)"]
+
+    G --> M["pf-mutate\nGrill intent · Hypothesis · Apply · Refactor"]
+    M --> E["pf-evaluate\nRun eval script · Compare output · Score"]
+
+    E -->|not there yet| M
+    E -->|goal reached| DONE["✓ Goal achieved"]
+
+    F2["New force"] -.->|reshapes goal| PFF
+```
+
+### Philosophy
+
+- **Force** — every change originates from an external pressure, not an internal impulse. If there's no force, there's no goal.
+- **Goal** — always end-to-end. Not "improve the internals" but "given this input, produce this output."
+- **Mutation** — one focused change at a time. Hill-climbing, not redesign.
+- **Evaluation** — run the real system with the real input. No mocks, no internal checks.
+- **Iteration** — a goal may take many mutations to reach. Each mutation is evaluated and either kept or discarded.
+
+### Skills
+
+| Skill | When to use |
+|-------|-------------|
+| `pf-force` | A force arrives — apply it to the goal landscape (create, update, or delete goals) |
+| `pf-mutate` | Mutate the software one step toward a goal |
+| `pf-evaluate` | Run the eval script end-to-end; score functional, performance, and taste |
+
+### Artifacts
+
+```
+evolve/
+└── <id>-<slug>/          # e.g. 01-response-quality
+    ├── goal.md           # Input, Expected output, History
+    ├── eval.<ext>        # canonical eval runner (created once, reused)
+    ├── N_mutation.md     # hypothesis · change · how to evaluate · status
+    └── N_evaluation.md   # actual output · functional · taste · verdict
+```
+
+---
+
 ## PFJ — Daily Journal Workflow
 
 PFJ is a personal productivity system: daily journaling, goal management, wiki, and research notes, rendered via mdbook.
