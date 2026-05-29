@@ -37,84 +37,15 @@ The script detects which AI agents are installed and sets up each one:
 
 PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Value** (why — user goals), **Aspect** (how — composable algorithms), **Object** (what — stable domain objects).
 
-### Workflow
-
-```
-[uncertain about design?]
-        ↓
-   pf-proto  ──→  PoC document
-                        ↓
-[clear on what to build]
-        ↓
-      pf    ──→  ADR (written + confirmed)
-                        ↓
-                   pf-impl  ──→  TDD implementation
-                                        ↓
-                               pf-review  ──→  code review + docs updated
-
-[design + implement without ADR]
-        ↓
-  pf-grill-impl  ──→  TDD implementation (no ADR)
-
-[validate with real data]
-        ↓
-  pf-e2e-val  ──→  create/edit cases + run affected
-                        ↓
-             pf-e2e-val-report  ──→  re-run specific or all cases
-
-[trace a scenario through code]
-        ↓
-    pf-sim  ──→  execution trace + verdict
-
-[observe runtime behavior — logs, data, state, config]
-        ↓
-  pf-observe  ──→  observation scripts + cause analysis
-                        ↓
-          pf-observe-report  ──→  run scripts + HTML findings report
-```
-
 ### Skills
 
 | Skill | When to use |
 |-------|-------------|
-| `pf-init` | First time — initialize the `.pf/` book in the project |
-| `pf-proto` | Design question unresolved — throwaway prototype + PoC document |
 | `pf` | Design clear — grill-me session, write and confirm an ADR |
 | `pf-impl` | ADR confirmed — TDD implementation, RED → GREEN → REFACTOR |
 | `pf-grill-impl` | Design + implement in one session — no ADR written |
-| `pf-review` | Implementation done — code review, scenario simulation, docs update |
-| `pf-e2e-val` | Create or edit E2E validation cases; runs affected case(s) only |
-| `pf-e2e-val-report` | Re-run specific or all existing E2E cases; generates analysis report |
-| `pf-sim` | Trace a scenario through source code step by step; confirm/deny hypothesis |
 | `pf-observe` | Build observation scripts to surface differences, patterns, and causes in a running system |
-| `pf-observe-report` | Run observe/ scripts and generate an HTML report of findings and anomalies |
-| `pf-docs-migrate` | One-time — migrate old feature-centric docs to layer-centric format |
 | `pf-readme` | Write or update per-directory README.md files via grill-me |
-
-### Artifacts
-
-```
-.pf/
-├── src/
-│   ├── adr/    # Architectural Decision Records (0001-slug.md)
-│   ├── poc/    # Proof of Concept documents (0001-slug.md)
-│   └── docs/   # Project documentation
-│       ├── value/    # Why — user goals per component
-│       ├── aspect/   # How — workflows per component
-│       └── object/   # What — domain objects per component
-└── serve.sh    # Start the book server
-
-validate/<slug>/
-└── cases/
-    └── NN-<name>/   # run.py · input.json · expected.json · result.json
-
-observe/          # observation scripts (flat — no subdirs)
-
-.pf/reports/
-├── impl/     # pf-grill-impl session reports
-├── validate/ # pf-e2e-val / pf-e2e-val-report reports
-└── sim/      # pf-sim scenario reports
-```
 
 ---
 
@@ -169,80 +100,6 @@ evolve/
     ├── eval.<ext>        # canonical eval runner (created once, reused)
     ├── N_mutation.md     # hypothesis · change · how to evaluate · status
     └── N_evaluation.md   # actual output · functional · taste · verdict
-```
-
----
-
-## PFJ — Daily Journal Workflow
-
-PFJ is a personal productivity system: daily journaling, goal management, wiki, and research notes, rendered via mdbook.
-
-### Workflow
-
-```
-[start of day]
-      ↓
-  pfj-init  ──→  knowledge base ready  (run once)
-                        ↓
-               write in today.md freely
-                        ↓
-        [concern, plan, or decision to work through?]
-                        ↓
-             pfj-grill  ──→  conclusion recorded in today.md
-                        ↓
-            [priorities shift mid-day?]
-                        ↓
-             pfj-adjust  ──→  today's goal updated
-                        ↓
-        [experiment or insight to capture?]
-                        ↓
-          pfj-research  ──→  markdown research note written
-                        ↓
-        [what notes are due for review today?]
-                        ↓
-        pfj-retention  ──→  daily spaced repetition report
-                        ↓
-              [end of day]
-                        ↓
-             pfj-review  ──→  daily report written
-                               wiki entries extracted
-                               tomorrow seeded
-```
-
-### Skills
-
-| Skill | When to use |
-|-------|-------------|
-| `pfj-init` | First time — initialize the knowledge base repo |
-| `pfj-grill` | Any time — think through a concern, plan, or decision |
-| `pfj-adjust` | Mid-day — priorities changed, task blocked, new urgent work |
-| `pfj-research` | Any time — capture experiment, observation, or insight as markdown note |
-| `pfj-research-report` | Generate HTML report from one or more research notes (by date or topic) |
-| `pfj-retention` | Any time — daily spaced repetition report; shows which research notes are due for review today |
-| `pfj-review` | End of day — close the day, extract wiki entries, seed tomorrow |
-
-### Journal structure
-
-```
-$PFJ_PATH/
-├── today.md              # daily goals + journal
-├── goals/
-│   ├── goal.md           # lifetime goals
-│   └── YYYY/
-│       ├── goal.md       # yearly
-│       ├── goal-MM.md    # monthly
-│       └── goal-MM-WNN.md # weekly
-├── wiki/                 # persistent knowledge entries
-├── Journal/              # archived daily entries
-├── discuss/              # pfj-grill HTML reports
-├── review/               # pfj-review HTML reports
-└── research/             # pfj-research markdown notes + HTML reports
-    ├── YYYY/
-    │   └── MM-DD-<slug>.md
-    └── reports/
-        └── YYYY/
-            ├── MM-DD-<scope>.html          # pfj-research-report
-            └── retention-MM-DD.html        # pfj-retention
 ```
 
 ---
