@@ -50,7 +50,7 @@ Good: `--log-path`, `--output-dir`, `--since`, `--env` — caller decides. See [
 
 **How to observe** — apply these lenses to any target above:
 - **Snapshot** — what does it look like right now?
-- **Delta** — what changed over time, across envs, or between versions?
+- **Delta** — what changed over time, across envs, or between versions? What differs between individual records, items, or instances that should be the same?
 - **Distribution** — what are the value ranges, frequencies, outliers?
 - **Pattern** — what recurring structures, regularities, or anomalies appear?
 - **Absence** — what's missing that should be there?
