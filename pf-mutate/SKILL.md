@@ -9,7 +9,7 @@ description: |
 
 One mutation = one focused change toward a goal — hill-climbing, one candidate at a time. Scope is **mutate only** — propose, apply, record. Scoring the result (functional → performance → taste) is the evaluation step's job.
 
-For VAO layer definitions read `../pf/references/layers.md`.
+For VAO layer definitions read `../pf/references/layers.md`, `../pf/references/deep-modules.md`, `../pf/references/views.md`.
 
 ## Step 1: Select goal
 
@@ -33,11 +33,7 @@ Read the source files relevant to the goal. Use the goal's description and input
 
 ## Step 4: Grill the intent
 
-Run `grill-me` skill. Starting context: the user's reason for mutating (evaluation result, shifted goal, new insight) — if no reason was given, open with that. Cover at minimum:
-- **Why now** — what triggered this mutation request?
-- **What must change** — which behavior, structure, or property is wrong or suboptimal?
-- **Constraints** — what must not regress?
-
+Run `grill-me` skill. Starting context: the user's reason for mutating (evaluation result, shifted goal, new insight)
 No maximum questions. User can say **"wrap up"** to move on.
 
 ## Step 5: Propose the mutation
@@ -54,9 +50,31 @@ Show this, then ask via `AskUserQuestion`: **"Apply this mutation?"** — allow 
 
 ## Step 6: Apply
 
-Make the real edits — minimal, only what the hypothesis requires. If behavior is added or altered, run `pf-impl`'s RED→GREEN for just that behavior; otherwise edit directly. Sanity-check that it builds/parses.
+Extract behaviors from the hypothesis — each discrete change that needs code:
 
-## Step 7: Record N_mutation.md
+```
+1. <behavior>  [value/aspect/object]
+2. ...
+```
+
+Implement one behavior at a time:
+```
+RED:   Write test via public interface → confirm fails
+GREEN: Write minimal code → confirm passes
+```
+Do not write the next test until current is green.
+
+Read `../pf-impl/references/tdd-tests.md` for test examples, `../pf-impl/references/tdd-mocking.md` for mocking.
+
+## Step 7: Refactor
+
+Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refactor step. Never refactor while RED.
+
+- [ ] Interface narrowable?
+- [ ] Complexity hidden or exposed?
+- [ ] Duplication to extract?
+
+## Step 8: Record N_mutation.md
 
 `N` = count of existing `*_mutation.md` + 1. Write `evolve/<id>-<slug>/N_mutation.md`:
 
@@ -85,6 +103,6 @@ applied — awaiting evaluation
 - YYYY-MM-DD: applied
 ```
 
-## Step 8: Hand off
+## Step 9: Hand off
 
 Report the path to `N_mutation.md` and the next step: **evaluate** (functional → performance → taste).

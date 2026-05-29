@@ -14,7 +14,7 @@ Goals live in `evolve/<id>-<slug>/goal.md`. Mutations and evaluations accumulate
 Goals must be **end-to-end**: a concrete input fed to the real system produces an observable output. Not "improve X internally" — but "given this input, the system should produce this output."
 
 Run `grill-me` skill. Starting context: goal definition. Cover at minimum:
-- **Input** — what exactly goes into the system? (file, string, request, stdin — must be concrete and reproducible)
+- **Input** — what exactly goes into the system? Must be concrete and reproducible. Ask for a real example: a command, a file, a config snippet, env vars — whatever it takes to actually run it.
 - **Expected output** — what does the system emit? (stdout, file, response body — must be observable and comparable)
 - **Why** — what's wrong or missing with the current output?
 - **Success criteria** — what does good look like (functional correctness, performance, human taste)?
@@ -38,7 +38,7 @@ Write `evolve/<id>-<slug>/goal.md`:
 <what we're trying to achieve>
 
 ## Input
-<what goes in>
+<concrete, reproducible input>
 
 ## Expected output
 <what should come out>
