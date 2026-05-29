@@ -95,6 +95,7 @@ flowchart TD
 | `pf-force` | A force arrives — apply it to the goal landscape (create, update, or delete goals) |
 | `pf-mutate` | Mutate the software one step toward a goal |
 | `pf-evaluate` | Run the eval script end-to-end; score functional, performance, and taste |
+| `pf-observe` | Watch the living software — scripts, patterns, causes; findings feed back as forces |
 
 ### Artifacts
 
