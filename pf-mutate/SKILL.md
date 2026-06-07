@@ -27,7 +27,7 @@ Display as a numbered list so the user can reference by number or slug. If the u
 ls evolve/<id>-<slug>/*_mutation.md evolve/<id>-<slug>/*_evaluation.md 2>/dev/null | sort -V
 ```
 
-Start from the latest pair (most recent `N_mutation.md` + its `evaluation_N.md`). Read more only if needed — e.g., user references a past attempt or the latest state is ambiguous. **Do not read the full history by default.**
+Start from the latest pair (most recent `N_mutation.md` + its `N_evaluation.md`). Read more only if needed — e.g., user references a past attempt or the latest state is ambiguous. **Do not read the full history by default.**
 
 ## Step 3: Read the codebase
 
@@ -95,7 +95,7 @@ Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refact
 
 ## Step 9: Record N_mutation.md
 
-`N` = count of existing `*_mutation.md` + 1. Write `evolve/<id>-<slug>/N_mutation.md`:
+`N` = count of existing `*_mutation.md` + 1. Discarded mutations keep their files — N always increments. Write `evolve/<id>-<slug>/N_mutation.md`:
 
 ```markdown
 # Mutation N — <short title>
