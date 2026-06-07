@@ -35,14 +35,17 @@ There is no maximum number of questions. Keep going until every branch of the de
 
 ## Step 3: Judge
 
+Based on the grill, automatically decide:
+
 | Action | When |
 |--------|------|
 | **Create** | Force reveals a new end-to-end goal not yet tracked |
+| **Create multiple** | Force reveals several distinct end-to-end goals — create one per goal |
 | **Update** | Force sharpens, redirects, or narrows an existing goal |
 | **Delete** | Force makes a goal obsolete or wrong |
 | **No change** | Force is context only — goals are already correct |
 
-State the judgment and confirm with the user before acting.
+State the judgment and reasoning, then proceed to Step 4 without waiting for confirmation. If the judgment is delete or ambiguous, confirm first.
 
 ## Step 4: Execute
 
