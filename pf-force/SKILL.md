@@ -45,7 +45,7 @@ Based on the grill, automatically decide:
 | **Delete** | Force makes a goal obsolete or wrong |
 | **No change** | Force is context only — goals are already correct |
 
-State the judgment and reasoning, then proceed to Step 4 without waiting for confirmation. If the judgment is delete or ambiguous, confirm first.
+State the judgment and reasoning, then confirm once with the user before proceeding.
 
 ## Step 4: Execute
 
