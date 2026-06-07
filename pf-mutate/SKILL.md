@@ -45,7 +45,13 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
 
-## Step 5: Propose the mutation
+## Step 5: Update goal and eval if needed
+
+If the grill revealed that the goal's scope, expected output, or input has shifted — update `evolve/<id>-<slug>/goal.md` and append to its History before proceeding. If the eval script no longer reflects the updated input or expected output — update it too. Confirm changes with the user before proceeding.
+
+If nothing changed, skip.
+
+## Step 6: Propose the mutation
 
 Form a hypothesis. State:
 - **Change** — what is being changed
@@ -56,7 +62,7 @@ Form a hypothesis. State:
 
 Show this, then ask via `AskUserQuestion`: **"Apply this mutation?"** — allow redirect. Do not edit until confirmed.
 
-## Step 6: Apply
+## Step 7: Apply
 
 Extract behaviors from the hypothesis — each discrete change that needs code:
 
@@ -74,7 +80,7 @@ Do not write the next test until current is green.
 
 Read `../pf-impl/references/tdd-tests.md` for test examples, `../pf-impl/references/tdd-mocking.md` for mocking.
 
-## Step 7: Refactor
+## Step 8: Refactor
 
 Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refactor step. Never refactor while RED.
 
@@ -87,7 +93,7 @@ Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refact
 - [ ] Errors include enough context to diagnose without a debugger?
 - [ ] Existing `observe/` scripts still compatible with changed paths/interfaces?
 
-## Step 8: Record N_mutation.md
+## Step 9: Record N_mutation.md
 
 `N` = count of existing `*_mutation.md` + 1. Write `evolve/<id>-<slug>/N_mutation.md`:
 
@@ -115,6 +121,6 @@ applied — awaiting evaluation
 - YYYY-MM-DD: applied
 ```
 
-## Step 9: Hand off
+## Step 10: Hand off
 
 Report the path to `N_mutation.md` and the next step: **evaluate** (functional → performance).
