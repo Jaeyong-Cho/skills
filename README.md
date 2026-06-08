@@ -57,3 +57,5 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 | `grill-me` | Interview relentlessly about any plan or design until shared understanding is reached |
 | `caveman` | Ultra-compressed output mode — ~75% fewer tokens, no filler |
 | `write-a-skill` | Create or review agent skills with proper structure and checklist |
+| `to-minutes` | Write markdown minutes file from current session discussion |
+| `self-audit` | Grill-based metacognition audit — maps known, uncertain, known-unknown, unknown for a topic |
