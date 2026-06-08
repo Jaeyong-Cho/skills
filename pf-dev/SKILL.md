@@ -7,6 +7,8 @@ description: |
 
 # Simple Implementation
 
+For VAO layer definitions read `../pf/references/layers.md`, `../pf/references/deep-modules.md`, `../pf/references/views.md`.
+
 ## Step 1: Grill
 
 Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand what to build and why, grounded in the existing codebase.
