@@ -27,11 +27,14 @@ Read source files relevant to the feature. Understand existing architecture, lay
 
 ## Step 3: Implement — one behavior at a time
 
+Read `../pf-observe/REFERENCE.md` for logging rules before implementing. Follow its conventions for log levels, CLI flags, and output format.
+
 Extract behaviors from the grill conclusions. Implement each:
 
 ```
 RED:   Write test via public interface → confirm fails
 GREEN: Write minimal code → confirm passes
+       Include logging per pf-observe conventions — key inputs, outputs, state changes
 ```
 
 Do not write the next test until current is green. Read `../pf-impl/references/tdd-tests.md` for test examples, `../pf-impl/references/tdd-mocking.md` for mocking.
