@@ -41,7 +41,6 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 
 | Skill | When to use |
 |-------|-------------|
-| `pf` | Design clear — grill-me session, write and confirm an ADR |
 | `pf-impl` | ADR confirmed — TDD implementation, RED → GREEN → REFACTOR |
 | `pf-grill-impl` | Design + implement in one session — no ADR, no report |
 | `pf-observe` | Build observation scripts to surface differences, patterns, and causes in a running system |
