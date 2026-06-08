@@ -41,6 +41,7 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 
 | Skill | When to use |
 |-------|-------------|
+| `pf-proto` | Throwaway single-file CLI proof of concept — grill, build, answer, delete |
 | `pf-impl` | Design + implement in one session — no ADR, no report |
 | `pf-observe` | Build observation scripts to surface differences, patterns, and causes in a running system |
 | `pf-readme` | Write or update per-directory README.md files via grill-me |
