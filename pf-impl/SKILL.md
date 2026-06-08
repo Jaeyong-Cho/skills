@@ -1,50 +1,65 @@
 ---
 name: pf-impl
 description: |
-  Implement code from an VAO ADR using TDD (RED → GREEN → REFACTOR).
-  Use after an ADR has been written and confirmed. Reads the ADR's Step-by-Step Plan and User Stories, then implements one behavior at a time through the red-green-refactor loop.
-  Triggers: "pf-impl", "implement the ADR", "implement with TDD", "start implementation", "write the code" when an VAO ADR exists.
+  Design and implement a feature in one session using VAO + TDD — no ADR written.
+  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time via RED→GREEN→REFACTOR.
+  Use when the user wants to think through a design and implement immediately without writing a formal ADR.
+  Triggers: "pf-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement", "implement this".
 ---
 
+For layer definitions read `../pf/references/layers.md`. For TDD philosophy read `references/tdd.md`.
 
-# VAO Implementation (TDD)
+# VAO Design + Implement (No ADR)
 
-For TDD philosophy and RED→GREEN→REFACTOR loop, read `references/tdd.md`.
+Design direction: **Value → Aspect → Object** (iterative in practice).
 
-Find the ADR file — search the project for markdown files matching the name or ID the user gives (`find . -name "*.md" | grep <id>`). If none specified, list candidates and ask which to implement.
+## Step 1: Grill the design
 
-## Step 1: Extract behaviors from ADR
+Read `../pf/references/deep-modules.md`, `../pf/references/layers.md`.
 
-For layer definitions, read `../pf/references/layers.md`.
+Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: reach a clear VAO design before implementing. Starting context: the user's scenario.
 
-From ADR collect:
-1. **Behavior list** — each item in Step-by-Step Plan becomes one RED→GREEN cycle
-2. **Test targets** — from Testing Decisions: which layers and modules get tests
-3. **Priority order** — implement tracer bullet (most end-to-end behavior) first
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 
-Example:
+Ask the questions one at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
+
+If a question can be answered by exploring the codebase, explore the codebase instead. When referencing source code, show the relevant snippet inline with `file:line` header before asking.
+
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
+
+## Step 2: Extract behavior list
+
+From grill conclusions derive and show:
+
 ```
-1. User can log in with valid credentials       [tracer bullet]
-2. Login rejects unknown email
-3. Login rejects wrong password
-4. User object validates its own password hash
+Behavior list:
+1. <tracer bullet behavior>    [value]
+2. <next behavior>             [aspect]
+3. <next behavior>             [object]
+
+Test targets:
+- <file> → <what gets tested>
 ```
 
-## Step 2: Implement — one behavior at a time
+Ask via `AskUserQuestion`: "Ready to implement?" — adjust list if needed.
 
-For test writing examples read `references/tdd-tests.md`. For mocking read `references/tdd-mocking.md`.
+## Step 3: Implement — one behavior at a time
+
+Read `../pf-observe/REFERENCE.md` for logging rules before implementing. Follow its conventions for log levels, CLI flags, and output format.
+
+Read `references/tdd-tests.md` for test examples, `references/tdd-mocking.md` for mocking.
 
 For each behavior:
 ```
 RED:   Write test via public interface → confirm fails
 GREEN: Write minimal code → confirm passes
+       Include logging per pf-observe conventions — key inputs, outputs, state changes
 ```
+Do not write next test until current is green.
 
-Test names must match ADR User Stories. Test only through public interfaces. Do not write next test until current is green.
+## Step 4: Refactor (after all green)
 
-## Step 3: Refactor (after all behaviors green)
-
-For refactoring guidelines read `references/tdd-refactoring.md`. For interface design read `../pf/references/deep-modules.md`.
+Read `references/tdd-refactoring.md`, `../pf/references/deep-modules.md`.
 
 - [ ] Interface narrowable?
 - [ ] Complexity hidden or exposed?
@@ -60,18 +75,6 @@ For refactoring guidelines read `references/tdd-refactoring.md`. For interface d
 
 Run all tests after each refactor step. Never refactor while RED.
 
-## Step 4: Markdown report
-
-Ask via `AskUserQuestion`: "Write the markdown report?" — if no, skip and go to Step 5.
-
-Save: `reports/impl/YYYY-MM-DD-<slug>.md` (slug from ADR name, lowercase, hyphens, max 40 chars)
-
-Free-form markdown — write what matters. Always include: behavior results table (behavior, GREEN/RED, test name). Include when warrants: refactor summary, open questions.
-
-```
-Report: reports/impl/YYYY-MM-DD-<slug>.md
-```
-
 ## Step 5: Done
 
-Show summary of what was built. Ask user to confirm code review. On confirmation: update documentation and mark ADR status as `Accepted`.
+Show summary of what was built. Suggest commit message using `../pf/references/commit.md`.
