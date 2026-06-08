@@ -47,32 +47,23 @@ Save all scripts directly in `observe/`. No subdirectories — observation often
 
 **Reuse existing scripts where they fit** — run them as-is or with different arguments before writing new ones. When writing new scripts, match the conventions of existing ones: same CLI flag names, same output format, same file naming pattern.
 
-**Every script must accept paths and config via CLI options — never hardcode.**
-Bad: `LOG_PATH = "/var/log/app.log"` or `OUTPUT = "observe/output/run.jsonl"`
-Good: `--log-path`, `--output-dir`, `--since`, `--env` — caller decides. See [REFERENCE.md](REFERENCE.md) for the pattern.
+Every script must accept paths and config via CLI options — never hardcode. See [REFERENCE.md](REFERENCE.md) for script rules, CLI flag conventions, and templates.
 
-**What to observe** — don't limit to one kind:
-- **Logs** — events, errors, branch decisions, performance signals
-- **Data** — shape, value ranges, missing fields, nulls, distributions, real usage patterns
-- **Runtime state** — memory, cache, DB counts, file system, resource usage
-- **Config / environment** — env vars, feature flags, versions, runtime info
-- **Source code** — structure, coupling, call frequency, duplication, dead code, layer violations
-
-**How to observe** — apply these lenses to any target above:
+Apply these lenses to any target (logs, data, runtime state, config, source code):
 - **Snapshot** — what does it look like right now?
-- **Delta** — what changed over time, across envs, or between versions? What differs between individual records, items, or instances that should be the same?
-- **Distribution** — what are the value ranges, frequencies, outliers?
-- **Pattern** — what recurring structures, regularities, or anomalies appear?
+- **Delta** — what changed over time, across envs, or between versions?
+- **Distribution** — value ranges, frequencies, outliers
+- **Pattern** — recurring structures, regularities, anomalies
 - **Absence** — what's missing that should be there?
 - **Correlation** — two things that should move together but don't
 
-Write scripts to discover patterns, differences, and trends — start from the grill findings but don't stop there. Scripts that look at unrelated areas are encouraged. Unexpected findings from outside the original concern are often the most valuable. One script per angle. Shell for quick captures, Python for structured analysis.
+Start from the grill findings but don't stop there — unexpected findings from unrelated areas are often most valuable. One script per angle. Shell for quick captures, Python for structured analysis.
 
 ## Step 4: Run and interpret
 
 Run scripts. Show output. Interpret each result — look beyond what was asked. Surface unexpected findings, including things that seem unrelated. Do not dismiss anything before examining it.
 
-**If a visual would communicate the pattern faster than raw text — visualize.** Any method is fine: ASCII, table, SVG, chart, diagram — whatever makes the observation clearest. See [REFERENCE.md](REFERENCE.md) for options. Save output files to `observe/` and print the path.
+If a visual communicates the pattern faster — visualize. See [REFERENCE.md](REFERENCE.md) for options. Save output files to `observe/` and print the path.
 
 If cause found → summarize. If not → identify next observable, repeat Step 3–4.
 
