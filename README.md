@@ -43,8 +43,7 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 |-------|-------------|
 | `pf` | Design clear — grill-me session, write and confirm an ADR |
 | `pf-impl` | ADR confirmed — TDD implementation, RED → GREEN → REFACTOR |
-| `pf-grill-impl` | Design + implement in one session — no ADR written |
-| `pf-dev` | Grill + implement immediately — no ADR, no report, follow existing architecture |
+| `pf-grill-impl` | Design + implement in one session — no ADR, no report |
 | `pf-observe` | Build observation scripts to surface differences, patterns, and causes in a running system |
 | `pf-readme` | Write or update per-directory README.md files via grill-me |
 

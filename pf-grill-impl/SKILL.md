@@ -75,18 +75,6 @@ Read `../pf-impl/references/tdd-refactoring.md`, `../pf/references/deep-modules.
 
 Run all tests after each refactor step. Never refactor while RED.
 
-Ask via `AskUserQuestion`: "Write the markdown report?" — if no, skip and go to Step 6.
-
-## Step 5: Markdown report
-
-Save: `reports/impl/YYYY-MM-DD-<slug>.md` (slug = feature name, lowercase, hyphens, max 40 chars)
-
-Free-form markdown — write what matters. Always include: behavior results table (behavior, layer, GREEN/RED, test name). Include when warrants: refactor summary, key design decisions, open questions.
-
-```
-Report: reports/impl/YYYY-MM-DD-<slug>.md
-```
-
-## Step 6: Done
+## Step 5: Done
 
 Show summary of what was built. Suggest commit message using `../pf/references/commit.md`.
