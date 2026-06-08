@@ -7,7 +7,7 @@ description: |
 
 # Evolutionary Evaluation
 
-Evaluation is end-to-end: a single CLI script runs the real system with the goal's input, captures actual output, and compares to expected. No mocks, no internal checks.
+Evaluation is the compare step: run the real system, compare actual output to the prediction, and name the gap. The gap is not failure — it is learning. It reveals where the mental model of the system was wrong, and becomes the input for the next force or mutation.
 
 When writing markdown: using Mermaid diagrams is recommended.
 
@@ -87,3 +87,9 @@ kept / discarded
 ## Step 7: Update mutation status
 
 Edit `evolve/<id>-<slug>/N_mutation.md` — set `## Status` to `kept` or `discarded`.
+
+## Step 8: Name the gap and next action
+
+Compare the prediction in `N_mutation.md` with the actual output. State explicitly:
+- **Gap** — where did prediction differ from reality? What does that reveal about your model of the system?
+- **Next** — does the gap become a new force (`pf-force`), a refined mutation (`pf-mutate`), or is the goal reached?

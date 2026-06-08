@@ -82,11 +82,15 @@ flowchart TD
 
 ### Philosophy
 
-- **Force** — every change originates from an external pressure, not an internal impulse. If there's no force, there's no goal.
+The loop: **goal → predict → act → compare → learn → repeat**
+
 - **Goal** — always end-to-end. Not "improve the internals" but "given this input, produce this output."
-- **Mutation** — one focused change at a time. Hill-climbing, not redesign.
-- **Evaluation** — run the real system with the real input. No mocks, no internal checks.
-- **Iteration** — a goal may take many mutations to reach. Each mutation is evaluated and either kept or discarded.
+- **Predict** — before acting, form a concrete prediction: if I make this change, the output will change in this specific way.
+- **Act** — take the smallest meaningful action based on that prediction. One mutation, not a redesign.
+- **Compare** — run the real system. Compare actual output to predicted output. No mocks, no internal checks.
+- **Learn** — gaps between prediction and reality reveal where your model of the system is wrong. Name the gap explicitly.
+- **Repeat** — gaps become new forces. Refined understanding shapes the next prediction. Ability to reach goals compounds over time.
+- **Force** — every change originates from an external pressure, not an internal impulse. If there's no force, there's no goal.
 
 ### Skills
 

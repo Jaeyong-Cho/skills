@@ -7,7 +7,7 @@ description: |
 
 # Evolutionary Mutation
 
-One mutation = one focused change toward a goal — hill-climbing, one candidate at a time. Scope is **mutate only** — propose, apply, record. Scoring the result (functional → performance) is the evaluation step's job.
+One mutation = one prediction tested against reality. Form a concrete prediction, take the smallest meaningful action based on it, then hand off to evaluation to compare actual vs expected. Scope is **predict and act only** — propose, apply, record. Scoring the gap is the evaluation step's job.
 
 When writing markdown: using Mermaid diagrams is recommended.
 
@@ -51,12 +51,13 @@ If the grill revealed that the goal's scope, expected output, or input has shift
 
 If nothing changed, skip.
 
-## Step 6: Propose the mutation
+## Step 6: Form a prediction
 
-Form a hypothesis. State:
-- **Change** — what is being changed
-- **Why** — why this should move toward the goal
-- **Expected effect + how to measure** per tier:
+State your prediction explicitly:
+- **Change** — the smallest meaningful action to take
+- **Prediction** — if this change is made, the output will change in this specific way
+- **Why** — why you believe this moves toward the goal
+- **How to measure** per tier:
   - functional — what must still hold / expected output
   - performance — what to measure
 
@@ -103,8 +104,8 @@ Read `../pf-impl/references/tdd-refactoring.md`. Run all tests after each refact
 ## Goal
 <id>-<slug> — <one-line restatement>
 
-## Hypothesis
-<the change and why it should move toward the goal>
+## Prediction
+<if this change is made, the output will change in this specific way>
 
 ## Change
 - files: <list>
