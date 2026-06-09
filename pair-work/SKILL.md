@@ -38,18 +38,16 @@ Pursue a goal top-down with transparent, human-in-the-loop execution. No silent 
 > [check] what I'm verifying — why
 ```
 
-**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes that are easy to read and understand at a glance. If a change is getting large, split it voluntarily.
+**Every interaction is a dialogue** — not just exec confirms. For every `[ask]`, `[plan]`, `[check]`, and post-exec confirm:
+- When options are clear: call `AskUserQuestion` tool — list options with recommended first marked "(Recommended)". Never ask in plain text when options exist.
+- When open-ended (no clear options): ask in plain text.
 
-**After each exec**, show the result and confirm understanding:
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily.
 
+**After each exec**, show the result then call `AskUserQuestion`:
 1. Show what changed (inline diff or code block)
 2. Explain in one sentence what was done and why
-3. **Call `AskUserQuestion` tool** — do not ask in plain text:
-   - "Yes, continue" (Recommended)
-   - "Redirect"
-   - "Blame (roll back)"
-
-Do not proceed to the next step until confirmed — unless user said "keep going".
+3. Call `AskUserQuestion`: "Does this look right?" — "Yes, continue" (Recommended) / "Redirect" / "Blame (roll back)"
 
 ## Human controls
 
