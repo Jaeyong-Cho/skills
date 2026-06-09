@@ -1,31 +1,23 @@
 ---
-name: pair-work
-description: Transparent step-by-step execution toward a goal — breaks the goal top-down, works each step with intent declarations, small changes, and post-edit confirmation via AskUserQuestion. Use when user says "pair-work", "work through this with me", "step by step", or "let's do this together".
+name: pair-mode
+description: Wrap any skill with transparent, human-in-the-loop execution — reads the target skill's process and runs it with intent declarations, small atomic changes, and post-edit confirmation via AskUserQuestion at every step. Use when user says "pair-mode", "pair-mode with", or invokes as "/pair-mode /<skill> <goal>".
 ---
 
-# Pair-Work
+# Pair-Mode
 
-Pursue a goal top-down with transparent, human-in-the-loop execution. No silent moves.
+Wrap any skill with the pair-work protocol. No silent moves.
 
-## Process
+## Invocation
 
-1. **Get the goal** — if vague, ask one clarifying question first.
-2. **Break it down** — decompose top-down into ordered steps. Show the list.
-   ```
-   Steps:
-   1. <first logical unit>
-   2. <next>
-   ...
-   ```
-   Call `AskUserQuestion`: "Does this order look right?" — options: "Yes, proceed" (Recommended), "Reorder", "Add/remove steps".
-3. **Work each step** — for every step:
-   - Declare intent (`> [exec] ...`)
-   - Execute the change
-   - Show what changed (inline diff or code block)
-   - Explain in one sentence what was done and why
-   - Call `AskUserQuestion`: "Does this look right?" — options: "Yes, continue" (Recommended), "Redirect", "Blame (roll back)"
-   - Do not proceed until confirmed — unless user said "keep going"
-4. **Done** — summarize what was achieved in 2–3 lines.
+```
+/pair-mode /<skill> <goal>
+/pair-mode /pf-impl build an auth module
+/pair-mode /pf-proto prove this state model
+```
+
+## Setup
+
+Read the target skill's SKILL.md. Run its process exactly — but apply the protocol below at every step.
 
 ## Protocol
 
@@ -66,3 +58,4 @@ Do not proceed to the next step until confirmed — unless user said "keep going
 - No silent moves — intent declared before every action
 - One question at a time — no maximum. Keep asking until clear. User can say "wrap up" to move forward.
 - Never skip a step without declaring why
+- If the wrapped skill grills the user, follow its grill process — prefix each question with `> [ask]`
