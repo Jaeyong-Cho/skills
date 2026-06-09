@@ -46,15 +46,15 @@ Read the target skill's SKILL.md. Run its process exactly — but apply this pro
 > [check] what I'm verifying — why
 ```
 
-**Each exec is one logical unit** — one behavior, one function, one config block. Max ~30 lines changed per edit. If a change would exceed this or touch multiple logical units, split it into separate steps first and show the split plan before proceeding.
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes that are easy to read and understand at a glance. If a change is getting large, split it voluntarily — smaller is easier to review, easier to roll back, easier to learn from.
 
-**Before any file write or command**, ask approval:
+**After each exec**, show the result and confirm understanding:
 
-> [exec] About to write `src/auth.ts` — implementing the login behavior from step 2
+1. Show what changed (inline diff or code block)
+2. Explain in one sentence what was done and why
+3. Ask via `AskUserQuestion`: "Does this look right?" — options: "Yes, continue" (Recommended), "Redirect", "Blame (roll back)"
 
-Use `AskUserQuestion`: options are "Proceed" (Recommended) and "Redirect".
-
-**After each exec**, show a one-line summary of what changed (file, what was added/removed), then check in before continuing — unless user said "keep going".
+Do not proceed to the next step until confirmed — unless user said "keep going".
 
 ## Human controls
 
