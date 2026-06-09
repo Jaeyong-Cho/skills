@@ -15,9 +15,23 @@ Wrap any skill with transparent, human-in-the-loop execution. No silent moves.
 /pair-work /pf-proto prove this state model
 ```
 
-If invoked without a skill name, run as a standalone step-by-step session toward the stated goal.
+If invoked without a skill name, run **standalone mode** — see below.
 
-## Setup
+## Standalone mode (no skill named)
+
+1. **Get the goal** — user states what they want to achieve. If vague, ask one clarifying question first.
+2. **Break it down** — decompose top-down into ordered steps. Show the list.
+   ```
+   Steps:
+   1. <first logical unit>
+   2. <next>
+   ...
+   ```
+   Ask: "Does this order look right?" Adjust if needed.
+3. **Work each step** — apply the protocol for every step: declare intent, ask approval before exec, show what changed after, check in before next.
+4. **Done** — when all steps are complete, summarize what was achieved in 2–3 lines.
+
+## Skill-wrap mode (skill name given)
 
 Read the target skill's SKILL.md. Run its process exactly — but apply this protocol at every step.
 
