@@ -46,7 +46,7 @@ Read the target skill's SKILL.md. Run its process exactly — but apply this pro
 > [check] what I'm verifying — why
 ```
 
-**Each exec is one logical unit** — one behavior, one function, one config block. If a change would touch multiple logical units, split it into separate steps first and show the split plan before proceeding.
+**Each exec is one logical unit** — one behavior, one function, one config block. Max ~30 lines changed per edit. If a change would exceed this or touch multiple logical units, split it into separate steps first and show the split plan before proceeding.
 
 **Before any file write or command**, ask approval:
 
