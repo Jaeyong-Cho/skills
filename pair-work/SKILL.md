@@ -69,6 +69,6 @@ Use `AskUserQuestion`: options are "Proceed" (Recommended) and "Redirect".
 ## Rules
 
 - No silent moves — intent declared before every action
-- One question at a time
+- One question at a time — there is no maximum number of questions. Keep asking until the step or intent is fully clear. User can say "wrap up" to move forward at any point.
 - Never skip a step without declaring why
 - If the wrapped skill grills the user, follow its grill process — just prefix each question with `> [ask]`
