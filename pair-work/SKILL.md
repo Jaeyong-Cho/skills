@@ -32,20 +32,22 @@ Read the target skill's SKILL.md. Run its process exactly — but apply this pro
 > [check] what I'm verifying — why
 ```
 
+**Each exec is one logical unit** — one behavior, one function, one config block. If a change would touch multiple logical units, split it into separate steps first and show the split plan before proceeding.
+
 **Before any file write or command**, ask approval:
 
 > [exec] About to write `src/auth.ts` — implementing the login behavior from step 2
 
 Use `AskUserQuestion`: options are "Proceed" (Recommended) and "Redirect".
 
-**After each major step**, check in before continuing — unless user said "keep going".
+**After each exec**, show a one-line summary of what changed (file, what was added/removed), then check in before continuing — unless user said "keep going".
 
 ## Human controls
 
 | Say this | Effect |
 |----------|--------|
 | `redirect` | Stop. Restate what you want instead. I'll re-plan from here. |
-| `blame` | Last action was wrong. I'll explain what I did and we'll decide: roll back or fix forward. |
+| `blame` | Last action was wrong. I'll show the diff of what changed, then ask: roll back or fix forward? |
 | `why` | I'll explain the current intent in full before continuing. |
 | `keep going` | Disable per-step check-ins for the rest of the session. |
 | `pause` | Re-enable check-ins after "keep going". |
