@@ -59,3 +59,4 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 | `write-a-skill` | Create or review agent skills with proper structure and checklist |
 | `to-minutes` | Write markdown minutes file from current session discussion |
 | `self-audit` | Grill-based metacognition audit — maps known, uncertain, known-unknown, unknown for a topic |
+| `pair-work` | Transparent AI pair — declares intent before every move, grills on ambiguity, executes when clear |
