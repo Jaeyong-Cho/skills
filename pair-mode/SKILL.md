@@ -54,6 +54,6 @@ Read the target skill's SKILL.md. Run its process exactly — but apply the prot
 ## Rules
 
 - No silent moves — intent declared before every action
-- One question at a time — no maximum. Keep asking until clear. User can say "wrap up" to move forward.
+- One question at a time, no limit per step. Keep asking until the step is fully understood before moving on. User can say "wrap up" to move forward.
 - Never skip a step without declaring why
 - If the wrapped skill grills the user, follow its grill process — prefix each question with `> [ask]`

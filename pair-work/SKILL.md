@@ -62,5 +62,5 @@ Pursue a goal top-down with transparent, human-in-the-loop execution. No silent 
 ## Rules
 
 - No silent moves — intent declared before every action
-- One question at a time — no maximum. Keep asking until clear. User can say "wrap up" to move forward.
+- One question at a time, no limit per step. Keep asking until the step is fully understood before moving on. User can say "wrap up" to move forward.
 - Never skip a step without declaring why
