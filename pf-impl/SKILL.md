@@ -1,13 +1,13 @@
 ---
 name: pf-impl
 description: |
-  Design and implement a feature in one session using VAO + TDD — no ADR written.
-  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time via RED→GREEN→REFACTOR.
+  Design and implement a feature in one session using VAO — no ADR written.
+  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time: write code, assert known unknowns, log unexpected states, run and observe.
   Use when the user wants to think through a design and implement immediately without writing a formal ADR.
   Triggers: "pf-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement", "implement this".
 ---
 
-For layer definitions read `../pf/references/layers.md`. For TDD philosophy read `references/tdd.md`.
+For layer definitions read `../pf/references/layers.md`.
 
 # VAO Design + Implement (No ADR)
 
@@ -36,9 +36,6 @@ Behavior list:
 1. <tracer bullet behavior>    [value]
 2. <next behavior>             [aspect]
 3. <next behavior>             [object]
-
-Test targets:
-- <file> → <what gets tested>
 ```
 
 Ask via `AskUserQuestion`: "Ready to implement?" — adjust list if needed.
@@ -47,19 +44,18 @@ Ask via `AskUserQuestion`: "Ready to implement?" — adjust list if needed.
 
 Read `../pf-observe/REFERENCE.md` for logging rules before implementing. Follow its conventions for log levels, CLI flags, and output format.
 
-Read `references/tdd-tests.md` for test examples, `references/tdd-mocking.md` for mocking.
-
 For each behavior:
-```
-RED:   Write test via public interface → confirm fails
-GREEN: Write minimal code → confirm passes
-       Include logging per pf-observe conventions — key inputs, outputs, state changes
-```
-Do not write next test until current is green.
+1. **Write the implementation** — minimal code that satisfies the behavior
+2. **Assert known unknowns** — for every invariant that must hold, add an assertion inline. If it fires, something is wrong.
+3. **Log unexpected states** — for states that shouldn't happen but aren't fatal, add an error log with enough context (inputs, state) to diagnose without a debugger
+4. **Dump useful data** — log key inputs, outputs, and state changes per pf-observe conventions
+5. **Run and observe** — execute the code, confirm assertions don't fire, confirm logs show expected data
 
-## Step 4: Refactor (after all green)
+Do not move to the next behavior until the current one runs cleanly.
 
-Read `references/tdd-refactoring.md`, `../pf/references/deep-modules.md`.
+## Step 4: Refactor (after all behaviors run cleanly)
+
+Read `../pf/references/deep-modules.md`.
 
 - [ ] Interface narrowable?
 - [ ] Complexity hidden or exposed?
@@ -73,7 +69,7 @@ Read `references/tdd-refactoring.md`, `../pf/references/deep-modules.md`.
 - [ ] Errors include enough context (input values, state) to diagnose without a debugger?
 - [ ] Existing `observe/` scripts still compatible? (`ls observe/ 2>/dev/null` — check each script still targets valid paths, interfaces, and output formats)
 
-Run all tests after each refactor step. Never refactor while RED.
+Run the code after each refactor step and confirm assertions still pass and logs still look correct.
 
 ## Step 5: Done
 
