@@ -19,11 +19,12 @@ Pursue a goal top-down with transparent, human-in-the-loop execution. No silent 
    ```
    Call `AskUserQuestion`: "Does this order look right?" — options: "Yes, proceed" (Recommended), "Reorder", "Add/remove steps".
 3. **Work each step** — for every step:
-   - Declare intent (`> [exec] ...`)
-   - Execute the change
-   - Show what changed (inline diff or code block)
-   - Explain in one sentence what was done and why
-   - Call `AskUserQuestion`: "Does this look right?" — options: "Yes, continue" (Recommended), "Redirect", "Blame (roll back)"
+   - **Pre-flight**: list ALL file changes this step will make (`> [plan] change 1, change 2, ...`). Group identical/parallel changes. Call `AskUserQuestion` to confirm the list before touching anything.
+   - For each change (or batch of identical changes):
+     - Declare intent (`> [exec] ...`)
+     - Execute the change
+     - Explain in one sentence what was done and why
+     - Call `AskUserQuestion` with a specific question about what was done
    - Do not proceed until confirmed — unless user said "keep going"
 4. **Done** — summarize what was achieved in 2–3 lines.
 
@@ -43,11 +44,9 @@ Pursue a goal top-down with transparent, human-in-the-loop execution. No silent 
 - When open-ended (no clear options): ask in plain text.
 - **Questions must be specific** — include the current intent in the question text. Options must reflect the actual decision, not generic labels. Bad: "Does this look right?" / "Yes, continue". Good: "I used a regex to validate date format and throw on mismatch — does this error strategy fit?" / "Yes, throw is right" / "Return null instead" / "Roll back".
 
-**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily.
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously.
 
-**After each exec**, show the result then call `AskUserQuestion`:
-1. Show what changed (inline diff or code block)
-2. Call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
+**After each exec**, call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
 
 ## Human controls
 

@@ -35,11 +35,11 @@ Read the target skill's SKILL.md. Run its process exactly — but apply the prot
 - When open-ended (no clear options): ask in plain text.
 - **Questions must be specific** — include the current intent in the question text. Options must reflect the actual decision, not generic labels. Bad: "Does this look right?" / "Yes, continue". Good: "I used a regex to validate date format and throw on mismatch — does this error strategy fit?" / "Yes, throw is right" / "Return null instead" / "Roll back".
 
-**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily.
+**Before starting a step's changes**, list ALL planned file changes (`> [plan] change 1, change 2, ...`). Group identical/parallel changes. Call `AskUserQuestion` to confirm the list before touching anything.
 
-**After each exec**, show the result then call `AskUserQuestion`:
-1. Show what changed (inline diff or code block)
-2. Call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously.
+
+**After each exec**, call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
 
 ## Human controls
 
