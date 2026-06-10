@@ -1,6 +1,6 @@
 ---
 name: uncomfortable
-description: Surface and resolve uncomfortable things. Reads ~/.strong/uncomfortable.md, interviews the user to pick the most uncomfortable item, runs 5 Whys to find the root cause, then sets a concrete goal and appends it back to the file. Use when user says "uncomfortable", "face uncomfortable", "what's bothering me", or "work through my uncomfortable list".
+description: Surface and resolve uncomfortable things. Reads ~/.strong/uncomfortable.md, reviews all items holistically, runs 5 Whys for each Inbox item, sets a goal for each considering relationships and existing goals, then saves. Use when user says "uncomfortable", "face uncomfortable", "what's bothering me", or "work through my uncomfortable list".
 ---
 
 # Uncomfortable
@@ -47,54 +47,53 @@ Already analyzed:
 
 If both groups are empty, tell the user and stop — ask them to add items to Inbox first.
 
-### 2. Pick the most uncomfortable
+### 2. Holistic review
 
-Ask (plain text, open-ended): "Which of these feels most uncomfortable to you right now?"
-Let the user point to a number or describe it. Confirm which item was chosen.
+Before working any item, read all items together — both Inbox and existing H2 sections. Silently note:
+- Items that share a root cause or could be resolved by the same goal
+- Existing goals that might conflict with each other or worsen other items
+- Patterns across items
 
-### 3. Five Whys interview
+Summarize what you noticed in 2–3 lines before proceeding.
 
-Ask up to 5 rounds:
+### 3. Work each Inbox item
 
+For every item in `## Inbox`, in order:
+
+**a. Five Whys** — ask up to 5 rounds:
 > "Why does [item / previous answer] make you uncomfortable?"
 
-After each answer, judge: is this a root cause (a belief, fear, or pattern with no deeper why), or is there another layer?
-- If deeper layer exists → ask again
-- If root reached (or 5 rounds done) → move on
+After each answer, judge: root cause reached, or deeper layer exists? Stop when root is clear. Summarize in one sentence.
 
-Summarize the root cause in one sentence before continuing.
-
-### 4. Set a goal
-
-Based on the root cause, propose one concrete, time-bound goal:
+**b. Set a goal** — propose one concrete, time-bound goal:
 - Specific action (not "be better at X")
 - Achievable in 2–4 weeks
 - Directly targets the root cause
+- **Explicitly check**: does this goal conflict with or relate to other items or existing goals? Mention it if so.
 
-Ask the user: "Does this goal feel right?" — let them adjust wording before saving.
+Ask the user: "Does this goal feel right?" — let them adjust wording.
 
-### 5. Extract notes
+**c. Extract notes** — without asking, synthesize key things from the conversation (constraints, patterns, prior context). 1–3 bullets max. Omit if nothing meaningful.
 
-Without asking the user, synthesize key things to remember from the conversation — constraints mentioned, prior attempts, patterns, context that would matter when working on this goal. Write 1–3 bullet points max. Omit if nothing meaningful surfaced.
-
-### 6. Save
-
-Promote the chosen item from `## Inbox` to its own H2 section in `~/.strong/uncomfortable.md`:
-
-1. Remove the bullet from `## Inbox`
-2. Add a new H2 section above `## Inbox`:
-
+**d. Save** — promote the item from `## Inbox` to its own H2 section:
+1. Remove its bullet from `## Inbox`
+2. Add new H2 above `## Inbox`:
 ```
 ## [original item text]
 - Root cause: [one sentence]
 - Goal: [concrete goal]
-- Notes: [synthesized from conversation — omit if empty]
+- Notes: [synthesized — omit if empty]
 ```
 
-If the item was already an H2 section (re-analysis), replace its sub-bullets in place.
+### 4. Review existing goals
+
+After all Inbox items are processed, show the existing H2 goals. Ask:
+> "Do any of these goals need updating given what we just worked through?"
+
+If yes — re-run goal-setting for that item and replace its sub-bullets in place.
 
 ## Rules
 
-- Never skip the 5 Whys — if the user gives shallow answers, gently push once more
+- Never skip the 5 Whys — if answers are shallow, push once more
 - Goal must be specific and time-bound — reject vague goals like "work on this"
-- One uncomfortable item per session
+- When setting a goal, always consider the full list — goals must not inadvertently worsen other items
