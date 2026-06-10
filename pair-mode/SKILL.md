@@ -37,7 +37,7 @@ Read the target skill's SKILL.md. Run its process exactly — but apply the prot
 
 **Before starting a step's changes**, list ALL planned file changes (`> [plan] change 1, change 2, ...`). Group identical/parallel changes. Call `AskUserQuestion` to confirm the list before touching anything.
 
-**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously.
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously. If an edit exceeds ~30–40 lines, split into logical chunks — confirm and review each chunk before moving to the next.
 
 **After each exec**, call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
 

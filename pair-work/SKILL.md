@@ -44,7 +44,7 @@ Pursue a goal top-down with transparent, human-in-the-loop execution. No silent 
 - When open-ended (no clear options): ask in plain text.
 - **Questions must be specific** — include the current intent in the question text. Options must reflect the actual decision, not generic labels. Bad: "Does this look right?" / "Yes, continue". Good: "I used a regex to validate date format and throw on mismatch — does this error strategy fit?" / "Yes, throw is right" / "Return null instead" / "Roll back".
 
-**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously.
+**Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously. If an edit exceeds ~30–40 lines, split into logical chunks — confirm and review each chunk before moving to the next.
 
 **After each exec**, call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
 

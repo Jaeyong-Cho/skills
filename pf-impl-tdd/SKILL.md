@@ -1,15 +1,15 @@
 ---
-name: pf-impl
+name: pf-impl-tdd
 description: |
-  Design and implement a feature in one session using VAO — no ADR written. No tests, no TDD (use pf-impl-tdd for test-first).
-  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time: write code, assert known unknowns, log unexpected states, run and observe.
-  Use when the user wants to think through a design and implement immediately without writing a formal ADR.
-  Triggers: "pf-impl", "design and implement", "think through and build", "quick impl", "no ADR just implement", "implement this".
+  Design and implement a feature in one session using VAO + TDD — no ADR written.
+  Grills the user to reach a clear VAO design, extracts behaviors, then implements one at a time via RED→GREEN→REFACTOR.
+  Use when the user wants test-first implementation with a clear design before coding.
+  Triggers: "pf-impl-tdd", "tdd impl", "test-first", "red green refactor", "implement with tdd".
 ---
 
-For layer definitions read `../pf/references/layers.md`.
+For layer definitions read `../pf/references/layers.md`. For TDD philosophy read `../pf-impl/references/tdd.md`.
 
-# VAO Design + Implement (No ADR)
+# VAO Design + Implement — TDD
 
 Design direction: **Value → Aspect → Object** (iterative in practice).
 
@@ -25,7 +25,7 @@ Ask the questions one at a time. When a question has clear discrete options, use
 
 If a question can be answered by exploring the codebase, explore the codebase instead. When referencing source code, show the relevant snippet inline with `file:line` header before asking.
 
-There is no maximum number of questions. Keep going until every branch of the decision tree is resolved — some plans need three questions, some need fifty. If the session feels too long, the user can stop at any time or say "wrap up" to summarise and move on. Natural-language steering is the intended control surface, not a numeric limit.
+There is no maximum number of questions. Keep going until every branch of the decision tree is resolved. User can say "wrap up" to summarise and move on.
 
 ## Step 2: Extract behavior list
 
@@ -36,26 +36,30 @@ Behavior list:
 1. <tracer bullet behavior>    [value]
 2. <next behavior>             [aspect]
 3. <next behavior>             [object]
+
+Test targets:
+- <file> → <what gets tested>
 ```
 
 Ask via `AskUserQuestion`: "Ready to implement?" — adjust list if needed.
 
 ## Step 3: Implement — one behavior at a time
 
+Read `../pf-impl/references/tdd-tests.md` for test examples, `../pf-impl/references/tdd-mocking.md` for mocking.
+
 Read `../pf-observe/REFERENCE.md` for logging rules before implementing. Follow its conventions for log levels, CLI flags, and output format.
 
 For each behavior:
-1. **Write the implementation** — minimal code that satisfies the behavior
-2. **Assert known unknowns** — for every invariant that must hold, add an assertion inline. If it fires, something is wrong.
-3. **Log unexpected states** — for states that shouldn't happen but aren't fatal, add an error log with enough context (inputs, state) to diagnose without a debugger
-4. **Dump useful data** — log key inputs, outputs, and state changes per pf-observe conventions
-5. **Run and observe** — execute the code, confirm assertions don't fire, confirm logs show expected data
+```
+RED:   Write test via public interface → confirm fails
+GREEN: Write minimal code → confirm passes
+       Include logging per pf-observe conventions — key inputs, outputs, state changes
+```
+Do not write next test until current is green.
 
-Do not move to the next behavior until the current one runs cleanly.
+## Step 4: Refactor (after all green)
 
-## Step 4: Refactor (after all behaviors run cleanly)
-
-Read `../pf/references/deep-modules.md`.
+Read `../pf-impl/references/tdd-refactoring.md`, `../pf/references/deep-modules.md`.
 
 - [ ] Interface narrowable?
 - [ ] Complexity hidden or exposed?
@@ -69,13 +73,8 @@ Read `../pf/references/deep-modules.md`.
 - [ ] Errors include enough context (input values, state) to diagnose without a debugger?
 - [ ] Existing `observe/` scripts still compatible? (`ls observe/ 2>/dev/null` — check each script still targets valid paths, interfaces, and output formats)
 
-Run the code after each refactor step and confirm assertions still pass and logs still look correct.
+Run all tests after each refactor step. Never refactor while RED.
 
 ## Step 5: Done
 
 Show summary of what was built. Suggest commit message using `../pf/references/commit.md`.
-
-## Rules
-
-- **No tests. No TDD.** Do not write test files. Do not use RED→GREEN. Use `/pf-impl-tdd` if test-first is needed.
-- Assertions go inline in production code only — not in separate test files.
