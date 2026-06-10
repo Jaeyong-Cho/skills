@@ -46,11 +46,9 @@ Based on the root cause, propose one concrete, time-bound goal:
 
 Ask the user: "Does this goal feel right?" — let them adjust wording before saving.
 
-### 5. Capture notes
+### 5. Extract notes
 
-Ask (plain text): "What are the important things to remember when working on this goal?"
-
-Let the user list anything — context, constraints, prior attempts, key insights from the interview. Accept free-form text. If they have nothing to add, skip.
+Without asking the user, synthesize key things to remember from the conversation — constraints mentioned, prior attempts, patterns, context that would matter when working on this goal. Write 1–3 bullet points max. Omit if nothing meaningful surfaced.
 
 ### 6. Save
 
@@ -60,7 +58,7 @@ Append root cause, goal, and notes directly under the chosen item in `~/.strong/
 - [original item text]
   - Root cause: [one sentence]
   - Goal: [concrete goal]
-  - Notes: [key things to remember — from step 5, or omit if none]
+  - Notes: [synthesized from conversation — omit if empty]
 ```
 
 If the item already has a root cause/goal block, replace it.
