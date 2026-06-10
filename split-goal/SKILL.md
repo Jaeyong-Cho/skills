@@ -9,6 +9,17 @@ Grill to understand the goal. Decompose top-down until every leaf is a single ac
 
 ## Process
 
+0. **Source** — read `~/.strong/uncomfortable.md`. Extract all items that have a `- Goal:` sub-line. If any exist, display them numbered:
+
+   ```
+   Goals from your uncomfortable list:
+   1. [goal text] (from: [uncomfortable item])
+   2. ...
+   ```
+
+   Ask (plain text): "Pick a number to decompose, or describe a different goal."
+   If the file doesn't exist or has no goals, skip this step and ask for the goal directly.
+
 1. **Grill** — clarify scope, constraints, and success criteria before decomposing.
 
    Using the Socratic method — question assumptions, probe deeper, help the user discover the right framing themselves. Purpose: understand the goal well enough to split it correctly.
