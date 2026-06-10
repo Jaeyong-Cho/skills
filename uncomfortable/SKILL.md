@@ -60,10 +60,15 @@ Summarize what you noticed in 2–3 lines before proceeding.
 
 For every item in `## Inbox`, in order:
 
-**a. Five Whys** — ask up to 5 rounds:
-> "Why does [item / previous answer] make you uncomfortable?"
+**a. Five Whys** — ask up to 5 rounds. Each round: call `AskUserQuestion` with the question "Why does [item / previous answer] make you uncomfortable?" and offer hint options based on common patterns:
 
-After each answer, judge: root cause reached, or deeper layer exists? Stop when root is clear. Summarize in one sentence.
+- Lack of knowledge or skill
+- Fear of failure or judgment
+- External pressure or constraint
+- Habit or avoidance pattern
+- Something else (free text)
+
+Adjust the hint options each round to match the context of the previous answer — don't repeat the same options mechanically. After each answer, judge: root cause reached, or deeper layer exists? Stop when root is clear. Summarize in one sentence.
 
 **b. Set a goal** — propose one concrete, time-bound goal:
 - Specific action (not "be better at X")
