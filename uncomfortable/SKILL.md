@@ -46,14 +46,21 @@ Based on the root cause, propose one concrete, time-bound goal:
 
 Ask the user: "Does this goal feel right?" — let them adjust wording before saving.
 
-### 5. Save
+### 5. Capture notes
 
-Append root cause and goal directly under the chosen item in `~/.strong/uncomfortable.md`:
+Ask (plain text): "What are the important things to remember when working on this goal?"
+
+Let the user list anything — context, constraints, prior attempts, key insights from the interview. Accept free-form text. If they have nothing to add, skip.
+
+### 6. Save
+
+Append root cause, goal, and notes directly under the chosen item in `~/.strong/uncomfortable.md`:
 
 ```
 - [original item text]
   - Root cause: [one sentence]
   - Goal: [concrete goal]
+  - Notes: [key things to remember — from step 5, or omit if none]
 ```
 
 If the item already has a root cause/goal block, replace it.
