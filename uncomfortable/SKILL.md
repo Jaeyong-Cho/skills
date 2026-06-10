@@ -9,16 +9,43 @@ Surface what's uncomfortable, find why, set a goal to face it.
 
 ## Data file
 
-`~/.strong/uncomfortable.md` — simple bullet list, one item per line.
+`~/.strong/uncomfortable.md` — structured markdown:
 
-If the file doesn't exist, create `~/.strong/` and an empty `~/.strong/uncomfortable.md`.
+```
+# Uncomfortable List
+
+## <analyzed item title>
+- Root cause: ...
+- Goal: ...
+- Notes: ... (optional)
+- Status: done ✓ (optional)
+
+## Inbox
+- unanalyzed item 1
+- unanalyzed item 2
+```
+
+H2 sections = analyzed items with root cause + goal. `## Inbox` = raw items not yet worked through.
+
+If the file doesn't exist, create `~/.strong/` with an empty file containing just `# Uncomfortable List\n\n## Inbox\n`.
 
 ## Process
 
 ### 1. Show the list
 
-Read `~/.strong/uncomfortable.md` and display all items numbered.
-If the list is empty, tell the user and stop — ask them to add items first.
+Read `~/.strong/uncomfortable.md`. Display two groups numbered:
+
+```
+Inbox (not yet analyzed):
+1. ...
+2. ...
+
+Already analyzed:
+3. ...
+4. ...
+```
+
+If both groups are empty, tell the user and stop — ask them to add items to Inbox first.
 
 ### 2. Pick the most uncomfortable
 
@@ -52,16 +79,19 @@ Without asking the user, synthesize key things to remember from the conversation
 
 ### 6. Save
 
-Append root cause, goal, and notes directly under the chosen item in `~/.strong/uncomfortable.md`:
+Promote the chosen item from `## Inbox` to its own H2 section in `~/.strong/uncomfortable.md`:
+
+1. Remove the bullet from `## Inbox`
+2. Add a new H2 section above `## Inbox`:
 
 ```
-- [original item text]
-  - Root cause: [one sentence]
-  - Goal: [concrete goal]
-  - Notes: [synthesized from conversation — omit if empty]
+## [original item text]
+- Root cause: [one sentence]
+- Goal: [concrete goal]
+- Notes: [synthesized from conversation — omit if empty]
 ```
 
-If the item already has a root cause/goal block, replace it.
+If the item was already an H2 section (re-analysis), replace its sub-bullets in place.
 
 ## Rules
 
