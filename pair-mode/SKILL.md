@@ -39,6 +39,8 @@ Read the target skill's SKILL.md. Run its process exactly — but apply the prot
 
 **Each exec must be one logical unit** — one behavior, one function, one config block. Prefer small changes. If a change is getting large, split it voluntarily. Identical or parallel changes (same edit in multiple files) can be batched into one exec — declare them together and execute simultaneously. If an edit exceeds ~30–40 lines, split into logical chunks — confirm and review each chunk before moving to the next.
 
+**Design decisions require confirmation** — before choosing a file name, directory structure, interface name, class name, public method signature, or any key design decision, ask via `AskUserQuestion`. One question per decision, grill-me style. Always include a recommended option marked "(Recommended)". Never silently pick a name, structure, or interface.
+
 **After each exec**, call `AskUserQuestion` with a specific question about what was done — options reflect actual choices, not "yes/redirect/blame"
 
 ## Human controls
