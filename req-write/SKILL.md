@@ -72,4 +72,5 @@ After writing all requirements, output:
 - MECE: each requirement covers exactly one concern. If two reqs overlap, merge them. If there's a gap, add a req.
 - "Out of Scope" is required in every req — it's what enforces MECE.
 - Do not invent APIs — only reference existing ones or flag new ones as "suggested (new)".
+- If an existing API doc is incomplete, wrong, or missing a method the requirement clearly needs, fix it — but only when the change is unambiguously correct given the requirement. Surface the change to the user before writing.
 - Req files are for WHAT and WHY, not HOW. Implementation details belong in api-write docs.
