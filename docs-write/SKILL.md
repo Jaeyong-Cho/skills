@@ -1,23 +1,29 @@
 ---
 name: docs-write
-description: Design an API through Socratic grilling, then write the structured API doc to docs/src/api/<name>.md for api-impl to consume. Use when user wants to design a new API, write API docs, mentions "docs-write", "design API", "write API doc", or wants to plan an API before implementing it.
+description: Write program documentation (architecture, concepts, guides, tutorials) through Socratic grilling, then write to docs/src/. Use when user wants to document how something works, write a guide, explain architecture, or mentions "docs-write", "write docs", "document this", "write a guide".
 ---
 
-# API Write (Design → Doc)
+# Docs Write (Program Documentation)
 
-Design an API through grilling, then output a structured doc for api-impl.
+Document how the program works — architecture, concepts, guides, tutorials. Not API design (use api-write for that).
 
 Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/references/layers.md) before starting.
 
-## Step 0: Language (first API only)
+## Step 0: Doc type
 
-Check whether `src/api/` contains any existing API files. If none exist, ask the user what programming language the project uses before grilling. Use the answer to set the language for all code blocks in the doc (method signatures, usage examples).
+Identify what kind of documentation this is:
+- **Architecture** — how the system is structured and why
+- **Concept** — explain a domain idea or design principle
+- **Guide** — how to accomplish a specific task
+- **Tutorial** — step-by-step walkthrough for a new user
 
-## Step 1: Grill the design
+If unclear, ask. The type determines the structure of the output.
 
-Before asking anything, map the decision space: identify every ambiguous or consequential decision this API requires. Rank them by impact — which ones, if decided wrong, ripple through the whole design?
+## Step 1: Grill the content
 
-Then ask only about the high-impact ambiguous ones, in order of importance. Skip decisions that are obvious, derivable from the codebase, or have a clear default. Do not walk every branch — focus on the ones where the answer genuinely changes the shape of the API.
+Before asking anything, map what's ambiguous or missing about the topic. Rank by impact — which gaps, if left unclear, will confuse the reader most?
+
+Ask only about the high-impact ambiguous ones, in order. Skip anything derivable from the codebase.
 
 Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)" to its label. For open-ended questions, ask in plain text and state your recommendation explicitly.
 
@@ -27,19 +33,13 @@ User can say "wrap up" to stop early.
 
 ## Step 2: Write the doc
 
-Confirm the API name with the user. The layer is determined from the design (Value / Aspect / Object).
+Confirm the filename with the user. Write to `src/<section>/<name>.md` — place it where it fits best in the existing SUMMARY.md structure.
 
-Write to `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/aspects/auth.md`, `src/api/values/signup.md`) using [DOC_TEMPLATE.md](DOC_TEMPLATE.md).
-
-If this is a new file, add it to `src/SUMMARY.md` under the appropriate layer section:
-
-```md
-- [ApiName](api/objects/name.md)
-```
+Add it to `src/SUMMARY.md` under the appropriate section if it's a new file.
 
 ## Rules
 
-- Grill first, write second — no doc until design is settled.
-- Omit sections (CLI, UI) if not applicable to this API.
-- If a design decision conflicts with deep-module or layer rules, surface it during the grill — not after writing.
-- **Layer dependency check**: before finalizing the doc, verify every entry in Dependencies points to a same or inner layer API. Flag any upward reference (inner → outer) as a design error and force a redesign before writing.
+- Grill first, write second.
+- Write for the reader, not the author — assume they don't know the internals.
+- No API method signatures here; those belong in api-write docs.
+- Include diagrams (mermaid) where structure is easier to show than describe.
