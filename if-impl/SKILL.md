@@ -1,6 +1,6 @@
 ---
 name: if-impl
-description: Implement existing IF specs faithfully using TDD — public interface is the only test target. Reads user-provided IF docs and implements each entry point one at a time: write test → implement → refactor. Use when user has a designed IF spec and wants it filled in, mentions "implement this interface", "implement from docs", "implement existing IF", "implement based on spec", or "if-impl".
+description: Implement existing IF specs faithfully using TDD — public interface is the only test target. Reads user-provided IF docs and implements each entry point one at a time (write test → implement → refactor). Use when user has a designed IF spec and wants it filled in, mentions "implement this interface", "implement from docs", "implement existing IF", "implement based on spec", or "if-impl".
 ---
 
 # IF Impl (From Docs — TDD)
