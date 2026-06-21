@@ -1,6 +1,6 @@
 ---
-name: api-init
-description: Initialize an mdBook API docs project with mdbook-mermaid, catppuccin theme, and kanagawa theme. Use when user wants to set up a new API docs book, mentions "api-init", "init api docs", or "set up mdbook".
+name: docs-init
+description: Initialize an mdBook API docs project with mdbook-mermaid, catppuccin theme, and kanagawa theme. Use when user wants to set up a new API docs book, mentions "docs-init", "init api docs", or "set up mdbook".
 ---
 
 # API Init
@@ -21,7 +21,7 @@ Default is the current directory name (`basename "$PWD"`). Confirm with the user
 ## Step 2: Run the init script
 
 ```bash
-~/.claude/skills/api-init/init.sh <title>
+~/.claude/skills/docs-init/init.sh <title>
 ```
 
 `<title>` is the book title only — the directory is always `docs/`.

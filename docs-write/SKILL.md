@@ -1,6 +1,6 @@
 ---
-name: api-write
-description: Design an API through Socratic grilling, then write the structured API doc to docs/src/api/<name>.md for api-impl to consume. Use when user wants to design a new API, write API docs, mentions "api-write", "design API", "write API doc", or wants to plan an API before implementing it.
+name: docs-write
+description: Design an API through Socratic grilling, then write the structured API doc to docs/src/api/<name>.md for api-impl to consume. Use when user wants to design a new API, write API docs, mentions "docs-write", "design API", "write API doc", or wants to plan an API before implementing it.
 ---
 
 # API Write (Design → Doc)
