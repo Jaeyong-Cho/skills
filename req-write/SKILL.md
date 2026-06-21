@@ -61,10 +61,11 @@ Add each new file to `src/SUMMARY.md`. Follow this structure (paths relative to 
 
 ## <Category>
 
-- [Requirement Name](req/category/name.md)
+- [Category](req/category.md)
+  - [Requirement Name](req/category/name.md)
 ```
 
-If the `# Requirements` section or the `##` category doesn't exist yet, create it. Insert new entries in alphabetical order within the category.
+If the category is new, create `src/req/<category>.md` as an index page with a one-paragraph overview of that category. If the `# Requirements` section or `##` category header doesn't exist in SUMMARY.md, create it. Insert new entries in alphabetical order within the category.
 
 ## Step 6: Summarize
 

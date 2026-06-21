@@ -38,18 +38,21 @@ If this is a new file, add it to `src/SUMMARY.md`. Follow this structure (paths 
 
 ## Objects
 
-- [ApiName](api/objects/name.md)
+- [Objects](api/objects.md)
+  - [ApiName](api/objects/name.md)
 
 ## Aspects
 
-- [ApiName](api/aspects/name.md)
+- [Aspects](api/aspects.md)
+  - [ApiName](api/aspects/name.md)
 
 ## Values
 
-- [ApiName](api/values/name.md)
+- [Values](api/values.md)
+  - [ApiName](api/values/name.md)
 ```
 
-If the `# API` section or the layer `##` subsection doesn't exist yet, create it. Insert new entries in alphabetical order within the subsection.
+If the layer is new, create `src/api/<layer>.md` as an index page listing the APIs in that layer. If the `# API` section or `##` layer subsection doesn't exist in SUMMARY.md, create it. Insert new entries in alphabetical order within the subsection.
 
 ## Rules
 

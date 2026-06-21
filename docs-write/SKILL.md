@@ -42,10 +42,11 @@ If this is a new file, add it to `src/SUMMARY.md`. Follow this structure (paths 
 
 ## <Category>
 
-- [Doc Name](section/category/name.md)
+- [Category](section/category.md)
+  - [Doc Name](section/category/name.md)
 ```
 
-If the section or category doesn't exist yet, create it. Insert new entries in alphabetical order within the category.
+If the category is new, create `src/<section>/<category>.md` as an index page with a one-paragraph overview. If the section or `##` category header doesn't exist in SUMMARY.md, create it. Insert new entries in alphabetical order within the category.
 
 ## Rules
 
