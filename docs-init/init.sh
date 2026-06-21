@@ -20,6 +20,7 @@ curl -fsSL "https://github.com/catppuccin/mdBook/releases/download/${CATPPUCCIN_
 
 echo "→ copy kanagawa theme"
 cp "$SKILL_DIR/kanagawa.css" "$DIR/theme/kanagawa.css"
+cp "$SKILL_DIR/inline-highlight.js" "$DIR/theme/inline-highlight.js"
 
 echo "→ copy serve.sh"
 cp "$SKILL_DIR/serve.sh" "$DIR/serve.sh"
@@ -40,14 +41,23 @@ PYEOF
 
 echo "→ update book.toml"
 python3 - "$DIR/book.toml" <<'PYEOF'
-import sys
+import sys, re
 path = sys.argv[1]
 text = open(path).read()
-additions = 'additional-css = ["theme/catppuccin.css", "theme/kanagawa.css"]\ndefault-theme = "kanagawa"\npreferred-dark-theme = "kanagawa"\n'
-if '[output.html]' in text:
-    text = text.replace('[output.html]\n', '[output.html]\n' + additions)
+css = 'additional-css = ["theme/catppuccin.css", "theme/kanagawa.css"]\ndefault-theme = "kanagawa"\npreferred-dark-theme = "kanagawa"\n'
+# merge inline-highlight.js into existing additional-js if present
+if 'additional-js' in text:
+    text = re.sub(
+        r'(additional-js\s*=\s*\[)([^\]]*)\]',
+        lambda m: m.group(1) + m.group(2).rstrip() + ', "theme/inline-highlight.js"]',
+        text
+    )
 else:
-    text += '\n[output.html]\n' + additions
+    css += 'additional-js = ["theme/inline-highlight.js"]\n'
+if '[output.html]' in text:
+    text = text.replace('[output.html]\n', '[output.html]\n' + css)
+else:
+    text += '\n[output.html]\n' + css
 open(path, 'w').write(text)
 PYEOF
 
