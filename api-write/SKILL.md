@@ -11,15 +11,15 @@ Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/referen
 
 ## Step 1: Grill the design
 
-Using the Socratic method — question assumptions, probe deeper. Starting context: the user's API scenario.
+Before asking anything, map the decision space: identify every ambiguous or consequential decision this API requires. Rank them by impact — which ones, if decided wrong, ripple through the whole design?
 
-Interview me relentlessly about every aspect of this API until we reach a shared understanding. Walk down each branch of the design tree one decision at a time. For each question, provide your recommended answer.
+Then ask only about the high-impact ambiguous ones, in order of importance. Skip decisions that are obvious, derivable from the codebase, or have a clear default. Do not walk every branch — focus on the ones where the answer genuinely changes the shape of the API.
 
 Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)" to its label. For open-ended questions, ask in plain text and state your recommendation explicitly.
 
 If a question can be answered by exploring the codebase, explore instead of asking.
 
-Keep going until every branch is resolved. User can say "wrap up" to stop early.
+User can say "wrap up" to stop early.
 
 ## Step 2: Write the doc
 
