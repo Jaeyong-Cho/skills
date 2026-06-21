@@ -31,9 +31,9 @@
 
 ## Dependencies
 
-> Rule: may only reference APIs at the **same or inner layer** (Value→Aspect→Object). No upward references.
+> Rule: may only reference APIs at the **same or inner layer** (Objects→Logics→Usecase→Interfaces). No upward references. See [archi](../references/archi.md).
 
-- `OtherApi.method()` — [layer: aspects|objects] used for ...
+- `OtherApi.method()` — [layer: objects] used for ...
 
 ## Usage Examples
 
