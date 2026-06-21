@@ -35,6 +35,12 @@
 
 - `OtherApi.method()` — [layer: Aspect|Object] used for ...
 
+### Usage Examples
+
+```ts
+// example showing typical call
+```
+
 ### Testing Strategy
 
 - **Unit**: ...
