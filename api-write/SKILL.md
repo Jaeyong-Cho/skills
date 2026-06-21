@@ -25,6 +25,12 @@ Keep going until every branch is resolved. User can say "wrap up" to stop early.
 
 Confirm the API name (filename) with user, then write to `docs/src/api/<name>.md` using the template in [DOC_TEMPLATE.md](DOC_TEMPLATE.md).
 
+If this is a new file (not an update), add it to `docs/src/SUMMARY.md` under the appropriate section. Find where other API entries are listed and insert the new entry in alphabetical order:
+
+```md
+- [ApiName](api/<name>.md)
+```
+
 ## Rules
 
 - Grill first, write second — no doc until design is settled.
