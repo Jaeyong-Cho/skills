@@ -75,6 +75,25 @@ Objects remain stable — not shaped by any single aspect or value concern. Desi
 
 ---
 
+## Dependency Rule
+
+**Outer layers reference inner. Inner layers never reference outer.**
+
+```
+Value   → may depend on Aspect, Object
+Aspect  → may depend on Object
+Object  → depends on nothing above it
+```
+
+An inner layer that references an outer layer is a design error. Example violations:
+- `Object` holds a reference to an `Aspect` → object is too thin; logic leaked upward
+- `Aspect` calls into a `Value` use-case → aspect is doing selection logic, not computation
+- `Aspect` calls another `Aspect` directly → cross-cutting logic should compose at the Value layer
+
+This is checked in the **Dependencies** section of every API doc.
+
+---
+
 ## Design Smells
 
 | Smell | What it looks like | Layer |

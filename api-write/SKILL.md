@@ -30,3 +30,4 @@ Confirm the API name (filename) with user, then write to `docs/src/api/<name>.md
 - Grill first, write second — no doc until design is settled.
 - Omit sections (CLI, UI) if not applicable to this API.
 - If a design decision conflicts with deep-module or layer rules, surface it during the grill — not after writing.
+- **Layer dependency check**: before finalizing the doc, verify every entry in Dependencies points to a same or inner layer API. Flag any upward reference (inner → outer) as a design error and force a redesign before writing.

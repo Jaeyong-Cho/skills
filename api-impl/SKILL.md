@@ -9,6 +9,8 @@ Design is already done. Your job: implement it faithfully.
 
 Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/references/layers.md) before starting.
 
+**Layer dependency rule**: outer layers reference inner; inner layers never reference outer (`Value → Aspect → Object`). If any wired dependency violates this, stop and surface the conflict before continuing.
+
 ## Step 1: Read the api docs
 
 User provides one or more API names to implement. For each, read the corresponding `docs/src/api/<name>.md`.

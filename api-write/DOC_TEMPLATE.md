@@ -32,7 +32,9 @@
 
 ## Dependencies
 
-- `OtherApi.method()` — used for ...
+> Rule: may only reference APIs at the **same or inner layer** (Value→Aspect→Object). No upward references.
+
+- `OtherApi.method()` — [layer: Aspect|Object] used for ...
 
 ## Testing Strategy
 
