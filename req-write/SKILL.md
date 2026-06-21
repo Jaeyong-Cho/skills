@@ -54,7 +54,7 @@ User can say "wrap up" to stop early.
 
 For each leaf requirement, confirm the filename and category with the user, then write to `src/req/<category>/<name>.md` using [REQ_TEMPLATE.md](REQ_TEMPLATE.md).
 
-Add each new file to `src/SUMMARY.md`. If a requirements section does not exist yet, create it:
+Add each new file to `src/SUMMARY.md`. Follow this structure (paths relative to `src/`):
 
 ```md
 # Requirements
@@ -64,9 +64,7 @@ Add each new file to `src/SUMMARY.md`. If a requirements section does not exist 
 - [Requirement Name](req/category/name.md)
 ```
 
-Paths in SUMMARY.md are relative to `src/` — so `req/category/name.md`, not `../src/req/...`.
-
-If the section exists, insert the new entry under the matching category in alphabetical order.
+If the `# Requirements` section or the `##` category doesn't exist yet, create it. Insert new entries in alphabetical order within the category.
 
 ## Step 6: Summarize
 

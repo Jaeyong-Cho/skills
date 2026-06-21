@@ -31,11 +31,25 @@ Confirm the API name with the user. The layer is determined from the design (Val
 
 Write to `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/aspects/auth.md`, `src/api/values/signup.md`) using [DOC_TEMPLATE.md](DOC_TEMPLATE.md).
 
-If this is a new file, add it to `src/SUMMARY.md` under the appropriate layer section:
+If this is a new file, add it to `src/SUMMARY.md`. Follow this structure (paths relative to `src/`):
 
 ```md
+# API
+
+## Objects
+
 - [ApiName](api/objects/name.md)
+
+## Aspects
+
+- [ApiName](api/aspects/name.md)
+
+## Values
+
+- [ApiName](api/values/name.md)
 ```
+
+If the `# API` section or the layer `##` subsection doesn't exist yet, create it. Insert new entries in alphabetical order within the subsection.
 
 ## Rules
 

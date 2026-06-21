@@ -35,7 +35,17 @@ User can say "wrap up" to stop early.
 
 Confirm the filename with the user. Write to `src/<section>/<name>.md` — place it where it fits best in the existing SUMMARY.md structure.
 
-Add it to `src/SUMMARY.md` under the appropriate section if it's a new file.
+If this is a new file, add it to `src/SUMMARY.md`. Follow this structure (paths relative to `src/`):
+
+```md
+# <Section>
+
+## <Category>
+
+- [Doc Name](section/category/name.md)
+```
+
+If the section or category doesn't exist yet, create it. Insert new entries in alphabetical order within the category.
 
 ## Rules
 
