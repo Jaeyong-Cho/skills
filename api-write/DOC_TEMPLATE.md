@@ -1,6 +1,7 @@
 # <ApiName>
 
 **Purpose**: [one-line description]
+**Source**: [`path/to/file.ts`](../../path/to/file.ts)
 
 ## Public Methods
 
