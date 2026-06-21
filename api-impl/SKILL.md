@@ -33,7 +33,7 @@ Write a test that calls the public method and asserts its specified behavior. Th
 Write the minimal code to make the test pass:
 1. **Match the signature exactly** — name, params, return type, errors
 2. **Follow the algorithm** — implement the described logic; don't invent
-3. **Wire dependencies correctly** — accept them as injected params, don't instantiate inside
+3. **Wire dependencies correctly** — accept them as injected params, don't instantiate inside (per [deep-modules](../references/deep-modules.md))
 4. Run tests — confirm GREEN before moving on
 
 ### REFACTOR
