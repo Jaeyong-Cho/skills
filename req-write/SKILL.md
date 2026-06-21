@@ -7,6 +7,8 @@ description: Top-down decomposition of a user goal into MECE requirements, then 
 
 Decompose a high-level goal top-down into MECE requirements, grounded in the existing codebase and API docs.
 
+Read [layers](../pf/references/layers.md) before starting.
+
 ## Step 1: Understand the goal
 
 User states a goal (e.g., "handle space key input in Tetris"). Restate it in one sentence to confirm understanding.
