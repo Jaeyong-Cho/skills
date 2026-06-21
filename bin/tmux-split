@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Usage: tmux-split 3   → top 1, bottom 2
+#        tmux-split 4   → top 2, bottom 2
+
+case "${1:-}" in
+  3)
+    tmux split-window -v
+    tmux split-window -h -t:.2
+    tmux select-pane -t:.1
+    ;;
+  4)
+    tmux split-window -v
+    tmux split-window -h -t:.1
+    tmux split-window -h -t:.3
+    tmux select-pane -t:.1
+    ;;
+  *)
+    echo "Usage: tmux-split 3|4"
+    echo "  3 → top 1, bottom 2"
+    echo "  4 → top 2, bottom 2"
+    exit 1
+    ;;
+esac

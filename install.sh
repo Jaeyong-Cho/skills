@@ -133,10 +133,27 @@ setup_copilot() {
   setup_pfj_path
 }
 
+# ── Bin scripts ──────────────────────────────────────────────────────────────
+
+setup_bin() {
+  local bin_src="$SKILLS_DIR/bin"
+  local bin_dst="$HOME/.local/bin"
+  [ -d "$bin_src" ] || return
+  mkdir -p "$bin_dst"
+  echo "→ bin scripts → $bin_dst"
+  for f in "$bin_src"/*; do
+    local name
+    name="$(basename "$f")"
+    ln -sf "$f" "$bin_dst/$name"
+    echo "  ✓ $name"
+  done
+}
+
 # ── Run selected setups ───────────────────────────────────────────────────────
 
 echo ""
 selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
+setup_bin && echo ""
 
 echo "Done."
