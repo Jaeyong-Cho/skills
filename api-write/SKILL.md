@@ -25,12 +25,12 @@ Keep going until every branch is resolved. User can say "wrap up" to stop early.
 
 Confirm the API name with the user. The layer is determined from the design (Value / Aspect / Object).
 
-Append a new section to `docs/src/api/<layer>.md` (e.g. `object.md`, `aspect.md`, `value.md`) using the section template in [DOC_TEMPLATE.md](DOC_TEMPLATE.md). Each file groups all APIs of that layer; each API is one H2 section within it.
+Write to `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/aspects/auth.md`, `src/api/values/signup.md`) using [DOC_TEMPLATE.md](DOC_TEMPLATE.md).
 
-If `docs/src/api/<layer>.md` does not exist yet, create it with an H1 header (`# <Layer> APIs`) before appending the section, then add it to `docs/src/SUMMARY.md` under the API section:
+If this is a new file, add it to `src/SUMMARY.md` under the appropriate layer section:
 
 ```md
-- [Object APIs](api/object.md)
+- [ApiName](api/objects/name.md)
 ```
 
 ## Rules

@@ -13,7 +13,7 @@ Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/referen
 
 ## Step 1: Read the api docs
 
-User provides one or more API names to implement. For each, determine its layer (Value / Aspect / Object) and read `docs/src/api/<layer>.md`. Find the H2 section matching the API name.
+User provides one or more API names to implement. For each, determine its layer and read `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/aspects/auth.md`, `src/api/values/signup.md`).
 
 ## Step 2: Implement — one entry point at a time
 
