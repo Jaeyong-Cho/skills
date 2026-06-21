@@ -7,7 +7,7 @@ description: Design an API through Socratic grilling, then write the structured 
 
 Design an API through grilling, then output a structured doc for api-impl.
 
-Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/references/layers.md) before starting.
+Read [deep-modules](references/deep-modules.md) and [layers](references/layers.md) before starting.
 
 ## Step 0: Language (first API only)
 

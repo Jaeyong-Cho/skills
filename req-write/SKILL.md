@@ -7,7 +7,7 @@ description: Top-down decomposition of a user goal into MECE requirements, then 
 
 Decompose a high-level goal top-down into MECE requirements, grounded in the existing codebase and API docs.
 
-Read [layers](../pf/references/layers.md) before starting.
+Read [layers](references/layers.md) before starting.
 
 ## Step 1: Understand the goal
 
