@@ -7,7 +7,7 @@ description: Write program documentation (architecture, concepts, guides, tutori
 
 Document how the program works — architecture, concepts, guides, tutorials. Not API design (use api-write for that).
 
-Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/references/layers.md) before starting.
+Read [deep-modules](references/deep-modules.md) and [archi](references/archi.md) before starting.
 
 ## Step 0: Doc type
 
