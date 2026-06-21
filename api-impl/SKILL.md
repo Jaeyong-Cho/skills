@@ -7,7 +7,7 @@ description: Implement existing API specs faithfully — no new API design. Read
 
 Design is already done. Your job: implement it faithfully.
 
-Read [deep-modules](references/deep-modules.md), [archi](references/archi.md), [tdd](references/tdd.md), [tdd-tests](references/tdd-tests.md), [tdd-mocking](references/tdd-mocking.md), and [tdd-refactoring](references/tdd-refactoring.md) before starting.
+Read [deep-modules](../references/deep-modules.md), [archi](../references/archi.md), [tdd](../references/tdd.md), [tdd-tests](../references/tdd-tests.md), [tdd-mocking](../references/tdd-mocking.md), and [tdd-refactoring](../references/tdd-refactoring.md) before starting.
 
 **Layer dependency rule**: inner layers never depend on outer (`Objects → Logics → Usecase → Interfaces`). If any wired dependency violates this, stop and surface the conflict before continuing.
 

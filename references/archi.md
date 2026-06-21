@@ -89,7 +89,7 @@ If a user need only lives in a comment or ticket, it hasn't been encoded yet.
 
 ## Interfaces — How the outside world interacts
 
-Adapters between the application and the outside world: HTTP controllers, CLI commands, UI event handlers, message consumers, external API gateways. Translates external input into Usecase calls and Usecase output into external responses.
+Adapters between the application and the outside world: HTTP controllers, CLI commands, UI event handlers, message consumers, external API gateways, files. Translates external input into Usecase calls and Usecase output into external responses.
 
 Contains no business logic. If logic appears here, move it inward.
 
