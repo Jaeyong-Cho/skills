@@ -32,9 +32,11 @@ Goal
 
 ## Step 4: Grill — narrow the decision space
 
-Ask one question at a time. Ask only the high-impact ambiguous ones in order of impact. Skip anything the codebase already answers.
+Before asking anything, map the decision space: identify every ambiguous or consequential decision the decomposition revealed. Rank by impact — which ones, if decided wrong, reshape the whole goal tree?
 
-When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)". For open-ended questions, ask in plain text and state your recommendation.
+Then ask only the high-impact ambiguous ones in order of importance. Skip anything obvious or already answered by the codebase.
+
+Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)". For open-ended questions, ask in plain text and state your recommendation explicitly.
 
 User can say "wrap up" to stop early.
 
