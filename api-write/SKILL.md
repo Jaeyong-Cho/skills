@@ -7,7 +7,7 @@ description: Design an API through Socratic grilling, then write the structured 
 
 Design an API through grilling, then output a structured doc for api-impl.
 
-Read [deep-modules](../references/deep-modules.md) and [archi](../references/archi.md) before starting.
+Read [deep-modules](../references/deep-modules.md), [archi](../references/archi.md), [tdd](../references/tdd.md), and [tdd-tests](../references/tdd-tests.md) before starting.
 
 ## Step 0: Language (first API only)
 
@@ -60,3 +60,4 @@ If the layer is new, create `src/api/<layer>.md` as an index page listing the AP
 - Omit sections (CLI, UI) if not applicable to this API.
 - If a design decision conflicts with deep-module or layer rules, surface it during the grill — not after writing.
 - **Layer dependency check**: before finalizing the doc, verify every entry in Dependencies points to a same or inner layer API. Flag any upward reference (inner → outer) as a design error and force a redesign before writing.
+- **Testability check**: before finalizing, verify — dependencies injectable? returns results instead of side effects where possible? public surface no wider than needed? If not, surface the conflict during the grill per [tdd](../references/tdd.md) and [deep-modules](../references/deep-modules.md).
