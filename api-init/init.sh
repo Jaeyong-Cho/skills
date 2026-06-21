@@ -51,4 +51,7 @@ else:
 open(path, 'w').write(text)
 PYEOF
 
+echo "→ remove chapter_1.md"
+rm -f "$DIR/src/chapter_1.md"
+
 echo "✓ done — cd docs && ./serve.sh"
