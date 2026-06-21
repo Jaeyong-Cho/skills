@@ -1,11 +1,11 @@
 ---
 name: docs-init
-description: Initialize an mdBook API docs project with mdbook-mermaid, catppuccin theme, and kanagawa theme. Use when user wants to set up a new API docs book, mentions "docs-init", "init api docs", or "set up mdbook".
+description: Initialize an mdBook IF docs project with mdbook-mermaid, catppuccin theme, and kanagawa theme. Use when user wants to set up a new IF docs book, mentions "docs-init", "init docs", or "set up mdbook".
 ---
 
-# API Init
+# Docs Init
 
-Set up a new mdBook project for API docs with mermaid diagrams and kanagawa/catppuccin themes.
+Set up a new mdBook project for IF docs with mermaid diagrams and kanagawa/catppuccin themes.
 
 ## Prerequisites check
 

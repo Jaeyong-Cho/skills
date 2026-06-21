@@ -1,4 +1,4 @@
-# <ApiName>
+# <IfName>
 
 **Purpose**: [one-line description]
 
@@ -31,9 +31,9 @@
 
 ## Dependencies
 
-> Rule: may only reference APIs at the **same or inner layer** (Objects→Logics→Usecase→Interfaces). No upward references. See [archi](../references/archi.md).
+> Rule: may only reference IFs at the **same or inner layer** (Objects→Logics→Usecase→External). No upward references. See [archi](../references/archi.md).
 
-- `OtherApi.method()` — [layer: objects] used for ...
+- `OtherIf.method()` — [layer: objects] used for ...
 
 ## Usage Examples
 

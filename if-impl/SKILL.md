@@ -1,21 +1,21 @@
 ---
-name: api-impl
-description: Implement existing API specs faithfully using TDD — public API is the only test target. Reads user-provided API docs and implements each entry point one at a time: write test → implement → refactor. Use when user has a designed API spec and wants it filled in, mentions "implement this API", "implement from docs", "implement existing API", "implement based on spec", or "api-impl".
+name: if-impl
+description: Implement existing IF specs faithfully using TDD — public interface is the only test target. Reads user-provided IF docs and implements each entry point one at a time: write test → implement → refactor. Use when user has a designed IF spec and wants it filled in, mentions "implement this interface", "implement from docs", "implement existing IF", "implement based on spec", or "if-impl".
 ---
 
-# API Impl (From Docs — TDD)
+# IF Impl (From Docs — TDD)
 
 Design is already done. Your job: implement it faithfully via TDD.
 
 Read [deep-modules](../references/deep-modules.md), [archi](../references/archi.md), [tdd](../references/tdd.md), [tdd-tests](../references/tdd-tests.md), [tdd-mocking](../references/tdd-mocking.md), and [tdd-refactoring](../references/tdd-refactoring.md) before starting.
 
-**Layer dependency rule**: inner layers never depend on outer (`Objects → Logics → Usecase → Interfaces`). If any wired dependency violates this, stop and surface the conflict before continuing.
+**Layer dependency rule**: inner layers never depend on outer (`Objects → Logics → Usecase → External`). If any wired dependency violates this, stop and surface the conflict before continuing.
 
 **Test target rule**: tests call only public methods defined in the spec. Never test private helpers or internal state directly.
 
-## Step 1: Read the API doc
+## Step 1: Read the IF doc
 
-User provides one or more API names to implement. For each, determine its layer and read `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/logics/transfer.md`, `src/api/usecases/signup.md`).
+User provides one or more IF names to implement. For each, determine its layer and read `src/if/<layer>s/<name>.md` (e.g. `src/if/objects/user.md`, `src/if/logics/transfer.md`, `src/if/usecases/signup.md`).
 
 Extract the list of public entry points to implement.
 
@@ -52,7 +52,7 @@ List implemented entry points vs spec. Flag any deviations with reason.
 
 ## Rules
 
-- **No new public API.** Match the spec exactly — no additions.
+- **No new public interface.** Match the spec exactly — no additions.
 - Private helpers are fine; just never test them directly.
 - If spec is ambiguous, ask before guessing.
 - If spec conflicts with testability principles, surface the conflict; don't silently deviate.

@@ -5,7 +5,7 @@
 | **Objects** | What domain things exist? | Entity / Value Object |
 | **Logics** | How does the domain compute and decide? | Domain Service |
 | **Usecase** | What user goals are worth automating? | Application Service |
-| **Interfaces** | How does the outside world interact? | Controller / CLI / UI / Gateway |
+| **External** | How does the outside world interact? | Controller / CLI / UI / Gateway |
 
 Each class belongs to exactly one layer. If a class is hard to place, the boundary is probably wrong.
 
@@ -16,7 +16,7 @@ Each class belongs to exactly one layer. If a class is hard to place, the bounda
 **Inner layers never depend on outer layers.**
 
 ```
-Objects  ←  Logics  ←  Usecase  ←  Interfaces
+Objects  ←  Logics  ←  Usecase  ←  External
 (inner)                              (outer)
 ```
 
@@ -25,7 +25,7 @@ Objects  ←  Logics  ←  Usecase  ←  Interfaces
 | Objects | nothing |
 | Logics | Objects |
 | Usecase | Logics, Objects |
-| Interfaces | Usecase, Logics, Objects |
+| External | Usecase, Logics, Objects |
 
 A dependency pointing outward is a design error. Stop and redesign before continuing.
 
@@ -87,7 +87,7 @@ If a user need only lives in a comment or ticket, it hasn't been encoded yet.
 
 ---
 
-## Interfaces — How the outside world interacts
+## External — How the outside world interacts
 
 Adapters between the application and the outside world: HTTP controllers, CLI commands, UI event handlers, message consumers, external API gateways, files. Translates external input into Usecase calls and Usecase output into external responses.
 
@@ -107,5 +107,5 @@ Contains no business logic. If logic appears here, move it inward.
 | Lens holding domain state | `AuthLogic` stores `user.plan` internally | Logics |
 | Usecase containing business rules | Rules belong in Objects or Logics | Usecase |
 | Usecase skipping Logics | Command directly checks `user.role === 'admin'` | Usecase |
-| Business logic in Interfaces | Controller deciding domain outcomes | Interfaces |
-| Interface calling Objects directly | Bypassing Usecase and Logics | Interfaces |
+| Business logic in External | Controller deciding domain outcomes | External |
+| External calling Objects directly | Bypassing Usecase and Logics | External |

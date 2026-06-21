@@ -52,5 +52,5 @@ If the category is new, create `src/<section>/<category>.md` as an index page wi
 
 - Grill first, write second.
 - Write for the reader, not the author — assume they don't know the internals.
-- No API method signatures here; those belong in api-write docs.
+- No IF method signatures here; those belong in if-write docs.
 - Include diagrams (mermaid) where structure is easier to show than describe.
