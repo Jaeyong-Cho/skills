@@ -92,6 +92,15 @@
   border-top: 0.1em solid #54546D;
   border-bottom: 0.1em solid #54546D;
 }
+/* ── Headings ────────────────────────────────────────────────────────── */
+
+.kanagawa h1 { color: #7E9CD8; } /* crystalBlue */
+.kanagawa h2 { color: #957FB8; } /* oniViolet */
+.kanagawa h3 { color: #7AA89F; } /* waveAqua2 */
+.kanagawa h4 { color: #E6C384; } /* carpYellow */
+.kanagawa h5 { color: #98BB6C; } /* springGreen */
+.kanagawa h6 { color: #FFA066; } /* surimiOrange */
+
 .kanagawa hr {
   border-color: #54546D;
   border-style: solid;
