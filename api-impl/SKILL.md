@@ -1,48 +1,58 @@
 ---
 name: api-impl
-description: Implement existing API specs faithfully — no new API design. Reads user-provided API docs (public method signatures, CLI interface, UI, algorithms, testing strategy, dependencies on other APIs) and implements each entry point one at a time. Use when user has a designed API spec and wants it filled in, mentions "implement this API", "implement from docs", "implement existing API", "implement based on spec", "api-impl", or hands over method signatures to fill in.
+description: Implement existing API specs faithfully using TDD — public API is the only test target. Reads user-provided API docs and implements each entry point one at a time: write test → implement → refactor. Use when user has a designed API spec and wants it filled in, mentions "implement this API", "implement from docs", "implement existing API", "implement based on spec", or "api-impl".
 ---
 
-# API Impl (From Docs)
+# API Impl (From Docs — TDD)
 
-Design is already done. Your job: implement it faithfully.
+Design is already done. Your job: implement it faithfully via TDD.
 
 Read [deep-modules](../references/deep-modules.md), [archi](../references/archi.md), [tdd](../references/tdd.md), [tdd-tests](../references/tdd-tests.md), [tdd-mocking](../references/tdd-mocking.md), and [tdd-refactoring](../references/tdd-refactoring.md) before starting.
 
 **Layer dependency rule**: inner layers never depend on outer (`Objects → Logics → Usecase → Interfaces`). If any wired dependency violates this, stop and surface the conflict before continuing.
 
-## Step 1: Read the api docs
+**Test target rule**: tests call only public methods defined in the spec. Never test private helpers or internal state directly.
 
-User provides one or more API names to implement. For each, determine its layer and read `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/aspects/auth.md`, `src/api/values/signup.md`).
+## Step 1: Read the API doc
+
+User provides one or more API names to implement. For each, determine its layer and read `src/api/<layer>s/<name>.md` (e.g. `src/api/objects/user.md`, `src/api/logics/transfer.md`, `src/api/usecases/signup.md`).
+
+Extract the list of public entry points to implement.
 
 ## Step 2: Implement — one entry point at a time
 
-For each public method / CLI command / UI handler:
+For each public method / CLI command / UI handler, follow RED → GREEN → REFACTOR:
 
+### RED
+Write a test that calls the public method and asserts its specified behavior. The test must fail before any implementation exists.
+- Test calls only the public signature from the spec
+- Test describes behavior ("user can cancel a pending order"), not implementation
+- Test must survive an internal refactor without changing
+
+### GREEN
+Write the minimal code to make the test pass:
 1. **Match the signature exactly** — name, params, return type, errors
 2. **Follow the algorithm** — implement the described logic; don't invent
-3. **Wire dependencies correctly** — call other APIs as specified; accept them as injected params (don't create inside) per [deep-modules](../pf/references/deep-modules.md) testable interface rules
-4. **Run and verify** — execute, confirm behavior matches spec description
+3. **Wire dependencies correctly** — accept them as injected params, don't instantiate inside
+4. Run tests — confirm GREEN before moving on
 
-Do not move to the next entry point until current one works.
+### REFACTOR
+With all tests green, check for improvements:
+- Can any interface be narrowed?
+- Any duplication to extract into private helpers?
+- Is complexity hidden or leaking?
 
-## Step 3: Testability check
+Run tests after each refactor step. Never refactor while RED.
 
-Per [deep-modules](../pf/references/deep-modules.md):
+Do not move to the next entry point until current one is GREEN and refactored.
 
-- [ ] Dependencies injected, not instantiated internally?
-- [ ] Returns results instead of implicit side effects where spec allows?
-- [ ] Interface surface matches spec exactly — not wider, not narrower?
-- [ ] Ambiguous spec points surfaced to user before guessing?
-
-## Step 4: Done
+## Step 3: Done
 
 List implemented entry points vs spec. Flag any deviations with reason.
 
 ## Rules
 
-- **No new public API.** Public methods are the API — match the spec exactly, no additions.
-- Private methods are fine — create as many helpers as needed to implement the logic cleanly.
-- Match public signatures exactly — name, params, return type.
+- **No new public API.** Match the spec exactly — no additions.
+- Private helpers are fine; just never test them directly.
 - If spec is ambiguous, ask before guessing.
 - If spec conflicts with testability principles, surface the conflict; don't silently deviate.
