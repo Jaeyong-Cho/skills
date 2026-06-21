@@ -1,0 +1,154 @@
+/* Kanagawa Wave theme for mdBook */
+/* Based on https://github.com/rebelot/kanagawa.nvim */
+
+/* ── Syntax highlighting ─────────────────────────────────────────────── */
+
+.kanagawa .hljs {
+  background: #2A2A37;
+  color: #DCD7BA;
+}
+.kanagawa .hljs-keyword,
+.kanagawa .hljs-selector-tag,
+.kanagawa .hljs-built_in,
+.kanagawa .hljs-name,
+.kanagawa .hljs-tag {
+  color: #957FB8;
+}
+.kanagawa .hljs-string,
+.kanagawa .hljs-addition {
+  color: #98BB6C;
+}
+.kanagawa .hljs-deletion,
+.kanagawa .hljs-selector-attr,
+.kanagawa .hljs-selector-pseudo,
+.kanagawa .hljs-meta {
+  color: #C34043;
+}
+.kanagawa .hljs-doctag,
+.kanagawa .hljs-attr,
+.kanagawa .hljs-formula {
+  color: #7AA89F;
+}
+.kanagawa .hljs-symbol,
+.kanagawa .hljs-bullet,
+.kanagawa .hljs-link {
+  color: #FFA066;
+}
+.kanagawa .hljs-number,
+.kanagawa .hljs-regexp {
+  color: #D27E99;
+}
+.kanagawa .hljs-variable,
+.kanagawa .hljs-template-variable,
+.kanagawa .hljs-params {
+  color: #E6C384;
+}
+.kanagawa .hljs-subst {
+  color: #DCD7BA;
+}
+.kanagawa .hljs-comment,
+.kanagawa .hljs-quote {
+  color: #727169;
+  font-style: italic;
+}
+.kanagawa .hljs-function,
+.kanagawa .hljs-title,
+.kanagawa .hljs-title.function_ {
+  color: #7E9CD8;
+}
+.kanagawa .hljs-class .hljs-title,
+.kanagawa .hljs-title.class_ {
+  color: #7AA89F;
+}
+.kanagawa .hljs-literal,
+.kanagawa .hljs-type {
+  color: #7AA89F;
+}
+.kanagawa .hljs-section,
+.kanagawa .hljs-attribute,
+.kanagawa .hljs-template-tag {
+  color: #98BB6C;
+}
+.kanagawa .hljs-emphasis {
+  font-style: italic;
+}
+.kanagawa .hljs-strong {
+  font-weight: bold;
+}
+
+/* ── UI elements ─────────────────────────────────────────────────────── */
+
+.kanagawa a code {
+  color: #7E9CD8;
+}
+.kanagawa :is(h1, h2, h3, h4, h5, h6) a code {
+  color: #DCD7BA;
+}
+.kanagawa code {
+  color: #DCD7BA;
+  background: #2A2A37;
+}
+.kanagawa blockquote blockquote {
+  border-top: 0.1em solid #54546D;
+  border-bottom: 0.1em solid #54546D;
+}
+.kanagawa hr {
+  border-color: #54546D;
+  border-style: solid;
+}
+.kanagawa del {
+  color: #727169;
+}
+.kanagawa .ace_gutter {
+  color: #54546D;
+  background: #16161D;
+}
+.kanagawa .ace_gutter-active-line.ace_gutter-cell {
+  color: #D27E99;
+  background: #16161D;
+}
+.kanagawa .tooltiptext {
+  background: #16161D;
+  color: #DCD7BA;
+}
+
+/* ── mdBook CSS variables ─────────────────────────────────────────────── */
+
+.kanagawa {
+  --bg: #1F1F28;
+  --fg: #DCD7BA;
+  --sidebar-bg: #16161D;
+  --sidebar-fg: #DCD7BA;
+  --sidebar-non-existant: #54546D;
+  --sidebar-active: #7E9CD8;
+  --sidebar-spacer: #54546D;
+  --scrollbar: #54546D;
+  --icons: #54546D;
+  --icons-hover: #C8C093;
+  --links: #7E9CD8;
+  --inline-code-color: #DCD7BA;
+  --theme-popup-bg: #16161D;
+  --theme-popup-border: #54546D;
+  --theme-hover: #363646;
+  --quote-bg: #16161D;
+  --quote-border: #1F1F28;
+  --table-border-color: #363646;
+  --table-header-bg: #16161D;
+  --table-alternate-bg: #16161D;
+  --searchbar-border-color: #363646;
+  --searchbar-bg: #16161D;
+  --searchbar-fg: #DCD7BA;
+  --searchbar-shadow-color: #16161D;
+  --searchresults-header-fg: #DCD7BA;
+  --searchresults-border-color: #363646;
+  --searchresults-li-bg: #1F1F28;
+  --sidebar-header-border-color: #7E9CD8;
+  --search-mark-bg: #FFA066;
+  --warning-border: #FF9E3B;
+  --color-scheme: dark;
+  --blockquote-note-color: #7E9CD8;
+  --blockquote-tip-color: #98BB6C;
+  --blockquote-important-color: #957FB8;
+  --blockquote-warning-color: #FF9E3B;
+  --blockquote-caution-color: #C34043;
+}
