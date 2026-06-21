@@ -94,12 +94,12 @@
 }
 /* ── Headings ────────────────────────────────────────────────────────── */
 
-.kanagawa h1 { color: #7E9CD8; } /* crystalBlue */
-.kanagawa h2 { color: #957FB8; } /* oniViolet */
-.kanagawa h3 { color: #7AA89F; } /* waveAqua2 */
-.kanagawa h4 { color: #E6C384; } /* carpYellow */
-.kanagawa h5 { color: #98BB6C; } /* springGreen */
-.kanagawa h6 { color: #FFA066; } /* surimiOrange */
+.kanagawa .content h1 { color: #7E9CD8; } /* crystalBlue */
+.kanagawa .content h2 { color: #957FB8; } /* oniViolet */
+.kanagawa .content h3 { color: #7AA89F; } /* waveAqua2 */
+.kanagawa .content h4 { color: #E6C384; } /* carpYellow */
+.kanagawa .content h5 { color: #98BB6C; } /* springGreen */
+.kanagawa .content h6 { color: #FFA066; } /* surimiOrange */
 
 .kanagawa hr {
   border-color: #54546D;
