@@ -15,7 +15,7 @@ Using the Socratic method — question assumptions, probe deeper. Starting conte
 
 Interview me relentlessly about every aspect of this API until we reach a shared understanding. Walk down each branch of the design tree one decision at a time. For each question, provide your recommended answer.
 
-Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — list options with your recommended one marked "(Recommended)". For open-ended questions, ask in plain text.
+Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)" to its label. For open-ended questions, ask in plain text and state your recommendation explicitly.
 
 If a question can be answered by exploring the codebase, explore instead of asking.
 
