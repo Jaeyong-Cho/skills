@@ -7,7 +7,7 @@ description: Top-down decomposition of a user goal into sub-goals, then writes a
 
 Decompose a high-level goal into sub-goals, grounded in the existing codebase.
 
-Read [archi](../references/archi.md) before starting.
+Read [deep-modules](../references/deep-modules.md) and [archi](../references/archi.md) before starting.
 
 ## Step 1: Understand the goal
 
