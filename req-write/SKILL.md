@@ -44,9 +44,9 @@ Each leaf = one requirement. Requirements must be **MECE**: no overlap, no gaps.
 
 Map every ambiguous or consequential decision the decomposition revealed. Rank by impact.
 
-Ask only the high-impact ambiguous ones, one at a time. Skip anything the codebase already answers.
+Ask one question at a time. Ask only the high-impact ambiguous ones in order of impact. Skip anything the codebase already answers.
 
-Use `AskUserQuestion` for discrete options — put recommended option first with "(Recommended)". Ask in plain text for open-ended ones.
+When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)" to its label. For open-ended questions, ask in plain text and state your recommendation explicitly.
 
 User can say "wrap up" to stop early.
 
