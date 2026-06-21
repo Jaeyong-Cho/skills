@@ -39,12 +39,16 @@ open(path, 'w').write(text.replace(old, new, 1))
 PYEOF
 
 echo "→ update book.toml"
-cat >> "$DIR/book.toml" << 'TOML'
-
-[output.html]
-additional-css = ["theme/catppuccin.css", "theme/kanagawa.css"]
-default-theme = "kanagawa"
-preferred-dark-theme = "kanagawa"
-TOML
+python3 - "$DIR/book.toml" <<'PYEOF'
+import sys
+path = sys.argv[1]
+text = open(path).read()
+additions = 'additional-css = ["theme/catppuccin.css", "theme/kanagawa.css"]\ndefault-theme = "kanagawa"\npreferred-dark-theme = "kanagawa"\n'
+if '[output.html]' in text:
+    text = text.replace('[output.html]\n', '[output.html]\n' + additions)
+else:
+    text += '\n[output.html]\n' + additions
+open(path, 'w').write(text)
+PYEOF
 
 echo "✓ done — cd docs && ./serve.sh"
