@@ -39,8 +39,8 @@ List implemented entry points vs spec. Flag any deviations with reason.
 
 ## Rules
 
-- **No new API.** Only implement what the spec defines.
-- Match signatures exactly — name, params, return type.
+- **No new public API.** Public methods are the API — match the spec exactly, no additions.
+- Private methods are fine — create as many helpers as needed to implement the logic cleanly.
+- Match public signatures exactly — name, params, return type.
 - If spec is ambiguous, ask before guessing.
 - If spec conflicts with testability principles, surface the conflict; don't silently deviate.
-- No extra methods, no convenience wrappers, no future-proofing.
