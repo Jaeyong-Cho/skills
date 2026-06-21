@@ -24,18 +24,21 @@ Default is the current directory name (`basename "$PWD"`). Confirm with the user
 ~/.claude/skills/api-init/init.sh <title>
 ```
 
+`<title>` is the book title only — the directory is always `docs/`.
+
 This script:
-1. Runs `mdbook init <title>` — creates book structure
-2. Runs `mdbook-mermaid install <title>` — adds preprocessor to book.toml
-3. Downloads `catppuccin.css` from the latest catppuccin/mdBook GitHub release
-4. Copies `kanagawa.css` from this skill's directory to `<title>/theme/`
-5. Downloads catppuccin's `index.hbs` (adds latte/frappe/macchiato/mocha theme buttons)
-6. Patches `index.hbs` to add a **Kanagawa** button after Mocha
-7. Appends `[output.html]` to `book.toml` with both CSS files and kanagawa as default theme
+1. Runs `mdbook init docs --title <title>` — creates book structure
+2. Runs `mdbook-mermaid install docs` — adds preprocessor to book.toml
+3. Downloads `catppuccin.css` from the latest catppuccin/mdBook GitHub release into `docs/theme/`
+4. Copies `kanagawa.css` from this skill's directory to `docs/theme/`
+5. Copies `serve.sh` from this skill's directory to `docs/`
+6. Downloads catppuccin's `index.hbs` (adds latte/frappe/macchiato/mocha theme buttons)
+7. Patches `index.hbs` to add a **Kanagawa** button after Mocha
+8. Appends `[output.html]` to `book.toml` with both CSS files and kanagawa as default theme
 
 ## Step 3: Done
 
 Tell the user:
 ```
-cd <title> && mdbook serve
+cd docs && ./serve.sh
 ```
