@@ -9,6 +9,10 @@ Design an API through grilling, then output a structured doc for api-impl.
 
 Read [deep-modules](../pf/references/deep-modules.md) and [layers](../pf/references/layers.md) before starting.
 
+## Step 0: Language (first API only)
+
+Check whether `src/api/` contains any existing API files. If none exist, ask the user what programming language the project uses before grilling. Use the answer to set the language for all code blocks in the doc (method signatures, usage examples).
+
 ## Step 1: Grill the design
 
 Before asking anything, map the decision space: identify every ambiguous or consequential decision this API requires. Rank them by impact — which ones, if decided wrong, ripple through the whole design?
