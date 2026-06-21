@@ -34,7 +34,8 @@ Write the minimal code to make the test pass:
 1. **Match the signature exactly** — name, params, return type, errors
 2. **Follow the algorithm** — implement the described logic; don't invent
 3. **Wire dependencies correctly** — accept them as injected params, don't instantiate inside (per [deep-modules](../references/deep-modules.md))
-4. Run tests — confirm GREEN before moving on
+4. **Write assertion or logging for any ambiguity** — if spec is unclear, add an assertion or log to confirm assumptions before proceeding
+5. Run tests — confirm GREEN before moving on
 
 ### REFACTOR
 With all tests green, check for improvements:
