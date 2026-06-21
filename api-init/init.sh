@@ -53,5 +53,11 @@ PYEOF
 
 echo "→ remove chapter_1.md"
 rm -f "$DIR/src/chapter_1.md"
+python3 - "$DIR/src/SUMMARY.md" <<'PYEOF'
+import sys
+path = sys.argv[1]
+lines = [l for l in open(path) if 'chapter_1.md' not in l]
+open(path, 'w').writelines(lines)
+PYEOF
 
 echo "✓ done — cd docs && ./serve.sh"
