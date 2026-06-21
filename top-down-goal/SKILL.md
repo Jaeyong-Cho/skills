@@ -1,13 +1,13 @@
 ---
 name: top-down-goal
-description: Top-down decomposition of a user goal into sub-needs, then writes a timestamped summary with suggested APIs. Use when user describes a feature goal and wants to break it down, mentions "top-down-goal", "break down this feature", "what do I need to implement", or "decompose this goal".
+description: Top-down decomposition of a user goal into sub-goals, then writes a timestamped summary. Use when user describes a feature goal and wants to break it down, mentions "top-down-goal", "break down this feature", "what do I need to implement", or "decompose this goal".
 ---
 
 # Top-Down Goal
 
-Decompose a high-level goal into sub-needs, grounded in the existing codebase and API docs.
+Decompose a high-level goal into sub-goals, grounded in the existing codebase.
 
-Read [deep-modules](../references/deep-modules.md) and [archi](../references/archi.md) before starting.
+Read [archi](../references/archi.md) before starting.
 
 ## Step 1: Understand the goal
 
@@ -15,18 +15,18 @@ Restate the goal in one sentence to confirm understanding.
 
 ## Step 2: Explore the codebase
 
-Read existing source files and all API docs in `src/api/` relevant to the goal. Map what exists vs. what is missing.
+Read existing source files relevant to the goal. Map what exists vs. what is missing.
 
 ## Step 3: Decompose top-down
 
-Break the goal into sub-needs. At each level ask: "What must be true for this to work?" Keep going until each leaf is concrete and implementable.
+Break the goal into sub-goals. At each level ask: "What must be true for this to work?" Keep going until each leaf is concrete and implementable.
 
 ```
 Goal
-├── Sub-need A
+├── Sub-goal A
 │   ├── Leaf 1
 │   └── Leaf 2
-└── Sub-need B
+└── Sub-goal B
     └── Leaf 3
 ```
 
@@ -54,18 +54,4 @@ Write to `~/.claude/skills/top-down-goal/{timestamp}_{slug}.md` where:
 ## Key Decisions
 
 - {decision}: {choice and reason}
-
-## Suggested APIs
-
-### Existing
-- `api/objects/<name>.md` — {why}
-
-### New (to create)
-- `api/objects/<name>.md` — {why}
 ```
-
-## Rules
-
-- Decompose before asking — have the full tree mapped before grilling.
-- Do not invent APIs — only reference existing ones or flag new ones as "new".
-- If an existing API doc is incomplete or wrong for what the goal clearly needs, fix it — but surface the change to the user first.
