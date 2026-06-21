@@ -23,12 +23,14 @@ Keep going until every branch is resolved. User can say "wrap up" to stop early.
 
 ## Step 2: Write the doc
 
-Confirm the API name (filename) with user, then write to `docs/src/api/<name>.md` using the template in [DOC_TEMPLATE.md](DOC_TEMPLATE.md).
+Confirm the API name with the user. The layer is determined from the design (Value / Aspect / Object).
 
-If this is a new file (not an update), add it to `docs/src/SUMMARY.md` under the appropriate section. Find where other API entries are listed and insert the new entry in alphabetical order:
+Append a new section to `docs/src/api/<layer>.md` (e.g. `object.md`, `aspect.md`, `value.md`) using the section template in [DOC_TEMPLATE.md](DOC_TEMPLATE.md). Each file groups all APIs of that layer; each API is one H2 section within it.
+
+If `docs/src/api/<layer>.md` does not exist yet, create it with an H1 header (`# <Layer> APIs`) before appending the section, then add it to `docs/src/SUMMARY.md` under the API section:
 
 ```md
-- [ApiName](api/<name>.md)
+- [Object APIs](api/object.md)
 ```
 
 ## Rules

@@ -1,11 +1,10 @@
-# <API Name>
+## <ApiName>
 
-**Layer**: [Value | Aspect | Object]
 **Purpose**: [one-line description]
 
-## Public Methods
+### Public Methods
 
-### `methodName(param: Type, ...): ReturnType`
+#### `methodName(param: Type, ...): ReturnType`
 
 **Description**: ...
 **Parameters**:
@@ -15,28 +14,28 @@
 **Errors**: ...
 **Algorithm**: ...
 
-## CLI Interface
+### CLI Interface
 
-### `<command> <subcommand> [flags]`
+#### `<command> <subcommand> [flags]`
 
 **Description**: ...
 **Flags**:
 - `--flag` — ...
 
-## UI Entry Points
+### UI Entry Points
 
-### `<ComponentName>`
+#### `<ComponentName>`
 
 **Description**: ...
 **Props / Handlers**: ...
 
-## Dependencies
+### Dependencies
 
 > Rule: may only reference APIs at the **same or inner layer** (Value→Aspect→Object). No upward references.
 
 - `OtherApi.method()` — [layer: Aspect|Object] used for ...
 
-## Testing Strategy
+### Testing Strategy
 
 - **Unit**: ...
 - **Integration**: ...
