@@ -20,7 +20,19 @@ Encodes what end user needs. Entry point in code: use-case, command, or applicat
 
 Two roles — keep them separate:
 
-**Algorithm** — the workflow, strategy, or computation that realizes the user goal.
+**Algorithm** — the workflow, strategy, or computation that realizes the user goal. In DDD terms this is a **Domain Service**: stateless, no identity, coordinates multiple objects when the operation does not naturally belong to any single one.
+
+```
+// TransferService coordinates two Accounts — belongs to neither
+class TransferService {
+    transfer(source, destination, amount) {
+        source.withdraw(amount);      // each object owns its own rule
+        destination.deposit(amount);
+    }
+}
+```
+
+Use an Aspect (service) only when the behavior genuinely spans multiple objects. If it only touches one, push it into the object.
 
 **Lens** — cross-cutting behavior that multiple objects need but belongs to none of them. Auth, logging, billing, caching — these cut across `User`, `Order`, `Product` alike. Each aspect asks one question of the object; reads only the properties relevant to its concern.
 
@@ -52,6 +64,29 @@ Structure into composable units — strategies, workflows, pipelines — so aspe
 ## Object — What
 
 Domain objects are not data containers. Defines full identity: properties, actions, behaviors, relationships. Logic scattered upward into services or aspects is leakage — object is too thin.
+
+In DDD terms, an Object is an **Entity**: it has a unique identity, mutable state, a lifecycle, and enforces its own invariants. The object owns the rules that govern its own state — not the aspect above it.
+
+```
+// Rich object — owns its own invariant
+class Order {
+    cancel() {
+        if (status == SHIPPED) throw new Error("Cannot cancel shipped order");
+        status = CANCELLED;
+    }
+}
+
+// Anemic object — leaked invariant
+class Order { status; }
+class OrderService {
+    cancel(order) {         // ← invariant doesn't belong here
+        if (order.status == SHIPPED) throw ...
+        order.status = CANCELLED;
+    }
+}
+```
+
+**Ask**: "Whose business rule is this?" If it depends on the state of one object, it belongs inside that object. If it coordinates multiple objects, it belongs in an Aspect.
 
 **Size must match concern**: too large covers things outside concern; too small forces callers to reconstruct meaning.
 
@@ -107,6 +142,7 @@ This is checked in the **Dependencies** section of every API doc.
 | Aspect calls aspect | `AuthAspect` calls `AuditAspect` directly | Aspect |
 | Aspect holds domain state | `BillingAspect` stores `user.plan` internally | Aspect |
 | Value layer skips aspect | Command directly checks `user.role === 'admin'` | Value |
+| Anemic object | Object has state but no behavior; rules live in Aspect | Object |
 | Concern in object | `user.logAccess()`, `order.checkBilling()` | Object |
 | Object shaped for one aspect | `user.authContext`, `user.billingView` | Object |
 | God object | Evaluates, executes, and models domain | Object |
