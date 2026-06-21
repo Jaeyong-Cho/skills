@@ -15,7 +15,7 @@ Restate the goal in one sentence to confirm understanding.
 
 ## Step 2: Explore the codebase
 
-Read existing source files relevant to the goal. Map what exists vs. what is missing.
+Read existing source files and docs relevant to the goal. Map what exists vs. what is missing.
 
 ## Step 3: Decompose top-down
 
@@ -40,7 +40,7 @@ User can say "wrap up" to stop early.
 
 ## Step 5: Write the summary
 
-Write to `~/.claude/skills/top-down-goal/{timestamp}_{slug}.md` where:
+Write to `./{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
 
