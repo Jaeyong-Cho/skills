@@ -64,6 +64,8 @@ Add each new file to `src/SUMMARY.md`. If a requirements section does not exist 
 - [Requirement Name](req/category/name.md)
 ```
 
+Paths in SUMMARY.md are relative to `src/` — so `req/category/name.md`, not `../src/req/...`.
+
 If the section exists, insert the new entry under the matching category in alphabetical order.
 
 ## Step 6: Summarize
