@@ -42,7 +42,7 @@ User can say "wrap up" to stop early.
 
 ## Step 5: Write the summary
 
-Write to `./{timestamp}_{slug}.md` where:
+Write to the current directory `./{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
 
