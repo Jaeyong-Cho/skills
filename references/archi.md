@@ -55,6 +55,8 @@ class OrderLogic {
 
 **Invariance principle**: an object must remain the same regardless of which outer layer uses it. If the object changes shape for a specific use case, it has leaked upward.
 
+**No combined objects**: never merge two objects into one to express a relationship. Keep them separate and let Logics or Usecase coordinate them. `ArtifactRepo` combining `Artifact` and `Repo` is a design error — `Artifact` and `Repo` are two objects; their relationship belongs in a Logic.
+
 ---
 
 ## Logics — How the domain computes
@@ -99,6 +101,7 @@ Contains no business logic. If logic appears here, move it inward.
 
 | Smell | What it looks like | Layer |
 |-------|-------------------|-------|
+| Combined object | `ArtifactRepo` merges two objects; split into `Artifact`, `Repo`, coordinate in Logics | Objects |
 | Anemic object | Object has state but no behavior; rules live in Logics | Objects |
 | Object shaped for one use case | `user.authContext`, `order.billingView` | Objects |
 | God object | Evaluates, executes, and models domain | Objects |
