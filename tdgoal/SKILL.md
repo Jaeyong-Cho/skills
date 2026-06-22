@@ -48,47 +48,36 @@ Write to the current directory `./{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
 
-Write the decomposition as a runtime execution sequence — the order things actually run, from the outside in:
-
-1. **External** — what triggers this (HTTP request, CLI command, UI event, …)
-2. **Usecase** — which usecase is invoked; what it orchestrates, step by step
-3. **Logics** — each logic called by the usecase, in call order; what objects it uses
-4. **Objects** — which domain objects are read or mutated
-
-Each level only lists what that layer does; don't repeat details already covered by an inner layer.
+Write one section per scenario. Each scenario traces the full runtime execution from the outside in — External → Usecase → Logics → Objects — showing how each component behaves in that specific case.
 
 ```md
 # {Goal}
 
-## Scenarios
+## Scenario: {name}
 
-Concrete examples that ground the decomposition. Each scenario traces one path through the system.
+Given {precondition}. When {trigger}. Then {expected outcome}.
 
-- **{Scenario name}**: {Given ...} {When ...} {Then ...}
-- **{Scenario name}**: {Given ...} {When ...} {Then ...}
+### External
+- {trigger} — [External] create/update/remove — {what arrives and from where in this scenario}
 
-## External
+### Usecase
+- {usecase name} — [Usecase] create/update/remove — {what user goal this fulfills}
+  1. call {LogicA} — {why, in this scenario}
+  2. call {LogicB} — {why, in this scenario}
 
-- {trigger} — [External] create/update/remove — {one sentence: what event arrives and from where}
-
-## Usecase
-
-- {usecase name} — [Usecase] create/update/remove — {one sentence: what user goal this fulfills}
-  1. call {LogicA} — {why}
-  2. call {LogicB} — {why}
-
-## Logics
-
-- {LogicA} — [Logics] create/update/remove — {one sentence: what rule or computation this encapsulates}
+### Logics
+- {LogicA} — [Logics] create/update/remove — {what it computes or enforces here}
   - uses {ObjectX}, {ObjectY}
 - {LogicB} — [Logics] create/update/remove — {one sentence}
   - uses {ObjectZ}
 
-## Objects
-
-- {ObjectX} — [Objects] create/update/remove — {one sentence: what invariant or state this owns}
+### Objects
+- {ObjectX} — [Objects] create/update/remove — {what state changes in this scenario}
 - {ObjectY} — [Objects] create/update/remove — {one sentence}
-- {ObjectZ} — [Objects] create/update/remove — {one sentence}
+
+## Scenario: {name}
+
+...
 
 ## Key Decisions
 
