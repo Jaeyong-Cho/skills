@@ -42,11 +42,22 @@ Ask one question at a time. When a question has clear discrete options, use `Ask
 
 User can say "wrap up" to stop early.
 
-## Step 5: Write the summary
+## Step 5: Write the ADR
 
-Write to the current directory `./{timestamp}_{slug}.md` where:
+Write to `docs/src/adr/{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
+
+Add the entry to `docs/src/SUMMARY.md` under an `# ADR` section (create it if absent), in chronological order:
+
+```md
+# ADR
+
+- [ADR](adr.md)
+  - [{Goal}](adr/{timestamp}_{slug}.md)
+```
+
+If `docs/src/adr.md` doesn't exist, create it as a one-line index page.
 
 Write one section per scenario. Each scenario traces the full runtime execution from the outside in — External → Usecase → Logics → Objects — showing how each component behaves in that specific case.
 
