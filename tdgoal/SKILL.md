@@ -48,20 +48,40 @@ Write to the current directory `./{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
 
-Order the decomposition as a logical top-down sequence a reader can follow straight through — from the goal down to leaves, in the order things must be understood or built. Each sub-goal is a section; its leaves are listed under it in implementation order.
+Write the decomposition as a runtime execution sequence — the order things actually run, from the outside in:
+
+1. **External** — what triggers this (HTTP request, CLI command, UI event, …)
+2. **Usecase** — which usecase is invoked; what it orchestrates, step by step
+3. **Logics** — each logic called by the usecase, in call order; what objects it uses
+4. **Objects** — which domain objects are read or mutated
+
+Each level only lists what that layer does; don't repeat details already covered by an inner layer.
 
 ```md
 # {Goal}
 
-## {Sub-goal A}
+## External
 
-- {Leaf 1} — [Objects] create
-- {Leaf 2} — [Logics] create
+- {trigger} — [External] create/update/remove
 
-## {Sub-goal B}
+## Usecase
 
-- {Leaf 3} — [Usecase] update
-- {Leaf 4} — [External] update
+- {usecase name} — [Usecase] create/update/remove
+  1. call {LogicA}
+  2. call {LogicB}
+
+## Logics
+
+- {LogicA} — [Logics] create/update/remove
+  - uses {ObjectX}, {ObjectY}
+- {LogicB} — [Logics] create/update/remove
+  - uses {ObjectZ}
+
+## Objects
+
+- {ObjectX} — [Objects] create/update/remove
+- {ObjectY} — [Objects] create/update/remove
+- {ObjectZ} — [Objects] create/update/remove
 
 ## Key Decisions
 
