@@ -32,11 +32,11 @@ Goal
     └── Leaf 3               [Usecase]   remove
 ```
 
-## Step 4: Grill — depth-first
+## Step 4: Grill — narrow the decision space
 
-Ask questions depth-first through the decomposition tree: fully resolve one sub-goal and its leaves before moving to the next sibling. Within each sub-goal, go one level deeper before moving sideways.
+Before asking anything, map the decision space: identify every ambiguous or consequential decision the decomposition revealed. Rank by impact — which ones, if decided wrong, reshape the whole goal tree?
 
-Before asking at each node, identify the most consequential ambiguity at that node. Ask only if the answer genuinely changes the shape of that branch. Skip what is obvious or derivable from the codebase.
+Then ask only the high-impact ambiguous ones in order of importance. Skip anything obvious or already answered by the codebase.
 
 Ask one question at a time. When a question has clear discrete options, use `AskUserQuestion` — put your recommended option first and append "(Recommended)". For open-ended questions, ask in plain text and state your recommendation explicitly.
 
@@ -59,32 +59,36 @@ Add the entry to `docs/src/SUMMARY.md` under an `# ADR` section (create it if ab
 
 If `docs/src/adr.md` doesn't exist, create it as a one-line index page.
 
-Write one single concrete execution path as the scenario — the most representative path through the system for this goal. Trace it from External down through Usecase → Logics → Objects.
+Write one section per scenario. Each scenario traces the full runtime execution from the outside in — External → Usecase → Logics → Objects — showing how each component behaves in that specific case.
 
 ```md
 # {Goal}
 
-## Scenario
+## Scenario: {name}
 
 Given {precondition}. When {trigger}. Then {expected outcome}.
 
 ### External
-- {trigger} — [External] create/update/remove — {what arrives and from where}
+- {trigger} — [External] create/update/remove — {what arrives and from where in this scenario}
 
 ### Usecase
 - {usecase name} — [Usecase] create/update/remove — {what user goal this fulfills}
-  1. call {LogicA} — {why}
-  2. call {LogicB} — {why}
+  1. call {LogicA} — {why, in this scenario}
+  2. call {LogicB} — {why, in this scenario}
 
 ### Logics
-- {LogicA} — [Logics] create/update/remove — {what it computes or enforces}
+- {LogicA} — [Logics] create/update/remove — {what it computes or enforces here}
   - uses {ObjectX}, {ObjectY}
 - {LogicB} — [Logics] create/update/remove — {one sentence}
   - uses {ObjectZ}
 
 ### Objects
-- {ObjectX} — [Objects] create/update/remove — {what state changes}
+- {ObjectX} — [Objects] create/update/remove — {what state changes in this scenario}
 - {ObjectY} — [Objects] create/update/remove — {one sentence}
+
+## Scenario: {name}
+
+...
 
 ## Key Decisions
 
