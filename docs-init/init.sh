@@ -20,6 +20,7 @@ curl -fsSL "https://github.com/catppuccin/mdBook/releases/download/${CATPPUCCIN_
 
 echo "→ copy kanagawa theme"
 cp "$SKILL_DIR/kanagawa.css" "$DIR/theme/kanagawa.css"
+cp "$SKILL_DIR/layout.css" "$DIR/theme/layout.css"
 
 echo "→ copy serve.sh"
 cp "$SKILL_DIR/serve.sh" "$DIR/serve.sh"
@@ -43,7 +44,7 @@ python3 - "$DIR/book.toml" <<'PYEOF'
 import sys
 path = sys.argv[1]
 text = open(path).read()
-css = 'additional-css = ["theme/catppuccin.css", "theme/kanagawa.css"]\ndefault-theme = "kanagawa"\npreferred-dark-theme = "kanagawa"\n'
+css = 'additional-css = ["theme/catppuccin.css", "theme/kanagawa.css", "theme/layout.css"]\ndefault-theme = "kanagawa"\npreferred-dark-theme = "kanagawa"\n'
 if '[output.html]' in text:
     text = text.replace('[output.html]\n', '[output.html]\n' + css)
 else:
