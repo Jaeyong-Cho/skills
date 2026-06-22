@@ -62,26 +62,26 @@ Each level only lists what that layer does; don't repeat details already covered
 
 ## External
 
-- {trigger} — [External] create/update/remove
+- {trigger} — [External] create/update/remove — {one sentence: what event arrives and from where}
 
 ## Usecase
 
-- {usecase name} — [Usecase] create/update/remove
-  1. call {LogicA}
-  2. call {LogicB}
+- {usecase name} — [Usecase] create/update/remove — {one sentence: what user goal this fulfills}
+  1. call {LogicA} — {why}
+  2. call {LogicB} — {why}
 
 ## Logics
 
-- {LogicA} — [Logics] create/update/remove
+- {LogicA} — [Logics] create/update/remove — {one sentence: what rule or computation this encapsulates}
   - uses {ObjectX}, {ObjectY}
-- {LogicB} — [Logics] create/update/remove
+- {LogicB} — [Logics] create/update/remove — {one sentence}
   - uses {ObjectZ}
 
 ## Objects
 
-- {ObjectX} — [Objects] create/update/remove
-- {ObjectY} — [Objects] create/update/remove
-- {ObjectZ} — [Objects] create/update/remove
+- {ObjectX} — [Objects] create/update/remove — {one sentence: what invariant or state this owns}
+- {ObjectY} — [Objects] create/update/remove — {one sentence}
+- {ObjectZ} — [Objects] create/update/remove — {one sentence}
 
 ## Key Decisions
 
