@@ -60,6 +60,13 @@ Each level only lists what that layer does; don't repeat details already covered
 ```md
 # {Goal}
 
+## Scenarios
+
+Concrete examples that ground the decomposition. Each scenario traces one path through the system.
+
+- **{Scenario name}**: {Given ...} {When ...} {Then ...}
+- **{Scenario name}**: {Given ...} {When ...} {Then ...}
+
 ## External
 
 - {trigger} — [External] create/update/remove — {one sentence: what event arrives and from where}
