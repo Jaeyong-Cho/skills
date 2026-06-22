@@ -21,15 +21,15 @@ Read existing source files and docs relevant to the goal. Map what exists vs. wh
 
 Break the goal into sub-goals. At each level ask: "What must be true for this to work?" Keep going until each leaf is concrete and implementable.
 
-Assign each leaf to a layer from [archi](../references/archi.md) (Objects / Logics / Usecase / External). Flag any leaf that would violate the dependency rule (inner depending on outer) as a design error before continuing.
+Assign each leaf to a layer from [archi](../references/archi.md) (Objects / Logics / Usecase / External) and an operation (create / update / remove). Flag any leaf that would violate the dependency rule (inner depending on outer) as a design error before continuing.
 
 ```
 Goal
-├── Sub-goal A                [Usecase]
-│   ├── Leaf 1               [Objects]
-│   └── Leaf 2               [Logics]
-└── Sub-goal B               [External]
-    └── Leaf 3               [Usecase]
+├── Sub-goal A                [Usecase]   create
+│   ├── Leaf 1               [Objects]   update
+│   └── Leaf 2               [Logics]    create
+└── Sub-goal B               [External]  update
+    └── Leaf 3               [Usecase]   remove
 ```
 
 ## Step 4: Grill — narrow the decision space
@@ -53,7 +53,7 @@ Write to the current directory `./{timestamp}_{slug}.md` where:
 
 ## Decomposition
 
-{top-down tree with layer labels}
+{top-down tree with layer labels and create/update/remove per leaf}
 
 ## Key Decisions
 
