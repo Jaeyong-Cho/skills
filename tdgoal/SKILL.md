@@ -1,11 +1,11 @@
 ---
-name: top-down-goal
-description: Top-down decomposition of a user goal into sub-goals, then writes a timestamped summary. Use when user describes a feature goal and wants to break it down, mentions "top-down-goal", "break down this feature", "what do I need to implement", or "decompose this goal".
+name: tdgoal
+description: Top-down decomposition of a user goal into sub-goals, grounded in architecture layers, then writes a timestamped summary. Use when user describes a feature goal and wants to break it down, mentions "tdgoal", "break down this feature", "what do I need to implement", or "decompose this goal".
 ---
 
-# Top-Down Goal
+# TDGoal (Top-Down Goal)
 
-Decompose a high-level goal into sub-goals, grounded in the existing codebase.
+Decompose a high-level goal into sub-goals, grounded in the existing codebase and architecture layers.
 
 Read [deep-modules](../references/deep-modules.md) and [archi](../references/archi.md) before starting.
 
@@ -21,13 +21,15 @@ Read existing source files and docs relevant to the goal. Map what exists vs. wh
 
 Break the goal into sub-goals. At each level ask: "What must be true for this to work?" Keep going until each leaf is concrete and implementable.
 
+Assign each leaf to a layer from [archi](../references/archi.md) (Objects / Logics / Usecase / External). Flag any leaf that would violate the dependency rule (inner depending on outer) as a design error before continuing.
+
 ```
 Goal
-├── Sub-goal A
-│   ├── Leaf 1
-│   └── Leaf 2
-└── Sub-goal B
-    └── Leaf 3
+├── Sub-goal A                [Usecase]
+│   ├── Leaf 1               [Objects]
+│   └── Leaf 2               [Logics]
+└── Sub-goal B               [External]
+    └── Leaf 3               [Usecase]
 ```
 
 ## Step 4: Grill — narrow the decision space
@@ -51,7 +53,7 @@ Write to the current directory `./{timestamp}_{slug}.md` where:
 
 ## Decomposition
 
-{top-down tree}
+{top-down tree with layer labels}
 
 ## Key Decisions
 
