@@ -48,12 +48,20 @@ Write to the current directory `./{timestamp}_{slug}.md` where:
 - `timestamp` = `YYYYMMDD_HHMMSS`
 - `slug` = kebab-case of the goal (e.g. `space-input-handler`)
 
+Order the decomposition as a logical top-down sequence a reader can follow straight through — from the goal down to leaves, in the order things must be understood or built. Each sub-goal is a section; its leaves are listed under it in implementation order.
+
 ```md
 # {Goal}
 
-## Decomposition
+## {Sub-goal A}
 
-{top-down tree with layer labels and create/update/remove per leaf}
+- {Leaf 1} — [Objects] create
+- {Leaf 2} — [Logics] create
+
+## {Sub-goal B}
+
+- {Leaf 3} — [Usecase] update
+- {Leaf 4} — [External] update
 
 ## Key Decisions
 
