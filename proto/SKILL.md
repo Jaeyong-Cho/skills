@@ -34,10 +34,11 @@ proto/
 ## Workflow
 
 1. **Read project context** — check for `CLAUDE.md`, `README.md`, or similar at the project root to understand the codebase; skip if not a project root
-2. Pick a slug: short noun phrase, kebab-case (e.g. `llm-latency`, `json-diff`)
+2. **Read expected results** — if the user specifies a target (e.g. `expected/foo.md`), read it and use it to shape what the prototype should produce; otherwise skip
+3. Pick a slug: short noun phrase, kebab-case (e.g. `llm-latency`, `json-diff`)
 3. Write the entry file in `proto/<slug>/` — name it whatever fits, self-contained
-4. Write `proto/<slug>/run.sh` — one case per use case with a short description
-5. Do NOT create tests, docs, or helper modules
+5. Write `proto/<slug>/run.sh` — one case per use case with a short description
+6. Do NOT create tests, docs, or helper modules
 
 ## Done when
 
