@@ -50,6 +50,29 @@ PF applies the VAO (Value–Aspect–Object) three-layer design philosophy: **Va
 
 ---
 
+## Prototype → Design Workflow
+
+A bottom-up pipeline: explore first, design from evidence.
+
+```
+/expected  →  /proto  →  /observe  →  /to-tdgoal
+```
+
+| Step | Skill | What happens |
+|------|-------|-------------|
+| 1 | `/expected` | Grill user to produce unambiguous input/output pairs; written to `expected/<slug>.md` |
+| 2 | `/proto` | Build a throwaway prototype in `proto/<slug>/`; optionally reads an expected file to shape output |
+| 3 | `/observe` | Run the prototype, collect output, write an analytical report to `proto/<slug>/observe/<timestamp>-<slug>.md` |
+| 4 | `/to-tdgoal` | Read source + observe reports; grill; write an ADR grounded in what the prototype actually proved |
+
+### When to use each path
+
+- **Start with `/expected`** when you know what behavior you want but not how to get there
+- **Start with `/proto`** when you want to explore and don't know what you'll find
+- **Use `/tdgoal`** instead of `/to-tdgoal` when starting from a hypothesis, not a prototype
+
+---
+
 ## Other Skills
 
 | Skill | What it does |
