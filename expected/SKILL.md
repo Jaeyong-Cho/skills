@@ -34,12 +34,12 @@ Write to `expected/<slug>.md` in the current directory.
 ## Cases
 
 ### {case name}
-- **Input**: {concrete value or structure}
-- **Output**: {concrete value, output format (JSON/CSV/...), log lines, behavior, side effect, or error}
+- **Input**: {anything — function args, CLI options, file path, env var, HTTP request, user action, ...}
+- **Output**: {anything — return value, format (JSON/CSV/...), log lines, file written, behavior, side effect, exit code, error, ...}
 
 ### {case name}
-- **Input**: {concrete value or structure}
-- **Output**: {concrete value, output format (JSON/CSV/...), log lines, behavior, side effect, or error}
+- **Input**: {anything — function args, CLI options, file path, env var, HTTP request, user action, ...}
+- **Output**: {anything — return value, format (JSON/CSV/...), log lines, file written, behavior, side effect, exit code, error, ...}
 
 ## Rules
 - {invariant that holds across all cases}
