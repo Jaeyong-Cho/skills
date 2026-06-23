@@ -23,7 +23,8 @@ Read all of these before writing anything:
 1. **Restate the goal** — one sentence: what production problem does this prototype answer?
 2. **Extract findings** — from observe reports: what did the prototype prove or rule out?
 3. **Decompose top-down** — break the production goal into sub-goals, assigned to layers (Objects / Logics / Usecase / External), grounded in what the prototype showed actually works
-4. **Write the ADR** — same format as tdgoal (see below)
+4. **Grill** — before writing, map the decision space: identify every ambiguous or consequential decision the decomposition revealed. Rank by impact — which ones, if decided wrong, reshape the whole goal tree? Ask only the high-impact ambiguous ones in order of importance. Skip anything obvious or already answered by the prototype. Ask one question at a time. Use `AskUserQuestion` for discrete options (recommended first). User can say "wrap up" to move on.
+5. **Write the ADR** — same format as tdgoal (see below)
 
 ## ADR output
 
@@ -35,7 +36,7 @@ Write to `docs/src/adr/<timestamp>_<slug>.md`. Add entry to `docs/src/SUMMARY.md
 ## Proto findings
 - What the prototype proved: {key finding}
 - What was ruled out: {if any}
-- Approach carried forward: {what from main.py shapes the design}
+- Approach carried forward: {what from the prototype source shapes the design}
 
 ## Scenario: {name}
 
