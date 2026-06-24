@@ -5,7 +5,7 @@ Source: https://metapatterns.io
 ## The Coordinate System
 
 Every architecture can be placed on three axes:
-- **Abstractness** (vertical) — high-level use cases at top, low-level implementation at bottom
+- **Abstractness** (vertical) — inversely proportional to distance from the system's clients; a graphical UI is highly abstract (users interact with it directly), while device drivers at the opposite end operate in raw bits and registers; intermediate layers (routing, proxies, OS) are placed toward the top even if not highly abstract, to keep diagrams simple — high-level above, low-level below
 - **Subdomain** (horizontal) — distinct functional areas side by side
 - **Sharding** (diagonal) — multiple deployed instances of the same module
 
@@ -13,7 +13,7 @@ The shape of the plot *is* the pattern. Minor variations collapse; fundamental s
 
 ## Cohesers & Decouplers
 
-Forces that determine when to consolidate vs split. See SKILL.md for full list.
+Forces that determine when to consolidate vs split.
 
 **Rule**: Only decouple when a decoupler is present and active. Default to cohesion.
 

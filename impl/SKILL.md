@@ -7,7 +7,7 @@ description: Implement a feature using TDD, grounded in the meta-pattern coordin
 
 Implement faithfully, one unit at a time, via TDD. Structure follows the meta-pattern coordinate.
 
-Read [deep-modules](../references/deep-modules.md), [tdd](../references/tdd.md), [tdd-tests](../references/tdd-tests.md), [tdd-mocking](../references/tdd-mocking.md), [tdd-refactoring](../references/tdd-refactoring.md), and [meta-pattern REFERENCE](../meta-pattern/REFERENCE.md) before starting.
+Read [deep-modules](../references/deep-modules.md), [tdd](../references/tdd.md), [tdd-tests](../references/tdd-tests.md), [tdd-mocking](../references/tdd-mocking.md), [tdd-refactoring](../references/tdd-refactoring.md), and [meta-pattern](../references/meta-pattern.md) before starting.
 
 ## Step 1: Locate on the coordinate
 
