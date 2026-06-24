@@ -7,9 +7,9 @@ description: Apply a single structural refactoring — vertical split (by abstra
 
 One structural move at a time. Split or combine — nothing else.
 
-Grounded in the meta-pattern coordinate system and coheser/decoupler forces. See [REFERENCE.md](REFERENCE.md).
+Grounded in the meta-pattern coordinate system and coheser/decoupler forces. See [meta-pattern](../references/meta-pattern.md).
 
-Read [meta-pattern](../references/meta-pattern.md), [tdd](../references/tdd.md), [tdd-refactoring](../references/tdd-refactoring.md), [tdd-tests](../references/tdd-tests.md), and [tdd-mocking](../references/tdd-mocking.md) before starting.
+Read [tdd](../references/tdd.md), [tdd-refactoring](../references/tdd-refactoring.md), [tdd-tests](../references/tdd-tests.md), and [tdd-mocking](../references/tdd-mocking.md) before starting.
 
 ## Operations
 

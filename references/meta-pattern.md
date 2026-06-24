@@ -1,84 +1,68 @@
-# Meta-Pattern Reference
-
-Source: https://metapatterns.io
+# Meta Pattern
 
 ## The Coordinate System
 
-Every architecture can be placed on three axes:
-- **Abstractness** (vertical) — inversely proportional to distance from the system's clients; a graphical UI is highly abstract (users interact with it directly), while device drivers at the opposite end operate in raw bits and registers; intermediate layers (routing, proxies, OS) are placed toward the top even if not highly abstract, to keep diagrams simple — high-level above, low-level below
-- **Subdomain** (horizontal) — distinct functional areas side by side
-- **Sharding** (diagonal) — multiple deployed instances of the same module
+Every architecture is plotted on three axes. The axis you move along determines the operation type:
 
-The shape of the plot *is* the pattern. Minor variations collapse; fundamental structures remain.
+```
+         ↑ Abstractness (vertical)
+         │   high-level use cases
+         │     domain logic
+         │       infrastructure
+         │─────────────────────────→ Subdomain (horizontal)
+        ╱        domain A | domain B | domain C
+       ╱ Sharding (diagonal — parallel deployed instances)
+```
 
-## Cohesers & Decouplers
+- **Abstractness** (vertical) — inversely proportional to distance from the system's clients; a graphical UI is highly abstract (users interact with it directly), while device drivers at the opposite end operate in raw bits and registers; intermediate layers (routing, proxies, OS) are placed toward the top even if not highly abstract, to keep diagrams simple — high-level above, low-level below; vertical split extracts a layer
+- **Subdomain** (horizontal) — distinct functional areas side by side; horizontal split separates domains
+- **Sharding** (diagonal) — multiple deployed instances; combine collapses unnecessary instances
+-
+## Code Structure and the Level of Pain
 
-Forces that determine when to consolidate vs split.
+The right structure depends on size. Decomposing too early adds complexity; not decomposing at scale causes pain. The clarity force shifts direction as the codebase grows:
 
-**Rule**: Only decouple when a decoupler is present and active. Default to cohesion.
+| Scale | Appropriate structure | Pain if ignored |
+|-------|-----------------------|-----------------|
+| ~10 lines | Simple script — no classes, no modules | Over-engineering kills velocity |
+| ~100 lines | Procedures or classes — divide into named units | Everything-in-one starts to hurt |
+| ~5 000 lines | Modules → classes → methods hierarchy | A 5k-line file is unreadable |
+| ~100 000 lines | Services — separate deployable units | Merge conflicts, compile times, nobody understands the whole |
 
-## Basic Patterns
+**The rule**: switch to the next level of decomposition when staying at the current level becomes more painful than the added complexity of splitting.
 
-### Monolith
-Single unified system. All components run in one process.
-- **Properties**: simple deploy, easy shared state, hard to scale parts independently
-- **Smell**: becomes a big ball of mud without internal structure discipline
+Each transition is a vertical split (extracting a layer of abstraction) or a horizontal split (separating a subdomain) — never both at once.
 
-### Shards
-Multiple identical instances of the same module, each owning a partition of data/load.
-- **Properties**: horizontal scale, no cross-shard coordination, partition key is critical
-- **Smell**: business logic that needs cross-shard joins
+## Cohesers — push toward unity
 
-### Layers
-Components stratified by abstraction (e.g. External → Usecase → Logics → Objects).
-- **Properties**: inner layers are stable and reusable; outer layers change more often
-- **Rule**: dependency always points inward; outer never depended on by inner
-- **Smell**: inner layer importing from outer layer
+| Force | When active |
+|-------|-------------|
+| Debuggability | Single process is easier to trace and reproduce |
+| Data consistency | No distributed state or sync needed |
+| Small team / early stage | Speed and simplicity matter more than flexibility |
+| Data analysis | Fewer integration points to query across |
 
-### Services
-Independent units that communicate over a network boundary.
-- **Properties**: independent deploy, network latency, harder consistency, loose coupling
-- **Smell**: services that must be deployed together or share a database
+## Decouplers — push toward separation
 
-### Pipeline
-Sequential stages; data flows in one direction through transforms.
-- **Properties**: easy to add/remove stages, stages are stateless, output of one is input of next
-- **Smell**: stages that need to call back to earlier stages
+| Force | When active |
+|-------|-------------|
+| Variability | Conflicting requirements need multiple implementations |
+| Location | Components must run on different machines or devices |
+| Conway's Law | Team boundaries demand code boundaries |
+| Scale | Parts must scale independently |
 
-## Extension Patterns
+## Bidirectional forces
 
-### Middleware
-Software that provides communication between other components. Acts as glue.
+| Force | Favors cohesion when... | Favors decoupling when... |
+|-------|------------------------|--------------------------|
+| Clarity | Small system, few concepts | Large system, many concepts |
+| Velocity | Single team, early stage | Multiple teams, parallel work |
+| Throughput | Integration is fast enough | Distribution unlocks more |
 
-### Shared Repository
-Central storage (DB, file system, memory) that multiple components read/write.
-- **Caution**: creates implicit coupling through shared schema
+## Evolution rule
 
-### Proxy
-Intermediary that controls access to a component. Adds auth, caching, rate limiting without changing the target.
+> Only pay for decoupling when a decoupler is present and active. Cohesion is the default.
 
-### Orchestrator
-Central coordinator that calls other services in sequence and manages their interactions.
-- **Contrast with Choreography**: orchestrator knows the flow; choreography delegates via events
+Typical progression: **Monolith → Layers → Services** as decouplers accumulate.
+Contraction happens when cohesers outweigh the original decoupler that justified a split.
 
-### Sandwich
-Combines layers with services — a layered internal structure wrapped in a service boundary.
-
-## Implementation Patterns
-
-### Plugins
-Extensible core with interchangeable modules behind a defined interface.
-- **When**: behavior must vary without changing the core
-
-### Hexagonal Architecture (Ports & Adapters)
-Core business logic at center; all I/O (HTTP, DB, CLI, events) plugs in via adapters.
-- **Rule**: core has zero knowledge of adapters
-- **When**: domain logic must be testable without infrastructure
-
-### Microkernel
-Minimal core + specialized plugins. Core routes; plugins do the work.
-- **When**: many optional capabilities around a small stable base
-
-### Mesh
-Distributed components communicate directly with each other (no central coordinator).
-- **When**: fully decentralized, each node is autonomous
