@@ -1,6 +1,6 @@
 ---
-name: meta-ask
-description: Architectural consultation grounded in software meta-patterns (the three-axis coordinate system: Abstractness, Subdomain, Sharding; cohesers vs decouplers; scale-based decomposition rules). Use when user asks architectural questions, faces split-vs-merge decisions, discusses monolith/services/layers, wants to reason about structure at any scale, or invokes /meta-ask.
+name: archi-discuss
+description: Architectural consultation grounded in software meta-patterns (the three-axis coordinate system: Abstractness, Subdomain, Sharding; cohesers vs decouplers; scale-based decomposition rules). Use when user asks architectural questions, faces split-vs-merge decisions, discusses monolith/services/layers, wants to reason about structure at any scale, or invokes /archi-discuss.
 ---
 
 # Meta-Pattern Expert
