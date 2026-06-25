@@ -11,19 +11,15 @@ Implement one small, focused change. Large plans are not allowed — they must b
 
 Before writing any code, assess whether the change is small enough.
 
-**A change is small if ALL of these are true:**
-- Single concern — one reason to change, one thing being done
-- Describable in one sentence without "and"
-- Touches one logical unit (one function, one module, one config)
-- Does not mix concerns: no refactor + feature, no interface + implementation change in one shot
-- Reviewable diff — a human can understand it in under 2 minutes
+**A change is small if it fits one of these patterns:**
+- **One function** — add, modify, or delete a single function (~20–30 lines diff)
+- **Uniform change** — the same mechanical edit applied everywhere (rename a variable, update an import, change a constant) — multiple files are fine if the change is identical in nature
 
 **A change is large if ANY of these are true:**
-- Requires changes across multiple unrelated files
-- Mixes refactoring with new behavior
-- Changes both a contract (interface/API/schema) and its callers in one go
+- Modifies multiple functions for different reasons
+- Mixes different types of change (e.g. rename + logic fix + refactor)
+- Diff exceeds ~30 lines of meaningful change (not counting renames/moves)
 - Can only be described with "and" or "also"
-- Would produce a diff that takes more than 2 minutes to review
 
 ## Step 2: Block if large
 
