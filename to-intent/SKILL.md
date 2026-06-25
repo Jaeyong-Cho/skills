@@ -31,21 +31,7 @@ Create or update `intents/{topic}.md` using this structure:
 ```markdown
 # {Topic} Intent
 
-## Goal
-{What the human wants to achieve}
-
-## Priorities
-- {Most important thing}
-- {Second most important}
-
-## Constraints
-- {Hard limits and things to avoid}
-
-## Preferences
-- {Style and approach preferences}
-
-## Context
-{Why these intents exist — background that makes the rules make sense}
+## No format
 ```
 
 Omit sections that have nothing to say. `mkdir -p intents` if the directory doesn't exist.
