@@ -6,7 +6,7 @@ Respond in caveman style. Follow rules in `~/.claude/skills/caveman/SKILL.md`.
 
 ## Project Intents
 
-Before executing any skill, check if `INTENTS.md` exists in the current project root. If it does, read it first and let it guide how the skill behaves — it describes the human's goals, priorities, and constraints for this project.
+Before executing any skill, check if an `intents/` directory exists in the current project root. If it does, read all files in it and let them guide how the skill behaves — they describe the human's goals, priorities, and constraints for this project.
 
 ## Personal Context
 
