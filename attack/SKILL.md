@@ -45,10 +45,23 @@ For each test:
 - Name it after what it's trying to break, not what it's testing (e.g. `test_returns_empty_on_null_input` not `test_process_data`)
 - Assert the exact failure mode, not just "it doesn't crash"
 
-## Step 4: Report
+## Step 4: Validate output results
 
-After writing, summarize:
+After writing and running the tests, validate that the actual outputs are correct — not just that the code doesn't crash.
+
+- **Shape** — is the output the right type, structure, length?
+- **Values** — are the values in a reasonable range? Any nulls, NaNs, negatives where impossible?
+- **Consistency** — same input → same output every time? Does order matter when it shouldn't?
+- **Contracts** — does the output honor any documented guarantees (sorted, unique, non-empty)?
+- **Side effects** — did the function change something it shouldn't have (mutated input, wrote a file, made a network call)?
+
+For each unexpected output, write an assertion that pins the correct behavior. If the correct behavior is unclear, flag it explicitly as an unspecified contract.
+
+## Step 5: Report
+
+After writing and validating, summarize:
 - How many attack vectors found
 - How many tests written (by type)
 - Which vectors are covered by tests vs. flagged as structural risks
+- Any output validation failures or unspecified contracts found
 - Any finding that warrants immediate attention
