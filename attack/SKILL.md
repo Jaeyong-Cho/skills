@@ -45,7 +45,28 @@ For each test:
 - Name it after what it's trying to break, not what it's testing (e.g. `test_returns_empty_on_null_input` not `test_process_data`)
 - Assert the exact failure mode, not just "it doesn't crash"
 
-## Step 4: Validate output results
+## Step 4: Create or update the test runner
+
+All tests must be runnable with one command. After writing tests, create or update `tests/run.sh`:
+
+```sh
+#!/bin/bash
+# Usage:
+#   ./tests/run.sh          → run all tests
+#   ./tests/run.sh unit     → run only unit tests
+#   ./tests/run.sh int      → run only integration tests
+#   ./tests/run.sh e2e      → run only e2e tests
+#   ./tests/run.sh <pattern>→ run tests matching a name pattern
+```
+
+- Detect the project's test framework (pytest, jest, go test, cargo test, etc.) and use it — don't invent a custom runner
+- Support filtering by type (`unit`, `int`, `e2e`) and by pattern (passed as argument)
+- Exit with a non-zero code on any failure so CI can use it
+- If a runner already exists, extend it rather than replace it
+
+Make `run.sh` executable (`chmod +x tests/run.sh`) after writing it.
+
+## Step 5: Validate output results
 
 After writing and running the tests, validate that the actual outputs are correct — not just that the code doesn't crash.
 
