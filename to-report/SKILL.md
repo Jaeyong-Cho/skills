@@ -22,7 +22,7 @@ Capture the current conversation into a clean markdown report file.
 ```markdown
 # {Title}
 
-**Date:** {YYYY-MM-DD HH:MM}  
+**Date:** {YYYY-MM-DD HH:MM}
 **Topic:** {one-line summary}
 
 ## Summary
