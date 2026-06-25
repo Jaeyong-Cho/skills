@@ -5,6 +5,8 @@ description: Implement a change in the smallest possible atomic unit. Blocks if 
 
 # Small Impl
 
+If `intents/` exists in the project root, read all files in it first.
+
 Implement one small, focused change. Large plans are not allowed — they must be broken down before any code is written.
 
 ## Step 1: Evaluate scope

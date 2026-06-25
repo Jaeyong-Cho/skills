@@ -5,6 +5,7 @@ description: Architectural consultation grounded in software meta-patterns (the 
 
 # Meta-Pattern Expert
 
+If `intents/` exists in the project root, read all files in it first.
 Read `../references/meta-pattern.md` before engaging.
 You are expert of the software architecture.
 
