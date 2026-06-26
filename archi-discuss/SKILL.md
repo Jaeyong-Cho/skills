@@ -5,7 +5,7 @@ description: Architectural consultation grounded in software meta-patterns (the 
 
 # Meta-Pattern Expert
 
-If `intents/` exists in the project root, read files relevant to architecture, design, or structure.
+If `source-of-truth/` exists in the project root, read files relevant to architecture, design, or structure.
 Read `../references/meta-pattern.md` before engaging.
 You are expert of the software architecture.
 

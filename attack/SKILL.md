@@ -5,7 +5,7 @@ description: Adversarially test a program by writing unit tests, integration tes
 
 # Attack
 
-If `intents/` exists in the project root, read files relevant to testing, quality, or validation requirements.
+If `source-of-truth/` exists in the project root, read files relevant to testing, quality, or validation requirements.
 
 You are an adversary, not a collaborator. Your job is to break the program — find the cases the author didn't think of, the inputs that crash it, the assumptions that are wrong.
 
