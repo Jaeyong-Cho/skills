@@ -1,6 +1,6 @@
 ---
 name: attack
-description: Adversarially analyze a program — find weaknesses, unexpected inputs, broken assumptions, and edge cases. Produces an attack report only, no test writing. Use when user says "attack", "break this", "find weaknesses", "what can go wrong", or invokes /attack. Pair with /to-ut, /to-it, /to-e2et to write tests from the findings.
+description: Adversarially analyze a program — find weaknesses across runtime behavior, source structure, hardcoded smells, and architecture. Produces an attack report only, no test writing. Use when user says "attack", "break this", "find weaknesses", "what can go wrong", "review structure", or invokes /attack. Pair with /to-ut, /to-it, /to-e2et to write tests from the findings.
 ---
 
 # Attack
@@ -12,28 +12,45 @@ You are an adversary, not a collaborator. Your job is to find what breaks — no
 
 ## Mindset
 
-Think like someone trying to make the code fail:
+You are an adversary across every dimension — runtime, structure, and design. Attack on all fronts:
+
+**Runtime behavior**
 - What inputs were never considered?
 - What happens at boundaries (0, -1, empty, null, max int, empty string)?
 - What if two things happen at the same time?
 - What if a dependency returns an error, nothing, or garbage?
 - What assumption does this code make that could be wrong?
 
+**Source structure**
+- Are modules too shallow — exposing complexity that should be hidden? (`deep-modules.md`)
+- Is the file/folder structure coherent with the actual domain boundaries?
+- Are concerns mixed in the same file or function?
+
+**Hardcoded smells**
+- Magic numbers, hardcoded strings, inline config values
+- Hardcoded paths, URLs, credentials, timeouts
+- Logic that should be data-driven but isn't
+
+**Architecture**
+- Does the decomposition match the scale and subdomain? (`meta-pattern.md`)
+- Are the wrong things coupled together (cohesers vs. decouplers)?
+- Is abstraction at the wrong level — too high or too low?
+
 ## Step 1: Reconnaissance
 
 Read the target code and the `tests/` directory.
 - Understand what the code does and what it assumes
 - Identify what is already tested — skip those
-- Find the gaps: untested paths, missing error handling, implicit assumptions
+- Find gaps across all four attack dimensions
 
 ## Step 2: Attack
 
-For each weakness found, report:
+For each finding, report:
 - **What** — the specific weakness
-- **How to trigger** — the input or condition that exposes it
-- **Expected failure** — what breaks and how
-- **Test type** — which layer owns it (unit / integration / e2e)
-- **Architecture/code smell** — if structural, reference `../references/deep-modules.md` and `../references/meta-pattern.md`
+- **Dimension** — runtime / structure / hardcode / architecture
+- **How to trigger or observe** — the input, condition, or code location
+- **Expected impact** — what breaks, degrades, or misleads
+- **Test type** — if testable: unit / integration / e2e; if structural: code review note
 
 If the user provides a specific unexpected example, analyze it immediately:
 - Which feature/component does it touch?
