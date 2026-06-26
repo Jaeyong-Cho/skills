@@ -6,6 +6,7 @@ description: Write an integration test that chains real components together with
 # To Integration Test
 
 If `source-of-truth/` exists in the project root, read files relevant to testing or coding constraints.
+Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/tdd-mocking.md` before writing.
 
 Write an integration test that proves two or more real components handle the unexpected case correctly when wired together.
 

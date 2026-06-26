@@ -6,6 +6,7 @@ description: Adversarially analyze a program — find weaknesses, unexpected inp
 # Attack
 
 If `source-of-truth/` exists in the project root, read files relevant to testing, quality, or validation requirements.
+Read `../references/tdd.md` and `../references/tdd-tests.md` before engaging.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
 
