@@ -47,6 +47,16 @@ For each test:
 - Name it after what it's trying to break, not what it's testing (e.g. `test_returns_empty_on_null_input` not `test_process_data`)
 - Assert the exact failure mode, not just "it doesn't crash"
 
+### User-provided unexpected examples
+
+If the user supplies a specific unexpected input or example, immediately generate all three test types for it:
+
+1. **Unit test** — feed the example directly to the smallest unit that handles it; assert the exact expected output or error
+2. **Integration test** — pass it through the component chain with real dependencies; use mock data for external services (DB, API, filesystem) that mirror realistic responses
+3. **E2e test** — drive the full flow end-to-end with the example as input; mock only what cannot run locally (third-party APIs, hardware)
+
+For the mock data: derive it from the example itself — same shape, same edge characteristics, not generic placeholders. If the example is `null`, the mock upstream should return `null`. If it's a malformed date string, the mock DB record should contain that string.
+
 ## Step 4: Create or update the test runner
 
 All tests must be runnable with one command. After writing tests, create or update `tests/run.sh`:
