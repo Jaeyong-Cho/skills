@@ -31,7 +31,7 @@ List the attack vectors you found. For each:
 - What is the weakness?
 - What type of test best exposes it? (unit / integration / e2e / code review note)
 - What is the expected failure mode if the code is broken?
-
+- What is the architecture and code smell?  `../references/deep-modules.md` and `../references/meta-pattern.md`
 Present this list to the user before writing tests. Let them cut or add.
 
 ## Step 3: Execute
