@@ -49,13 +49,11 @@ For each test:
 
 ### User-provided unexpected examples
 
-If the user supplies a specific unexpected input or example, immediately generate all three test types for it:
+If the user supplies a specific unexpected input or example, identify which feature or component it touches — then write only the tests that cover that feature's responsibility.
 
-1. **Unit test** — feed the example directly to the smallest unit that handles it; assert the exact expected output or error
-2. **Integration test** — pass it through the component chain with real dependencies; use mock data for external services (DB, API, filesystem) that mirror realistic responses
-3. **E2e test** — drive the full flow end-to-end with the example as input; mock only what cannot run locally (third-party APIs, hardware)
-
-For the mock data: derive it from the example itself — same shape, same edge characteristics, not generic placeholders. If the example is `null`, the mock upstream should return `null`. If it's a malformed date string, the mock DB record should contain that string.
+- Determine the scope: which layer owns this behavior? (single function → unit, cross-component → integration, full flow → e2e)
+- Write the test type that best exposes the failure. Don't generate all three mechanically — only what's needed to prove the feature handles the unexpected case correctly or fails clearly.
+- Use mock data derived from the example itself — same shape, same edge characteristics. If the example is `null`, the mock should return `null`. If it's a malformed date, the mock record should contain that string.
 
 ## Step 4: Create or update the test runner
 
