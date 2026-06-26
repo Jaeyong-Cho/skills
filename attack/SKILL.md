@@ -26,6 +26,13 @@ You are an adversary across every dimension — runtime, structure, and design. 
 - Is the file/folder structure coherent with the actual domain boundaries?
 - Are concerns mixed in the same file or function?
 
+**Code smells**
+- Long functions, large classes, deep nesting
+- Duplicated logic across multiple places
+- Dead code, unused parameters, obsolete comments
+- Inconsistent naming, misleading abstractions
+- Feature envy, inappropriate intimacy between modules
+
 **Hardcoded smells**
 - Magic numbers, hardcoded strings, inline config values
 - Hardcoded paths, URLs, credentials, timeouts
@@ -47,7 +54,7 @@ Read the target code and the `tests/` directory.
 
 For each finding, report:
 - **What** — the specific weakness
-- **Dimension** — runtime / structure / hardcode / architecture
+- **Dimension** — runtime / structure / code-smell / hardcode / architecture
 - **How to trigger or observe** — the input, condition, or code location
 - **Expected impact** — what breaks, degrades, or misleads
 - **Test type** — if testable: unit / integration / e2e; if structural: code review note
