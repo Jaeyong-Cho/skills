@@ -1,11 +1,11 @@
 ---
 name: todo-discuss
-description: Discuss what to do next, decompose complex tasks, and structure todos — then optionally write the result back to ~/.sot/wiki/TODO.md. Use when user says "what should I do next", "help me plan", "decompose this task", "todo-discuss", "how do I break this down", or invokes /todo-discuss.
+description: Discuss what to do next, decompose complex tasks, and structure todos — then optionally write the result back to TODO.md. Use when user says "what should I do next", "help me plan", "decompose this task", "todo-discuss", "how do I break this down", or invokes /todo-discuss.
 ---
 
 # Todo Discuss
 
-If `~/.sot/wiki/` exists in the project root, read all files in it first — especially `TODO.md`.
+If `~/.sot/wiki/` exists, read all files in it first. Also read `TODO.md` in the current project root if it exists.
 
 Interview the user relentlessly about their tasks until every item is clear, prioritized, and decomposed into concrete steps. Walk down each branch of the task tree, resolving dependencies one-by-one. For each question, provide your recommended answer.
 
@@ -31,4 +31,4 @@ There is no maximum number of questions. Keep going until every task is decompos
 
 ## Output
 
-When discussion reaches clarity, present the proposed todo list then run `/to-todo` to write it to `~/.sot/wiki/TODO.md`.
+When discussion reaches clarity, present the proposed todo list then run `/to-todo` to write it to `TODO.md`.
