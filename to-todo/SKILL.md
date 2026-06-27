@@ -1,35 +1,35 @@
 ---
 name: to-todo
-description: Add, update, or list todos in TODO.md — a single persistent todo file for the project. Use when user says "add todo", "mark done", "what are my todos", "to-todo", or invokes /to-todo.
+description: Add or remove tasks in TODO.md — a plain list of human-accepted tasks for the project. Use when user says "add todo", "remove todo", "what are my todos", "to-todo", or invokes /to-todo.
 ---
 
 # To Todo
 
-Manage the project's single todo file at `TODO.md`.
+Manage the project's accepted task list at `TODO.md`.
+
+Every item in `TODO.md` is human-accepted and ready to execute. No checkboxes — done tasks are removed, not marked.
 
 ## Operations
 
-**Add a todo** — user says "add todo: X" or just describes a task to track
-**Mark done** — user says "done: X" or "mark X as done"
-**List todos** — user says "show todos", "what's left"
-**Remove** — user says "remove X" or "delete X from todos"
+**Add** — user says "add todo: X" or describes a task to accept
+**Remove** — user says "remove X" or "delete X" (use this when a task is done or cancelled)
+**List** — user says "show todos", "what's left"
 
 ## File format
 
 ```markdown
 # TODO
 
-- [ ] Task description
-- [ ] Another task
-- [x] Completed task
+- Task description
+- Another task
 ```
 
-Unchecked `[ ]` = open. Checked `[x]` = done. Keep completed items at the bottom.
+Plain list only. No checkboxes. No done items — remove them when complete.
 
 ## Steps
 
 1. If `TODO.md` doesn't exist, create it with the header `# TODO`.
 2. Read the current file.
-3. Apply the operation (add / check / uncheck / remove).
-4. Write the file back — open items first, completed items last.
+3. Apply the operation (add / remove).
+4. Write the file back.
 5. Confirm in one sentence what changed.
