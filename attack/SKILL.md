@@ -61,10 +61,10 @@ You are an adversary across every dimension — runtime, structure, and design. 
 
 ## Step 1: Reconnaissance
 
-Read the target code and the `tests/` directory.
+Read the target code. Discover the test directory — check `tests/`, `__tests__/`, `spec/`, `test/`, and co-located test files (e.g. `*.test.*`, `*.spec.*`).
 - Understand what the code does and what it assumes
 - Identify what is already tested — skip those
-- Find gaps across all four attack dimensions
+- Find gaps across all attack dimensions
 
 ## Step 2: Attack
 
