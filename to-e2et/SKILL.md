@@ -5,7 +5,7 @@ description: Write an end-to-end test that drives the full application flow with
 
 # To E2E Test
 
-Run `sot search-cmd "testing coding constraints" --k 5` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on testing and coding constraints.
 Read `../references/tdd.md` and `../references/tdd-tests.md` before writing.
 
 Write an e2e test that drives the full application flow from entry point to final output, verifying the system handles the unexpected case end-to-end.

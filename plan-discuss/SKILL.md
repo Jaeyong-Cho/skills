@@ -5,7 +5,7 @@ description: Interview the user to build a concrete development plan — scope, 
 
 # Plan Discuss
 
-Run `sot search-cmd "architecture plan design constraints" --k 5` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on architecture, plans, and constraints.
 Read `../references/meta-pattern.md` and `../references/deep-modules.md` before engaging.
 
 Interview the user relentlessly until the development plan is concrete and every branch of the design tree is resolved. For each question, provide your recommended answer.

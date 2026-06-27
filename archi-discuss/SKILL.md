@@ -5,7 +5,7 @@ description: Architectural consultation grounded in software meta-patterns (the 
 
 # Meta-Pattern Expert
 
-Run `sot search-cmd "architecture design structure" --k 5` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on architecture, design, and structure.
 Read `../references/meta-pattern.md` and `../references/deep-modules.md` before engaging.
 You are expert of the software architecture.
 

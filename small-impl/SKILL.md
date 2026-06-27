@@ -5,7 +5,7 @@ description: Implement a change in the smallest possible atomic unit. Blocks if 
 
 # Small Impl
 
-Run `sot search-cmd "implementation style workflow coding constraints" --k 5` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on implementation style, workflow, and coding constraints.
 Read `../references/tdd-refactoring.md` before writing any code.
 
 Implement one small, focused change. Large plans are not allowed — they must be broken down before any code is written.

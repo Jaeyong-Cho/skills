@@ -5,7 +5,7 @@ description: Write the current conversation or discussion as a structured markdo
 
 # To Report
 
-Run `sot search-cmd "reporting documentation style" --k 5` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on reporting and documentation style.
 
 Capture the current conversation into a clean markdown report file.
 

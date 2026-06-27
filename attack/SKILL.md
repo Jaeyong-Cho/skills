@@ -5,7 +5,7 @@ description: Adversarially analyze a program — find weaknesses across runtime 
 
 # Attack
 
-Run `sot search-cmd "testing quality validation architecture observability usability constraints" --k 10` for relevant context.
+If `source-of-truth/` exists in the project root, read relevant files on testing, quality, architecture, observability, and usability.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/deep-modules.md` and `../references/meta-pattern.md` before engaging.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
