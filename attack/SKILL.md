@@ -1,6 +1,6 @@
 ---
 name: attack
-description: Adversarially analyze a program — find weaknesses across runtime behavior, source structure, hardcoded smells, and architecture. Produces an attack report only, no test writing. Use when user says "attack", "break this", "find weaknesses", "what can go wrong", "review structure", or invokes /attack. Pair with /to-ut, /to-it, /to-e2et to write tests from the findings.
+description: Adversarially analyze a program — find weaknesses across runtime behavior, source structure, hardcoded smells, architecture, and usability. Produces an attack report only, no test writing. Use when user says "attack", "break this", "find weaknesses", "what can go wrong", "review structure", "usability review", or invokes /attack. Pair with /to-ut, /to-it, /to-e2et to write tests from the findings.
 ---
 
 # Attack
@@ -43,6 +43,14 @@ You are an adversary across every dimension — runtime, structure, and design. 
 - Are the wrong things coupled together (cohesers vs. decouplers)?
 - Is abstraction at the wrong level — too high or too low?
 
+**Usability**
+- Is the CLI/API/interface intuitive? Would a new user get stuck?
+- Are error messages helpful — do they tell you what went wrong and how to fix it?
+- Are defaults sensible? Does the happy path require minimal configuration?
+- Is discoverability poor — are features hidden or hard to find?
+- Is feedback missing — does the system silently succeed or fail without confirming?
+- Are there unnecessary steps, friction, or repetition in common workflows?
+
 ## Step 1: Reconnaissance
 
 Read the target code and the `tests/` directory.
@@ -54,7 +62,7 @@ Read the target code and the `tests/` directory.
 
 For each finding, report:
 - **What** — the specific weakness
-- **Dimension** — runtime / structure / code-smell / hardcode / architecture
+- **Dimension** — runtime / structure / code-smell / hardcode / architecture / usability
 - **How to trigger or observe** — the input, condition, or code location
 - **Expected impact** — what breaks, degrades, or misleads
 - **Test type** — if testable: unit / integration / e2e; if structural: code review note
