@@ -5,7 +5,7 @@ description: Adversarially analyze a program — find weaknesses across runtime 
 
 # Attack
 
-Run `sot search-cmd "testing quality validation architecture usability constraints" --k 10` for relevant context.
+Run `sot search-cmd "testing quality validation architecture observability usability constraints" --k 10` for relevant context.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/deep-modules.md` and `../references/meta-pattern.md` before engaging.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
@@ -43,6 +43,14 @@ You are an adversary across every dimension — runtime, structure, and design. 
 - Are the wrong things coupled together (cohesers vs. decouplers)?
 - Is abstraction at the wrong level — too high or too low?
 
+**Observability**
+- Are errors logged with enough context to diagnose in production?
+- Are there missing metrics — key operations with no timing, count, or success/failure signal?
+- Is tracing absent across service/function boundaries?
+- Are log levels misused — debug noise in production, or critical events at info level?
+- Silent failures — operations that swallow errors or fail without any signal?
+- Is there no way to know the system's health without running it manually?
+
 **Usability**
 - Is the CLI/API/interface intuitive? Would a new user get stuck?
 - Are error messages helpful — do they tell you what went wrong and how to fix it?
@@ -62,7 +70,7 @@ Read the target code and the `tests/` directory.
 
 For each finding, report:
 - **What** — the specific weakness
-- **Dimension** — runtime / structure / code-smell / hardcode / architecture / usability
+- **Dimension** — runtime / structure / code-smell / hardcode / architecture / observability / usability
 - **How to trigger or observe** — the input, condition, or code location
 - **Expected impact** — what breaks, degrades, or misleads
 - **Test type** — if testable: unit / integration / e2e; if structural: code review note
