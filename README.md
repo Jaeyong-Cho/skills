@@ -50,6 +50,7 @@ Run `/attack` on any code. Each numbered finding in the report can be handed dir
 | `/to-ut` | Write a unit test targeting one specific function or edge case |
 | `/to-it` | Write an integration test chaining real components together |
 | `/to-e2et` | Write an end-to-end test driving the full application flow |
+| `/feeling` | Structured emotional check-in across five dimensions (good/bad/concern/don't want/want), then grilled for clarity |
 | `/grill-me` | Relentless interviewing about any plan or design until shared understanding is reached |
 | `/small-impl` | Implement one atomic change; blocks and decomposes if the plan is too large |
 | `/to-todo` | Add or remove tasks in `TODO.md` directly |
