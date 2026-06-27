@@ -1,11 +1,11 @@
 ---
 name: to-todo
-description: Add, update, or list todos in source-of-truth/TODO.md — a single persistent todo file for the project. Use when user says "add todo", "mark done", "what are my todos", "to-todo", or invokes /to-todo.
+description: Add, update, or list todos in ~/.sot/wiki/TODO.md — a single persistent todo file for the project. Use when user says "add todo", "mark done", "what are my todos", "to-todo", or invokes /to-todo.
 ---
 
 # To Todo
 
-Manage the project's single todo file at `source-of-truth/TODO.md`.
+Manage the project's single todo file at `~/.sot/wiki/TODO.md`.
 
 ## Operations
 
@@ -28,7 +28,7 @@ Unchecked `[ ]` = open. Checked `[x]` = done. Keep completed items at the bottom
 
 ## Steps
 
-1. If `source-of-truth/TODO.md` doesn't exist, create it with the header `# TODO`.
+1. If `~/.sot/wiki/TODO.md` doesn't exist, create it with the header `# TODO`.
 2. Read the current file.
 3. Apply the operation (add / check / uncheck / remove).
 4. Write the file back — open items first, completed items last.

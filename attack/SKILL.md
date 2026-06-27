@@ -5,7 +5,7 @@ description: Adversarially analyze a program — find weaknesses across runtime 
 
 # Attack
 
-If `source-of-truth/` exists in the project root, read files relevant to testing, quality, or validation requirements.
+If `~/.sot/wiki/` exists in the project root, read files relevant to testing, quality, or validation requirements.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/deep-modules.md` and `../references/meta-pattern.md` before engaging.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.

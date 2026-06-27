@@ -5,7 +5,7 @@ description: Write unit tests for a specific function or module, targeting a wea
 
 # To Unit Test
 
-If `source-of-truth/` exists in the project root, read files relevant to testing or coding constraints.
+If `~/.sot/wiki/` exists in the project root, read files relevant to testing or coding constraints.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/tdd-mocking.md` before writing.
 
 Write a unit test that isolates and pins one specific behavior — especially failure paths and edge cases.

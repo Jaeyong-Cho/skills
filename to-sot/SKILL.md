@@ -1,17 +1,17 @@
 ---
 name: to-sot
-description: Extract the human's intent from the current conversation and write it as a structured markdown file into the project's source-of-truth/ directory. Use when user says "save intent", "write intent", "capture this", "to-sot", "source of truth", or invokes /to-sot.
+description: Extract the human's intent from the current conversation and write it as a structured markdown file into the project's ~/.sot/wiki/ directory. Use when user says "save intent", "write intent", "capture this", "to-sot", "source of truth", or invokes /to-sot.
 ---
 
 # To Source of Truth
 
-Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `source-of-truth/` so future skills can read it.
+Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `~/.sot/wiki/` so future skills can read it.
 
 ## Step 1: Derive the topic
 
-From the current conversation, identify the core topic or concern being expressed (e.g. `testing`, `architecture`, `code-style`, `workflow`). This becomes the filename: `source-of-truth/{topic}.md`.
+From the current conversation, identify the core topic or concern being expressed (e.g. `testing`, `architecture`, `code-style`, `workflow`). This becomes the filename: `~/.sot/wiki/{topic}.md`.
 
-If an `source-of-truth/{topic}.md` already exists, read it first — update or extend rather than overwrite.
+If an `~/.sot/wiki/{topic}.md` already exists, read it first — update or extend rather than overwrite.
 
 ## Step 2: Extract the intent
 
@@ -26,7 +26,7 @@ Only include things actually expressed or strongly implied in the conversation. 
 
 ## Step 3: Write the file
 
-Create or update `source-of-truth/{topic}.md` using this structure:
+Create or update `~/.sot/wiki/{topic}.md` using this structure:
 
 ```markdown
 # {Topic} Intent
@@ -34,7 +34,7 @@ Create or update `source-of-truth/{topic}.md` using this structure:
 ## No format
 ```
 
-Omit sections that have nothing to say. `mkdir -p source-of-truth` if the directory doesn't exist.
+Omit sections that have nothing to say. `mkdir -p ~/.sot/wiki` if the directory doesn't exist.
 
 ## Step 4: Confirm
 

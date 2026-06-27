@@ -5,7 +5,7 @@ description: Write the current conversation or discussion as a structured markdo
 
 # To Report
 
-If `source-of-truth/` exists in the project root, read files relevant to reporting, documentation, or communication style.
+If `~/.sot/wiki/` exists in the project root, read files relevant to reporting, documentation, or communication style.
 
 Capture the current conversation into a clean markdown report file.
 
