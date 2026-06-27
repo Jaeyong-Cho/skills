@@ -5,7 +5,7 @@ description: Extract the human's intent from the current conversation and write 
 
 # To Source of Truth
 
-Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `~/sot/wiki/` so it becomes searchable via `sot search-cmd`.
+Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `~/.sot/wiki/` so it becomes searchable via `sot search-cmd`.
 
 ## Step 1: Derive the topic
 
@@ -38,7 +38,7 @@ Omit sections that have nothing to say. `mkdir -p ~/.sot/wiki` if the directory 
 
 ## Step 4: Re-index
 
-Run `sot index ~/sot` so the new content becomes searchable.
+Run `sot index ~/.sot` so the new content becomes searchable.
 
 ## Step 5: Confirm
 
