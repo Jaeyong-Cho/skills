@@ -72,4 +72,4 @@ There is no limit on questions. Stop when the user has clarity — not when all 
 End with a clear statement:
 > "Real problem: [X]. Root cause: [Y]. Expectation held: [Z] — [valid / needs revision]. Options explored: [A, B, C]. Chosen direction: [option]. First step: [action]."
 
-Do not implement any source code.
+Do not implement any source code. If the problem points toward a build task, suggest `/plan-discuss` as the next step.

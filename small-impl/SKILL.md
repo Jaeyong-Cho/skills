@@ -5,6 +5,8 @@ description: Implement a change in the smallest possible atomic unit. Blocks if 
 
 # Small Impl
 
+Pairs with `/plan-discuss` — run that first to define and sequence the change, then invoke this to implement one step at a time.
+
 If `source-of-truth/` exists in the project root, read relevant files on implementation style, workflow, and coding constraints.
 Read `../references/tdd-refactoring.md` before writing any code.
 
