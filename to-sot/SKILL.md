@@ -1,9 +1,9 @@
 ---
-name: to-intent
-description: Extract the human's intent from the current conversation and write it as a structured markdown file into the project's source-of-truth/ directory. Use when user says "save intent", "write intent", "capture this as intent", "to-intent", or invokes /to-intent.
+name: to-sot
+description: Extract the human's intent from the current conversation and write it as a structured markdown file into the project's source-of-truth/ directory. Use when user says "save intent", "write intent", "capture this", "to-sot", "source of truth", or invokes /to-sot.
 ---
 
-# To Intent
+# To Source of Truth
 
 Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `source-of-truth/` so future skills can read it.
 
