@@ -17,56 +17,68 @@ The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
 |-------|----------------------|
-| Claude Code | `~/.claude/CLAUDE.md` symlink + `PFJ_PATH` in `settings.json` and shell rc |
-| GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` symlink + `PFJ_PATH` in shell rc |
-
-`PFJ_PATH` is exported in `.zshrc`/`.bashrc` and points to your journal directory (default: `~/pofe`).
+| Claude Code | `~/.claude/CLAUDE.md` symlink |
+| GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` symlink |
 
 ---
 
-## Global Instructions
+## Workflows
 
-`CLAUDE.md` defines global behaviors active in every session:
+Skills are designed to chain. Here are the common pipelines:
 
-- **Caveman style** — terse, no filler, fragments ok, technical terms exact
-- **Session logging** — after any skill session, append a timestamped summary + lessons to `$PFJ_PATH/today.md`
-
----
-
----
-
-## Prototype → Design Workflow
-
-A bottom-up pipeline: explore first, design from evidence.
-
+### Find weaknesses → Write tests
 ```
-/expected  →  /proto  →  /observe  →  /to-tdgoal
+/attack  →  /to-ut   (unit test for an isolated function)
+         →  /to-it   (integration test across components)
+         →  /to-e2et (end-to-end test for a full flow)
 ```
+Run `/attack` on any code. Each numbered finding in the report can be handed directly to one of the test-writing skills. Just invoke the next skill — it reads the current conversation and picks up the finding.
 
-| Step | Skill | What happens |
-|------|-------|-------------|
-| 1 | `/expected` | Grill user to produce unambiguous input/output pairs; written to `expected/<slug>.md` |
-| 2 | `/proto` | Build a throwaway prototype in `proto/<slug>/`; optionally reads an expected file to shape output |
-| 3 | `/observe` | Run the prototype, collect output, write an analytical report to `proto/<slug>/observe/<timestamp>-<slug>.md` |
-| 4 | `/to-tdgoal` | Read source + observe reports; grill; write an ADR grounded in what the prototype actually proved |
+### Plan a feature → Implement it
+```
+/problem-discuss  →  /plan-discuss  →  /to-sot  →  /small-impl
+```
+`/problem-discuss` surfaces what the real problem is. `/plan-discuss` turns it into a concrete build plan. `/to-sot` persists the plan to `source-of-truth/` so every subsequent skill reads it as context. `/small-impl` executes one atomic change at a time.
 
-### When to use each path
+### Manage a task list
+```
+/todo-discuss  →  /to-todo
+```
+`/todo-discuss` decomposes and prioritizes work, then writes it to `TODO.md` via `/to-todo`.
 
-- **Start with `/expected`** when you know what behavior you want but not how to get there
-- **Start with `/proto`** when you want to explore and don't know what you'll find
-- **Use `/tdgoal`** instead of `/to-tdgoal` when starting from a hypothesis, not a prototype
+### Discuss architecture
+```
+/archi-discuss  →  /to-sot
+/plan-discuss   →  /to-sot
+```
+Both interview you and resolve decisions. `/to-sot` saves the outcome as project context.
 
 ---
 
-## Other Skills
+## All Skills
 
 | Skill | What it does |
 |-------|-------------|
-| `tdgoal` | Top-down decomposition of a goal into sub-goals grounded in architecture layers; writes ADR |
-| `if-write` | Design an interface through grilling; writes structured IF doc |
-| `if-impl` | Implement an existing IF spec faithfully using TDD |
-| `docs-init` | Initialize an mdBook docs project with themes and mermaid |
-| `docs-write` | Write program documentation through grilling; writes to docs/src/ |
-| `grill-me` | Interview relentlessly about any plan or design until shared understanding is reached |
-| `caveman` | Ultra-compressed output mode — ~75% fewer tokens, no filler |
-| `write-a-skill` | Create or review agent skills with proper structure and checklist |
+| `/attack` | Adversarially find weaknesses across runtime, structure, architecture, and usability — produces a numbered finding list |
+| `/to-ut` | Write a unit test targeting one specific function or edge case |
+| `/to-it` | Write an integration test chaining real components together |
+| `/to-e2et` | Write an end-to-end test driving the full application flow |
+| `/plan-discuss` | Interview to build a concrete development plan — scope, architecture, sequencing, risks |
+| `/archi-discuss` | Architectural consultation grounded in meta-patterns — resolves split/merge and layer decisions |
+| `/problem-discuss` | Deep Socratic interview to surface the real problem, root cause, and decision space |
+| `/grill-me` | Relentless interviewing about any plan or design until shared understanding is reached |
+| `/small-impl` | Implement one atomic change; blocks and decomposes if the plan is too large |
+| `/todo-discuss` | Decompose and prioritize tasks, then write the result to `TODO.md` |
+| `/to-todo` | Add or remove tasks in `TODO.md` directly |
+| `/to-sot` | Save the current conversation's intent to `source-of-truth/` so future skills read it as context |
+| `/to-report` | Write the current conversation as a structured markdown report to `reports/` |
+| `/caveman` | Ultra-compressed output mode — ~75% fewer tokens, no filler |
+| `/write-a-skill` | Create a new skill with proper structure and description |
+
+---
+
+## `source-of-truth/`
+
+Many skills say "if `source-of-truth/` exists, read it." This directory holds your project's goals, constraints, and decisions so every skill session starts with context.
+
+Create and update it with `/to-sot` — it reads the current conversation and writes the relevant intent as a markdown file into `source-of-truth/`.

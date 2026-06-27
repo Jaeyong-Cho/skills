@@ -3,7 +3,6 @@ set -e
 
 SKILLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
-CLAUDE_SETTINGS="$CLAUDE_DIR/settings.json"
 CLAUDE_MD="$SKILLS_DIR/CLAUDE.md"
 
 echo "=== Skills Install ==="
@@ -52,50 +51,6 @@ selected() {
   return 1
 }
 
-# ── Shared: shell rc path ─────────────────────────────────────────────────────
-
-shell_rc() {
-  case "$SHELL" in
-    */zsh)  echo "$HOME/.zshrc" ;;
-    */bash) echo "$HOME/.bashrc" ;;
-    *)      echo "" ;;
-  esac
-}
-
-# ── Shared: PFJ_PATH ──────────────────────────────────────────────────────────
-
-PFJ_PATH_VALUE=""
-
-setup_pfj_path() {
-  local rc
-  rc="$(shell_rc)"
-
-  if [ -n "$rc" ] && grep -q 'export PFJ_PATH=' "$rc" 2>/dev/null; then
-    PFJ_PATH_VALUE=$(grep 'export PFJ_PATH=' "$rc" | tail -1 | sed 's/export PFJ_PATH="\(.*\)"/\1/' | sed "s/export PFJ_PATH='\(.*\)'/\1/" | sed 's/export PFJ_PATH=//')
-    echo "  PFJ_PATH already in $rc: $PFJ_PATH_VALUE"
-    return
-  fi
-
-  if [ -n "$PFJ_PATH" ]; then
-    PFJ_PATH_VALUE="$PFJ_PATH"
-    echo "  PFJ_PATH already set in environment: $PFJ_PATH"
-    return
-  fi
-
-  read -rp "  pfj directory path [~/pofe]: " PFJ_INPUT
-  PFJ_PATH_VALUE="${PFJ_INPUT:-$HOME/pofe}"
-  PFJ_PATH_VALUE="${PFJ_PATH_VALUE/#\~/$HOME}"
-
-  if [ -n "$rc" ]; then
-    local marker="# PFJ_PATH — journal directory (added by skills/install.sh)"
-    { echo ""; echo "$marker"
-      echo "export PFJ_PATH=\"$PFJ_PATH_VALUE\""
-    } >> "$rc"
-    echo "  ✓ PFJ_PATH=$PFJ_PATH_VALUE → $rc"
-    echo "  reload shell or: source $rc"
-  fi
-}
-
 # ── Setup functions ───────────────────────────────────────────────────────────
 
 setup_claude() {
@@ -107,20 +62,6 @@ setup_claude() {
   fi
   ln -sf "$CLAUDE_MD" "$CLAUDE_DIR/CLAUDE.md"
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
-
-  setup_pfj_path
-
-  [ ! -f "$CLAUDE_SETTINGS" ] && echo '{}' > "$CLAUDE_SETTINGS"
-  python3 -c "
-import json
-with open('$CLAUDE_SETTINGS') as f: d = json.load(f)
-if d.get('env', {}).get('PFJ_PATH') != '$PFJ_PATH_VALUE':
-    d.setdefault('env', {})['PFJ_PATH'] = '$PFJ_PATH_VALUE'
-    with open('$CLAUDE_SETTINGS', 'w') as f: json.dump(d, f, indent=2)
-    print('  ✓ PFJ_PATH mirrored to ~/.claude/settings.json')
-else:
-    print('  settings.json already up to date')
-"
 }
 
 setup_copilot() {
@@ -129,8 +70,6 @@ setup_copilot() {
   mkdir -p "$HOME/.copilot"
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
-
-  setup_pfj_path
 }
 
 # ── Bin scripts ──────────────────────────────────────────────────────────────
