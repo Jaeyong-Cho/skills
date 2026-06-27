@@ -5,7 +5,7 @@ description: Discuss what to do next, decompose complex tasks, and structure tod
 
 # Todo Discuss
 
-If `~/.sot/wiki/` exists, read all files in it first. Also read `TODO.md` in the current project root if it exists.
+Run `sot search-cmd "project tasks priorities constraints" --k 5` for relevant context. Also read `TODO.md` in the current project root if it exists.
 
 Interview the user relentlessly about their tasks until every item is clear, prioritized, and decomposed into concrete steps. Walk down each branch of the task tree, resolving dependencies one-by-one. For each question, provide your recommended answer.
 

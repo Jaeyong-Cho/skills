@@ -5,7 +5,6 @@ description: Interview the user to build a concrete development plan — scope, 
 
 # Plan Discuss
 
-If `~/.sot/wiki/` exists in the project root, read all files in it first.
 Read `../references/meta-pattern.md` and `../references/deep-modules.md` before engaging.
 
 Interview the user relentlessly until the development plan is concrete and every branch of the design tree is resolved. For each question, provide your recommended answer.
@@ -39,4 +38,4 @@ There is no maximum number of questions. Keep going until the plan is fully conc
 
 ## Output
 
-A concrete plan with: goal, architecture decision, build sequence, and top risks. Offer to write it to `~/.sot/wiki/` via `/to-sot`.
+A concrete plan with: goal, architecture decision, build sequence, and top risks. Offer to write it via `/to-sot`.

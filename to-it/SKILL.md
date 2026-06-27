@@ -5,7 +5,7 @@ description: Write an integration test that chains real components together with
 
 # To Integration Test
 
-If `~/.sot/wiki/` exists in the project root, read files relevant to testing or coding constraints.
+Run `sot search-cmd "testing coding constraints" --k 5` for relevant context.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/tdd-mocking.md` before writing.
 
 Write an integration test that proves two or more real components handle the unexpected case correctly when wired together.

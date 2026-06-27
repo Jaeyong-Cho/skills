@@ -5,7 +5,7 @@ description: Write the current conversation or discussion as a structured markdo
 
 # To Report
 
-If `~/.sot/wiki/` exists in the project root, read files relevant to reporting, documentation, or communication style.
+Run `sot search-cmd "reporting documentation style" --k 5` for relevant context.
 
 Capture the current conversation into a clean markdown report file.
 

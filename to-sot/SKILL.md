@@ -5,13 +5,13 @@ description: Extract the human's intent from the current conversation and write 
 
 # To Source of Truth
 
-Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `~/.sot/wiki/` so future skills can read it.
+Capture what the human actually wants — their goals, priorities, constraints, and preferences — and persist it to `~/sot/wiki/` so it becomes searchable via `sot search-cmd`.
 
 ## Step 1: Derive the topic
 
 From the current conversation, identify the core topic or concern being expressed (e.g. `testing`, `architecture`, `code-style`, `workflow`). This becomes the filename: `~/.sot/wiki/{topic}.md`.
 
-If an `~/.sot/wiki/{topic}.md` already exists, read it first — update or extend rather than overwrite.
+Run `sot search-cmd "<topic>" --k 3` first — if relevant chunks exist, update or extend rather than overwrite.
 
 ## Step 2: Extract the intent
 
@@ -36,6 +36,10 @@ Create or update `~/.sot/wiki/{topic}.md` using this structure:
 
 Omit sections that have nothing to say. `mkdir -p ~/.sot/wiki` if the directory doesn't exist.
 
-## Step 4: Confirm
+## Step 4: Re-index
+
+Run `sot index ~/sot` so the new content becomes searchable.
+
+## Step 5: Confirm
 
 Tell the user what was written and where. One sentence.

@@ -5,12 +5,12 @@ description: Autonomously execute all tasks in TODO.md without asking the human 
 
 # Auto Run
 
-If `~/.sot/wiki/` exists, read all files in it first for context.
+Run `sot search-cmd "project context constraints preferences" --k 5` for relevant context.
 Read `TODO.md` in the current project root. Everything in this file is already human-accepted — execute all of it.
 
 ## Execution rules
 
-**Act, don't ask.** Make decisions independently. Use context from `~/.sot/wiki/` and the codebase to resolve ambiguity whenever possible. The human has already approved these tasks — don't re-seek approval.
+**Act, don't ask.** Make decisions independently. Use `sot search-cmd` and the codebase to resolve ambiguity whenever possible. The human has already approved these tasks — don't re-seek approval.
 
 **Only stop and ask when:**
 1. Credentials, secrets, or access are missing and cannot be inferred
