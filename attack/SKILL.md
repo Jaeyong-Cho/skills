@@ -6,7 +6,7 @@ description: Adversarially analyze a program — find weaknesses across runtime 
 # Attack
 
 If `source-of-truth/` exists in the project root, read relevant files on testing, quality, architecture, observability, and usability.
-Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/deep-modules.md` and `../references/meta-pattern.md` before engaging.
+If the target is source code, read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/deep-modules.md`, and `../references/meta-pattern.md` before engaging. Skip these if the target is a config, doc, or non-code artifact.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
 
