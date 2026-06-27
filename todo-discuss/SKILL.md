@@ -7,34 +7,28 @@ description: Discuss what to do next, decompose complex tasks, and structure tod
 
 If `source-of-truth/` exists in the project root, read all files in it first — especially `TODO.md`.
 
-Help the user figure out what to do next and how to break it down into actionable todos.
+Interview the user relentlessly about their tasks until every item is clear, prioritized, and decomposed into concrete steps. Walk down each branch of the task tree, resolving dependencies one-by-one. For each question, provide your recommended answer.
 
-## What this covers
+## What to resolve
 
-- **Prioritization** — what to tackle next given the current state
-- **Decomposition** — breaking a large task into concrete, small steps
-- **Structure** — organizing todos into a logical order with dependencies clear
+**Priority** — what to tackle next given the current state
+- If `TODO.md` exists, start there: "Which of these is most important right now?"
+- Surface what's blocked, what's urgent, what has dependencies
 
-## How to run it
+**Decomposition** — break vague or large tasks into small concrete steps
+- Keep asking "what's the first concrete action?" until each step fits in one sitting
+- Each final step must be: specific, actionable, independently completable
 
-Ask one question at a time. Drive toward clarity on three things:
+**Dependencies** — make ordering explicit
+- If B can't start until A is done, say so
+- Identify what's parallelizable vs. sequential
 
-**1. What's the goal?**
-- "What are you trying to accomplish?"
-- If `TODO.md` exists, read it and ask: "Which of these is most important right now? What's blocking progress?"
+## How to ask
 
-**2. What's blocking or unclear?**
-- "What's the hardest part to figure out?"
-- "Is anything blocked on something else?"
-- Surface dependencies — if B can't start until A is done, make that explicit.
+Ask one question at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list options with your recommended one marked "(Recommended)". For open-ended questions, ask in plain text.
 
-**3. How to decompose?**
-- For any task that's vague or large, ask: "What's the first concrete action?"
-- Keep decomposing until each step is small enough to complete in one sitting.
-- Each final step should be: specific, actionable, and independently completable.
+There is no maximum number of questions. Keep going until every task is decomposed and the order is clear. The user can say "wrap up" at any time to get a structured summary and move on.
 
 ## Output
 
-When the discussion reaches clarity, offer to write the structured todos back to `source-of-truth/TODO.md` via `/to-todo`.
-
-Present the proposed todo list first — let the user confirm before writing.
+When discussion reaches clarity, present the proposed todo list and ask: "Should I write this to `source-of-truth/TODO.md`?"
