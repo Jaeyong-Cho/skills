@@ -31,4 +31,4 @@ There is no maximum number of questions. Keep going until every task is decompos
 
 ## Output
 
-When discussion reaches clarity, present the proposed todo list and ask: "Should I write this to `source-of-truth/TODO.md`?"
+When discussion reaches clarity, present the proposed todo list then run `/to-todo` to write it to `source-of-truth/TODO.md`.
