@@ -22,7 +22,8 @@ Read the full session and pull out everything the human actually expressed or st
 - **Opinions** — their judgments and assessments
 - **Decisions** — choices they made or committed to
 - **Constraints** — what they can't, won't, or don't want to do
-- **Goals** — what they're trying to achieve
+- **Intent** — what they're trying to accomplish right now
+- **Goals** — what they're trying to achieve longer term
 - **Concerns** — what worries or weighs on them
 - **Patterns** — recurring themes across multiple messages
 
