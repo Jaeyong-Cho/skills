@@ -82,6 +82,28 @@ If the user provides a specific unexpected example, analyze it immediately:
 
 ## Step 3: Report
 
-Output a numbered attack list. Each item is a self-contained finding the user can hand to `/to-ut`, `/to-it`, or `/to-e2et` to write tests for.
+Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the target name.
+
+Write the findings to `source-of-truth/attack/{timestamp}-{slug}.md`:
+
+```markdown
+# Attack: {Target}
+
+**Date:** {YYYY-MM-DD}
+
+## Findings
+
+1. **{Title}**
+   - What: ...
+   - Dimension: ...
+   - How to trigger: ...
+   - Expected impact: ...
+   - Test type: ...
+...
+```
+
+`mkdir -p source-of-truth/attack` if needed. Tell the user the file path.
+
+Output the same numbered list to the conversation. Each finding is a self-contained goal for `/directing`.
 
 Do not write any test code.
