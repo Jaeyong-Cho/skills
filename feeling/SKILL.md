@@ -52,6 +52,8 @@ Once the root is clear, help the user land on a decision:
 - Challenge constraints that haven't been verified ("is that actually fixed, or assumed?")
 - Push toward a concrete commitment — "I will do X" not "I might do X"
 
+Do not write any code, tests, or implementation — decisions only.
+
 ## Step 5: Synthesize
 
 End with a clear summary. Only include dimensions the user actually shared.
