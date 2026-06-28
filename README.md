@@ -55,7 +55,6 @@ Run `/attack` on any code. Each numbered finding in the report can be handed dir
 | `/small-impl` | Implement one atomic change; blocks and decomposes if the plan is too large |
 | `/to-todo` | Add or remove tasks in `TODO.md` directly |
 | `/to-sot` | Save the current conversation's intent to `source-of-truth/` so future skills read it as context |
-| `/to-report` | Write the current conversation as a structured markdown report to `reports/` |
 | `/caveman` | Ultra-compressed output mode — ~75% fewer tokens, no filler |
 | `/write-a-skill` | Create a new skill with proper structure and description |
 
