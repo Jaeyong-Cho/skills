@@ -5,8 +5,6 @@ description: Add or remove tasks in TODO.md — a plain list of human-accepted t
 
 # To Todo
 
-Before making any change, present the planned addition or removal to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
-
 Manage the project's accepted task list at `TODO.md`.
 
 Every item in `TODO.md` is human-accepted and ready to execute. No checkboxes — done tasks are removed, not marked.

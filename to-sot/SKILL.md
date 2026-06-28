@@ -5,8 +5,6 @@ description: Read the full conversation session and extract all truth — facts,
 
 # To Source of Truth
 
-Before writing, present the extracted truths to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
-
 Read the entire conversation and extract every truth the human revealed — not just intent, but facts, preferences, opinions, decisions, constraints, and anything else that reflects who they are or what they want.
 
 ## Step 1: Derive the topic
