@@ -18,4 +18,4 @@ Work through the Action Sequence one step at a time:
 
 Never execute more than one step without confirmation. If a step is blocked or ambiguous, stop and ask — do not skip or improvise.
 
-Completion criterion: every step in the Action Sequence is done and confirmed, or the user explicitly stops. When done: "Action sequence complete. Run /evaluate to assess the result."
+Completion criterion: every step in the Action Sequence is done and confirmed, or the user explicitly stops. When done: "Action sequence complete. Run `/evaluate` to assess the result."

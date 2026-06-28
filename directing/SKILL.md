@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Read all files in `source-of-truth/wiki/` and `source-of-truth/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
 
-Use the grilling skill to reach a committed direction:
+Run a `/grilling` skill to reach a committed direction:
 
 1. **Goal** — what does success actually look like? Push past the surface request to the real outcome the user needs.
 2. **Decision space** — what are the options? For each: what does it unlock, what does it cost, what does it leave unresolved?
