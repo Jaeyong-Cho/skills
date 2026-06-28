@@ -8,6 +8,8 @@ description: Implement a change in the smallest possible atomic unit. Blocks if 
 If `source-of-truth/` exists in the project root, read relevant files on implementation style, workflow, and coding constraints.
 Read `../references/tdd-refactoring.md` before writing any code.
 
+Before writing any code, present the plan to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
+
 Implement one small, focused change. Large plans are not allowed — they must be broken down before any code is written.
 
 ## Step 1: Evaluate scope

@@ -5,6 +5,8 @@ description: Create new agent skills with proper structure, progressive disclosu
 
 # Writing Skills
 
+Before creating any files, present the full skill draft to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
+
 ## Process
 
 1. **Gather requirements** - ask user about:

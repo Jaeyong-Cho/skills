@@ -8,6 +8,8 @@ description: Write an integration test that chains real components together with
 If `source-of-truth/` exists in the project root, read relevant files on testing and coding constraints.
 Read `../references/tdd.md` and `../references/tdd-tests.md` and `../references/tdd-mocking.md` before writing.
 
+Before writing any test, present the plan to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
+
 Write an integration test that proves two or more real components handle the unexpected case correctly when wired together.
 
 ## What to test

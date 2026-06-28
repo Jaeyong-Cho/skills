@@ -8,6 +8,8 @@ description: Write an end-to-end test that drives the full application flow with
 If `source-of-truth/` exists in the project root, read relevant files on testing and coding constraints.
 Read `../references/tdd.md` and `../references/tdd-tests.md` before writing.
 
+Before writing any test, present the plan to the human and wait for explicit approval. Do not proceed until they confirm they are satisfied.
+
 Write an e2e test that drives the full application flow from entry point to final output, verifying the system handles the unexpected case end-to-end.
 
 ## What to test
