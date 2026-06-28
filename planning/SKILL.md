@@ -6,7 +6,9 @@ disable-model-invocation: true
 
 # Planning
 
-Read all files in `source-of-truth/wiki/` for direction and context.
+Read all files in `source-of-truth/wiki/` for direction and context. Also read `source-of-truth/adr/` — if an existing ADR covers the same topic, read it and revise it rather than creating a new one.
+
+Use this for new plans or to replan after a fix reveals new design needs.
 Read `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
 
 Run a `/grilling` skill to resolve every branch of the plan:

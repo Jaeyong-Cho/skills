@@ -10,6 +10,8 @@ If the target is source code, read `../references/tdd.md`, `../references/tdd-te
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
 
+Use this on new code or existing code. If a previous attack report exists in `source-of-truth/attack/`, read it — attack what was missed or has regressed since then.
+
 ## Mindset
 
 You are an adversary across every dimension — runtime, structure, and design. Attack on all fronts:

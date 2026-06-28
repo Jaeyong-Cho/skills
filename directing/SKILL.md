@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Read all files in `source-of-truth/wiki/` and `source-of-truth/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
 
+Use this for new goals or to redirect an existing one. If an existing wiki file covers the same topic, read it and update it rather than creating a new file.
+
 Run a `/grilling` skill to reach a committed direction:
 
 1. **Goal** — what does success actually look like? Push past the surface request to the real outcome the user needs.

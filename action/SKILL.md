@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Read the ADR to execute from `source-of-truth/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
 
+Use this for new implementation or for applying a fix — the ADR's action sequence may describe either.
+
 Work through the Action Sequence one step at a time:
 
 1. State what you are about to do — one plain sentence the user can understand without reading the code.
