@@ -7,9 +7,9 @@ disable-model-invocation: true
 # Planning
 
 Read all files in `source-of-truth/wiki/` for direction and context.
-Read `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/tdd.md`, `../references/tdd-tests.md`.
+Read `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
 
-Use the grilling skill to resolve every branch of the plan:
+Run a `/grilling` skill to resolve every branch of the plan:
 
 1. **Architecture** — how to structure the implementation? Apply meta-pattern (Abstractness/Subdomain/Sharding axes) and deep-module principles (hide complexity, widen interfaces).
 2. **Design** — what are the key modules, contracts, and data flows?
