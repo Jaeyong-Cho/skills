@@ -53,3 +53,5 @@ Write `source-of-truth/adr/{timestamp}-{slug}.md`:
 ```
 
 `mkdir -p source-of-truth/adr` if needed. Tell the user the file path. Next step: `/action`.
+
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.

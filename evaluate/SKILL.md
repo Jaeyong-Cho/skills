@@ -49,3 +49,5 @@ Write the report to `source-of-truth/evaluate/{timestamp}-{slug}.md`:
 `mkdir -p source-of-truth/evaluate` if needed. Tell the user the file path.
 
 If failures exist, flag each as a target: "Run /attack on [X]." Those findings feed back into /directing.
+
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.

@@ -21,3 +21,5 @@ Work through the Action Sequence one step at a time:
 Never execute more than one step without confirmation. If a step is blocked or ambiguous, stop and ask — do not skip or improvise.
 
 Completion criterion: every step in the Action Sequence is done and confirmed, or the user explicitly stops. When done: "Action sequence complete. Run `/evaluate` to assess the result."
+
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.

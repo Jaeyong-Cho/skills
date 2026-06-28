@@ -108,4 +108,6 @@ Write the findings to `source-of-truth/attack/{timestamp}-{slug}.md`:
 
 Output the same numbered list to the conversation. Each finding is a self-contained goal for `/directing`.
 
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
+
 Do not write any test code.
