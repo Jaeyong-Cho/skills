@@ -17,7 +17,9 @@ Run a `/grilling` skill to reach a committed direction:
 
 Grill until the direction is unambiguous. Completion criterion: the user has stated a committed direction in their own words.
 
-Then write `source-of-truth/wiki/{topic}.md`:
+Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the topic.
+
+Write `source-of-truth/wiki/{timestamp}-{slug}.md`:
 
 ```markdown
 # {Topic}
@@ -36,3 +38,5 @@ Then write `source-of-truth/wiki/{topic}.md`:
 ```
 
 `mkdir -p source-of-truth/wiki` if needed. Tell the user the file path. Next step: `/planning`.
+
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
