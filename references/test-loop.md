@@ -4,22 +4,33 @@ A test-loop is a tight, repeatable harness that mirrors the real system as close
 
 ## What makes a good test-loop
 
+- **Clean state** — reset to a known baseline before each run. Delete output dirs, clear caches, reset the database, remove side effects from the previous run. A dirty state hides real behavior.
+- **Environment setup** — configure what the system needs before it runs: env vars, seed data, config files, dependency state. Make setup scripted and reproducible.
+- **Specific test behaviors** — define the exact scenarios the loop exercises: which inputs, which user actions, which edge cases. Name them. Don't run the whole system blindly.
 - **Real-system parity** — same input format, same dependencies, same environment assumptions as production. No stubs unless the dependency is unavailable.
 - **Real result output** — the actual system output: stdout, files, API response, database state. Not just pass/fail.
 - **Debug output** — intermediate state at each stage, written to a directory. Use `--debug` / `--debug-dir` flags so debug output is opt-in and inspectable after the run.
-- **Logs** — runtime log output from the system. Logs are in scope: they reveal control flow, errors, and timing that neither the real result nor debug artifacts show.
+- **Logs** — runtime log output from the system. Logs reveal control flow, errors, and timing that neither the real result nor debug artifacts show.
 
 ## Outputs
 
 | Output | What it is | How to use it |
 |--------|-----------|---------------|
-| Real result | What the system produced | Compare against expected output to judge correctness |
+| Real result | What the system produced | Compare against expected output; flag anything unexpected |
 | Debug output | Intermediate state per stage | Trace where the system diverged from expected behavior |
 | Logs | Runtime log output | Reveal control flow, errors, and timing; confirm expected log sequences |
 
 ## Recommended pattern
 
 ```bash
+# 1. Clean state
+rm -rf ./debug-out ./output
+
+# 2. Environment setup
+export ENV_VAR=value
+# seed data, config, etc.
+
+# 3. Run specific behavior
 <entrypoint> --debug --debug-dir ./debug-out <inputs>
 ```
 
@@ -30,14 +41,14 @@ A test-loop is a tight, repeatable harness that mirrors the real system as close
 
 ## Where this fits in the workflow
 
-**Planning (`/planning`)** — include the test-loop in the action sequence:
-1. Set up the test-loop before implementing
-2. Verify the loop runs and produces all three output types
-3. Implement the feature or fix
-4. Run the loop to evaluate
+**Planning (`/planning`)** — design the test-loop explicitly:
+- What is the clean state? What must be reset before each run?
+- What environment setup is needed? (env vars, seed data, dependencies)
+- What specific behaviors does the loop exercise? Name each scenario.
+- What are the expected outputs for each behavior?
 
-**Evaluate (`/evaluate`)** — use test-loop output as the primary evaluation signal:
-- Real result output is the ground truth for correctness
-- Debug output is the trace for diagnosing failures
-- Logs confirm expected sequences (e.g. "log A → log B means the path was taken")
+**Evaluate (`/evaluate`)** — use test-loop output to find unexpected results and their root causes:
+- Run each named behavior from the test-loop design
+- For each output: is it what you expected? Flag anything unexpected
+- For every unexpected result: trace the root cause through debug output and logs
 - A passing evaluation criterion should be expressible in terms of test-loop output

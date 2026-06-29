@@ -12,7 +12,14 @@ Use this after new implementation or after a fix — re-evaluate any time to ver
 
 Read the selected ADR's **Test Plan** and **Evaluation Criteria**. Read `../references/test-loop.md` — use test-loop output as the primary evaluation signal where applicable.
 
-Run each test in the Test Plan. For each:
+If the ADR has a **Test-Loop Design**: run it first.
+1. Apply clean state — reset exactly what the design specifies.
+2. Apply environment setup.
+3. Run each named behavior scenario.
+4. For each scenario: compare actual output against expected. Flag every unexpected result.
+5. For every unexpected result: trace the root cause through debug output and logs — do not just report it, explain why it happened.
+
+Then run each test in the Test Plan. For each:
 - State what it tests
 - Run it
 - Record pass or fail
@@ -38,6 +45,11 @@ Write the report to `source-of-truth/evaluate/{timestamp}-{slug}.md`:
 | Test | Result |
 |------|--------|
 | {test} | Pass / Fail |
+
+## Unexpected Results
+| Scenario | Expected | Actual | Root Cause |
+|----------|----------|--------|------------|
+| {scenario} | {expected} | {actual} | {why — traced from debug output / logs} |
 
 ## Verdict Detail
 {What passed, what failed, why}
