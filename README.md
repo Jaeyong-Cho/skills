@@ -25,9 +25,9 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/attack  →  /directing  →  /planning  →  /action      →  /evaluate
-                ↑                         /auto-action        |
-                └──────────── failures feed back ─────────────┘
+/brainstorm  →  /attack  →  /directing  →  /planning  →  /action      →  /evaluate
+                                ↑                         /auto-action        |
+                                └──────────── failures feed back ─────────────┘
 ```
 
 All workflow skills are user-invoked. Artifacts land in `source-of-truth/`. All skills work on new development and fixing existing code.
@@ -36,12 +36,13 @@ All workflow skills are user-invoked. Artifacts land in `source-of-truth/`. All 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
+| `/brainstorm` | ideas | Read the codebase, grill to surface gaps, pain, and opportunities |
 | `/attack` | `source-of-truth/attack/` | Find weaknesses — each finding is a goal for /directing |
 | `/directing` | `source-of-truth/direction/` | Grill to find the goal, explore decision space, commit to a direction |
-| `/planning` | `source-of-truth/adr/` | Grill to design architecture, test plan, and action sequence |
+| `/planning` | `source-of-truth/adr/` | Grill to design architecture, test-loop, and action sequence |
 | `/action` | code changes | Execute the ADR one confirmed step at a time |
 | `/auto-action` | code changes | Execute the ADR straight through without confirmation |
-| `/evaluate` | `source-of-truth/evaluate/` | Run the test plan, deliver a verdict, flag failures for /attack |
+| `/evaluate` | `source-of-truth/evaluate/` | Run the test-loop, surface unexpected results and root causes |
 
 ## References
 
