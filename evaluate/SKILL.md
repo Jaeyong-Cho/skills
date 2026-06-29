@@ -10,19 +10,14 @@ List all files in `source-of-truth/adr/`. If multiple exist, ask the user which 
 
 Use this after new implementation or after a fix — re-evaluate any time to verify the result still holds.
 
-Read the selected ADR's **Test Plan** and **Evaluation Criteria**. Read `../references/test-loop.md` — use test-loop output as the primary evaluation signal where applicable.
+Read the selected ADR's **Test-Loop Design** and **Evaluation Criteria**. Read `../references/test-loop.md`.
 
-If the ADR has a **Test-Loop Design**: run it first.
+Run the test-loop — this is the primary evaluation signal. Unit test results are not the main scope.
 1. Apply clean state — reset exactly what the design specifies.
 2. Apply environment setup.
 3. Run each named behavior scenario.
 4. For each scenario: compare actual output against expected. Flag every unexpected result.
 5. For every unexpected result: trace the root cause through debug output and logs — do not just report it, explain why it happened.
-
-Then run each test in the Test Plan. For each:
-- State what it tests
-- Run it
-- Record pass or fail
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a slug from the ADR being evaluated.
 
