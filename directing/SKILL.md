@@ -42,3 +42,5 @@ Write `source-of-truth/direction/{timestamp}-{slug}.md`:
 `mkdir -p source-of-truth/direction` if needed. Tell the user the file path. Next step: `/planning`.
 
 Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
+
+**DO NOT START IMPLEMENT**
