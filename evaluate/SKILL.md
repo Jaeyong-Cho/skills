@@ -13,7 +13,7 @@ Use this after new implementation or after a fix — re-evaluate any time to ver
 Read the selected ADR's **Test-Loop Design** and **Evaluation Criteria**. Read `../references/test-loop.md`.
 
 Run the test-loop — this is the primary evaluation signal. Unit test results are not the main scope.
-1. Apply clean state — reset exactly what the design specifies.
+1. Apply clean state — reset and initialize exactly what the design specifies.
 2. Apply environment setup.
 3. Run each named behavior scenario.
 4. For each scenario: compare actual output against expected. Flag every unexpected result.

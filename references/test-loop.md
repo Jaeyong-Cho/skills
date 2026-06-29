@@ -6,7 +6,7 @@ The target is **full situational coverage with the real system** — happy path,
 
 ## What makes a good test-loop
 
-- **Clean state** — reset to a known baseline before each run. Delete output dirs, clear caches, reset the database, remove side effects from the previous run. A dirty state hides real behavior.
+- **Clean state** — reset and initialize to a known baseline before each run. Delete output dirs, clear caches, reset the database, remove side effects from the previous run, then initialize to the required initial state (seed data, default config, starting conditions). A dirty or uninitialized state hides real behavior.
 - **Environment setup** — configure what the system needs before it runs: env vars, seed data, config files, dependency state. Make setup scripted and reproducible.
 - **Specific test behaviors** — define the exact scenarios the loop exercises: which inputs, which user actions, which edge cases. Name them. Don't run the whole system blindly.
 - **Real-system parity** — same input format, same dependencies, same environment assumptions as production. No stubs unless the dependency is unavailable.
