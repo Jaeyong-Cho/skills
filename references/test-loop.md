@@ -41,7 +41,7 @@ export ENV_VAR=value
 
 ## Where this fits in the workflow
 
-**Planning (`/planning`)** — design the test-loop explicitly:
+**Planning (`/planning`)** — reuse before creating. Check if an existing test-loop already covers the needed behaviors; extend it rather than creating a new one. Too many test-loops become unmanageable. Only create a new loop when the existing one structurally cannot cover the scenarios. Design the test-loop explicitly:
 - What is the clean state? What must be reset before each run?
 - What environment setup is needed? (env vars, seed data, dependencies)
 - What specific behaviors does the loop exercise? Name each scenario.
