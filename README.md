@@ -37,7 +37,7 @@ All workflow skills are user-invoked. Artifacts land in `source-of-truth/`. All 
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/attack` | `source-of-truth/attack/` | Find weaknesses — each finding is a goal for /directing |
-| `/directing` | `source-of-truth/wiki/` | Grill to find the goal, explore decision space, commit to a direction |
+| `/directing` | `source-of-truth/direction/` | Grill to find the goal, explore decision space, commit to a direction |
 | `/planning` | `source-of-truth/adr/` | Grill to design architecture, test plan, and action sequence |
 | `/action` | code changes | Execute the ADR one confirmed step at a time |
 | `/auto-action` | code changes | Execute the ADR straight through without confirmation |

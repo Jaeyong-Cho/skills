@@ -1,6 +1,6 @@
 ---
 name: directing
-description: Direction-setting skill. Grills to find the real goal, explores the decision space, commits to a direction, and writes the wiki. Use when invoked as /directing.
+description: Direction-setting skill. Grills to find the real goal, explores the decision space, commits to a direction, and writes the direction. Use when invoked as /directing.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Read all files in `source-of-truth/wiki/` and `source-of-truth/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
 
-Use this for new goals or to redirect an existing one. If an existing wiki file covers the same topic, read it and update it rather than creating a new file.
+Use this for new goals or to redirect an existing one. If an existing direction file covers the same topic, read it and update it rather than creating a new file.
 
 Run a `/grilling` skill to reach a committed direction:
 
