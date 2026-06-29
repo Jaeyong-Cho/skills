@@ -25,9 +25,10 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/brainstorm  →  /attack  →  /directing  →  /planning  →  /action      →  /evaluate
-                                ↑                         /auto-action        |
-                                └──────────── failures feed back ─────────────┘
+/brainstorm  ↘
+/attack      →  /directing  →  /planning  →  /action      →  /evaluate
+                    ↑                         /auto-action        |
+                    └──────────── failures feed back ─────────────┘
 ```
 
 All workflow skills are user-invoked. Artifacts land in `source-of-truth/`. All skills work on new development and fixing existing code.
