@@ -15,10 +15,11 @@ Run a `/grilling` skill to resolve every branch of the plan:
 
 1. **Architecture** — how to structure the implementation? Apply meta-pattern (Abstractness/Subdomain/Sharding axes) and deep-module principles (hide complexity, widen interfaces).
 2. **Design** — what are the key modules, contracts, and data flows?
-3. **Test plan** — what tests prove this works? Apply TDD: what is the smallest failing test, what does green look like?
-4. **Evaluation criteria** — how do we know the result is good? Make it checkable. how to human know if the changes is working well at the real working system with real data? how to  which one need to see for verify? how to observe it? how to judge the plan is working well? (e.g. "the user can do X in Y seconds", "see the data and check all of them has property P", "the system can handle N requests per second", "If log A -> log B and data X -> Y -> Z is shown, then it is working well" or "All of the unmatched is zero, then it is working well"). Make it checkable.
-5. **Action sequence** — ordered atomic steps to implement. Each step: one concern, one logical unit, describable without "and".
-6. **Observability** — which debugging information is needed for handling issue? how to verify the logic is working well or not? which informations need to see to judge this plan is working well?
+3. **Observability** — which debugging information is needed for handling issue? how to verify the logic is working well or not? which informations need to see to judge this plan is working well? how to detect known unknown or unknown unknown ambiguous and concern point? (e.g. "use assert to detect concern point" or "write debugging data to the json in data directory")
+4. **Test plan** — what tests prove this works? Apply TDD: what is the smallest failing test, what does green look like?
+5. **Evaluation criteria** — how do we know the result is good? Make it checkable. how to human know if the changes is working well at the real working system with real data? how to  which one need to see for verify? how to observe it? how to judge the plan is working well? (e.g. "the user can do X in Y seconds", "see the data and check all of them has property P", "the system can handle N requests per second", "If log A -> log B and data X -> Y -> Z is shown, then it is working well" or "All of the unmatched is zero, then it is working well"). Make it checkable.
+6. **Action sequence** — ordered atomic steps to implement. Each step: one concern, one logical unit, describable without "and".
+
 
 Grill until every branch is resolved and the user confirms. Completion criterion: action sequence is fully ordered with no ambiguous steps, user confirmed.
 
