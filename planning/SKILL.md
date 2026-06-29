@@ -16,7 +16,7 @@ Run a `/grilling` skill to resolve every branch of the plan:
 1. **Architecture** — how to structure the implementation? Apply meta-pattern (Abstractness/Subdomain/Sharding axes) and deep-module principles (hide complexity, widen interfaces).
 2. **Design** — what are the key modules, contracts, and data flows?
 3. **Test plan** — what tests prove this works? Apply TDD: what is the smallest failing test, what does green look like?
-4. **Evaluation criteria** — how do we know the result is good? Make it checkable.
+4. **Evaluation criteria** — how do we know the result is good? Make it checkable. how to human know if the changes is working well at the real working system with real data? which one need to see for verify? how to observe it? (e.g. "the user can do X in Y seconds" or "see the data and check all of them has property P" or "the system can handle N requests per second"). Make it checkable.
 5. **Action sequence** — ordered atomic steps to implement. Each step: one concern, one logical unit, describable without "and".
 
 Grill until every branch is resolved and the user confirms. Completion criterion: action sequence is fully ordered with no ambiguous steps, user confirmed.
