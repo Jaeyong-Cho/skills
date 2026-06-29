@@ -12,7 +12,7 @@ The target is **full situational coverage with the real system** — happy path,
 - **Real-system parity** — same input format, same dependencies, same environment assumptions as production. No stubs unless the dependency is unavailable.
 - **Real result output** — the actual system output: stdout, files, API response, database state. Not just pass/fail.
 - **Debug output** — intermediate state at each stage, written to a directory. Use `--debug` / `--debug-dir` flags so debug output is opt-in and inspectable after the run.
-- **Logs** — runtime log output from the system. Logs reveal control flow, errors, and timing that neither the real result nor debug artifacts show.
+- **Logs** — runtime log output written to the debug-dir alongside debug artifacts. Logs reveal control flow, errors, and timing that neither the real result nor debug artifacts show.
 
 ## Outputs
 
@@ -38,7 +38,7 @@ export ENV_VAR=value
 
 - Real result goes to stdout or the expected output location
 - Debug artifacts land in `./debug-out/` — one file per stage or decision point
-- Logs go to stderr or a log file — capture them alongside the run
+- Logs also write to `./debug-out/` — co-located with debug artifacts for easy inspection
 - Run → inspect real result → inspect debug output → inspect logs → change → repeat
 
 ## Where this fits in the workflow
