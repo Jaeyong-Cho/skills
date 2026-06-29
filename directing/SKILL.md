@@ -21,7 +21,7 @@ Grill until the direction is unambiguous. Completion criterion: the user has sta
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the topic.
 
-Write `source-of-truth/wiki/{timestamp}-{slug}.md`:
+Write `source-of-truth/direction/{timestamp}-{slug}.md`:
 
 ```markdown
 # {Topic}
@@ -39,6 +39,6 @@ Write `source-of-truth/wiki/{timestamp}-{slug}.md`:
 {What was explicitly ruled out}
 ```
 
-`mkdir -p source-of-truth/wiki` if needed. Tell the user the file path. Next step: `/planning`.
+`mkdir -p source-of-truth/direction` if needed. Tell the user the file path. Next step: `/planning`.
 
 Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
