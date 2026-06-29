@@ -10,7 +10,7 @@ List all files in `source-of-truth/adr/`. If multiple exist, ask the user which 
 
 Use this after new implementation or after a fix — re-evaluate any time to verify the result still holds.
 
-Read the selected ADR's **Test Plan** and **Evaluation Criteria**.
+Read the selected ADR's **Test Plan** and **Evaluation Criteria**. Read `../references/test-loop.md` — use test-loop output as the primary evaluation signal where applicable.
 
 Run each test in the Test Plan. For each:
 - State what it tests
