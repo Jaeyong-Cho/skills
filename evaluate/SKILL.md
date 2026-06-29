@@ -24,39 +24,13 @@ Then run each test in the Test Plan. For each:
 - Run it
 - Record pass or fail
 
-Deliver a verdict against the Evaluation Criteria:
-- **Pass** — all criteria met
-- **Partial** — state what passes and what doesn't
-- **Fail** — state what broke and why
-
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a slug from the ADR being evaluated.
 
-Write the report to `source-of-truth/evaluate/{timestamp}-{slug}.md`:
+Write the report to `source-of-truth/evaluate/{timestamp}-{slug}.md`. Keep the format simple — no strict structure required. The report must clearly communicate:
 
-```markdown
-# Evaluate: {ADR Title}
-
-**Date:** {YYYY-MM-DD}
-**ADR:** {path to ADR}
-**Verdict:** Pass / Partial / Fail
-
-## Results
-
-| Test | Result |
-|------|--------|
-| {test} | Pass / Fail |
-
-## Unexpected Results
-| Scenario | Expected | Actual | Root Cause |
-|----------|----------|--------|------------|
-| {scenario} | {expected} | {actual} | {why — traced from debug output / logs} |
-
-## Verdict Detail
-{What passed, what failed, why}
-
-## Next Steps
-{If failures: "Run /attack on [X] to find the root cause." If pass: "Evaluation complete."}
-```
+- **Good** — what is working as expected
+- **Unexpected / Ambiguous / Needs check** — anything surprising, unclear, or worth revisiting, each with a root cause traced from debug output and logs
+- **Next steps** — if anything needs fixing: "Run /attack on [X]"
 
 `mkdir -p source-of-truth/evaluate` if needed. Tell the user the file path.
 
