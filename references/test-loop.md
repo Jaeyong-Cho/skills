@@ -2,6 +2,8 @@
 
 A test-loop is a tight, repeatable harness that mirrors the real system as closely as possible. Run it after every change — implementation or bug fix — to see what the system actually does.
 
+The target is **full situational coverage with the real system** — happy path, edge cases, error conditions, and boundary inputs. If a situation can happen in production, the test-loop should be able to exercise it.
+
 ## What makes a good test-loop
 
 - **Clean state** — reset to a known baseline before each run. Delete output dirs, clear caches, reset the database, remove side effects from the previous run. A dirty state hides real behavior.
