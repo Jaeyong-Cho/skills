@@ -53,6 +53,31 @@ export ENV_VAR=value
 - Logs also write to `./debug-out/` — co-located with debug artifacts for easy inspection
 - Run → inspect real result → inspect debug output → inspect logs → change → repeat
 
+## E2E run/verify pattern
+
+Split E2E into two separate scripts — **run** and **verify** — so they can be executed and inspected independently.
+
+**`run.py` / `run.sh`** — execute the system and write all outputs to a result directory:
+- System outputs (files, API responses, DB state)
+- Metadata the verifier needs: version, input data, timestamps, config, environment info
+- Debug output and logs to `--debug-dir`
+
+```bash
+run.py --output-dir ./e2e-out --debug-dir ./e2e-out/debug <inputs>
+# writes: ./e2e-out/result.json, ./e2e-out/meta.json, ./e2e-out/debug/...
+```
+
+**`verify.py` / `verify.sh`** — read the result directory and check outputs against expectations:
+- Reads metadata (version, inputs) from the run to know what to verify
+- Compares actual outputs against expected
+- Reports pass / unexpected / ambiguous per scenario
+
+```bash
+verify.py --output-dir ./e2e-out
+```
+
+This separation means: run once, verify many times. You can also compare result dirs across versions to spot regressions.
+
 ## Where this fits in the workflow
 
 **Planning (`/planning`)** — reuse before creating. Check if an existing test-loop already covers the needed behaviors; extend it rather than creating a new one. Too many test-loops become unmanageable. Only create a new loop when the existing one structurally cannot cover the scenarios. Design the test-loop explicitly:
