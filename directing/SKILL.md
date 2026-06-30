@@ -13,9 +13,10 @@ Use this for new goals or to redirect an existing one. If an existing direction 
 Run a `/grilling` skill to reach a committed direction:
 
 1. **Goal** — what does success actually look like? Push past the surface request to the real outcome the user needs.
-2. **Decision space** — what are the options? For each: what does it unlock, what does it cost, what does it leave unresolved?
-3. **Constraints** — what is fixed vs. assumed? Challenge assumed constraints.
-4. **Direction** — one choice the user commits to. Not "we might" — "we will."
+2. **Failure modes** — what does bad look like? What is the ambiguous middle zone where partial success might be acceptable vs not? Name specific failure conditions, not just "it doesn't work."
+3. **Decision space** — what are the options? For each: what does it unlock, what does it cost, what does it leave unresolved?
+4. **Constraints** — what is fixed vs. assumed? Challenge assumed constraints.
+5. **Direction** — one choice the user commits to. Not "we might" — "we will."
 
 Grill until the direction is unambiguous. Completion criterion: the user has stated a committed direction in their own words.
 
@@ -28,6 +29,12 @@ Write `source-of-truth/direction/{timestamp}-{slug}.md`:
 
 ## Goal
 {What success looks like}
+
+## Failure Criteria
+{What bad looks like — specific failure conditions}
+
+## Ambiguous Zone
+{What partial success looks like — which tradeoffs are acceptable vs not}
 
 ## Direction
 {The committed choice and why}

@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Read the ADR to execute from `source-of-truth/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
 
+Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
+
 Use this for new implementation or for applying a fix — the ADR's action sequence may describe either.
 
 Work through the Action Sequence one step at a time:

@@ -18,6 +18,7 @@ Run the test-loop — this is the primary evaluation signal. Unit test results a
 3. Run each named behavior scenario.
 4. For each scenario: compare actual output against expected. Flag every unexpected result.
 5. For every unexpected result: trace the root cause through debug output and logs — do not just report it, explain why it happened.
+6. Group all unexpected results — what pattern do they share? Name the pattern (e.g. "all failures on empty input", "fails only on large payloads"). Identify the likely single root cause of the pattern.
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a slug from the ADR being evaluated.
 
@@ -25,6 +26,7 @@ Write the report to `source-of-truth/evaluate/{timestamp}-{slug}.md`. Keep the f
 
 - **Good** — what is working as expected
 - **Unexpected / Ambiguous / Needs check** — anything surprising, unclear, or worth revisiting, each with a root cause traced from debug output and logs
+- **Patterns** — unexpected results grouped by shared pattern, each named with a single root cause
 - **Next steps** — if anything needs fixing: "Run /attack on [X]"
 
 `mkdir -p source-of-truth/evaluate` if needed. Tell the user the file path.
