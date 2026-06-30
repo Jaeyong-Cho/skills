@@ -22,6 +22,18 @@ The target is **full situational coverage with the real system** — happy path,
 | Debug output | Intermediate state per stage | Trace where the system diverged from expected behavior |
 | Logs | Runtime log output | Reveal control flow, errors, and timing; confirm expected log sequences |
 
+## Test layers
+
+Manage UT, IT, and E2E separately — each has different scope, speed, and setup needs. Run them in order.
+
+| Layer | Scope | Setup | When it fails |
+|-------|-------|-------|---------------|
+| **UT** (unit) | Single function or module in isolation | Minimal — no env, no I/O | Logic error inside the unit |
+| **IT** (integration) | Component interactions, real dependencies | Partial env — real DB, real services where possible | Contract or wiring error between components |
+| **E2E** (end-to-end) | Full system, real inputs to real outputs | Full env — same as production | System-level behavior broken |
+
+Design the test-loop with each layer in mind. A scenario may have coverage at one or more layers — name which layer covers it.
+
 ## Recommended pattern
 
 ```bash
