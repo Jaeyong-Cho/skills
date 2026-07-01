@@ -1,0 +1,213 @@
+/* Kanagawa CSS Template
+   Source: https://github.com/rebelot/kanagawa.nvim
+   Wave theme (default dark). Embed inside <style> for self-contained HTML. */
+
+/* ─── Palette ─────────────────────────────────────────────────────────────── */
+:root {
+  /* Background shades */
+  --sumi-ink-0: #16161D;
+  --sumi-ink-1: #181820;
+  --sumi-ink-2: #1a1a22;
+  --sumi-ink-3: #1F1F28; /* main bg */
+  --sumi-ink-4: #2A2A37; /* surface / cards */
+  --sumi-ink-5: #363646;
+  --sumi-ink-6: #54546D; /* fg dim */
+
+  /* Popup / float */
+  --wave-blue-1: #223249;
+  --wave-blue-2: #2D4F67;
+
+  /* Git / diff */
+  --winter-green:  #2B3328;
+  --winter-yellow: #49443C;
+  --winter-red:    #43242B;
+  --winter-blue:   #252535;
+  --autumn-green:  #76946A;
+  --autumn-red:    #C34043;
+  --autumn-yellow: #DCA561;
+
+  /* Diagnostics */
+  --samurai-red:  #E82424;
+  --ronin-yellow: #FF9E3B;
+  --wave-aqua-1:  #6A9589;
+  --dragon-blue:  #658594;
+
+  /* Foreground / text */
+  --old-white:  #C8C093;
+  --fuji-white: #DCD7BA; /* main text */
+  --fuji-gray:  #727169; /* muted / comments */
+
+  /* Accent */
+  --oni-violet:    #957FB8;
+  --oni-violet-2:  #b8b4d0;
+  --crystal-blue:  #7E9CD8;
+  --spring-violet-1: #938AA9;
+  --spring-violet-2: #9CABCA;
+  --spring-blue:   #7FB4CA;
+  --wave-aqua-2:   #7AA89F;
+  --spring-green:  #98BB6C;
+  --boat-yellow-1: #938056;
+  --boat-yellow-2: #C0A36E;
+  --carp-yellow:   #E6C384;
+  --sakura-pink:   #D27E99;
+  --wave-red:      #E46876;
+  --peach-red:     #FF5D62;
+  --surimi-orange: #FFA066;
+  --katana-gray:   #717C7C;
+
+  /* ─── Semantic roles ───────────────────────────────────────────────────── */
+  --bg:        var(--sumi-ink-3);
+  --surface:   var(--sumi-ink-4);
+  --border:    var(--sumi-ink-5);
+  --text:      var(--fuji-white);
+  --muted:     var(--fuji-gray);
+
+  --role-goal:      var(--crystal-blue);
+  --role-failure:   var(--autumn-red);
+  --role-ambiguous: var(--carp-yellow);
+  --role-good:      var(--spring-green);
+  --role-action:    var(--wave-aqua-2);
+  --role-special:   var(--oni-violet);
+  --role-highlight: var(--surimi-orange);
+  --role-info:      var(--spring-blue);
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 2rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────── */
+h1 { font-size: 1.8rem; color: var(--crystal-blue);   border-bottom: 2px solid var(--crystal-blue);   padding-bottom: .4rem; margin-bottom: 1.2rem; }
+h2 { font-size: 1.3rem; color: var(--spring-violet-2); border-left: 4px solid var(--spring-violet-2); padding-left: .6rem;  margin: 1.6rem 0 .6rem; }
+h3 { font-size: 1.1rem; color: var(--old-white);       margin: 1rem 0 .4rem; }
+h4, h5, h6 { color: var(--old-white); margin: .8rem 0 .3rem; }
+
+p  { margin-bottom: .8rem; }
+strong { color: var(--carp-yellow); font-weight: 700; }
+em     { color: var(--spring-violet-2); font-style: italic; }
+a  { color: var(--crystal-blue); text-decoration: underline dotted; }
+a:hover { color: var(--spring-blue); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+/* ─── Code ────────────────────────────────────────────────────────────────── */
+code {
+  background: var(--surface);
+  color: var(--spring-green);
+  padding: .1em .35em;
+  border-radius: 4px;
+  font-size: .92em;
+}
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+pre code { background: none; padding: 0; color: var(--fuji-white); }
+
+/* ─── Lists ───────────────────────────────────────────────────────────────── */
+ul, ol { padding-left: 1.5rem; margin-bottom: .8rem; }
+li { margin-bottom: .25rem; }
+ul li::marker { color: var(--muted); }
+ol li::marker { color: var(--carp-yellow); }
+
+/* ─── Checkboxes (action steps / criteria) ────────────────────────────────── */
+.checklist { list-style: none; padding-left: 0; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .3rem .5rem;
+  border-radius: 4px;
+}
+.checklist li:hover { background: var(--surface); }
+.checklist input[type="checkbox"] {
+  margin-top: .25rem;
+  accent-color: var(--spring-green);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ─── Tables ──────────────────────────────────────────────────────────────── */
+table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
+th {
+  background: var(--surface);
+  color: var(--crystal-blue);
+  text-align: left;
+  padding: .5rem .75rem;
+  border-bottom: 2px solid var(--border);
+}
+td { padding: .45rem .75rem; border-bottom: 1px solid var(--border); }
+tr:hover td { background: var(--surface); }
+
+/* ─── Cards (section type variants) ──────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: 8px;
+  border-left: 4px solid var(--border);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.2rem;
+}
+.card-title {
+  font-size: .75rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: .5rem;
+  opacity: .8;
+}
+
+.card.goal      { border-color: var(--role-goal);      }  .card.goal      .card-title { color: var(--role-goal);      }
+.card.failure   { border-color: var(--role-failure);   }  .card.failure   .card-title { color: var(--role-failure);   }
+.card.ambiguous { border-color: var(--role-ambiguous); }  .card.ambiguous .card-title { color: var(--role-ambiguous); }
+.card.good      { border-color: var(--role-good);      }  .card.good      .card-title { color: var(--role-good);      }
+.card.action    { border-color: var(--role-action);    }  .card.action    .card-title { color: var(--role-action);    }
+.card.special   { border-color: var(--role-special);   }  .card.special   .card-title { color: var(--role-special);   }
+.card.info      { border-color: var(--role-info);      }  .card.info      .card-title { color: var(--role-info);      }
+
+/* ─── Badges / tags ───────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .15em .55em;
+  border-radius: 3px;
+  margin-right: .3rem;
+}
+.badge.good      { background: #1e2d1e; color: var(--spring-green);  border: 1px solid var(--spring-green);  }
+.badge.bad       { background: #2d1e1e; color: var(--autumn-red);    border: 1px solid var(--autumn-red);    }
+.badge.ambiguous { background: #2d2a1e; color: var(--carp-yellow);   border: 1px solid var(--carp-yellow);   }
+.badge.info      { background: #1e2133; color: var(--crystal-blue);  border: 1px solid var(--crystal-blue);  }
+
+/* ─── Mermaid diagrams ────────────────────────────────────────────────────── */
+.mermaid {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+/* ─── Scrollbar (Webkit) ──────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--sumi-ink-5); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fuji-gray); }
