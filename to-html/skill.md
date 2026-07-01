@@ -75,10 +75,24 @@ Only generate a mermaid diagram when the source text explicitly states a relatio
 - Phrases: "leads to", "depends on", "feeds into", "flows to", "calls", "triggers"
 
 Pick the diagram type that best fits the content:
-- Pipeline / sequence of steps → `flowchart LR` or `flowchart TD`
-- System interactions over time → `sequenceDiagram`
-- Data structures / classes → `classDiagram`
-- Timeline / schedule → `gantt`
+
+| Content | Diagram type |
+|---|---|
+| Pipeline, step flow, decision tree | `flowchart LR` / `flowchart TD` |
+| System interactions over time, API calls | `sequenceDiagram` |
+| Data structures, class relationships | `classDiagram` |
+| State machines, lifecycle, transitions | `stateDiagram-v2` |
+| Database schema, entity relationships | `erDiagram` |
+| Proportions, share of a whole | `pie` |
+| Numeric data over time or categories, bar/line | `xychart-beta` |
+| Hierarchical data, folder/tree structure | `treeView` |
+| Priorities on two axes (effort vs impact, etc.) | `quadrantChart` |
+| Schedule, milestones, dates | `gantt` |
+| Hierarchical concepts, brainstorm | `mindmap` |
+| Chronological events | `timeline` |
+| Flow of quantities between nodes | `sankey-beta` |
+| Git branch history | `gitGraph` |
+| User steps / emotions journey | `journey` |
 
 Every mermaid block **must** open with this init directive:
 ```
