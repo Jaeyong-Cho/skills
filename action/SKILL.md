@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Action
 
-Read the ADR to execute from `source-of-truth/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
+Read the ADR to execute from `.sot/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
 
@@ -24,4 +24,4 @@ Never execute more than one step without confirmation. If a step is blocked or a
 
 Completion criterion: every step in the Action Sequence is done and confirmed, or the user explicitly stops. When done: "Action sequence complete. Run `/evaluate` to assess the result."
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Planning
 
-Read all files in `source-of-truth/direction/` for the committed direction. Read `source-of-truth/wiki/` for broader context. Also read `source-of-truth/adr/` — if an existing ADR covers the same topic, read it and revise it rather than creating a new one.
+Read all files in `.sot/direction/` for the committed direction. Read `.sot/wiki/` for broader context. Also read `.sot/adr/` — if an existing ADR covers the same topic, read it and revise it rather than creating a new one.
 
 Use this for new plans or to replan after a fix reveals new design needs.
 Read `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/test-loop.md`.
@@ -25,7 +25,7 @@ Grill until every branch is resolved and the user confirms. Completion criterion
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the topic.
 
-Write `source-of-truth/adr/{timestamp}-{slug}.md`:
+Write `.sot/adr/{timestamp}-{slug}.md`:
 
 ```markdown
 # ADR: {Title}
@@ -55,8 +55,8 @@ Write `source-of-truth/adr/{timestamp}-{slug}.md`:
 {Checkable conditions that define success}
 ```
 
-`mkdir -p source-of-truth/adr` if needed. Tell the user the file path. Next step: `/action`.
+`mkdir -p .sot/adr` if needed. Tell the user the file path. Next step: `/action`.
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `source-of-truth/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
 
 **DO NOT START IMPLEMENT**
