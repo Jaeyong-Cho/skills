@@ -45,6 +45,13 @@ All workflow skills are user-invoked. Artifacts land in `.sot/`. All skills work
 | `/auto-action` | code changes | Execute the ADR straight through without confirmation |
 | `/evaluate` | `.sot/evaluate/` | Run the test-loop, surface unexpected results and root causes |
 
+## Utilities
+
+| Skill | Output | What it does |
+|-------|--------|-------------|
+| `/to-todo` | `.sot/TODO.md` | Manage a global checklist — add, check off, remove tasks |
+| `/to-changelog` | `.sot/changelog/{year}/{month-day}.md` | Append a dated entry summarizing what changed |
+
 ## References
 
 Referenced by workflow skills — loaded at the point they're needed.
