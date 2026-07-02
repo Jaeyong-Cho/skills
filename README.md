@@ -51,6 +51,8 @@ All workflow skills are user-invoked. Artifacts land in `.sot/`. All skills work
 |-------|--------|-------------|
 | `/to-todo` | `.sot/TODO.md` | Manage a global checklist — add, check off, remove tasks |
 | `/to-changelog` | `.sot/changelog/{year}/{month-day}.md` | Append a dated entry summarizing what changed |
+| `/to-wiki` | `.sot/wiki/` | Harvest tacit knowledge — one file per topic |
+| `/to-html` | HTML file | Render any file as a rich Kanagawa-themed HTML document |
 
 ## References
 
