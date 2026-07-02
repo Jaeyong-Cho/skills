@@ -62,6 +62,8 @@ setup_claude() {
   fi
   ln -sf "$CLAUDE_MD" "$CLAUDE_DIR/CLAUDE.md"
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
+
+  setup_tmux_agent_status_claude
 }
 
 setup_copilot() {
@@ -70,6 +72,47 @@ setup_copilot() {
   mkdir -p "$HOME/.copilot"
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
+
+  # Copilot CLI has no hooks API — tmux-agent-status can only see it via
+  # process presence auto-detection, not working/done transitions.
+  echo "  note: tmux-agent-status has no hook support for Copilot CLI (process presence only)"
+}
+
+# ── tmux-agent-status hook wiring ────────────────────────────────────────────
+# https://github.com/samleeney/tmux-agent-status — merges into settings.json
+# without clobbering existing hooks/settings; skips if jq or the plugin
+# (installed via TPM) aren't present.
+
+add_json_hook() {
+  local settings="$1" event="$2" cmd="$3"
+  local tmp
+  tmp="$(mktemp)"
+  jq --arg event "$event" --arg cmd "$cmd" '
+    .hooks[$event] = ((.hooks[$event] // []) as $existing |
+      if ($existing | any(.hooks[]?.command == $cmd)) then $existing
+      else $existing + [{"hooks": [{"type": "command", "command": $cmd}]}]
+      end)
+  ' "$settings" > "$tmp" && mv "$tmp" "$settings"
+}
+
+setup_tmux_agent_status_claude() {
+  local hook_script="$HOME/.tmux/plugins/tmux-agent-status/hooks/better-hook.sh"
+  if [ ! -x "$hook_script" ]; then
+    return
+  fi
+  if ! command -v jq &>/dev/null; then
+    echo "  jq not found, skipping tmux-agent-status hooks"
+    return
+  fi
+
+  local settings="$CLAUDE_DIR/settings.json"
+  [ -f "$settings" ] || echo '{}' > "$settings"
+
+  local event
+  for event in UserPromptSubmit PreToolUse Stop Notification; do
+    add_json_hook "$settings" "$event" "~/.tmux/plugins/tmux-agent-status/hooks/better-hook.sh $event"
+  done
+  echo "  ✓ tmux-agent-status hooks → ~/.claude/settings.json"
 }
 
 # ── Bin scripts ──────────────────────────────────────────────────────────────
