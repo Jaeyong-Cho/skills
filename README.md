@@ -44,6 +44,7 @@ All workflow skills are user-invoked. Artifacts land in `.sot/`. All skills work
 | `/action` | code changes | Execute the ADR one confirmed step at a time |
 | `/auto-action` | code changes | Execute the ADR straight through without confirmation |
 | `/evaluate` | `.sot/evaluate/` | Run the test-loop, surface unexpected results and root causes |
+| `/loop-design` | `.sot/loop/` | Grill to resolve a recurring loop's goal, body, test, and progress record, then hand off to `/loop` or `/schedule` |
 
 ## Utilities
 
