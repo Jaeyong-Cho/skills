@@ -1,16 +1,18 @@
 ---
 name: evaluate
-description: Evaluate skill. Runs the test plan from an ADR and writes a verdict report. Use when invoked as /evaluate.
+description: Evaluate skill. Runs a test plan (from an ADR, or described directly by the user) and writes a verdict report. Use when invoked as /evaluate.
 disable-model-invocation: true
 ---
 
 # Evaluate
 
-List all files in `.sot/adr/`. If multiple exist, ask the user which ADR to evaluate. If one exists, use it.
+List all files in `.sot/adr/`. If multiple exist, ask the user which ADR to evaluate, or let them skip. If one exists, use it, or let the user skip.
+
+An ADR is not required. If none exists, or the user skips, ask the user directly for what to test (test-loop design) and what counts as success (evaluation criteria).
 
 Use this after new implementation or after a fix — re-evaluate any time to verify the result still holds.
 
-Read the selected ADR's **Test-Loop Design** and **Evaluation Criteria**. Read `../references/test-loop.md`.
+Read the selected ADR's **Test-Loop Design** and **Evaluation Criteria** (or what the user described, if no ADR). Read `../references/test-loop.md`.
 
 Run the test-loop — this is the primary evaluation signal. Unit test results are not the main scope.
 1. Apply clean state — reset and initialize exactly what the design specifies.
@@ -20,7 +22,7 @@ Run the test-loop — this is the primary evaluation signal. Unit test results a
 5. For every unexpected result: trace the root cause through debug output and logs — do not just report it, explain why it happened.
 6. Group all unexpected results — what pattern do they share? Name the pattern (e.g. "all failures on empty input", "fails only on large payloads"). Identify the likely single root cause of the pattern.
 
-Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a slug from the ADR being evaluated.
+Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a slug from the ADR being evaluated, or from the topic the user described if no ADR was used.
 
 Write the report to `.sot/evaluate/{timestamp}-{slug}.md`. Keep the format simple — no strict structure required. The report must clearly communicate:
 
