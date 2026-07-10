@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Loop Design
 
-Read `.sot/wiki/` for context. If an existing `.sot/loop/` file covers the same topic, read it and revise it rather than creating a new one.
+Read `.context/wiki/` for context. If an existing `.context/loop/` file covers the same topic, read it and revise it rather than creating a new one.
 
 Use this before setting up a recurring `/loop` or a `/schedule` cron routine — it resolves what the loop should do, not how often it fires.
 
@@ -26,7 +26,7 @@ Grill until every branch is resolved and the user confirms. Completion criterion
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the topic.
 
-Write `.sot/loop/{timestamp}-{slug}.md`:
+Write `.context/loop/{timestamp}-{slug}.md`:
 
 ```markdown
 # {Topic}
@@ -42,7 +42,7 @@ Write `.sot/loop/{timestamp}-{slug}.md`:
 - **Across iterations:** {how to verify the loop overall — run once, verify many}
 
 ## Progress Record
-{Format and location of the per-iteration log — e.g. `.sot/loop/{timestamp}-{slug}-progress.md`, one line per iteration: timestamp, what happened, test result}
+{Format and location of the per-iteration log — e.g. `.context/loop/{timestamp}-{slug}-progress.md`, one line per iteration: timestamp, what happened, test result}
 
 ## Required Actions
 {Tools, permissions, or external access each iteration needs}
@@ -54,8 +54,8 @@ Write `.sot/loop/{timestamp}-{slug}.md`:
 {/loop or /schedule, and why}
 ```
 
-`mkdir -p .sot/loop` if needed. Tell the user the file path. Next step: hand the spec to whichever runner was chosen (`/loop` or `/schedule`).
+`mkdir -p .context/loop` if needed. Tell the user the file path. Next step: hand the spec to whichever runner was chosen (`/loop` or `/schedule`).
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
 
 **DO NOT START THE LOOP**

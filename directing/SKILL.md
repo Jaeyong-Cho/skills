@@ -6,7 +6,9 @@ disable-model-invocation: true
 
 # Directing
 
-Read all files in `.sot/wiki/` and `.sot/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
+Read all files in `.context/wiki/` and `.context/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
+
+Check `.claude/agents/` and `.github/agents/` for existing project subagents. If one's description matches this topic, delegate the relevant research or exploration to it rather than doing that work inline yourself.
 
 Use this for new goals or to redirect an existing one. If an existing direction file covers the same topic, read it and update it rather than creating a new file.
 
@@ -22,7 +24,7 @@ Grill until the direction is unambiguous. Completion criterion: the user has sta
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the topic.
 
-Write `.sot/direction/{timestamp}-{slug}.md`:
+Write `.context/direction/{timestamp}-{slug}.md`:
 
 ```markdown
 # {Topic}
@@ -46,8 +48,8 @@ Write `.sot/direction/{timestamp}-{slug}.md`:
 {What was explicitly ruled out}
 ```
 
-`mkdir -p .sot/direction` if needed. Tell the user the file path. Next step: `/planning`.
+`mkdir -p .context/direction` if needed. Tell the user the file path. Next step: `/planning`.
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
 
 **DO NOT START IMPLEMENT**

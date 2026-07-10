@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Auto-Action
 
-Read the ADR to execute from `.sot/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
+Read the ADR to execute from `.context/adr/`. If multiple ADRs exist, list them and ask the user which to use. If one exists, use it.
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
 
@@ -18,4 +18,4 @@ Completion criterion: every step executed and reported, or stopped on first fail
 
 When done: "Auto-action complete. Run `/evaluate` to assess the result."
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.

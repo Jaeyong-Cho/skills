@@ -1,11 +1,11 @@
 ---
 name: to-wiki
-description: Harvest tacit knowledge from the current session into .sot/wiki/ — create, update, or remove entries. Use when the user says "save to wiki", "add to wiki", "remember this", "capture this", "update wiki", "remove from wiki", "delete wiki entry", or when a non-obvious insight worth preserving surfaces.
+description: Harvest tacit knowledge from the current session into .context/wiki/ — create, update, or remove entries. Use when the user says "save to wiki", "add to wiki", "remember this", "capture this", "update wiki", "remove from wiki", "delete wiki entry", or when a non-obvious insight worth preserving surfaces.
 ---
 
 # To Wiki
 
-Manage `.sot/wiki/` entries.
+Manage `.context/wiki/` entries.
 
 **What to harvest** — tacit knowledge the codebase or docs can't show: constraints, domain facts, key decisions, patterns. Skip anything derivable from code, git history, or CLAUDE.md.
 
@@ -14,8 +14,8 @@ Manage `.sot/wiki/` entries.
 ## Create / Update
 
 For each piece of knowledge:
-1. List `.sot/wiki/` — if a file for this topic exists, update it rather than creating a duplicate.
-2. If new: run `date +%Y%m%d-%H%M%S`, derive a kebab-case slug, write `.sot/wiki/{timestamp}-{slug}.md`.
+1. List `.context/wiki/` — if a file for this topic exists, update it rather than creating a duplicate.
+2. If new: run `date +%Y%m%d-%H%M%S`, derive a kebab-case slug, write `.context/wiki/{timestamp}-{slug}.md`.
 
 Format:
 ```markdown
@@ -24,7 +24,7 @@ Format:
 {The knowledge — one focused concept.}
 ```
 
-`mkdir -p .sot/wiki` if needed.
+`mkdir -p .context/wiki` if needed.
 
 ## Remove
 

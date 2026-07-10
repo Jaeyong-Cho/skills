@@ -31,30 +31,31 @@ The script detects which AI agents are installed and sets up each one:
                     └──────────── failures feed back ─────────────┘
 ```
 
-All workflow skills are user-invoked. Artifacts land in `.sot/`. All skills work on new development and fixing existing code.
+All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
 
 ## Skills
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/brainstorm` | ideas | Read the codebase, grill to surface gaps, pain, and opportunities |
-| `/attack` | `.sot/attack/` | Find weaknesses — each finding is a goal for /directing |
-| `/directing` | `.sot/direction/` | Grill to find the goal, explore decision space, commit to a direction |
-| `/planning` | `.sot/adr/` | Grill to design architecture, test-loop, and action sequence |
+| `/attack` | `.context/attack/` | Find weaknesses — each finding is a goal for /directing |
+| `/directing` | `.context/direction/` | Grill to find the goal, explore decision space, commit to a direction |
+| `/planning` | `.context/adr/` | Grill to design architecture, test-loop, and action sequence |
 | `/action` | code changes | Execute the ADR one confirmed step at a time |
 | `/auto-action` | code changes | Execute the ADR straight through without confirmation |
-| `/evaluate` | `.sot/evaluate/` | Run the test-loop, surface unexpected results and root causes |
-| `/loop-design` | `.sot/loop/` | Grill to resolve a recurring loop's goal, body, test, and progress record, then hand off to `/loop` or `/schedule` |
+| `/evaluate` | `.context/evaluate/` | Run the test-loop, surface unexpected results and root causes |
+| `/loop-design` | `.context/loop/` | Grill to resolve a recurring loop's goal, body, test, and progress record, then hand off to `/loop` or `/schedule` |
 
 ## Utilities
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/to-todo` | `.sot/TODO.md` | Manage a global checklist — add, check off, remove tasks |
-| `/to-changelog` | `.sot/changelog/{year}/{month-day}.md` | Append a dated entry summarizing what changed |
-| `/to-wiki` | `.sot/wiki/` | Harvest tacit knowledge — one file per topic |
+| `/to-todo` | `.context/TODO.md` | Manage a global checklist — add, check off, remove tasks |
+| `/to-changelog` | `.context/changelog/{year}/{month-day}.md` | Append a dated entry summarizing what changed |
+| `/to-wiki` | `.context/wiki/` | Harvest tacit knowledge — one file per topic |
 | `/to-html` | HTML file | Render any file as a rich Kanagawa-themed HTML document |
 | `/psos` | annotates journal in place | Tag journal clauses with the PSOS operator that ran and the state it updated |
+| `/create-agent` | `.claude/agents/*.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 
 ## References
 

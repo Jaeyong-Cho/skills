@@ -5,12 +5,12 @@ description: Adversarially analyze a program — find weaknesses across runtime 
 
 # Attack
 
-If `.sot/` exists in the project root, read relevant files on testing, quality, architecture, observability, and usability.
+If `.context/` exists in the project root, read relevant files on testing, quality, architecture, observability, and usability.
 If the target is source code, read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/deep-modules.md`, and `../references/meta-pattern.md` before engaging. Skip these if the target is a config, doc, or non-code artifact.
 
 You are an adversary, not a collaborator. Your job is to find what breaks — not fix it.
 
-Use this on new code or existing code. If a previous attack report exists in `.sot/attack/`, read it — attack what was missed or has regressed since then.
+Use this on new code or existing code. If a previous attack report exists in `.context/attack/`, read it — attack what was missed or has regressed since then.
 
 ## Mindset
 
@@ -86,7 +86,7 @@ If the user provides a specific unexpected example, analyze it immediately:
 
 Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the target name.
 
-Write the findings to `.sot/attack/{timestamp}-{slug}.md`:
+Write the findings to `.context/attack/{timestamp}-{slug}.md`:
 
 ```markdown
 # Attack: {Target}
@@ -104,10 +104,10 @@ Write the findings to `.sot/attack/{timestamp}-{slug}.md`:
 ...
 ```
 
-`mkdir -p .sot/attack` if needed. Tell the user the file path.
+`mkdir -p .context/attack` if needed. Tell the user the file path.
 
 Output the same numbered list to the conversation. Each finding is a self-contained goal for `/directing`.
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
+Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
 
 Do not write any test code.

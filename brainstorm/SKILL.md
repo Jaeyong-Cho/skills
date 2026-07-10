@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Brainstorm
 
-Read the codebase. Read `.sot/wiki/`, `.sot/direction/`, and `.sot/attack/` if they exist. Understand what the project does, what it can't do, and where it hurts.
+Read the codebase. Read `.context/wiki/`, `.context/direction/`, and `.context/attack/` if they exist. Understand what the project does, what it can't do, and where it hurts.
 
 Run `/grilling` to brainstorm — diverge across:
 - **Gaps** — what is the codebase unable to do that it probably should?
@@ -19,4 +19,4 @@ Do not propose solutions during the brainstorm — ask, listen, and follow the t
 
 When the user wraps up, synthesize: list the best ideas that surfaced, ranked by potential impact. Each idea in one sentence.
 
-Any useful truth discovered — a constraint, a domain fact, a key decision — can also be written to `.sot/wiki/` at any time.
+Any useful truth discovered — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
