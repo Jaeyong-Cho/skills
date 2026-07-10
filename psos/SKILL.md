@@ -16,7 +16,7 @@ question on Requirement).
 
 | Operator | Signature | Marks a clause where... |
 |---|---|---|
-| **Sense** | World → Understanding | you noticed, read, measured, or learned some fact |
+| **Observe** | World → Understanding | you noticed, read, measured, or learned some fact |
 | **Feel** | Understanding → Goal | a discrepancy turned into something you now want |
 | **Plan** | Understanding + Goal → Solution | you decided or wrote down what to do |
 | **Execute** | Solution → World′ | you actually did it, changing reality |
