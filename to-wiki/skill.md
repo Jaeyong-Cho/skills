@@ -9,6 +9,8 @@ Manage `.context/wiki/` entries.
 
 **What to harvest** — tacit knowledge the codebase or docs can't show: constraints, domain facts, key decisions, patterns. Skip anything derivable from code, git history, or CLAUDE.md.
 
+**Never write personal or private information** — no names, credentials, personal data, private conversations, or anything that identifies an individual. Wiki entries must be purely technical or domain knowledge.
+
 **One file per topic, each short.** Do not mix unrelated knowledge into one file.
 
 ## Create / Update
