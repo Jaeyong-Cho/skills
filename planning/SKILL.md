@@ -20,7 +20,7 @@ Run a `/grilling` skill to resolve every branch of the plan:
 3. **Observability** — which debugging information is needed for handling issues? How to verify the logic is working? Which information is needed to judge the plan is working? How to detect known-unknown and ambiguous concern points? (e.g. "use assert to detect concern point" or "write debugging data to the json in data directory") Include runtime checkpoints: what internal state, logs, or intermediate data to observe mid-execution, not just the final output.
 4. **Test-loop design** — E2E only. Check if an existing test-loop scenario covers the needed behaviors; extend it rather than creating a new scenario. Apply `test-loop.md`: what does `run` reset and initialize before executing? what does `run` write (results, metadata: version, input data, config)? what does `verify` check per scenario? For each scenario, classify the observation method: binary pass/fail | numeric metric range (with expected range) | qualitative rubric (with explicit criteria). Reference directing's Goal and Failure Criteria for each scenario's expected outcome.
 5. **Evaluation criteria** — how do we know the result is good? Make it checkable. How to a human know if the changes are working at the real working system with real data? What to see for verification? How to observe it? How to judge the plan is working well? (e.g. "the user can do X in Y seconds", "see the data and check all of them has property P", "the system can handle N requests per second", "If log A -> log B and data X -> Y -> Z is shown, then it is working well" or "All of the unmatched is zero, then it is working well"). Map each criterion to directing's Good / Ambiguous / Bad definitions. Make it checkable.
-6. **Action sequence** — ordered atomic steps to implement. Each step: one concern, one logical unit, describable without "and". Always end the sequence with three fixed steps: update `.context/wiki/` via `/to-wiki` if new truths were found or existing entries are stale (skip otherwise), write a changelog entry via `/to-changelog`, then remove the originating `.context/TODO.md` item via `/to-todo` if one exists.
+6. **Action sequence** — ordered atomic steps to implement. Each step: one concern, one logical unit, describable without "and". After all implementation steps, always include a **refactoring step** before the closing steps: review the changed code against meta-pattern and deep-module principles — simplify anything overly complex, remove unused files and dead code, flatten unnecessary abstractions. Simple is better than clever. Then end with three fixed closing steps: update `.context/wiki/` via `/to-wiki` if new truths were found or existing entries are stale (skip otherwise), write a changelog entry via `/to-changelog`, then remove the originating `.context/TODO.md` item via `/to-todo` if one exists.
 
 
 Grill until every branch is resolved and the user confirms. Completion criterion: action sequence is fully ordered with no ambiguous steps, user confirmed.
@@ -47,9 +47,10 @@ Write `.context/adr/{timestamp}-{slug}.md`:
 1. {First atomic step}
 2. {Second atomic step}
 ...
-N. Update `.context/wiki/` via `/to-wiki` if new truths found or existing entries stale (skip otherwise)
-N+1. Write a changelog entry via `/to-changelog`
-N+2. Remove the originating `.context/TODO.md` item via `/to-todo`, if one exists
+N. Refactor — review changed code against meta-pattern and deep-module: simplify complexity, remove unused files and dead code, flatten unnecessary abstractions. Simple is better than clever.
+N+1. Update `.context/wiki/` via `/to-wiki` if new truths found or existing entries stale (skip otherwise)
+N+2. Write a changelog entry via `/to-changelog`
+N+3. Remove the originating `.context/TODO.md` item via `/to-todo`, if one exists
 
 ## Test-Loop Design
 - **`run`:** {what it resets/initializes, what it executes, what it writes — results, metadata (version, input data, config, timestamps)}
