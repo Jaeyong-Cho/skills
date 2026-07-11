@@ -36,10 +36,10 @@ After writing or updating entries, scan existing `.context/wiki/` files for entr
 ls .context/wiki/ | wc -l
 ```
 
-If the count exceeds 20, compact before adding new entries:
-1. Read all files. Group by theme.
-2. Merge files that cover the same concept into one — keep the best phrasing, discard the rest.
-3. Delete files whose knowledge is no longer correct, no longer relevant, or already captured in a merged file.
-4. Do not invent or expand content during compaction — only consolidate what exists.
+If the count exceeds 20, run a compaction pass before adding new entries:
+1. Read all files. Assign each a category.
+2. Write or overwrite `.context/wiki/TOC.md` — a categorized table of contents listing every file with a one-line summary.
+3. For each file: freshen the content — tighten wording, correct anything outdated, remove anything no longer true.
+4. Delete files whose knowledge is entirely obsolete or incorrect with no salvageable content.
 
-Completion criterion: every non-obvious insight is written or updated in its own focused file; stale or superseded entries updated or removed proactively; no file mixes unrelated concepts; file count kept manageable.
+Completion criterion: every non-obvious insight is written or updated in its own focused file; stale or superseded entries updated or removed proactively; no file mixes unrelated concepts; TOC exists and is current when file count is high.
