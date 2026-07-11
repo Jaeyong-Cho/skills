@@ -15,7 +15,7 @@ Manage `.context/wiki/` entries.
 
 For each piece of knowledge:
 1. List `.context/wiki/` — if a file for this topic exists, update it rather than creating a duplicate.
-2. If new: run `date +%Y%m%d-%H%M%S`, derive a kebab-case slug, write `.context/wiki/{timestamp}-{slug}.md`.
+2. If new: derive a kebab-case slug, write `.context/wiki/{slug}.md`.
 
 Format:
 ```markdown
