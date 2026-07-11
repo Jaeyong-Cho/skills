@@ -50,7 +50,7 @@ ls .context/wiki/{category}/ | wc -l   # for each existing category
 2. **Categorize** — group files by theme. Move each into its category subdirectory. Create the subdirectory if needed.
 3. **Combine common** — merge files that cover the same concept. Keep the best phrasing; discard the rest.
 4. **Remove stale** — delete files whose knowledge is incorrect, obsolete, or already captured in a merged file.
-5. **TOC** — write or overwrite a `TOC.md` in that directory listing every remaining file with a one-line summary.
+5. **TOC** — write or overwrite a `index.md` in that directory listing every remaining file with a one-line summary.
 
 **The same rule applies recursively to each category directory.** If a category grows past 20 files after compaction, apply the same five steps within it — sub-categorize, combine, remove, TOC.
 
