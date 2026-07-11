@@ -30,4 +30,16 @@ Format:
 
 After writing or updating entries, scan existing `.context/wiki/` files for entries that are now stale, contradicted, or superseded by the current session's findings. Update them to reflect the new truth, or delete them if the knowledge no longer applies.
 
-Completion criterion: every non-obvious insight is written or updated in its own focused file; stale or superseded entries updated or removed proactively; no file mixes unrelated concepts.
+## Compaction
+
+```bash
+ls .context/wiki/ | wc -l
+```
+
+If the count exceeds 20, compact before adding new entries:
+1. Read all files. Group by theme.
+2. Merge files that cover the same concept into one — keep the best phrasing, discard the rest.
+3. Delete files whose knowledge is no longer correct, no longer relevant, or already captured in a merged file.
+4. Do not invent or expand content during compaction — only consolidate what exists.
+
+Completion criterion: every non-obvious insight is written or updated in its own focused file; stale or superseded entries updated or removed proactively; no file mixes unrelated concepts; file count kept manageable.
