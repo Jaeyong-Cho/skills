@@ -48,8 +48,6 @@ Write `.context/direction/{timestamp}-{slug}.md`:
 {What was explicitly ruled out}
 ```
 
-`mkdir -p .context/direction` if needed. Tell the user the file path. Next step: `/planning`.
-
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
+`mkdir -p .context/direction` if needed. Write any domain truths, constraints, or key decisions surfaced during grilling to `.context/wiki/` via `/to-wiki`. Tell the user the file path. Next step: `/planning`.
 
 **DO NOT START IMPLEMENT**

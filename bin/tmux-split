@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# Usage: tmux-split 3   → left top+bottom, right 1
+# Usage: tmux-split ts2  → left / right
+#        tmux-split 3   → left top+bottom, right 1
 #        tmux-split 4   → top 2, bottom 2
 
 ORIGIN=$(tmux display-message -p '#P')
 
 case "${1:-}" in
+  ts2)
+    tmux split-window -h          # left / right
+    tmux select-pane -t "$ORIGIN"
+    ;;
   3)
     tmux split-window -h          # left / right; focus → right
     tmux select-pane -t "$ORIGIN" # back to left
@@ -19,9 +24,10 @@ case "${1:-}" in
     tmux select-pane -t "$ORIGIN"
     ;;
   *)
-    echo "Usage: tmux-split 3|4"
-    echo "  3 → left top+bottom, right 1"
-    echo "  4 → top 2, bottom 2"
+    echo "Usage: tmux-split ts2|3|4"
+    echo "  ts2 → left / right"
+    echo "  3   → left top+bottom, right 1"
+    echo "  4   → top 2, bottom 2"
     exit 1
     ;;
 esac
