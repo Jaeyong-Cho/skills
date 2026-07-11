@@ -48,6 +48,6 @@ Write `.context/direction/{timestamp}-{slug}.md`:
 {What was explicitly ruled out}
 ```
 
-`mkdir -p .context/direction` if needed. If truths, constraints, or decisions worth persisting were discovered, or any existing wiki entries are now stale, update `.context/wiki/` via `/to-wiki` — skip it otherwise. Tell the user the file path. Next step: `/planning`.
+`mkdir -p .context/direction` if needed. Always write a session log to `.context/wiki/` via `/to-wiki` — the next session starts cold, so record: what problem was addressed, what direction was chosen, and any constraints or decisions that shaped it. Also update or remove any wiki entries now stale. Tell the user the file path. Next step: `/planning`.
 
 **DO NOT START IMPLEMENT**
