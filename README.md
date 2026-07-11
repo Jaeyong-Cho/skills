@@ -55,7 +55,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 | `/to-wiki` | `.context/wiki/` | Harvest tacit knowledge — one file per topic |
 | `/to-html` | HTML file | Render any file as a rich Kanagawa-themed HTML document |
 | `/psos` | annotates journal in place | Tag journal clauses with the PSOS operator that ran and the state it updated |
-| `/create-agent` | `.claude/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
+| `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 
 ## References
 

@@ -1,6 +1,6 @@
 ---
 name: create-agent
-description: Design and write a project-specific subagent file — Claude Code (.claude/agents/), GitHub Copilot (.github/agents/), or both. Use when invoked as /create-agent.
+description: Design and write a project-specific subagent — Claude Code (.claude/agents/{name}.md) or GitHub Copilot (.github/agents/{name}.agent.md), or both. Use when invoked as /create-agent.
 disable-model-invocation: true
 ---
 
@@ -16,7 +16,7 @@ A subagent earns its own file only when the work has a **focused**, repeatable s
 
 Ask the user which format(s) to produce:
 
-- **Claude Code** — `.claude/agents/{name}.agent.md`
+- **Claude Code** — `.claude/agents/{name}.md`
 - **GitHub Copilot** — `.github/agents/{name}.agent.md`
 - **Both**
 
@@ -66,7 +66,7 @@ If grill item 5 flagged self-update: set `memory: project`. In the prompt body, 
 mkdir -p .claude/agents
 ```
 
-Write `.claude/agents/{name}.agent.md`.
+Write `.claude/agents/{name}.md`.
 
 ### GitHub Copilot
 
@@ -84,10 +84,10 @@ Run for each file written:
 
 **Claude Code:**
 ```bash
-awk '/^---$/{c++} END{print c}' .claude/agents/{name}.agent.md          # must print 2
-grep -c "^name:" .claude/agents/{name}.agent.md                          # must print 1
-grep -c "^description:" .claude/agents/{name}.agent.md                   # must print 1
-grep -E "^(tools|model|permissionMode|isolation|memory|skills):" .claude/agents/{name}.agent.md
+awk '/^---$/{c++} END{print c}' .claude/agents/{name}.md          # must print 2
+grep -c "^name:" .claude/agents/{name}.md                          # must print 1
+grep -c "^description:" .claude/agents/{name}.md                   # must print 1
+grep -E "^(tools|model|permissionMode|isolation|memory|skills):" .claude/agents/{name}.md
 ```
 For each optional field printed, confirm its value is in the valid-values column of `references/claude-agent-schema.md`.
 
