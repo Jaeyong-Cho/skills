@@ -26,8 +26,8 @@ Format:
 
 `mkdir -p .context/wiki` if needed.
 
-## Remove
+## Remove / Update stale
 
-Delete the file when the user asks to remove an entry.
+After writing or updating entries, scan existing `.context/wiki/` files for entries that are now stale, contradicted, or superseded by the current session's findings. Update them to reflect the new truth, or delete them if the knowledge no longer applies.
 
-Completion criterion: every non-obvious insight is written or updated in its own focused file; stale entries removed on request; no file mixes unrelated concepts.
+Completion criterion: every non-obvious insight is written or updated in its own focused file; stale or superseded entries updated or removed proactively; no file mixes unrelated concepts.
