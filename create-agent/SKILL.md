@@ -62,4 +62,22 @@ Completion criterion: the file exists at `.claude/agents/{name}.agent.md`, passe
 
 Tell the user the path written. If this was the first agent file in a previously-empty `.claude/agents/`, remind them to restart Claude Code so the directory is picked up.
 
-Any useful truth discovered during this session — a constraint, a domain fact, a key decision — can also be written to `.context/wiki/` at any time.
+## 7. GitHub Copilot format (optional)
+
+Ask the user if they also want a GitHub Copilot agent file. Skip this step if they don't.
+
+If yes: read `references/github-copilot-agent-schema.md`. Write the same job and prompt body, translated to that schema's frontmatter fields and tool names.
+
+```bash
+mkdir -p .github/agents
+```
+
+Write `.github/agents/{name}.agent.md`. Validate:
+
+```bash
+awk '/^---$/{c++} END{print c}' .github/agents/{name}.agent.md   # must print 2
+grep -c "^name:" .github/agents/{name}.agent.md                   # must print 1
+grep -c "^description:" .github/agents/{name}.agent.md            # must print 1
+```
+
+Tell the user the path written.
