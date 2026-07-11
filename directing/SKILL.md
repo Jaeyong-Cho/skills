@@ -48,6 +48,6 @@ Write `.context/direction/{timestamp}-{slug}.md`:
 {What was explicitly ruled out}
 ```
 
-`mkdir -p .context/direction` if needed. Write any domain truths, constraints, or key decisions surfaced during grilling to `.context/wiki/` via `/to-wiki`. Tell the user the file path. Next step: `/planning`.
+`mkdir -p .context/direction` if needed. If truths, constraints, or decisions worth persisting were discovered, or any existing wiki entries are now stale, update `.context/wiki/` via `/to-wiki` — skip it otherwise. Tell the user the file path. Next step: `/planning`.
 
 **DO NOT START IMPLEMENT**

@@ -31,7 +31,7 @@ Write the report to `.context/evaluate/{timestamp}-{slug}.md`. Keep the format s
 - **Patterns** — unexpected results grouped by shared pattern, each named with a single root cause
 - **Next steps** — if anything needs fixing: "Run /attack on [X]"
 
-`mkdir -p .context/evaluate` if needed. Write any domain truths, unexpected patterns, or root causes discovered during evaluation to `.context/wiki/` via `/to-wiki`. Tell the user the file path.
+`mkdir -p .context/evaluate` if needed. If unexpected patterns, root causes, or truths worth persisting were discovered, or any existing wiki entries are now stale, update `.context/wiki/` via `/to-wiki` — skip it otherwise. Tell the user the file path.
 
 If failures exist, flag each as a target: "Run /attack on [X]." Those findings feed back into /directing.
 
