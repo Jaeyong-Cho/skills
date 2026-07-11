@@ -1,6 +1,6 @@
 ---
 name: create-agent
-description: Design and write a project-specific Claude Code subagent — a .claude/agents/*.md file wired to the project's existing skills. Use when invoked as /create-agent.
+description: Design and write a project-specific Claude Code subagent — a .claude/agents/*.agent.md file wired to the project's existing skills. Use when invoked as /create-agent.
 disable-model-invocation: true
 ---
 
@@ -44,21 +44,21 @@ Wire the surveyed skills via the `skills:` frontmatter field (not `tools: Skill`
 
 If grill item 5 flagged self-update: set `memory: project` so the agent gets a persistent `.claude/agent-memory/{name}/` notes directory, checked into version control. In the prompt body, instruct it explicitly: consult memory before starting work, and after finishing, write down what changed in the project since last time (new conventions, moved files, updated schemas).
 
-`mkdir -p .claude/agents` if needed. Write `.claude/agents/{name}.md`.
+`mkdir -p .claude/agents` if needed. Write `.claude/agents/{name}.agent.md`.
 
 ## 6. Validate deterministically
 
 Don't eyeball it — run this sequence and require the stated result at each line:
 
 ```bash
-awk '/^---$/{c++} END{print c}' .claude/agents/{name}.md          # must print 2
-grep -c "^name:" .claude/agents/{name}.md                          # must print 1
-grep -c "^description:" .claude/agents/{name}.md                   # must print 1
-grep -E "^(tools|model|permissionMode|isolation|memory|skills):" .claude/agents/{name}.md   # extract every optional field present
+awk '/^---$/{c++} END{print c}' .claude/agents/{name}.agent.md          # must print 2
+grep -c "^name:" .claude/agents/{name}.agent.md                          # must print 1
+grep -c "^description:" .claude/agents/{name}.agent.md                   # must print 1
+grep -E "^(tools|model|permissionMode|isolation|memory|skills):" .claude/agents/{name}.agent.md   # extract every optional field present
 ```
 For each field the last command prints, look it up in `references/claude-agent-schema.md` and confirm the value used is in that field's valid-values column. Any failed line above → fix the file and re-run the whole sequence before reporting done.
 
-Completion criterion: the file exists at `.claude/agents/{name}.md`, passes the step 6 checks, carries no name collision, any project skills chosen in step 3 are wired in via `skills:`, the prompt body includes an explicit completion criterion, and — if grill item 5 flagged self-update — the `memory` field and consult/update instructions are present.
+Completion criterion: the file exists at `.claude/agents/{name}.agent.md`, passes the step 6 checks, carries no name collision, any project skills chosen in step 3 are wired in via `skills:`, the prompt body includes an explicit completion criterion, and — if grill item 5 flagged self-update — the `memory` field and consult/update instructions are present.
 
 Tell the user the path written. If this was the first agent file in a previously-empty `.claude/agents/`, remind them to restart Claude Code so the directory is picked up.
 
