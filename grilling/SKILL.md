@@ -8,3 +8,5 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 Ask one question at a time. When a question has clear discrete options, use the `AskUserQuestion` tool — list the options with your recommended one first marked "(Recommended)". For open-ended questions with no clear options, ask in plain text.
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
+
+Before interviewing, list the filenames in `../references/` and `../template/` (no need to read contents yet). If a branch of the interview touches a topic one of them covers, read that specific file then and let it inform your questions.

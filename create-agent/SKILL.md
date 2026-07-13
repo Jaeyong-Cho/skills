@@ -26,7 +26,7 @@ The answer drives which steps below apply. Note it — referred to as the **targ
 
 Run a `/grilling` skill to resolve every branch:
 
-1. **Job** — the one task this agent excels at. If it takes "and" to describe, it's two agents.
+1. **Job** — the one task this agent excels at. If it takes "and" to describe, it's two agents. If the job is architecture/module-design work, read `../references/archi.md`, `../references/deep-modules.md`, `../references/meta-pattern.md` first. If the job is testing work, read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`, `../references/tdd-refactoring.md`, `../references/test-loop.md` first.
 2. **Delegation trigger** — the `description` Claude uses to decide when to hand off to it. Encourage proactive delegation ("use proactively after X") where that fits.
 3. **Tools & model** — which tools it needs (allowlist beats inherit-everything for a focused agent). For the model, read `../references/model-selection.md` and pick the tier that matches the job's ambiguity, mistake cost, and verifiability.
 4. **Isolation** — does it need its own git worktree, persistent memory across sessions, or plain shared-checkout access?
