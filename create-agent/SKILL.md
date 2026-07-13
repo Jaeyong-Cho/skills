@@ -31,7 +31,7 @@ Run a `/grilling` skill to resolve every branch:
 3. **Tools & model** — which tools it needs (allowlist beats inherit-everything for a focused agent). For the model, read `../references/model-selection.md` and pick the tier that matches the job's ambiguity, mistake cost, and verifiability.
 4. **Isolation** — does it need its own git worktree, persistent memory across sessions, or plain shared-checkout access?
 5. **Self-update** — does this agent's operating knowledge (project conventions, schemas, module layout) go stale as the project changes? If yes, name what it must track and how often it's likely to drift.
-6. **Completion criterion** — what is the done state? When does the agent stop and declare success? (Equivalent to `exit 0` in a script: the observable condition it checks before reporting done.)
+6. **Completion criterion** — what is the done state? When does the agent stop and declare success? (Equivalent to `exit 0` in a script: the observable condition it checks before reporting done.) Read `../references/good-harness.md` and design a concrete local check for it — not just a description of done.
 
 ## 4. Survey project skills _(Claude Code only)_
 
@@ -100,6 +100,8 @@ grep -c "^description:" .github/agents/{name}.agent.md                   # must 
 
 Any failed check → fix the file and re-run the full sequence before reporting done.
 
-Completion criterion: every selected file exists and passes its validation sequence; no name collision; Claude Code file has `skills:` wired and a completion criterion in the prompt body; if grill item 5 flagged self-update, `memory` field and consult/update instructions are present.
+Then run the job-specific check designed in grill item 6, per `../references/good-harness.md`. These structural checks only confirm the file's shape — they don't confirm the agent actually does the job.
+
+Completion criterion: every selected file exists and passes its validation sequence; no name collision; Claude Code file has `skills:` wired and a completion criterion in the prompt body; if grill item 5 flagged self-update, `memory` field and consult/update instructions are present; the job-specific harness from grill item 6 passes.
 
 Tell the user each path written. If this was the first agent file in a previously-empty `.claude/agents/`, remind them to restart Claude Code so the directory is picked up.
