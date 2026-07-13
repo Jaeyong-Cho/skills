@@ -64,6 +64,20 @@ setup_claude() {
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
 
   setup_tmux_agent_status_claude
+
+  ensure_rtk_binary
+  if command -v rtk &>/dev/null; then
+    rtk init -g --auto-patch &>/dev/null \
+      && echo "  ✓ rtk hooks (rtk init -g)" \
+      || echo "  rtk init failed, run manually: rtk init -g"
+  fi
+
+  if command -v claude &>/dev/null; then
+    claude plugin marketplace add Egonex-AI/Understand-Anything &>/dev/null \
+      && claude plugin install understand-anything &>/dev/null \
+      && echo "  ✓ Understand-Anything plugin" \
+      || echo "  Understand-Anything install failed, run manually: claude plugin marketplace add Egonex-AI/Understand-Anything && claude plugin install understand-anything"
+  fi
 }
 
 setup_copilot() {
@@ -76,6 +90,34 @@ setup_copilot() {
   # Copilot CLI has no hooks API — tmux-agent-status can only see it via
   # process presence auto-detection, not working/done transitions.
   echo "  note: tmux-agent-status has no hook support for Copilot CLI (process presence only)"
+
+  ensure_rtk_binary
+  if command -v rtk &>/dev/null; then
+    rtk init -g --copilot --auto-patch &>/dev/null \
+      && echo "  ✓ rtk hooks (rtk init -g --copilot)" \
+      || echo "  rtk init failed, run manually: rtk init -g --copilot"
+  fi
+
+  if command -v copilot &>/dev/null; then
+    copilot plugin install Egonex-AI/Understand-Anything:understand-anything-plugin &>/dev/null \
+      && echo "  ✓ Understand-Anything plugin" \
+      || echo "  Understand-Anything install failed, run manually: copilot plugin install Egonex-AI/Understand-Anything:understand-anything-plugin"
+  fi
+}
+
+# ── rtk binary ───────────────────────────────────────────────────────────────
+# https://github.com/rtk-ai/rtk — CLI proxy that filters/compresses command
+# output before it reaches the agent's context.
+
+ensure_rtk_binary() {
+  command -v rtk &>/dev/null && return
+
+  echo "  installing rtk..."
+  if command -v brew &>/dev/null; then
+    brew install rtk &>/dev/null
+  else
+    curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+  fi
 }
 
 # ── tmux-agent-status hook wiring ────────────────────────────────────────────
