@@ -16,4 +16,4 @@ After all steps are done, report what changed for each step in order. Read `.con
 
 Completion criterion: every step executed and reported, or stopped on first failure with reason.
 
-When done: "Auto-action complete. Run `/evaluate` to assess the result."
+When done: "Auto-action complete." followed by the per-step summary.

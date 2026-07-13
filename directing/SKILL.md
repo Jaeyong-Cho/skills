@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Directing
 
-Read all files in `.context/wiki/` and `.context/attack/` for context. If invoked with a finding from /attack, treat it as the starting problem.
+Read all files in `.context/wiki/` for context.
 
 Check `.claude/agents/` and `.github/agents/` for existing project subagents. If one's description matches this topic, delegate the relevant research or exploration to it rather than doing that work inline yourself.
 

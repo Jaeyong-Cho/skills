@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Brainstorm
 
-Read the codebase. Read `.context/wiki/`, `.context/direction/`, and `.context/attack/` if they exist. Understand what the project does, what it can't do, and where it hurts.
+Read the codebase. Read `.context/wiki/` and `.context/direction/` if they exist. Understand what the project does, what it can't do, and where it hurts.
 
 Run `/grilling` to brainstorm — diverge across:
 - **Gaps** — what is the codebase unable to do that it probably should?

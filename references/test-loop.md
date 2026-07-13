@@ -49,6 +49,6 @@ Design explicitly:
 - What does `run` write? (results, metadata: version, input data, config)
 - What does `verify` check per scenario?
 
-**Evaluate (`/evaluate`)** — run the test-loop and use its output as the primary evaluation signal:
+**After execution** — run the test-loop and use its output as the primary evaluation signal:
 - Run `test` for a full cycle, or `run` then `verify` separately
 - For every unexpected result: trace root cause through debug output and logs

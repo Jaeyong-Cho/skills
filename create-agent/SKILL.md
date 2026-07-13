@@ -50,7 +50,7 @@ Any match → pick a different name or confirm the overwrite with the user.
 
 ## 6. Write the file(s)
 
-**Prompt body — structure it like an automation script in natural language.** An agent is a CI/CD or debugging script where the non-deterministic parts are expressed in prose instead of code. Structure the body accordingly: setup → sequence → done check. Wherever a step is deterministic (a check, extraction, or fixed operation with one right way to run it), write the actual command(s) in a code block. Reserve prose for the parts that genuinely need judgment. The body must end with an explicit **completion criterion** (from grill item 6) — the observable condition the agent checks before reporting done. A prompt body without a done condition is a script without `exit`.
+**Prompt body — write it like a script in natural language.** Setup → sequence → done check. Wherever a step is deterministic, write the actual command(s) in a code block; reserve prose for what needs judgment. End on the completion criterion from item 6 — a prompt body without one is a script without `exit`.
 
 Write the file(s) for the selected target format:
 

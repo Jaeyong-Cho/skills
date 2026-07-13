@@ -28,6 +28,6 @@ Get the timestamp: run `date +%Y%m%d-%H%M%S`. Derive a kebab-case slug from the 
 
 Fill in `../template/adr.md` with the resolved decision, design, action sequence, and verification, and write it to `.context/adr/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is.
 
-`mkdir -p .context/adr` if needed. Tell the user the file path. Next step: `/action`.
+`mkdir -p .context/adr` if needed. Tell the user the file path. Next step: `/auto-action`.
 
 **DO NOT START IMPLEMENT**

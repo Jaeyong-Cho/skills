@@ -10,7 +10,7 @@ Before executing any skill, check if a `.context/` directory exists in the curre
 
 ## Workflow Scope
 
-All skills apply to both new development and fixing existing things. `/attack` finds weaknesses in existing code. `/directing` can direct a fix as easily as a new feature. `/planning`, `/action`, and `/evaluate` work the same way regardless of whether the work is greenfield or remediation.
+All skills apply to both new development and fixing existing things. `/directing` can direct a fix as easily as a new feature. `/planning` and `/auto-action` work the same way regardless of whether the work is greenfield or remediation.
 
 ## Wiki
 
