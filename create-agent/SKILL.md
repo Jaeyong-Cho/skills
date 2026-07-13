@@ -6,11 +6,11 @@ disable-model-invocation: true
 
 # Create Agent
 
-Read `.context/wiki/` for context.
+Read codebase or run `understand-*` skill for context.
 
 ## 1. Focus gate
 
-A subagent earns its own file only when the work has a **focused**, repeatable shape: one job, a distinct tool/model/context scope, delegable without step-by-step supervision. If what's described is a one-shot judgment call, or purely deterministic (a script would do), say so and point at the better fit — a skill (`skill-creator`), or a plain script — instead of building an agent nobody should have. Stop here if it doesn't pass.
+An agent earns its own file only when the work has a **focused**, repeatable shape: one job, a distinct tool/model/context scope, delegable without step-by-step supervision. If what's described is a one-shot judgment call, or purely deterministic (a script would do), say so and point at the better fit — a skill (`skill-creator`), or a plain script — instead of building an agent nobody should have. Stop here if it doesn't pass.
 
 ## 2. Format selection
 
@@ -28,7 +28,7 @@ Run a `/grilling` skill to resolve every branch:
 
 1. **Job** — the one task this agent excels at. If it takes "and" to describe, it's two agents.
 2. **Delegation trigger** — the `description` Claude uses to decide when to hand off to it. Encourage proactive delegation ("use proactively after X") where that fits.
-3. **Tools & model** — which tools it needs (allowlist beats inherit-everything for a focused agent), which model fits the job's cost/quality tradeoff.
+3. **Tools & model** — which tools it needs (allowlist beats inherit-everything for a focused agent). For the model, read `../references/model-selection.md` and pick the tier that matches the job's ambiguity, mistake cost, and verifiability.
 4. **Isolation** — does it need its own git worktree, persistent memory across sessions, or plain shared-checkout access?
 5. **Self-update** — does this agent's operating knowledge (project conventions, schemas, module layout) go stale as the project changes? If yes, name what it must track and how often it's likely to drift.
 6. **Completion criterion** — what is the done state? When does the agent stop and declare success? (Equivalent to `exit 0` in a script: the observable condition it checks before reporting done.)

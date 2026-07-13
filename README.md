@@ -69,3 +69,4 @@ Referenced by workflow skills — loaded at the point they're needed.
 | `tdd-tests.md` | How to write good tests |
 | `tdd-mocking.md` | When and how to mock |
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
+| `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
