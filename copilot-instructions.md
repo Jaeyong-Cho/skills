@@ -15,3 +15,31 @@ All skills apply to both new development and fixing existing things. `/attack` f
 ## Wiki
 
 `.context/wiki/` is a shared knowledge base. Any skill, at any time, can write useful truths to it — domain facts, constraints, key decisions, or anything that should persist across sessions. Files use the format `{timestamp}-{slug}.md`. Read it at the start of every skill for context.
+
+<!-- rtk-instructions v2 -->
+# RTK — Token-Optimized CLI
+
+**rtk** is a CLI proxy that filters and compresses command outputs, saving 60-90% tokens.
+
+## Rule
+
+Always prefix shell commands with `rtk`:
+
+```bash
+# Instead of:              Use:
+git status                 rtk git status
+git log -10                rtk git log -10
+cargo test                 rtk cargo test
+docker ps                  rtk docker ps
+kubectl get pods           rtk kubectl pods
+```
+
+## Meta commands (use directly)
+
+```bash
+rtk gain              # Token savings dashboard
+rtk gain --history    # Per-command savings history
+rtk discover          # Find missed rtk opportunities
+rtk proxy <cmd>       # Run raw (no filtering) but track usage
+```
+<!-- /rtk-instructions -->
