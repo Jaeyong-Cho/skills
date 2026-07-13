@@ -11,3 +11,5 @@ All skills apply to both new development and fixing existing things. `/attack` f
 ## Wiki
 
 `.context/wiki/` is a shared knowledge base. Any skill, at any time, can write useful truths to it — domain facts, constraints, key decisions, or anything that should persist across sessions. Files use the format `{timestamp}-{slug}.md`. Read it at the start of every skill for context.
+
+@RTK.md
