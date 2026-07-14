@@ -8,13 +8,22 @@
 e.g. Auth tokens are validated on every request by hitting the DB, capping throughput at 200 req/s. Move validation to a cache.
 
 ## Decision
-> Concrete design — which API(s) are affected or introduced, which source file(s) hold the change, and how the source structure is organized (modules, layers, directories).
+> Concrete design — which API(s) are affected or introduced, which source file(s) hold the change, and how the source structure is organized (modules, layers, directories). A small Mermaid diagram is welcome wherever it clarifies the before/after shape faster than prose. The full Static/Dynamic View lives in the paired `architecture.md`, not here.
 
 ### Before
 e.g. No cache; `AuthService.validate(token)` in `src/auth/service.py` hits the DB directly.
+```mermaid
+graph LR
+    AuthService --> DB[("DB")]
+```
 
 ### After
 e.g. `AuthService.validate(token)` in `src/auth/service.py` checks the new `TokenCache.get(token)` (`src/auth/cache.py`) before falling back to the DB; cache entries expire after 5 minutes.
+```mermaid
+graph LR
+    AuthService --> TokenCache --> Redis[("Redis")]
+    AuthService --> DB[("DB")]
+```
 
 ## Observability
 > Runtime checkpoints — internal state, logs, or intermediate data to observe mid-execution, with the final output.

@@ -39,7 +39,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
 | `/auto-action` | code changes | Execute the plan's action sequence straight through, no confirmation between steps |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
-| `/merge-archi` | `.context/adr/{slug}.md` | Merge the draft ADR into its committed architecture doc once implementation is done; the ADR is kept and renamed `*.merged.md` |
+| `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
 
 ## Utilities
 
@@ -72,5 +72,6 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | Template | Used by |
 |----------|---------|
 | `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
+| `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
 | `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
