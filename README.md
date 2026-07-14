@@ -47,8 +47,6 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves. Called directly or from within other skills |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
-| `/to-todo` | `.context/TODO.md` | Manage a global checklist — add, check off, remove tasks |
-| `/to-changelog` | `.context/changelog/{year}/{month-day}.md` | Append a dated entry summarizing what changed |
 | `/to-wiki` | `.context/wiki/` | Harvest tacit knowledge — one file per topic |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 
