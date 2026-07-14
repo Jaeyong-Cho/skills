@@ -22,10 +22,18 @@ e.g. Auth tokens are validated on every request by hitting the DB, capping throu
 - e.g. Token revocation is out of scope — a revoked token stays valid in cache for up to 5 minutes; the security team has accepted this window.
 
 # User Scenario
-> One scenario per subsection — split into multiple when a single sequence grows too large to follow, or covers more than one path or actor. Narrate each as the sequence the user lives through: {action} → {reaction} → {action} → ... down to the outcome — not a feature list.
+> One scenario per subsection — split into multiple when a single sequence grows too large to follow, or covers more than one path or actor. Narrate each as the sequence the user lives through: {action} → {reaction} → {action} → ... down to the outcome — not a feature list. A Mermaid flowchart is welcome alongside the narration wherever the scenario branches or a picture reads faster than the arrow chain.
 
 ## {Scenario name}
 e.g. Repeat request within window → cache hit, no DB round-trip → response returns in <20ms
+```mermaid
+graph LR
+    A[Request arrives] --> B{Token cached?}
+    B -->|hit| C[Serve from cache, <20ms]
+    B -->|miss| D[Validate against DB]
+    D --> E[Cache result, 5-minute TTL]
+    E --> C
+```
 
 # Acceptance Criteria
 > SMART AC — Specific, Measurable, Achievable, Relevant, Time-bound. Each row is one verifiable condition, phrased as Given–When–Then.
