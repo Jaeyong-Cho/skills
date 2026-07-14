@@ -1,4 +1,4 @@
-# SPEC
+# SPEC - {title}
 
 ## Requirements
 > What must be true. One requirement per line, testable — avoid vague verbs like "support" or "handle" without a condition attached.
