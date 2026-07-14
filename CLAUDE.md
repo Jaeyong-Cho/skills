@@ -6,10 +6,6 @@ Before executing any skill, check if a `.context/` directory exists in the curre
 
 ## Workflow Scope
 
-All skills apply to both new development and fixing existing things. `/directing` can direct a fix as easily as a new feature. `/planning` and `/auto-action` work the same way regardless of whether the work is greenfield or remediation.
-
-## Wiki
-
-`.context/wiki/` is a shared knowledge base. Any skill, at any time, can write useful truths to it — domain facts, constraints, key decisions, or anything that should persist across sessions. Files use the format `{timestamp}-{slug}.md`. Read it at the start of every skill for context.
+All skills apply to both new development and fixing existing things. `/req`, `/planning`, and `/auto-action` work the same way regardless of whether the work is greenfield or remediation.
 
 @RTK.md

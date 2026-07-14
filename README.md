@@ -25,9 +25,7 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/brainstorm  →  /directing  →  /planning  →  /auto-action
-                    ↑                             |
-                    └────── .context/wiki/ ───────┘
+/req  →  /planning  →  /auto-action
 ```
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
@@ -36,8 +34,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/brainstorm` | ideas | Read the codebase, grill to surface gaps, pain, and opportunities |
-| `/directing` | `.context/direction/` | Grill to find the goal, explore decision space, commit to a direction |
+| `/req` | `.context/req/` | Grill to find the goal, elicit functional/non-functional requirements, and commit to a testable spec |
 | `/planning` | `.context/adr/` | Grill to design architecture, test-loop, and action sequence, then write an ADR |
 | `/auto-action` | code changes | Execute the ADR's action sequence straight through, no confirmation between steps |
 
@@ -47,7 +44,6 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves. Called directly or from within other skills |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
-| `/to-wiki` | `.context/wiki/` | Harvest tacit knowledge — one file per topic |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 
 ## References
@@ -73,4 +69,4 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | Template | Used by |
 |----------|---------|
 | `adr.md` | `/planning` — written to `.context/adr/{timestamp}-{slug}.md` |
-| `requirements.md` | Spec/requirements gathering during `/grilling` |
+| `requirements.md` | `/req` — written to `.context/req/{slug}.md` |
