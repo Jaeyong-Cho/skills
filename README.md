@@ -36,7 +36,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 |-------|--------|-------------|
 | `/req` | `.context/req/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
-| `/planning` | `.context/plan/` | Grill to sequence the ADR's design into ordered implementation steps, then write a plan |
+| `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
 | `/auto-action` | code changes | Execute the plan's action sequence straight through, no confirmation between steps |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 | `/merge-archi` | `.context/adr/{slug}.md` | Merge the draft ADR into its committed architecture doc once implementation is done; the ADR is kept and renamed `*.merged.md` |
