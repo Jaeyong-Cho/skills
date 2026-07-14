@@ -25,6 +25,6 @@ Derive a kebab-case slug from the topic. If revising an existing draft RDR, reus
 
 Fill in `../template/requirements.md` with the context, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/req/rdr/{timestamp}-{slug}.md` — the filename itself is how `/planning` and `/merge-req` find and track the record's slug and merge state.
 
-`mkdir -p .context/req/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/merge-req` will fold into `.context/req/{slug}.md` once implementation completes. Next step: `/planning`.
+`mkdir -p .context/req/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/merge-req` will fold into `.context/req/{slug}.md` once implementation completes. Next step: `/archi`.
 
 **DO NOT START IMPLEMENT**

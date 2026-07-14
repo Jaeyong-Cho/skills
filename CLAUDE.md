@@ -6,6 +6,6 @@ Before executing any skill, check if a `.context/` directory exists in the curre
 
 ## Workflow Scope
 
-All skills apply to both new development and fixing existing things. `/req`, `/planning`, and `/auto-action` work the same way regardless of whether the work is greenfield or remediation.
+All skills apply to both new development and fixing existing things. `/req`, `/archi`, `/planning`, and `/auto-action` work the same way regardless of whether the work is greenfield or remediation.
 
 @RTK.md

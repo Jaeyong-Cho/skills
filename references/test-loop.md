@@ -42,7 +42,7 @@ Run `run` once, run `verify` many times. Compare output dirs across versions to 
 
 ## Where this fits in the workflow
 
-**Planning (`/planning`)** — reuse before creating. Check if an existing test-loop scenario already covers the needed behaviors; extend it rather than creating a new scenario. Only create a new scenario when structurally needed.
+**Architecture (`/archi`)** — reuse before creating. Check if an existing test-loop scenario already covers the needed behaviors; extend it rather than creating a new scenario. Only create a new scenario when structurally needed.
 
 Design explicitly:
 - What is the clean state?
