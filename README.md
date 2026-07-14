@@ -34,7 +34,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/req` | `.context/req/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
+| `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
 | `/auto-action` | code changes | Execute the plan's action sequence straight through, no confirmation between steps |
@@ -73,4 +73,4 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 |----------|---------|
 | `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
 | `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
-| `requirements.md` | `/req` — written to `.context/req/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
+| `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
