@@ -16,4 +16,4 @@ After all steps are done, report what changed for each step in order. Read `.con
 
 Completion criterion: every step executed and reported, or stopped on first failure with reason.
 
-When done: "Auto-action complete." followed by the per-step summary.
+When done: "Auto-action complete." followed by the per-step summary. If a draft RDR (`{timestamp}-{slug}.md`, no `.merged.md` suffix) exists in `.context/req/rdr/` for this ADR's slug, add: next step `/merge-req` to commit it into the spec. If any step failed, do not mention `/merge-req` — leave the draft RDR in place so the spec isn't committed for unfinished work.

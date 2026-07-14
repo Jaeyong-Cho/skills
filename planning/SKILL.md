@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Planning
 
-Read all files in `.context/req/` for the committed spec. Also read `.context/adr/` — if an existing ADR covers the same topic, read it and revise it rather than creating a new one.
+Read `.context/req/rdr/` for the draft RDR to plan against — a draft is named `{timestamp}-{slug}.md` (a merged one has `.merged.md` and is no longer live). This is the spec `/req` just produced. If `.context/req/{slug}.md` also exists, read it too for prior committed context. Also read `.context/adr/` — if an existing ADR covers the same topic, read it and revise it rather than creating a new one.
 
 Use this for new plans or to replan after a fix reveals new design needs.
 Read `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/test-loop.md`.

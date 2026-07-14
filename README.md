@@ -25,7 +25,7 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/req  →  /planning  →  /auto-action
+/req  →  /planning  →  /auto-action  →  /merge-req
 ```
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
@@ -34,9 +34,10 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/req` | `.context/req/` | Grill to find the goal, elicit functional/non-functional requirements, and commit to a testable spec |
+| `/req` | `.context/req/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/planning` | `.context/adr/` | Grill to design architecture, test-loop, and action sequence, then write an ADR |
 | `/auto-action` | code changes | Execute the ADR's action sequence straight through, no confirmation between steps |
+| `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 
 ## Utilities
 
@@ -69,4 +70,4 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | Template | Used by |
 |----------|---------|
 | `adr.md` | `/planning` — written to `.context/adr/{timestamp}-{slug}.md` |
-| `requirements.md` | `/req` — written to `.context/req/{slug}.md` |
+| `requirements.md` | `/req` — written to `.context/req/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
