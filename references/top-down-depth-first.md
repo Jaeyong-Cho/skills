@@ -21,7 +21,7 @@ Root: Make Tetris
 - C: Make game logic
 ```
 
-A, B, C are MECE at the root: menu, ranking, and game logic don't overlap, and together they're everything Tetris needs. A's five children are MECE the same way one level down — UI, start, settings, ranking-view, and exit each own a distinct slice of the main menu, nothing else belongs there. Depth-first order: finish A1, then A2, then A3, A4, A5 — each already a leaf, one actor, one path, no "and" — before B or C get touched, even though B and C were named in the same breath as A.
+A, B, C are MECE at the root: menu, ranking, and game logic don't overlap, and together they're everything Tetris needs. A's five children are MECE the same way one level down — UI, start, settings, ranking-view, and exit each own a distinct slice of the main menu, nothing else belongs there. Depth-first order: finish A1, then A2, then A3, A4, A5 — each already a leaf, a single atomic task in one sentence with no "and," "or," or "then" — before B or C get touched, even though B and C were named in the same breath as A.
 
 ## Understanding gaps
 

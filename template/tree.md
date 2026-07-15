@@ -1,6 +1,6 @@
 # Goal Tree: {Title}
 
-> Nested checklist, depth-first, leftmost-first. Indentation = depth. Siblings at each level must be MECE — mutually exclusive, collectively exhaustive (see `../references/top-down-depth-first.md`). Three states: `[ ]` pending action, `[?]` pending understanding — a named unknown blocking a correct split, resolved manually and recorded inline, not researched by the skill — `[x]` done. An action line is done once its RDR and ADR are committed; an understand line is done once its answer is recorded; a non-leaf line is done once every child under it is done. A leaf is a node reducible to one scenario, one actor, one path — describable without "and."
+> Nested checklist, depth-first, leftmost-first. Indentation = depth. Siblings at each level must be MECE — mutually exclusive, collectively exhaustive (see `../references/top-down-depth-first.md`). Three states: `[ ]` pending action, `[?]` pending understanding — a named unknown blocking a correct split, resolved manually and recorded inline, not researched by the skill — `[x]` done. An action line is done once its RDR and ADR are committed; an understand line is done once its answer is recorded; a non-leaf line is done once every child under it is done. A leaf is a single atomic task — one sentence, no "and," "or," or "then."
 
 - [ ] Root: {goal text}
   - [ ] A: {goal text}
