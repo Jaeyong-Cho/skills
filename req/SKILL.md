@@ -42,5 +42,5 @@ Write in a clear, concise, and professional report style.
 - Prioritize clarity over stylistic or decorative writing.
 - Use direct, objective, and business-oriented language.
 - Present conclusions and recommendations explicitly rather than implying them.
-- 
+
 **DO NOT START IMPLEMENT**
