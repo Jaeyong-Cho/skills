@@ -1,5 +1,7 @@
 # SPEC - {title}
 
+> Target: ≤20 words per sentence; total prose (excluding diagrams/tables) under ~450 words — a 5-minute read. If a draft runs over, flag it to the user and continue; don't block on it.
+
 ## Context
 > The problem or trigger, and the current state before this spec — why this work exists at all.
 

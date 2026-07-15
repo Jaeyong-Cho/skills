@@ -2,6 +2,8 @@
 
 **Date:** {YYYY-MM-DD}
 
+> Target: ≤20 words per sentence; total prose (excluding diagrams/tables) under ~450 words — a 5-minute read. If a draft runs over, flag it to the user and continue; don't block on it.
+
 ## Context
 > What is the problem, What is the current state, What should be changed
 

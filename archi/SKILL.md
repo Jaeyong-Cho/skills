@@ -29,6 +29,6 @@ Derive a kebab-case slug from the topic. If revising an existing draft ADR, reus
 
 Fill in `../template/adr.md` with the resolved context with this style `../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/adr/{timestamp}-{slug}.md`.
 
-`mkdir -p .context/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/merge-archi` will fold into `.context/adr/{slug}.md` once implementation completes. Next step: `/planning`.
+`mkdir -p .context/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/merge-archi` will fold into `.context/adr/{slug}.md` once implementation completes. If the written ADR runs over the template's word/sentence budget, say so and suggest running `/drill` to split the goal further — but don't block on it. Next step: `/planning`.
 
 **DO NOT START IMPLEMENT**
