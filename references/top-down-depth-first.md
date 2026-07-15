@@ -3,6 +3,7 @@
 - Top-down depth-first is a methodology for making progress on tasks that are complex, difficult, or unfamiliar.
 - From the top goal, drill down: at each node, decide what you need to understand and what you need to do next.
 - Split each node into children that are MECE — Mutually Exclusive (no two children overlap in scope) and Collectively Exhaustive (together they cover everything the parent needed). A gap or overlap at one level compounds at every level below it.
+- There's no cap on depth. Split a non-atomic child again the same way, however many levels it takes — two or ten, the bar for "is this actually atomic yet" doesn't loosen with depth.
 - When you reach a leaf task — small enough to do immediately, with no unresolved dependency — complete it right away.
 - This keeps you focused on one task at a time, avoids context switching, and gives you fast feedback as each leaf closes.
 - So when starting toward a goal, go straight for the smallest actionable subtask and do it immediately, rather than mapping the whole tree first — descend one branch to a leaf and finish it before naming what's inside the next sibling.
