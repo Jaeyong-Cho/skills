@@ -23,24 +23,8 @@ Grill until every branch resolves and requirements are stated testably. Completi
 
 Derive a kebab-case slug from the topic. If revising an existing draft RDR, reuse its slug and timestamp — edit that file in place rather than creating a second record for the same round. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/requirements.md` with the context, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/rdr/{timestamp}-{slug}.md` — the filename itself is how `/planning` and `/merge-req` find and track the record's slug and merge state.
+Fill in `../template/requirements.md` with the context with this style `../references/document-style.md, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/rdr/{timestamp}-{slug}.md` — the filename itself is how `/planning` and `/merge-req` find and track the record's slug and merge state.
 
 `mkdir -p .context/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/merge-req` will fold into `.context/req/{slug}.md` once implementation completes. Next step: `/archi`.
-
-## Document Style
-Write in a clear, concise, and professional report style.
-
-- Use short, simple sentences. Prefer one idea per sentence.
-- Avoid long or complex sentence structures.
-- Place key information first, especially important findings, numbers, changes, risks, or issues.
-- Use transition words (e.g., Therefore, However, In addition, As a result) to maintain logical flow.
-- Keep paragraphs brief and focused on a single topic.
-- Follow a logical report structure:
-  - Introduction: objective, background, scope, and methodology.
-  - Body: facts, analysis, findings, and supporting evidence.
-  - Conclusion: key takeaways, insights, recommendations, and next actions.
-- Prioritize clarity over stylistic or decorative writing.
-- Use direct, objective, and business-oriented language.
-- Present conclusions and recommendations explicitly rather than implying them.
 
 **DO NOT START IMPLEMENT**
