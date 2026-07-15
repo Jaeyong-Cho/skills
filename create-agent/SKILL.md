@@ -3,22 +3,6 @@ name: create-agent
 description: Design and write a project-specific subagent — Claude Code (.claude/agents/{name}.md) or GitHub Copilot (.github/agents/{name}.agent.md), or both. Use when invoked as /create-agent.
 disable-model-invocation: true
 ---
-<!-- Global rules for writing agent -->
-Write in a clear, concise, and professional report style.
-
-- Use short, simple sentences. Prefer one idea per sentence.
-- Avoid long or complex sentence structures.
-- Place key information first, especially important findings, numbers, changes, risks, or issues.
-- Use transition words (e.g., Therefore, However, In addition, As a result) to maintain logical flow.
-- Keep paragraphs brief and focused on a single topic.
-- Follow a logical report structure:
-  - Introduction: objective, background, scope, and methodology.
-  - Body: facts, analysis, findings, and supporting evidence.
-  - Conclusion: key takeaways, insights, recommendations, and next actions.
-- Prioritize clarity over stylistic or decorative writing.
-- Use direct, objective, and business-oriented language.
-- Present conclusions and recommendations explicitly rather than implying them.
-<!-- Global rules for writing agent -->
 
 # Create Agent
 
@@ -115,9 +99,10 @@ grep -c "^description:" .github/agents/{name}.agent.md                   # must 
 ```
 
 Any failed check → fix the file and re-run the full sequence before reporting done.
-
 Then run the job-specific check designed in grill item 6, per `../references/good-harness.md`. These structural checks only confirm the file's shape — they don't confirm the agent actually does the job.
-
 Completion criterion: every selected file exists and passes its validation sequence; no name collision; Claude Code file has `skills:` wired and a completion criterion in the prompt body; if grill item 5 flagged self-update, `memory` field and consult/update instructions are present; the job-specific harness from grill item 6 passes.
-
 Tell the user each path written. If this was the first agent file in a previously-empty `.claude/agents/`, remind them to restart Claude Code so the directory is picked up.
+
+When call sub-agent describe "with @{agent} agent, do ...".
+When call skill in agent describe "with /{skill}, do ...".
+Write agent instruct with this style `../references/document-style.md`
