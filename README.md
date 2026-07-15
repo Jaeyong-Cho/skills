@@ -67,7 +67,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `tdd-refactoring.md` | Refactoring checklist — only after all tests pass |
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
-| `top-down-depth-first.md` | Split a goal top-down into a full tree of atomic, junior-developer-executable sub-goals before deciding execution order |
+| `top-down-decompose.md` | Split a goal top-down into a full tree of atomic, junior-developer-executable sub-goals before deciding execution order |
 
 ## Templates
 
