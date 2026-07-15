@@ -1,4 +1,4 @@
-<!- Global rules for writing documents -->
+<!-- Global rules for writing documents -->
 Write in a clear, concise, and professional report style.
 
 - Use short, simple sentences. Prefer one idea per sentence.
@@ -13,7 +13,7 @@ Write in a clear, concise, and professional report style.
 - Prioritize clarity over stylistic or decorative writing.
 - Use direct, objective, and business-oriented language.
 - Present conclusions and recommendations explicitly rather than implying them.
-<!- Global rules for writing documents -->
+<!-- Global rules for writing documents -->
 
 # ADR: {Title}
 
