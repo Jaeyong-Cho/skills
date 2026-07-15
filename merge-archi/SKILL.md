@@ -12,10 +12,9 @@ A draft ADR is named `{timestamp}-{slug}.md`; a merged one is `{timestamp}-{slug
 
 1. Find the slug: read `.context/plan/` for the plan `/auto-action` just executed (most recently modified; if ambiguous, list candidates and ask the user which one) and take `{slug}` from its filename `{timestamp}-{slug}.md`.
 2. In `.context/adr/`, find the draft ADR file (no `.merged.md` suffix) whose filename ends in `-{slug}.md`. If none, tell the user there's nothing to merge and stop. If more than one, list them and ask the user which to merge.
-3. Copy that file's content, unchanged, to `.context/adr/{slug}.md`, overwriting it entirely if it already exists — the ADR is newer and wins; don't preserve anything it superseded.
+3. Read the source files the merged ADR's Decision names, and the requirements spec's User Scenario section, Update the architecture document with well structured it to `.context/archi/{slug}.md` with this stype `../references/document-style.md`, and template `../template/architecture.md`'s Static View and Dynamic View from what's actually there — the real classes/files as implemented, the real call flow per scenario — not just what the ADR proposed. Update the changed if there is an already existing same topic architecture documents if needed.
 4. Rename the ADR file in place from `{timestamp}-{slug}.md` to `{timestamp}-{slug}.merged.md` — keep it as permanent decision history, never delete it.
-5. Read the source files the merged ADR's Decision names, and the requirements spec's User Scenario section, and fill `../template/architecture.md`'s Static View and Dynamic View from what's actually there — the real classes/files as implemented, the real call flow per scenario — not just what the ADR proposed. Write it to `.context/archi/{slug}.md`, overwriting any previous version; it always reflects current reality, so it carries no draft/merged filename state.
-6. Tell the user the committed ADR path, the ADR's new filename, and the architecture doc path.
+5. Tell the user the committed ADR path, the ADR's new filename, and the architecture doc path.
 
 `mkdir -p .context/archi` if needed.
 
