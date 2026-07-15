@@ -27,24 +27,8 @@ Grill until every branch is resolved and the user confirms. Completion criterion
 
 Derive a kebab-case slug from the topic. If revising an existing draft ADR, reuse its slug and timestamp — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/adr.md` with the resolved context, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/adr/{timestamp}-{slug}.md`.
+Fill in `../template/adr.md` with the resolved context with this style `../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/adr/{timestamp}-{slug}.md`.
 
 `mkdir -p .context/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/merge-archi` will fold into `.context/adr/{slug}.md` once implementation completes. Next step: `/planning`.
-
-## Document Style
-Write in a clear, concise, and professional report style.
-
-- Use short, simple sentences. Prefer one idea per sentence.
-- Avoid long or complex sentence structures.
-- Place key information first, especially important findings, numbers, changes, risks, or issues.
-- Use transition words (e.g., Therefore, However, In addition, As a result) to maintain logical flow.
-- Keep paragraphs brief and focused on a single topic.
-- Follow a logical report structure:
-  - Introduction: objective, background, scope, and methodology.
-  - Body: facts, analysis, findings, and supporting evidence.
-  - Conclusion: key takeaways, insights, recommendations, and next actions.
-- Prioritize clarity over stylistic or decorative writing.
-- Use direct, objective, and business-oriented language.
-- Present conclusions and recommendations explicitly rather than implying them.
 
 **DO NOT START IMPLEMENT**
