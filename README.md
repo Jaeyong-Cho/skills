@@ -26,11 +26,9 @@ The script detects which AI agents are installed and sets up each one:
 
 ```
 /drilling  →  /req  →  /archi  →  /planning  →  /auto-action  →  /merge-req, /merge-archi
-   ↑                                                                              |
-   └──────────────────────── next sibling leaf ─────────────────────────────────┘
 ```
 
-`/drilling` is optional for goals small enough to spec in one pass — start straight at `/req` for those. For a broad goal, `/drilling` splits it into a tree of narrower sub-goals and hands one leaf at a time to `/req`; re-run `/drilling` after each leaf's `/merge-req`/`/merge-archi` to pick the next one.
+`/drilling` is optional for goals small enough to spec in one pass — start straight at `/req` for those. For a broad goal, `/drilling` builds the whole tree of atomic sub-goals in one pass; it doesn't pick an order. You choose which leaf to send through `/req` next, and re-run `/drilling` any time to check status or extend the tree.
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
 
@@ -38,7 +36,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/drilling` | `.context/tree/` | Drill a broad goal top-down into a tree of narrower sub-goals, depth-first, until reaching a leaf small enough for `/req` |
+| `/drilling` | `.context/tree/` | Split a broad goal top-down into a tree of atomic, junior-developer-executable sub-goals, one per leaf small enough for `/req` |
 | `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
@@ -69,7 +67,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `tdd-refactoring.md` | Refactoring checklist — only after all tests pass |
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
-| `top-down-depth-first.md` | Drill from the top goal to the smallest actionable subtask and do it immediately, rather than mapping the whole tree first |
+| `top-down-depth-first.md` | Split a goal top-down into a full tree of atomic, junior-developer-executable sub-goals before deciding execution order |
 
 ## Templates
 
