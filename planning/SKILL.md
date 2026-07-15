@@ -21,7 +21,7 @@ If the ADR is ambiguous or missing something the sequence needs, stop and send t
 
 Derive a kebab-case slug from the topic — reuse the ADR's slug so the plan pairs with it. If revising an existing plan, reuse its timestamp too — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/plan.md` with the ADR's path and the resolved action sequence, and write it to `.context/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is.
+Fill in `../template/plan.md` with the ADR's path and the resolved action sequence with this style `../references/document-style.md`, and write it to `.context/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is.
 
 `mkdir -p .context/plan` if needed. Tell the user the file path. Next step: `/auto-action`.
 
