@@ -25,12 +25,12 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/drill  →  /req  →  /archi  →  /planning  →  /auto-action  →  /merge-req, /merge-archi
+/drilling  →  /req  →  /archi  →  /planning  →  /auto-action  →  /merge-req, /merge-archi
    ↑                                                                              |
    └──────────────────────── next sibling leaf ─────────────────────────────────┘
 ```
 
-`/drill` is optional for goals small enough to spec in one pass — start straight at `/req` for those. For a broad goal, `/drill` splits it into a tree of narrower sub-goals and hands one leaf at a time to `/req`; re-run `/drill` after each leaf's `/merge-req`/`/merge-archi` to pick the next one.
+`/drilling` is optional for goals small enough to spec in one pass — start straight at `/req` for those. For a broad goal, `/drilling` splits it into a tree of narrower sub-goals and hands one leaf at a time to `/req`; re-run `/drilling` after each leaf's `/merge-req`/`/merge-archi` to pick the next one.
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
 
@@ -38,7 +38,7 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/drill` | `.context/tree/` | Drill a broad goal top-down into a tree of narrower sub-goals, depth-first, until reaching a leaf small enough for `/req` |
+| `/drilling` | `.context/tree/` | Drill a broad goal top-down into a tree of narrower sub-goals, depth-first, until reaching a leaf small enough for `/req` |
 | `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
@@ -81,4 +81,4 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
 | `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
-| `tree.md` | `/drill` — written to `.context/tree/{slug}.md`, updated in place as the tree is drilled and leaves complete (no draft/merged state) |
+| `tree.md` | `/drilling` — written to `.context/tree/{slug}.md`, updated in place as the tree is drilled and leaves complete (no draft/merged state) |

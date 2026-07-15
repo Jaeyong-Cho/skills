@@ -1,6 +1,6 @@
 ---
-name: drill
-description: Goal-decomposition skill. Drills a broad goal top-down into a persisted tree of narrower sub-goals, depth-first, until reaching a leaf small enough for /req. Use when invoked as /drill.
+name: drilling
+description: Goal-decomposition skill. Drills a broad goal top-down into a persisted tree of narrower sub-goals, depth-first, until reaching a leaf small enough for /req. Use when invoked as /drilling.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ Manages a persisted goal tree so a broad goal never lands on `/req` in one overs
 
 **Starting a new tree:** if invoked with a goal argument, derive a kebab-case slug from the clarified goal. If `.context/tree/{slug}.md` doesn't exist, create it from `../template/tree.md` with the clarified goal as the root node and proceed to split it (below). If it already exists, ignore the argument and resume it instead.
 
-**Resuming:** if invoked with no argument, look in `.context/tree/`. One file — resume it. Several — list them and ask the user which. None — tell the user to run `/drill {goal}` to start one, and stop.
+**Resuming:** if invoked with no argument, look in `.context/tree/`. One file — resume it. Several — list them and ask the user which. None — tell the user to run `/drilling {goal}` to start one, and stop.
 
 **Finding the frontier:** walk the tree depth-first, leftmost-first. A node is done when: an action leaf (`[ ]`) — its slug's RDR and ADR are committed (`.context/req/{slug}.md` and `.context/adr/{slug}.md` exist, with no unmerged draft left in `.context/rdr/` or `.context/adr/` for that slug); an understand-node (`[?]`) — its question has been answered and the answer recorded inline; a non-leaf — every child under it is done. If the current node is done, check it off (`[x]`, leaves get rdr/adr links, understand-nodes keep their recorded answer), then continue the walk — a sibling if any remain unchecked, otherwise back up to the parent (checking it off too once every child is done) and on to the parent's next sibling. Stop at the first node that isn't done. If the walk reaches the end with everything checked off, tell the user the goal tree is complete and stop.
 
