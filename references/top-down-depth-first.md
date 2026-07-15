@@ -22,3 +22,22 @@ Root: Make Tetris
 ```
 
 A, B, C are MECE at the root: menu, ranking, and game logic don't overlap, and together they're everything Tetris needs. A's five children are MECE the same way one level down — UI, start, settings, ranking-view, and exit each own a distinct slice of the main menu, nothing else belongs there. Depth-first order: finish A1, then A2, then A3, A4, A5 — each already a leaf, one actor, one path, no "and" — before B or C get touched, even though B and C were named in the same breath as A.
+
+## Understanding gaps
+
+Sometimes a node can't be split correctly because a real piece of information is missing — not indecision, a genuine unknown the split depends on. Don't guess at children you can't yet name correctly. When it surfaces, turn the gap into its own node under whichever parent you were splitting when you hit it: `[?] {path}: Understand {the unknown}`.
+
+- If the answer would change how the rest of *that same parent's* children get named, it blocks: insert it as the parent's first child, stop there, and only finish naming the parent's remaining children once it's answered.
+- If the parent's other children don't depend on the answer, name them too and add the understand-node alongside as one more sibling under that parent.
+- Understand-nodes resolve manually, outside the tree: whoever finds the answer reports it back, the node is checked off with the answer recorded inline, and drilling resumes from there.
+- Understand-nodes are atomic — they don't get split further. If answering one surfaces a second unknown, that's a new understand-node, not a child of the first.
+
+### Example
+```
+Root: Make Tetris
+- [x] A: Make main menu
+- [ ] B: Make ranking system
+  - [?] B0: Understand whether ranking needs online sync
+- [ ] C: Make game logic
+```
+The root split into A, B, C didn't need this answer — menu, ranking, and game logic are MECE regardless of how ranking works internally. The gap only surfaced one level down, while drilling into B: a synced ranking system and a local-only one decompose into different children (sync service, conflict resolution, vs. just local score storage), so B0 blocks — B gets no other children until it's answered. Once it is, B splits for real using that answer, same as any other node.
