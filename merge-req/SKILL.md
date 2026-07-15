@@ -12,7 +12,7 @@ A draft RDR is named `{timestamp}-{slug}.md`; a merged one is `{timestamp}-{slug
 
 1. Find the slug: read `.context/plan/` for the plan `/auto-action` just executed (most recently modified; if ambiguous, list candidates and ask the user which one) and take `{slug}` from its filename `{timestamp}-{slug}.md`.
 2. In `.context/rdr/`, find draft RDR files (no `.merged.md` suffix) whose filename ends in `-{slug}.md`. If none, tell the user there's nothing to merge and stop. If more than one, list them and ask the user which to merge.
-3. Copy that file's content, unchanged, to `.context/req/{slug}.md`, overwriting it entirely if it already exists — the RDR is newer and wins; don't preserve anything it superseded.
+3. Rewrite well structured requirement documents at the `.context/req/{slug}.md` with this style `../references/document-style.md`, updating changed if the already existing related topic requirement documents. — the RDR is newer and wins.
 4. Rename the RDR file in place from `{timestamp}-{slug}.md` to `{timestamp}-{slug}.merged.md` — keep it as permanent decision history, never delete it.
 5. Tell the user the committed spec path and the RDR's new filename.
 
