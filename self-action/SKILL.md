@@ -18,3 +18,17 @@ For each step in the plan's Action Sequence:
 Completion criterion: all tests written, all files created with a mix of working code and strategic holes (human's ~30% holes, AI's ~70% working), showing the full flow and interactions.
 
 When done: report which files were modified, which were created, which tests were added, and which steps have holes for human to fill. Do not report anything beyond the changes made.
+
+## Example: Calculator
+
+**Working (AI):**
+- `main()`: try/catch structure, while loop, input/strip, exit checks → human sees the REPL flow
+- `parse_expression()`: error message template, function structure → pattern defined
+- `execute()`: error handling wrapper (try/catch for ValueError and ZeroDivisionError) → error paths defined
+
+**Holes (Human):**
+- `main()` line 109-111: Call `usecase.execute(line)` and print. Human learns the main operation flow.
+- `parse_expression()` line 49-54: Implement regex pattern and parse the three groups (left, operator, right). Human learns the parsing algorithm.
+- `execute()` line 72-77: Orchestrate parse → evaluate → catch errors. Human learns the flow and error handling coordination.
+
+Human reads working code, fills holes, and understands: REPL loop → parsing → evaluation → error handling. No excessive typing, full understanding.
