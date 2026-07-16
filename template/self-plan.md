@@ -9,7 +9,15 @@
   - **Working:** Entire function — Redis client setup, TTL, connection error handling. This is a leaf stage's own algorithm, not a call to another flow stage, so it has no hole.
 - e.g. Wire `TokenCache.get(token)` into `AuthService.validate(token)` in `src/auth/service.py` so it checks the cache before falling back to the DB.
   - **Working:** The DB-lookup branch itself (`UserRepository.find(token)` and its query).
-  - **Hole:** The line(s) in `validate` where it calls `TokenCache.get(token)` and decides, from the result, whether to call the DB. TODO (per `todo-hole.md`): `# TODO: Turn `token` (e.g. "user-42-session") into the value this method returns (e.g. a validated user record) — using TokenCache.get and, on a miss, UserRepository.find.`
+  - **Hole:** The line(s) in `validate` where it calls `TokenCache.get(token)` and decides, from the result, whether to call the DB. TODO (per `todo-hole.md`):
+    ```python
+    # TODO:
+    # 1. Call TokenCache.get(token).
+    # 2. If it returns a cached user, return that.
+    # 3. Otherwise call UserRepository.find(token) and return that.
+    # e.g. token="user-42-session" -> get() returns None (miss)
+    #      -> UserRepository.find("user-42-session") -> the user record
+    ```
 
 ## Closeout
 - [ ] Refactor
