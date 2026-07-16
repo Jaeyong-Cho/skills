@@ -18,4 +18,4 @@ A draft ADR is named `{timestamp}-{slug}.md`; a merged one is `{timestamp}-{slug
 
 `mkdir -p .context/archi` if needed.
 
-Completion criterion: the matching ADR file is renamed to `.merged.md`, `.context/adr/{slug}.md` holds its content, and `.context/archi/{slug}.md` reflects the implemented Static/Dynamic View.
+Completion criterion: the matching ADR file is renamed to `.merged.md`, and `.context/archi/{slug}.md` reflects the implemented Static/Dynamic View.
