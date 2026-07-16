@@ -27,21 +27,3 @@ For each step in the plan's Action Sequence:
 Completion criterion: all tests written, all files created with a mix of working code and strategic holes (human's ~30% holes, AI's ~70% working), showing the full flow and interactions.
 
 When done: report which files were modified, which were created, which tests were added, and which steps have holes for human to fill. Do not report anything beyond the changes made.
-
-## Example: Calculator
-
-Applying the five rules:
-
-**Working (AI):**
-- `main()` try/catch + while loop structure (Rule 1: error infrastructure)
-- `execute()` try/catch blocks for ValueError and ZeroDivisionError (Rule 1: error infrastructure)
-- `Expression.evaluate()` implementation for operator '+' (Rule 2: show one case, others follow the pattern)
-- Regex pattern syntax in `parse_expression()` (Rule 5: syntax, not logic)
-
-**Holes (Human):**
-- `main()` line 109-111: Call `usecase.execute(line)` and print (Rule 4: orchestration)
-- `execute()` line 72-77: Sequence of parse → evaluate → return result (Rule 4: orchestration, Rule 5: data transformation)
-- `execute()` error handling logic: which error triggers which message (Rule 3: decision logic)
-- `Expression.evaluate()` implementation for operator '-' (Rule 2: one representative case; human applies pattern to '*' and '/')
-
-Human reads working code (infrastructure, one example), fills holes (orchestration, decisions, representative pattern), and understands the full system without excessive typing.
