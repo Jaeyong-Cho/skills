@@ -27,7 +27,9 @@ To tell hole from working, ask: does this line carry the flow's data to the next
 
 For each hole, record its TODO text following `todo-hole.md`.
 
-If the ADR is ambiguous or missing something the sequence needs, stop and send the user back to `/archi` rather than guessing. Otherwise show the user the full sequence, including each implementation step's hole/working breakdown, and ask for confirmation. Completion criterion: action sequence is fully ordered, test-before-implementation on every unit of work, every implementation step has its hole/working decision recorded, user confirmed.
+**Budget:** across the whole sequence, holed lines should be roughly 30% of implementation lines, working code the other ~70%. This is a plan-wide budget, not a per-step cap — some steps may be all working code, a few may carry more holes, as long as the total lands near 30/70. After building the sequence, tally holed vs. working lines; if holes run well past 30%, cut back to the most important flow-connecting and key-change lines and demote the rest to working code.
+
+If the ADR is ambiguous or missing something the sequence needs, stop and send the user back to `/archi` rather than guessing. Otherwise show the user the full sequence, including each implementation step's hole/working breakdown and the overall hole/working tally, and ask for confirmation. Completion criterion: action sequence is fully ordered, test-before-implementation on every unit of work, every implementation step has its hole/working decision recorded, the ~30/70 budget holds, user confirmed.
 
 Derive a kebab-case slug from the topic — reuse the ADR's slug so the plan pairs with it. If revising an existing self-plan, reuse its timestamp too — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
