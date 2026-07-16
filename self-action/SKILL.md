@@ -10,10 +10,11 @@ Read the plan to scaffold from `.context/plan/`. If multiple plans exist, list t
 
 For each step in the plan's Action Sequence:
 
-- **If editing an existing file:** Add a TODO hint directly at the source location (inline comment with implementation guidance, constraints, edge cases). Do not modify other code.
-- **If creating a new file:** Create the file with skeleton functions (signatures only), each with a TODO hint explaining what it should do. Match the file structure and language idioms the plan specifies.
-- **If the step involves tests:** Generate test code following the plan's test specifications. Tests should be ready to run immediately and cover the cases the plan lists.
+- **If the step involves tests:** Generate complete test code following the plan's test specifications. Tests should be ready to run immediately and cover all cases the plan lists.
+- **Identify business logic:** Isolate the core feature logic that a human should understand and write (~30%). This is the conceptual heart of the feature. Everything else (infrastructure, setup, plumbing, error handling) is AI's responsibility.
+- **Business logic only — scaffold with TODOs:** For business logic functions/blocks, create skeleton code (signatures only) with TODO hints explaining the business goal, inputs, outputs, and edge cases. Do not scaffold infrastructure or implementation details.
+- **Everything else — write complete:** For non-business-logic code, write complete, production-ready implementations. No TODOs.
 
-Completion criterion: every step has scaffolding in place (TODOs added to existing code or skeleton code created for new code), and all specified tests are written.
+Completion criterion: all tests written, business logic scaffolded with clear TODOs (human's 30%), and all infrastructure/plumbing fully implemented (AI's 70%).
 
-When done: report which files were modified, which were created, and which tests were added. Do not report anything beyond the changes made.
+When done: report which files were modified, which were created, which tests were added, and which functions are scaffolded for human implementation. Do not report anything beyond the changes made.
