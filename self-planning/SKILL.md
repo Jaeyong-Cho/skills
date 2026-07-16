@@ -16,14 +16,14 @@ Build the action sequence the same way `/planning` does: one red-green TDD cycle
 
 Read the ADR's Decision (Before/After) to identify the main flow: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
 
-For each implementation step, decide hole vs working using one rule:
+For each implementation step, a hole is never a whole function body and never a stage's full algorithm — it's one or a few specific lines. There are two kinds, and both are judgment calls, not a rigid checklist — recommend what best serves understanding:
 
-**Hole only the line(s) where a function calls the next stage of the flow and uses the returned value. Never hole a whole function body, and never hole a function's own internal algorithm — only the connecting calls between flow stages.**
+1. **Flow-connecting hole:** the line(s) where a stage calls the next stage of the flow and uses the returned value (e.g., `main()` calling the use case and printing its result; a use case calling the parser then the evaluator).
+2. **In-stage key-change hole:** the one line that is a stage's own core decision or transformation, even when it doesn't call another stage. If the stage has multiple similar branches (e.g., several operators, several conditions), hole exactly one representative branch's line — the rest stay working code, giving the human a pattern to generalize from.
 
-To tell the two apart, ask: does removing this line break the chain from input to output (a hole), or does it just change how one stage computes its own result internally (working code)?
+Everything else is working code, always: the rest of a stage's own algorithm (setup, loops, the non-representative branches), and infrastructure (prompts, exit handling, try/except structure, error message strings).
 
-- **Working, always:** a stage's own algorithm (e.g., a parser's regex, an evaluator's operator dispatch) even though the stage itself is named in the flow; infrastructure (loops, prompts, exit handling, try/except structure, error message strings).
-- **Hole:** the 1–2 lines where one stage calls the next and uses what it returns (e.g., `main()` calling the use case and printing its result; a use case calling the parser then the evaluator).
+To tell hole from working, ask: does this line carry the flow's data to the next stage, or is it the one line that embodies this stage's core decision? If neither, it's working code.
 
 For each hole, record its TODO text following `todo-hole.md`.
 
