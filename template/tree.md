@@ -17,3 +17,12 @@ e.g.
   - [ ] B: Make ranking system
     - [?] B0: Understand whether ranking needs online sync
   - [ ] C: Make game logic
+
+## Dependencies
+> Every leaf as a node, edges from prerequisite to dependent. Only real dependencies — most leaves have none and stay isolated nodes here.
+```mermaid
+graph TD
+    A2[A2: Make game-start logic]
+    A5[A5: Make exit logic]
+    A2 --> A5
+```

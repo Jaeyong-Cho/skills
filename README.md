@@ -79,4 +79,4 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
 | `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
-| `tree.md` | `/drilling` — written to `.context/tree/{slug}.md`, updated in place as the tree is drilled and leaves complete (no draft/merged state) |
+| `tree.md` | `/drilling` — written to `.context/tree/{slug}.md`: a MECE decomposition checklist plus a Mermaid dependency DAG over the leaves, updated in place as the tree is built and leaves complete (no draft/merged state) |
