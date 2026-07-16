@@ -37,10 +37,10 @@ All workflow skills are user-invoked. Artifacts land in `.context/`. All skills 
 
 After planning, choose how to implement:
 
-| Path | Test | Architecture | Details |
-|------|------|--------------|---------|
+| Path | Test | Code Structure | Strategic Holes |
+|------|------|----------------|-----------------|
 | **auto-action** | AI writes | AI writes | AI writes |
-| **self-action** | AI writes | You write (~30%) | AI writes (~70%) |
+| **self-action** | AI writes | AI writes complete | You fill (~30%) |
 | **test** | Runs only | — | — |
 
 ## Skills
@@ -51,7 +51,7 @@ After planning, choose how to implement:
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
 | `/auto-action` | code changes | Execute the plan's action sequence: write tests → write code → verify. Fully autonomous. |
-| `/self-action` | code changes + tests | Generate tests, scaffold top-level architecture and main flow (you understand the pipeline), write complete detailed logic inside (edge cases, error handling, validation). |
+| `/self-action` | code changes + tests | Generate tests and complete code, but leave strategic holes (TODOs) throughout to teach how the system works. You fill the holes; AI handles infrastructure and plumbing. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 | `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
