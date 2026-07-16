@@ -11,9 +11,9 @@ Read the plan to scaffold from `.context/plan/`. If multiple plans exist, list t
 For each step in the plan's Action Sequence:
 
 - **If the step involves tests:** Generate complete test code following the plan's test specifications. Tests should be ready to run immediately and cover all cases the plan lists.
-- **Function signatures and interfaces — scaffold with TODOs:** Create function declarations, method signatures, and interface/type definitions. Add TODO hints explaining the contract: what it takes, what it returns, what it should do. Do not implement the bodies.
-- **Implementation logic — write complete:** Write all implementation logic inside function bodies. Handle edge cases, assertions, validation, and error handling. Production-ready, no TODOs.
+- **Top-level architecture and flow — scaffold with TODOs:** Create the orchestration layer: main functions, call sequences, interface definitions, and component interactions. Add TODO hints explaining the big picture: what calls what, in what order, and why. Show the main pipeline structure. Do not fill in detailed implementations inside each function.
+- **Detailed implementations — write complete:** Inside each function body, write complete, production-ready logic. Handle edge cases, error handling, validation, and constraints. This is where the complexity lives, but it's internal to each function—hidden from the orchestration layer above.
 
-Completion criterion: all tests written, all function signatures and interfaces defined with TODO explanations (human's ~30%), and all implementation logic fully written (AI's ~70%).
+Completion criterion: all tests written, top-level architecture and flow clear with TODOs (human's ~30%), and all detailed implementations complete (AI's ~70%).
 
-When done: report which files were modified, which were created, which tests were added, and which function signatures are ready for human review. Do not report anything beyond the changes made.
+When done: report which files were modified, which were created, which tests were added, and which orchestration/flow functions are ready for human review. Do not report anything beyond the changes made.
