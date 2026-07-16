@@ -20,9 +20,12 @@ For each step in the plan's Action Sequence:
 4. **Hole the architectural flow** — how components call each other, the orchestration sequence, not the internal details of those calls
 5. **Hole the transformations** — where data flows and changes shape, not the syntax of how it changes
 
-**Working code:** Error handling infrastructure, language details (try/catch syntax, regex patterns), implementation mechanics.
+**Working code:** Error handling infrastructure, language details (try/catch syntax, regex patterns), implementation mechanics. Complete, runnable, no TODOs.
 
-**Holes:** Orchestration, component interactions, representative examples, business logic flow, transformation logic.
+**Holes:** Orchestration, component interactions, representative examples, business logic flow, transformation logic. Mark each hole with a TODO comment explaining:
+- What should happen at this point
+- Why it matters (architectural context, data flow, decision logic)
+- What the human should implement or understand
 
 Completion criterion: all tests written, all files created with a mix of working code and strategic holes (human's ~30% holes, AI's ~70% working), showing the full flow and interactions.
 
