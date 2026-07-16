@@ -3,7 +3,8 @@
 **ADR:** {path to `.context/adr/{slug}.md`}
 
 ## Static View
-> Directory structure, classes — each with purpose and description — and their dependency relationships, placed per archi.md's layers (Objects/Logics/Usecase/External). Dependencies as a Mermaid diagram; an arrow pointing from an inner layer to an outer one is a design error.
+> - Directory structure, classes — each with purpose and description — and their dependency relationships, placed per archi.md's layers (Objects/Logics/Usecase/External).
+> - Dependencies as a Mermaid diagram; an arrow pointing from an inner layer to an outer one is a design error.
 
 **Directory structure**
 ```
@@ -28,7 +29,7 @@ graph LR
 ```
 
 ## Dynamic View
-> One Mermaid sequence diagram per scenario in the requirements spec's User Scenario section — name the subsection to match.
+> - One Mermaid sequence diagram per scenario in the requirements spec's User Scenario section — name the subsection to match.
 
 ### {Scenario name}
 ```mermaid
