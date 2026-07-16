@@ -5,19 +5,20 @@ A hole's TODO is a transformation spec, not an explanation. State only what goes
 **Format:**
 - ≤2 lines
 - Use the real parameter/return names from the signature — never invented names
-- Include one abstracted example: the *shape* of the transformation, not a worked concrete value
+- Include one worked example with concrete values — not abstract placeholders, but different values than the paired test uses, so it clarifies the shape without being a copy-pasteable answer
 - No "why this matters" reasoning
 - No operation-category or technique hint (not "split", not "use regex", not "orchestrate")
 
 **Examples:**
 
-For `def parse_expression(line: str) -> Expression:`
+For `def parse_expression(line: str) -> Expression:` (paired test uses `"3 + 4"`)
 ```python
-# TODO: Turn `line` (shape: "<left> <operator> <right>") into
-# Expression(left, operator, right).
+# TODO: Turn `line` (e.g. "5 - 2") into
+# Expression(5, "-", 2).
 ```
 
-For an orchestration hole inside `execute(self, line: str) -> str:`
+For an orchestration hole inside `execute(self, line: str) -> str:` (paired test uses `"3 + 4"` → `"7"`)
 ```python
-# TODO: Turn `line` into the value this method returns.
+# TODO: Turn `line` (e.g. "5 - 2") into the value this method
+# returns (e.g. "3").
 ```
