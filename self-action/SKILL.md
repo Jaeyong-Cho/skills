@@ -11,9 +11,9 @@ Read the plan to scaffold from `.context/plan/`. If multiple plans exist, list t
 For each step in the plan's Action Sequence:
 
 - **If the step involves tests:** Generate complete test code following the plan's test specifications. Tests should be ready to run immediately and cover all cases the plan lists.
-- **For each step: decide working or hole:** Some steps are fully implemented (working code). Some steps have holes (TODOs). Place holes strategically so the human sees purpose, operations, interactions, and flow without much typing.
+- **For each step: decide working or hole:** Some steps are fully implemented (working code). Some steps have holes (TODOs). Place holes strategically so the human understands purpose, algorithm, operations, interactions, and flow without much typing.
 - **Working steps:** Complete, production-ready implementations. These show how parts connect and provide working context.
-- **Hole steps:** Leave a TODO with a brief explanation of what this step does and why. The human fills it to understand how the pieces interact, not to implement everything from scratch.
+- **Hole steps:** Leave a TODO with a brief explanation of what this step does, why, and the algorithm/approach. The human fills it to understand the logic and how the pieces interact, not to implement everything from scratch.
 
 Completion criterion: all tests written, all files created with a mix of working code and strategic holes (human's ~30% holes, AI's ~70% working), showing the full flow and interactions.
 
