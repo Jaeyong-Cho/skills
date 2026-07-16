@@ -25,23 +25,24 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/req  →  /archi  →  /planning  →  (choose path)  →  /merge-req, /merge-archi
-                                  ├─ /auto-action (AI implements fully)
-                                  ├─ /self-action (AI scaffolds, you implement)
-                                  └─ /test (verify only)
+/req  →  /archi  →  (choose planning path)  →  /auto-action  →  /merge-req, /merge-archi
+                     ├─ /planning       (regular plan, full implementation)
+                     └─ /self-planning  (self-plan, holes for human implementation)
+
+/test  →  verify a plan's tests, or discover and run all tests — standalone, any time
 ```
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
 
 ### Implementation Paths
 
-After planning, choose how to implement:
+The branch happens at planning, not execution — `/auto-action` always runs, but behaves differently depending on which plan type it finds:
 
 | Path | Test | Working Steps | Holes to Fill |
 |------|------|---------------|---------------|
-| **auto-action** | AI writes | AI writes (100%) | — |
-| **self-action** | AI writes | AI writes (~70%) | You fill (~30%) |
-| **test** | Runs only | — | — |
+| **/planning → /auto-action** | AI writes | AI writes (100%) | — |
+| **/self-planning → /auto-action** | AI writes | AI writes (~70%) | You fill (~30%) |
+| **/test** | Runs only | — | — |
 
 ## Skills
 
@@ -49,9 +50,9 @@ After planning, choose how to implement:
 |-------|--------|-------------|
 | `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
 | `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
-| `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a plan |
-| `/auto-action` | code changes | Execute the plan's action sequence: write tests → write code → verify. Fully autonomous. |
-| `/self-action` | code changes + tests | Generate tests and code with a mix of working steps and holes (TODOs). Some steps fully implemented, some with TODOs—you fill the holes to understand purpose, algorithm, operations, interactions, and flow. |
+| `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan |
+| `/self-planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
+| `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 | `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
@@ -79,6 +80,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `tdd-refactoring.md` | Refactoring checklist — only after all tests pass |
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
+| `todo-hole.md` | Wording rule for a self-plan hole's TODO: input→output using real signature names, one abstracted example, ≤2 lines, no rationale, no technique hint |
 
 ## Templates
 
@@ -89,4 +91,5 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 | `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
 | `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
+| `self-plan.md` | `/self-planning` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
