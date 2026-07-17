@@ -22,7 +22,9 @@ Completion criterion: every step executed and reported, or stopped on first fail
 
 ## Self-Plan Execution
 
-For each implementation step, write exactly what the step's **Working** and **Hole** annotations specify — this was already decided in `/self-planning`, so do not re-derive or re-apply the five rules here. Write working parts complete and runnable. For each hole, write its recorded TODO text verbatim, following `../references/todo-hole.md`.
+For each implementation step, write exactly what the step's **Working** and **Hole** annotations specify — this was already decided in `/self-planning`, so do not re-derive or re-apply the rules here. Write working parts complete and runnable. For each hole, write its recorded TODO text verbatim, following `../references/todo-hole.md`.
+
+Each file gets one Write or Edit call that lands its final state directly — holes as TODOs, working parts complete, in the same pass. Never write a full working implementation for a hole's line(s) and then edit it down to a TODO afterward; that's two passes of work for one outcome the self-plan already decided.
 
 Test steps are always written complete, per the plan.
 
