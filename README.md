@@ -82,6 +82,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
 | `todo-hole.md` | Wording rule for a self-plan hole's TODO: input→output using real signature names, one abstracted example, ≤2 lines, no rationale, no technique hint |
+| `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
 
 ## Templates
 
