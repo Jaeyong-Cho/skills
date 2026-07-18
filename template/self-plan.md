@@ -18,6 +18,14 @@
     # e.g. token="user-42-session" -> get() returns None (miss)
     #      -> UserRepository.find("user-42-session") -> the user record
     ```
+- e.g. Wire `AuthService.validate(token)` into the request handler in `src/auth/handler.py` (the client-facing entry point) so incoming requests are authorized before reaching the route.
+  - **Working:** Response formatting and the 401 branch.
+  - **Hole:** The line(s) where the handler calls `AuthService.validate(token)` and gates the route on its result. TODO (per `todo-hole.md`): ...
+
+## Recommended Human Work Order
+Every holed step above, reordered top-down along the flow (entry point → algorithm) instead of build order. Steps with no hole (e.g. Step 2, `TokenCache.get`) are omitted — they're already complete.
+- e.g. Step 4: Wire `AuthService.validate` into the request handler — the flow's entry point; start here to see the whole flow before descending into it.
+- e.g. Step 3: Wire `TokenCache.get` into `AuthService.validate` — one level down; the flow's next stage.
 
 ## Closeout
 - [ ] Refactor
