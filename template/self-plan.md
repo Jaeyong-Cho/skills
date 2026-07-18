@@ -17,6 +17,10 @@
     # 3. Otherwise call UserRepository.find(token) and return that.
     # e.g. token="user-42-session" -> get() returns None (miss)
     #      -> UserRepository.find("user-42-session") -> the user record
+    cached = TokenCache.get(/* */)
+    if cached:
+        return /* */
+    return /* */
     ```
 - e.g. Wire `AuthService.validate(token)` into the request handler in `src/auth/handler.py` (the client-facing entry point) so incoming requests are authorized before reaching the route.
   - **Working:** Response formatting and the 401 branch.
@@ -28,5 +32,5 @@ Every holed step above, reordered top-down along the flow (entry point → algor
 - e.g. Step 3: Wire `TokenCache.get` into `AuthService.validate` — one level down; the flow's next stage.
 
 ## Closeout
+- [ ] Review + Test — once every hole above is filled in, re-run `/auto-action` on this plan; it detects the holes are gone and reviews each one against its recorded intent, then runs the tests
 - [ ] Refactor
-- [ ] Test

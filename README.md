@@ -52,7 +52,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | `/archi` | `.context/adr/` | Resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR — asks the user only where a decision is important or ambiguous |
 | `/fs-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
-| `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. |
+| `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan, first run: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. Self-plan, re-run after the human fills every hole: review each one against its recorded intent and run the tests. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 | `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
@@ -81,7 +81,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `tdd-refactoring.md` | Refactoring checklist — only after all tests pass |
 | `test-loop.md` | Build a tight harness that mirrors real system: real result, debug output, logs |
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
-| `todo-hole.md` | Wording rule for a self-plan hole's TODO: input→output using real signature names, one abstracted example, ≤2 lines, no rationale, no technique hint |
+| `todo-hole.md` | Wording rule for a self-plan hole's TODO: junior-developer guidance, no line cap — real signature names, the general technique, numbered steps, one worked example with concrete values different from the paired test |
 | `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
 
 ## Templates

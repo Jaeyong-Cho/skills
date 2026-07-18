@@ -25,7 +25,7 @@ Everything else is working code, always: the rest of a stage's own algorithm (se
 
 To tell hole from working, ask: does this line carry the flow's data to the next stage, or is it the one line that embodies this stage's core decision? If neither, it's working code.
 
-For each hole, record its TODO text following `todo-hole.md`.
+For each hole, record its TODO comment and blanked code skeleton following `todo-hole.md`.
 
 **Budget:** across the whole sequence, holed lines should be roughly 30% of implementation lines, working code the other ~70%. This is a plan-wide budget, not a per-step cap — some steps may be all working code, a few may carry more holes, as long as the total lands near 30/70. After building the sequence, tally holed vs. working lines; if holes run well past 30%, cut back to the most important flow-connecting and key-change lines and demote the rest to working code.
 
@@ -35,7 +35,7 @@ If the ADR is ambiguous or missing something the sequence needs, stop and send t
 
 Derive a kebab-case slug from the topic — reuse the ADR's slug so the plan pairs with it. If revising an existing self-plan, reuse its timestamp too — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/self-plan.md` with the ADR's path, `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is.
+Fill in `../template/self-plan.md` with the ADR's path, `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is — unlike `/fs-plan`'s, it carries an extra **Review + Test** item ahead of Refactor, since a self-plan's holes aren't done until a human fills them in. That item stays unchecked through `/auto-action`'s first (write) pass; it's satisfied by re-running `/auto-action` on this plan once every hole is filled — it detects the holes are gone and switches from writing to reviewing the implementation against each hole's recorded intent and running the tests, instead of a separate skill.
 
 `mkdir -p .context/plan` if needed. Tell the user the file path. Next step: `/auto-action`.
 
