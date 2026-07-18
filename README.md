@@ -48,8 +48,8 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
-| `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
+| `/req` | `.context/rdr/` | Find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record — asks the user only where a decision is important or ambiguous |
+| `/archi` | `.context/adr/` | Resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR — asks the user only where a decision is important or ambiguous |
 | `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan |
 | `/self-planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
 | `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. |
