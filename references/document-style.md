@@ -14,3 +14,8 @@ Write in a clear, concise, and professional report style, structured as bullet p
 - Prioritize clarity over stylistic or decorative writing.
 - Use direct, objective, and business-oriented language.
 - Present conclusions and recommendations explicitly as bullets rather than implying them in prose.
+
+## Restricted content
+- Never write secrets or credentials into the document: API keys, tokens, passwords, private keys, connection strings.
+- Never write personal information: usernames, real names, emails, phone numbers, addresses, or other personally identifiable information.
+- If such data appears in source material, redact it (e.g., `[REDACTED]`) or refer to it abstractly (e.g., "the API key") instead of quoting the value.
