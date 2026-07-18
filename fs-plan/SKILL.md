@@ -1,10 +1,10 @@
 ---
-name: planning
-description: Planning skill. Sequences an ADR's design into ordered implementation steps as TDD cycles, then writes a plan. Use when invoked as /planning.
+name: fs-plan
+description: Full self-plan skill. Sequences an ADR's design into ordered implementation steps as TDD cycles, then writes a plan fully written and executed by AI. Use when invoked as /fs-plan.
 disable-model-invocation: true
 ---
 
-# Planning
+# Fs-Plan (Full Self-Plan)
 
 Read the draft ADR to plan from `.context/adr/` — a draft is named `{timestamp}-{slug}.md` (a merged one has `.merged.md` and is no longer the active target). If multiple drafts exist, list them and ask the user which to use. If none exist, tell the user to run `/archi` first and stop.
 

@@ -1,10 +1,10 @@
 ---
-name: self-planning
-description: Self-planning skill. Sequences an ADR's design into ordered TDD steps and marks, per implementation step, which parts are holes for human implementation vs working code. Use when invoked as /self-planning.
+name: co-plan
+description: Collaborative-plan skill. Sequences an ADR's design into ordered TDD steps and marks, per implementation step, which parts are holes for human implementation vs working code. Use when invoked as /co-plan.
 disable-model-invocation: true
 ---
 
-# Self-Planning
+# Co-Plan (Collaborative Plan)
 
 Read the draft ADR to plan from `.context/adr/` — a draft is named `{timestamp}-{slug}.md` (a merged one has `.merged.md` and is no longer the active target). If multiple drafts exist, list them and ask the user which to use. If none exist, tell the user to run `/archi` first and stop.
 
@@ -12,7 +12,7 @@ Read `.context/plan/` — if an existing self-plan (`**Type:** Self-Plan`) cover
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`, `../references/tdd-refactoring.md`, `../references/todo-hole.md`.
 
-Build the action sequence the same way `/planning` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Test steps are never holed — tests are always complete and AI-written.
+Build the action sequence the same way `/fs-plan` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Test steps are never holed — tests are always complete and AI-written.
 
 Read the ADR's Decision (Before/After) to identify the main flow: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
 

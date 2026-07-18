@@ -26,8 +26,8 @@ The script detects which AI agents are installed and sets up each one:
 
 ```
 /req  →  /archi  →  (choose planning path)  →  /auto-action  →  /merge-req, /merge-archi
-                     ├─ /planning       (regular plan, full implementation)
-                     └─ /self-planning  (self-plan, holes for human implementation)
+                     ├─ /fs-plan  (full self-plan, full AI implementation)
+                     └─ /co-plan  (collaborative plan, holes for human implementation)
 
 /test  →  verify a plan's tests, or discover and run all tests — standalone, any time
 ```
@@ -40,8 +40,8 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Path | Test | Working Steps | Holes to Fill |
 |------|------|---------------|---------------|
-| **/planning → /auto-action** | AI writes | AI writes (100%) | — |
-| **/self-planning → /auto-action** | AI writes | AI writes (~70%) | You fill (~30%) |
+| **/fs-plan → /auto-action** | AI writes | AI writes (100%) | — |
+| **/co-plan → /auto-action** | AI writes | AI writes (~70%) | You fill (~30%) |
 | **/test** | Runs only | — | — |
 
 ## Skills
@@ -50,8 +50,8 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 |-------|--------|-------------|
 | `/req` | `.context/rdr/` | Find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record — asks the user only where a decision is important or ambiguous |
 | `/archi` | `.context/adr/` | Resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR — asks the user only where a decision is important or ambiguous |
-| `/planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan |
-| `/self-planning` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
+| `/fs-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
+| `/co-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
 | `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
@@ -91,6 +91,6 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 |----------|---------|
 | `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
-| `plan.md` | `/planning` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
-| `self-plan.md` | `/self-planning` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug |
+| `plan.md` | `/fs-plan` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
+| `self-plan.md` | `/co-plan` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |

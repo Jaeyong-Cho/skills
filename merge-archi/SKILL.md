@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Merge Archi
 
-Folds the draft ADR `/archi` produced and `/planning`/`/auto-action` built against — from `.context/adr/` — into its committed file, `.context/adr/{slug}.md`, now that implementation is finished. Then derives the architecture doc from the merged ADR and the actual implemented code — more accurate written now, after the fact, than it would have been at design time.
+Folds the draft ADR `/archi` produced and `/fs-plan` or `/co-plan`/`/auto-action` built against — from `.context/adr/` — into its committed file, `.context/adr/{slug}.md`, now that implementation is finished. Then derives the architecture doc from the merged ADR and the actual implemented code — more accurate written now, after the fact, than it would have been at design time.
 
 A draft ADR is named `{timestamp}-{slug}.md`; a merged one is `{timestamp}-{slug}.merged.md` — the filename is the state, no in-file marker to parse.
 

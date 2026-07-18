@@ -23,7 +23,7 @@ Resolve every item — directly where you can, by asking where it's important or
 
 Derive a kebab-case slug from the topic. If revising an existing draft RDR, reuse its slug and timestamp — edit that file in place rather than creating a second record for the same round. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/requirements.md` with the context with this style `../references/document-style.md, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/rdr/{timestamp}-{slug}.md` — the filename itself is how `/planning` and `/merge-req` find and track the record's slug and merge state.
+Fill in `../template/requirements.md` with the context with this style `../references/document-style.md, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/rdr/{timestamp}-{slug}.md` — the filename itself is how `/fs-plan`, `/co-plan`, and `/merge-req` find and track the record's slug and merge state.
 
 `mkdir -p .context/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/merge-req` will fold into `.context/req/{slug}.md` once implementation completes. Next step: `/archi`.
 

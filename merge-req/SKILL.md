@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Merge Req
 
-Folds a draft RDR from `.context/rdr/` — the record `/req` produced and `/archi`/`/planning`/`/auto-action` built against — into its committed spec, `.context/req/{slug}.md`, now that implementation is finished.
+Folds a draft RDR from `.context/rdr/` — the record `/req` produced and `/archi`/`/fs-plan` or `/co-plan`/`/auto-action` built against — into its committed spec, `.context/req/{slug}.md`, now that implementation is finished.
 
 A draft RDR is named `{timestamp}-{slug}.md`; a merged one is `{timestamp}-{slug}.merged.md` — the filename is the state, no in-file marker to parse.
 
