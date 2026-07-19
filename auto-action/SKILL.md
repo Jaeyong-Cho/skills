@@ -1,6 +1,6 @@
 ---
 name: auto-action
-description: Auto-action skill. Reads a plan and its ADR and executes the full action sequence — fully autonomous for a regular plan; for a self-plan, writes working code with recorded holes left as TODOs, then on a later run (once the human has filled every hole) reviews the implementation against those holes' recorded intent and runs the tests. Use when invoked as /auto-action.
+description: Auto-action skill. Reads a plan and its ADR and executes the full action sequence — fully autonomous for a regular plan; for a self-plan, writes working code with recorded holes left as TODOs, then on a later run (once the human has filled every hole) reviews the implementation against those holes' recorded intent, runs the tests, and asks the user to confirm a commit once every hole's TODO is gone and tests pass. Use when invoked as /auto-action.
 disable-model-invocation: true
 ---
 
@@ -38,8 +38,9 @@ Do not rewrite any file — the human has already replaced every hole's TODO wit
 
 1. **Review.** For each hole, compare what's now in place against that hole's recorded TODO intent (the technique/approach it named) and against the flow the ADR describes. Note, per hole, whether it matches the intent, and flag anything that looks incomplete, mismatched, or that reintroduces working code the plan already wrote elsewhere. Once a hole passes review, remove its TODO comment from the file — the code now there replaces it, and leaving it behind is stale clutter, not documentation worth keeping. Leave the TODO comment in place for any hole that doesn't pass review, alongside the flagged concern, so the human still has it to work from.
 2. **Test.** Run the same test scope `/test` would use: read the plan and ADR/RDR for test strategy and scope (default to both unit and integration unless the plan says otherwise), then run those tests and record pass/fail per test.
+3. **Commit.** Only if every hole passed review (no TODO comments remain) and every test passed: draft the commit message following this project's standard git commit-message convention (see the top-level git instructions — draft from the actual diff, do not invent a new format), show it to the user along with the files to be staged, and ask them to confirm. Commit only after they confirm; if they decline or ask for changes, leave the working tree as-is and don't retry uninvited. If any hole failed review or any test failed, skip this entirely — do not ask to commit unfinished or failing work.
 
-Completion criterion: every hole reviewed against its recorded intent with a verdict, and the plan's test scope run with results recorded — or stopped with a reason if a hole's recorded intent is missing (send the user back to `/co-plan`) or the project's tests can't be run.
+Completion criterion: every hole reviewed against its recorded intent with a verdict, and the plan's test scope run with results recorded — or stopped with a reason if a hole's recorded intent is missing (send the user back to `/co-plan`) or the project's tests can't be run. If both are clean, the user has been asked to confirm the commit.
 
 ## When Done
 
@@ -47,4 +48,4 @@ Completion criterion: every hole reviewed against its recorded intent with a ver
 
 **Self-Plan Execution — Write:** "Auto-action complete (self-plan)." followed by which files were modified, which were created, and which functions/blocks contain holes for the user to implement. Do not mention `/merge-req` or `/merge-archi` — holes mean implementation isn't finished yet. Tell the user: fill in every hole, then re-run `/auto-action` on this plan — it will detect the holes are filled and switch to reviewing and testing the implementation instead of writing it.
 
-**Self-Plan Execution — Review & Test:** "Auto-action review complete (self-plan)." followed by, per hole, whether it matched its recorded intent (and what looked off if not), then the test results (pass/fail counts, failures listed explicitly). If every hole matched and all tests pass, tell the user the plan's Closeout Review + Test item is satisfied and only Refactor remains. If anything didn't match or tests failed, say so plainly and do not claim Closeout is satisfied.
+**Self-Plan Execution — Review & Test:** "Auto-action review complete (self-plan)." followed by, per hole, whether it matched its recorded intent (and what looked off if not), then the test results (pass/fail counts, failures listed explicitly). If every hole matched and all tests pass, tell the user the plan's Closeout Review + Test item is satisfied, show them the drafted commit message and ask them to confirm before committing, and note that only Refactor remains once they do. If anything didn't match or tests failed, say so plainly, note that nothing will be committed, and do not claim Closeout is satisfied.

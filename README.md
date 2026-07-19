@@ -44,6 +44,16 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | **/co-plan → /auto-action** | AI writes | AI writes (~70%) | You fill (~30%) |
 | **/test** | Runs only | — | — |
 
+### Philosophy: least-effort human participation
+
+`/co-plan` + `/auto-action` exist because full automation isn't always the goal — sometimes the point is for the human to actually understand the codebase, not just review a diff of it. The design question was never "how much can AI write?" but "what's the smallest, most load-bearing set of decisions a human must make by hand to genuinely learn this code?"
+
+- **Budget, not vibes.** Holes land near 30% of implementation lines, working code the other ~70% — tallied across the whole plan, not per step. Below that and there's nothing to learn; above it and the human is doing AI's job.
+- **Two hole kinds, never a whole function.** A hole is either the line where a stage hands its result to the next stage (flow-connecting), or the one line that embodies a stage's own core decision (key-change) — infrastructure, loops, error handling, and the rest of a stage's algorithm stay working code, written by AI.
+- **Guide, don't quiz.** Each hole's TODO names the general technique, breaks it into numbered steps, and gives one worked example with different values than the paired test — enough that a competent human can apply it without guessing the approach from scratch. The effort spent is in application, not archaeology.
+- **Read order follows the flow, not the build order.** `/co-plan` emits a Recommended Human Work Order — holed steps reordered top-down (entry point → algorithm) — separate from the Action Sequence's TDD build order, which is often bottom-up. Filling holes should follow the story the code tells, not the order tests happened to be written in.
+- **AI closes the loop.** On the re-run, `/auto-action` checks every hole against its recorded intent and runs the tests itself — the human fills the gap once, then AI reports whether it landed. Nobody has to independently re-verify correctness by hand.
+
 ## Skills
 
 | Skill | Output | What it does |
