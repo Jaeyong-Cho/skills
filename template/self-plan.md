@@ -28,8 +28,8 @@
 
 ## Recommended Human Work Order
 Every holed step above, reordered top-down along the flow (entry point → algorithm) instead of build order. Steps with no hole (e.g. Step 2, `TokenCache.get`) are omitted — they're already complete.
-- e.g. Step 4: Wire `AuthService.validate` into the request handler — the flow's entry point; start here to see the whole flow before descending into it.
-- e.g. Step 3: Wire `TokenCache.get` into `AuthService.validate` — one level down; the flow's next stage.
+- e.g. Step 4: Wire `AuthService.validate` into the request handler — `src/auth/handler.py`, function `handle_request` — the flow's entry point; start here to see the whole flow before descending into it.
+- e.g. Step 3: Wire `TokenCache.get` into `AuthService.validate` — `src/auth/service.py`, method `AuthService.validate` — one level down; the flow's next stage.
 
 ## Closeout
 - [ ] Review + Test — once every hole above is filled in, re-run `/auto-action` on this plan; it detects the holes are gone and reviews each one against its recorded intent, then runs the tests
