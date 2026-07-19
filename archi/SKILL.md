@@ -1,6 +1,6 @@
 ---
 name: archi
-description: Architecture skill. Resolves architecture, design, observability, test-loop design, and verification criteria against archi.md's layers and dependency rule, then writes an ADR — asking the user only where a decision is important or ambiguous. Use when invoked as /archi.
+description: Architecture skill. Grills to resolve architecture, design, observability, test-loop design, and verification criteria against archi.md's layers and dependency rule, then writes an ADR. Use when invoked as /archi.
 disable-model-invocation: true
 ---
 
@@ -15,7 +15,7 @@ Read `../references/archi.md`, `../references/meta-pattern.md`, `../references/d
 
 Check `.claude/agents/` and `.github/agents/` for existing project subagents. If one's description matches part of this design (e.g. a domain expert for architecture research, or a specialized reviewer for the design), delegate that part to it rather than reasoning through it inline yourself.
 
-Work through each item below yourself — resolve it via codebase exploration or a reasonable default wherever you can. Ask the user only when a decision is important (affects layer placement, module boundaries, or verification strategy) or genuinely ambiguous (more than one valid reading, conflicting signals) — not for items you can resolve on your own. Ask one question at a time; when a question has clear discrete options, use the `AskUserQuestion` tool with your recommended option listed first and marked "(Recommended)". For open-ended questions with no clear options, ask in plain text. Resolve every branch of the design:
+Run a `/grilling` skill to resolve every branch of the design:
 
 1. **Architecture** — how to structure the implementation? Apply archi.md's layers (Objects/Logics/Usecase/External) and dependency rule, meta-pattern (Abstractness/Subdomain/Sharding axes), and deep-module principles (hide complexity, widen interfaces). Every class lands in exactly one layer; a dependency pointing outward is a design error — stop and redesign.
 2. **Design** — what are the key modules, contracts, and data flows? Place each inside the layer archi.md assigns it; check against archi.md's Design Smells table.
@@ -23,7 +23,7 @@ Work through each item below yourself — resolve it via codebase exploration or
 4. **Test-loop design** — E2E only. Check if an existing test-loop scenario covers the needed behaviors; extend it rather than creating a new scenario. Apply `test-loop.md`: what does `run` reset and initialize before executing? what does `run` write (results, metadata: version, input data, config)? what does `verify` check per scenario? For each scenario, classify the observation method: binary pass/fail | numeric metric range (with expected range) | qualitative rubric (with explicit criteria). Reference the requirements spec's User Scenario and Acceptance Criteria for each scenario's expected outcome.
 5. **Verification criteria** — how do we know the result is good? Make it checkable. How does a human know if the changes are working at the real working system with real data? What to see for verification? How to observe it? How to judge the design is working well? (e.g. "the user can do X in Y seconds", "see the data and check all of them has property P", "the system can handle N requests per second", "If log A -> log B and data X -> Y -> Z is shown, then it is working well" or "All of the unmatched is zero, then it is working well"). Map each criterion to the requirements spec's Acceptance Criteria categories (Normal / Exception / Boundary). Apply `good-harness.md`'s axes (Layer, Determinism) to each criterion to pick the right harness shape, and check it against the anti-patterns before accepting it. Make it checkable.
 
-Resolve every branch — directly where you can, by asking where it's important or ambiguous — until the user confirms. Completion criterion: architecture, design, observability, test-loop, and verification are each stated concretely with no ambiguous branch, layer placement is clean end to end, user confirmed.
+Grill until every branch is resolved and the user confirms. Completion criterion: architecture, design, observability, test-loop, and verification are each stated concretely with no ambiguous branch, layer placement is clean end to end, user confirmed.
 
 Derive a kebab-case slug from the topic. If revising an existing draft ADR, reuse its slug and timestamp — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 

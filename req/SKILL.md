@@ -1,16 +1,16 @@
 ---
 name: req
-description: Requirements-engineering skill. Finds the goal, elicits and prioritizes functional and non-functional requirements, and commits to a testable spec — asking the user only where a decision is important or ambiguous. Use when invoked as /req.
+description: Requirements-engineering skill. Grills to find the goal, elicit and prioritize functional and non-functional requirements, and commit to a testable spec. Use when invoked as /req.
 disable-model-invocation: true
 ---
 
 # Req
 
-Read `../references/requirement-engineering.md` — the key activities (elicitation, analysis, specification, validation) and the functional/non-functional split shape the items below. Read `../template/requirements.md` — its sections (Context, Requirements, Decision, Out of Scope, User Scenario, Acceptance Criteria) are what each item below fills in, so work toward that shape from the first question rather than only at write-time.
+Read `../references/requirement-engineering.md` — the key activities (elicitation, analysis, specification, validation) and the functional/non-functional split shape the grill below. Read `../template/requirements.md` — its sections (Context, Requirements, Decision, Out of Scope, User Scenario, Acceptance Criteria) are what each grill item below fills in, so grill toward that shape from the first question rather than only at write-time.
 
 Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/rdr/` — a draft RDR is named `{timestamp}-{slug}.md`; a merged one has been renamed to `{timestamp}-{slug}.merged.md`. If a draft (no `.merged.md` suffix) for the same slug already exists, it's unfinished work from a run that never reached `/merge-req`; read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh RDR.
 
-Use this for new goals or to rescope an existing one. Work through each item below yourself — resolve it via codebase exploration or a reasonable default wherever you can. Ask the user only when a decision is important (affects scope, priority, or user-facing behavior) or genuinely ambiguous (more than one valid reading, conflicting signals) — not for items you can resolve on your own. Ask one question at a time; when a question has clear discrete options, use the `AskUserQuestion` tool with your recommended option listed first and marked "(Recommended)". For open-ended questions with no clear options, ask in plain text. Reach a committed, testable spec covering:
+Use this for new goals or to rescope an existing one. Run a `/grilling` skill to reach a committed, testable spec:
 
 1. **Context** — what's the problem or trigger? What's the current state before this work? Push for the real trigger, not just the surface ask — this is the background the rest of the spec stands on.
 2. **Goal & scenario** — what does success actually look like? Push past the surface request to the real outcome the user needs. Narrate it as the sequence the user lives through: {action} → {reaction} → {action} → ... down to the outcome — not a feature list. If it covers more than one path or actor, or the chain gets too long to follow as one sequence, split into multiple named scenarios.
@@ -19,7 +19,7 @@ Use this for new goals or to rescope an existing one. Work through each item bel
 5. **Constraints & scope** — what's fixed vs. merely assumed? Challenge assumed constraints. What's explicitly excluded so it isn't silently re-litigated later?
 6. **Validation** — what does bad look like, and where's the ambiguous middle zone where partial success might be acceptable? Convert every requirement into a SMART, Given–When–Then acceptance criterion; the bad and ambiguous cases just surfaced become the Exception and Boundary rows, not just Normal. Each row needs a concrete verification method (manual test, e2e test, unit test, query) — read `../references/good-harness.md` to pick one that actually fails when the requirement is violated, not just one that runs.
 
-Resolve every item — directly where you can, by asking where it's important or ambiguous — until requirements are stated testably. Completion criterion: the user has confirmed a committed spec in their own words, and every acceptance criterion has a verification method.
+Grill until every branch resolves and requirements are stated testably. Completion criterion: the user has confirmed a committed spec in their own words, and every acceptance criterion has a verification method.
 
 Derive a kebab-case slug from the topic. If revising an existing draft RDR, reuse its slug and timestamp — edit that file in place rather than creating a second record for the same round. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
