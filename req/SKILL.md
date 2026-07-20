@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Read `../references/requirement-engineering.md` — the key activities (elicitation, analysis, specification, validation) and the functional/non-functional split shape the grill below. Read `../template/requirements.md` — its sections (Context, Requirements, Decision, Out of Scope, User Scenario, Acceptance Criteria) are what each grill item below fills in, so grill toward that shape from the first question rather than only at write-time.
 
-Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/rdr/` — a draft RDR is named `{timestamp}-{slug}.md`; a merged one has been renamed to `{timestamp}-{slug}.done.md`. If a draft (no `.done.md` suffix) for the same slug already exists, it's unfinished work from a run where `/auto-action` never finished (or never ran); read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh RDR.
+Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/inbox/rdr/` for a draft RDR ending in `-{slug}.md`; if one exists, it's unfinished work from a run where `/auto-action` never finished (or never ran) — read it and revise that record in place rather than starting a new one. A merged draft lives in `.context/done/rdr/` instead and is no longer live. Otherwise this round produces a fresh RDR.
 
 Use this for new goals or to rescope an existing one. Run a `/get-me` skill to reach a committed, testable spec:
 
@@ -23,8 +23,8 @@ Grill until every branch resolves and requirements are stated testably. Completi
 
 Derive a kebab-case slug from the topic. If revising an existing draft RDR, reuse its slug and timestamp — edit that file in place rather than creating a second record for the same round. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/requirements.md` with the context with this style `../references/document-style.md, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/rdr/{timestamp}-{slug}.md` — the filename itself is how `/fs-plan`, `/co-plan`, and `/auto-action` find and track the record's slug and merge state.
+Fill in `../template/requirements.md` with the context with this style `../references/document-style.md, resolved requirements, decision, out-of-scope, user scenario, and acceptance criteria table. Write it to `.context/inbox/rdr/{timestamp}-{slug}.md` — `/fs-plan`, `/co-plan`, and `/auto-action` find it by this path and slug; whether it lives in `.context/inbox/rdr/` or `.context/done/rdr/` is the merge-state signal, not the filename.
 
-`mkdir -p .context/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/auto-action` will fold into `.context/req/{slug}.md` once implementation completes. Next step: `/archi`.
+`mkdir -p .context/inbox/rdr` if needed. Tell the user the file path, and that it's a draft Requirement Decision Record that `/auto-action` will fold into `.context/req/{slug}.md` and move to `.context/done/rdr/` once implementation completes. Next step: `/archi`.
 
 **DO NOT START IMPLEMENT**

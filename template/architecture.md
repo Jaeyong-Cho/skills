@@ -1,6 +1,6 @@
 # Architecture: {Title}
 
-**ADR:** {path to `.context/adr/{slug}.md`}
+**ADR:** {path to `.context/done/adr/{timestamp}-{slug}.md`}
 
 ## Static View
 > - Directory structure, classes — each with purpose and description — and their dependency relationships, placed per archi.md's layers (Objects/Logics/Usecase/External).

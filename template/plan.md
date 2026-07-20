@@ -1,6 +1,6 @@
 # Plan: {Title}
 
-**ADR:** {path to `.context/adr/{timestamp}-{slug}.md`}
+**ADR:** {path to `.context/inbox/adr/{timestamp}-{slug}.md`}
 
 ## Action Sequence
 - e.g. Write failing test `test_cache_hit_skips_db` in `tests/auth/test_cache.py`, asserting `AuthService.validate(token)` calls `TokenCache.get` before any DB call.

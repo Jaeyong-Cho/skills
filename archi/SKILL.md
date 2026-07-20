@@ -6,9 +6,9 @@ disable-model-invocation: true
 
 # Archi
 
-Read `.context/rdr/` for the draft RDR to design against — a draft is named `{timestamp}-{slug}.md` (a merged one has `.done.md` and is no longer live). If `.context/req/{slug}.md` also exists, read it too for prior committed context.
+Read `.context/inbox/rdr/` for the draft RDR to design against (a merged one has moved to `.context/done/rdr/` and is no longer live). If `.context/req/{slug}.md` also exists, read it too for prior committed context.
 
-Check `.context/adr/{slug}.md` — if a committed architecture doc covers the same topic, read it for context. Check `.context/adr/` for a draft ADR — named `{timestamp}-{slug}.md` (a merged one has been renamed to `{timestamp}-{slug}.done.md`). If a draft (no `.done.md` suffix) for the same slug already exists, it's unfinished work from a run where `/auto-action` never finished (or never ran); read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh ADR.
+Check `.context/archi/{slug}.md` — if a committed architecture doc covers the same topic, read it for context. Check `.context/inbox/adr/` for a draft ADR ending in `-{slug}.md`. If one exists, it's unfinished work from a run where `/auto-action` never finished (or never ran); read it and revise that record in place rather than starting a new one. A merged draft lives in `.context/done/adr/` instead and is no longer live. Otherwise this round produces a fresh ADR.
 
 Use this for new designs or to redesign after a fix reveals new architecture needs.
 Read `../references/archi.md`, `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/test-loop.md`, `../references/good-harness.md`.
@@ -27,8 +27,8 @@ Grill until every branch is resolved and the user confirms. Completion criterion
 
 Derive a kebab-case slug from the topic. If revising an existing draft ADR, reuse its slug and timestamp — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/adr.md` with the resolved context with this style `../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/adr/{timestamp}-{slug}.md`.
+Fill in `../template/adr.md` with the resolved context with this style `../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/inbox/adr/{timestamp}-{slug}.md`.
 
-`mkdir -p .context/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/auto-action` will fold into `.context/adr/{slug}.md` once implementation completes. Next step: `/fs-plan` or `/co-plan`.
+`mkdir -p .context/inbox/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/auto-action` will fold into `.context/archi/{slug}.md` and move to `.context/done/adr/` once implementation completes. Next step: `/fs-plan` or `/co-plan`.
 
 **DO NOT START IMPLEMENT**

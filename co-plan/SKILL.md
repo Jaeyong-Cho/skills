@@ -6,9 +6,9 @@ disable-model-invocation: true
 
 # Co-Plan (Collaborative Plan)
 
-Read the draft ADR to plan from `.context/adr/` — a draft is named `{timestamp}-{slug}.md` (a merged one has `.done.md` and is no longer the active target). If multiple drafts exist, list them and ask the user which to use. If none exist, tell the user to run `/archi` first and stop.
+Read the draft ADR to plan from `.context/inbox/adr/` (a merged one has moved to `.context/done/adr/` and is no longer the active target). If multiple drafts exist, list them and ask the user which to use. If none exist, tell the user to run `/archi` first and stop.
 
-Read `.context/plan/` — if an existing self-plan (`**Type:** Self-Plan`) covers the same topic, read it and revise it rather than creating a new one.
+Read `.context/inbox/plan/` — if an existing self-plan (`**Type:** Self-Plan`) covers the same topic, read it and revise it rather than creating a new one.
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`, `../references/tdd-refactoring.md`, `../references/todo-hole.md`.
 
@@ -26,6 +26,7 @@ Everything else is working code, always: the rest of a stage's own algorithm (se
 To tell hole from working, ask: does this line carry the flow's data to the next stage, or is it the one line that embodies this stage's core decision? If neither, it's working code.
 
 For each hole, record its TODO comment and blanked code skeleton following `todo-hole.md` — this is the only place literal source code belongs in the plan. For working code, record a short description of what it does and why it isn't a hole (the template's **Working:** line, e.g. "Redis client setup, TTL, connection error handling") — never the actual implementation. The plan records the hole/working decision, not the working code itself; `/auto-action` writes the real working code into the real files later, from that description.
+**MUST NOT** write any working code into the plan — only the hole skeletons and working descriptions. The plan is a design, not an implementation.
 
 **Budget:** across the whole sequence, holed lines should be roughly 30% of implementation lines, working code the other ~70%. This is a plan-wide budget, not a per-step cap — some steps may be all working code, a few may carry more holes, as long as the total lands near 30/70. After building the sequence, tally holed vs. working lines; if holes run well past 30%, cut back to the most important flow-connecting and key-change lines and demote the rest to working code.
 
@@ -35,8 +36,8 @@ If the ADR is ambiguous or missing something the sequence needs, stop and send t
 
 Derive a kebab-case slug from the topic — reuse the ADR's slug so the plan pairs with it. If revising an existing self-plan, reuse its timestamp too — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/self-plan.md` with the ADR's path, `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is — unlike `/fs-plan`'s plain **Test** item, a self-plan's single item is **Review + Test**, since a self-plan's holes aren't done until a human fills them in and their work is checked against each hole's recorded intent. That item stays unchecked through `/auto-action`'s first (write) pass; it's satisfied by re-running `/auto-action` on this plan once every hole is filled — it detects the holes are gone and switches from writing to reviewing the implementation against each hole's recorded intent and running the tests, instead of a separate skill.
+Fill in `../template/self-plan.md` with the ADR's path, `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/inbox/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is — unlike `/fs-plan`'s plain **Test** item, a self-plan's single item is **Review + Test**, since a self-plan's holes aren't done until a human fills them in and their work is checked against each hole's recorded intent. That item stays unchecked through `/auto-action`'s first (write) pass; it's satisfied by re-running `/auto-action` on this plan once every hole is filled — it detects the holes are gone and switches from writing to reviewing the implementation against each hole's recorded intent and running the tests, instead of a separate skill.
 
-`mkdir -p .context/plan` if needed. Tell the user the file path. Next step: `/auto-action`.
+`mkdir -p .context/inbox/plan` if needed. Tell the user the file path. Next step: `/auto-action`.
 
 **DO NOT START IMPLEMENT**
