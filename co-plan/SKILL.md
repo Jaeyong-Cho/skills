@@ -25,7 +25,7 @@ Everything else is working code, always: the rest of a stage's own algorithm (se
 
 To tell hole from working, ask: does this line carry the flow's data to the next stage, or is it the one line that embodies this stage's core decision? If neither, it's working code.
 
-For each hole, record its TODO comment and blanked code skeleton following `todo-hole.md`.
+For each hole, record its TODO comment and blanked code skeleton following `todo-hole.md` — this is the only place literal source code belongs in the plan. For working code, record a short description of what it does and why it isn't a hole (the template's **Working:** line, e.g. "Redis client setup, TTL, connection error handling") — never the actual implementation. The plan records the hole/working decision, not the working code itself; `/auto-action` writes the real working code into the real files later, from that description.
 
 **Budget:** across the whole sequence, holed lines should be roughly 30% of implementation lines, working code the other ~70%. This is a plan-wide budget, not a per-step cap — some steps may be all working code, a few may carry more holes, as long as the total lands near 30/70. After building the sequence, tally holed vs. working lines; if holes run well past 30%, cut back to the most important flow-connecting and key-change lines and demote the rest to working code.
 
