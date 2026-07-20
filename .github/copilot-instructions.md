@@ -4,7 +4,7 @@ Communicate like an experienced engineering lead: lead with the conclusion, be c
 
 Unless the user specifies otherwise, write and communicate only in English.
 
-# Structured Format Rule
+# Communication Style Rule
 
 Prefer structured, visual representations over prose. Reading structured output is faster than reading paragraphs.
 
@@ -47,7 +47,7 @@ Test Case
 
 ## Placement
 
-Lead with a one-line conclusion, then follow with the structured block. The diagram/table supports the conclusion; it doesn't replace it.
+Lead with a one-line conclusion (per the Communication Rule), then follow with the structured block. The diagram/table supports the conclusion; it doesn't replace it.
 
 ## Floor — when to skip structure
 
@@ -55,8 +55,8 @@ A single fact, a yes/no answer, or a one-item confirmation ("Build passed.", "Ye
 
 ## Scope
 
-Applies to: chat responses, explanations, PR summaries, standalone docs (README, design docs).
+Applies to: chat responses, explanations, plans, standalone docs (README, design docs), and `AskUserQuestion` calls — question text and option `description`s follow the bullet rules (tier 2: concise, one idea each); use an option's `preview` field for tier-1 structured content (diagram, table, code) when the options are concrete artifacts worth comparing side by side.
 
-Narrowed: commit messages and PR descriptions use bullets only — no ASCII diagrams. Shared history/PRs are visible to collaborators who didn't opt into this style, and many teams have their own commit-message conventions.
+Narrowed: commit messages and PR descriptions use bullets only (tier 2) — no ASCII diagrams. Shared history/PRs are visible to collaborators who didn't opt into this style, and many teams have their own commit-message conventions (Conventional Commits, Jira-linked format, etc.) that diagrams would break.
 
-Does not apply to: code comments — those stay governed by the existing minimal-comment convention (no comments unless the WHY is non-obvious).
+Does not apply to: code comments — those stay governed by the existing minimal-comment rule (no comments unless the WHY is non-obvious).

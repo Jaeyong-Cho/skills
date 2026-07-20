@@ -29,17 +29,19 @@
 # User Scenario
 > - One scenario per subsection — split into multiple when a single sequence grows too large to follow, or covers more than one path or actor.
 > - Narrate each as the sequence the user lives through: {action} → {reaction} → {action} → ... down to the outcome — not a feature list.
-> - A Mermaid flowchart is welcome alongside the narration wherever the scenario branches or a picture reads faster than the arrow chain.
+> - An ASCII flow diagram (plain characters only — `|`, `v`, `+--`, `->`; see `../references/document-style.md`) is welcome alongside the narration wherever the scenario branches or a picture reads faster than the arrow chain.
 
 ## {Scenario name}
 - e.g. Repeat request within window → cache hit, no DB round-trip → response returns in <20ms
-```mermaid
-graph LR
-    A[Request arrives] --> B{Token cached?}
-    B -->|hit| C[Serve from cache, <20ms]
-    B -->|miss| D[Validate against DB]
-    D --> E[Cache result, 5-minute TTL]
-    E --> C
+```
+Request arrives
+    |
+    v
+Token cached?
+    |
+    +-- yes -> Serve from cache, <20ms
+    |
+    +-- no  -> Validate against DB -> Cache result, 5-min TTL -> Serve from cache, <20ms
 ```
 
 # Acceptance Criteria

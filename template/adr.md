@@ -12,22 +12,20 @@
 
 ## Decision
 > - Concrete design — which API(s) are affected or introduced, which source file(s) hold the change, and how the source structure is organized (modules, layers, directories).
-> - A small Mermaid diagram is welcome wherever it clarifies the before/after shape faster than prose.
+> - A small ASCII flow diagram (plain characters only — `|`, `v`, `+--`, `->`; see `../references/document-style.md`) is welcome wherever it clarifies the before/after shape faster than prose.
 > - The full Static/Dynamic View lives in the paired `architecture.md`, not here.
 
 ### Before
 - e.g. No cache; `AuthService.validate(token)` in `src/auth/service.py` hits the DB directly.
-```mermaid
-graph LR
-    AuthService --> DB[("DB")]
+```
+AuthService -> DB
 ```
 
 ### After
 - e.g. `AuthService.validate(token)` in `src/auth/service.py` checks the new `TokenCache.get(token)` (`src/auth/cache.py`) before falling back to the DB; cache entries expire after 5 minutes.
-```mermaid
-graph LR
-    AuthService --> TokenCache --> Redis[("Redis")]
-    AuthService --> DB[("DB")]
+```
+AuthService -> TokenCache -> Redis
+AuthService -> DB
 ```
 
 ## Observability

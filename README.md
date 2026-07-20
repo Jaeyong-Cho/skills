@@ -58,11 +58,11 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/req` | `.context/rdr/` | Grill to find the goal, elicit functional/non-functional requirements, and write a draft Requirement Decision Record |
-| `/archi` | `.context/adr/` | Grill to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
+| `/req` | `.context/rdr/` | Use `/get-me` to find the goal, elicit and prioritize functional/non-functional requirements, and write a draft Requirement Decision Record |
+| `/archi` | `.context/adr/` | Use `/get-me` to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/fs-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
-| `/auto-action` | code changes | Execute the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous. Self-plan, first run: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. Self-plan, re-run after the human fills every hole: review each one against its recorded intent and run the tests. |
+| `/auto-action` | code changes | Stops immediately if the plan file already carries the `.done.md` suffix. Otherwise executes the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous, then renames the plan file to `.done.md`. Self-plan, first run: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. Self-plan, re-run after the human fills every hole: review each one against its recorded intent, run the tests, rename the plan file to `.done.md`, and ask to confirm a commit. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 | `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
 | `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
@@ -72,10 +72,20 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves. Called directly or from within other skills |
+| `/get-me` | `../preferences/`, `.context/preferences/` | Same interview as `/grilling`, but checks recorded preferences first and skips any question one already answers; records new standing preferences as they're confirmed. Used by `/req` and `/archi` |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/breakdown` | — | Break any goal into a MECE tree of atomic, actionable sub-goals, then order the leaves into a dependency-respecting execution sequence |
 | `/study-guide` | HTML file | Explain a document or codebase and quiz the reader on it — background, core concepts with worked examples, walkthrough, and a 5-question interactive quiz, rendered via bundled `render.py` |
+
+## Preferences
+
+`/get-me` grows two preference stores instead of re-asking the same settled question every pass:
+
+- `preferences/{topic}.md` — general engineering/style rules true regardless of which project (e.g. `preferences/api-design.md`). Lives in this skills repo, so it travels with the install.
+- `.context/preferences/{topic}.md` — this project's own recorded choices (e.g. `.context/preferences/tech-stack.md`).
+
+Neither is pre-populated — `/get-me` creates a topic file the first time a standing rule (not a one-off, feature-specific answer) comes up, and appends to it on repeat topics. Edit or delete an entry directly if it's wrong; nothing else enforces it.
 
 ## References
 
@@ -103,6 +113,6 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 |----------|---------|
 | `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
-| `plan.md` | `/fs-plan` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug |
-| `self-plan.md` | `/co-plan` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug |
+| `plan.md` | `/fs-plan` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug; `/auto-action` renames it to `*.done.md` on completion |
+| `self-plan.md` | `/co-plan` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug; `/auto-action` renames it to `*.done.md` once every hole is reviewed and tests pass |
 | `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |

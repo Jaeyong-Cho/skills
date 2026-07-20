@@ -1,4 +1,4 @@
-# Structured Format Rule
+# Communication Style Rule
 
 Prefer structured, visual representations over prose. Reading structured output is faster than reading paragraphs.
 
@@ -49,7 +49,7 @@ A single fact, a yes/no answer, or a one-item confirmation ("Build passed.", "Ye
 
 ## Scope
 
-Applies to: chat responses, explanations, plans, standalone docs (README, design docs).
+Applies to: chat responses, explanations, plans, standalone docs (README, design docs), and `AskUserQuestion` calls — question text and option `description`s follow the bullet rules (tier 2: concise, one idea each); use an option's `preview` field for tier-1 structured content (diagram, table, code) when the options are concrete artifacts worth comparing side by side.
 
 Narrowed: commit messages and PR descriptions use bullets only (tier 2) — no ASCII diagrams. Shared history/PRs are visible to collaborators who didn't opt into this style, and many teams have their own commit-message conventions (Conventional Commits, Jira-linked format, etc.) that diagrams would break.
 

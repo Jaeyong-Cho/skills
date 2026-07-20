@@ -9,8 +9,6 @@
 
 Each class belongs to exactly one layer. If a class is hard to place, the boundary is probably wrong.
 
----
-
 ## Dependency Rule
 
 **Inner layers never depend on outer layers.**
@@ -28,8 +26,6 @@ Objects  ←  Logics  ←  Usecase  ←  External
 | External | Usecase, Logics, Objects |
 
 A dependency pointing outward is a design error. Stop and redesign before continuing.
-
----
 
 ## Objects — What exists
 
@@ -52,12 +48,8 @@ class OrderLogic {
 ```
 
 **Ask**: "Whose business rule is this?" If it depends on the state of one object, it belongs inside that object.
-
 **Invariance principle**: an object must remain the same regardless of which outer layer uses it. If the object changes shape for a specific use case, it has leaked upward.
-
 **No combined objects**: never merge two objects into one to express a relationship. Keep them separate and let Logics or Usecase coordinate them. `ArtifactRepo` combining `Artifact` and `Repo` is a design error — `Artifact` and `Repo` are two objects; their relationship belongs in a Logic.
-
----
 
 ## Logics — How the domain computes
 
@@ -79,23 +71,15 @@ Two sub-roles:
 - **Algorithm** — workflow, strategy, or computation realizing a domain rule
 - **Lens** — cross-cutting concern (auth, billing, audit) that reads from objects without modifying their shape
 
----
-
 ## Usecase — What the user wants
 
 Encodes what the end user needs. Defines which goals are worth satisfying, what success looks like, and which logics deliver the result. Orchestrates Logics and Objects to fulfill one user goal per use case.
-
 If a user need only lives in a comment or ticket, it hasn't been encoded yet.
-
----
 
 ## External — How the outside world interacts
 
 Adapters between the application and the outside world: HTTP controllers, CLI commands, UI event handlers, message consumers, external API gateways, files. Translates external input into Usecase calls and Usecase output into external responses.
-
 Contains no business logic. If logic appears here, move it inward.
-
----
 
 ## Design Smells
 
