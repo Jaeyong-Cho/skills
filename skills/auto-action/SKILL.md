@@ -10,7 +10,7 @@ List the plans in `.context/inbox/plan/` (not yet done) and `.context/done/plan/
 
 Read the plan. Read the matching ADR (same slug, via the plan's `**ADR:**` line) from `.context/inbox/adr/`, or `.context/done/adr/` if it was already merged, for the architecture, design, observability, test-loop, and verification context behind the plan's Action Sequence.
 
-Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
+Read `../../references/tdd.md`, `../../references/tdd-tests.md`, `../../references/tdd-mocking.md`.
 
 Check the plan's `**Type:**` line. If it reads `Self-Plan`, check whether its recorded holes are still open: for each implementation step with a **Hole** annotation, open the file and check whether the hole's blanked placeholder(s) (e.g. `/* */`) are still there — the TODO comment above them isn't the signal, since it stays until a hole passes review. If any hole's blank is still present, follow **Self-Plan Execution — Write**. If every hole's blank has been replaced with real code, follow **Self-Plan Execution — Review & Test** instead. If the plan's Type line is anything other than `Self-Plan` (including absent), follow **Full Execution**.
 
@@ -24,7 +24,7 @@ Completion criterion: every step executed and reported, or stopped on first fail
 
 ## Self-Plan Execution — Write
 
-For each implementation step, write exactly what the step's **Working** and **Hole** annotations specify — this was already decided in `/co-plan`, so do not re-derive or re-apply the rules here. Write working parts complete and runnable. For each hole, write its recorded TODO comment and blanked code skeleton verbatim, following `../references/todo-hole.md` — the surrounding statement structure is real code; only the recorded blank(s) are left for the human.
+For each implementation step, write exactly what the step's **Working** and **Hole** annotations specify — this was already decided in `/co-plan`, so do not re-derive or re-apply the rules here. Write working parts complete and runnable. For each hole, write its recorded TODO comment and blanked code skeleton verbatim, following `../../references/todo-hole.md` — the surrounding statement structure is real code; only the recorded blank(s) are left for the human.
 
 Each file gets one Write or Edit call that lands its final state directly — holes as TODOs, working parts complete, in the same pass. Never write a full working implementation for a hole's line(s) and then edit it down to a TODO afterward; that's two passes of work for one outcome the self-plan already decided.
 
@@ -52,11 +52,11 @@ Runs after successful execution but before the plan moves to `.context/done/plan
 Take `{slug}` from the plan's own filename.
 
 If a draft RDR exists in `.context/inbox/rdr/` ending in `-{slug}.md`:
-1. Rewrite well structured requirement documents at `.context/req/{slug}.md`, in the style of `../references/document-style.md`, updating already-existing related-topic requirement documents if they changed — the RDR is newer and wins.
+1. Rewrite well structured requirement documents at `.context/req/{slug}.md`, in the style of `../../references/document-style.md`, updating already-existing related-topic requirement documents if they changed — the RDR is newer and wins.
 2. Move the RDR file from `.context/inbox/rdr/` to `.context/done/rdr/`, filename unchanged (`mkdir -p .context/done/rdr` if needed) — keep it as permanent decision history, never delete it.
 
 If a draft ADR exists in `.context/inbox/adr/` ending in `-{slug}.md`:
-1. Read the source files the ADR's Decision names, and the requirements spec's User Scenario section. Update the architecture document at `.context/archi/{slug}.md`, in the style of `../references/document-style.md` and `../template/architecture.md`'s Static View and Dynamic View, from what's actually implemented — the real classes/files, the real call flow per scenario — not just what the ADR proposed. Update an already-existing same-topic architecture document if needed. `mkdir -p .context/archi` if it doesn't exist.
+1. Read the source files the ADR's Decision names, and the requirements spec's User Scenario section. Update the architecture document at `.context/archi/{slug}.md`, in the style of `../../references/document-style.md` and `../../template/architecture.md`'s Static View and Dynamic View, from what's actually implemented — the real classes/files, the real call flow per scenario — not just what the ADR proposed. Update an already-existing same-topic architecture document if needed. `mkdir -p .context/archi` if it doesn't exist.
 2. Move the ADR file from `.context/inbox/adr/` to `.context/done/adr/`, filename unchanged (`mkdir -p .context/done/adr` if needed) — keep it as permanent decision history, never delete it.
 
 If neither draft exists for this slug, there's nothing to merge — skip silently.

@@ -8,7 +8,7 @@ A **standing** preference is one you'd answer the same way next time, regardless
 
 ## File location
 
-- `../preferences/{topic}.md` — true across any project. `{topic}` is a kebab-case slug of the rule's subject (e.g. `../preferences/api-design.md`).
+- `../../preferences/{topic}.md` — true across any project. `{topic}` is a kebab-case slug of the rule's subject (e.g. `../../preferences/api-design.md`).
 - `.context/preferences/{topic}.md` — true only in the current project (e.g. `.context/preferences/tech-stack.md`).
 
 ## Entry format

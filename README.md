@@ -13,6 +13,18 @@ git clone git@github.com:Jaeyong-Cho/skills.git ~/.claude/skills
 ~/.claude/skills/install.sh
 ```
 
+## Repository Layout
+
+```
+skills/       executable skills; each skill owns its SKILL.md and optional resources
+references/   shared guidance loaded by skills
+preferences/  cross-project standing preferences
+template/     shared artifact templates
+bin/          installed helper scripts
+```
+
+Skills refer to shared root-level resources with `../../references/...`, `../../template/...`, or `../../preferences/...` because their `SKILL.md` files live one directory deeper under `skills/`.
+
 The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
@@ -72,8 +84,8 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves. Called directly or from within other skills |
-| `/get-me` | `../preferences/`, `.context/preferences/` | Same interview as `/grilling`, but checks recorded preferences first and skips any question one already answers; records new standing preferences as they're confirmed. Used by `/req` and `/archi` |
-| `/to-preference` | `../preferences/`, `.context/preferences/` | Sweep the whole session for confirmed decisions or corrections that generalize beyond it, and record the approved ones as standing preferences — a batch, after-the-fact counterpart to `/get-me`'s live recording |
+| `/get-me` | `../../preferences/`, `.context/preferences/` | Same interview as `/grilling`, but checks recorded preferences first and skips any question one already answers; records new standing preferences as they're confirmed. Used by `/req` and `/archi` |
+| `/to-preference` | `../../preferences/`, `.context/preferences/` | Sweep the whole session for confirmed decisions or corrections that generalize beyond it, and record the approved ones as standing preferences — a batch, after-the-fact counterpart to `/get-me`'s live recording |
 | `/to-todo` | `.context/inbox/todo/` | Turn the current `/breakdown` tree into a checkbox TODO; manually move the file unchanged to `.context/done/todo/` after every item is checked |
 | `/to-docs` | user-selected path | Write the current session's work as a report-style document |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
@@ -109,7 +121,7 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
 | `document-style.md` | Structured-format report style for written docs: priority order (diagram/table > bullets > prose), when to use a flow diagram vs a table, Introduction/Body/Conclusion structure |
 | `communication-style.md` | Same structured-format priority, scoped to chat responses, plans, and `AskUserQuestion` calls rather than standalone docs |
-| `preference-format.md` | Standing-vs-one-off test, file location (`../preferences/` vs `.context/preferences/`), and entry format for recorded preferences — used by `/get-me` and `/to-preference` |
+| `preference-format.md` | Standing-vs-one-off test, file location (`../../preferences/` vs `.context/preferences/`), and entry format for recorded preferences — used by `/get-me` and `/to-preference` |
 | `requirement-engineering.md` | Elicitation, analysis, specification, validation, management — the five activities `/req` draws on |
 | `top-down-decompose.md` | MECE top-down decomposition methodology `/breakdown` applies to split a goal into atomic sub-goals |
 

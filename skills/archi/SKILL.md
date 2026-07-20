@@ -11,7 +11,7 @@ Read `.context/inbox/rdr/` for the draft RDR to design against (a merged one has
 Check `.context/archi/{slug}.md` — if a committed architecture doc covers the same topic, read it for context. Check `.context/inbox/adr/` for a draft ADR ending in `-{slug}.md`. If one exists, it's unfinished work from a run where `/auto-action` never finished (or never ran); read it and revise that record in place rather than starting a new one. A merged draft lives in `.context/done/adr/` instead and is no longer live. Otherwise this round produces a fresh ADR.
 
 Use this for new designs or to redesign after a fix reveals new architecture needs.
-Read `../references/archi.md`, `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/test-loop.md`, `../references/good-harness.md`.
+Read `../../references/archi.md`, `../../references/meta-pattern.md`, `../../references/deep-modules.md`, `../../references/test-loop.md`, `../../references/good-harness.md`.
 
 Check `.claude/agents/` and `.github/agents/` for existing project subagents. If one's description matches part of this design (e.g. a domain expert for architecture research, or a specialized reviewer for the design), delegate that part to it rather than reasoning through it inline yourself.
 
@@ -27,7 +27,7 @@ Grill until every branch is resolved and the user confirms. Completion criterion
 
 Derive a kebab-case slug from the topic. If revising an existing draft ADR, reuse its slug and timestamp — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/adr.md` with the resolved context with this style `../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/inbox/adr/{timestamp}-{slug}.md`.
+Fill in `../../template/adr.md` with the resolved context with this style `../../references/document-style.md`, decision (before/after), observability, test-loop design, and verification criteria, and write it to `.context/inbox/adr/{timestamp}-{slug}.md`.
 
 `mkdir -p .context/inbox/adr` if needed. Tell the user the file path, and that it's a draft ADR that `/auto-action` will fold into `.context/archi/{slug}.md` and move to `.context/done/adr/` once implementation completes. Next step: `/fs-plan` or `/co-plan`.
 
