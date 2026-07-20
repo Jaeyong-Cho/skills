@@ -29,7 +29,7 @@ The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
 |-------|----------------------|
-| Claude Code | `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, Understand-Anything plugin |
+| Claude Code | Copies `skills/`, `references/`, `preferences/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and Understand-Anything plugin |
 | GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, Understand-Anything plugin |
 
 ---
