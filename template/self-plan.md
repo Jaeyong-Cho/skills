@@ -33,4 +33,3 @@ Every holed step above, reordered top-down along the flow (entry point → algor
 
 ## Closeout
 - [ ] Review + Test — once every hole above is filled in, re-run `/auto-action` on this plan; it detects the holes are gone and reviews each one against its recorded intent, then runs the tests
-- [ ] Refactor

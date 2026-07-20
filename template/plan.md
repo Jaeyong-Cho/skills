@@ -9,5 +9,4 @@
 - e.g. Implement the fallback in `TokenCache.get(token)` (`src/auth/cache.py`): catch the Redis connection error and return a cache-miss so `AuthService.validate(token)` falls through to the DB, until `test_cache_fallback_on_redis_down` passes.
 
 ## Closeout
-- [ ] Refactor
 - [ ] Test
