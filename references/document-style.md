@@ -8,7 +8,8 @@ Write in a clear, concise, and professional report style. Prefer structured, vis
 4. **Free text** — lowest preference, avoid unless nothing else fits
 
 ## Which structured form to use
-- **Flow, pipeline, dependency, or stage-to-stage content** (e.g. requirement → design → implementation, a data/control flow, a decision sequence) → ASCII tree/flow diagram, plain ASCII characters only (`|`, `v`, `+--`, `->`). No Unicode box-drawing or arrow glyphs — plain ASCII renders correctly everywhere.
+- **Flow, pipeline, dependency, or stage-to-stage content** (e.g. requirement -> design -> implementation, a data/control flow, a decision sequence) → ASCII tree/flow diagram, plain ASCII characters only (`|`, `v`, `+--`, `->`). No Unicode box-drawing or arrow glyphs — plain ASCII renders correctly everywhere.
+  - Common Unicode traps to avoid inside the diagram: arrows (`→`, `⇒`, `➜`), box-drawing (`─`, `│`, `┌`, `└`, `├`, `┬`), bullet markers (`•`, `▪`). Swap each for the ASCII set above — they render as boxes or vanish in plain terminals.
 - **Comparison content** (options, trade-offs, parallel attributes, before/after) → Markdown table.
 - **List-like content with no flow or comparison shape** → bullets (tier 2), per the rules below.
 - Short edge/node labels (roughly 4 words or fewer) go inline on the arrow; longer explanations drop to a numbered/bulleted legend below the diagram.

@@ -12,6 +12,7 @@ Prefer structured, visual representations over prose. Reading structured output 
 ## Which structured form to use
 
 - **Flow, pipeline, hierarchy, or dependency content** → ASCII tree/flow diagram, plain ASCII characters only (`|`, `v`, `+--`, `->`). No Unicode box-drawing or arrow glyphs — plain ASCII renders correctly everywhere.
+  - Common Unicode traps to avoid inside the diagram: arrows (`→`, `⇒`, `➜`), box-drawing (`─`, `│`, `┌`, `└`, `├`, `┬`), bullet markers (`•`, `▪`). Swap each for the ASCII set above — they render as boxes or vanish in plain terminals.
 - **Comparison content** (options, trade-offs, parallel attributes) → Markdown table.
 - **List-like content with no flow or comparison shape** → concise bullets (tier 2), not a forced diagram.
 
