@@ -4,9 +4,21 @@
 
 ## Context
 > The problem or trigger, and the current state before this spec — why this work exists at all.
+> Stage-to-stage content (current state → trigger → desired state) → ASCII flow diagram, plain characters only (`|`, `v`, `+--`, `->`; see `../references/document-style.md`).
 
-- e.g. Auth tokens are validated on every request by hitting the DB, capping throughput at 200 req/s during peak traffic.
-- e.g. Product wants 1000 req/s sustained.
+```
+e.g.
+Current State
+  Auth tokens validated on every request by hitting the DB
+    |
+    v
+Trigger
+  Throughput capped at 200 req/s during peak traffic
+    |
+    v
+Desired State
+  1000 req/s sustained
+```
 
 ## Requirements
 > - What must be true.
@@ -18,8 +30,12 @@
 ## Decision
 > - The choice made among alternatives, and why.
 > - Not the requirement itself — the resolution when a requirement was ambiguous or had multiple valid implementations.
+> - Comparison content (alternatives weighed against each other) → Markdown table.
 
-- e.g. Chose Redis over in-process cache: multiple app instances share validation state, so an in-process cache would miss on every other request behind the load balancer.
+|Option|Chosen|Why|
+|--|--|--|
+|e.g. Redis cache|Yes|Multiple app instances share validation state; each holds session tokens|
+|e.g. In-process cache|No|Would miss on every other request behind the load balancer|
 
 ## Out of Scope
 > - What was explicitly excluded, so it isn't silently re-litigated later.
