@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Read `../references/requirement-engineering.md` — the key activities (elicitation, analysis, specification, validation) and the functional/non-functional split shape the grill below. Read `../template/requirements.md` — its sections (Context, Requirements, Decision, Out of Scope, User Scenario, Acceptance Criteria) are what each grill item below fills in, so grill toward that shape from the first question rather than only at write-time.
 
-Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/rdr/` — a draft RDR is named `{timestamp}-{slug}.md`; a merged one has been renamed to `{timestamp}-{slug}.merged.md`. If a draft (no `.merged.md` suffix) for the same slug already exists, it's unfinished work from a run that never reached `/merge-req`; read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh RDR.
+Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/rdr/` — a draft RDR is named `{timestamp}-{slug}.md`; a merged one has been renamed to `{timestamp}-{slug}.done.md`. If a draft (no `.done.md` suffix) for the same slug already exists, it's unfinished work from a run that never reached `/merge-req`; read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh RDR.
 
 Use this for new goals or to rescope an existing one. Run a `/get-me` skill to reach a committed, testable spec:
 

@@ -64,8 +64,8 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | `/co-plan` | `.context/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
 | `/auto-action` | code changes | Stops immediately if the plan file already carries the `.done.md` suffix. Otherwise executes the plan's action sequence. Regular plan: write tests → write code → verify, fully autonomous, then renames the plan file to `.done.md`. Self-plan, first run: write tests and working parts complete, leave recorded holes as explanatory TODOs, no run-to-green. Self-plan, re-run after the human fills every hole: review each one against its recorded intent, run the tests, rename the plan file to `.done.md`, and ask to confirm a commit. |
 | `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
-| `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.merged.md` |
-| `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.merged.md` |
+| `/merge-req` | `.context/req/{slug}.md` | Merge the draft RDR into its committed spec once implementation is done; the RDR is kept and renamed `*.done.md` |
+| `/merge-archi` | `.context/adr/{slug}.md`, `.context/archi/{slug}.md` | Merge the draft ADR into its committed file, then derive the architecture doc (Static/Dynamic View) from the implemented result; the draft ADR is kept and renamed `*.done.md` |
 
 ## Utilities
 
@@ -117,8 +117,8 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 
 | Template | Used by |
 |----------|---------|
-| `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.merged.md` |
+| `adr.md` | `/archi` — written to `.context/adr/{timestamp}-{slug}.md`, later merged into `.context/adr/{slug}.md` by `/merge-archi`, which renames it to `*.done.md` |
 | `architecture.md` | `/merge-archi` — derived from the merged ADR and the implemented code, written directly to `.context/archi/{slug}.md` (no draft/merged state) |
 | `plan.md` | `/fs-plan` — written to `.context/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug; `/auto-action` renames it to `*.done.md` on completion |
 | `self-plan.md` | `/co-plan` — written to `.context/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug; `/auto-action` renames it to `*.done.md` once every hole is reviewed and tests pass |
-| `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.merged.md` |
+| `requirements.md` | `/req` — written to `.context/rdr/{timestamp}-{slug}.md`, later merged into `.context/req/{slug}.md` by `/merge-req`, which renames it to `*.done.md` |

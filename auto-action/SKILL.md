@@ -49,7 +49,7 @@ Completion criterion: every hole reviewed against its recorded intent with a ver
 
 **Already Done:** "Auto-action: this plan is already complete." followed by the plan file's `.done.md` name. Do nothing else.
 
-**Full Execution:** "Auto-action complete." followed by the per-step summary. If a draft RDR (`{timestamp}-{slug}.md`, no `.merged.md` suffix) exists in `.context/rdr/` for this slug, add: next step `/merge-req` to commit it into the spec. If a draft ADR (`{timestamp}-{slug}.md`, no `.merged.md` suffix) exists in `.context/adr/` for this slug, add: next step `/merge-archi` to commit it and derive the architecture doc. If any step failed, mention neither — leave both drafts in place so nothing is committed for unfinished work.
+**Full Execution:** "Auto-action complete." followed by the per-step summary. If a draft RDR (`{timestamp}-{slug}.md`, no `.done.md` suffix) exists in `.context/rdr/` for this slug, add: next step `/merge-req` to commit it into the spec. If a draft ADR (`{timestamp}-{slug}.md`, no `.done.md` suffix) exists in `.context/adr/` for this slug, add: next step `/merge-archi` to commit it and derive the architecture doc. If any step failed, mention neither — leave both drafts in place so nothing is committed for unfinished work.
 
 **Self-Plan Execution — Write:** "Auto-action complete (self-plan)." followed by which files were modified, which were created, and which functions/blocks contain holes for the user to implement. Do not mention `/merge-req` or `/merge-archi` — holes mean implementation isn't finished yet. Tell the user: fill in every hole, then re-run `/auto-action` on this plan — it will detect the holes are filled and switch to reviewing and testing the implementation instead of writing it.
 

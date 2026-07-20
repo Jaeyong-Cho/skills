@@ -6,9 +6,9 @@ disable-model-invocation: true
 
 # Archi
 
-Read `.context/rdr/` for the draft RDR to design against — a draft is named `{timestamp}-{slug}.md` (a merged one has `.merged.md` and is no longer live). If `.context/req/{slug}.md` also exists, read it too for prior committed context.
+Read `.context/rdr/` for the draft RDR to design against — a draft is named `{timestamp}-{slug}.md` (a merged one has `.done.md` and is no longer live). If `.context/req/{slug}.md` also exists, read it too for prior committed context.
 
-Check `.context/adr/{slug}.md` — if a committed architecture doc covers the same topic, read it for context. Check `.context/adr/` for a draft ADR — named `{timestamp}-{slug}.md` (a merged one has been renamed to `{timestamp}-{slug}.merged.md`). If a draft (no `.merged.md` suffix) for the same slug already exists, it's unfinished work from a run that never reached `/merge-archi`; read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh ADR.
+Check `.context/adr/{slug}.md` — if a committed architecture doc covers the same topic, read it for context. Check `.context/adr/` for a draft ADR — named `{timestamp}-{slug}.md` (a merged one has been renamed to `{timestamp}-{slug}.done.md`). If a draft (no `.done.md` suffix) for the same slug already exists, it's unfinished work from a run that never reached `/merge-archi`; read it and revise that record in place rather than starting a new one. Otherwise this round produces a fresh ADR.
 
 Use this for new designs or to redesign after a fix reveals new architecture needs.
 Read `../references/archi.md`, `../references/meta-pattern.md`, `../references/deep-modules.md`, `../references/test-loop.md`, `../references/good-harness.md`.
