@@ -13,6 +13,7 @@ Write in a clear, concise, and professional report style. Prefer structured, vis
 - **Comparison content** (options, trade-offs, parallel attributes, before/after) → Markdown table.
 - **List-like content with no flow or comparison shape** → bullets (tier 2), per the rules below.
 - Short edge/node labels (roughly 4 words or fewer) go inline on the arrow; longer explanations drop to a numbered/bulleted legend below the diagram.
+- Every diagram carries a one-sentence caption stating what it depicts, placed directly above or below it — the diagram shows structure, the caption states content, so a reader who skips the ASCII art still gets the information.
 
 ## Bullet rules (when bullets are the right tier)
 - Default to bullet + sub-bullet structure over paragraphs. Use paragraphs only for a short lead-in sentence when a section truly needs one.
