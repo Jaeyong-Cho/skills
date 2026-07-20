@@ -105,6 +105,11 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
 | `todo-hole.md` | Wording rule for a self-plan hole's TODO: junior-developer guidance, no line cap — real signature names, the general technique, numbered steps, one worked example with concrete values different from the paired test |
 | `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
+| `document-style.md` | Structured-format report style for written docs: priority order (diagram/table > bullets > prose), when to use a flow diagram vs a table, Introduction/Body/Conclusion structure |
+| `communication-style.md` | Same structured-format priority, scoped to chat responses, plans, and `AskUserQuestion` calls rather than standalone docs |
+| `preference-format.md` | Standing-vs-one-off test, file location (`../preferences/` vs `.context/preferences/`), and entry format for recorded preferences — used by `/get-me` and `/to-preference` |
+| `requirement-engineering.md` | Elicitation, analysis, specification, validation, management — the five activities `/req` draws on |
+| `top-down-decompose.md` | MECE top-down decomposition methodology `/breakdown` applies to split a goal into atomic sub-goals |
 
 ## Templates
 
