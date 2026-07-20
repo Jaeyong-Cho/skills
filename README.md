@@ -73,6 +73,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves. Called directly or from within other skills |
 | `/get-me` | `../preferences/`, `.context/preferences/` | Same interview as `/grilling`, but checks recorded preferences first and skips any question one already answers; records new standing preferences as they're confirmed. Used by `/req` and `/archi` |
+| `/to-preference` | `../preferences/`, `.context/preferences/` | Sweep the whole session for confirmed decisions or corrections that generalize beyond it, and record the approved ones as standing preferences — a batch, after-the-fact counterpart to `/get-me`'s live recording |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/breakdown` | — | Break any goal into a MECE tree of atomic, actionable sub-goals, then order the leaves into a dependency-respecting execution sequence |
@@ -80,12 +81,12 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 ## Preferences
 
-`/get-me` grows two preference stores instead of re-asking the same settled question every pass:
+`/get-me` and `/to-preference` grow two preference stores instead of re-asking the same settled question every pass:
 
 - `preferences/{topic}.md` — general engineering/style rules true regardless of which project (e.g. `preferences/api-design.md`). Lives in this skills repo, so it travels with the install.
 - `.context/preferences/{topic}.md` — this project's own recorded choices (e.g. `.context/preferences/tech-stack.md`).
 
-Neither is pre-populated — `/get-me` creates a topic file the first time a standing rule (not a one-off, feature-specific answer) comes up, and appends to it on repeat topics. Edit or delete an entry directly if it's wrong; nothing else enforces it.
+Neither is pre-populated — the first standing rule (not a one-off, feature-specific answer) on a topic creates its file, and later ones append to it. `/get-me` records live, per answer, during an interview; `/to-preference` sweeps a whole session afterward and asks for confirmation before writing. Edit or delete an entry directly if it's wrong; nothing else enforces it.
 
 ## References
 

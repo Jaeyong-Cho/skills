@@ -13,10 +13,6 @@ Ask one question at a time for anything not already answered. When a question ha
 
 If a question can be answered by exploring the codebase, explore the codebase instead. Check for a knowledge graph first — `.ua/knowledge-graph.json` or legacy `.understand-anything/knowledge-graph.json` — and query it via `understand-chat` before falling back to raw Read/Grep.
 
-After getting an answer, decide whether it's a one-off for this plan or a standing rule that would apply beyond it. A standing rule is one you'd answer the same way next time regardless of which feature or project prompted it (an API design convention, a testing habit, a naming rule). A one-off is specific to this plan's own constraints (this feature uses Redis because this project already runs Redis). Don't ask the human to classify it — decide and record it yourself; they can edit or delete the file directly if it's wrong.
+After getting an answer, decide whether it's a one-off for this plan or a standing rule that would apply beyond it — see `../references/preference-format.md` for the standing-vs-one-off test. Don't ask the human to classify it — decide and record it yourself; they can edit or delete the file directly if it's wrong.
 
-Record a standing rule by appending to (or creating) a topic file, kebab-case named after the rule's subject:
-- `../preferences/{topic}.md` — true across any project (e.g. `../preferences/api-design.md`).
-- `.context/preferences/{topic}.md` — true only in this project (e.g. `.context/preferences/tech-stack.md`).
-
-Each entry is the rule stated as a decision, one line, e.g. `- Use plural nouns for REST resource endpoints.` Append under the file's existing bullets; if it's the first entry on that topic, create the file with just that line.
+Record a standing rule per `../references/preference-format.md` (file location and entry format).
