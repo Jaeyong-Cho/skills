@@ -5,7 +5,7 @@ description: Interview the user about a plan or design like /grilling, but check
 
 # Get-Me
 
-Interview me about every branch of this plan until we reach a shared understanding, the same way `/grilling` does — but don't ask what's already settled. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding, but don't ask what's already settled by a recorded preference. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 
 Before asking a question, check for a recorded preference that already answers it: search `../preferences/**/*.md` (cross-project — general engineering/style rules that hold regardless of which project this is) and `.context/preferences/**/*.md` (this project's own recorded choices) for a matching topic. If one answers the branch, apply it directly and say so inline (e.g. "Using recorded preference `<topic>`: ...") instead of asking — move straight to the next branch.
 
