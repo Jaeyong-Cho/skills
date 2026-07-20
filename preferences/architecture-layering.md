@@ -1,0 +1,2 @@
+- A stateful entity (has a lifecycle and enforces its own invariants) that needs to hold both an Objects-layer value and a Logics-layer value belongs in the Usecase layer, not forced into Objects (which may depend on nothing) or Logics (which may depend on Objects only) — even in a project that has no Usecase layer yet.
+- No Logics/Objects/Usecase code may hold a value of an External-layer type (e.g. an I/O wrapper like a file-backed handle); depend on the inner Objects-layer value instead and let the External-layer caller pass it in.
