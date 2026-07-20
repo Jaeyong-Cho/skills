@@ -100,7 +100,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 - `preferences/{topic}.md` — general engineering/style rules true regardless of which project (e.g. `preferences/api-design.md`). Lives in this skills repo, so it travels with the install.
 - `.context/preferences/{topic}.md` — this project's own recorded choices (e.g. `.context/preferences/tech-stack.md`).
 
-Neither is pre-populated — the first standing rule (not a one-off, feature-specific answer) on a topic creates its file, and later ones append to it. `/get-me` records live, per answer, during an interview; `/to-preference` sweeps a whole session afterward and asks for confirmation before writing. Edit or delete an entry directly if it's wrong; nothing else enforces it.
+Neither is pre-populated — the first standing rule (not a one-off, feature-specific answer) on a topic creates its file, and later ones append to it. Preference files are concise decision ledgers: one direct decision per bullet, no report sections or diagrams. `/get-me` records live, per answer, during an interview; `/to-preference` sweeps a whole session afterward and asks for confirmation before writing. Edit or delete an entry directly if it's wrong; nothing else enforces it.
 
 ## References
 

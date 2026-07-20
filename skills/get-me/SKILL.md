@@ -15,4 +15,4 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 After getting an answer, decide whether it's a one-off for this plan or a standing rule that would apply beyond it — see `../../references/preference-format.md` for the standing-vs-one-off test. Don't ask the human to classify it — decide and record it yourself; they can edit or delete the file directly if it's wrong.
 
-Record a standing rule per `../../references/preference-format.md` (file location and entry format).
+Record a standing rule per `../../references/preference-format.md` (file location, entry format, and style). Apply `../../references/communication-style.md` when stating a recorded preference to the user, and `../../references/document-style.md`'s bullet rules when writing it to the preference file.
