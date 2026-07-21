@@ -66,7 +66,15 @@ install_skill_library() {
     return
   fi
 
-  for dir in skills references preferences template; do
+  # "skills" is special: its contents must land directly under
+  # $CLAUDE_SKILLS_DIR (e.g. $CLAUDE_SKILLS_DIR/archi), not nested one level
+  # deeper as $CLAUDE_SKILLS_DIR/skills/archi — Claude Code only discovers
+  # skills at $CLAUDE_SKILLS_DIR/<name>/SKILL.md.
+  if [ -d "$SKILLS_DIR/skills" ]; then
+    cp -R "$SKILLS_DIR/skills/." "$CLAUDE_SKILLS_DIR/"
+  fi
+
+  for dir in references preferences template; do
     [ -d "$SKILLS_DIR/$dir" ] || continue
     cp -R "$SKILLS_DIR/$dir" "$CLAUDE_SKILLS_DIR/"
   done
