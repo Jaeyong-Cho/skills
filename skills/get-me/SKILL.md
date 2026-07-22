@@ -1,6 +1,6 @@
 ---
 name: get-me
-description: Interview the user about a plan or design like /grilling, but check recorded preferences first and skip any question already answered by one; record new standing preferences as they're confirmed. Use when req/archi (or anything else) needs a grill that doesn't re-ask settled preferences, or uses 'get-me' trigger phrases.
+description: Interview the user about a plan or design like /grilling, but check recorded preferences first and skip any question already answered by one; record a new standing preference only when the human explicitly asks to save one. Use when req/archi (or anything else) needs a grill that doesn't re-ask settled preferences, or uses 'get-me' trigger phrases.
 ---
 
 # Get-Me
@@ -11,8 +11,8 @@ Before asking a question, check for a recorded preference that already answers i
 
 Run `/grilling` skill for interview me.
 
-After getting an answer, decide whether it's a one-off for this plan or a standing rule that would apply beyond it — see `../references/preference-format.md` for the standing-vs-one-off test. Don't ask the human to classify it.
+Do not automatically classify an answer as standing vs. one-off, and do not proactively offer to record one. Recording only happens when the human explicitly asks to save an answer as a preference (e.g. "save this as a preference," "make this a standing rule") — otherwise every answer stays scoped to this session. For a full sweep of the session after the fact, point the human at `/to-preference` instead.
 
-Before recording a standing rule, show the human the exact entry you're about to write (topic + text) and get their confirmation. Only write it after they confirm; if they decline or want it changed, adjust or drop it per their response instead of writing it.
+When the human does ask, apply `../references/preference-format.md`'s standing-vs-one-off test to that answer, then show them the exact entry you're about to write (topic + text) and get their confirmation. Only write it after they confirm; if they decline or want it changed, adjust or drop it per their response instead of writing it.
 
 Record a confirmed standing rule per `../references/preference-format.md` (file location, entry format, and style). Apply `../references/communication-style.md` when stating a recorded preference to the user, and `../references/document-style.md`'s bullet rules when writing it to the preference file.
