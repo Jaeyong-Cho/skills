@@ -124,6 +124,7 @@ setup_copilot() {
       cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
       cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
       cp -R "$SKILLS_DIR/preferences/." "$HOME/.copilot/skills/preferences"
+      cp -R "$SKILLS_DIR/template/." "$HOME/.copilot/skills/template"
       echo "  ✓ skills and references → ~/.copilot"
   fi
   
