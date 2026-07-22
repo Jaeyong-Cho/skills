@@ -117,6 +117,16 @@ setup_copilot() {
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
 
+  # Install skills, preferences and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
+  if [ -d "$HOME/.copilot" ]; then
+      # Clear existing skills and references to avoid duplicates
+      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/preferences" "$HOME/.copilot/references"
+      cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
+      cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
+      cp -R "$SKILLS_DIR/preferences/." "$HOME/.copilot/skills/preferences"
+      echo "  ✓ skills and references → ~/.copilot"
+  fi
+  
   # Copilot CLI has no hooks API — tmux-agent-status can only see it via
   # process presence auto-detection, not working/done transitions.
   echo "  note: tmux-agent-status has no hook support for Copilot CLI (process presence only)"
