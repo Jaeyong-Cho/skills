@@ -1,6 +1,6 @@
 ---
 name: req
-description: Requirements-engineering skill. Uses /get-me to find the goal, elicit and prioritize functional and non-functional requirements, and commit to a testable spec. Use when invoked as /req.
+description: Requirements-engineering skill. Uses /grilling to find the goal, elicit and prioritize functional and non-functional requirements, and commit to a testable spec. Use when invoked as /req.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Read `../references/requirement-engineering.md` — the key activities (elicitat
 
 Check `.context/req/{slug}.md` — if a committed spec covers the same topic, read it for context. Check `.context/inbox/rdr/` for a draft RDR ending in `-{slug}.md`; if one exists, it's unfinished work from a run where `/auto-action` never finished (or never ran) — read it and revise that record in place rather than starting a new one. A merged draft lives in `.context/done/rdr/` instead and is no longer live. Otherwise this round produces a fresh RDR.
 
-Use this for new goals or to rescope an existing one. Run a `/get-me` skill to reach a committed, testable spec:
+Use this for new goals or to rescope an existing one. Run a `/grilling` skill to reach a committed, testable spec:
 
 1. **Context** — what's the problem or trigger? What's the current state before this work? Push for the real trigger, not just the surface ask — this is the background the rest of the spec stands on.
 2. **Goal & scenario** — what does success actually look like? Push past the surface request to the real outcome the user needs. Narrate it as the sequence the user lives through: {action} → {reaction} → {action} → ... down to the outcome — not a feature list. If it covers more than one path or actor, or the chain gets too long to follow as one sequence, split into multiple named scenarios.

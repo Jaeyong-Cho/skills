@@ -1,6 +1,6 @@
 # Preference Format
 
-Where a recorded preference lives, and how each entry is written. Used by `get-me` and `to-preference`.
+Where a recorded preference lives, and how each entry is written. Used by `to-preference`.
 
 ## Style
 

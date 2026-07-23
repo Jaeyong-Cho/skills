@@ -1,6 +1,6 @@
 ---
 name: archi
-description: Architecture skill. Uses /get-me to resolve architecture, design, observability, test-loop design, and verification criteria against archi.md's layers and dependency rule, then writes an ADR. Use when invoked as /archi.
+description: Architecture skill. Uses /grilling to resolve architecture, design, observability, test-loop design, and verification criteria against archi.md's layers and dependency rule, then writes an ADR. Use when invoked as /archi.
 disable-model-invocation: true
 ---
 
@@ -15,7 +15,7 @@ Read `../references/archi.md`, `../references/meta-pattern.md`, `../references/d
 
 Check `.claude/agents/` and `.github/agents/` for existing project subagents. If one's description matches part of this design (e.g. a domain expert for architecture research, or a specialized reviewer for the design), delegate that part to it rather than reasoning through it inline yourself.
 
-Run a `/get-me` skill to resolve every branch of the design:
+Run a `/grilling` skill to resolve every branch of the design:
 
 1. **Architecture** — how to structure the implementation? Apply archi.md's layers (Objects/Logics/Usecase/External) and dependency rule, meta-pattern (Abstractness/Subdomain/Sharding axes), and deep-module principles (hide complexity, widen interfaces). Every class lands in exactly one layer; a dependency pointing outward is a design error — stop and redesign.
 2. **Design** — what are the key modules, contracts, and data flows? Place each inside the layer archi.md assigns it; check against archi.md's Design Smells table.
