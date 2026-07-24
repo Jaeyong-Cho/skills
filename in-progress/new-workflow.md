@@ -11,7 +11,7 @@
 ### Exponential Software Development Process from Prototype to Product
 - The main loop of the process
 ```
-Goal -> Scen + AC -> Req + AC -> Arch + AC -> Impl + AC -> Test -> Feedback
+Goal -> Scen + AC -> Req + AC -> Arch + AC -> Algo + AC -> Impl + AC -> Test -> Feedback
  ```
 
 - The value of each stage
@@ -55,7 +55,10 @@ Req -> Arch + AC -> Impl -> Test -> Feedback
   - Scen: user can exit with button
 - One vertical slice done = minimum release unit
 - One vertical slice done is mean every stage's are specified and confirmed by human
-
+- The Scenarios should be defined with real situation ordered.
+  - Scenario: As a user, I want to product list when open the app, so that I can select a product to buy.
+  - Scenario: As a user, I want to add a product to my shopping cart, so that I can purchase it later.
+  - Scenario: As a user, I want to checkout my shopping cart, so that I can complete my purchase.
 
 #### Scenario format
 ```
@@ -115,6 +118,8 @@ The system shall reject adding an out-of-stock product.
 
 #### Architecture format
 - Component is a reuseable structural element of the system, including its responsibility and relationships with other components
+  - Component can be may be class, struct, file...
+  - Component's interface can be public method, public function, public API, public endpoint...
 - Sequence is the collaboration of components to satisfy one or more requirements. Each Dynamic is explicitly mapped to the requirements it realizes and includes the interaction flow and acceptance criteria for that collaboration.
   - Mostly it will be mapping with requirements 1:1
 
@@ -127,10 +132,7 @@ Receive cart requests.
 
 ## Interfaces
 
-### Input
 - POST /cart/items
-
-### Output
 - Cart Response
 
 ## Depends On
@@ -197,6 +199,35 @@ Cart Service
 6. Updated cart is returned to the client.
 ```
 
+#### Algorithm Design Format
+- Algorithm will defined for each architecture component's interfaces
+```
+# ALG-001
+- Status: Draft/Reviewed/Done
+
+## Component
+- CMP-002 Cart Service
+
+## Interface
+- addProductToCart(productId: string, quantity: number): Cart
+
+## Algorithm
+1. Load the product using Product Repository.
+2. If the product is out of stock, throw an error.
+3. Load the shopping cart using Cart Repository.
+4. If the product already exists in the cart, increase its quantity.
+5. If the product does not exist, add it to the cart with the specified quantity.
+6. Save the updated cart using Cart Repository.
+
+## Acceptance Criteria
+1. Product is successfully loaded.
+2. Out-of-stock products are rejected.
+3. Shopping cart is successfully loaded.
+4. Product quantity is updated or added correctly.
+5. Updated cart is persisted and returned.
+```
+
+
 #### Requirement Decision Record Format
 ```
 # RDR-001
@@ -248,3 +279,4 @@ Introduce a Cart Repository component.
 - Cleaner architecture.
 - Additional repository abstraction.
 ```
+
