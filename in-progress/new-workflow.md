@@ -60,9 +60,10 @@ Req -> Arch + AC -> Impl -> Test -> Feedback
 #### Scenario format
 ```
 # SCN-001 Add Product to Cart
+- Status: Draft/Reviewed/Done
 
-## Goal
-User adds a product to the shopping cart.
+## User Scenario
+As a User, I want to add a product to my shopping cart so that I can purchase it later.
 
 ## Flow
 1. User selects a product.
@@ -77,6 +78,7 @@ User adds a product to the shopping cart.
 #### Requirement format
 ```
 # REQ-001
+- Status: Draft/Reviewed/Done
 
 ## Requirement
 The system shall add the selected product to the shopping cart.
@@ -88,6 +90,7 @@ The system shall add the selected product to the shopping cart.
 ---
 
 # REQ-002
+- Status: Draft/Reviewed/Done
 
 ## Requirement
 If the product already exists in the cart, the system shall increase its quantity.
@@ -100,6 +103,7 @@ If the product already exists in the cart, the system shall increase its quantit
 ---
 
 # REQ-003
+- Status: Draft/Reviewed/Done
 
 ## Requirement
 The system shall reject adding an out-of-stock product.
@@ -116,6 +120,7 @@ The system shall reject adding an out-of-stock product.
 
 ```
 # CMP-001 Cart API
+- Status: Draft/Reviewed/Done
 
 ## Responsibility
 Receive cart requests.
@@ -136,6 +141,7 @@ Receive cart requests.
 - SEQ-002
 
 # CMP-002 Cart Service
+- Status: Draft/Reviewed/Done
 
 ## Responsibility
 Execute cart business logic.
@@ -150,6 +156,7 @@ Execute cart business logic.
 - SEQ-003
 
 # SEQ-001 Add Product to Cart
+- Status: Draft/Reviewed/Done
 
 ## Requirement
 REQ-001
@@ -193,6 +200,7 @@ Cart Service
 #### Requirement Decision Record Format
 ```
 # RDR-001
+- Status: Draft/Reviewed/Done
 
 ## Requirement
 - REQ-001 Add product to shopping cart.
@@ -218,6 +226,7 @@ Increase the quantity of the existing cart item.
 #### Architectural Decision Record Format
 ```
 # ADR-001
+- Status: Draft/Reviewed/Done
 
 ## Architecture
 - ARCH-001 Shopping Cart
