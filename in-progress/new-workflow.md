@@ -119,9 +119,11 @@ The system shall reject adding an out-of-stock product.
 #### Architecture format
 - Component is a reuseable structural element of the system, including its responsibility and relationships with other components
   - Component can be may be class, struct, file...
+  - Match a component to a class/struct/type when that concept exists for its responsibility (e.g. it holds state). If no class concept exists (e.g. a stateless function or a set of functions), the component is the file/module instead.
   - Component's interface can be public method, public function, public API, public endpoint...
 - Sequence is the collaboration of components to satisfy one or more requirements. Each Dynamic is explicitly mapped to the requirements it realizes and includes the interaction flow and acceptance criteria for that collaboration.
   - Mostly it will be mapping with requirements 1:1
+  - Each Sequence step that invokes another component must cite that component's actual interface (method/endpoint signature from its CMP doc), not just a prose description — this keeps the sequence traceable to each component's Interfaces section and catches drift if a signature changes.
 
 ```
 # CMP-001 Cart API
@@ -147,6 +149,10 @@ Receive cart requests.
 
 ## Responsibility
 Execute cart business logic.
+
+## Interfaces
+
+- addProductToCart(productId: string, quantity: number): Cart
 
 ## Depends On
 - CMP-003
@@ -183,12 +189,12 @@ Cart Service
 
 ## Sequence
 
-1. Cart API receives the request.
-2. Cart Service loads the product.
-3. Cart Service loads the cart.
-4. Cart Service adds the product.
-5. Cart Service saves the cart.
-6. Cart API returns the response.
+1. Cart API's `POST /cart/items` receives the request.
+2. Cart Service calls Product Repo's `getProduct(productId: string): Product` to load the product.
+3. Cart Service calls Cart Repo's `getCart(cartId: string): Cart` to load the cart.
+4. Cart Service's `addProductToCart(productId: string, quantity: number): Cart` adds the product to the cart.
+5. Cart Service calls Cart Repo's `saveCart(cart: Cart): void` to save the cart.
+6. Cart API returns the `Cart Response`.
 
 ## Acceptance Criteria
 1. Cart API forwards the request to Cart Service.
