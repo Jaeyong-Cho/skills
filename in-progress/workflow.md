@@ -19,51 +19,13 @@ Goal -> Scen + AC -> Req + AC -> Arch + AC -> Algo + AC -> Impl + AC -> Test -> 
 
 #### Interface vs internal responsibility
 - Interface = the interaction between components at that stage's level of abstraction, not any single component's internals.
-- Interface is a contract, so it needs human review (grilling) before moving on.
-- Internal details are the AI's subjective judgement: no grilling needed, the AI decides and only comes back on test failure/feedback.
-
-```
-Goal -> Scen + AC -> Req + AC -> Arch + AC || Algo + AC -> Impl + AC -> Test -> Feedback
-        |------- Interface: human review (grilling) -------||---- Internal: AI judgement ----|
-```
+- Interface is a contract between components/stages — get it wrong and every dependent component breaks, so it deserves the most careful design attention.
+- Internal details are implementation choices within that contract; they can be revised freely as long as the interface holds.
 
 ##### What "interface" means per stage
-- Scenario: the components are Client/User, Program/System, and Output/Data. The interface is their interaction — the Flow steps that cross the boundary (user action in, system response/output data out). Grilling reviews whether those crossing points are complete and unambiguous, not how the system computes internally.
-- Requirement: the interface is the boundary between the triggering input/condition and the guaranteed output, captured in Acceptance Criteria. Grilling reviews whether that input -> output boundary is fully and testably specified, not the internal logic that satisfies it.
-- Architecture: a Component's Interfaces section (method/API signatures) is literally the interface — the contract between components. Grilling reviews signature completeness and correctness, not each component's internal algorithm.
-
-- Interface stages (grilling required): Scenario, Requirement, Architecture (Component interfaces + Sequence)
-- Internal stages (AI's judgement, no grilling): Algorithm, Implementation
-
-
-#### Incremental software development
-- The loop can be separated.
-
-```
-Loop 1: Scenario + Req analyze loop
-Goal -> Scen + AC -> Impl -> Test -> Feedback
-```
-- Feedback action
-  - feedback goal
-  - feedback scenario
-  - specify requirements (RDR: requirement decision record)
-
-```
-Loop 2: Req + Arch analyze loop
-Scen -> Req + AC -> Impl -> Test -> Feedback
-```
-- Feedback action
-  - feedback scenario
-  - feedback requirement
-  - specify architecture (ADR: architectural decision record)
-
-```
-Loop 3: Archi + Impl analyze loop
-Req -> Arch + AC -> Impl -> Test -> Feedback
-```
-- Feedback action
-  - feedback requirement
-  - feedback architecture
+- Scenario: the components are Client/User, Program/System, and Output/Data. The interface is their interaction — the Flow steps that cross the boundary (user action in, system response/output data out).
+- Requirement: the interface is the boundary between the triggering input/condition and the guaranteed output, captured in Acceptance Criteria.
+- Architecture: a Component's Interfaces section (method/API signatures) is literally the interface — the contract between components.
 
 #### The release rule
 - Scenario
