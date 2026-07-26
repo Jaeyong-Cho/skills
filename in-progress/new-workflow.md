@@ -17,6 +17,24 @@ Goal -> Scen + AC -> Req + AC -> Arch + AC -> Algo + AC -> Impl + AC -> Test -> 
 - The value of each stage
   - Goal > Feedback > Scen + Test > Req + Test > Arch + Test > Impl
 
+#### Interface vs internal responsibility
+- Interface = the interaction between components at that stage's level of abstraction, not any single component's internals.
+- Interface is a contract, so it needs human review (grilling) before moving on.
+- Internal details are the AI's subjective judgement: no grilling needed, the AI decides and only comes back on test failure/feedback.
+
+```
+Goal -> Scen + AC -> Req + AC -> Arch + AC || Algo + AC -> Impl + AC -> Test -> Feedback
+        |------- Interface: human review (grilling) -------||---- Internal: AI judgement ----|
+```
+
+##### What "interface" means per stage
+- Scenario: the components are Client/User, Program/System, and Output/Data. The interface is their interaction — the Flow steps that cross the boundary (user action in, system response/output data out). Grilling reviews whether those crossing points are complete and unambiguous, not how the system computes internally.
+- Requirement: the interface is the boundary between the triggering input/condition and the guaranteed output, captured in Acceptance Criteria. Grilling reviews whether that input -> output boundary is fully and testably specified, not the internal logic that satisfies it.
+- Architecture: a Component's Interfaces section (method/API signatures) is literally the interface — the contract between components. Grilling reviews signature completeness and correctness, not each component's internal algorithm.
+
+- Interface stages (grilling required): Scenario, Requirement, Architecture (Component interfaces + Sequence)
+- Internal stages (AI's judgement, no grilling): Algorithm, Implementation
+
 
 #### Incremental software development
 - The loop can be separated.
@@ -61,6 +79,7 @@ Req -> Arch + AC -> Impl -> Test -> Feedback
   - Scenario: As a user, I want to checkout my shopping cart, so that I can complete my purchase.
 
 #### Scenario format
+- The components at this stage are Client/User, Program/System, and Output/Data. The interface is their interaction, so each Flow step is tagged with which components it crosses.
 ```
 # SCN-001 Add Product to Cart
 - Status: Draft/Reviewed/Done
@@ -68,23 +87,33 @@ Req -> Arch + AC -> Impl -> Test -> Feedback
 ## User Scenario
 As a User, I want to add a product to my shopping cart so that I can purchase it later.
 
-## Flow
-1. User selects a product.
-2. User clicks **Add to Cart**.
-3. The system adds the product to the cart.
-4. The updated cart is shown.
+## Components
+- Client/User: the shopper
+- Program/System: the cart service
+- Output/Data: the cart shown back to the user
+
+## Flow (Interface: Client/User <-> Program/System <-> Output/Data)
+1. [Client/User -> Program/System] User selects a product.
+2. [Client/User -> Program/System] User clicks **Add to Cart**.
+3. [Program/System -> Output/Data] The system adds the product to the cart.
+4. [Program/System -> Client/User] The updated cart is shown.
 
 ## Exceptions
 - Product is out of stock.
 ```
 
 #### Requirement format
+- The interface at this stage is the boundary between the triggering input/condition and the guaranteed output, so each requirement states that boundary explicitly before the Acceptance Criteria spell it out as test cases.
 ```
 # REQ-001
 - Status: Draft/Reviewed/Done
 
 ## Requirement
 The system shall add the selected product to the shopping cart.
+
+## Interface (Input -> Output)
+- Input: selected product, current cart
+- Output: cart with the product added
 
 ## Acceptance Criteria
 - Product appears in the cart.
@@ -98,6 +127,10 @@ The system shall add the selected product to the shopping cart.
 ## Requirement
 If the product already exists in the cart, the system shall increase its quantity.
 
+## Interface (Input -> Output)
+- Input: product already in cart, additional quantity
+- Output: cart with the existing item's quantity increased
+
 ## Acceptance Criteria
 - Existing quantity: 2
 - Add the same product.
@@ -110,6 +143,10 @@ If the product already exists in the cart, the system shall increase its quantit
 
 ## Requirement
 The system shall reject adding an out-of-stock product.
+
+## Interface (Input -> Output)
+- Input: out-of-stock product
+- Output: error response, cart unchanged
 
 ## Acceptance Criteria
 - An error message is displayed.
