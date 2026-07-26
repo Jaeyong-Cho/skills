@@ -6,15 +6,13 @@ disable-model-invocation: true
 
 # Co-Plan (Collaborative Plan)
 
-Read the draft ADR to plan from `.context/inbox/adr/` (a merged one has moved to `.context/done/adr/` and is no longer the active target). If multiple drafts exist, list them and ask the user which to use. If none exist, tell the user to run `/archi` first and stop.
-
 Read `.context/inbox/plan/` — if an existing self-plan (`**Type:** Self-Plan`) covers the same topic, read it and revise it rather than creating a new one.
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`, `../references/tdd-refactoring.md`, `../references/todo-hole.md`.
 
 Build the action sequence the same way `/fs-plan` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Test steps are never holed — tests are always complete and AI-written.
 
-Read the ADR's Decision (Before/After) to identify the main flow: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
+Read the architecture Decision to identify the main flow: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
 
 For each implementation step, a hole is never a whole function body and never a stage's full algorithm — it's one or a few specific lines. There are two kinds, and both are judgment calls, not a rigid checklist — recommend what best serves understanding:
 
