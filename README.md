@@ -84,6 +84,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves; notes where recorded preferences live. Called directly or from within other skills |
+| `/socratic` | — | Respond to a question, hypothesis, or claim with one probing question at a time instead of a direct answer, never stating a conclusion, until the user reasons their way there |
 | `/to-preference` | `../../preferences/`, `.context/preferences/` | Sweep the whole session for confirmed decisions or corrections that generalize beyond it, and record the approved ones as standing preferences |
 | `/to-todo` | `.context/inbox/todo/` | Turn the current `/breakdown` tree into a checkbox TODO; manually move the file unchanged to `.context/done/todo/` after every item is checked |
 | `/to-docs` | user-selected path | Write the current session's work as a report-style document |
