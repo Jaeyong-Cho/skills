@@ -17,6 +17,8 @@ A single chart answers one question well; a **gallery** — several complementar
 
 5. **Rank the gallery (optional)** — most relevant to the user's stated question first.
 
+6. **Assemble the gallery page.** Build a manifest JSON (schema in `scripts/build_gallery.py`'s docstring) with one entry per rendered form — its catalog category, title, image, and the four explanation fields — then run `python scripts/build_gallery.py manifest.json index.html`. Done when `index.html` exists, embeds every rendered image directly (no external file references), and opens standalone in a browser.
+
 ## Output template (per visualization)
 
 - **Why this form** — what in the profile made it a match.
@@ -24,4 +26,4 @@ A single chart answers one question well; a **gallery** — several complementar
 - **Strengths / limitations** — from the catalog entry, adjusted for what this specific render shows.
 - **Best used for** — the analytical question this form answers better than the others in the gallery.
 
-See `references/catalog.md` for the full set of forms, grouped by the structure in the data they surface: comparison, distribution, relationship, composition, trend & time, hierarchy, network, geospatial, multivariate.
+See `references/catalog.md` for the full set of forms, grouped by the structure in the data they surface: comparison, distribution, relationship, composition, trend & time, hierarchy, network, geospatial, multivariate. `references/template.html` and `scripts/build_gallery.py` turn a finished gallery into a single themed `index.html`.

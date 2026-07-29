@@ -1,0 +1,247 @@
+<title>{{TITLE}}</title>
+<style>
+:root {
+  --bg-page: #f6f5f1;
+  --bg: #faf9f5;
+  --ink: #2a2920;
+  --ink-2: #6c675f;
+  --muted: #858179;
+  --line: #e0ddd8;
+  --line-strong: #a8a49c;
+  --accent: #9a4929;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --serif: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --bg-page: #191918;
+    --bg: #262624;
+    --ink: #e8e4dc;
+    --ink-2: #938e87;
+    --muted: #5a5955;
+    --line: #333330;
+    --line-strong: #636360;
+    --accent: #d97757;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg-page: #191918;
+  --bg: #262624;
+  --ink: #e8e4dc;
+  --ink-2: #938e87;
+  --muted: #5a5955;
+  --line: #333330;
+  --line-strong: #636360;
+  --accent: #d97757;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg-page);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.9rem;
+}
+
+h1 {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  line-height: 1.25;
+  margin: 0 0 0.6rem;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+.dek {
+  color: var(--ink-2);
+  font-size: 1.05rem;
+  max-width: 62ch;
+  margin: 0 0 2.6rem;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.6rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 0.9rem 0;
+  margin-bottom: 2.4rem;
+}
+.meta-row span b { color: var(--ink-2); font-weight: 600; }
+
+section.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 3rem;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.stat { background: var(--bg); padding: 1.1rem 1rem; }
+.stat .n {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: block;
+}
+.stat .l {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--mono);
+}
+
+.palette-block { margin-bottom: 3.5rem; }
+.palette-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.7rem;
+}
+.swatches {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.swatch { flex: 1; display: flex; flex-direction: column; }
+.swatch-color { display: block; height: 34px; }
+.swatch-hex {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  text-align: center;
+  padding: 0.35rem 0.2rem;
+  color: var(--ink-2);
+  background: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+
+h2.section-title {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  margin: 0 0 1.6rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.gallery { display: flex; flex-direction: column; gap: 2.6rem; }
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  overflow: hidden;
+}
+.card-media { border-bottom: 1px solid var(--line); background: var(--bg); }
+.card-media img { display: block; width: 100%; height: auto; }
+.card-body { padding: 1.5rem 1.6rem 1.7rem; }
+.card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 1.1rem;
+  flex-wrap: wrap;
+}
+.card-head h3 {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+dl { margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.9rem; }
+dt {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+dd { margin: 0; max-width: 68ch; color: var(--ink); }
+
+footer {
+  margin-top: 3.5rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+footer code {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  color: var(--ink);
+}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">{{EYEBROW}}</p>
+  <h1>{{TITLE}}</h1>
+  <p class="dek">{{DEK}}</p>
+
+  <div class="meta-row">
+{{META_ROW}}
+  </div>
+
+  <section class="stats">
+{{STATS}}
+  </section>
+
+  <div class="palette-block">
+    <p class="palette-label">Categorical palette — token-light, in slot order</p>
+    <div class="swatches">
+{{SWATCHES}}
+    </div>
+  </div>
+
+  <h2 class="section-title">The gallery</h2>
+  <div class="gallery">
+{{CARDS}}
+  </div>
+
+  <footer>{{FOOTER}}</footer>
+</div>

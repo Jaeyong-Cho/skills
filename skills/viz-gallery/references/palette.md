@@ -37,6 +37,8 @@ token's 8 syntax hues (blue, green, red, yellow, purple, cyan, orange, olive) ar
 | 7 | purple | `#805ba7` |
 | 8 | olive | `#617613` |
 
+For white vs. dark-ink (`#2a2920`) text set *on* one of these slots as a fill (legend chips, tags) rather than the slot used as a mark on the surface: white wins on every slot except 4 (cyan), where dark ink wins.
+
 This order clears the hard gates for **adjacent** use (stacks/bars/lines): worst adjacent CVD ΔE 6.1 (protan/deutan — floor band, 6–8, ship secondary encoding: direct labels, gaps, or texture) — worst adjacent normal-vision ΔE 22.4 (≥15 floor, pass). Slot 4 (cyan `#00a2a3`) sits at 2.98:1 on the light surface, just under the 3:1 relief threshold — ship a visible label or the table view whenever it's used, per the relief rule.
 
 **All-pairs cap (scatter, bubble, choropleth, small multiples):** the full 8 do not clear all-pairs CVD separation at any 4-color subset — token's hues crowd into the warm range (red/orange/yellow/olive), leaving too little distance between any four once every pair, not just neighbors, can land side by side. The one 3-color subset that clears every gate cleanly is **green `#296926`, purple `#805ba7`, cyan `#00a2a3`** (all-pairs CVD ΔE 12.1, normal ΔE 20.9 — both pass, no relief needed). Use this triad, in this order, for all-pairs contexts; past 3 series, fold to "Other," facet, or label directly.
