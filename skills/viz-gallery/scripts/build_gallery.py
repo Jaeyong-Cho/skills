@@ -21,7 +21,7 @@ Manifest schema:
 
 "category" must be one of the catalog.md categories (case-insensitive):
 comparison, distribution, relationship, composition, trend & time, hierarchy,
-network, geospatial, multivariate. "image" is a path (relative to the
+network, geospatial, multivariate, structure & flow. "image" is a path (relative to the
 manifest file, or absolute) to a PNG/JPEG/SVG, or an existing data: URI.
 """
 import sys, os, json, base64, mimetypes, html
@@ -35,7 +35,7 @@ SLOT_HEX = {
 CATEGORY_SLOT = {
     "comparison": 1, "distribution": 2, "relationship": 3, "composition": 4,
     "trend & time": 5, "hierarchy": 6, "network": 7, "geospatial": 8,
-    "multivariate": 1,
+    "multivariate": 1, "structure & flow": 7,
 }
 # From palette.md: white text wins the contrast check on every slot except 4 (cyan).
 SLOT_TEXT = {slot: ("#2a2920" if slot == 4 else "#ffffff") for slot in SLOT_HEX}

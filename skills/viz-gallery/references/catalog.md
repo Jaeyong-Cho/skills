@@ -66,6 +66,24 @@ Treemap (see Composition) also serves hierarchy-plus-size and is often the bette
 
 **Point map** — Best for individual located events or entities. Requires latitude + longitude, optional numeric for size/color. Strength: shows exact location and density/clusters. Limitation: overplotting in dense areas unless clustered.
 
+## Structure & flow
+
+For subjects with a structural face — a system, codebase, algorithm, schema, or filesystem — rather than (or alongside) tabular data. Render with mermaid or graphviz to SVG.
+
+**Flowchart** — Best for a process or algorithm's control flow: steps, branches, and loops. Requires an ordered sequence of steps with decision points. Strength: makes branching logic and dead ends legible. Limitation: sprawls when branches multiply; not for data magnitudes. Render with mermaid `flowchart`.
+
+**Sequence diagram** — Best for interactions between actors/components over time — who calls whom, in what order. Requires participants + ordered messages. Strength: shows request/response ordering and lifelines clearly. Limitation: one scenario per diagram; parallel paths get busy. Render with mermaid `sequenceDiagram`.
+
+**Architecture diagram** — Best for a system's components and how they connect (services, stores, queues, boundaries). Requires components + their connections/dependencies. Strength: conveys topology at a glance. Limitation: no fixed grammar — easy to overcrowd; keep to one abstraction level. Render with mermaid `flowchart` or graphviz.
+
+**Entity-relationship diagram** — Best for a data model: entities, their attributes, and relationship cardinality. Requires entities + typed relationships (1:1, 1:N, N:M). Strength: the canonical view of a schema. Limitation: attribute-heavy entities crowd; not for instance data. Render with mermaid `erDiagram`.
+
+**State diagram** — Best for the states of an entity and the transitions between them. Requires states + transition triggers. Strength: surfaces unreachable or terminal states. Limitation: state explosion with many orthogonal dimensions. Render with mermaid `stateDiagram`.
+
+**Directory tree** — Best for a filesystem or project's nested structure. Requires a path hierarchy. Strength: shows nesting and grouping directly. Limitation: deep or wide trees need truncation. Render as an indented tree to SVG.
+
+Node-link graph (see Network) also serves free-form dependency or relationship graphs that aren't a strict hierarchy.
+
 ## Multivariate
 
 **Parallel coordinates** — Best for comparing many entities across many (4+) numeric variables at once. Requires 4+ numeric variables. Strength: scales to more dimensions than a scatter matrix. Limitation: line crossings become illegible past a few dozen entities or a handful of variables; axis order changes readability. Avoid when entity count is large — subsample or aggregate first.
