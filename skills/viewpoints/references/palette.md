@@ -1,6 +1,6 @@
 # Palette — token-light theme
 
-Derived from the [`token`](https://github.com/ThorstenRhau/token) Neovim colorscheme's light variant, for styling every chart `viz-gallery` renders.
+Derived from the [`token`](https://github.com/ThorstenRhau/token) Neovim colorscheme's light variant, for styling every chart `viewpoints` renders.
 
 ## How to use these values
 

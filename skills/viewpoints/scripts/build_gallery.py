@@ -8,14 +8,14 @@ Usage:
 
 Manifest schema:
 {
-  "eyebrow": "viz-gallery · <dataset name>",
+  "eyebrow": "viewpoints · <subject name>",
   "title": "...", "dek": "...",
   "meta": [["rows", "576"], ["columns", "8"], ...],
   "stats": [["0.72", "r sales x units"], ...],
   "footer": "...",
   "cards": [
     {"category": "Trend & time", "title": "...", "image": "chart.png",
-     "why": "...", "insights": "...", "sl": "...", "best": "..."}
+     "shows": "...", "read": "...", "takeaways": "...", "caveats": "..."}
   ]
 }
 
@@ -70,10 +70,10 @@ def card_html(card, base_dir):
           <h3>{html.escape(card["title"])}</h3>
         </div>
         <dl>
-          <dt>Why this form</dt><dd>{mono(card["why"])}</dd>
-          <dt>Insights</dt><dd>{mono(card["insights"])}</dd>
-          <dt>Strengths / limitations</dt><dd>{mono(card["sl"])}</dd>
-          <dt>Best used for</dt><dd>{mono(card["best"])}</dd>
+          <dt>What it shows</dt><dd>{mono(card["shows"])}</dd>
+          <dt>How to read it</dt><dd>{mono(card["read"])}</dd>
+          <dt>Key takeaways</dt><dd>{mono(card["takeaways"])}</dd>
+          <dt>Watch for</dt><dd>{mono(card["caveats"])}</dd>
         </dl>
       </div>
     </article>'''
@@ -100,7 +100,7 @@ def main():
     cards = "\n".join(card_html(c, base_dir) for c in m["cards"])
 
     out = (tpl
-           .replace("{{EYEBROW}}", html.escape(m.get("eyebrow", "viz-gallery")))
+           .replace("{{EYEBROW}}", html.escape(m.get("eyebrow", "viewpoints")))
            .replace("{{TITLE}}", html.escape(m["title"]))
            .replace("{{DEK}}", mono(m.get("dek", "")))
            .replace("{{META_ROW}}", meta_row)

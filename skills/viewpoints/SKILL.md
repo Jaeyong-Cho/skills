@@ -1,9 +1,9 @@
 ---
-name: viz-gallery
-description: Build a gallery of complementary visualizations for a dataset instead of picking one chart — profile the data, shortlist diverse forms from a catalog, render each in a consistent theme, and explain why it was chosen, what it shows, and when to prefer it over the others. Use when the user wants to explore or discover insights in a dataset, asks how to visualize data without naming a chart type, or wants multiple/comparative views of the same data.
+name: viewpoints
+description: Build a set of complementary viewpoints on a subject instead of picking one chart — profile the data or structure, shortlist diverse forms (charts and diagrams) from a catalog, render each in a consistent theme, and annotate each with how to read it and what it reveals. Use when the user wants to explore or discover insights in a dataset, visualize a system, algorithm, or schema, asks how to visualize something without naming a form, or wants multiple/comparative views of the same subject.
 ---
 
-A single visualization answers one question well; a **gallery** — several complementary forms shown side by side — answers several. The forms aren't only statistical charts: a gallery can mix data charts (bar, scatter, heatmap) with structural diagrams (flowchart, architecture, entity-relationship, state, directory tree) when the subject has a structural face as well as, or instead of, a tabular one. Build a gallery instead of guessing the single "best" view.
+A single visualization answers one question well; a gallery of **viewpoints** — several complementary forms shown side by side — answers several. The forms aren't only statistical charts: viewpoints can mix data charts (bar, scatter, heatmap) with structural diagrams (flowchart, architecture, entity-relationship, state, directory tree) when the subject has a structural face as well as, or instead of, a tabular one. Build a gallery of viewpoints instead of guessing the single "best" view.
 
 ## Steps
 
@@ -13,7 +13,7 @@ A single visualization answers one question well; a **gallery** — several comp
 
 3. **Render every shortlisted form as SVG**, using whatever plotting tool the project already uses for data charts, and mermaid (`mmdc`) or graphviz for structural diagrams, styled from `references/palette.md` (the token-light theme): assign categorical slots in the documented order, use the sequential or diverging ramp where the form calls for one, and pull surface/text/gridline/border colors from the chrome table rather than picking colors ad hoc. Prefer SVG output for crisp scaling; fall back to PNG only when the tool can't emit SVG. Light mode only for now — dark-mode data marks aren't derived yet, so fall back to any sensible default dark categorical set. Done when every shortlisted form has been rendered — none dropped silently for seeming redundant or hard to implement.
 
-4. **Explain each rendered form** using the template below, drawing every claim from what the render actually shows, not boilerplate copied from the catalog entry. Done when all four sections are filled for every rendered form.
+4. **Annotate each rendered form** with reader-facing notes using the template below — information that helps someone read the view, not why it was chosen — drawing every claim from what the render actually shows, not boilerplate copied from the catalog entry. Done when all four sections are filled for every rendered form.
 
 5. **Rank the gallery (optional)** — most relevant to the user's stated question first.
 
@@ -23,9 +23,11 @@ A single visualization answers one question well; a **gallery** — several comp
 
 ## Output template (per visualization)
 
-- **Why this form** — what in the profile made it a match.
-- **Insights** — patterns, trends, anomalies, or relationships actually visible in the render.
-- **Strengths / limitations** — from the catalog entry, adjusted for what this specific render shows.
-- **Best used for** — the analytical question this form answers better than the others in the gallery.
+Reader-facing notes that help someone read this view — not a justification for choosing it.
+
+- **What it shows** — the content of this view: which variables or elements it depicts, and the slice, scenario, or scope drawn.
+- **How to read it** — how to decode the marks, axes, or layout, and where to look first.
+- **Key takeaways** — the specific patterns, values, or relationships visible in this render.
+- **Watch for** — how this view can mislead: what to read cautiously or discount.
 
 See `references/catalog.md` for the full set of forms, grouped by the structure they surface: comparison, distribution, relationship, composition, trend & time, hierarchy, network, geospatial, multivariate, and structure & flow (flowchart, sequence, architecture, entity-relationship, state, directory tree). `references/template.html` and `scripts/build_gallery.py` turn a finished gallery into a single themed `index.html`.
