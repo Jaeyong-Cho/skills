@@ -55,7 +55,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: max(920px, 50vw); margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+.wrap { width: 1080px; max-width: 100%; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
 
 .eyebrow {
   font-family: var(--mono);
@@ -207,7 +207,7 @@ dt {
   color: var(--muted);
   margin-bottom: 0.25rem;
 }
-dd { margin: 0; max-width: 68ch; color: var(--ink); font-size: 1.15rem; }
+dd { margin: 0 auto; max-width: 68ch; color: var(--ink); font-size: 1.15rem; }
 
 footer {
   margin-top: 3.5rem;
@@ -229,6 +229,7 @@ footer code {
 
 </head>
 <body>
+  <div class="wrap">
   <p class="eyebrow">{{EYEBROW}}</p>
   <h1>{{TITLE}}</h1>
   <p class="dek">{{DEK}}</p>
@@ -247,8 +248,6 @@ footer code {
 {{SWATCHES}}
     </div>
   </div>
-</body>
-</html>
 
   <h2 class="section-title">The gallery</h2>
   <div class="gallery">
@@ -256,4 +255,6 @@ footer code {
   </div>
 
   <footer>{{FOOTER}}</footer>
-</div>
+  </div>
+</body>
+</html>
