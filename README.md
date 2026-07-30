@@ -146,17 +146,6 @@ Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
 
 `to_rdr` and `to_adr` run as needed, recording the decisions taken while shaping REQ and CMP.
 
-## Peon Ping (sound notifications)
-
-A separate, unrelated add-on: character-voice sound cues for session events (start, task complete, errors, and more).
-
-| Skill | What it does |
-|-------|--------------|
-| `/peon-ping-toggle` | Mute/unmute peon-ping sounds (master switch); routes any other config request to `/peon-ping-config` |
-| `/peon-ping-config` | Update settings — volume, active/rotating sound packs, category toggles, per-directory pack bindings |
-| `/peon-ping-use` | Set the character voice pack for the current session only |
-| `/peon-ping-log` | Log pushup/squat reps for the Peon Trainer |
-
 ## Preferences
 
 Two preference stores keep settled decisions from being re-asked every pass:
