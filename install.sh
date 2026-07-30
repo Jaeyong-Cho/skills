@@ -55,7 +55,7 @@ selected() {
 # ── Setup functions ───────────────────────────────────────────────────────────
 
 install_skill_library() {
-  local source_root destination_root dir
+  local source_root destination_root dir manifest name
 
   mkdir -p "$CLAUDE_SKILLS_DIR"
   source_root="$(cd "$SKILLS_DIR" && pwd -P)"
@@ -66,12 +66,27 @@ install_skill_library() {
     return
   fi
 
+  # Clear what a previous run of this script installed so renamed/removed
+  # skills (e.g. socratic → deleted, viz-gallery → renamed viewpoints) don't
+  # linger. Tracked via a manifest since "skills" flattens directly under
+  # $CLAUDE_SKILLS_DIR alongside anything else that may live there.
+  manifest="$CLAUDE_SKILLS_DIR/.installed-by-skills-repo"
+  if [ -f "$manifest" ]; then
+    while IFS= read -r name; do
+      [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
+    done < "$manifest"
+  fi
+  for dir in references preferences template; do
+    rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
+  done
+
   # "skills" is special: its contents must land directly under
   # $CLAUDE_SKILLS_DIR (e.g. $CLAUDE_SKILLS_DIR/archi), not nested one level
   # deeper as $CLAUDE_SKILLS_DIR/skills/archi — Claude Code only discovers
   # skills at $CLAUDE_SKILLS_DIR/<name>/SKILL.md.
   if [ -d "$SKILLS_DIR/skills" ]; then
     cp -R "$SKILLS_DIR/skills/." "$CLAUDE_SKILLS_DIR/"
+    (cd "$SKILLS_DIR/skills" && ls -1) > "$manifest"
   fi
 
   for dir in references preferences template; do

@@ -78,11 +78,48 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves; notes where recorded preferences live. Called directly or from within other skills |
-| `/socratic` | — | Respond to a question, hypothesis, or claim with one probing question at a time instead of a direct answer, never stating a conclusion, until the user reasons their way there |
 | `/to-docs` | user-selected path | Write the current session's work as a report-style document |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/study-guide` | HTML file | Explain a document or codebase and quiz the reader on it — background, core concepts with worked examples, walkthrough, and a 5-question interactive quiz, rendered via bundled `render.py` |
+| `/experiment` | `experiments/{slug}/report.md` (+ `raw/`, `gallery/`) | Turn a request into a scientific-method run — hypothesis, method, execution, analysis, verdict — building a `/viewpoints` gallery over the raw results before writing the report |
+| `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
+| `/scaffold-skeleton-code` | skeleton file + test file | Generate function signatures, TODO hints, and a matching test file so the user implements just the logic |
+
+## Spec Pipeline
+
+`/spec` advances one stage of a separate documentation pipeline, or records a decision. Each stage reads the artifact above it and writes filled-in docs below.
+
+```
+Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
+                                   |                |     ^_________|
+                                   |                |   (to_seq reads REQ + CMP)
+                            to_rdr |         to_adr |
+                                   v                v
+                                  RDR              ADR
+```
+
+| Arg | Reads | Writes |
+|-----|-------|--------|
+| `to_scen` | a goal | `spec/scen/SCN-*.md` |
+| `to_req` | SCN docs | `spec/req/REQ-*.md` |
+| `to_cmp` | REQ docs | `spec/cmp/CMP-*.md` |
+| `to_seq` | REQ + CMP docs | `spec/seq/SEQ-*.md` |
+| `to_rdr` | REQ docs | `spec/rdr/RDR-*.md` |
+| `to_adr` | CMP + SEQ docs | `spec/adr/ADR-*.md` |
+
+`to_rdr` and `to_adr` run as needed, recording the decisions taken while shaping REQ and CMP.
+
+## Peon Ping (sound notifications)
+
+A separate, unrelated add-on: character-voice sound cues for session events (start, task complete, errors, and more).
+
+| Skill | What it does |
+|-------|--------------|
+| `/peon-ping-toggle` | Mute/unmute peon-ping sounds (master switch); routes any other config request to `/peon-ping-config` |
+| `/peon-ping-config` | Update settings — volume, active/rotating sound packs, category toggles, per-directory pack bindings |
+| `/peon-ping-use` | Set the character voice pack for the current session only |
+| `/peon-ping-log` | Log pushup/squat reps for the Peon Trainer |
 
 ## Preferences
 
