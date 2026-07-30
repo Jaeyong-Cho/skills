@@ -2,6 +2,7 @@
 name: experiment
 description: Run an experiment on a user's request — frame a hypothesis, design a method, execute it, analyze the results, build a visualization gallery via /viewpoints in a subagent, and write up an experiment report. Use when invoked as /experiment.
 disable-model-invocation: true
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, AskUserQuestion
 ---
 
 # Experiment
