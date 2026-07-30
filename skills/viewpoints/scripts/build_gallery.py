@@ -93,10 +93,6 @@ def main():
 
     meta_row = "\n".join(f'<span>{html.escape(l)} <b>{html.escape(v)}</b></span>' for l, v in m.get("meta", []))
     stats = "\n".join(f'<div class="stat"><span class="n">{html.escape(v)}</span><span class="l">{html.escape(l)}</span></div>' for v, l in m.get("stats", []))
-    swatches = "\n".join(
-        f'<div class="swatch"><span class="swatch-color" style="background:{SLOT_HEX[i]}"></span>'
-        f'<span class="swatch-hex">{SLOT_HEX[i]}</span></div>' for i in range(1, 9)
-    )
     cards = "\n".join(card_html(c, base_dir) for c in m["cards"])
 
     out = (tpl
@@ -105,7 +101,6 @@ def main():
            .replace("{{DEK}}", mono(m.get("dek", "")))
            .replace("{{META_ROW}}", meta_row)
            .replace("{{STATS}}", stats)
-           .replace("{{SWATCHES}}", swatches)
            .replace("{{CARDS}}", cards)
            .replace("{{FOOTER}}", mono(m.get("footer", ""))))
 

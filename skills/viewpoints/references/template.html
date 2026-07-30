@@ -124,33 +124,6 @@ section.stats {
   font-family: var(--mono);
 }
 
-.palette-block { margin-bottom: 3.5rem; }
-.palette-label {
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 0.7rem;
-}
-.swatches {
-  display: flex;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.swatch { flex: 1; display: flex; flex-direction: column; }
-.swatch-color { display: block; height: 34px; }
-.swatch-hex {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  text-align: center;
-  padding: 0.35rem 0.2rem;
-  color: var(--ink-2);
-  background: var(--bg);
-  font-variant-numeric: tabular-nums;
-}
-
 h2.section-title {
   font-family: var(--mono);
   font-size: 1.15rem;
@@ -241,13 +214,6 @@ footer code {
   <section class="stats">
 {{STATS}}
   </section>
-
-  <div class="palette-block">
-    <p class="palette-label">Categorical palette — token-light, in slot order</p>
-    <div class="swatches">
-{{SWATCHES}}
-    </div>
-  </div>
 
   <h2 class="section-title">The gallery</h2>
   <div class="gallery">
