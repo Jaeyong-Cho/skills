@@ -69,6 +69,7 @@ Treemap (see Composition) also serves hierarchy-plus-size and is often the bette
 ## Structure & flow
 
 For subjects with a structural face — a system, codebase, algorithm, schema, or filesystem — rather than (or alongside) tabular data. Render with mermaid or graphviz to SVG.
+P.S. Prefer top-down direction diagram. Because the narrow left-right diagram is not readable.
 
 **Flowchart** — Best for a process or algorithm's control flow: steps, branches, and loops. Requires an ordered sequence of steps with decision points. Strength: makes branching logic and dead ends legible. Limitation: sprawls when branches multiply; not for data magnitudes. Render with mermaid `flowchart`.
 
