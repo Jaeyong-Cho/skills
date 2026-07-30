@@ -46,6 +46,8 @@ Each entry: what it's best for, what data it requires, its strengths and limitat
 
 **Calendar heatmap** — Best for daily-granularity patterns over months or years (activity, seasonality). Requires 1 date + 1 numeric. Strength: surfaces weekly/seasonal rhythm at a glance. Limitation: poor for reading exact magnitude; only works at day granularity.
 
+**Gantt chart** — Best for tasks or phases with a start and end across a project schedule, optionally with dependencies. Requires task name + start + end (or duration), optional dependency links. Strength: shows overlap, sequencing, and duration at a glance. Limitation: many parallel tracks get visually dense; not for continuous numeric values. Avoid when the data is a continuous metric rather than discrete tasks — use a line chart; when events have no duration, use an event timeline (see Structure & flow) instead. Render with mermaid `gantt`.
+
 ## Hierarchy
 
 **Tree diagram** — Best for the parent-child structure itself (org charts, taxonomies), independent of any numeric weight. Requires hierarchical categorical only. Limitation: wide trees need a lot of horizontal space.
@@ -80,6 +82,8 @@ P.S. Prefer top-down direction diagram. Because the narrow left-right diagram is
 **Entity-relationship diagram** — Best for a data model: entities, their attributes, and relationship cardinality. Requires entities + typed relationships (1:1, 1:N, N:M). Strength: the canonical view of a schema. Limitation: attribute-heavy entities crowd; not for instance data. Render with mermaid `erDiagram`.
 
 **State diagram** — Best for the states of an entity and the transitions between them. Requires states + transition triggers. Strength: surfaces unreachable or terminal states. Limitation: state explosion with many orthogonal dimensions. Render with mermaid `stateDiagram`.
+
+**Event timeline** — Best for a chronological sequence of milestones or eras with no duration (project history, release timeline). Requires ordered dated/labeled events. Strength: shows chronological order and the spacing/clustering of events clearly. Limitation: no notion of duration or overlap — use a Gantt chart (see Trend & time) when events span a range instead of a point. Render with mermaid `timeline`.
 
 **Directory tree** — Best for a filesystem or project's nested structure. Requires a path hierarchy. Strength: shows nesting and grouping directly. Limitation: deep or wide trees need truncation. Render as an indented tree to SVG.
 
