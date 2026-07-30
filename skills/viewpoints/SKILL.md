@@ -19,7 +19,7 @@ A single visualization answers one question well; a gallery of **viewpoints** �
 
 6. **Assemble the gallery page into an output directory.** Pick an output directory — use the one the user named, else default to `gallery/{dataset-slug}/`. Create it, write the manifest and any rendered images there, build a manifest JSON (schema in `scripts/build_gallery.py`'s docstring) with one entry per rendered form — its catalog category, title, image, and the four explanation fields — then run `python scripts/build_gallery.py {output-dir}/manifest.json {output-dir}/index.html`. Done when `{output-dir}/index.html` exists, embeds every rendered image directly (no external file references), and opens standalone in a browser.
 
-7. **Serve the gallery.** Run `python scripts/serve.py {output-dir}` (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL to open: http://localhost:4800. Done when the server is running and the URL is stated.
+7. **Serve the gallery.** Copy `python scripts/serve.py {output-dir}` to the gallery directory to make run manually. (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL to open: http://localhost:4800. Done when the server is running and the URL is stated.
 
 ## Output template (per visualization)
 
