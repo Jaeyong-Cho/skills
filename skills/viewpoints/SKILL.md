@@ -23,7 +23,7 @@ A single visualization answers one question well; a gallery of **viewpoints** �
 
 ## Output template (per visualization)
 
-Reader-facing notes that help someone read this view — not a justification for choosing it.
+MUST NOT use unicode arrows (`→`, `⇒`), box-drawing characters (`─`, `│`, `┌`), bullets (`•`, `▪`), or emoji. USE ASCII instead.
 
 - **What it shows** — the content of this view: which variables or elements it depicts, and the slice, scenario, or scope drawn.
 - **How to read it** — how to decode the marks, axes, or layout, and where to look first.
