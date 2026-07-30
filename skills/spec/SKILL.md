@@ -1,18 +1,23 @@
 ---
 name: spec
-description: Scaffold spec-pipeline docs from the stage above them — scenarios, requirements, components, sequences — each transformed from its upstream artifact in the workflow.md format. Use when invoked as /spec with to_scen | to_req | to_cmp | to_seq.
+description: Scaffold spec-pipeline docs from the stage above them — scenarios, requirements, components, sequences, and the requirement/architecture decision records — each transformed from its upstream artifact in the workflow.md format. Use when invoked as /spec with to_scen | to_req | to_cmp | to_seq | to_rdr | to_adr.
 disable-model-invocation: true
 ---
 
 # Spec
 
-Advance one spec stage. The arg picks the stage; each stage reads the artifact above it and writes the stage below, filled in.
+Advance one spec stage, or record a decision. The arg picks which; each reads the artifact above it and writes filled-in docs below.
 
 ```
 Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
-                                                    ^______________|
-                                              (to_seq reads REQ + CMP)
+                                   |                |     ^_________|
+                                   |                |   (to_seq reads REQ + CMP)
+                            to_rdr |         to_adr |
+                                   v                v
+                                  RDR              ADR
 ```
+
+The four linear stages transform each artifact into the next. `to_rdr` and `to_adr` are run as needed — they record the decisions taken while shaping REQ and CMP.
 
 | arg       | reads         | writes             |
 |-----------|---------------|--------------------|
@@ -20,13 +25,15 @@ Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
 | `to_req`  | SCN docs      | `spec/req/REQ-*.md`  |
 | `to_cmp`  | REQ docs      | `spec/cmp/CMP-*.md`  |
 | `to_seq`  | REQ + CMP docs| `spec/seq/SEQ-*.md`  |
+| `to_rdr`  | REQ docs      | `spec/rdr/RDR-*.md`  |
+| `to_adr`  | CMP + SEQ docs| `spec/adr/ADR-*.md`  |
 
 Read the upstream from `spec/<stage>/` by default; if the user named a file or path in the invocation, use that instead. Write the new docs to `spec/<stage>/{ID}.md`, one file per doc, `mkdir -p` the folder first.
 
 ## Conventions (every stage)
 
 - **Interface first.** At each stage the interface is the contract between the stage's parts — get it wrong and every dependent breaks; internal detail can be revised freely as long as the interface holds. Nail the interface before anything else, and let the rest of the doc fill in around it.
-- **IDs** are zero-padded and sequential per stage: `SCN-001`, `REQ-001`, `CMP-001`, `SEQ-001`. Continue from the highest existing ID in the target folder.
+- **IDs** are zero-padded and sequential per stage: `SCN-001`, `REQ-001`, `CMP-001`, `SEQ-001`, `RDR-001`, `ADR-001`. Continue from the highest existing ID in the target folder.
 - **Status** starts `Draft`. Generated docs are drafts for a human to review — do not mark `Reviewed`/`Done` yourself.
 - One doc = one unit; produce every doc the upstream demands in a single run, not just the first.
 
@@ -162,3 +169,69 @@ Cart Service
 ```
 
 Completion: every REQ has a SEQ; every Sequence step that invokes another component cites that component's actual interface signature; each SEQ has a Flow and Acceptance Criteria; every used CMP's `Used By` lists the SEQ.
+
+---
+
+## to_rdr — Requirement -> Requirement Decision Record
+
+Input: REQ doc(s), plus their source SCN for context.
+
+Scan the requirements for points that are underspecified or admit more than one valid implementation — the places a reader would otherwise have to guess. For each, draft one RDR that records the **choice made among alternatives**, not the requirement itself.
+
+```
+# RDR-001
+- Status: Draft
+
+## Requirement
+- REQ-001 <requirement title>
+
+## Context
+<what is unspecified or in tension>
+
+## Decision
+<the choice made>
+
+## Rationale
+- <why this choice>
+
+## Alternatives
+- <option not taken>
+
+## Consequences
+- <trade-off accepted>
+```
+
+Completion: every underspecified or multi-option point in the source requirements has an RDR; each RDR links its REQ and states Context, Decision, Rationale, Alternatives, and Consequences.
+
+---
+
+## to_adr — Component -> Architectural Decision Record
+
+Input: CMP doc(s), plus SEQ for how the components collaborate.
+
+Scan the architecture for decisions a reader would question — why a responsibility became its own component, why a dependency points the way it does, why an abstraction was introduced. For each, draft one ADR that records the choice among alternatives.
+
+```
+# ADR-001
+- Status: Draft
+
+## Architecture
+- <affected component(s), e.g. CMP-003 Cart Repo>
+
+## Context
+<the architectural force or constraint>
+
+## Decision
+<the choice made>
+
+## Rationale
+- <why this choice>
+
+## Alternatives
+- <option not taken>
+
+## Consequences
+- <trade-off accepted>
+```
+
+Completion: every non-obvious architecture decision in the source components has an ADR; each ADR names the affected component(s) and states Context, Decision, Rationale, Alternatives, and Consequences.
