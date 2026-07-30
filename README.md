@@ -42,7 +42,7 @@ The script detects which AI agents are installed and sets up each one:
  └─ /co-plan  (collaborative plan, holes for human implementation)
 ```
 
-Once `/auto-action` genuinely finishes (regular plan, or a self-plan after every hole passes review), it folds any inbox RDR/ADR for that slug into `.context/req/{slug}.md`, derives `.context/archi/{slug}.md`, then moves the RDR, ADR, and plan unchanged from `.context/inbox/` to `.context/done/` — no separate merge step to run.
+Once `/auto-action` genuinely finishes (regular plan, or a self-plan after every hole passes review), it moves the plan unchanged from `.context/inbox/plan/` to `.context/done/plan/`.
 
 All workflow skills are user-invoked. Artifacts land in `.context/`. All skills work on new development and fixing existing code.
 
@@ -69,9 +69,9 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/fs-plan` | `.context/inbox/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
-| `/co-plan` | `.context/inbox/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
-| `/auto-action` | code changes, `.context/req/{slug}.md`, `.context/archi/{slug}.md`, `.context/done/` | Runs an inbox plan. Regular plan: write tests → write code → verify. Self-plan: first write working parts and hole TODOs; then, after the human fills every hole, review and test. Once successful, fold the RDR into the committed spec, derive the architecture doc, and move the RDR, ADR, and plan from `inbox/` to `done/`. |
+| `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
+| `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
+| `/auto-action` | code changes, `.context/done/plan/` | Runs an inbox plan. Regular plan: write tests → write code → verify. Self-plan: first write working parts and hole TODOs; then, after the human fills every hole, review and test. Once successful, move the plan from `inbox/` to `done/`. |
 
 ## Utilities
 
@@ -122,8 +122,8 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 
 | Template | Used by |
 |----------|---------|
-| `adr.md` | `/archi` — written to `.context/inbox/adr/{timestamp}-{slug}.md`; `/auto-action` moves it to `.context/done/adr/` after successful implementation |
-| `architecture.md` | `/auto-action` — derived from the completed ADR and implemented code, written directly to `.context/archi/{slug}.md` |
 | `plan.md` | `/fs-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`; `/auto-action` moves it to `.context/done/plan/` on completion |
 | `self-plan.md` | `/co-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`; `/auto-action` moves it to `.context/done/plan/` once every hole is reviewed and tests pass |
-| `requirements.md` | `/req` — written to `.context/inbox/rdr/{timestamp}-{slug}.md`; `/auto-action` folds it into `.context/req/{slug}.md` then moves it to `.context/done/rdr/` |
+| `adr.md` | — Architectural Decision Record format; currently unused (no skill writes it) |
+| `architecture.md` | — Architecture document format (Static/Dynamic View); currently unused |
+| `requirements.md` | — Requirement Decision Record format; currently unused (no skill writes it) |
