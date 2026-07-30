@@ -34,6 +34,42 @@ The script detects which AI agents are installed and sets up each one:
 
 ---
 
+## Goal-to-Implementation Loop
+
+The macro loop this repo is built around: validate the riskiest question as cheaply as possible before committing to a spec or writing code, then close the loop by testing the shipped result against that same question.
+
+```
+Goal
+ |  (create a directory to hold this goal's context)
+ v
+Question / Hypothesis          e.g. "SQLite vs Postgres: which is
+ |                                   reliable enough here?"
+ v
+/experiment  ------------->  cheapest method that resolves the question
+ |                            (builds a /viewpoints gallery over raw results)
+ v
+Ideas                        read the gallery/report, generate options
+ |
+ v
+Direction                    pick how the goal will be resolved
+ |
+ v
+/spec   (Goal -> SCN -> REQ -> CMP -> SEQ)
+ |
+ v
+/fs-plan or /co-plan  ->  /auto-action     implement
+ |
+ v
+/experiment                  re-test the implementation against the
+ |                            original hypothesis
+ v
+Goal closed
+```
+
+- **Cheapest method first.** When requesting `/experiment`, the point is picking the cheapest way to resolve the question — a spike, a small script, existing data — not a full build. See `/experiment` in the Skills table below.
+- **Ideas -> Direction -> Spec.** The direction decided from the experiment's ideas is the "goal" that `/spec`'s `to_scen` stage consumes; see Spec Pipeline below.
+- **Same skill opens and closes the loop.** `/experiment` both answers the upfront hypothesis and, later, verifies the implementation actually resolved it — no separate test-writing step is needed for that check.
+
 ## Workflow
 
 ```
