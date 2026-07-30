@@ -1,7 +1,5 @@
 # Plan: {Title}
 
-**ADR:** {path to `.context/inbox/adr/{timestamp}-{slug}.md`}
-
 ## Action Sequence
 - e.g. Write failing test `test_cache_hit_skips_db` in `tests/auth/test_cache.py`, asserting `AuthService.validate(token)` calls `TokenCache.get` before any DB call.
 - e.g. Implement `TokenCache.get(token)` in `src/auth/cache.py` (Redis-backed, 5-minute TTL) and wire it into `AuthService.validate(token)` in `src/auth/service.py` so `test_cache_hit_skips_db` passes.

@@ -1,6 +1,6 @@
 ---
 name: co-plan
-description: Collaborative-plan skill. Sequences an ADR's design into ordered TDD steps and marks, per implementation step, which parts are holes for human implementation vs working code. Use when invoked as /co-plan.
+description: Collaborative-plan skill. Sequences a design into ordered TDD steps and marks, per implementation step, which parts are holes for human implementation vs working code. Use when invoked as /co-plan.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mo
 
 Build the action sequence the same way `/fs-plan` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Test steps are never holed — tests are always complete and AI-written.
 
-Read the architecture Decision to identify the main flow: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
+Identify the main flow of the design: the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should understand.
 
 For each implementation step, a hole is never a whole function body and never a stage's full algorithm — it's one or a few specific lines. There are two kinds, and both are judgment calls, not a rigid checklist — recommend what best serves understanding:
 
@@ -30,11 +30,11 @@ For each hole, record its TODO comment and blanked code skeleton following `todo
 
 The action sequence above is build order (TDD: leaves are often implemented before the callers that wire them in), which is not the order that best teaches the flow. Separately derive a **Recommended Human Work Order**: every implementation step that carries a hole, reordered top-down along the flow identified earlier — starting at the flow's entry point (e.g., `main` or the client-facing call) and proceeding stage by stage toward the algorithm/leaf stage. This lets the human trace input → output the way a reader would, jumping directly between hole steps regardless of where they fall in build order. Reference each entry by its step number, name, and the hole's file and function/class location (the same location named in that step's **Hole** annotation), so the human can jump straight to the TODO without cross-referencing the Action Sequence; omit steps with no hole, since those are already complete working code.
 
-If the ADR is ambiguous or missing something the sequence needs, stop and send the user back to `/archi` rather than guessing. Otherwise show the user the full sequence, including each implementation step's hole/working breakdown, the overall hole/working tally, and the Recommended Human Work Order, and ask for confirmation. Completion criterion: action sequence is fully ordered, test-before-implementation on every unit of work, every implementation step has its hole/working decision recorded, the ~30/70 budget holds, the Recommended Human Work Order lists every holed step top-down along the flow, user confirmed.
+If the design is ambiguous or missing something the sequence needs, stop and ask the user to clarify rather than guessing. Otherwise show the user the full sequence, including each implementation step's hole/working breakdown, the overall hole/working tally, and the Recommended Human Work Order, and ask for confirmation. Completion criterion: action sequence is fully ordered, test-before-implementation on every unit of work, every implementation step has its hole/working decision recorded, the ~30/70 budget holds, the Recommended Human Work Order lists every holed step top-down along the flow, user confirmed.
 
-Derive a kebab-case slug from the topic — reuse the ADR's slug so the plan pairs with it. If revising an existing self-plan, reuse its timestamp too — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
+Derive a kebab-case slug from the topic. If revising an existing self-plan, reuse its slug and timestamp — edit that file in place. Otherwise get a fresh timestamp: run `date +%Y%m%d-%H%M%S`.
 
-Fill in `../template/self-plan.md` with the ADR's path, `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/inbox/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is — unlike `/fs-plan`'s plain **Test** item, a self-plan's single item is **Review + Test**, since a self-plan's holes aren't done until a human fills them in and their work is checked against each hole's recorded intent. That item stays unchecked through `/auto-action`'s first (write) pass; it's satisfied by re-running `/auto-action` on this plan once every hole is filled — it detects the holes are gone and switches from writing to reviewing the implementation against each hole's recorded intent and running the tests, instead of a separate skill.
+Fill in `../template/self-plan.md` with `**Type:** Self-Plan`, the resolved action sequence (with hole/working annotations on implementation steps), and the Recommended Human Work Order, in this style `../references/document-style.md`, and write it to `.context/inbox/plan/{timestamp}-{slug}.md`. Leave the fixed Closeout checklist as-is — unlike `/fs-plan`'s plain **Test** item, a self-plan's single item is **Review + Test**, since a self-plan's holes aren't done until a human fills them in and their work is checked against each hole's recorded intent. That item stays unchecked through `/auto-action`'s first (write) pass; it's satisfied by re-running `/auto-action` on this plan once every hole is filled — it detects the holes are gone and switches from writing to reviewing the implementation against each hole's recorded intent and running the tests, instead of a separate skill.
 
 `mkdir -p .context/inbox/plan` if needed. Tell the user the file path. Next step: `/auto-action`.
 

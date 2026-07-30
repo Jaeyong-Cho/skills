@@ -37,11 +37,9 @@ The script detects which AI agents are installed and sets up each one:
 ## Workflow
 
 ```
-/req  →  /archi  →  (choose planning path)  →  /auto-action
-                     ├─ /fs-plan  (full self-plan, full AI implementation)
-                     └─ /co-plan  (collaborative plan, holes for human implementation)
-
-/test  →  verify a plan's tests, or discover and run all tests — standalone, any time
+(choose planning path)  →  /auto-action
+ ├─ /fs-plan  (full self-plan, full AI implementation)
+ └─ /co-plan  (collaborative plan, holes for human implementation)
 ```
 
 Once `/auto-action` genuinely finishes (regular plan, or a self-plan after every hole passes review), it folds any inbox RDR/ADR for that slug into `.context/req/{slug}.md`, derives `.context/archi/{slug}.md`, then moves the RDR, ADR, and plan unchanged from `.context/inbox/` to `.context/done/` — no separate merge step to run.
@@ -56,7 +54,6 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 |------|------|---------------|---------------|
 | **/fs-plan → /auto-action** | AI writes | AI writes (100%) | — |
 | **/co-plan → /auto-action** | AI writes | AI writes (~70%) | You fill (~30%) |
-| **/test** | Runs only | — | — |
 
 ### Philosophy: least-effort human participation
 
@@ -72,12 +69,9 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/req` | `.context/inbox/rdr/` | Use `/grilling` to find the goal, elicit and prioritize functional/non-functional requirements, and write a draft Requirement Decision Record |
-| `/archi` | `.context/inbox/adr/` | Use `/grilling` to resolve architecture, design, observability, test-loop, and verification criteria against `archi.md`, then write an ADR |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence the ADR's design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence the ADR's design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
 | `/auto-action` | code changes, `.context/req/{slug}.md`, `.context/archi/{slug}.md`, `.context/done/` | Runs an inbox plan. Regular plan: write tests → write code → verify. Self-plan: first write working parts and hole TODOs; then, after the human fills every hole, review and test. Once successful, fold the RDR into the committed spec, derive the architecture doc, and move the RDR, ADR, and plan from `inbox/` to `done/`. |
-| `/test` | test results | Run tests for a plan or discover and run all tests in the project. Verification only. |
 
 ## Utilities
 
@@ -85,22 +79,19 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 |-------|--------|-------------|
 | `/grilling` | — | Interview relentlessly about a plan, one question at a time, until every branch resolves; notes where recorded preferences live. Called directly or from within other skills |
 | `/socratic` | — | Respond to a question, hypothesis, or claim with one probing question at a time instead of a direct answer, never stating a conclusion, until the user reasons their way there |
-| `/to-preference` | `../../preferences/`, `.context/preferences/` | Sweep the whole session for confirmed decisions or corrections that generalize beyond it, and record the approved ones as standing preferences |
-| `/to-todo` | `.context/inbox/todo/` | Turn the current `/breakdown` tree into a checkbox TODO; manually move the file unchanged to `.context/done/todo/` after every item is checked |
 | `/to-docs` | user-selected path | Write the current session's work as a report-style document |
 | `/create-agent` | `.claude/agents/*.md` or `.github/agents/*.agent.md` | Grill to design a project-specific subagent wired to existing skills, then write it |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
-| `/breakdown` | — | Break any goal into a MECE tree of atomic, actionable sub-goals, then order the leaves into a dependency-respecting execution sequence |
 | `/study-guide` | HTML file | Explain a document or codebase and quiz the reader on it — background, core concepts with worked examples, walkthrough, and a 5-question interactive quiz, rendered via bundled `render.py` |
 
 ## Preferences
 
-`/to-preference` grows two preference stores instead of re-asking the same settled question every pass:
+Two preference stores keep settled decisions from being re-asked every pass:
 
 - `preferences/{topic}.md` — general engineering/style rules true regardless of which project (e.g. `preferences/api-design.md`). Lives in this skills repo, so it travels with the install.
 - `.context/preferences/{topic}.md` — this project's own recorded choices (e.g. `.context/preferences/tech-stack.md`).
 
-Neither is pre-populated — the first standing rule (not a one-off, feature-specific answer) on a topic creates its file, and later ones append to it. Preference files are concise decision ledgers: one direct decision per bullet, no report sections or diagrams. `/to-preference` sweeps a whole session and asks for confirmation before writing. `/grilling` only notes where these files live during an interview; it doesn't read, skip on, or write to them itself. Edit or delete an entry directly if it's wrong; nothing else enforces it.
+Neither is pre-populated — the first standing rule (not a one-off, feature-specific answer) on a topic creates its file, and later ones append to it. Preference files are concise decision ledgers: one direct decision per bullet, no report sections or diagrams. `/grilling` only notes where these files live during an interview; it doesn't read, skip on, or write to them itself. Edit or delete an entry directly if it's wrong; nothing else enforces it.
 
 ## References
 
@@ -121,9 +112,9 @@ Referenced by workflow skills — loaded at the point they're needed. Also auto-
 | `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
 | `document-style.md` | Structured-format report style for written docs: priority order (diagram/table > bullets > prose), when to use a flow diagram vs a table, Introduction/Body/Conclusion structure |
 | `communication-style.md` | Same structured-format priority, scoped to chat responses, plans, and `AskUserQuestion` calls rather than standalone docs |
-| `preference-format.md` | Standing-vs-one-off test, file location (`../../preferences/` vs `.context/preferences/`), and entry format for recorded preferences — used by `/to-preference` |
-| `requirement-engineering.md` | Elicitation, analysis, specification, validation, management — the five activities `/req` draws on |
-| `top-down-decompose.md` | MECE top-down decomposition methodology `/breakdown` applies to split a goal into atomic sub-goals |
+| `preference-format.md` | Standing-vs-one-off test, file location (`../../preferences/` vs `.context/preferences/`), and entry format for recorded preferences |
+| `requirement-engineering.md` | Elicitation, analysis, specification, validation, management — the five requirement-engineering activities |
+| `top-down-decompose.md` | MECE top-down decomposition methodology to split a goal into atomic sub-goals |
 
 ## Templates
 
@@ -133,6 +124,6 @@ Auto-discovered by `/grilling`; filled in and written to `.context/` by the work
 |----------|---------|
 | `adr.md` | `/archi` — written to `.context/inbox/adr/{timestamp}-{slug}.md`; `/auto-action` moves it to `.context/done/adr/` after successful implementation |
 | `architecture.md` | `/auto-action` — derived from the completed ADR and implemented code, written directly to `.context/archi/{slug}.md` |
-| `plan.md` | `/fs-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`, pairs with an ADR of the same slug; `/auto-action` moves it to `.context/done/plan/` on completion |
-| `self-plan.md` | `/co-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`, pairs with an ADR of the same slug; `/auto-action` moves it to `.context/done/plan/` once every hole is reviewed and tests pass |
+| `plan.md` | `/fs-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`; `/auto-action` moves it to `.context/done/plan/` on completion |
+| `self-plan.md` | `/co-plan` — written to `.context/inbox/plan/{timestamp}-{slug}.md`, marked `**Type:** Self-Plan`; `/auto-action` moves it to `.context/done/plan/` once every hole is reviewed and tests pass |
 | `requirements.md` | `/req` — written to `.context/inbox/rdr/{timestamp}-{slug}.md`; `/auto-action` folds it into `.context/req/{slug}.md` then moves it to `.context/done/rdr/` |
