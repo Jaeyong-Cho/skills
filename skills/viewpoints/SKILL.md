@@ -5,6 +5,8 @@ description: Build a set of complementary viewpoints on a subject instead of pic
 
 A single visualization answers one question well; a gallery of **viewpoints** — several complementary forms shown side by side — answers several. The forms aren't only statistical charts: viewpoints can mix data charts (bar, scatter, heatmap) with structural diagrams (flowchart, architecture, entity-relationship, state, directory tree) when the subject has a structural face as well as, or instead of, a tabular one. Build a gallery of viewpoints instead of guessing the single "best" view.
 
+MUST NOT use unicode arrows (`→`, `⇒`), box-drawing characters (`─`, `│`, `┌`), bullets (`•`, `▪`), or emoji. USE ASCII instead.
+
 ## Steps
 
 1. **Profile the subject.** First identify what you're visualizing — tabular data, a structure (system, codebase, algorithm, schema, filesystem), or both. For tabular data: per column note data type, cardinality, and missingness; for the whole, note inter-column relationships, hierarchical structure, and temporal structure. For a structure: note its elements and the relations among them — sequence/control flow, dependency, containment/hierarchy, state transitions, and cardinality. Done when every face the subject has (data, structural, or both) is profiled, stating "none" where a dimension doesn't apply — a partial profile understates what the gallery could show.
@@ -22,8 +24,6 @@ A single visualization answers one question well; a gallery of **viewpoints** �
 7. **Serve the gallery.** Copy `scripts/serve.sh` to the gallery directory to make run manually. (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL to open: http://localhost:4800. MUST NOT RUN server. user will manually run it.
 
 ## Output template (per visualization)
-
-MUST NOT use unicode arrows (`→`, `⇒`), box-drawing characters (`─`, `│`, `┌`), bullets (`•`, `▪`), or emoji. USE ASCII instead.
 
 - **What it shows** — the content of this view: which variables or elements it depicts, and the slice, scenario, or scope drawn.
 - **How to read it** — how to decode the marks, axes, or layout, and where to look first.
