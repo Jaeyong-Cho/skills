@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Turn a user's request into a small scientific-method run: hypothesis, method, execution, analysis, then a report a reader can trust without re-running it. The **verdict** — supported, refuted, or inconclusive — is the spine everything else hangs from.
 
+Default to full latitude for running the method — install packages, run scripts, hit local services, whatever the hypothesis needs. MUST NOT remove, edit, or create anything outside `experiments/{slug}/`, though: treat everything else as read-only. If the method needs to touch code or data elsewhere, copy it into `experiments/{slug}/raw/` first and work on the copy.
+
 ## Steps
 
 1. **Frame the hypothesis.** Restate the user's request as one falsifiable hypothesis (a claim that could turn out false), plus the observations that would confirm it and the ones that would refute it. Ask the user only if the request is too vague to convert into a testable claim. Slugify the hypothesis into `{slug}` (kebab-case, e.g. `cache-ttl-vs-latency`) and create `experiments/{slug}/`. Done when the hypothesis reads as a claim (not a question) and both confirming and refuting observations are named.
