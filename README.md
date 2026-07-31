@@ -109,7 +109,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/goal-init` | `.context/goal.md`, `experiments/index.html` | Bootstrap a new goal — create `.context/` for its working context, and build/refresh a dashboard linking every experiment's report and viewpoint gallery |
+| `/goal-init` | `goal.md`, `experiments/index.html` | Bootstrap a new goal — write the goal statement to project-root `goal.md`, and build/refresh a dashboard linking every experiment's report and viewpoint gallery |
 | `/workflow` | `spec/**`, one self-plan per SEQ in `.context/inbox/plan/` | Run a goal straight through `/spec`'s scen → req → cmp → seq stages, then fan out one subagent per resulting SEQ to run `/co-plan` scoped to just that sequence |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
