@@ -120,6 +120,9 @@ Interface: the Interfaces section (real method/function/endpoint signatures) IS 
 ## Responsibility
 <single responsibility>
 
+## Mapped
+- <mapping to the source file, classes and struct>
+
 ## Interfaces
 - <signature, e.g. addProductToCart(productId: string, quantity: number): Cart>
 - <endpoint, e.g. POST /cart/items>
