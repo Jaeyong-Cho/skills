@@ -6,4 +6,13 @@ set -euo pipefail
 name="${1:-$(basename "$PWD")}"
 name="${name//[.:]/_}"
 
-exec tmux new-session -A -s "$name"
+if [ -n "${TMUX:-}" ]; then
+  # Already inside tmux: attaching here would nest a client inside this
+  # pane instead of taking over the outer one, so switch the outer
+  # client to the target session instead (creating it detached first
+  # if it doesn't exist yet).
+  tmux new-session -d -s "$name" 2>/dev/null || true
+  exec tmux switch-client -t "$name"
+else
+  exec tmux new-session -A -s "$name"
+fi
