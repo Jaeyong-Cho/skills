@@ -84,6 +84,28 @@ good `#0ca30c`, warning `#fab219`, serious `#ec835a`, critical `#d03b3b`. Keep t
 | Delta ↑ good (success text) | `#24831f` (gsign_add) | `#7da47a` (gsign_add) |
 | Border (hairline ring) | `rgba(42,41,32,0.10)` | `rgba(232,228,220,0.10)` |
 
+## Typography
+
+Every rendered form — data chart or structural diagram — uses one monospace family and a restrained, mostly-flat size scale. Titles should read as "slightly emphasized," not as a headline.
+
+**Font stack:** `"JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace` (JetBrains Mono first; the rest are fallbacks for environments where it isn't installed).
+
+**Size scale** (px, at the ~1032px card display width from `template.html`):
+
+| Role | Size | Weight |
+|---|---|---|
+| Chart/diagram title | 13-14px | 600 |
+| Axis titles, legend headers | 11-12px | 500 |
+| Axis tick labels, legend entries, node/edge labels | 10-11px | 400 |
+| Annotations, footnotes, data labels | 9-10px | 400 |
+
+Nothing in a rendered chart or diagram should exceed ~14px — there's no reading distance to fill, so oversized titles just eat space that should go to the data. Keep the scale flat (2-3 sizes total) rather than stepping every text role up or down.
+
+**Per-tool wiring:**
+- **matplotlib**: `plt.rcParams['font.family'] = 'monospace'; plt.rcParams['font.monospace'] = ['JetBrains Mono', 'DejaVu Sans Mono']`, then set `font.size` (tick/body) to 10 and bump only `axes.titlesize` to 13-14.
+- **mermaid**: set `theme: 'base'` with `themeVariables: { fontFamily: '"JetBrains Mono", monospace', fontSize: '11px' }` in the mermaid config/frontmatter.
+- **graphviz**: set `fontname="JetBrains Mono"` on the graph, node, and edge defaults, and `fontsize=11` (bump title-equivalent labels, if any, to 13-14).
+
 ## Surfaces
 
 - Light chart surface: `#faf9f5`

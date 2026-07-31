@@ -40,13 +40,17 @@ The macro loop this repo is built around: validate the riskiest question as chea
 
 ```
 Goal
- |  (create a directory to hold this goal's context)
+ |
+ v
+/goal-init                   creates `.context/`, and (re)builds the
+ |                            experiments dashboard (experiments/index.html)
  v
 Question / Hypothesis          e.g. "SQLite vs Postgres: which is
  |                                   reliable enough here?"
  v
 /experiment  ------------->  cheapest method that resolves the question
- |                            (builds a /viewpoints gallery over raw results)
+ |                            (builds a /viewpoints gallery over raw results,
+ |                             refreshes the experiments dashboard on exit)
  v
 Ideas                        read the gallery/report, generate options
  |
@@ -105,6 +109,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
+| `/goal-init` | `.context/goal.md`, `experiments/index.html` | Bootstrap a new goal — create `.context/` for its working context, and build/refresh a dashboard linking every experiment's report and viewpoint gallery |
 | `/workflow` | `spec/**`, one self-plan per SEQ in `.context/inbox/plan/` | Run a goal straight through `/spec`'s scen → req → cmp → seq stages, then fan out one subagent per resulting SEQ to run `/co-plan` scoped to just that sequence |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |

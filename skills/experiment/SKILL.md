@@ -9,7 +9,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, AskUserQuestion
 
 Turn a user's request into a small scientific-method run: hypothesis, method, execution, analysis, then a report a reader can trust without re-running it. The **verdict** — supported, refuted, or inconclusive — is the spine everything else hangs from.
 
-Default to full latitude for running the method — install packages, run scripts, hit local services, whatever the hypothesis needs. MUST NOT remove, edit, or create anything outside `experiments/{slug}/`, though: treat everything else as read-only. If the method needs to touch code or data elsewhere, copy it into `experiments/{slug}/raw/` first and work on the copy.
+Default to full latitude for running the method — install packages, run scripts, hit local services, whatever the hypothesis needs. MUST NOT remove, edit, or create anything outside `experiments/{slug}/`, except appending the summary bullet to the project root `README.md` in step 7 and regenerating `experiments/index.html` in step 8 — treat everything else as read-only. If the method needs to touch code or data elsewhere, copy it into `experiments/{slug}/raw/` first and work on the copy.
 
 ## Steps
 
@@ -24,6 +24,15 @@ Default to full latitude for running the method — install packages, run script
 5. **Build the gallery in a subagent.** Dispatch a subagent (Agent tool) with claude-sonnet-5 model pointed at the raw results in `experiments/{slug}/raw/`, with the instruction: "with /viewpoints, build a gallery over <describe the results/data>, output to `experiments/{slug}/gallery/`." Wait for it to finish before continuing — the report in step 6 links the gallery, so it must exist first. Isolating this in a subagent keeps viewpoints' own multi-step legwork (profiling, shortlisting, rendering) out of the main run, so the report step waiting behind it doesn't rush it. Done when `experiments/{slug}/gallery/index.html` exists.
 
 6. **Write the experiment report.** Assemble `experiments/{slug}/report.md` using the template below. Done when every section is filled from real artifacts of steps 1-5 (not restated boilerplate) and the report opens with the verdict, not buried at the end.
+
+7. **Summarize in the project README.** Append a short bullet to the `## Experiments` section of the project root `README.md` (create the section, or the file, if missing) — one bullet per experiment, verdict-first, linking to the full report. Never restate the report's contents beyond that one line. Done when the bullet is added and its link resolves.
+
+   ```
+   ## Experiments
+   - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <one-line takeaway>. [Report](experiments/{slug}/report.md)
+   ```
+
+8. **Refresh the experiments dashboard.** Run `python ../goal-init/scripts/build_dashboard.py experiments experiments/index.html` (path relative to this skill's own directory) so this experiment's verdict, hypothesis, and gallery thumbnail appear alongside every prior one. This is the same script `/goal-init` uses to build the dashboard from scratch — don't reimplement it here. Done when `experiments/index.html` exists and includes this experiment's slug.
 
 ## Report template (`experiments/{slug}/report.md`)
 
