@@ -125,6 +125,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/study-guide` | HTML file | Explain a document or codebase and quiz the reader on it — background, core concepts with worked examples, walkthrough, and a 5-question interactive quiz, rendered via bundled `render.py` |
 | `/experiment` | `experiments/{slug}/report.md` (+ `raw/`, `gallery/`) | Turn a request into a scientific-method run — hypothesis, method, execution, analysis, verdict — building a `/viewpoints` gallery over the raw results before writing the report |
+| `/run-n-view` | `run-n-view/{slug}/raw/`, `run-n-view/{slug}/gallery/index.html` | Bare run+view primitive — launch/drive a command, script, or app for real via `run`, then build a `/viewpoints` gallery over the captured output. No hypothesis or report; use `/experiment` when those are needed |
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
 | `/scaffold-skeleton-code` | skeleton file + test file | Generate function signatures, TODO hints, and a matching test file so the user implements just the logic |
 
