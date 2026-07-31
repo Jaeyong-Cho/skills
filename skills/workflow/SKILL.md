@@ -1,17 +1,17 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through, then fan out one co-plan self-plan per resulting sequence, each dispatched to its own subagent. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through, then one co-plan self-plan per resulting sequence, dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
 # Workflow
 
-Chain `/spec` from a goal to SEQ docs, then fan out: one subagent per SEQ runs `/co-plan` scoped to just that sequence.
+Chain `/spec` from a goal to SEQ docs, then work the SEQ list one at a time: each gets its own subagent running `/co-plan` scoped to just that sequence.
 
 ```
 Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
                                                             |
-                                                  (per SEQ, subagent)
+                                                  (per SEQ, one at a time)
                                                             v
                                                   co-plan --> self-plan
 ```
@@ -31,9 +31,9 @@ Read `../spec/SKILL.md` once, then execute its `to_scen`, `to_req`, `to_cmp`, `t
 
 Follow each section's own completion criterion before starting the next. If a stage stops (ambiguous goal, missing upstream content), stop the whole workflow there and report why — never invent content to force the chain forward.
 
-## 3. One subagent per SEQ, in parallel
+## 3. One subagent per SEQ, sequentially
 
-For every SEQ doc written in step 2, dispatch one subagent — single message, one Agent call per SEQ, run in the foreground since step 4 needs every result before it can report anything. Brief each subagent to:
+Take the SEQ docs written in step 2 in order. For each one, dispatch a single subagent and wait for it to finish and report its self-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
 
 - Read `../co-plan/SKILL.md` in full.
 - Treat this one SEQ, plus its linked REQ and CMP docs (follow the SEQ's `## Requirement` and `## Components` references), as "the design" `/co-plan` expects — not the whole spec tree.
