@@ -33,10 +33,11 @@ Follow each section's own completion criterion before starting the next. If a st
 
 ## 3. One subagent per SEQ, sequentially
 
-Take the SEQ docs written in step 2 in order. For each one, dispatch a single subagent and wait for it to finish and report its self-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
+Take the SEQ docs written in step 2 in order. For each one, dispatch a single subagent with claude-sonnet-5 model and wait for it to finish and report its self-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
 
 - Read `../co-plan/SKILL.md` in full.
 - Treat this one SEQ, plus its linked REQ and CMP docs (follow the SEQ's `## Requirement` and `## Components` references), as "the design" `/co-plan` expects — not the whole spec tree.
+- Consider the previous plans from earlier SEQs as context for consistency.
 - Run `/co-plan`'s process exactly, with one exception: skip the interactive "ask for confirmation" step — a dispatched subagent can't hold that conversation. Write the self-plan straight through and report its file path back.
 - Derive the plan's slug from the SEQ's title, so the human can tell which SEQ produced which plan.
 
