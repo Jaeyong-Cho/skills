@@ -105,6 +105,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
+| `/workflow` | `spec/**`, one self-plan per SEQ in `.context/inbox/plan/` | Run a goal straight through `/spec`'s scen → req → cmp → seq stages, then fan out one subagent per resulting SEQ to run `/co-plan` scoped to just that sequence |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, and for each implementation step decide — block-by-block — what's a hole (for you to fill) vs working code (AI-written); writes a plan marked `**Type:** Self-Plan` |
 | `/auto-action` | code changes, `.context/done/plan/` | Runs an inbox plan. Regular plan: write tests → write code → verify. Self-plan: first write working parts and hole TODOs; then, after the human fills every hole, review and test. Once successful, move the plan from `inbox/` to `done/`. |
