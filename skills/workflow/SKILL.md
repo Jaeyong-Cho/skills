@@ -1,6 +1,6 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — grill the goal first, then spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, then one auto-action write-and-test pass per plan, each dispatched to its own subagent one at a time. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass — grill the goal first, then spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, then one auto-action write-and-test pass per plan, each dispatched to its own subagent one at a time, then visualize the result with viewpoints. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
@@ -21,6 +21,9 @@ Goal --> [main thread: grilling] --> grilled Goal
                                                                 (per plan, one at a time)
                                                                           v
                                                                 auto-action (haiku) --> Write & Test
+                                                                          |
+                                                                          v
+                                                                Report --> viewpoints gallery
 ```
 
 ## 1. Grill the goal
@@ -78,4 +81,10 @@ Once every subagent returns, list each SEQ id next to its review-plan path and i
 
 Completion criterion: every SEQ from step 3 has either a review-plan path with auto-action results, or a reported failure reason — nothing left dispatched-and-unaccounted-for.
 
-**DO NOT run the Confirm Review pass yourself** — that step asks the human to confirm each Review Sequence entry, which only the human can genuinely do; workflow's job ends at Write & Test.
+## 7. Visualize the result
+
+Once step 6's report is written, run `../viewpoints/SKILL.md` against it. The subject is the workflow's own output, not external data: the SEQ list, each SEQ's review-plan, and its auto-action Write & Test result (pass/fail, files touched). This is a structural/comparison subject — expect the shortlist to lean on structure & flow forms (e.g. a Goal -> SEQ -> plan -> test-result flow diagram) and comparison forms (e.g. SEQ vs. plan vs. test outcome) rather than statistical charts. Follow viewpoints' steps through its gallery assembly, then report the gallery path/URL to the user alongside the step 6 report — do not run its server step yourself, same as viewpoints' own instruction.
+
+Completion criterion: viewpoints' gallery `index.html` exists and its path has been reported to the user.
+
+**DO NOT run the Confirm Review pass yourself** — that step asks the human to confirm each Review Sequence entry, which only the human can genuinely do; workflow's job ends at Write & Test plus the viewpoints visualization of that result.
