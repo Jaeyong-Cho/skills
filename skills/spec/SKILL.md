@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Advance one spec stage, or record a decision. The arg picks which; each reads the artifact above it and writes filled-in docs below.
 
-```
+```text
 Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
                                    |                |     ^_________|
                                    |                |   (to_seq reads REQ + CMP)
@@ -36,6 +36,7 @@ Read the upstream from `spec/<stage>/` by default; if the user named a file or p
 - **IDs** are zero-padded and sequential per stage: `SCN-001`, `REQ-001`, `CMP-001`, `SEQ-001`, `RDR-001`, `ADR-001`. Continue from the highest existing ID in the target folder.
 - **Status** starts `Draft`. Generated docs are drafts for a human to review — do not mark `Reviewed`/`Done` yourself. The only status you set beyond `Draft` is `Removed`, for a doc whose upstream source disappeared.
 - One doc = one unit; produce every doc the upstream demands in a single run, not just the first.
+- **ASCII diagrams** (e.g. a SEQ's `## Flow`) follow the global style: plain ASCII only (`|`, `v`, `+--`, `->`, no Unicode box-drawing/arrows), and wrapped in a ` ```text ` fence in the written file — not a bare ` ``` ` fence.
 - **Every stage is CRUD against its own folder, not create-only.** Before writing, read what's already in `spec/<stage>/`. For each piece of upstream content, decide:
   - **Create** — no existing doc covers it: mint the next ID as usual.
   - **Update** — an existing doc covers the same thing but upstream changed it: edit that doc in place (same ID, revised body), don't duplicate it. Pair the edit with a decision record where the stage has one — `to_req` writes an RDR, `to_cmp` and `to_seq` write an ADR — capturing what the doc said before, what changed, why, and what alternative was rejected. `to_scen` has no paired decision-record type; update it in place with no companion doc.

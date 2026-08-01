@@ -13,12 +13,13 @@ Prefer structured, visual representations over prose. Reading structured output 
 
 - **Flow, pipeline, hierarchy, or dependency content** → ASCII tree/flow diagram, plain ASCII characters only (`|`, `v`, `+--`, `->`). No Unicode box-drawing or arrow glyphs — plain ASCII renders correctly everywhere.
   - Common Unicode traps to avoid inside the diagram: arrows (`→`, `⇒`, `➜`), box-drawing (`─`, `│`, `┌`, `└`, `├`, `┬`), bullet markers (`•`, `▪`). Swap each for the ASCII set above — they render as boxes or vanish in plain terminals.
+  - Always wrap the diagram in a fenced code block tagged ` ```text ` (not a bare ` ``` ` fence) — this keeps renderers from applying syntax highlighting or reflowing the ASCII layout.
 - **Comparison content** (options, trade-offs, parallel attributes) → Markdown table.
 - **List-like content with no flow or comparison shape** → concise bullets (tier 2), not a forced diagram.
 - Every diagram carries a one-sentence caption stating what it depicts, placed directly above or below it — the diagram shows structure, the caption states content, so a reader who skips the ASCII art still gets the information.
 
 Example flow diagram:
-```
+```text
 Requirement
     |
     v
