@@ -1,6 +1,6 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through, then one co-plan self-plan per resulting sequence, dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan self-plan per resulting sequence, each dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
@@ -9,7 +9,7 @@ disable-model-invocation: true
 Chain `/spec` from a goal to SEQ docs, then work the SEQ list one at a time: each gets its own subagent running `/co-plan` scoped to just that sequence.
 
 ```
-Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
+Goal --> [subagent: to_scen->to_req->to_cmp->to_seq] --> SEQ list
                                                             |
                                                   (per SEQ, one at a time)
                                                             v
@@ -20,16 +20,19 @@ Goal --to_scen--> SCN --to_req--> REQ --to_cmp--> CMP --to_seq--> SEQ
 
 Input: the goal (prose in the invocation, or a goal file the user names) — the same input `/spec`'s `to_scen` takes.
 
-## 2. Run scen -> req -> cmp -> seq directly, in order
+## 2. One subagent runs scen -> req -> cmp -> seq, in order
 
-Read `../spec/SKILL.md` once, then execute its `to_scen`, `to_req`, `to_cmp`, `to_seq` sections yourself, in this order, in your own context — do not dispatch a subagent for this part. Each stage's output feeds the next stage's input, and reading the chain as one continuous thread is what lets a slip in `to_req` get caught before it propagates into `to_cmp`.
+Dispatch a single subagent with claude-sonnet-5 model to run the whole chain, and wait for it to finish. Isolating this in a subagent keeps the (potentially large) SCN/REQ/CMP/SEQ doc content out of your own context — you only need the resulting SEQ list for step 3, not the full doc bodies. Brief the subagent to:
 
-1. `to_scen`: goal -> `spec/scen/SCN-*.md`.
-2. `to_req`: those SCN docs -> `spec/req/REQ-*.md`.
-3. `to_cmp`: those REQ docs -> `spec/cmp/CMP-*.md`.
-4. `to_seq`: REQ + CMP docs -> `spec/seq/SEQ-*.md`.
+- Read `../spec/SKILL.md` once, then execute its `to_scen`, `to_req`, `to_cmp`, `to_seq` sections itself, in this order, as one continuous pass in its own context — reading the chain as one continuous thread is what lets a slip in `to_req` get caught before it propagates into `to_cmp`.
+  1. `to_scen`: goal -> `spec/scen/SCN-*.md`.
+  2. `to_req`: those SCN docs -> `spec/req/REQ-*.md`.
+  3. `to_cmp`: those REQ docs -> `spec/cmp/CMP-*.md`.
+  4. `to_seq`: REQ + CMP docs -> `spec/seq/SEQ-*.md`.
+- Follow each section's own completion criterion before starting the next. If a stage stops (ambiguous goal, missing upstream content), stop the whole chain there and report why — never invent content to force the chain forward.
+- Report back: the list of SEQ ids and file paths written (or the stage it stopped at and why, if it didn't reach `to_seq`).
 
-Follow each section's own completion criterion before starting the next. If a stage stops (ambiguous goal, missing upstream content), stop the whole workflow there and report why — never invent content to force the chain forward.
+If the subagent reports a stopped chain instead of a SEQ list, stop the whole workflow here and report why to the user — do not proceed to step 3 with a partial or invented SEQ list.
 
 ## 3. One subagent per SEQ, sequentially
 
