@@ -142,7 +142,7 @@ setup_copilot() {
       cp -R "$SKILLS_DIR/template/." "$HOME/.copilot/skills/template"
       echo "  ✓ skills and references → ~/.copilot"
   fi
-  
+
   # Copilot CLI has no hooks API — tmux-agent-status can only see it via
   # process presence auto-detection, not working/done transitions.
   echo "  note: tmux-agent-status has no hook support for Copilot CLI (process presence only)"
