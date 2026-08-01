@@ -1,0 +1,3 @@
+#!/bin/bash
+
+copilot --model claude-sonnet-5
