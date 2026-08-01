@@ -1,12 +1,12 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, each dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, then one auto-action write-and-test pass per plan, each dispatched to its own subagent one at a time. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
 # Workflow
 
-Chain `/spec` from a goal to SEQ docs, then work the SEQ list one at a time: each gets its own subagent running `/co-plan` scoped to just that sequence.
+Chain `/spec` from a goal to SEQ docs, then work the SEQ list one at a time: each gets its own subagent running `/co-plan` scoped to just that sequence, then its own subagent running `/auto-action` on the resulting plan.
 
 ```
 Goal --> [subagent: to_scen->to_req->to_cmp->to_seq] --> SEQ list
@@ -14,6 +14,10 @@ Goal --> [subagent: to_scen->to_req->to_cmp->to_seq] --> SEQ list
                                                   (per SEQ, one at a time)
                                                             v
                                                   co-plan --> review-plan
+                                                            |
+                                                  (per plan, one at a time)
+                                                            v
+                                                  auto-action (haiku) --> Write & Test
 ```
 
 ## 1. Resolve the goal
@@ -46,10 +50,21 @@ Take the SEQ docs written in step 2 in order. For each one, dispatch a single su
 
 Each subagent's completion criterion is co-plan's own, unchanged: the review-plan's action sequence is fully ordered, test-before-implementation on every unit of work, and the Review Sequence covers every implementation step top-down along the flow with a concrete verification point.
 
-## 4. Report
+## 4. One subagent per plan, sequentially, running auto-action
 
-Once every subagent returns, list each SEQ id next to the review-plan path its subagent produced — or the reason it didn't finish, if one failed. Tell the user the next step for each plan is `/auto-action`.
+Take the review-plan paths written in step 3, in the same order. For each one, dispatch a single subagent with the claude-haiku-4.5 model and wait for it to finish and report its result before dispatching the next — never more than one subagent running at a time, since these subagents write real code and running them concurrently risks file conflicts across plans that touch overlapping code. Brief each subagent to:
 
-Completion criterion: every SEQ from step 2 has either a review-plan path or a reported failure reason — nothing left dispatched-and-unaccounted-for.
+- Read `../auto-action/SKILL.md` in full.
+- Run `/auto-action` on this one plan's file path exactly as written — do not skip or reinterpret its branching logic.
+- Since this is a freshly-written review-plan, this will follow the **Review-Plan Execution — Write & Test** branch: the whole action sequence gets written and tested, `[x] Test` is checked, and the plan stays in `.context/inbox/plan/` with `[ ] Review` open — that's the expected stopping point, not a failure. Report back what changed and the test results.
+- If a step fails or auto-action stops for any other reason, report exactly what failed and why — do not retry or work around it.
 
-**DO NOT run `/auto-action` yourself** — that stays a separate, explicit step per plan, same as everywhere else in this pipeline.
+Completion criterion: every review-plan from step 3 has been run through auto-action's Write & Test pass, with results reported — or a reported failure reason if one didn't finish.
+
+## 5. Report
+
+Once every subagent returns, list each SEQ id next to its review-plan path and its auto-action test results — or the reason it didn't finish, if one failed. Tell the user each plan now needs a human to walk its Review Sequence against the finished code, then re-run `/auto-action` on it themselves to confirm review and close it out.
+
+Completion criterion: every SEQ from step 2 has either a review-plan path with auto-action results, or a reported failure reason — nothing left dispatched-and-unaccounted-for.
+
+**DO NOT run the Confirm Review pass yourself** — that step asks the human to confirm each Review Sequence entry, which only the human can genuinely do; workflow's job ends at Write & Test.
