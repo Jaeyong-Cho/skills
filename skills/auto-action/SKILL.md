@@ -1,6 +1,6 @@
 ---
 name: auto-action
-description: Auto-action skill. Stops immediately if the plan file already lives in `.context/done/plan/`. Otherwise reads a plan (from `.context/inbox/plan/`) and executes the full action sequence — fully autonomous for a regular plan; for a self-plan, writes working code with recorded holes left as TODOs, then on a later run (once the human has filled every hole) reviews the implementation against those holes' recorded intent, runs the tests, and asks the user to confirm a commit once every hole's TODO is gone and tests pass. Use when invoked as /auto-action.
+description: Auto-action skill. Stops immediately if the plan file already lives in `.context/done/plan/`. Otherwise reads a plan (from `.context/inbox/plan/`) and executes the full action sequence — fully autonomous for a regular plan; for a review-plan, writes and tests the entire sequence in one pass (same as a regular plan), then on a later run asks the human to confirm they've walked the plan's Review Sequence against the finished code before marking it done. Use when invoked as /auto-action.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ Read the plan for the Action Sequence to execute.
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`.
 
-Check the plan's `**Type:**` line. If it reads `Self-Plan`, check whether its recorded holes are still open: for each implementation step with a **Hole** annotation, open the file and check whether the hole's blanked placeholder(s) (e.g. `/* */`) are still there — the TODO comment above them isn't the signal, since it stays until a hole passes review. If any hole's blank is still present, follow **Self-Plan Execution — Write**. If every hole's blank has been replaced with real code, follow **Self-Plan Execution — Review & Test** instead. If the plan's Type line is anything other than `Self-Plan` (including absent), follow **Full Execution**.
+Check the plan's `**Type:**` line. If it reads `Review-Plan`, check its `## Closeout` checklist: if `[ ] Test` is still unchecked, follow **Review-Plan Execution — Write & Test**. If `[x] Test` is already checked and `[ ] Review` is still unchecked, follow **Review-Plan Execution — Confirm Review** instead. If the plan's Type line is anything other than `Review-Plan` (including absent), follow **Full Execution**.
 
 ## Full Execution
 
@@ -22,28 +22,23 @@ After all steps are done, report what changed for each step in order. Since the 
 
 Completion criterion: every step executed and reported, or stopped on first failure with reason. If every step succeeded, the plan's Closeout checklist is fully checked and the file now lives in `.context/done/plan/`.
 
-## Self-Plan Execution — Write
+## Review-Plan Execution — Write & Test
 
-For each implementation step, write exactly what the step's **Working** and **Hole** annotations specify — this was already decided in `/co-plan`, so do not re-derive or re-apply the rules here. Write working parts complete and runnable. For each hole, write its recorded TODO comment and blanked code skeleton verbatim, following `../references/todo-hole.md` — the surrounding statement structure is real code; only the recorded blank(s) are left for the human.
+Execute the plan's entire Action Sequence straight through, exactly like Full Execution — every step is fully working code, there are no holes to leave open. If a step fails or is blocked, stop immediately, report what failed and why, and do not continue.
 
-Each file gets one Write or Edit call that lands its final state directly — holes as TODOs, working parts complete, in the same pass. Never write a full working implementation for a hole's line(s) and then edit it down to a TODO afterward; that's two passes of work for one outcome the self-plan already decided.
+After all steps are done, report what changed for each step in order, then mark `[x] Test` in the plan's `## Closeout` checklist. Leave `[ ] Review` unchecked and do **not** move the plan file yet — the plan isn't done until the human has walked its Review Sequence against this finished code.
 
-Test steps are always written complete, per the plan.
+Completion criterion: every step written and tested, `[x] Test` checked in the plan file, `[ ] Review` still open, plan file still in `.context/inbox/plan/`. This is a stopping point, not a failure — the plan now waits on the human to review before `/auto-action` can move past it.
 
-Do not run tests to green — holes are intentionally incomplete, so failing tests are expected. If a step's Working/Hole annotation is missing or unclear, stop and send the user back to `/co-plan` rather than guessing.
+## Review-Plan Execution — Confirm Review
 
-Completion criterion: every step written (tests complete, working parts complete, holes marked with explanatory TODOs), or stopped on first missing/unclear annotation with reason. This is a stopping point, not a failure — the plan now waits on the human to fill in every hole before `/auto-action` can move past it.
+Do not rewrite or re-test any file — the code was already written and tested in the prior run. Instead, walk the plan's Review Sequence with the user: for each entry (in the top-down, entry-point-to-leaf order the plan records), name the file/function location and its verification point, and ask the user to confirm whether it holds in the finished code. Record, per entry, whether it was confirmed or flagged.
 
-## Self-Plan Execution — Review & Test
+1. **Confirm.** Go through every Review Sequence entry and get the user's confirmation or a flagged concern for each.
+2. **Commit.** Only if every entry was confirmed with no flagged concerns: draft the commit message following this project's standard git commit-message convention (see the top-level git instructions — draft from the actual diff, do not invent a new format), show it to the user along with the files to be staged, and ask them to confirm. Commit only after they confirm; if they decline or ask for changes, leave the working tree as-is and don't retry uninvited. If any entry was flagged, skip this entirely — do not ask to commit code the human hasn't fully confirmed.
+3. **Mark Closeout.** If every Review Sequence entry was confirmed, mark `[x] Review` in the plan's `## Closeout` checklist, then move the plan file from `.context/inbox/plan/{timestamp}-{slug}.md` to `.context/done/plan/{timestamp}-{slug}.md` (`mkdir -p .context/done/plan` if needed). This happens regardless of the user's commit decision in step 2. If any entry was flagged, leave both the checklist and the file location unchanged — report the flagged entries so the user can request fixes, then re-run `/auto-action` once resolved.
 
-Do not rewrite any file — the human has already replaced every hole's TODO with their own implementation. Instead:
-
-1. **Review.** For each hole, compare what's now in place against that hole's recorded TODO intent (the technique/approach it named) and against the flow the plan describes. Note, per hole, whether it matches the intent, and flag anything that looks incomplete, mismatched, or that reintroduces working code the plan already wrote elsewhere. Once a hole passes review, remove its TODO comment from the file — the code now there replaces it, and leaving it behind is stale clutter, not documentation worth keeping. Leave the TODO comment in place for any hole that doesn't pass review, alongside the flagged concern, so the human still has it to work from.
-2. **Test.** Run the plan's test scope: read the plan for test strategy and scope (default to both unit and integration unless the plan says otherwise), then run those tests and record pass/fail per test.
-3. **Commit.** Only if every hole passed review (no TODO comments remain) and every test passed: draft the commit message following this project's standard git commit-message convention (see the top-level git instructions — draft from the actual diff, do not invent a new format), show it to the user along with the files to be staged, and ask them to confirm. Commit only after they confirm; if they decline or ask for changes, leave the working tree as-is and don't retry uninvited. If any hole failed review or any test failed, skip this entirely — do not ask to commit unfinished or failing work.
-4. **Mark Closeout.** If every hole passed review and every test passed, mark `[x] Review + Test` in the plan's `## Closeout` checklist, then move the plan file from `.context/inbox/plan/{timestamp}-{slug}.md` to `.context/done/plan/{timestamp}-{slug}.md` (`mkdir -p .context/done/plan` if needed). This happens regardless of the user's commit decision in step 3; the checklist item and the move are about review and tests, not the commit. Leave both the checklist and the file location unchanged if anything failed.
-
-Completion criterion: every hole reviewed against its recorded intent with a verdict, and the plan's test scope run with results recorded — or stopped with a reason if a hole's recorded intent is missing (send the user back to `/co-plan`) or the project's tests can't be run. If review and tests are clean, the user has been asked to confirm the commit, and the Closeout checklist and file location both reflect completion.
+Completion criterion: every Review Sequence entry confirmed or flagged with a verdict — or stopped with a reason if the plan has no recorded Review Sequence (send the user back to `/co-plan`). If every entry is confirmed, the user has been asked to confirm the commit, and the Closeout checklist and file location both reflect completion.
 
 ## When Done
 
@@ -51,6 +46,6 @@ Completion criterion: every hole reviewed against its recorded intent with a ver
 
 **Full Execution:** "Auto-action complete." followed by the per-step summary. If every step succeeded, report the plan's new path in `.context/done/plan/`. If any step failed, say what failed and note the plan stays in `.context/inbox/plan/`.
 
-**Self-Plan Execution — Write:** "Auto-action complete (self-plan)." followed by which files were modified, which were created, and which functions/blocks contain holes for the user to implement. Tell the user: fill in every hole, then re-run `/auto-action` on this plan — it will detect the holes are filled and switch to reviewing and testing the implementation instead of writing it.
+**Review-Plan Execution — Write & Test:** "Auto-action complete (review-plan)." followed by which files were modified or created and the test results. Tell the user: walk the plan's Review Sequence against this code, then re-run `/auto-action` on this plan — it will ask you to confirm each Review Sequence entry and, once confirmed, mark the plan done.
 
-**Self-Plan Execution — Review & Test:** "Auto-action review complete (self-plan)." followed by, per hole, whether it matched its recorded intent (and what looked off if not), then the test results (pass/fail counts, failures listed explicitly). If every hole matched and all tests pass, tell the user the plan's Closeout Review + Test item is satisfied and the plan file has moved to `.context/done/plan/`, then show them the drafted commit message and ask them to confirm before committing. If anything didn't match or tests failed, say so plainly, note that nothing will be committed and the file was not moved, and do not claim Closeout is satisfied.
+**Review-Plan Execution — Confirm Review:** "Auto-action review complete (review-plan)." followed by, per Review Sequence entry, whether the user confirmed it or flagged a concern. If every entry was confirmed, tell the user the plan's Closeout Review item is satisfied and the plan file has moved to `.context/done/plan/`, then show them the drafted commit message and ask them to confirm before committing. If any entry was flagged, say so plainly, note that nothing will be committed and the file was not moved, and do not claim Closeout is satisfied.

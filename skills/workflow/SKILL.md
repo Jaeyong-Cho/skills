@@ -1,6 +1,6 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan self-plan per resulting sequence, each dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass — spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, each dispatched to its own subagent one sequence at a time. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
@@ -13,7 +13,7 @@ Goal --> [subagent: to_scen->to_req->to_cmp->to_seq] --> SEQ list
                                                             |
                                                   (per SEQ, one at a time)
                                                             v
-                                                  co-plan --> self-plan
+                                                  co-plan --> review-plan
 ```
 
 ## 1. Resolve the goal
@@ -36,20 +36,20 @@ If the subagent reports a stopped chain instead of a SEQ list, stop the whole wo
 
 ## 3. One subagent per SEQ, sequentially
 
-Take the SEQ docs written in step 2 in order. For each one, dispatch a single subagent with claude-sonnet-5 model and wait for it to finish and report its self-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
+Take the SEQ docs written in step 2 in order. For each one, dispatch a single subagent with claude-sonnet-5 model and wait for it to finish and report its review-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
 
 - Read `../co-plan/SKILL.md` in full.
 - Treat this one SEQ, plus its linked REQ and CMP docs (follow the SEQ's `## Requirement` and `## Components` references), as "the design" `/co-plan` expects — not the whole spec tree.
 - Consider the previous plans from earlier SEQs as context for consistency.
-- Run `/co-plan`'s process exactly, with one exception: skip the interactive "ask for confirmation" step — a dispatched subagent can't hold that conversation. Write the self-plan straight through and report its file path back.
+- Run `/co-plan`'s process exactly, with one exception: skip the interactive "ask for confirmation" step — a dispatched subagent can't hold that conversation. Write the review-plan straight through and report its file path back.
 - Derive the plan's slug from the SEQ's title, so the human can tell which SEQ produced which plan.
 
-Each subagent's completion criterion is co-plan's own, unchanged: the self-plan's action sequence is fully ordered, every implementation step's hole/working decision is recorded, the ~30/70 budget holds, and the Recommended Human Work Order is filled in.
+Each subagent's completion criterion is co-plan's own, unchanged: the review-plan's action sequence is fully ordered, test-before-implementation on every unit of work, and the Review Sequence covers every implementation step top-down along the flow with a concrete verification point.
 
 ## 4. Report
 
-Once every subagent returns, list each SEQ id next to the self-plan path its subagent produced — or the reason it didn't finish, if one failed. Tell the user the next step for each plan is `/auto-action`.
+Once every subagent returns, list each SEQ id next to the review-plan path its subagent produced — or the reason it didn't finish, if one failed. Tell the user the next step for each plan is `/auto-action`.
 
-Completion criterion: every SEQ from step 2 has either a self-plan path or a reported failure reason — nothing left dispatched-and-unaccounted-for.
+Completion criterion: every SEQ from step 2 has either a review-plan path or a reported failure reason — nothing left dispatched-and-unaccounted-for.
 
 **DO NOT run `/auto-action` yourself** — that stays a separate, explicit step per plan, same as everywhere else in this pipeline.
