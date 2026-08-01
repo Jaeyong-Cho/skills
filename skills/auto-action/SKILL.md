@@ -18,17 +18,17 @@ Check the plan's `**Type:**` line. If it reads `Review-Plan`, check its `## Clos
 
 Execute the plan's entire Action Sequence straight through — no confirmation between steps. If a step fails or is blocked, stop immediately, report what failed and why, and do not continue.
 
-After all steps are done, report what changed for each step in order. Since the Action Sequence's fixed last step is a full test run, mark `[x] Test` in the plan's `## Closeout` checklist, then move the plan file from `.context/inbox/plan/{timestamp}-{slug}.md` to `.context/done/plan/{timestamp}-{slug}.md` (`mkdir -p .context/done/plan` if needed).
+After all steps are done, report what changed for each step in order. Then run the project's full build/test suite (not just the tests written in this sequence) and confirm it passes before marking anything done — if it fails, stop, report the failure, and do not mark `[x] Test` or move the plan file. Only once the full build/test run is confirmed green, mark `[x] Test` in the plan's `## Closeout` checklist, then move the plan file from `.context/inbox/plan/{timestamp}-{slug}.md` to `.context/done/plan/{timestamp}-{slug}.md` (`mkdir -p .context/done/plan` if needed).
 
-Completion criterion: every step executed and reported, or stopped on first failure with reason. If every step succeeded, the plan's Closeout checklist is fully checked and the file now lives in `.context/done/plan/`.
+Completion criterion: every step executed and reported, and the full build/test suite confirmed passing — or stopped on first failure (a step or the full build/test run) with reason. If every step succeeded and the full build/test run passed, the plan's Closeout checklist is fully checked and the file now lives in `.context/done/plan/`.
 
 ## Review-Plan Execution — Write & Test
 
 Execute the plan's entire Action Sequence straight through, exactly like Full Execution — every step is fully working code, there are no holes to leave open. If a step fails or is blocked, stop immediately, report what failed and why, and do not continue.
 
-After all steps are done, report what changed for each step in order, then mark `[x] Test` in the plan's `## Closeout` checklist. Leave `[ ] Review` unchecked and do **not** move the plan file yet — the plan isn't done until the human has walked its Review Sequence against this finished code.
+After all steps are done, report what changed for each step in order. Then run the project's full build/test suite (not just the tests written in this sequence) and confirm it passes — if it fails, stop, report the failure, and do not mark `[x] Test`. Only once the full build/test run is confirmed green, mark `[x] Test` in the plan's `## Closeout` checklist. Leave `[ ] Review` unchecked and do **not** move the plan file yet — the plan isn't done until the human has walked its Review Sequence against this finished code.
 
-Completion criterion: every step written and tested, `[x] Test` checked in the plan file, `[ ] Review` still open, plan file still in `.context/inbox/plan/`. This is a stopping point, not a failure — the plan now waits on the human to review before `/auto-action` can move past it.
+Completion criterion: every step written and tested, the full build/test suite confirmed passing, `[x] Test` checked in the plan file, `[ ] Review` still open, plan file still in `.context/inbox/plan/`. This is a stopping point, not a failure — the plan now waits on the human to review before `/auto-action` can move past it.
 
 ## Review-Plan Execution — Confirm Review
 
