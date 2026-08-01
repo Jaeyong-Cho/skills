@@ -10,7 +10,7 @@ Read `.context/inbox/plan/` — if an existing review-plan (`**Type:** Review-Pl
 
 Read `../references/tdd.md`, `../references/tdd-tests.md`, `../references/tdd-mocking.md`, `../references/tdd-refactoring.md`.
 
-Build the action sequence the same way `/fs-plan` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Every step is fully written, working code — there are no holes and no human-implementation steps; `/auto-action` writes the entire sequence itself, the same as a regular plan.
+Build the action sequence the same way `/fs-plan` does: one red-green TDD cycle per unit of work, test step before implementation step, each step naming the exact file, function or class, and expected input/output. Every step is fully written, working code — there are no holes and no human-implementation steps; `/auto-action` writes the entire sequence itself, the same as a regular plan. The Action Sequence's fixed last step is running the project's full build/test suite (not just the tests written in this sequence) and confirming it passes — `/auto-action` gates marking `[x] Test` in Closeout on this passing.
 
 Identify the main flow of the design (its **Scope**): the sequence of calls that carries data from input to output (e.g., input line → parse → evaluate → printed result). This flow, end-to-end, is what the human should be able to trace and review once the code exists. This scope identification is an agent-only working note — never a section in the shown result or the written plan file.
 
