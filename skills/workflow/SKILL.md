@@ -1,90 +1,59 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass — grill the goal first, then spec's scen -> req -> cmp -> seq stages straight through in one subagent, then one co-plan review-plan per resulting sequence, then one auto-action write-and-test pass per plan, each dispatched to its own subagent one at a time, then visualize the result with viewpoints. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass, skipping the spec stage entirely to save tokens — grill the goal first, then feed the grilled goal straight to fs-plan as the design, then one auto-action write-and-test pass, then visualize the result with viewpoints. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
 # Workflow
 
-Grill the goal first, then chain `/spec` from that goal to SEQ docs, then work the SEQ list one at a time: each gets its own subagent running `/co-plan` scoped to just that sequence, then its own subagent running `/auto-action` on the resulting plan.
+Grill the goal first, then take the grilled goal directly as "the design" `/fs-plan` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs written or read, and no Review Sequence for a human to walk afterward: `/viewpoints` is the review step instead. This trades away spec's traceability and co-plan's human-readable Review Sequence for token cost: skipping scen -> req -> cmp -> seq means one grilled goal turns straight into one plan instead of fanning out a full doc tree first. Reach for `/spec` + `/co-plan`'s original per-SEQ fan-out instead when that traceability, a human code walkthrough, or a goal genuinely large enough to need splitting into multiple SEQs, matters more than the token savings.
 
 ```
 Goal --> [main thread: grilling] --> grilled Goal
                                           |
                                           v
-                        [subagent: to_scen->to_req->to_cmp->to_seq] --> SEQ list
-                                                                          |
-                                                                (per SEQ, one at a time)
-                                                                          v
-                                                                co-plan --> review-plan
-                                                                          |
-                                                                (per plan, one at a time)
-                                                                          v
-                                                                auto-action (haiku) --> Write & Test
-                                                                          |
-                                                                          v
-                                                                Report --> viewpoints gallery
+                              [main thread: fs-plan] --> plan
+                                                              |
+                                                              v
+                                                    [subagent: auto-action (haiku)] --> Write & Test
+                                                              |
+                                                              v
+                                                    Report --> viewpoints gallery
 ```
 
 ## 1. Grill the goal
 
 Input: the goal (prose in the invocation, or a goal file the user names) — the same input `/spec`'s `to_scen` takes.
 
-Before dispatching anything, run `../grilling/SKILL.md` yourself, in the main thread, against this goal — grilling is interactive (it asks the user one question at a time via `AskUserQuestion`), so it cannot run inside a dispatched subagent; every subagent from step 3 onward runs unattended and explicitly skips confirmation steps for that reason. Interview the user until the goal's open decisions are resolved, then treat the grilled result as the goal for step 2.
+Before dispatching anything, run `../grilling/SKILL.md` yourself, in the main thread, against this goal — grilling is interactive (it asks the user one question at a time via `AskUserQuestion`), so it cannot run inside a dispatched subagent; step 3's subagent runs unattended for that reason. Interview the user until the goal's open decisions are resolved, then treat the grilled result as the goal for step 2.
 
 Completion criterion: grilling's own — a shared understanding reached on every branch of the goal that has discrete decisions to make. Don't proceed to step 2 on a goal that's still ambiguous.
 
-## 2. Resolve the goal
+## 2. Run fs-plan directly on the grilled goal
 
-Take the grilled goal from step 1 as the input to `/spec`'s `to_scen`.
+No `/spec` stage, no subagent fan-out here — run `../fs-plan/SKILL.md` yourself, in the main thread, taking the grilled goal from step 1 directly as "the design" `/fs-plan` expects. There's no SCN/REQ/CMP/SEQ paper trail to link back to; the plan's own Action Sequence is what carries the goal's intent forward from here.
 
-## 3. One subagent runs scen -> req -> cmp -> seq, in order
+Run `/fs-plan`'s process exactly. Write the plan and note its file path for step 3.
 
-Dispatch a single subagent with claude-sonnet-5 model to run the whole chain, and wait for it to finish. Isolating this in a subagent keeps the (potentially large) SCN/REQ/CMP/SEQ doc content out of your own context — you only need the resulting SEQ list for step 4, not the full doc bodies. Brief the subagent to:
+Completion criterion: fs-plan's own, unchanged — the plan's action sequence is fully ordered, test-before-implementation on every unit of work, ending in the fixed full-suite test step.
 
-- Read `../spec/SKILL.md` once, then execute its `to_scen`, `to_req`, `to_cmp`, `to_seq` sections itself, in this order, as one continuous pass in its own context — reading the chain as one continuous thread is what lets a slip in `to_req` get caught before it propagates into `to_cmp`.
-  1. `to_scen`: goal -> `spec/scen/SCN-*.md`.
-  2. `to_req`: those SCN docs -> `spec/req/REQ-*.md`.
-  3. `to_cmp`: those REQ docs -> `spec/cmp/CMP-*.md`.
-  4. `to_seq`: REQ + CMP docs -> `spec/seq/SEQ-*.md`.
-- Follow each section's own completion criterion before starting the next. If a stage stops (ambiguous goal, missing upstream content), stop the whole chain there and report why — never invent content to force the chain forward.
-- Report back: the list of SEQ ids and file paths written (or the stage it stopped at and why, if it didn't reach `to_seq`).
+## 3. Dispatch one subagent running auto-action
 
-If the subagent reports a stopped chain instead of a SEQ list, stop the whole workflow here and report why to the user — do not proceed to step 4 with a partial or invented SEQ list.
-
-## 4. One subagent per SEQ, sequentially
-
-Take the SEQ docs written in step 3 in order. For each one, dispatch a single subagent with claude-sonnet-5 model and wait for it to finish and report its review-plan path before dispatching the next — never more than one subagent running at a time. Brief each subagent to:
-
-- Read `../co-plan/SKILL.md` in full.
-- Treat this one SEQ, plus its linked REQ and CMP docs (follow the SEQ's `## Requirement` and `## Components` references), as "the design" `/co-plan` expects — not the whole spec tree.
-- Consider the previous plans from earlier SEQs as context for consistency.
-- Run `/co-plan`'s process exactly, with one exception: skip the interactive "ask for confirmation" step — a dispatched subagent can't hold that conversation. Write the review-plan straight through and report its file path back.
-- Derive the plan's slug from the SEQ's title, so the human can tell which SEQ produced which plan.
-
-Each subagent's completion criterion is co-plan's own, unchanged: the review-plan's action sequence is fully ordered, test-before-implementation on every unit of work, and the Review Sequence covers every implementation step top-down along the flow with a concrete verification point.
-
-## 5. One subagent per plan, sequentially, running auto-action
-
-Take the review-plan paths written in step 4, in the same order. For each one, dispatch a single subagent with the claude-haiku-4.5 model and wait for it to finish and report its result before dispatching the next — never more than one subagent running at a time, since these subagents write real code and running them concurrently risks file conflicts across plans that touch overlapping code. Brief each subagent to:
+Dispatch a single subagent with the claude-haiku-4.5 model, brief it to:
 
 - Read `../auto-action/SKILL.md` in full.
-- Run `/auto-action` on this one plan's file path exactly as written — do not skip or reinterpret its branching logic.
-- Since this is a freshly-written review-plan, this will follow the **Review-Plan Execution — Write & Test** branch: the whole action sequence gets written and tested, `[x] Test` is checked, and the plan stays in `.context/inbox/plan/` with `[ ] Review` open — that's the expected stopping point, not a failure. Report back what changed and the test results.
+- Run `/auto-action` on step 2's plan file path exactly as written — do not skip or reinterpret its branching logic.
+- Since this is a plan with no `**Type:**` line, this will follow the **Full Execution** branch: the whole action sequence gets written and tested, and once every step succeeds the plan moves from `.context/inbox/plan/` to `.context/done/plan/` — that's the expected stopping point. Report back what changed and the test results.
 - If a step fails or auto-action stops for any other reason, report exactly what failed and why — do not retry or work around it.
 
-Completion criterion: every review-plan from step 4 has been run through auto-action's Write & Test pass, with results reported — or a reported failure reason if one didn't finish.
+Completion criterion: the plan from step 2 has been run through auto-action's Full Execution pass, with results reported — or a reported failure reason if it didn't finish.
 
-## 6. Report
+## 4. Report
 
-Once every subagent returns, list each SEQ id next to its review-plan path and its auto-action test results — or the reason it didn't finish, if one failed. Tell the user each plan now needs a human to walk its Review Sequence against the finished code, then re-run `/auto-action` on it themselves to confirm review and close it out.
+Once the subagent returns, report the plan path next to its auto-action test results — or the reason it didn't finish, if it failed. If it succeeded, tell the user the plan has moved to `.context/done/plan/`; the viewpoints gallery in step 5 is the review, so no further human walkthrough step is needed unless the user wants one.
 
-Completion criterion: every SEQ from step 3 has either a review-plan path with auto-action results, or a reported failure reason — nothing left dispatched-and-unaccounted-for.
+## 5. Visualize the result
 
-## 7. Visualize the result
+Once step 4's report is written, run `../viewpoints/SKILL.md` against it. The subject is the workflow's own output, not external data: the grilled goal, the plan, and its auto-action Write & Test result (pass/fail, files touched). This is a structural/comparison subject — expect the shortlist to lean on structure & flow forms (e.g. a Goal -> plan -> test-result flow diagram) and comparison forms (e.g. plan vs. test outcome) rather than statistical charts. Follow viewpoints' steps through its gallery assembly, then report the gallery path/URL to the user alongside the step 4 report — do not run its server step yourself, same as viewpoints' own instruction.
 
-Once step 6's report is written, run `../viewpoints/SKILL.md` against it. The subject is the workflow's own output, not external data: the SEQ list, each SEQ's review-plan, and its auto-action Write & Test result (pass/fail, files touched). This is a structural/comparison subject — expect the shortlist to lean on structure & flow forms (e.g. a Goal -> SEQ -> plan -> test-result flow diagram) and comparison forms (e.g. SEQ vs. plan vs. test outcome) rather than statistical charts. Follow viewpoints' steps through its gallery assembly, then report the gallery path/URL to the user alongside the step 6 report — do not run its server step yourself, same as viewpoints' own instruction.
-
-Completion criterion: viewpoints' gallery `index.html` exists and its path has been reported to the user.
-
-**DO NOT run the Confirm Review pass yourself** — that step asks the human to confirm each Review Sequence entry, which only the human can genuinely do; workflow's job ends at Write & Test plus the viewpoints visualization of that result.
+Completion criterion: viewpoints' gallery `index.html` exists and its path has been reported to the user — this gallery is the workflow's review step, in place of a human-walked Review Sequence.
