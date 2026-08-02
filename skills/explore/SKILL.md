@@ -31,7 +31,7 @@ Bucket questions by tier from step 2 — at most two, `haiku` and `sonnet`. Each
 
 ## 5. Dispatch
 
-For each non-empty bucket from step 3, dispatch one Agent tool call at that tier's model, `run_in_background: false` — not fire-and-forget, since the calling context needs the answers to proceed. If both buckets are non-empty, issue both calls in the same message so they run in parallel.
+For each non-empty bucket from step 3, **MUST DISPATCH** one Agent tool call at that tier's model, `run_in_background: false` — not fire-and-forget, since the calling context needs the answers to proceed. If both buckets are non-empty, issue both calls in the same message so they run in parallel.
 
 Brief each subagent with its bucket's full `{question, evidence path}` list, to:
 
