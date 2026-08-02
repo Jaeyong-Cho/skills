@@ -1,6 +1,6 @@
 ---
 name: experiment
-description: Run an experiment on a user's request — grill the user for real intent and question, frame a hypothesis, design a method, execute it, analyze the results, build a visualization gallery via /viewpoints in a subagent, and write up an experiment report. Use when invoked as /experiment.
+description: Run an experiment on a user's request — grill the user for real intent and question (folded into /explore as one haiku-tier question, alongside any research the method needs), frame a hypothesis, design a method, execute it, analyze the results, build a visualization gallery via /viewpoints in a subagent, and write up an experiment report. Use when invoked as /experiment.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill, AskUserQuestion
 ---
@@ -13,13 +13,17 @@ Default to full latitude for running the method — install packages, run script
 
 ## Steps
 
-1. **Grill the user.** Invoke the `grilling` skill (Skill tool) with the user's request as the target, focused on three things: the real intent behind the request, the real question being tested (which may not match the literal wording), and why that question matters enough to spend an experiment on. Let grilling interview the user through `AskUserQuestion` until each of the three is settled — don't shortcut to one question and move on. Skip this step only if the user's request already states intent, question, and why unprompted, or the user explicitly asks to skip the interview. Done when intent, the real question, and its importance are each stated in one or two sentences, ready to carry into the hypothesis in step 2.
+1. **Grill the user.** Invoke the `grilling` skill (Skill tool) with the user's request as the target, focused on three things: the real intent behind the request, the real question being tested (which may not match the literal wording), and why that question matters enough to spend an experiment on. Let grilling interview the user through `AskUserQuestion` until each of the three is settled — don't shortcut to one question and move on. Skip the interview only if the user's request already states intent, question, and why unprompted, or the user explicitly asks to skip it — the grilling skill itself is invoked unmodified either way.
 
-2. **Frame the hypothesis.** Restate the real question from step 1 as one falsifiable hypothesis (a claim that could turn out false), plus the observations that would confirm it and the ones that would refute it. Slugify the hypothesis into `{slug}` (kebab-case, e.g. `cache-ttl-vs-latency`) and create `experiments/{slug}/`. Done when the hypothesis reads as a claim (not a question) and both confirming and refuting observations are named.
+   Once the interview concludes — or, if skipped, once intent/question/why are confirmed directly from the request — run `../explore/SKILL.md` with a single question: "What is the user's real intent, the real question being tested, and why it matters, given this interview?" — supply the full interview (every question asked and what it resolved to, or the request itself if skipped) as that question's own context. This is a write-up of an already-decided outcome, not a new judgment call, so it lands in explore's `haiku` tier. Treat the resulting evidence file, not the raw transcript, as step 2's source.
 
-3. **Design the method before touching anything.** Decide what varies (the treatment), what stays fixed (the control/baseline, if the hypothesis is comparative), what gets measured, and how — run code, benchmark, query data/logs, read source, targeted research, whatever the request actually calls for. Write this down before executing it: a method decided after seeing results is not a method. Done when the variable(s), control, and measurement are all named.
+   Done when intent, the real question, and its importance are each stated in that evidence file's Answer section, ready to carry into the hypothesis in step 2.
 
-4. **Execute the method and collect raw results.** Run it for real — actual commands, actual output — never fabricate or estimate a result to save time. Save raw output (command output, data files, logs) under `experiments/{slug}/raw/` so the report and gallery can both point back to it. Done when every measurement the method called for has a real, saved result.
+2. **Frame the hypothesis.** Restate the real question from step 1's evidence file as one falsifiable hypothesis (a claim that could turn out false), plus the observations that would confirm it and the ones that would refute it. Slugify the hypothesis into `{slug}` (kebab-case, e.g. `cache-ttl-vs-latency`) and create `experiments/{slug}/`. Done when the hypothesis reads as a claim (not a question) and both confirming and refuting observations are named.
+
+3. **Design the method before touching anything.** Decide what varies (the treatment), what stays fixed (the control/baseline, if the hypothesis is comparative), what gets measured, and how — run code, benchmark, query data/logs, read source, targeted research, whatever the request actually calls for. If measurement means reading source or checking facts rather than running/benchmarking something, that's the `read source, targeted research` case — plan to answer it via `../explore/SKILL.md` in step 4 rather than reading files directly in the main thread. Write this down before executing it: a method decided after seeing results is not a method. Done when the variable(s), control, and measurement are all named.
+
+4. **Execute the method and collect raw results.** Run it for real — actual commands, actual output — never fabricate or estimate a result to save time. For a research-shaped measurement, "running it" means invoking `../explore/SKILL.md` with the question(s) step 3 named; its evidence file(s) are the raw result, not a further summary of one — copy or write them directly under `experiments/{slug}/raw/`, don't re-derive their content in your own words. For an execution-shaped measurement, save raw output (command output, data files, logs) under `experiments/{slug}/raw/` so the report and gallery can both point back to it. Done when every measurement the method called for has a real, saved result.
 
 5. **Analyze against the hypothesis.** Compare the raw results to the confirming/refuting observations from step 2 and reach a verdict: supported, refuted, or inconclusive (state why, if inconclusive — usually insufficient signal or an uncontrolled variable). Done when the verdict is one of the three states and each is backed by a specific result, not a general impression.
 
@@ -44,7 +48,7 @@ Default to full latitude for running the method — install packages, run script
 **Verdict:** Supported | Refuted | Inconclusive
 
 ## Motivation
-- Intent: <why the user wanted this, from step 1's interview>
+- Intent: <why the user wanted this, from step 1's evidence file>
 - Real question: <the question being tested, which may not match the literal request>
 - Why it matters: <why it was worth an experiment>
 

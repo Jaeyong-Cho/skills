@@ -28,6 +28,8 @@ Which model tier an agent should run at is a property of the job's shape, not th
 | Commit messages, PR descriptions, changelog/release notes drafting | Mini | `haiku` | Facts are fixed by the diff/history; job is accurate summarization, not judgment |
 | Release readiness / semver version-bump decisions | Powerful | `opus` | A misjudged breaking-vs-minor call breaks downstream consumers silently; no automated check catches it |
 | Formatting, boilerplate, mechanical transforms | Mini | `haiku` | Deterministic transformation, trivially checked |
+| Fact-finding / narrow lookup (locate a definition, check a config value, list callers, confirm a version) | Mini | `haiku` | Well-specified locate task; a wrong or incomplete answer is cheap to notice and cheap to re-run |
+| Open-ended exploration / architecture reconnaissance (assess a pattern, survey trade-offs, judge risk before a design decision) | Medium | `sonnet` | High ambiguity in what's relevant, but exploration only gathers evidence — it doesn't make the risky call itself, so `sonnet` covers the reasoning without escalating to `opus` for a research step |
 | Anything not listed above | Medium | `sonnet` | Default to the middle tier until the axes above say otherwise |
 
 ## Escalation
