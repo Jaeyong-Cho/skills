@@ -17,6 +17,8 @@ From the user, collect three pieces of information:
 | Product target | Where code goes in the product repo | `apps/web/` or `services/api/` |
 | Integration goal | What to accomplish and success criteria | "Add A/B testing widget to checkout, wire into analytics" |
 
+Also judge integration size now (single file/module vs. multi-module or new architecture) — steps 3, 4, and 7 scale their dispatch depth to this judgment.
+
 ## 2. Set up session context
 
 Create a timestamped directory for this session's artifacts and decision records:
@@ -33,19 +35,23 @@ Create a timestamped directory for this session's artifacts and decision records
 
 ## 3. Explore experiment and product (subagents via `/explore`)
 
-Delegate to `explore` to gather reconnaissance on two fronts in parallel:
+**Check for prior artifacts first.** If the experiment location contains `report.md` and/or a `gallery/` from the `experiment` skill, treat those as ground truth — do not re-derive findings they already cover. Read them directly instead of dispatching a subagent for anything they already answer.
+
+Delegate to `explore` only for what the prior artifacts leave open, on up to two fronts in parallel:
 
 ### Experiments branch
-Research the experiment source for implementation patterns, data structures, assumptions, and lessons learned.
+Skip entirely if `report.md` already covers implementation patterns, data structures, assumptions, and lessons learned. Otherwise research the experiment source for whatever `report.md` doesn't answer.
 
 ### Product branch
-Research the product codebase for existing patterns, dependencies, architecture expectations, and integration points where the experiment fits.
+Research the product codebase for existing patterns, dependencies, architecture expectations, and integration points where the experiment fits. (No prior artifact covers this — always run.)
 
-**Outputs:** `experiments/{question-slug}.md` and `product/{question-slug}.md` in the session context.
+**Outputs:** `experiments/{question-slug}.md` (only if dispatched) and `product/{question-slug}.md` in the session context.
 
 ## 4. Grill for intent (Sonnet-5, foreground)
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
+**Check for a prior grilling output first.** If the experiment location has `.context/grilling/` from the `experiment` skill, pass that file into this step as prior intent — the real question and why it mattered are already answered. Scope this grill to what that file doesn't cover: product-specific unknowns (deployment target, non-negotiables specific to this codebase, integration constraints).
+
+**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings (and prior grilling output, if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
 
 - What success looks like (measurable, grounded in what's actually possible)
 - Non-negotiables vs. nice-to-haves (informed by codebase reality)
@@ -77,14 +83,16 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 ## 7. Review (Sonnet-5, foreground)
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/viewpoints` to build a multi-angle analysis of the result:
+**Scale to integration size.** For a small, low-risk integration (single file or module, no new architecture), skip the subagent entirely — read the diff yourself against `plan.md`, fix anything minor inline, and move on. Reserve the dispatch below for integrations that touch multiple modules, introduce new architecture, or carry real production risk.
+
+**MUST DISPATCH** (large/risky integrations only) sub-agent (Agent tool) with claude-sonnet-5 model `/viewpoints` to build a multi-angle analysis of the result:
 
 - Implementation completeness vs. plan
 - Code quality and test coverage
 - Integration risk (breaking changes, dependency conflicts, performance)
 - Production readiness and rollout strategy
 
-**Output:** `review/gallary/` in the session context — one file per analytical angle.
+**Output:** `review/gallary/` in the session context (large/risky path only; small integrations note the inline check in `plan.md` and proceed).
 
 ## 8. Handoff
 
