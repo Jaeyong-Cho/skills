@@ -25,6 +25,7 @@ network, geospatial, multivariate, structure & flow. "image" is a path (relative
 manifest file, or absolute) to a PNG/JPEG/SVG, or an existing data: URI.
 """
 import sys, os, json, base64, mimetypes, html
+from validate_svg import validate_svg_wellformed
 
 SLOT_HEX = {
     1: "#856c02", 2: "#2876b2", 3: "#9f5c0b", 4: "#00a2a3",
@@ -45,6 +46,11 @@ def embed_image(path, base_dir):
     if path.startswith("data:"):
         return path
     full = path if os.path.isabs(path) else os.path.join(base_dir, path)
+    if full.lower().endswith(".svg"):
+        try:
+            validate_svg_wellformed(full)
+        except ValueError as e:
+            sys.exit(f"{full}: invalid SVG, refusing to embed — {e}")
     mime = mimetypes.guess_type(full)[0] or "image/png"
     with open(full, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
