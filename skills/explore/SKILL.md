@@ -26,15 +26,8 @@ Never escalate to `opus`: exploration only gathers evidence, it doesn't decide �
 
 Bucket questions by tier from step 2 — at most two, `haiku` and `sonnet`. Each non-empty bucket gets exactly **one** subagent dispatch in step 5, however many questions it holds: one dispatch per tier, not per question. Split a bucket further only if it's too large for one subagent to juggle without overload.
 
-## 4. Prepare the evidence paths
-
-Run `date +%Y%m%d-%H%M%S` once per session, reused across every question. Derive a kebab-case task-slug for the overall task and a kebab-case question-slug per question, then:
-
-```bash
-mkdir -p .context/explore/{timestamp}-{task-slug}
-```
-
-Each question's path: `.context/explore/{timestamp}-{task-slug}/{question-slug}.md` — one file per question, even when one subagent answers several.
+- Write a proper location for evidence files,
+- `.../explore/{timestamp}-{task-slug}/{question-slug}.md`
 
 ## 5. Dispatch
 

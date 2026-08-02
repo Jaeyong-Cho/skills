@@ -1,12 +1,12 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass, skipping the spec stage to save tokens — grill the goal, run /explore once for the grilled intent (one haiku-tier question) plus any codebase facts the plan needs, feed that evidence straight to fs-plan as the design, then one auto-action write-and-test pass, then visualize with viewpoints. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass, skipping the spec stage to save tokens — grill the goal, run /explore once for the grilled intent (one haiku-tier question) plus any codebase facts the plan needs, feed that evidence straight to p4d as the design, then one work write-and-test pass, then visualize with viewpoints. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
 # Workflow
 
-Grill the goal, then take the grilled intent directly as "the design" `/fs-plan` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence: `/viewpoints` is the review step instead. This trades spec's traceability and co-plan's human-readable Review Sequence for token cost — skipping scen -> req -> cmp -> seq turns one grilled goal straight into one plan instead of a full doc tree. Reach for `/spec` + `/co-plan`'s per-SEQ fan-out instead when traceability, a human code walkthrough, or a goal large enough to need multiple SEQs matters more than the savings.
+Grill the goal, then take the grilled intent directly as "the design" `/p4d` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence: `/viewpoints` is the review step instead. This trades spec's traceability and co-plan's human-readable Review Sequence for token cost — skipping scen -> req -> cmp -> seq turns one grilled goal straight into one plan instead of a full doc tree. Reach for `/spec` + `/co-plan`'s per-SEQ fan-out instead when traceability, a human code walkthrough, or a goal large enough to need multiple SEQs matters more than the savings.
 
 ```
 Goal --> [sub-agent: grilling] --> interview
@@ -16,10 +16,10 @@ Goal --> [sub-agent: grilling] --> interview
                                 (user-intent + any codebase facts)
                                           |
                                           v
-                              [main thread: fs-plan] --> plan
+                              [subagent: p4d] --> plan
                                                               |
                                                               v
-                                                    [subagent: auto-action (haiku)] --> Write & Test
+                                                    [subagent: work (haiku)] --> Write & Test
                                                               |
                                                               v
                                                     Report --> viewpoints gallery
@@ -48,24 +48,24 @@ Let explore bucket, dispatch, and write every question — the intent one includ
 
 Completion criterion: explore's own — every posed question, intent included, has a written, read evidence file.
 
-## 3. Run fs-plan directly on the grilled intent
+## 3. Dispatch one subagent running p4d on the grilled intent
 
-No `/spec` stage, no subagent fan-out — run `../fs-plan/SKILL.md` yourself, in the main thread, taking step 2's evidence files directly as "the design" it expects. No SCN/REQ/CMP/SEQ trail; the plan's own Action Sequence carries the goal's intent forward.
+Dispatch a subagent (Agent tool) with claude-sonnet-5 model to run `../p4d/SKILL.md`, taking step 2's evidence files directly as "the design" it expects. The plan's own Action Sequence carries the goal's intent forward.
 
-Run `/fs-plan`'s process exactly. Write the plan; note its path for step 4.
+Pass `run_in_background: false` so the plan completes before proceeding. Brief the subagent to run `/p4d`'s process exactly and report the plan's path back.
 
-Completion criterion: fs-plan's own — action sequence fully ordered, test-before-implementation throughout, ending in the fixed full-suite test step.
+Completion criterion: p4d's own — action sequence fully ordered, test-before-implementation throughout, ending in the fixed full-suite test step.
 
-## 4. Dispatch one subagent running auto-action
+## 4. Dispatch one subagent running work
 
 Dispatch a single subagent with the claude-haiku-4.5 model, brief it to:
 
-- Read `../auto-action/SKILL.md` in full.
-- Run `/auto-action` on step 3's plan path exactly as written — don't skip or reinterpret its branching logic.
+- Read `../work/SKILL.md` in full.
+- Run `/work` on step 3's plan path exactly as written — don't skip or reinterpret its branching logic.
 - With no `**Type:**` line, this follows the **Full Execution** branch: the whole sequence gets written and tested, and once every step succeeds the plan moves to `.context/done/plan/` — the expected stop. Report what changed and the test results.
-- If a step fails or auto-action stops otherwise, report exactly why — don't retry or work around it.
+- If a step fails or work stops otherwise, report exactly why — don't retry or work around it.
 
-Completion criterion: the plan from step 3 has run through auto-action's Full Execution pass, results reported — or a reported failure reason.
+Completion criterion: the plan from step 3 has run through work's Full Execution pass, results reported — or a reported failure reason.
 
 ## 5. Report
 
