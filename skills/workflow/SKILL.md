@@ -1,12 +1,12 @@
 ---
 name: workflow
-description: Run the goal-to-plan pipeline in one pass, skipping the spec stage entirely to save tokens — grill the goal first, then run /explore once for both the grilled intent (as one haiku-tier question) and any codebase facts the plan needs, feed that evidence straight to fs-plan as the design, then one auto-action write-and-test pass, then visualize the result with viewpoints. Use when invoked as /workflow.
+description: Run the goal-to-plan pipeline in one pass, skipping the spec stage to save tokens — grill the goal, run /explore once for the grilled intent (one haiku-tier question) plus any codebase facts the plan needs, feed that evidence straight to fs-plan as the design, then one auto-action write-and-test pass, then visualize with viewpoints. Use when invoked as /workflow.
 disable-model-invocation: true
 ---
 
 # Workflow
 
-Grill the goal first, then take the grilled intent directly as "the design" `/fs-plan` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs written or read, and no Review Sequence for a human to walk afterward: `/viewpoints` is the review step instead. This trades away spec's traceability and co-plan's human-readable Review Sequence for token cost: skipping scen -> req -> cmp -> seq means one grilled goal turns straight into one plan instead of fanning out a full doc tree first. Reach for `/spec` + `/co-plan`'s original per-SEQ fan-out instead when that traceability, a human code walkthrough, or a goal genuinely large enough to need splitting into multiple SEQs, matters more than the token savings.
+Grill the goal, then take the grilled intent directly as "the design" `/fs-plan` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence: `/viewpoints` is the review step instead. This trades spec's traceability and co-plan's human-readable Review Sequence for token cost — skipping scen -> req -> cmp -> seq turns one grilled goal straight into one plan instead of a full doc tree. Reach for `/spec` + `/co-plan`'s per-SEQ fan-out instead when traceability, a human code walkthrough, or a goal large enough to need multiple SEQs matters more than the savings.
 
 ```
 Goal --> [main thread: grilling] --> interview
@@ -27,48 +27,48 @@ Goal --> [main thread: grilling] --> interview
 
 ## 1. Grill the goal
 
-Input: the goal (prose in the invocation, or a goal file the user names) — the same input `/spec`'s `to_scen` takes.
+Input: the goal (prose in the invocation, or a goal file the user names) — same input `/spec`'s `to_scen` takes.
 
-Run `../grilling/SKILL.md` yourself, in the main thread, against this goal, unmodified — grilling is interactive (it asks the user one question at a time via `AskUserQuestion`), so it cannot run inside a dispatched subagent; step 4's subagent runs unattended for that reason. Interview the user until the goal's open decisions are resolved.
+Run `../grilling/SKILL.md` yourself, in the main thread, unmodified — it's interactive (`AskUserQuestion`, one question at a time), so it can't run in a dispatched subagent; that's why step 4's subagent can run unattended. Interview until the goal's open decisions are resolved.
 
-Completion criterion: grilling's own — a shared understanding reached on every branch of the goal that has discrete decisions to make. Don't proceed to step 2 on a goal that's still ambiguous.
+Completion criterion: grilling's own — shared understanding on every branch with a discrete decision. Don't proceed on a goal that's still ambiguous.
 
 ## 2. Explore for the grilled intent and any facts the plan needs
 
-Run `../explore/SKILL.md` once, posing every question step 3's sequencing needs an answer to — the grilled intent is just one more question in that batch, not a separate mechanism:
+Run `../explore/SKILL.md` once, posing every question step 3 needs answered — the grilled intent is just one more question in that batch, not a separate mechanism:
 
-- **One question for the grilled intent itself**: "What is the resolved goal, and the key decisions behind it, from this interview?" — supply the full interview (every question asked and what it resolved to) as the question's own context. This is a write-up of an already-decided outcome, not a new judgment call, so it classifies as explore's `haiku` tier (same reasoning as explore's fact-finding tier: the source of truth already exists, the job is accurate write-up).
-- **One question per codebase fact** step 3's sequencing needs but the interview doesn't already state — where the affected code/tests currently live, what an existing pattern looks like, whether a dependency is already present, and the like. Skip these if the interview is already self-contained enough that step 3 needs nothing further from the codebase.
+- **The grilled intent**: "What is the resolved goal, and the key decisions behind it, from this interview?" — give the full interview (every question asked, what it resolved to) as context. It's a write-up of an already-decided outcome, not a new judgment call, so it's explore's `haiku` tier: the source of truth already exists.
+- **Any codebase fact** step 3 needs but the interview doesn't state — where affected code/tests live, what an existing pattern looks like, whether a dependency exists. Skip if the interview is already self-contained.
 
-Let explore bucket, dispatch, and write every question — including the intent one — into the same `.context/explore/{timestamp}-{task-slug}/` session directory. Treat the resulting evidence files, not the raw interview transcript, as "the design" from here on.
+Let explore bucket, dispatch, and write every question — the intent one included — into one `.context/explore/{timestamp}-{task-slug}/` session. Treat those evidence files, not the raw transcript, as "the design" from here on.
 
-Completion criterion: explore's own — every posed question (the intent question plus any fact questions) has a written, read evidence file.
+Completion criterion: explore's own — every posed question, intent included, has a written, read evidence file.
 
 ## 3. Run fs-plan directly on the grilled intent
 
-No `/spec` stage, no subagent fan-out here — run `../fs-plan/SKILL.md` yourself, in the main thread, taking step 2's evidence files directly as "the design" `/fs-plan` expects. There's no SCN/REQ/CMP/SEQ paper trail to link back to; the plan's own Action Sequence is what carries the goal's intent forward from here.
+No `/spec` stage, no subagent fan-out — run `../fs-plan/SKILL.md` yourself, in the main thread, taking step 2's evidence files directly as "the design" it expects. No SCN/REQ/CMP/SEQ trail; the plan's own Action Sequence carries the goal's intent forward.
 
-Run `/fs-plan`'s process exactly. Write the plan and note its file path for step 4.
+Run `/fs-plan`'s process exactly. Write the plan; note its path for step 4.
 
-Completion criterion: fs-plan's own, unchanged — the plan's action sequence is fully ordered, test-before-implementation on every unit of work, ending in the fixed full-suite test step.
+Completion criterion: fs-plan's own — action sequence fully ordered, test-before-implementation throughout, ending in the fixed full-suite test step.
 
 ## 4. Dispatch one subagent running auto-action
 
 Dispatch a single subagent with the claude-haiku-4.5 model, brief it to:
 
 - Read `../auto-action/SKILL.md` in full.
-- Run `/auto-action` on step 3's plan file path exactly as written — do not skip or reinterpret its branching logic.
-- Since this is a plan with no `**Type:**` line, this will follow the **Full Execution** branch: the whole action sequence gets written and tested, and once every step succeeds the plan moves from `.context/inbox/plan/` to `.context/done/plan/` — that's the expected stopping point. Report back what changed and the test results.
-- If a step fails or auto-action stops for any other reason, report exactly what failed and why — do not retry or work around it.
+- Run `/auto-action` on step 3's plan path exactly as written — don't skip or reinterpret its branching logic.
+- With no `**Type:**` line, this follows the **Full Execution** branch: the whole sequence gets written and tested, and once every step succeeds the plan moves to `.context/done/plan/` — the expected stop. Report what changed and the test results.
+- If a step fails or auto-action stops otherwise, report exactly why — don't retry or work around it.
 
-Completion criterion: the plan from step 3 has been run through auto-action's Full Execution pass, with results reported — or a reported failure reason if it didn't finish.
+Completion criterion: the plan from step 3 has run through auto-action's Full Execution pass, results reported — or a reported failure reason.
 
 ## 5. Report
 
-Once the subagent returns, report the plan path next to its auto-action test results — or the reason it didn't finish, if it failed. If it succeeded, tell the user the plan has moved to `.context/done/plan/`; the viewpoints gallery in step 6 is the review, so no further human walkthrough step is needed unless the user wants one.
+Once the subagent returns, report the plan path next to its test results — or why it didn't finish. If it succeeded, tell the user the plan moved to `.context/done/plan/`; step 6's viewpoints gallery is the review, so no further walkthrough is needed unless the user wants one.
 
 ## 6. Visualize the result
 
-Once step 5's report is written, run `../viewpoints/SKILL.md` against it. The subject is the workflow's own output, not external data: step 2's evidence files, the plan, and its auto-action Write & Test result (pass/fail, files touched). This is a structural/comparison subject — expect the shortlist to lean on structure & flow forms (e.g. a Goal -> plan -> test-result flow diagram) and comparison forms (e.g. plan vs. test outcome) rather than statistical charts. Follow viewpoints' steps through its gallery assembly, then report the gallery path/URL to the user alongside the step 5 report — do not run its server step yourself, same as viewpoints' own instruction.
+Once step 5's report is written, run `../viewpoints/SKILL.md` against it. Subject: the workflow's own output — step 2's evidence files, the plan, and its Write & Test result (pass/fail, files touched). A structural/comparison subject — expect flow forms (Goal -> plan -> test-result) and comparison forms (plan vs. test outcome) over statistical charts. Follow viewpoints' gallery assembly, then report the gallery path/URL alongside step 5's report — don't run its server step yourself.
 
-Completion criterion: viewpoints' gallery `index.html` exists and its path has been reported to the user — this gallery is the workflow's review step, in place of a human-walked Review Sequence.
+Completion criterion: viewpoints' gallery `index.html` exists, its path reported to the user — this gallery is the workflow's review step, replacing a human-walked Review Sequence.
