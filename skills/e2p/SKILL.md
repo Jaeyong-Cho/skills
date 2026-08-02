@@ -13,9 +13,11 @@ From the user, collect three pieces of information:
 
 | Input | Purpose | Example |
 |---|---|---|
-| Experiment location | Where the research/prototype lives | `../my-experiment/` or a GitHub URL |
+| Experiment location(s) | Where the research/prototype(s) live — one or more | `../my-experiment/` or a GitHub URL |
 | Product target | Where code goes in the product repo | `apps/web/` or `services/api/` |
 | Integration goal | What to accomplish and success criteria | "Add A/B testing widget to checkout, wire into analytics" |
+
+Multiple experiment locations are allowed when several prototypes feed one integration (e.g. one experiment validated the algorithm, another validated the UI pattern). Treat each independently in steps 3-4, then reconcile them into one plan in step 5 — note in `plan.md` which piece of the design each experiment is responsible for.
 
 Also judge integration size now (single file/module vs. multi-module or new architecture) — steps 3, 4, and 7 scale their dispatch depth to this judgment.
 
@@ -35,23 +37,23 @@ Create a timestamped directory for this session's artifacts and decision records
 
 ## 3. Explore experiment and product (subagents via `/explore`)
 
-**Check for prior artifacts first.** If the experiment location contains `report.md` and/or a `gallery/` from the `experiment` skill, treat those as ground truth — do not re-derive findings they already cover. Read them directly instead of dispatching a subagent for anything they already answer.
+**Check for prior artifacts first.** For each experiment location, look for `handoff/manifest.md` from the `experiment` skill — it's the one path to read, linking to that experiment's `report.md`, `.context/grilling/`, and `.context/explore-context/` (machine-readable evidence) plus `gallery/index.html` (human-only reference — skip reading it, its content is already summarized in `report.md`). Treat the machine-readable links as ground truth; do not re-derive findings they already cover. If a location has no `handoff/manifest.md` (pre-dates this convention, or wasn't built with `/experiment`), fall back to checking for `report.md` directly.
 
 Delegate to `explore` only for what the prior artifacts leave open, on up to two fronts in parallel:
 
 ### Experiments branch
-Skip entirely if `report.md` already covers implementation patterns, data structures, assumptions, and lessons learned. Otherwise research the experiment source for whatever `report.md` doesn't answer.
+Skip entirely, per experiment, if its manifest already covers implementation patterns, data structures, assumptions, and lessons learned. Otherwise research that experiment source for whatever its manifest doesn't answer. With multiple experiment locations, run this check independently per location.
 
 ### Product branch
-Research the product codebase for existing patterns, dependencies, architecture expectations, and integration points where the experiment fits. (No prior artifact covers this — always run.)
+Research the product codebase for existing patterns, dependencies, architecture expectations, and integration points where the experiment(s) fit. (No prior artifact covers this — always run, once, regardless of how many experiment locations there are.)
 
-**Outputs:** `experiments/{question-slug}.md` (only if dispatched) and `product/{question-slug}.md` in the session context.
+**Outputs:** `experiments/{exp-slug}/{question-slug}.md` (only for locations needing it; nest under the experiment's own slug when there are multiple) and `product/{question-slug}.md` in the session context.
 
 ## 4. Grill for intent (Sonnet-5, foreground)
 
-**Check for a prior grilling output first.** If the experiment location has `.context/grilling/` from the `experiment` skill, pass that file into this step as prior intent — the real question and why it mattered are already answered. Scope this grill to what that file doesn't cover: product-specific unknowns (deployment target, non-negotiables specific to this codebase, integration constraints).
+**Check for prior grilling output first.** For each experiment location, its `handoff/manifest.md` links to that experiment's `.context/grilling/` — pass all of them into this step as prior intent, the real question(s) and why they mattered are already answered. Scope this grill to what those files don't cover: product-specific unknowns (deployment target, non-negotiables specific to this codebase, integration constraints) and, when there are multiple experiments, how their findings reconcile — do they agree, does one supersede another, do they cover disjoint parts of the goal?
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings (and prior grilling output, if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
+**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings (and prior grilling output(s), if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
 
 - What success looks like (measurable, grounded in what's actually possible)
 - Non-negotiables vs. nice-to-haves (informed by codebase reality)
@@ -92,7 +94,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 - Integration risk (breaking changes, dependency conflicts, performance)
 - Production readiness and rollout strategy
 
-**Output:** `review/gallary/` in the session context (large/risky path only; small integrations note the inline check in `plan.md` and proceed).
+**Output:** `review/gallery/` in the session context (large/risky path only; small integrations note the inline check in `plan.md` and proceed).
 
 ## 8. Handoff
 

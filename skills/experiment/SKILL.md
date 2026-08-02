@@ -32,14 +32,16 @@ Default to full latitude for running the method — install packages, run script
 
 8. **Write the experiment report.** Assemble `experiments/{slug}/report.md` using the template below. Done when every section is filled from real artifacts of steps 1-7 (not restated boilerplate) and the report opens with the verdict, not buried at the end.
 
-9. **Summarize in the project README.** Append a short bullet to the `## Experiments` section of the project root `README.md` (create the section, or the file, if missing) — one bullet per experiment, verdict-first, linking to the full report. Never restate the report's contents beyond that one line. Done when the bullet is added and its link resolves.
+9. **Package the handoff.** Create `experiments/{slug}/handoff/manifest.md` with relative links to `../report.md`, `../.context/grilling/`, and `../.context/explore-context/` — mark these as machine-readable, for downstream tooling (e.g. `/e2p`) to read as evidence. Also link `../gallery/index.html`, labeled explicitly as human-only reference (rendered HTML, not something an agent should parse for findings) — the report's prose already carries anything the gallery shows. This is the single path downstream tooling should read — it should never need to know this skill's internal layout. Done when `manifest.md` exists and every link in it resolves.
 
-   ```
-   ## Experiments
-   - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <one-line takeaway>. [Report](experiments/{slug}/report.md)
-   ```
+10. **Summarize in the project README.** Append a short bullet to the `## Experiments` section of the project root `README.md` (create the section, or the file, if missing) — one bullet per experiment, verdict-first, linking to the full report. Never restate the report's contents beyond that one line. Done when the bullet is added and its link resolves.
 
-10. **Refresh the experiments dashboard.** Run `python ../goal-init/scripts/build_dashboard.py experiments experiments/index.html` (path relative to this skill's own directory) so this experiment's verdict, hypothesis, and gallery thumbnail appear alongside every prior one. This is the same script `/goal-init` uses to build the dashboard from scratch — don't reimplement it here. Done when `experiments/index.html` exists and includes this experiment's slug.
+    ```
+    ## Experiments
+    - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <one-line takeaway>. [Report](experiments/{slug}/report.md)
+    ```
+
+11. **Refresh the experiments dashboard.** Run `python ../goal-init/scripts/build_dashboard.py experiments experiments/index.html` (path relative to this skill's own directory) so this experiment's verdict, hypothesis, and gallery thumbnail appear alongside every prior one. This is the same script `/goal-init` uses to build the dashboard from scratch — don't reimplement it here. Done when `experiments/index.html` exists and includes this experiment's slug.
 
 ## Report template (`experiments/{slug}/report.md`)
 
