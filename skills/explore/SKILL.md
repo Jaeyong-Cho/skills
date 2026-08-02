@@ -1,6 +1,6 @@
 ---
 name: explore
-description: Delegate fact-finding to a subagent instead of spending the main thread's context on raw search output — get one evidence file per question: a direct answer backed by cited bullets. Tiers the model to the question's ambiguity — haiku for a narrow lookup ("where is X defined?", "does config Y exist?"), sonnet for open-ended reconnaissance ("is this pattern safe to reuse?", "what are the trade-offs before a design decision?") — never opus, since exploring only gathers evidence, it doesn't decide. Use before any non-trivial implementation, design, or debugging task that needs facts first, or when invoked as /explore.
+description: Delegate fact-finding to a subagent instead of spending the main thread's context on raw search output — get one evidence file per question - a direct answer backed by cited bullets. Tiers the model to the question's ambiguity — haiku for a narrow lookup ("where is X defined?", "does config Y exist?"), sonnet for open-ended reconnaissance ("is this pattern safe to reuse?", "what are the trade-offs before a design decision?") — never opus, since exploring only gathers evidence, it doesn't decide. Use before any non-trivial implementation, design, or debugging task that needs facts first, or when invoked as /explore.
 ---
 
 # Explore
