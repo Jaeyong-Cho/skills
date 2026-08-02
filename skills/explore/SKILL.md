@@ -1,6 +1,6 @@
 ---
 name: explore
-description: Delegate fact-finding to a subagent instead of spending the main thread's context on raw search output — get one evidence file per question - a direct answer backed by cited bullets. Tiers the model to the question's ambiguity — haiku for a narrow lookup ("where is X defined?", "does config Y exist?"), sonnet for open-ended reconnaissance ("is this pattern safe to reuse?", "what are the trade-offs before a design decision?") — never opus, since exploring only gathers evidence, it doesn't decide. Use before any non-trivial implementation, design, or debugging task that needs facts first, or when invoked as /explore.
+description: Delegate fact-finding to a subagent instead of spending the main thread's context on raw search output — get one evidence file per question - a direct answer backed by cited bullets. Defaults to haiku for lookups and bounded investigations ("where is X defined?", "does config Y exist?", "why does this test fail?"), reserving sonnet only for genuinely open-ended reconnaissance needing judgment ("is this pattern safe to reuse?", "what are the trade-offs before a design decision?") — never opus, since exploring only gathers evidence, it doesn't decide. Use before any non-trivial implementation, design, or debugging task that needs facts first, or when invoked as /explore.
 ---
 
 # Explore
@@ -17,10 +17,10 @@ Apply `../../references/model-selection.md`'s three axes (ambiguity, mistake cos
 
 | Tier | Shape of the question | Example |
 |---|---|---|
-| `haiku` | Narrow locate/lookup; a wrong or incomplete answer is cheap to notice and cheap to re-run | "Where is `X` defined?", "Does config `Y` set `Z`?", "List every caller of `F`." |
-| `sonnet` | Anything else — a bounded investigation needing some reasoning, or open-ended reconnaissance with high ambiguity in what's even relevant | "Why does this specific test fail?", "Is this pattern safe to reuse here?", "What are the trade-offs before we pick a design?" |
+| `haiku` | Default tier. Locate/lookup, or a bounded investigation where the search path is knowable in advance even if it takes a few hops — a wrong or incomplete answer is cheap to notice and cheap to re-run | "Where is `X` defined?", "Does config `Y` set `Z`?", "List every caller of `F`.", "Why does this specific test fail?" |
+| `sonnet` | Reserve for genuinely open-ended reconnaissance where what's even relevant is unclear, or the answer requires weighing trade-offs rather than reporting findings | "Is this pattern safe to reuse here?", "What are the trade-offs before we pick a design?" |
 
-Never escalate to `opus`: exploration only gathers evidence, it doesn't decide — `sonnet` covers a risky question's reasoning without opus's cost.
+Default to `haiku` unless a question clearly needs judgment, not just search. Never escalate to `opus`: exploration only gathers evidence, it doesn't decide — `sonnet` covers a risky question's reasoning without opus's cost.
 
 ## 3. Group questions by tier
 
