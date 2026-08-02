@@ -45,7 +45,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 ## 4. Grill for intent (Sonnet-5, foreground)
 
-Dispatch `/grilling` using the exploration findings to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
+Dispatch sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
 
 - What success looks like (measurable, grounded in what's actually possible)
 - Non-negotiables vs. nice-to-haves (informed by codebase reality)
@@ -56,7 +56,7 @@ Dispatch `/grilling` using the exploration findings to ground the conversation. 
 
 ## 5. Plan implementation (Sonnet-5, foreground)
 
-Dispatch `/fs-plan` to design the architecture for integrating the experiment into the product:
+Dispatch sub-agent (Agent tool) with claude-sonnet-5 model `/p4d` to plan to implement the intent in the product codebase.
 
 - Where code lands (file structure, module boundaries)
 - What refactors or scaffolding are needed
@@ -67,7 +67,7 @@ Dispatch `/fs-plan` to design the architecture for integrating the experiment in
 
 ## 6. Implement (Haiku-4.5, foreground)
 
-Dispatch `/auto-action` to execute the implementation plan:
+Dispatch sub-agent (Agent tool) with claude-haiku-4-5 model `/work` to execute the implementation plan:
 
 - Apply code changes to the product codebase
 - Run existing tests to catch regressions
@@ -77,7 +77,7 @@ Dispatch `/auto-action` to execute the implementation plan:
 
 ## 7. Review (Sonnet-5, foreground)
 
-Dispatch `/viewpoints` to build a multi-angle analysis of the result:
+Dispatch sub-agent (Agent tool) with claude-sonnet-5 model `/viewpoints` to build a multi-angle analysis of the result:
 
 - Implementation completeness vs. plan
 - Code quality and test coverage
