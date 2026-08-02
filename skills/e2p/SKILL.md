@@ -87,7 +87,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 **Scale to integration size.** For a small, low-risk integration (single file or module, no new architecture), skip the subagent entirely — read the diff yourself against `plan.md`, fix anything minor inline, and move on. Reserve the dispatch below for integrations that touch multiple modules, introduce new architecture, or carry real production risk.
 
-**MUST DISPATCH** (large/risky integrations only) sub-agent (Agent tool) with claude-sonnet-5 model `/viewpoints` to build a multi-angle analysis of the result:
+**MUST DISPATCH** (large/risky integrations only) sub-agent (Agent tool) with claude-haiku-4.5 model `/viewpoints` to build a multi-angle analysis of the result — haiku is enough here, since `/viewpoints` renders views for a human reviewer, it doesn't make the go/no-go call itself:
 
 - Implementation completeness vs. plan
 - Code quality and test coverage

@@ -29,7 +29,7 @@ Bucket questions by tier from step 2 — at most two, `haiku` and `sonnet`. Each
 ## 4. Choose evidence file locations
 
 Write a proper location for evidence files:
-- `.../explore/{timestamp}-{task-slug}/{question-slug}.md`
+- `.../{question-slug}.md`
 
 ## 5. Dispatch
 
