@@ -26,7 +26,9 @@ Never escalate to `opus`: exploration only gathers evidence, it doesn't decide �
 
 Bucket questions by tier from step 2 — at most two, `haiku` and `sonnet`. Each non-empty bucket gets exactly **one** subagent dispatch in step 5, however many questions it holds: one dispatch per tier, not per question. Split a bucket further only if it's too large for one subagent to juggle without overload.
 
-- Write a proper location for evidence files,
+## 4. Choose evidence file locations
+
+Write a proper location for evidence files:
 - `.../explore/{timestamp}-{task-slug}/{question-slug}.md`
 
 ## 5. Dispatch
@@ -36,9 +38,12 @@ For each non-empty bucket from step 3, **MUST DISPATCH** one Agent tool call at 
 Brief each subagent with its bucket's full `{question, evidence path}` list, to:
 
 - Research each question independently — one question's findings shouldn't bleed into another's file.
+- Verify the two highest-risk claim shapes directly, not by proxy:
+  - **Absence/removal** ("X was already removed," "X doesn't exist," "X is unused"): search for the literal named artifact itself (exact filename, symbol, string). A search that only covers *related* names (e.g. the APIs a file uses) is not evidence the file itself is gone — a proxy match can pass while the literal claim is false.
+  - **Full enumeration** ("the only state/hooks/callers/fields are Y"): grep for every instance of the pattern across the whole file/symbol (e.g. every `useState`/`useReducer` call), don't summarize from a partial read. An omitted item is worse than a wrong one — nothing points at it later.
 - Write each question's findings to its own path, structured as:
   - **Answer**, first: a direct, complete, concise answer — no padding, no restating evidence in prose, but complete enough that the calling context needs nothing else to understand it.
-  - **Evidence**, per `../../references/document-style.md`: one claim per bullet, citation (file:line or URL) nested under it — grounds the Answer, doesn't restate it.
+  - **Evidence**, per `../../references/document-style.md`: one claim per bullet, citation (file:line or URL) nested under it, tagged `[DIRECT]` (the search/read positively confirmed the literal thing claimed) or `[INFERRED]` (deduced without checking the thing itself) — grounds the Answer, doesn't restate it.
   - **Open gaps**: anything unresolved or uncertain — don't bury it by omitting it from the Answer.
 - Reply with only the evidence file paths — no summary. The Answer section is the deliverable; a reply-level summary is just an uncontrolled second copy of it.
 
