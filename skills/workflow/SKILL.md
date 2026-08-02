@@ -9,7 +9,7 @@ disable-model-invocation: true
 Grill the goal, then take the grilled intent directly as "the design" `/fs-plan` expects — no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence: `/viewpoints` is the review step instead. This trades spec's traceability and co-plan's human-readable Review Sequence for token cost — skipping scen -> req -> cmp -> seq turns one grilled goal straight into one plan instead of a full doc tree. Reach for `/spec` + `/co-plan`'s per-SEQ fan-out instead when traceability, a human code walkthrough, or a goal large enough to need multiple SEQs matters more than the savings.
 
 ```
-Goal --> [main thread: grilling] --> interview
+Goal --> [sub-agent: grilling] --> interview
                                           |
                                           v
                               [subagent(s): explore] --> evidence file(s)
@@ -25,11 +25,15 @@ Goal --> [main thread: grilling] --> interview
                                                     Report --> viewpoints gallery
 ```
 
+- Run `date +%Y%m%d-%H%M%S` once per session, reused across every question. Derive a kebab-case task-slug for the overall task and a kebab-case question-slug per question, then:
+- The context of this session is in the `.context/{timestamp}-{task-slub}/` directory.
+- Defaultly use `explore` skill to research and explore for getting informations.
+
 ## 1. Grill the goal
 
 Input: the goal (prose in the invocation, or a goal file the user names) — same input `/spec`'s `to_scen` takes.
 
-Run `../grilling/SKILL.md` yourself, in the main thread, unmodified — it's interactive (`AskUserQuestion`, one question at a time), so it can't run in a dispatched subagent; that's why step 4's subagent can run unattended. Interview until the goal's open decisions are resolved.
+Dispatch a subagent (Agent tool) with claude-sonnet-5 model to run `../grilling/SKILL.md` on the goal. Pass `run_in_background: false` so the interview completes before proceeding. The subagent will use `AskUserQuestion` to interview interactively until the goal's open decisions are resolved. Report the grilled goal when it returns at the `.context/{timestamp}-{task-slug}/grilling/` path.
 
 Completion criterion: grilling's own — shared understanding on every branch with a discrete decision. Don't proceed on a goal that's still ambiguous.
 
@@ -40,7 +44,7 @@ Run `../explore/SKILL.md` once, posing every question step 3 needs answered — 
 - **The grilled intent**: "What is the resolved goal, and the key decisions behind it, from this interview?" — give the full interview (every question asked, what it resolved to) as context. It's a write-up of an already-decided outcome, not a new judgment call, so it's explore's `haiku` tier: the source of truth already exists.
 - **Any codebase fact** step 3 needs but the interview doesn't state — where affected code/tests live, what an existing pattern looks like, whether a dependency exists. Skip if the interview is already self-contained.
 
-Let explore bucket, dispatch, and write every question — the intent one included — into one `.context/explore/{timestamp}-{task-slug}/` session. Treat those evidence files, not the raw transcript, as "the design" from here on.
+Let explore bucket, dispatch, and write every question — the intent one included — into one `.context/{timestamp}-{task-slug}/explore` session. Treat those evidence files, not the raw transcript, as "the design" from here on.
 
 Completion criterion: explore's own — every posed question, intent included, has a written, read evidence file.
 

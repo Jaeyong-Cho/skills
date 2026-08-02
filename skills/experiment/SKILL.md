@@ -11,13 +11,12 @@ Turn a user's request into a small scientific-method run: hypothesis, method, ex
 
 Default to full latitude for running the method — install packages, run scripts, hit local services, whatever the hypothesis needs. MUST NOT remove, edit, or create anything outside `experiments/{slug}/`, except appending the summary bullet to the project root `README.md` in step 7 and regenerating `experiments/index.html` in step 8 — treat everything else as read-only. If the method needs to touch code or data elsewhere, copy it into `experiments/{slug}/raw/` first and work on the copy.
 
+- The context of this session is in the `experiments/{slug}/.context/` directory.
+- Defaultly use `explore` skill to research and explore for getting informations.
+
 ## Steps
 
-1. **Grill the user.** Invoke the `grilling` skill (Skill tool) on the user's request, focused on three things: the real intent, the real question being tested (may not match the literal wording), and why it matters enough to spend an experiment on. Let it interview through `AskUserQuestion` until all three are settled — don't shortcut to one question. Skip the interview only if the request already states intent, question, and why, or the user asks to skip — grilling itself runs unmodified either way.
-
-   Once the interview concludes (or is skipped and intent/question/why are confirmed from the request), run `../explore/SKILL.md` with one question: "What is the user's real intent, the real question, and why it matters, given this interview?" — give the full interview (or the request, if skipped) as context. It's a write-up of an already-decided outcome, so it lands in explore's `haiku` tier. Treat the resulting evidence file, not the raw transcript, as step 2's source.
-
-   Done when intent, the real question, and its importance are each stated in that file's Answer section.
+1. **Grill the user.** Dispatch a subagent (Agent tool) with claude-sonnet-5 model to run the `grilling` skill on the user's request, focused on three things: the real intent, the real question being tested (may not match the literal wording), and why it matters enough to spend an experiment on. Pass `run_in_background: false` so the interview completes before proceeding. And make sure the subagent's output is saved to `experiments/{slug}/.context/grilling/` so it can be referenced in step 2.
 
 2. **Frame the hypothesis.** Restate the real question from step 1's evidence file as one falsifiable hypothesis (a claim that could turn out false), plus the observations that would confirm it and the ones that would refute it. Slugify the hypothesis into `{slug}` (kebab-case, e.g. `cache-ttl-vs-latency`) and create `experiments/{slug}/`. Done when the hypothesis reads as a claim (not a question) and both confirming and refuting observations are named.
 
