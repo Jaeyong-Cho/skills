@@ -6,6 +6,7 @@ description: Bridge experiments to production — transform ad-hoc research into
 # Experiment to Product (E2P)
 
 Transform experiments into production-quality code. Requires experiment source, product target, and a clear goal; orchestrates the full chain: intent capture → reconnaissance → architecture planning → implementation → review.
+Defaultly **DO NOT READ** codebase directly at the parent agent. **MUST USE** `/explore` skill to research and explore for getting informations.
 
 ## 1. Gather inputs
 
