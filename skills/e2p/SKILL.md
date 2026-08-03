@@ -76,7 +76,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 ## 6. Implement (Haiku-4.5, foreground)
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model run to `/work` skill to execute the implementation plan:
+**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model run to `/work` skill parallelly according to groups and depends to execute the implementation plan:
 
 - Apply code changes to the product codebase
 - Run existing tests to catch regressions
