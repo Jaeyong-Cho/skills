@@ -27,6 +27,8 @@ Three gated stages, each detailed in its own reference under `references/` — *
 
 Runs once a gate stops at Explore-to-Viewpoints, Core, or later (skip entirely if Explore's gate already resolved the request in words). Every field below has a source file from an earlier stage — read it, don't re-derive. If the core stage never ran (explore -> viewpoints direct), the report has no hypothesis to state — see the template's note on that case.
 
+**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool) to perform steps 1-6 below directly — assembling and writing every file itself, not returning content for the orchestrator to write. Brief it with every stage's real artifacts that ran (hypothesis/result/method/raw under `experiments/`, or `.context/explore/` evidence if Explored) plus the report template. `run_in_background: false`. Read back only confirmation that `report.md`'s Verdict line and `goal.md`'s Answer line were written before treating the question as closed.
+
 1. **Write the report.** Assemble `questions/{slug}/report.md` (template below) from real artifacts of the stages actually run. Verdict first, not buried.
 2. **Package the handoff.** `questions/{slug}/handoff/manifest.md` with relative links to `../report.md`, `../.context/explore/`, `../.context/grilling/` (omit if the core stage never ran), and — if Viewpoints ran — `../gallery/index.html` (labeled human-only reference). This is the single path downstream tooling (e.g. `/e2p`) should read.
 3. **Update the README.** Append one bullet to `## Experiments` in root `README.md` (create if missing), verdict-first, nothing beyond one line:
