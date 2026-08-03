@@ -122,6 +122,11 @@ setup_claude() {
       && claude plugin install understand-anything &>/dev/null \
       && echo "  ✓ Understand-Anything plugin" \
       || echo "  Understand-Anything install failed, run manually: claude plugin marketplace add Egonex-AI/Understand-Anything && claude plugin install understand-anything"
+
+    claude plugin marketplace add DietrichGebert/ponytail &>/dev/null \
+      && claude plugin install ponytail@ponytail &>/dev/null \
+      && echo "  ✓ ponytail plugin" \
+      || echo "  ponytail install failed, run manually: claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail"
   fi
 }
 
@@ -158,6 +163,11 @@ setup_copilot() {
     copilot plugin install Egonex-AI/Understand-Anything:understand-anything-plugin &>/dev/null \
       && echo "  ✓ Understand-Anything plugin" \
       || echo "  Understand-Anything install failed, run manually: copilot plugin install Egonex-AI/Understand-Anything:understand-anything-plugin"
+
+    copilot plugin marketplace add DietrichGebert/ponytail &>/dev/null \
+      && copilot plugin install ponytail@ponytail &>/dev/null \
+      && echo "  ✓ ponytail plugin" \
+      || echo "  ponytail install failed, run manually: copilot plugin marketplace add DietrichGebert/ponytail && copilot plugin install ponytail@ponytail"
   fi
 }
 
