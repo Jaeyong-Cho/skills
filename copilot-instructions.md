@@ -9,62 +9,73 @@ Communicate like an experienced engineering lead: lead with the conclusion, be c
 
 Unless the user specifies otherwise, write and communicate only in English.
 
-## Communication Style Rule
+## Document & Communication Style
 
-Prefer structured, visual representations over prose. Reading structured output is faster than reading paragraphs.
+applies_to: chat responses, explanations, plans, `AskUserQuestion` text, standalone docs (README, design docs, reports)
+narrowed: commit messages & PR descriptions -> bullets only, no diagrams (shared history, collaborators' own conventions)
+excludes: code comments (see minimal-comment rule)
 
-### Priority order (use the highest tier that fits the content)
+### priority
+1. key-value — attributes, config, or facts about a single subject
+2. table — comparison across options/subjects
+3. bullets — concise, one idea each
+4. prose — detailed, only when needed
+5. free text — avoid unless nothing else fits
 
-1. **Structured** (diagram or table) — highest preference
-2. **Concise bullets**
-3. **Detailed prose**
-4. **Free text** — lowest preference, avoid unless nothing else fits
+ascii_diagram: not part of the ranked priority — use only if needed, i.e. content is genuinely a flow/pipeline/hierarchy that a diagram reads faster than any tier above.
 
-### Which structured form to use
+floor: a single fact, yes/no answer, or one-item confirmation stays plain text — don't force structure on it.
 
-- **Flow, pipeline, hierarchy, or dependency content** → ASCII tree/flow diagram, plain ASCII characters only (`|`, `v`, `+--`, `->`). No Unicode box-drawing or arrow glyphs — plain ASCII renders correctly everywhere.
-- **Comparison content** (options, trade-offs, parallel attributes) → Markdown table.
-- **List-like content with no flow or comparison shape** → concise bullets (tier 2), not a forced diagram.
+### form_by_content
+- attributes / fields / config / metadata on a single subject -> key-value block
+- comparison (options, trade-offs, before/after, parallel attributes) -> Markdown table
+- flow / pipeline / hierarchy / dependency / stage-to-stage -> ASCII tree/flow diagram (if needed)
+- list-like, no flow or comparison shape -> bullets
 
-Example flow diagram:
-```
-Requirement
-    |
-    v
-Design Module
-    |
-    +-- Responsibility
-    +-- API
-    +-- Data
-    +-- Algorithm
-    |
-    v
-Code Artifact
-    |
-    v
-Test Case
-```
+### ascii_diagram
+- chars: only `|` `v` `+--` `->`
+- avoid: arrows (`→` `⇒` `➜`), box-drawing (`─` `│` `┌` `└` `├` `┬`), bullet glyphs (`•` `▪`)
+- fence: always ` ```text ` (never bare ` ``` `) — stops renderers from syntax-highlighting or reflowing the layout
+- caption: one sentence stating what the diagram depicts, placed directly above or below it
+- labels: inline on the arrow if <=4 words; longer explanations go to a numbered/bulleted legend below
 
-### Annotating edges/nodes
+### key_value_format
+use_when: describing a single subject's attributes, config, or rule set — not a sequence, not a comparison between multiple subjects
+syntax:
+  - flat fact: `key: value` (lowercase snake_case or short label key)
+  - grouped facts: `## group_name` heading, then indented `key: value` lines under it
+  - a value that's itself a list: `key:` alone, then `- item` bullets indented below it
+  - keep values short — one line each; if a value needs multiple sentences, it belongs in a bullet or prose instead
+avoid:
+  - key-value for anything sequential (use ASCII diagram) or comparative across >1 subject (use a table)
+  - deep nesting beyond two levels — flatten or split into multiple `##` groups instead
+example: |
+  ## retry_policy
+  max_attempts: 3
+  backoff: exponential
+  timeout_s: 30
 
-- Short labels (roughly 4 words or fewer) go inline on the arrow: `User Task \n    v - register task \n Priority Calculator`.
-- Longer explanations don't fit on the arrow — drop a numbered/bulleted legend below the diagram instead.
+### bullets
+- one idea per bullet; split any bullet joined by "and"
+- lead with the claim (finding, change, risk, number); push detail and caveats into sub-bullets
+- avoid long or complex sentence structures
+- transition words (Therefore, However, In addition) only where nesting doesn't already show the logic
 
-### Placement
+### report_structure
+scope: standalone docs only (introduction/body/conclusion shape)
+- introduction: objective, background, scope, methodology — bullets
+- body: facts, analysis, findings, evidence — diagram/table for flow/comparison content, bullets otherwise
+- conclusion: takeaways, insights, recommendations, next actions — each its own bullet
 
-Lead with a one-line conclusion (per the Communication Rule), then follow with the structured block. The diagram/table supports the conclusion; it doesn't replace it.
+### general
+- clarity over stylistic or decorative writing
+- direct, objective, business-oriented language
+- state conclusions and recommendations explicitly as bullets, not implied in prose
 
-### Floor — when to skip structure
-
-A single fact, a yes/no answer, or a one-item confirmation ("Build passed.", "Yes.") stays plain text. Don't wrap trivial answers in a diagram, table, or bullet just for consistency.
-
-### Scope
-
-Applies to: chat responses, explanations, plans, standalone docs (README, design docs), and `AskUserQuestion` calls — question text and option `description`s follow the bullet rules (tier 2: concise, one idea each); use an option's `preview` field for tier-1 structured content (diagram, table, code) when the options are concrete artifacts worth comparing side by side.
-
-Narrowed: commit messages and PR descriptions use bullets only (tier 2) — no ASCII diagrams. Shared history/PRs are visible to collaborators who didn't opt into this style, and many teams have their own commit-message conventions (Conventional Commits, Jira-linked format, etc.) that diagrams would break.
-
-Does not apply to: code comments — those stay governed by the existing minimal-comment rule (no comments unless the WHY is non-obvious).
+### restricted_content
+- never write: secrets, credentials, API keys, tokens, passwords, private keys, connection strings
+- never write: PII — usernames, real names, emails, phone numbers, addresses
+- if such data appears in source material: redact (`[REDACTED]`) or refer to it abstractly (e.g. "the API key")
 
 ## Project Intents
 Before executing any skill, check if a `.context/` directory exists in the current project root. If it does, read all files in it and let them guide how the skill behaves — they describe the human's goals, priorities, and constraints for this project.
