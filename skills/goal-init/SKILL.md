@@ -13,7 +13,7 @@ Opens the Goal-to-Implementation Loop (see project root `README.md`): record the
 
 1. **Record the goal statement.** Ask the user for a one-line goal if they haven't given one. Write it to `goal.md` — create if missing; if it exists, prepend under a `## {today's date}` heading rather than overwriting (a project can carry more than one goal over its life).
 
-2. **Record the open questions.** Ask what question(s) need resolving toward this goal, if not already given (one or several; more can be added later by re-running this step). Append each as its own `## Question N` heading, continuing numbering rather than restarting at 1:
+2. **Record the open questions.** Ask what question(s) need resolving toward this goal, if not already given (one or several; more can be added later by re-running this step). If the user doesn't have questions in mind yet, use `/question-brainstorm` instead of guessing on their behalf — it proposes candidates from the goal and existing context and writes the chosen ones into `goal.md` the same way this step would. Append each as its own `## Question N` heading, continuing numbering rather than restarting at 1:
 
    ```
    ## Question 3

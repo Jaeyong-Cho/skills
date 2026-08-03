@@ -9,7 +9,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill, AskUserQuestion
 
 Turn a request into a scientific-method run: hypothesis, method, execution, analysis, then a report a reader can trust without re-running it. The **verdict** — supported, refuted, or inconclusive — is the spine everything hangs from.
 
-Full latitude for running the method (install packages, run scripts, hit local services). MUST NOT touch anything outside `questions/{slug}/`, except appending to root `README.md` and regenerating `questions/index.html` in Publish.
+Full latitude for running the method (install packages, run scripts, hit local services). MUST NOT touch anything outside `questions/{slug}/`, except appending to root `README.md` and `goal.md`, and regenerating `questions/index.html`, in Publish.
 
 - `{slug}` names a `## Question N` heading in root `goal.md`; its directory is created by `/goal-init` before this skill runs — see `references/pipeline.md`. No `goal.md` -> the explore stage stops and says so.
 - **DO NOT** read the codebase directly — use `/explore`.
@@ -34,7 +34,12 @@ Runs once a gate stops at Explore-to-Viewpoints, Core, or later (skip entirely i
    ## Experiments
    - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <takeaway>. [Report](questions/{slug}/report.md)
    ```
-4. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it.
+4. **Answer the question in `goal.md`.** Directly under the `## Question N` heading this `{slug}` came from, add one line:
+   ```
+   **Answer:** <verdict> — <takeaway, same one used above>
+   ```
+   Replace it in place on a later re-run (same question, new experiment) rather than stacking multiple `**Answer:**` lines under one heading.
+5. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it.
 
 ## Report template (`questions/{slug}/report.md`)
 

@@ -76,7 +76,8 @@ Goal closed
 
 - **Cheapest method first.** When requesting `/experiment`, the point is picking the cheapest way to resolve the question — a spike, a small script, existing data — not a full build. See `/experiment` in the Skills table below.
 - **Ideas -> Direction -> Spec.** The direction decided from the experiment's ideas is the "goal" that `/spec`'s `to_scen` stage consumes; see Spec Pipeline below.
-- **Same skill opens and closes the loop.** `/experiment` both answers the upfront hypothesis and, later, verifies the implementation actually resolved it — no separate test-writing step is needed for that check.
+- **Same skill opens and closes the loop.** `/experiment` both answers the upfront hypothesis and, later, verifies the implementation actually resolved it — no separate test-writing step is needed for that check. It also writes a one-line `**Answer:**` back under the matching `## Question N` heading in `goal.md`, so the goal statement itself carries the answer, not just the report.
+- **No questions yet?** Run `/question-brainstorm` right after `/goal-init` writes the goal statement — it proposes candidate questions from the goal plus existing context, lets you pick and edit, appends the chosen ones as `## Question N` headings in `goal.md`, then hands off back to `/goal-init` to create their directories and build the dashboard.
 
 ## Workflow
 
@@ -113,6 +114,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/goal-init` | `goal.md`, `questions/{slug}/`, `questions/index.html` | Bootstrap a new goal — write the goal statement and its `## Question N` headings to project-root `goal.md`, create each question's `questions/{slug}/` directory, and build/refresh a dashboard linking every question's report and viewpoint gallery |
+| `/question-brainstorm` | `## Question N` headings in `goal.md` | Propose 3-5 candidate questions from the goal statement, existing context, and (when relevant) a fresh `/explore` pass; user picks/edits, then it appends the chosen ones to `goal.md` and hands off to `/goal-init` for directory creation |
 | `/workflow` | one plan in `.context/done/plan/`, code changes | Grill the goal, then run `/explore` once for both the grilled intent (one haiku-tier question) and any codebase facts the plan needs, straight into `/fs-plan` as the design (no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence), then dispatch a subagent to run `/auto-action`'s Full Execution pass (haiku model), then visualize the result with `/viewpoints` as the review step |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, fully written by AI like `/fs-plan`, then derive a Review Sequence — the same steps reordered along the code's flow (entry point → algorithm) — so a human can review the finished code in that order; writes a plan marked `**Type:** Review-Plan` |
