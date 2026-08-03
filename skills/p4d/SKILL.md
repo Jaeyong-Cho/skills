@@ -44,7 +44,6 @@ Structure your plan with:
 - **Steps**: Numbered, sequential steps with:
   - Clear action
   - What file(s) to modify or create
-  - Why this step matters
   - Expected outcome
 - **Testing approach**: How to verify each step works
 - **Edge cases**: Known challenges or gotchas
@@ -66,13 +65,11 @@ Prerequisites:
 Step 1: Create auth schema
   File: db/migrations/001_auth_schema.sql
   Action: Create users, sessions tables
-  Why: Foundation for auth system
   Verify: psql shows new tables
 
 Step 2: Add auth middleware
   File: src/middleware/auth.ts
   Action: Implement JWT validation
-  Why: Protect routes
   Verify: Middleware rejects invalid tokens
 
 [... more steps ...]
