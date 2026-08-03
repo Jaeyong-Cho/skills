@@ -16,9 +16,9 @@ Collect from the user:
 - product target — where the code lands (e.g. `apps/web/`)
 - integration goal — what to accomplish and success criteria
 
-Multiple experiment locations are fine when several prototypes feed one integration — treat each independently through step 4, then reconcile into one plan in step 5 (note in `plan.md` which piece each experiment is responsible for). Judge integration size now too (single file/module vs. multi-module/new architecture) — it shapes how much the plan in step 4 needs to break down.
+Multiple experiment locations are fine when several prototypes feed one integration — treat each independently through step 4, then reconcile into one plan in step 5 (note in `plan/index.md` which piece each experiment is responsible for). Judge integration size now too (single file/module vs. multi-module/new architecture) — it shapes how much the plan in step 4 needs to break down.
 
-Create `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/` for this session's artifacts: `intent.md`, `experiments/`, `product/`, `plan.md`, `implementation/`, `review/`.
+Create `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/` for this session's artifacts: `intent.md`, `experiments/`, `product/`, `plan/`, `implementation/`, `review/`.
 
 ## 2. Explore experiment and product (subagents via `/explore`)
 
@@ -42,19 +42,19 @@ Run `/grilling` with the exploration findings (and any prior grilling output) as
 
 Brief the subagent with each experiment's `report.md` (Method, Results, Analysis) directly, not just `intent.md` — the plan builds on what was already tried, not a re-derivation from product code alone.
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model, run to `/p4d`, to plan: where code lands, what refactors/scaffolding are needed, dependency/integration points, a step-by-step change list structured as **implement -> test -> commit** per change (or change group) — each entry names what to build, the test that proves it works, and the commit it lands in — with risk annotations.
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model, run to `/p4d`, to plan: where code lands, what refactors/scaffolding are needed, dependency/integration points, a step-by-step change list structured as **implement -> test -> commit** per change — with risk annotations, grouped into parallel-execution groups. Per `/p4d`'s own convention, this writes `plan/index.md` (group table: steps, depends_on, file) plus one `plan/group-{n}.md` per group — not a single flat file.
 
-**Output:** `plan.md`.
+**Output:** `plan/index.md`, `plan/group-{n}.md` per group.
 
 ## 5. Implement (Haiku-4.5, foreground)
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model, run to `/work` (parallel by groups/depends), to execute `plan.md`'s implement -> test -> commit sequence per entry: apply the change, run the test(s) that prove it (existing + new), then commit. Save the actual test output (pass/fail, not a summary) to `implementation/test-results.md` as it goes — step 6 reads this directly rather than re-running anything.
+Read `plan/index.md`'s group table. For each dependency wave (groups with no unmet `depends_on`, dispatched together; wait for a wave to finish before the next), **MUST DISPATCH** one claude-haiku-4-5 subagent per group, each given only that group's `plan/group-{n}.md` — via `/work`, to execute its implement -> test -> commit entries: apply the change, run the test(s) that prove it (existing + new), then commit. Each subagent saves its actual test output (pass/fail, not a summary) to `implementation/test-results/group-{n}.md` — namespaced per group so concurrent dispatches never write over each other; step 6 reads the whole directory rather than re-running anything.
 
-**Output:** code changes committed (or staged) in the product repo; `implementation/test-results.md` and other logs in `implementation/`.
+**Output:** code changes committed (or staged) in the product repo; `implementation/test-results/group-{n}.md` and other logs in `implementation/`.
 
 ## 6. Review against the goal (Sonnet-5, foreground)
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model — briefed with `intent.md`, `plan.md`, and `implementation/test-results.md`, to review the implementation against the integration goal: completeness vs. plan, whether the saved test results actually validate the goal (not just that tests passed), integration risk, production readiness. Sonnet, not haiku, since judging "does this satisfy the goal" is the reasoning-heavy call this step exists for.
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model — briefed with `intent.md`, `plan/index.md` (plus its group files), and everything under `implementation/test-results/`, to review the implementation against the integration goal: completeness vs. plan, whether the saved test results actually validate the goal (not just that tests passed), integration risk, production readiness. Sonnet, not haiku, since judging "does this satisfy the goal" is the reasoning-heavy call this step exists for.
 
 **Output:** `review/report.md`.
 

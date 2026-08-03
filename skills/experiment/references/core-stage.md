@@ -8,9 +8,9 @@ Read only when you've reached this stage.
 
 **Frame the hypothesis.** Restate the real question as one falsifiable claim, plus the observations that would confirm or refute it. Write `questions/{slug}/hypothesis.md`.
 
-**Design the method before touching anything.** **MUST DISPATCH** a claude-sonnet-5 subagent, briefed with the explore evidence and hypothesis.md directly, to decide what varies, what stays fixed (control/baseline, if comparative), and what gets measured and how — via `/p4d`. Write `questions/{slug}/method.md` before executing.
+**Design the method before touching anything.** **MUST DISPATCH** a claude-sonnet-5 subagent, briefed with the explore evidence and hypothesis.md directly, to decide what varies, what stays fixed (control/baseline, if comparative), and what gets measured and how — via `/p4d`. Per `/p4d`'s own convention, this writes `questions/{slug}/method/index.md` (objective, prerequisites, and the group table) plus one `questions/{slug}/method/group-{n}.md` per parallel-execution group — not a single flat file — before executing.
 
-**Execute and collect raw results.** **MUST DISPATCH** a claude-haiku-4.5 subagent, briefed with the method exactly as decided, to run it for real via `/work` (parallel by groups/depends) — actual commands and output, never fabricated. Save every raw result under `questions/{slug}/raw/`. `run_in_background: false`.
+**Execute and collect raw results.** Read `method/index.md`'s group table. For each dependency wave (groups with no unmet `depends_on`, dispatched together; wait for a wave to finish before the next), **MUST DISPATCH** one claude-haiku-4.5 subagent per group, each given only that group's `method/group-{n}.md` — via `/work`, actual commands and output, never fabricated. Each subagent saves its raw results under `questions/{slug}/raw/group-{n}/` (namespaced per group so concurrent dispatches never write over each other). `run_in_background: false` for each wave.
 
 **Analyze against the hypothesis.** Compare the raw results to the confirming/refuting observations and reach a verdict — supported, refuted, or inconclusive (state why if inconclusive).
 

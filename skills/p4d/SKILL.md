@@ -1,6 +1,6 @@
 ---
 name: p4d
-description: Create step-by-step implementation plans from context. Use this when the user provides a context location (file, directory, or URL) and needs a detailed breakdown of how to implement something. The skill reads the context, analyzes the codebase if relevant, and produces a structured plan that can be executed sequentially.
+description: Create step-by-step implementation plans from context. Use this when the user provides a context location (file, directory, or URL) and needs a detailed breakdown of how to implement something. The skill reads the context, analyzes the codebase if relevant, and writes the plan as one file per parallel-execution group (plan/index.md plus plan/group-{n}.md) so a subagent dispatched to one group only needs to read that group's file.
 ---
 
 # Plan from Context (p4d)
@@ -37,32 +37,42 @@ A claim is load-bearing if believing it wrong would change whether a plan step e
 - Spot-check cheaply — this is not "read the codebase," it's checking the specific facts the plan's correctness depends on: one targeted `Read`/`Grep`/`Bash` call against the literal named artifact if you have codebase access, or one `haiku`-tier `explore` dispatch if you don't. A handful of targeted checks costs orders of magnitude less than re-deriving the whole doc from a full read, for the same correctness.
 - If a spot-check contradicts the doc, say so explicitly in the plan (a short "Correction to context doc" callout referencing what was claimed vs. what the check found) — don't just silently fix the plan and leave the doc wrong for the next person who reads it.
 
-### 3. Create the plan
-Structure your plan with:
-- A key-value header (per `../references/document-style.md`'s `key_value_format` — these are attributes of the plan itself, not a sequence): `objective:`, `prerequisites:` (list value), `testing_approach:`, `edge_cases:` (list value)
-- **Corrections to context doc** (if step 2b found any): what the doc claimed vs. what the spot-check found, and which plan steps exist because of it
-- **Steps**: Numbered, sequential steps with:
-  - Clear action
-  - What file(s) to modify or create
-  - Expected outcome
+### 3. Group steps before writing anything
 
+Determine parallel execution groups now, before the plan is written down — not as an afterthought over a finished flat list. Group steps that can run concurrently (no shared file, no data dependency between them); a group that needs another group's output declares that dependency rather than being merged into it.
 
-### 4. Present clearly
-Use a structured format (ASCII diagram or numbered list) that's easy to follow. Each step should be actionable by someone following the plan directly.
+### 4. Write the plan as one file per group
 
-### 5. Parallel Execution Orchestration
-- Group parallel execution paths.
-- Determine sub-agent dispatch order.
+A subagent later dispatched to execute one group must be able to work from that group's file alone — never require it to read a sibling group's file to know what to do. Write:
+
+- `plan/index.md` — the plan's own attributes, key-value (per `../references/document-style.md`'s `key_value_format`): `objective:`, `prerequisites:` (list), `testing_approach:`, `edge_cases:` (list), plus a **Corrections to context doc** section if step 2b found any (what the doc claimed vs. what the spot-check found, and which steps exist because of it). Then a group table: `Group N | steps | depends_on | file`.
+- `plan/group-{n}.md` per group — that group's steps only, each with a clear action, file(s) to modify/create, and expected outcome. If a step depends on a prior group's output, state the concrete artifact to expect (a file path, an exported symbol, a schema) — a fact the dispatched agent can check for itself — not "see group N," which would send it back to a file it isn't given.
+
+### 5. Present clearly
+
+Report `plan/index.md`'s group table so the orchestrating skill (e.g. `/work`) can see dispatch order and dependencies at a glance without opening every group file.
 
 ## Example output structure
 
+`plan/index.md`:
 ```text
 objective: Add user authentication to the API
 prerequisites:
   - Node.js 16+
   - PostgreSQL running locally
   - Environment variables configured
+testing_approach: ...
+edge_cases:
+  - ...
 
+Group | Steps | Depends on | File
+1     | 1-3   | none       | group-1.md
+2     | 4-5   | none       | group-2.md
+3     | 6-8   | 1, 2       | group-3.md
+```
+
+`plan/group-1.md`:
+```text
 Step 1: Create auth schema
   File: db/migrations/001_auth_schema.sql
   Action: Create users, sessions tables
@@ -73,15 +83,10 @@ Step 2: Add auth middleware
   Action: Implement JWT validation
   Verify: Middleware rejects invalid tokens
 
-[... more steps ...]
-
-Group 1
-- 1, 2, 3
-Group 2 
-- 4, 5
-Group 3 (Depends by group 1, group 2)
-- 6, 7, 8
+[... step 3 ...]
 ```
+
+`plan/group-3.md` (depends on groups 1 and 2) states what to expect from them inline, e.g. "Expects `src/middleware/auth.ts` to export `verifyToken()` (group 1) and `src/db/models/session.ts` (group 2)" — not a pointer back to those files.
 
 ## Notes
 

@@ -18,6 +18,7 @@ Use this skill to systematically execute a structured implementation plan.
 
 ### 1. Receive and parse the plan
 - Accept the plan (text, file, or output from p4d)
+- If given a single `plan/group-{n}.md` (dispatched to execute one group of a larger `/p4d` plan): treat it as the complete scope for this run — it's self-contained by construction, so don't go read `plan/index.md` or sibling group files for more context unless the group file itself says a dependency's output is missing.
 - Extract objectives, prerequisites, and steps
 - Verify prerequisites are met before starting
 - Ask clarifying questions if steps are ambiguous

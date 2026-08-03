@@ -19,8 +19,8 @@ questions/
       explore/                  e1 output -- writes directly here, no staging area
       grilling/                 e2 interview output
     hypothesis.md                e2 output
-    method.md                    e2 output
-    raw/                         e2 execution output -- also e3's input
+    method/                      e2 output -- /p4d's own convention: index.md (group table) + group-{n}.md
+    raw/group-{n}/                e2 execution output, namespaced per method group -- also e3's input
     report.md                    e2 output, Visualizations left "Not built" until e3 runs
     gallery/                     e3 output (only if e3 was run)
     handoff/manifest.md          e2 output; links report + gallery (if present)
