@@ -13,7 +13,7 @@ Default to full latitude for running the method — install packages, run script
 
 - The context of this session is in the `experiments/{slug}/.context/` directory.
 - The context of this goal's context is in the `.context/` directory.
-- Defaultly **DO NOT READ** codebase directly at the parent agent. **MUST USE** `/explore` skill to research and explore for getting informations.
+- Defaultly **DO NOT READ** codebase directly at the parent agent. **MUST USE** the existing context information `/explore` skill to research and explore for getting informations.
 
 ## Steps
 
