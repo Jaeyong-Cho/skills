@@ -36,4 +36,4 @@ Read only when you've reached this stage. Runs one **attempt** at a time — `qu
 Does the resolving (or final) attempt's verdict, backed by its results, resolve the question without a visual?
 
 - **Yes:** go straight to `../SKILL.md`'s Publish, no gallery. Mark Visualizations "Not built — not needed to resolve the question."
-- **No** (subtle, comparative across runs/attempts, or needs to be seen to be trusted): ask the user via `AskUserQuestion` whether to build a gallery before Publish. If yes, continue to `../references/viewpoints-stage.md`, then Publish; if no, go to Publish and mark Visualizations "Not built — user declined."
+- **No** (subtle, comparative across runs/attempts, hard to follow from the result text/numbers alone, or needs to be seen to be trusted): ask the user via `AskUserQuestion` whether to build a gallery before Publish. If yes, continue to `../references/viewpoints-stage.md`, then Publish; if no, go to Publish and mark Visualizations "Not built — user declined."
