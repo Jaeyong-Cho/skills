@@ -16,5 +16,5 @@ No `goal-context.md`, or it left a gap: **MUST RUN** `../../explore/SKILL.md` �
 ## Gate — resolve here, or continue?
 
 - **Evidence alone answers the request** (a lookup, not a claim to test): answer directly from the evidence, citing it. Stop — no further stage.
-- **Evidence is worth seeing, not testing** (the request wanted to understand or explore something — a structure, a dataset, a codebase shape — not verify a claim): skip straight to `../references/viewpoints-stage.md`, then Publish. No hypothesis, no core stage.
+- **Evidence is worth seeing, not testing** (the request wanted to understand or explore something — a structure, a dataset, a codebase shape — not verify a claim): ask the user via `AskUserQuestion` whether to build a gallery (`../references/viewpoints-stage.md`) before Publish, or skip straight to Publish. No hypothesis, no core stage either way.
 - **Request needs a claim tested** (comparative/causal — "does X actually help/hurt Y", "which is faster/safer/correct"): continue to `../references/core-stage.md` for attempt 1. Judge the starting tier from the evidence: `cheap` if a single quick check could plausibly settle it, `full` only if it's inherently comparative/causal at a scale no one-shot check can cover — don't default to `full` just because a claim needs testing.
