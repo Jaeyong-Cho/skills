@@ -5,7 +5,8 @@ description: Create step-by-step implementation plans from context. Use this whe
 
 # Plan from Context (p4d)
 
-Use this skill to generate implementation plans by reading and analyzing context provided by the user.
+Use this skill to generate implementation plans by reading and analyzing context provided by the user
+**MUST READ** `/ponytail` skill before planning
 
 ## When to use
 
