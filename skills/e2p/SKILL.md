@@ -1,6 +1,6 @@
 ---
 name: e2p
-description: Bridge experiments to production — turn research/prototypes into integrated product code via grilling, exploration, planning, implementation, and review. Use when the user names an experiment (or a goal-directory question) and a product target to integrate it into.
+description: Bridge experiments to production — turn research/prototypes into integrated product code via grilling, exploration, planning, implementation, and review, or via a fast track (single haiku dispatch implements and commits directly) when the integration is small and the experiment's report already fully specifies it. Use when the user names an experiment (or a goal-directory question) and a product target to integrate it into.
 ---
 
 # Experiment to Product (E2P)
@@ -19,6 +19,19 @@ Collect from the user:
 Multiple experiment locations are fine when several prototypes feed one integration — treat each independently through step 4, then reconcile into one plan in step 5 (note in `plan/index.md` which piece each experiment is responsible for). Judge integration size now too (single file/module vs. multi-module/new architecture) — it shapes how much the plan in step 4 needs to break down.
 
 Create `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/` for this session's artifacts: `intent.md`, `experiments/`, `product/`, `plan/`, `implementation/`, `review/`.
+
+## Fast track — skip straight to implementation?
+
+Judge this before step 2, every time. Fast-track when **all** hold:
+- single experiment location, single small product target (one file/module, not multi-module/new architecture)
+- that experiment's `report.md` already fully specifies what to build — a clear `Verdict`, concrete Method/Results, nothing architecturally ambiguous left for grilling or planning to resolve
+- the user asked to move fast, or the integration is obviously this small on its face (a config value, a small function, wiring one already-proven snippet into one call site)
+
+If any of those doesn't hold, skip this section — continue to step 2 as normal.
+
+**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool), briefed with the experiment's `report.md` directly, the product target, and the integration goal, to: read `report.md` (via `handoff/manifest.md` if present), implement the change directly in the product target, run the test(s) that prove it (existing + new), then commit. `run_in_background: false`. Have it save its actual test output (pass/fail, not a summary) to `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/implementation/fast-track.md`, alongside a one-line note of which report.md it worked from.
+
+**Output:** code changes committed (or staged) in the product repo; `implementation/fast-track.md`. Session complete — skip steps 2 through 6 and go straight to step 7's handoff (grill/plan/review artifacts will be absent; that's expected on this path, not a gap).
 
 ## 2. Explore experiment and product (subagents via `/explore`)
 
@@ -60,4 +73,4 @@ Read `plan/index.md`'s group table. For each dependency wave (groups with no unm
 
 ## 7. Handoff
 
-Session complete when: intent signed off, exploration evidence collected, plan risk-annotated, implementation committed, review has no critical blockers. Leave `.context/{timestamp}-{goal}/` intact for audit trail.
+Full pipeline: session complete when intent signed off, exploration evidence collected, plan risk-annotated, implementation committed, review has no critical blockers. Fast track: session complete when `implementation/fast-track.md` shows a passing commit — no intent/plan/review artifacts to check, by design. Leave `.context/{timestamp}-{goal}/` intact for audit trail either way.
