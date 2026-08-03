@@ -49,6 +49,7 @@ Structure your plan with:
 - **Testing approach**: How to verify each step works
 - **Edge cases**: Known challenges or gotchas
 
+
 ### 4. Present clearly
 Use a structured format (ASCII diagram or numbered list) that's easy to follow. Each step should be actionable by someone following the plan directly.
 
@@ -80,6 +81,7 @@ Step 2: Add auth middleware
 ## Notes
 
 - Plans should be detailed enough to execute without ambiguity
+- **MUST NOT** write code directly and plan document. Just write a instruct as a plan.
 - Call out file paths, function names, and concrete artifacts
 - Include verification steps for each major phase
 - If the context is large, summarize and focus on the relevant parts
