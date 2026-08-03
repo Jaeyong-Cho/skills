@@ -12,6 +12,7 @@ Turn a user's request into a small scientific-method run: hypothesis, method, ex
 Default to full latitude for running the method — install packages, run scripts, hit local services, whatever the hypothesis needs. MUST NOT remove, edit, or create anything outside `experiments/{slug}/`, except appending the summary bullet to the project root `README.md` in step 9 and regenerating `experiments/index.html` in step 10 — treat everything else as read-only. If the method needs to touch code or data elsewhere, copy it into `experiments/{slug}/raw/` first and work on the copy.
 
 - The context of this session is in the `experiments/{slug}/.context/` directory.
+- The context of this goal's context is in the `.context/` directory.
 - Defaultly **DO NOT READ** codebase directly at the parent agent. **MUST USE** `/explore` skill to research and explore for getting informations.
 
 ## Steps
