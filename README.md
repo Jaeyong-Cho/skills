@@ -42,17 +42,21 @@ The macro loop this repo is built around: validate the riskiest question as chea
 Goal
  |
  v
-/goal-init                   creates `.context/`, and (re)builds the
- |                            experiments dashboard (experiments/index.html)
+/goal-init                   writes goal.md's `## Question N` headings, creates
+ |                            questions/{slug}/ per question, (re)builds the
+ |                            questions dashboard (questions/index.html)
  v
-Question / Hypothesis          e.g. "SQLite vs Postgres: which is
+Question                       e.g. "SQLite vs Postgres: which is
  |                                   reliable enough here?"
  v
-/experiment  ------------->  cheapest method that resolves the question
- |                            (builds a /viewpoints gallery over raw results,
- |                             refreshes the experiments dashboard on exit)
+/explore                     -> /experiment -> /viewpoints, each run and gated
+ |                            separately (see /experiment's references/pipeline.md):
+ |                            stop as soon as a stage resolves the question --
+ |                            explore alone if it's a lookup, a verdict alone if
+ |                            no visual is needed -- only running further stages
+ |                            when the question genuinely requires it
  v
-Ideas                        read the gallery/report, generate options
+Ideas                        read the report (and gallery, if built), generate options
  |
  v
 Direction                    pick how the goal will be resolved
@@ -108,7 +112,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/goal-init` | `goal.md`, `experiments/index.html` | Bootstrap a new goal — write the goal statement to project-root `goal.md`, and build/refresh a dashboard linking every experiment's report and viewpoint gallery |
+| `/goal-init` | `goal.md`, `questions/{slug}/`, `questions/index.html` | Bootstrap a new goal — write the goal statement and its `## Question N` headings to project-root `goal.md`, create each question's `questions/{slug}/` directory, and build/refresh a dashboard linking every question's report and viewpoint gallery |
 | `/workflow` | one plan in `.context/done/plan/`, code changes | Grill the goal, then run `/explore` once for both the grilled intent (one haiku-tier question) and any codebase facts the plan needs, straight into `/fs-plan` as the design (no `/spec` stage, no SCN/REQ/CMP/SEQ docs, no Review Sequence), then dispatch a subagent to run `/auto-action`'s Full Execution pass (haiku model), then visualize the result with `/viewpoints` as the review step |
 | `/fs-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD implementation steps, then write a regular plan, fully written and executed by AI |
 | `/co-plan` | `.context/inbox/plan/` | Sequence a design into ordered TDD steps, fully written by AI like `/fs-plan`, then derive a Review Sequence — the same steps reordered along the code's flow (entry point → algorithm) — so a human can review the finished code in that order; writes a plan marked `**Type:** Review-Plan` |
@@ -124,7 +128,7 @@ The branch happens at planning, not execution — `/auto-action` always runs, bu
 | `/explore` | `.context/explore/{timestamp}-{task-slug}/{question-slug}.md` | Delegate fact-finding to a subagent tiered by question ambiguity (haiku for narrow lookups, sonnet for open-ended reconnaissance, never opus), one dispatch per tier bucket, writing an Answer + Evidence + Open gaps file per question so the calling context reads a complete answer instead of raw search output |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/study-guide` | HTML file | Explain a document or codebase and quiz the reader on it — background, core concepts with worked examples, walkthrough, and a 5-question interactive quiz, rendered via bundled `render.py` |
-| `/experiment` | `experiments/{slug}/report.md` (+ `raw/`, `gallery/`) | Turn a request into a scientific-method run — grill the user's real intent/question (folded into `/explore` as one haiku-tier question), frame a hypothesis, then method, execution, analysis, verdict — routing a research-shaped method through `/explore` for its raw results, building a `/viewpoints` gallery over them before writing the report |
+| `/experiment` | `questions/{slug}/report.md` (+ `raw/`, optional `gallery/`) | Middle stage of a three-gate pipeline (`/explore` -> `/experiment` -> `/viewpoints`, run separately by hand — see `references/pipeline.md`): grill the user's real intent/question, frame a hypothesis, then method, execution, analysis, verdict, publish. Each stage gates on whether it already resolves the question, so a plain lookup can stop at `/explore` and a clear verdict can skip the `/viewpoints` gallery entirely |
 | `/run-n-view` | `run-n-view/{slug}/raw/`, `run-n-view/{slug}/gallery/index.html` | Bare run+view primitive — launch/drive a command, script, or app for real via `run`, then build a `/viewpoints` gallery over the captured output. No hypothesis or report; use `/experiment` when those are needed |
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
 | `/scaffold-skeleton-code` | skeleton file + test file | Generate function signatures, TODO hints, and a matching test file so the user implements just the logic |

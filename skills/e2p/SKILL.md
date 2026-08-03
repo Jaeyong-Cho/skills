@@ -1,110 +1,63 @@
 ---
 name: e2p
-description: Bridge experiments to production — transform ad-hoc research into integrated product code. Takes an experiment location, a product target, and an integration goal; orchestrates grilling (intent capture), exploration (codebase reconnaissance), planning (design strategy), implementation (automated coding), and review (multi-angle validation). Outputs ship-ready code plus decision records in a timestamped session context.
+description: Bridge experiments to production — turn research/prototypes into integrated product code via grilling, exploration, planning, implementation, and review. Use when the user names an experiment (or a goal-directory question) and a product target to integrate it into.
 ---
 
 # Experiment to Product (E2P)
 
-Transform experiments into production-quality code. Requires experiment source, product target, and a clear goal; orchestrates the full chain: intent capture → reconnaissance → architecture planning → implementation → review.
-Defaultly **DO NOT READ** codebase directly at the parent agent. **MUST USE** the existing context information or `/explore` skill to research and explore for getting informations.
+Turn an experiment into production code: intent capture -> reconnaissance -> plan -> implement -> review. **DO NOT READ** the codebase directly — use `/explore`.
 
-## 1. Gather inputs
+**Experiment results are first priority.** Before exploring, grilling, or planning, read each experiment location's `report.md` (via `handoff/manifest.md`) — the authoritative source for that experiment's findings. Later steps only fill what it leaves open, never re-derive what it already states.
 
-From the user, collect three pieces of information:
+## 1. Gather inputs and set up the session
 
-| Input | Purpose | Example |
-|---|---|---|
-| Experiment location(s) | Where the research/prototype(s) live — one or more | `../my-experiment/` or a GitHub URL |
-| Product target | Where code goes in the product repo | `apps/web/` or `services/api/` |
-| Integration goal | What to accomplish and success criteria | "Add A/B testing widget to checkout, wire into analytics" |
+Collect from the user:
+- experiment location(s) — a path, a URL, or a `## Question N` in a `goal.md` (see `../experiment/references/pipeline.md`): resolve by content match to its existing `questions/{slug}/` directory (don't re-slugify); if several questions match, ask via `AskUserQuestion` rather than guessing
+- product target — where the code lands (e.g. `apps/web/`)
+- integration goal — what to accomplish and success criteria
 
-Multiple experiment locations are allowed when several prototypes feed one integration (e.g. one experiment validated the algorithm, another validated the UI pattern). Treat each independently in steps 3-4, then reconcile them into one plan in step 5 — note in `plan.md` which piece of the design each experiment is responsible for.
+Multiple experiment locations are fine when several prototypes feed one integration — treat each independently through step 4, then reconcile into one plan in step 5 (note in `plan.md` which piece each experiment is responsible for). Judge integration size now too (single file/module vs. multi-module/new architecture) — it shapes how much the plan in step 4 needs to break down.
 
-Also judge integration size now (single file/module vs. multi-module or new architecture) — steps 3, 4, and 7 scale their dispatch depth to this judgment.
+Create `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/` for this session's artifacts: `intent.md`, `experiments/`, `product/`, `plan.md`, `implementation/`, `review/`.
 
-## 2. Set up session context
+## 2. Explore experiment and product (subagents via `/explore`)
 
-Create a timestamped directory for this session's artifacts and decision records:
-
-```text
-{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/
-    ├─ intent.md (grilling output)
-    ├─ experiments/ (exploration findings)
-    ├─ product/ (reconnaissance findings)
-    ├─ plan.md (architecture + implementation strategy)
-    ├─ implementation/ (code changes during auto-action)
-    └─ review/ (viewpoints analysis of the result)
-```
-
-## 3. Explore experiment and product (subagents via `/explore`)
-
-**Check for prior artifacts first.** For each experiment location, look for `handoff/manifest.md` from the `experiment` skill — it's the one path to read, linking to that experiment's `report.md`, `.context/grilling/`, and `.context/explore-context/` (machine-readable evidence) plus `gallery/index.html` (human-only reference — skip reading it, its content is already summarized in `report.md`). Treat the machine-readable links as ground truth; do not re-derive findings they already cover. If a location has no `handoff/manifest.md` (pre-dates this convention, or wasn't built with `/experiment`), fall back to checking for `report.md` directly.
+**Check for prior artifacts first.** For each experiment location, look for `handoff/manifest.md` — it links that question's `report.md`, `.context/explore/`, and (if the core stage ran) `.context/grilling/` as machine-readable evidence, plus `gallery/index.html` as human-only reference (skip reading it — already summarized in `report.md`). Treat the machine-readable links as ground truth. No `.context/grilling/` link is expected on the explore-to-viewpoints path (`**Verdict:** Explored`), not a missing artifact — fall back to the report's Motivation section there. No manifest at all (pre-dates this convention, or wasn't built with `/experiment`): fall back to `report.md` directly.
 
 Delegate to `explore` only for what the prior artifacts leave open, on up to two fronts in parallel:
+- **Experiments branch** — skip per experiment if its manifest already covers implementation patterns, data structures, assumptions, lessons learned; otherwise research what it doesn't answer.
+- **Product branch** — always runs once: existing patterns, dependencies, architecture, integration points in the product codebase.
 
-### Experiments branch
-Skip entirely, per experiment, if its manifest already covers implementation patterns, data structures, assumptions, and lessons learned. Otherwise research that experiment source for whatever its manifest doesn't answer. With multiple experiment locations, run this check independently per location.
+**Output:** `experiments/{exp-slug}/{question-slug}.md` (as needed) and `product/{question-slug}.md`.
 
-### Product branch
-Research the product codebase for existing patterns, dependencies, architecture expectations, and integration points where the experiment(s) fit. (No prior artifact covers this — always run, once, regardless of how many experiment locations there are.)
+## 3. Grill for intent
 
-**Outputs:** `experiments/{exp-slug}/{question-slug}.md` (only for locations needing it; nest under the experiment's own slug when there are multiple) and `product/{question-slug}.md` in the session context.
+**Check for prior grilling first.** Pass any experiment's `.context/grilling/` in as prior intent. A location on the explore-to-viewpoints path has none to reuse — grill it from scratch, same as a location with no manifest. Also pass in the product repo's `goal.md` if it exists. Scope this grill to what those files don't cover: product-specific unknowns (deployment target, non-negotiables, constraints) and, with multiple experiments, how their findings reconcile.
 
-## 4. Grill for intent
+Run `/grilling` with the exploration findings (and any prior grilling output) as background. Output pins down: what success looks like, non-negotiables vs. nice-to-haves, known constraints, risk surface.
 
-**Check for prior grilling output first.** For each experiment location, its `handoff/manifest.md` links to that experiment's `.context/grilling/` — pass all of them into this step as prior intent, the real question(s) and why they mattered are already answered. Also check the product repo root for `goal.md` (from `/goal-init`) and pass it in too — it states the project's declared goal, useful for judging whether this integration actually serves it. Scope this grill to what those files don't cover: product-specific unknowns (deployment target, non-negotiables specific to this codebase, integration constraints) and, when there are multiple experiments, how their findings reconcile — do they agree, does one supersede another, do they cover disjoint parts of the goal?
+**Output:** `intent.md`.
 
-Run to `/grilling` skill using the exploration findings (and prior grilling output(s), if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
+## 4. Plan implementation (Sonnet-5, foreground)
 
-- What success looks like (measurable, grounded in what's actually possible)
-- Non-negotiables vs. nice-to-haves (informed by codebase reality)
-- Known constraints (timeline, dependencies, team, technical debt)
-- Risk surface (what could break this, based on existing patterns)
+Brief the subagent with each experiment's `report.md` (Method, Results, Analysis) directly, not just `intent.md` — the plan builds on what was already tried, not a re-derivation from product code alone.
 
-**Output:** `intent.md` in the session context directory.
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model, run to `/p4d`, to plan: where code lands, what refactors/scaffolding are needed, dependency/integration points, a step-by-step change list structured as **implement -> test -> commit** per change (or change group) — each entry names what to build, the test that proves it works, and the commit it lands in — with risk annotations.
 
-## 5. Plan implementation (Sonnet-5, foreground)
+**Output:** `plan.md`.
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model run to `/p4d` skill to plan to implement the intent in the product codebase.
+## 5. Implement (Haiku-4.5, foreground)
 
-- Where code lands (file structure, module boundaries)
-- What refactors or scaffolding are needed
-- Dependency and integration points
-- Step-by-step change list with risk annotations
+**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model, run to `/work` (parallel by groups/depends), to execute `plan.md`'s implement -> test -> commit sequence per entry: apply the change, run the test(s) that prove it (existing + new), then commit. Save the actual test output (pass/fail, not a summary) to `implementation/test-results.md` as it goes — step 6 reads this directly rather than re-running anything.
 
-**Output:** `plan.md` in the session context directory.
+**Output:** code changes committed (or staged) in the product repo; `implementation/test-results.md` and other logs in `implementation/`.
 
-## 6. Implement (Haiku-4.5, foreground)
+## 6. Review against the goal (Sonnet-5, foreground)
 
-**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model run to `/work` skill parallelly according to groups and depends to execute the implementation plan:
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model — briefed with `intent.md`, `plan.md`, and `implementation/test-results.md`, to review the implementation against the integration goal: completeness vs. plan, whether the saved test results actually validate the goal (not just that tests passed), integration risk, production readiness. Sonnet, not haiku, since judging "does this satisfy the goal" is the reasoning-heavy call this step exists for.
 
-- Apply code changes to the product codebase
-- Run existing tests to catch regressions
-- Create or update tests for new code paths
+**Output:** `review/report.md`.
 
-**Output:** Code changes committed (or staged) in the product repo; logs in `implementation/` in the session context.
+## 7. Handoff
 
-## 7. Review (Sonnet-5, foreground)
-
-**Scale to integration size.** For a small, low-risk integration (single file or module, no new architecture), skip the subagent entirely — read the diff yourself against `plan.md`, fix anything minor inline, and move on. Reserve the dispatch below for integrations that touch multiple modules, introduce new architecture, or carry real production risk.
-
-**MUST DISPATCH (large/risky integrations only) sub-agent** (Agent tool) with claude-haiku-4.5 model run to `/viewpoints` skill to build a multi-angle analysis of the result — haiku is enough here, since `/viewpoints` renders views for a human reviewer, it doesn't make the go/no-go call itself:
-
-- Implementation completeness vs. plan
-- Code quality and test coverage
-- Integration risk (breaking changes, dependency conflicts, performance)
-- Production readiness and rollout strategy
-
-**Output:** `review/gallery/` in the session context (large/risky path only; small integrations note the inline check in `plan.md` and proceed).
-
-## 8. Handoff
-
-Session complete when:
-
-- ✓ Intent pinned down and signed off
-- ✓ Exploration evidence collected and reviewed
-- ✓ Plan written and risk-annotated
-- ✓ Implementation committed
-- ✓ Review complete (no critical blockers)
-
-Leave the `.context/{timestamp}-{goal}/` directory intact for audit trail and future reference.
+Session complete when: intent signed off, exploration evidence collected, plan risk-annotated, implementation committed, review has no critical blockers. Leave `.context/{timestamp}-{goal}/` intact for audit trail.

@@ -1,0 +1,16 @@
+# Explore stage
+
+Read only when you've reached this stage.
+
+**Locate the question's directory.** Match the request to a `## Question N` heading in root `goal.md` (per `pipeline.md`'s `handoff_rules`):
+- No `goal.md`: stop, tell the user to run `/goal-init` first.
+- No matching heading: append a new `## Question N` and create its `questions/{slug}/` yourself, using the same kebab-case slugging `/goal-init` uses.
+- Matching heading: use its existing `questions/{slug}/` — already created by `/goal-init`.
+
+**Explore.** **MUST RUN** `../../explore/SKILL.md` — sonnet tier (open-ended reconnaissance, not a lookup) — posing: "What codebase/domain context is relevant to <the request>, and what would ground an interview about it?" Save the evidence directly to `questions/{slug}/.context/explore/{question-slug}.md` — the directory already exists, so no staging area or move step.
+
+## Gate — resolve here, or continue?
+
+- **Evidence alone answers the request** (a lookup, not a claim to test): answer directly from the evidence, citing it. Stop — no further stage.
+- **Evidence is worth seeing, not testing** (the request wanted to understand or explore something — a structure, a dataset, a codebase shape — not verify a claim): skip straight to `../references/viewpoints-stage.md`, then Publish. No hypothesis, no core stage.
+- **Request needs a claim tested** (comparative/causal — "does X actually help/hurt Y", "which is faster/safer/correct"): continue to `../references/core-stage.md`.

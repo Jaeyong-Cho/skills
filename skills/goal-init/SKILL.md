@@ -1,20 +1,27 @@
 ---
 name: goal-init
-description: Bootstrap a new goal — write the goal statement to `goal.md` at the project root, and (re)build `experiments/index.html`, a dashboard linking every experiment's report and viewpoint gallery so results don't stay buried under `experiments/*/gallery/`. Use when starting a new goal per the Goal-to-Implementation Loop, or whenever the experiments dashboard needs refreshing.
+description: Bootstrap a new goal — write the goal statement and its open questions to `goal.md` at the project root, create a `questions/{slug}/` directory for each question, and (re)build `questions/index.html`, a dashboard linking every question's report and viewpoint gallery. Use when starting a new goal per the Goal-to-Implementation Loop, when adding a new question to an existing goal, or whenever the dashboard needs refreshing.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write, AskUserQuestion
 ---
 
 # Goal Init
 
-Opens the Goal-to-Implementation Loop (see project root `README.md`): record the goal statement at the project root, and surface every experiment run so far so its viewpoint gallery is one click away instead of buried in `experiments/*/gallery/`.
+Opens the Goal-to-Implementation Loop (see project root `README.md`): record the goal and its open questions, give each question its own directory, and surface every question's result so its gallery is one click away instead of buried in `questions/*/gallery/`. This is where `/explore` -> `/experiment` -> `/viewpoints` (see `../experiment/references/pipeline.md`) get the directory they write into — none of those three creates one itself.
 
 ## Steps
 
-1. **Record the goal statement.** Ask the user for a one-line goal statement if they haven't already given one. Write it to `goal.md` at the project root — create the file if missing; if it already exists, prepend the new goal under a `## {today's date}` heading rather than overwriting, since a project can carry more than one goal over its life. Done when `goal.md` exists and contains the current goal statement.
+1. **Record the goal statement.** Ask the user for a one-line goal if they haven't given one. Write it to `goal.md` — create if missing; if it exists, prepend under a `## {today's date}` heading rather than overwriting (a project can carry more than one goal over its life).
 
-2. **Build the experiments dashboard.** Run `python scripts/build_dashboard.py experiments experiments/index.html` from the project root (path relative to this skill's own directory — resolve it against wherever this `SKILL.md` was loaded from). It scans `experiments/{slug}/report.md` for each experiment's hypothesis and verdict, and `experiments/{slug}/gallery/index.html` for a thumbnail, then writes a card grid plus a stats bar (total experiments, verdict breakdown, gallery coverage) to `experiments/index.html`. Report the output path when it finishes. If `experiments/` doesn't exist yet or has no finished experiments, say so plainly — the dashboard renders an empty state, that's expected for a brand-new goal until `/experiment` produces its first result. Done when `experiments/index.html` exists and its card count matches the number of `experiments/*/report.md` files present.
+2. **Record the open questions.** Ask what question(s) need resolving toward this goal, if not already given (one or several; more can be added later by re-running this step). Append each as its own `## Question N` heading, continuing numbering rather than restarting at 1:
 
-`/experiment` calls this same script at the end of its own run (see its step 7) so the dashboard stays in sync without duplicating this logic — don't re-implement dashboard building elsewhere.
+   ```
+   ## Question 3
+   Does the cache TTL bound P99 latency?
+   ```
 
-3. **Serve the dashboard.** Copy `scripts/serve.sh` to the `experiments/` directory to make run manually (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL to open: http://localhost:4800. MUST NOT RUN server. user will manually run it.
+3. **Create each question's directory.** For every `## Question N` heading without one yet, slugify its text into `{slug}` (kebab-case, e.g. `cache-ttl-bound-p99-latency`) and create `questions/{slug}/` — empty is enough; `/explore`, `/experiment`, `/viewpoints` fill it in later.
+
+4. **Build the questions dashboard.** Run `python scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory). Scans `questions/{slug}/report.md` for hypothesis/verdict and `questions/{slug}/gallery/index.html` for a thumbnail, writes a card grid plus stats bar to `questions/index.html`. A question with no `report.md` yet is skipped, not shown broken. `/experiment` calls this same script at the end of its own Publish step — don't reimplement it elsewhere.
+
+5. **Serve the dashboard.** Copy `scripts/serve.sh` to `questions/` (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL: http://localhost:4800. MUST NOT run the server — the user runs it manually.

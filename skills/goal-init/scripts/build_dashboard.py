@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Scan experiments/{slug}/ directories and build a single dashboard page that
-links to each experiment's report and viewpoint gallery.
+Scan {slug}/ directories under a root (e.g. questions/, or the legacy
+experiments/) and build a single dashboard page that links to each entry's
+report and viewpoint gallery. Generic over the directory name -- callers pass
+it explicitly (see /goal-init and /experiment, which both pass "questions").
 
 Usage:
   python build_dashboard.py [experiments_dir] [out_path]
