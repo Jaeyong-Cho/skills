@@ -17,8 +17,8 @@ Apply `../../references/model-selection.md`'s three axes (ambiguity, mistake cos
 
 | Tier | Shape of the question | Example |
 |---|---|---|
-| `haiku` | Default tier. Locate/lookup, or a bounded investigation where the search path is knowable in advance even if it takes a few hops — a wrong or incomplete answer is cheap to notice and cheap to re-run | "Where is `X` defined?", "Does config `Y` set `Z`?", "List every caller of `F`.", "Why does this specific test fail?" |
-| `sonnet` | Reserve for genuinely open-ended reconnaissance where what's even relevant is unclear, or the answer requires weighing trade-offs rather than reporting findings | "Is this pattern safe to reuse here?", "What are the trade-offs before we pick a design?" |
+| `haiku-4.5` | Default tier. Locate/lookup, or a bounded investigation where the search path is knowable in advance even if it takes a few hops — a wrong or incomplete answer is cheap to notice and cheap to re-run | "Where is `X` defined?", "Does config `Y` set `Z`?", "List every caller of `F`.", "Why does this specific test fail?" |
+| `sonnet-5` | Reserve for genuinely open-ended reconnaissance where what's even relevant is unclear, or the answer requires weighing trade-offs rather than reporting findings | "Is this pattern safe to reuse here?", "What are the trade-offs before we pick a design?" |
 
 Default to `haiku` unless a question clearly needs judgment, not just search. Never escalate to `opus`: exploration only gathers evidence, it doesn't decide — `sonnet` covers a risky question's reasoning without opus's cost.
 
