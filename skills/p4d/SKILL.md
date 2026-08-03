@@ -52,6 +52,10 @@ Structure your plan with:
 ### 4. Present clearly
 Use a structured format (ASCII diagram or numbered list) that's easy to follow. Each step should be actionable by someone following the plan directly.
 
+### 5. Parallel Execution Orchestration
+- Group parallel execution paths.
+- Determine sub-agent dispatch order.
+
 ## Example output structure
 
 ```text
