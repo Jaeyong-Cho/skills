@@ -1,6 +1,6 @@
 ---
 name: experiment
-description: Run an experiment through three gated stages — explore, then (if needed) hypothesize/method/execute/analyze, then (if needed) build a /viewpoints gallery. Each stage hands off and stops as soon as it resolves the question, instead of always running to the end. Use when invoked as /experiment.
+description: Run an experiment through three gated stages — explore, then (if needed) one or more attempts, each a cheap one-shot check by default and each free to take a different angle on the question, stepping up to a full p4d/haiku-swarm method only for the specific angle that needs more rigor than a quick check can give. Each stage hands off and stops as soon as it resolves the question, instead of always running to the end. Use when invoked as /experiment.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill, AskUserQuestion
 ---
@@ -20,7 +20,7 @@ Full latitude for running the method (install packages, run scripts, hit local s
 Three gated stages, each detailed in its own reference under `references/` — **read only the one you're about to run.** Each ends in a gate: if the result already resolves the question, hand off and stop.
 
 1. **Explore** — `references/explore-stage.md`. Locates/creates the question's directory; its gate resolves directly, skips straight to Viewpoints (evidence worth seeing, not testing), or sends you to Core.
-2. **Core** — `references/core-stage.md`. Grill, hypothesis, method, execute, analyze; its gate sends you to Publish or to Viewpoints.
+2. **Core** — `references/core-stage.md`. Grill once, then one or more attempts (hypothesis, method, execute, analyze), each picking cheap or full tier fresh based on what that attempt's angle needs; its next-attempt gate loops back to another attempt (usually a new angle, same cheap tier), or its viewpoints gate sends you to Publish or to Viewpoints.
 3. **Viewpoints** — `references/viewpoints-stage.md`. Builds the gallery, then Publish. Reachable directly from Explore (no hypothesis) or from Core (after a verdict).
 
 ## Publish
@@ -41,6 +41,8 @@ Runs once a gate stops at Explore-to-Viewpoints, Core, or later (skip entirely i
 Motivation/Hypothesis/Method are key-value (single-subject attributes, per `../../references/document-style.md`); Results/Analysis are bullets (list-shaped). `**Verdict:**` stays bolded prose, not key-value — `build_dashboard.py` parses it with `\*\*Verdict:\*\*\s*(\w+)` and would break on a renamed field.
 
 **If the core stage never ran** (explore -> viewpoints direct, no hypothesis was framed): use `**Verdict:** Explored`, title the heading from the question itself rather than a claim, and write `Hypothesis`, `Method`, `Analysis` as `not applicable — evidence explored and visualized, no claim tested`; `Motivation` still comes from the explore evidence's Answer section (there's no grilling output on this path).
+
+**If the core stage ran more than one attempt** (a different angle each time, and/or a step up in tier for one of them): Hypothesis/Method/Results/Analysis describe only the resolving (or final) `experiments/{n}-*/`, not every attempt — that attempt is the claim actually being reported. Add a `## Prior attempts` section (bullets) listing each earlier `experiments/{n}-*/`: its angle, tier, verdict, and why it didn't close the question — so the report doesn't read as if the resolving attempt were the only one tried, and so a future reader doesn't re-run an already-ruled-out angle.
 
 ```
 # Experiment: <hypothesis, stated as a claim — or the question itself, if Explored>
@@ -63,10 +65,14 @@ control_baseline: <what stayed fixed, or "none — non-comparative", or "not app
 measurement: <what was measured and how, or "not applicable">
 
 ## Results
-- <one bullet per finding, referencing questions/{slug}/raw/... — or, if Explored, referencing questions/{slug}/.context/explore/...>
+- <one bullet per finding, referencing questions/{slug}/experiments/{n}-{angle-slug}/raw/... — or, if Explored, referencing questions/{slug}/.context/explore/...>
 
 ## Analysis
 - <one bullet per reasoning point tying a result to the verdict, or "not applicable — no claim tested">
+
+## Prior attempts
+<omit this section entirely if only one attempt ran, or if the core stage never ran>
+- **{n}-{angle-slug}** (tier: cheap|full) — <verdict>: <why it didn't close the question, e.g. "right angle, underpowered" or "missed the cold-start case">
 
 ## Visualizations
 See [gallery](gallery/index.html) — <what it adds>, or "Not built — not needed to resolve the question." if Viewpoints was skipped
