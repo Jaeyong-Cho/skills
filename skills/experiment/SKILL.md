@@ -39,7 +39,8 @@ Runs once a gate stops at Explore-to-Viewpoints, Core, or later (skip entirely i
    **Answer:** <verdict> — <takeaway, same one used above>
    ```
    Replace it in place on a later re-run (same question, new experiment) rather than stacking multiple `**Answer:**` lines under one heading.
-5. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it.
+5. **Rebuild Acceptance Criteria.** `python ../goal-init/scripts/build_acceptance_criteria.py goal.md` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it. Rewrites the `## Acceptance Criteria` checklist from every `**Answer:** Supported|Refuted` line in `goal.md`; Inconclusive answers don't produce a criterion. Preserves any box already checked off.
+6. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it.
 
 ## Report template (`questions/{slug}/report.md`)
 

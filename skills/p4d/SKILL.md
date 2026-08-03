@@ -48,6 +48,15 @@ A subagent later dispatched to execute one group must be able to work from that 
 - `plan/index.md` — the plan's own attributes, key-value (per `../references/document-style.md`'s `key_value_format`): `objective:`, `prerequisites:` (list), `testing_approach:`, `edge_cases:` (list), plus a **Corrections to context doc** section if step 2b found any (what the doc claimed vs. what the spot-check found, and which steps exist because of it). Then a group table: `Group N | steps | depends_on | file`.
 - `plan/group-{n}.md` per group — that group's steps only, each with a clear action, file(s) to modify/create, and expected outcome. If a step depends on a prior group's output, state the concrete artifact to expect (a file path, an exported symbol, a schema) — a fact the dispatched agent can check for itself — not "see group N," which would send it back to a file it isn't given.
 
+### 4b. Every step's `Verify:` is a command, not a description
+
+Per `../references/good-harness.md`: classify each step's constraint (structural/behavioral x objective/judgment) and write `Verify:` as the actual command that produces a pass/fail — never a prose claim the executor would have to eyeball ("Middleware rejects invalid tokens"). If a step's outcome genuinely can't be reduced to a command (rare — usually means the step is too coarse), split it until each piece can.
+
+- Objective + structural: a `grep`/`test`/field check (`grep -q "^export function verifyToken" src/middleware/auth.ts`)
+- Objective + behavioral: the actual test/repro command and its expected exit code or output (`npm test -- auth.test.ts`, `curl -s localhost:3000/api/x | grep -q '"ok":true'`)
+- Judgment-based: still name a concrete command that produces the artifact to judge (e.g. a diff or log) — the plan can't automate the judgment call, but it must automate getting to the evidence
+- If no command produces a failing case you can picture, the step isn't harnessed yet — don't write "Verify: looks correct"
+
 ### 5. Present clearly
 
 Report `plan/index.md`'s group table so the orchestrating skill (e.g. `/work`) can see dispatch order and dependencies at a glance without opening every group file.
@@ -76,12 +85,12 @@ Group | Steps | Depends on | File
 Step 1: Create auth schema
   File: db/migrations/001_auth_schema.sql
   Action: Create users, sessions tables
-  Verify: psql shows new tables
+  Verify: psql -c "\dt" | grep -qE "users|sessions"
 
 Step 2: Add auth middleware
   File: src/middleware/auth.ts
   Action: Implement JWT validation
-  Verify: Middleware rejects invalid tokens
+  Verify: npm test -- auth.test.ts (expects "rejects invalid token" case to pass)
 
 [... step 3 ...]
 ```
@@ -93,7 +102,7 @@ Step 2: Add auth middleware
 - Plans should be detailed enough to execute without ambiguity
 - **MUST NOT** write code directly and plan document. Just write a instruct as a plan.
 - Call out file paths, function names, and concrete artifacts
-- Include verification steps for each major phase
+- Every step's verification is a command (see 4b) — no eyeball-only checklists
 - If the context is large, summarize and focus on the relevant parts
 - Ask clarifying questions if requirements are unclear
 - Don't let step 2b's spot-checks turn into a full codebase read by default — only widen beyond the targeted claims if a spot-check actually turns up a contradiction serious enough to doubt the rest of the doc

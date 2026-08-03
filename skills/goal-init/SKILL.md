@@ -1,6 +1,6 @@
 ---
 name: goal-init
-description: Bootstrap a new goal — write the goal statement and its open questions to `goal.md` at the project root, create a `questions/{slug}/` directory for each question, and (re)build `questions/index.html`, a dashboard linking every question's report and viewpoint gallery. Use when starting a new goal per the Goal-to-Implementation Loop, when adding a new question to an existing goal, or whenever the dashboard needs refreshing.
+description: Bootstrap a new goal — write the goal statement and its open questions to `goal.md` at the project root, create a `questions/{slug}/` directory for each question, (re)build `questions/index.html` (a dashboard linking every question's report and viewpoint gallery), and rebuild `goal.md`'s Acceptance Criteria checklist from answered questions. Use when starting a new goal per the Goal-to-Implementation Loop, when adding a new question to an existing goal, or whenever the dashboard or acceptance criteria need refreshing.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write, AskUserQuestion
 ---
@@ -24,4 +24,6 @@ Opens the Goal-to-Implementation Loop (see project root `README.md`): record the
 
 4. **Build the questions dashboard.** Run `python scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory). Scans `questions/{slug}/report.md` for hypothesis/verdict and `questions/{slug}/gallery/index.html` for a thumbnail, writes a card grid plus stats bar to `questions/index.html`. A question with no `report.md` yet is skipped, not shown broken. `/experiment` calls this same script at the end of its own Publish step — don't reimplement it elsewhere.
 
-5. **Serve the dashboard.** Copy `scripts/serve.sh` to `questions/` (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL: http://localhost:4800. MUST NOT run the server — the user runs it manually.
+5. **Rebuild Acceptance Criteria.** Run `python scripts/build_acceptance_criteria.py goal.md` (path relative to this skill's directory). Rewrites the `## Acceptance Criteria` section from every `**Answer:** Supported|Refuted` line in `goal.md`, preserving any box already checked off. Idempotent and safe to run even if no question has an answer yet (writes nothing). `/experiment` calls this same script at the end of its own Publish step — don't reimplement it elsewhere.
+
+6. **Serve the dashboard.** Copy `scripts/serve.sh` to `questions/` (binds `0.0.0.0:4800`; pass a second arg to override the port), then report the URL: http://localhost:4800. MUST NOT run the server — the user runs it manually.

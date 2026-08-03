@@ -29,9 +29,9 @@ Judge this before step 2, every time. Fast-track when **all** hold:
 
 If any of those doesn't hold, skip this section — continue to step 2 as normal.
 
-**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool), briefed with the experiment's `report.md` directly, the product target, and the integration goal, to: read `report.md` (via `handoff/manifest.md` if present), implement the change directly in the product target, run the test(s) that prove it (existing + new), then commit. `run_in_background: false`. Have it save its actual test output (pass/fail, not a summary) to `{product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/implementation/fast-track.md`, alongside a one-line note of which report.md it worked from.
+**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool), briefed with the experiment's `report.md` directly, the product target, and the integration goal, to: read `report.md` (via `handoff/manifest.md` if present), implement the change directly in the product target, run the test(s) that prove it (existing + new) redirected straight to a file under its own directory (e.g. `{test cmd} > {product_repo_root}/.context/{YYYYMMDD-HHMM}-{goal-slug}/implementation/fast-track/output.txt 2>&1`), then commit. `run_in_background: false`. Have it also drop a one-line `implementation/fast-track/notes.md` noting which report.md it worked from.
 
-**Output:** code changes committed (or staged) in the product repo; `implementation/fast-track.md`. Session complete — skip steps 2 through 6 and go straight to step 7's handoff (grill/plan/review artifacts will be absent; that's expected on this path, not a gap).
+**Output:** code changes committed (or staged) in the product repo; `implementation/fast-track/notes.md` + `implementation/fast-track/output.txt`. Session complete — skip steps 2 through 6 and go straight to step 7's handoff (grill/plan/review artifacts will be absent; that's expected on this path, not a gap).
 
 ## 2. Explore experiment and product (subagents via `/explore`)
 
@@ -61,9 +61,9 @@ Brief the subagent with each experiment's `report.md` (Method, Results, Analysis
 
 ## 5. Implement (Haiku-4.5, foreground)
 
-Read `plan/index.md`'s group table. For each dependency wave (groups with no unmet `depends_on`, dispatched together; wait for a wave to finish before the next), **MUST DISPATCH** one claude-haiku-4-5 subagent per group, each given only that group's `plan/group-{n}.md` — via `/work`, to execute its implement -> test -> commit entries: apply the change, run the test(s) that prove it (existing + new), then commit. Each subagent saves its actual test output (pass/fail, not a summary) to `implementation/test-results/group-{n}.md` — namespaced per group so concurrent dispatches never write over each other; step 6 reads the whole directory rather than re-running anything.
+Read `plan/index.md`'s group table. For each dependency wave (groups with no unmet `depends_on`, dispatched together; wait for a wave to finish before the next), **MUST DISPATCH** one claude-haiku-4-5 subagent per group, each given only that group's `plan/group-{n}.md` — via `/work`, to execute its implement -> test -> commit entries: apply the change, run the test(s) that prove it (existing + new) redirected straight to a file under its own group directory (e.g. `{test cmd} > implementation/test-results/group-{n}/output.txt 2>&1`), then commit. Each group gets its own directory so concurrent dispatches never write over each other; step 6 reads the whole `test-results/` tree rather than re-running anything.
 
-**Output:** code changes committed (or staged) in the product repo; `implementation/test-results/group-{n}.md` and other logs in `implementation/`.
+**Output:** code changes committed (or staged) in the product repo; `implementation/test-results/group-{n}/output.txt` and other logs in `implementation/`.
 
 ## 6. Review against the goal (Sonnet-5, foreground)
 
@@ -74,3 +74,5 @@ Read `plan/index.md`'s group table. For each dependency wave (groups with no unm
 ## 7. Handoff
 
 Full pipeline: session complete when intent signed off, exploration evidence collected, plan risk-annotated, implementation committed, review has no critical blockers. Fast track: session complete when `implementation/fast-track.md` shows a passing commit — no intent/plan/review artifacts to check, by design. Leave `.context/{timestamp}-{goal}/` intact for audit trail either way.
+
+**Check off the Acceptance Criteria box.** Only once the session is complete per the paragraph above (full pipeline: no critical blockers in `review/report.md`; fast track: passing commit) — a blocked or partial session leaves its box unchecked. For each experiment location, open *that experiment's own* `goal.md` (the repo the `## Question N` came from in step 1 — not necessarily the product repo) and flip its matching `- [ ] <verdict> -- <takeaway>` line under `## Acceptance Criteria` to `- [x]`. No matching line (question predates the Acceptance Criteria feature, or its answer was Inconclusive) — nothing to check, skip silently.
