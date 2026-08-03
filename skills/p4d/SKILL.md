@@ -77,6 +77,13 @@ Step 2: Add auth middleware
   Verify: Middleware rejects invalid tokens
 
 [... more steps ...]
+
+Group 1
+- 1, 2, 3
+Group 2 
+- 4, 5
+Group 3 (Depends by group 1, group 2)
+- 6, 7, 8
 ```
 
 ## Notes
