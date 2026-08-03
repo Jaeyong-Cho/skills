@@ -53,7 +53,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 **Check for prior grilling output first.** For each experiment location, its `handoff/manifest.md` links to that experiment's `.context/grilling/` — pass all of them into this step as prior intent, the real question(s) and why they mattered are already answered. Also check the product repo root for `goal.md` (from `/goal-init`) and pass it in too — it states the project's declared goal, useful for judging whether this integration actually serves it. Scope this grill to what those files don't cover: product-specific unknowns (deployment target, non-negotiables specific to this codebase, integration constraints) and, when there are multiple experiments, how their findings reconcile — do they agree, does one supersede another, do they cover disjoint parts of the goal?
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings (and prior grilling output(s), if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model `/grilling` using the exploration findings (and prior grilling output(s), if found) to ground the conversation. Stress-test and capture the goal with facts in hand. Outputs a signed-off intent document pinning down:
 
 - What success looks like (measurable, grounded in what's actually possible)
 - Non-negotiables vs. nice-to-haves (informed by codebase reality)
@@ -64,7 +64,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 ## 5. Plan implementation (Sonnet-5, foreground)
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-sonnet-5 model `/p4d` to plan to implement the intent in the product codebase.
+**MUST DISPATCH sub-agent** (Agent tool) with claude-sonnet-5 model `/p4d` to plan to implement the intent in the product codebase.
 
 - Where code lands (file structure, module boundaries)
 - What refactors or scaffolding are needed
@@ -75,7 +75,7 @@ Research the product codebase for existing patterns, dependencies, architecture 
 
 ## 6. Implement (Haiku-4.5, foreground)
 
-**MUST DISPATCH** sub-agent (Agent tool) with claude-haiku-4-5 model `/work` to execute the implementation plan:
+**MUST DISPATCH sub-agent** (Agent tool) with claude-haiku-4-5 model `/work` to execute the implementation plan:
 
 - Apply code changes to the product codebase
 - Run existing tests to catch regressions
