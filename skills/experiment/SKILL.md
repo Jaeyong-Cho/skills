@@ -46,25 +46,27 @@ Default to full latitude for running the method — install packages, run script
 
 ## Report template (`experiments/{slug}/report.md`)
 
+Motivation, Hypothesis, and Method are each attributes of this one experiment (per `../../references/document-style.md`'s `key_value_format`), so they're key-value, not bullets. Results and Analysis are genuinely list-shaped (one entry per finding/reasoning point), so they stay bullets. The `**Verdict:**` line stays bolded prose, not folded into a key-value block — `../goal-init/scripts/build_dashboard.py` parses it with a regex (`\*\*Verdict:\*\*\s*(\w+)`) and would break on a renamed or re-nested field.
+
 ```
 # Experiment: <hypothesis, stated as a claim>
 
 **Verdict:** Supported | Refuted | Inconclusive
 
 ## Motivation
-- Intent: <why the user wanted this, from step 2's evidence file>
-- Real question: <the question being tested, which may not match the literal request>
-- Why it matters: <why it was worth an experiment>
+intent: <why the user wanted this, from step 2's evidence file>
+real_question: <the question being tested, which may not match the literal request>
+why_it_matters: <why it was worth an experiment>
 
 ## Hypothesis
-- Claim: <the falsifiable claim>
-- Confirms if: <the observation that would confirm it>
-- Refutes if: <the observation that would refute it>
+claim: <the falsifiable claim>
+confirms_if: <the observation that would confirm it>
+refutes_if: <the observation that would refute it>
 
 ## Method
-- Variable(s): <what varied>
-- Control/baseline: <what stayed fixed, or "none — non-comparative">
-- Measurement: <what was measured and how>
+variables: <what varied>
+control_baseline: <what stayed fixed, or "none — non-comparative">
+measurement: <what was measured and how>
 
 ## Results
 - <one bullet per finding, each referencing experiments/{slug}/raw/...>

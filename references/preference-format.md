@@ -6,7 +6,7 @@ Where a recorded preference lives, and how each entry is written. Used by `to-pr
 
 Preference files are concise decision ledgers, not report documents.
 
-- Apply `communication-style.md` to user-facing preference confirmations: lead with the decision and use concise bullets for a list of candidates.
+- Apply `document-style.md` to user-facing preference confirmations: lead with the decision and use concise bullets for a list of candidates.
 - Apply `document-style.md`'s bullet rules to persisted entries: one decision per bullet, decision first, direct wording, and no joined unrelated claims.
 - Do not add an introduction, conclusion, table, or diagram to a preference topic file. A preference file is list-like content, so concise bullets are the correct structured form.
 

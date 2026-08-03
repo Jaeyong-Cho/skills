@@ -50,9 +50,11 @@ Orchestrator collects results -- Steps 6-7: assemble manifest, build gallery, se
 
 ## Output template (per visualization)
 
-- **What it shows** — the content of this view: which variables or elements it depicts, and the slice, scenario, or scope drawn.
-- **How to read it** — how to decode the marks, axes, or layout, and where to look first.
-- **Key takeaways** — the specific patterns, values, or relationships visible in this render.
-- **Watch for** — how this view can mislead: what to read cautiously or discount.
+Per `../../references/document-style.md`'s `key_value_format` — these are four attributes of one rendered view, not a sequence or a comparison. Field names match `scripts/build_gallery.py`'s manifest schema (`shows`/`read`/`takeaways`/`caveats`) so the annotation can be copied straight into the manifest JSON:
+
+- `shows` ("What it shows"): the content of this view — which variables or elements it depicts, and the slice, scenario, or scope drawn
+- `read` ("How to read it"): how to decode the marks, axes, or layout, and where to look first
+- `takeaways` ("Key takeaways"): the specific patterns, values, or relationships visible in this render
+- `caveats` ("Watch for"): how this view can mislead — what to read cautiously or discount
 
 See `references/catalog.md` for the full set of forms, grouped by the structure they surface: comparison, distribution, relationship, composition, trend & time, hierarchy, network, geospatial, multivariate, and structure & flow (flowchart, sequence, architecture, entity-relationship, state, directory tree). `references/template.html` and `scripts/build_gallery.py` turn a finished gallery into a single themed `index.html`.

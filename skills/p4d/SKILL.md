@@ -39,15 +39,12 @@ A claim is load-bearing if believing it wrong would change whether a plan step e
 
 ### 3. Create the plan
 Structure your plan with:
-- **Objective**: What will be implemented
+- A key-value header (per `../references/document-style.md`'s `key_value_format` — these are attributes of the plan itself, not a sequence): `objective:`, `prerequisites:` (list value), `testing_approach:`, `edge_cases:` (list value)
 - **Corrections to context doc** (if step 2b found any): what the doc claimed vs. what the spot-check found, and which plan steps exist because of it
-- **Prerequisites**: What needs to be in place first
 - **Steps**: Numbered, sequential steps with:
   - Clear action
   - What file(s) to modify or create
   - Expected outcome
-- **Testing approach**: How to verify each step works
-- **Edge cases**: Known challenges or gotchas
 
 
 ### 4. Present clearly
@@ -60,12 +57,11 @@ Use a structured format (ASCII diagram or numbered list) that's easy to follow. 
 ## Example output structure
 
 ```text
-Objective: Add user authentication to the API
-
-Prerequisites:
-- Node.js 16+
-- PostgreSQL running locally
-- Environment variables configured
+objective: Add user authentication to the API
+prerequisites:
+  - Node.js 16+
+  - PostgreSQL running locally
+  - Environment variables configured
 
 Step 1: Create auth schema
   File: db/migrations/001_auth_schema.sql

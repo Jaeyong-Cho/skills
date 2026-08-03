@@ -42,6 +42,7 @@ Brief each subagent with its bucket's full `{question, evidence path}` list, to:
   - **Absence/removal** ("X was already removed," "X doesn't exist," "X is unused"): search for the literal named artifact itself (exact filename, symbol, string). A search that only covers *related* names (e.g. the APIs a file uses) is not evidence the file itself is gone — a proxy match can pass while the literal claim is false.
   - **Full enumeration** ("the only state/hooks/callers/fields are Y"): grep for every instance of the pattern across the whole file/symbol (e.g. every `useState`/`useReducer` call), don't summarize from a partial read. An omitted item is worse than a wrong one — nothing points at it later.
 - Write each question's findings to its own path, structured as:
+  - A key-value header, per `../../references/document-style.md`'s `key_value_format` (the file's own attributes, not its content): `question:`, `tier:` (`haiku` or `sonnet`).
   - **Answer**, first: a direct, complete, concise answer — no padding, no restating evidence in prose, but complete enough that the calling context needs nothing else to understand it.
   - **Evidence**, per `../../references/document-style.md`: one claim per bullet, citation (file:line or URL) nested under it, tagged `[DIRECT]` (the search/read positively confirmed the literal thing claimed) or `[INFERRED]` (deduced without checking the thing itself) — grounds the Answer, doesn't restate it.
   - **Open gaps**: anything unresolved or uncertain — don't bury it by omitting it from the Answer.

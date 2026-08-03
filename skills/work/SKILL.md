@@ -44,31 +44,32 @@ For each step:
 
 ## Example workflow
 
-```text
-Plan received: "Add user authentication to API"
+Per `../../references/document-style.md`'s `key_value_format`: the plan header, each step's own facts, and the closing summary are all attributes of a single subject (the plan, the step, the run) — key-value, not narrated bullets. The step sequence itself stays a numbered progression.
 
-Prerequisites check:
-  ✓ Node.js 16+ installed
-  ✓ PostgreSQL running
-  ✓ Environment variables set
+```text
+plan: "Add user authentication to API"
+prerequisites:
+  - Node.js 16+ installed
+  - PostgreSQL running
+  - Environment variables set
 
 Step 1/5: Create auth schema
-  - Running: db/migrations/001_auth_schema.sql
-  - Result: ✓ users table created, sessions table created
-  - Status: Ready for step 2
+  file: db/migrations/001_auth_schema.sql
+  result: users table created, sessions table created
+  status: ready for step 2
 
 Step 2/5: Add auth middleware
-  - Creating: src/middleware/auth.ts
-  - Implementing: JWT validation logic
-  - Testing: Middleware correctly rejects invalid tokens
-  - Status: ✓ Complete
+  file: src/middleware/auth.ts
+  action: implement JWT validation logic
+  test: middleware correctly rejects invalid tokens
+  status: complete
 
 [... continuing through steps ...]
 
-Summary:
-  Completed: 5/5 steps
-  All tests passing
-  Implementation ready for review
+summary:
+  completed: 5/5 steps
+  tests: passing
+  status: ready for review
 ```
 
 ## Notes
