@@ -12,6 +12,7 @@ Turns a goal statement into candidate questions instead of requiring the user to
 - `goal.md` must already exist with a goal statement. No `goal.md` -> stop and tell the user to run `/goal-init` first.
 - Every proposed question must be falsifiable (a report could come back Supported, Refuted, or Inconclusive against it) — not a vague topic to explore.
 - Don't propose a question that duplicates or trivially rephrases one already in `goal.md`.
+- **DO NOT** read the codebase directly — use `/explore`.
 
 ## Steps
 
@@ -19,7 +20,7 @@ Turns a goal statement into candidate questions instead of requiring the user to
 
 2. **Gather cheap context.** Read root `README.md` and every file in `.context/` if either exists — these carry constraints, priorities, and prior decisions that shape which questions are actually worth asking, per this repo's Project Intents convention.
 
-3. **Decide whether the goal is codebase-relevant.** If the goal concerns this project's code, architecture, or data (most goals in a code repo do), dispatch `/explore` with 2-4 factual questions about the current state relevant to the goal (e.g. "does a caching layer already exist?", "what does the current data model look like?") — grounds the brainstorm in what's actually true instead of inventing questions about a codebase state that doesn't exist. Save the evidence to `questions/.context/explore/goal-context.md` (create the directory if missing) — this is goal-level evidence, gathered before any question's own directory exists, and step 8 propagates it forward so later stages don't re-explore the same ground. Skip this step only for goals with no codebase angle at all (e.g. purely product/strategy goals).
+3. **Decide whether the goal is codebase-relevant.** If the goal concerns this project's code, architecture, or data (most goals in a code repo do), **MUST RUN** `../explore/SKILL.md` posing 2-4 factual questions about the current state relevant to the goal (e.g. "does a caching layer already exist?", "what does the current data model look like?") — grounds the brainstorm in what's actually true instead of inventing questions about a codebase state that doesn't exist. Direct it to save the combined evidence to `questions/.context/explore/goal-context.md` (create the directory if missing) instead of its default per-question path — this is goal-level evidence, gathered before any question's own directory exists, and step 8 propagates it forward so later stages don't re-explore the same ground. Skip this step only for goals with no codebase angle at all (e.g. purely product/strategy goals).
 
 4. **Brainstorm 3-5 candidates.** Each should target a distinct risk or unresolved assumption standing between the current state and the goal — not 5 phrasings of the same uncertainty. Favor the question whose answer would most change what happens next; a question whose answer is already implied by the explore evidence or existing report isn't a good candidate. State each candidate as a single falsifiable sentence, the same form a `## Question N` heading takes (e.g. "Does the cache TTL bound P99 latency?").
 
