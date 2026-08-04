@@ -1,7 +1,7 @@
 ---
 name: goal-init
 description: Bootstrap a new goal — write the goal statement and its open questions to `goal.md` at the project root, create a `questions/{slug}/` directory for each question, (re)build `questions/index.html` (a dashboard linking every question's report and viewpoint gallery), and rebuild `goal.md`'s Acceptance Criteria checklist from answered questions. Use when starting a new goal per the Goal-to-Implementation Loop, when adding a new question to an existing goal, or whenever the dashboard or acceptance criteria need refreshing.
-disable-model-invocation: flase
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write, AskUserQuestion
 ---
 
