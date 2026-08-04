@@ -14,6 +14,7 @@ Full latitude for running the method (install packages, run scripts, hit local s
 - `{slug}` names a `## Question N` heading in root `goal.md`; its directory is created by `/goal-init` before this skill runs — see `references/pipeline.md`. No `goal.md` -> the explore stage stops and says so.
 - **DO NOT** read the codebase directly — use `/explore`.
 - **MUST FOLLOW** `/ponytail` skill to do not overengineer. Think about the cheapest way to get a verdict, not the fanciest.
+- **MUST DESIGN** strategy at this agent to make answer the questions and request for sub-agents.
 - **Prior stage output is first priority.** Each stage reads what the last stage wrote and treats it as sufficient; don't re-explore or re-grep to double-check it. Fall back to fresh `/explore` only for a genuine gap.
 
 ## Multi-question fan-out
