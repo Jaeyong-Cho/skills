@@ -13,6 +13,10 @@ Defaults: experiments_dir="experiments", out_path="{experiments_dir}/index.html"
 Per experiment (a subdirectory of experiments_dir containing report.md), reads:
   {slug}/report.md            -> hypothesis (from "# Experiment: ..." heading)
                                   and verdict (from "**Verdict:** ...")
+  {slug}/report.html          -> if present (via render_report.py), the Report
+                                  card link points here instead of report.md,
+                                  so it opens rendered in-browser, not as a
+                                  markdown file download
   {slug}/gallery/index.html   -> first embedded <img src="data:..."> as a thumbnail
 
 A subdirectory without report.md is skipped (not yet a finished experiment). A
@@ -160,7 +164,7 @@ def stats_html(verdicts, gallery_count):
     return f'<div class="stats">{stats}</div>'
 
 
-def card_html(slug, hypothesis, verdict, thumb, has_gallery):
+def card_html(slug, hypothesis, verdict, thumb, has_gallery, has_report_html):
     badge_class = verdict.lower() if verdict.lower() in ("supported", "refuted", "inconclusive") else "unknown"
     thumb_html = (
         f'<img src="{thumb}" alt="{html.escape(slug)} preview" loading="lazy">'
@@ -170,6 +174,7 @@ def card_html(slug, hypothesis, verdict, thumb, has_gallery):
         f'<a href="{html.escape(slug)}/gallery/index.html">Gallery</a>'
         if has_gallery else '<span class="disabled">Gallery</span>'
     )
+    report_href = f"{html.escape(slug)}/report.html" if has_report_html else f"{html.escape(slug)}/report.md"
     return f'''
     <article class="card">
       <div class="thumb">{thumb_html}</div>
@@ -177,7 +182,7 @@ def card_html(slug, hypothesis, verdict, thumb, has_gallery):
         <span class="badge {badge_class}">{html.escape(verdict)}</span>
         <h3>{html.escape(hypothesis)}</h3>
         <div class="slug">{html.escape(slug)}</div>
-        <div class="links"><a href="{html.escape(slug)}/report.md">Report</a>{gallery_link}</div>
+        <div class="links"><a href="{report_href}">Report</a>{gallery_link}</div>
       </div>
     </article>'''
 
@@ -202,8 +207,9 @@ def main():
         hypothesis, verdict = parse_report(os.path.join(base, "report.md"))
         gallery_index = os.path.join(base, "gallery", "index.html")
         has_gallery = os.path.exists(gallery_index)
+        has_report_html = os.path.exists(os.path.join(base, "report.html"))
         thumb = first_thumbnail(gallery_index)
-        cards.append(card_html(slug, hypothesis, verdict, thumb, has_gallery))
+        cards.append(card_html(slug, hypothesis, verdict, thumb, has_gallery, has_report_html))
         verdicts.append(verdict)
         gallery_count += 1 if has_gallery else 0
 

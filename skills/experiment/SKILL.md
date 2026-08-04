@@ -27,22 +27,23 @@ Three gated stages, each detailed in its own reference under `references/` — *
 
 Runs once a gate stops at Explore-to-Viewpoints, Core, or later (skip entirely if Explore's gate already resolved the request in words). Every field below has a source file from an earlier stage — read it, don't re-derive. If the core stage never ran (explore -> viewpoints direct), the report has no hypothesis to state — see the template's note on that case.
 
-**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool) to perform steps 1-6 below directly — assembling and writing every file itself, not returning content for the orchestrator to write. Brief it with every stage's real artifacts that ran (hypothesis/result/method/raw under `experiments/`, or `.context/explore/` evidence if Explored) plus the report template. `run_in_background: false`. Read back only confirmation that `report.md`'s Verdict line and `goal.md`'s Answer line were written before treating the question as closed.
+**MUST DISPATCH** one claude-haiku-4-5 subagent (Agent tool) to perform steps 1-7 below directly — assembling and writing every file itself, not returning content for the orchestrator to write. Brief it with every stage's real artifacts that ran (hypothesis/result/method/raw under `experiments/`, or `.context/explore/` evidence if Explored) plus the report template. `run_in_background: false`. Read back only confirmation that `report.md`'s Verdict line and `goal.md`'s Answer line were written before treating the question as closed.
 
 1. **Write the report.** Assemble `questions/{slug}/report.md` (template below) from real artifacts of the stages actually run. Verdict first, not buried.
-2. **Package the handoff.** `questions/{slug}/handoff/manifest.md` with relative links to `../report.md`, `../.context/explore/`, `../.context/grilling/` (omit if the core stage never ran), and — if Viewpoints ran — `../gallery/index.html` (labeled human-only reference). This is the single path downstream tooling (e.g. `/e2p`) should read.
-3. **Update the README.** Append one bullet to `## Experiments` in root `README.md` (create if missing), verdict-first, nothing beyond one line:
+2. **Render the report to HTML.** `python ../goal-init/scripts/render_report.py questions/{slug}/report.md` (path relative to this skill's directory) — writes `questions/{slug}/report.html`, a standalone rendered page (same theme as the gallery/dashboard) so a reader opens it straight in a browser instead of downloading the raw `.md`. Same script every run, don't reimplement it; re-run whenever `report.md` changes.
+3. **Package the handoff.** `questions/{slug}/handoff/manifest.md` with relative links to `../report.html` (rendered; link `../report.md` alongside it as the source), `../.context/explore/`, `../.context/grilling/` (omit if the core stage never ran), and — if Viewpoints ran — `../gallery/index.html` (labeled human-only reference). This is the single path downstream tooling (e.g. `/e2p`) should read.
+4. **Update the README.** Append one bullet to `## Experiments` in root `README.md` (create if missing), verdict-first, nothing beyond one line:
    ```
    ## Experiments
-   - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <takeaway>. [Report](questions/{slug}/report.md)
+   - **Supported/Refuted/Inconclusive** — <hypothesis in a few words>: <takeaway>. [Report](questions/{slug}/report.html)
    ```
-4. **Answer the question in `goal.md`.** Directly under the `## Question N` heading this `{slug}` came from, add one line:
+5. **Answer the question in `goal.md`.** Directly under the `## Question N` heading this `{slug}` came from, add one line:
    ```
    **Answer:** <verdict> — <takeaway, same one used above>
    ```
    Replace it in place on a later re-run (same question, new experiment) rather than stacking multiple `**Answer:**` lines under one heading.
-5. **Rebuild Acceptance Criteria.** `python ../goal-init/scripts/build_acceptance_criteria.py goal.md` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it. Rewrites the `## Acceptance Criteria` checklist from every `**Answer:** Supported|Refuted` line in `goal.md`; Inconclusive answers don't produce a criterion. Preserves any box already checked off.
-6. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it.
+6. **Rebuild Acceptance Criteria.** `python ../goal-init/scripts/build_acceptance_criteria.py goal.md` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it. Rewrites the `## Acceptance Criteria` checklist from every `**Answer:** Supported|Refuted` line in `goal.md`; Inconclusive answers don't produce a criterion. Preserves any box already checked off.
+7. **Refresh the dashboard.** `python ../goal-init/scripts/build_dashboard.py questions questions/index.html` (path relative to this skill's directory) — same script `/goal-init` uses, don't reimplement it. Picks up `report.html` automatically (step 2) and links the dashboard's Report card to it instead of `report.md`.
 
 ## Report template (`questions/{slug}/report.md`)
 
