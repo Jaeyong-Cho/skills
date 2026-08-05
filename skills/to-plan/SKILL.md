@@ -7,6 +7,7 @@ disable-model-invocation: true
 # To-Plan
 
 Turn this session's decisions into a plan document instead of leaving them to evaporate at the end of the chat.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 
 1. **Follow document style.** Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and size limits govern the draft.
 2. **Draft the plan**, covering:
