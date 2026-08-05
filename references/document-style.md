@@ -27,3 +27,12 @@ floor: a single fact, yes/no answer, or one-item confirmation stays plain text â
 - fence: always ` ```text ` (never bare ` ``` `) â€” stops renderers from syntax-highlighting or reflowing the layout
 - caption: one sentence stating what the diagram depicts, placed directly above or below it
 - labels: inline on the arrow if <=4 words; longer explanations go to a numbered/bulleted legend below
+
+**MUST NOT** make the document size over then below
+- Sentence: 15 word
+- Paragraph: 50 word
+- Key message: 1-3 sentence
+- Section: 200 word
+- File: 500 word
+
+**MUST** Split the file if the size over then below
