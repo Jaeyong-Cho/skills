@@ -76,7 +76,7 @@ install_skill_library() {
       [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
     done < "$manifest"
   fi
-  for dir in references preferences template; do
+  for dir in preferences; do
     rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
   done
 
@@ -89,11 +89,11 @@ install_skill_library() {
     (cd "$SKILLS_DIR/skills" && ls -1) > "$manifest"
   fi
 
-  for dir in references preferences template; do
+  for dir in preferences; do
     [ -d "$SKILLS_DIR/$dir" ] || continue
     cp -R "$SKILLS_DIR/$dir" "$CLAUDE_SKILLS_DIR/"
   done
-  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, references, preferences, template)"
+  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, preferences)"
 }
 
 setup_claude() {
@@ -122,6 +122,11 @@ setup_claude() {
       && claude plugin install ponytail@ponytail &>/dev/null \
       && echo "  ✓ ponytail plugin" \
       || echo "  ponytail install failed, run manually: claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail"
+
+    claude plugin marketplace add mattpocock/skills &>/dev/null \
+      && claude plugin install mattpocock-skills@mattpocock &>/dev/null \
+      && echo "  ✓ mattpocock-skills plugin (grilling, grill-me)" \
+      || echo "  mattpocock-skills install failed, run manually: claude plugin marketplace add mattpocock/skills && claude plugin install mattpocock-skills@mattpocock"
   fi
 }
 
@@ -132,15 +137,13 @@ setup_copilot() {
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
 
-  # Install skills, preferences and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
+  # Install skills and preferences for Copilot CLI, if the user has a ~/.copilot/skills directory.
   if [ -d "$HOME/.copilot" ]; then
-      # Clear existing skills and references to avoid duplicates
-      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/preferences" "$HOME/.copilot/references"
+      # Clear existing skills and preferences to avoid duplicates
+      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/preferences"
       cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
-      cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
       cp -R "$SKILLS_DIR/preferences/." "$HOME/.copilot/skills/preferences"
-      cp -R "$SKILLS_DIR/template/." "$HOME/.copilot/skills/template"
-      echo "  ✓ skills and references → ~/.copilot"
+      echo "  ✓ skills and preferences → ~/.copilot"
   fi
 
   # Copilot CLI has no hooks API — tmux-agent-status can only see it via
@@ -159,6 +162,11 @@ setup_copilot() {
       && copilot plugin install ponytail@ponytail &>/dev/null \
       && echo "  ✓ ponytail plugin" \
       || echo "  ponytail install failed, run manually: copilot plugin marketplace add DietrichGebert/ponytail && copilot plugin install ponytail@ponytail"
+
+    copilot plugin marketplace add mattpocock/skills &>/dev/null \
+      && copilot plugin install mattpocock-skills@mattpocock &>/dev/null \
+      && echo "  ✓ mattpocock-skills plugin (grilling, grill-me)" \
+      || echo "  mattpocock-skills install failed, run manually: copilot plugin marketplace add mattpocock/skills && copilot plugin install mattpocock-skills@mattpocock"
   fi
 }
 
