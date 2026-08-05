@@ -6,12 +6,10 @@ disable-model-invocation: true
 
 # Feat Grill Me
 
-Grill a feature plan before building it — the same interview as `/grilling`, aimed at the questions a feature spec skips.
-
-1. **Run `mattpocock-skills:grilling`** (Skill tool, plugin-qualified — `grilling` alone won't resolve, it's a plugin skill) against the feature plan in this session.
-2. **Cover every branch below**, on top of whatever grilling surfaces on its own:
+- Run `/grilling` session
+- **Cover every branch below**, on top of whatever grilling surfaces on its own:
    - Scope-in / scope-out
-   - Expected state
+   - Expected
    - Architecture — components and interfaces
    - Observability
    - Testability
