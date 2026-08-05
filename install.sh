@@ -52,6 +52,19 @@ selected() {
   return 1
 }
 
+# ── Plugin install (marketplace add is idempotent-unsafe on some CLIs —
+#    ignore its exit code, only the install step's result decides success) ────
+
+install_agent_plugin() {
+  local cli="$1" marketplace_repo="$2" plugin_id="$3" label="$4"
+  "$cli" plugin marketplace add "$marketplace_repo" &>/dev/null
+  if "$cli" plugin install "$plugin_id" &>/dev/null; then
+    echo "  ✓ $label"
+  else
+    echo "  $label install failed, run manually: $cli plugin marketplace add $marketplace_repo && $cli plugin install $plugin_id"
+  fi
+}
+
 # ── Setup functions ───────────────────────────────────────────────────────────
 
 install_skill_library() {
@@ -118,15 +131,8 @@ setup_claude() {
   fi
 
   if command -v claude &>/dev/null; then
-    claude plugin marketplace add DietrichGebert/ponytail &>/dev/null \
-      && claude plugin install ponytail@ponytail &>/dev/null \
-      && echo "  ✓ ponytail plugin" \
-      || echo "  ponytail install failed, run manually: claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail"
-
-    claude plugin marketplace add mattpocock/skills &>/dev/null \
-      && claude plugin install mattpocock-skills@mattpocock &>/dev/null \
-      && echo "  ✓ mattpocock-skills plugin (grilling, grill-me)" \
-      || echo "  mattpocock-skills install failed, run manually: claude plugin marketplace add mattpocock/skills && claude plugin install mattpocock-skills@mattpocock"
+    install_agent_plugin claude DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
+    install_agent_plugin claude mattpocock/skills mattpocock-skills@mattpocock "mattpocock-skills plugin (grilling, grill-me)"
   fi
 }
 
@@ -158,15 +164,8 @@ setup_copilot() {
   fi
 
   if command -v copilot &>/dev/null; then
-    copilot plugin marketplace add DietrichGebert/ponytail &>/dev/null \
-      && copilot plugin install ponytail@ponytail &>/dev/null \
-      && echo "  ✓ ponytail plugin" \
-      || echo "  ponytail install failed, run manually: copilot plugin marketplace add DietrichGebert/ponytail && copilot plugin install ponytail@ponytail"
-
-    copilot plugin marketplace add mattpocock/skills &>/dev/null \
-      && copilot plugin install mattpocock-skills@mattpocock &>/dev/null \
-      && echo "  ✓ mattpocock-skills plugin (grilling, grill-me)" \
-      || echo "  mattpocock-skills install failed, run manually: copilot plugin marketplace add mattpocock/skills && copilot plugin install mattpocock-skills@mattpocock"
+    install_agent_plugin copilot DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
+    install_agent_plugin copilot mattpocock/skills mattpocock-skills@mattpocock "mattpocock-skills plugin (grilling, grill-me)"
   fi
 }
 
