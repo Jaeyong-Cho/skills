@@ -6,12 +6,10 @@ disable-model-invocation: true
 
 # Fix Grill Me
 
-- Run `/grilling` session
-- **Cover every branch below**, on top of whatever grilling surfaces on its own:
-   - Root cause
-   - Regeneration
-   - Impact scope
-   - Observation
-   - Monitoring
+Run `/grilling` session with remember these key points for effective bug fix:
+- Root cause
+- Impact scope
+- Observation
+- Monitoring
 
 Completion criterion: each branch above has an explicit, recorded answer — not skipped — and no implementation work has started.
