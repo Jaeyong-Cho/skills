@@ -2,14 +2,10 @@
 - timestamp: YYYY-MM-DD HH:mm:dd
 - stage: Explore
 
-## What I understand (not truth)
-- {Human}
+## Current State
 
-## What is current main problem
-- {Human}
+## Expected State
 
-## Questions
-- {Human}
-  
-## Others (Memo for future)
-- {Human}
+## Gap
+
+## Action
