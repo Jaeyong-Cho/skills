@@ -2,7 +2,7 @@
 - timestamp: YYYY-MM-DD HH:mm:dd
 - stage: Explore
 
-## Recommended Actions
+## Recommended Actions - By AI
 - {Written By AI Eli5}
 
 ## What is current main problem
