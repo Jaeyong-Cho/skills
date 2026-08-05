@@ -1,11 +1,11 @@
-# Human Thinking 
+# Human Thinking
+- timestamp: YYYY-MM-DD HH:mm:dd
+- stage: Explore
 
-## What human understand
+## What is current main problem
 
-## What are good
+## What I understand (not truth)
 
-## What are bad
+## Questions
 
-## What are want
-
-## Questions?
+## Others (Memo for future)
