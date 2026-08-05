@@ -7,6 +7,8 @@ disable-model-invocation: true
 # Fix Grill Me
 
 Run `/grilling` session with remember these key points for effective bug fix:
+- Intent and purpose
+- Expected
 - Root cause
 - Impact scope
 - Observation
