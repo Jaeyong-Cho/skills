@@ -14,6 +14,8 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Target project (e.g. path of the repo)
    - Spec changes
    - Acceptance criteria
+   - Commit
+   - Release
    - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
 3. **Write it** to `plans/{timestamp}-{slug}.md` (kebab-case slug of the plan's topic, timestamp from `date +%Y%m%d-%H%M%S`), creating the directory if needed.
 
