@@ -1,6 +1,6 @@
 # Document & Communication Style
 
-Basically write document with two phase (Introduction -> Abstraction -> Detailed)
+Basically write document with three phase (Introduction -> Abstraction -> Detailed)
 
 **Introduction**: 1-3 sentence short description to explain why, what
 **Abstraction**: Abstraction is a model consisted of object and their interactions, relationships, categories
