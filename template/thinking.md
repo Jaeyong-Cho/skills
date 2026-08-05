@@ -8,10 +8,4 @@
     - Sub goal
 **ONLY FOR RELATED CURRENT THINKING** 
 
-## Current State
-
-## Expected State
-
-## Gap
-
 ## Opinion
