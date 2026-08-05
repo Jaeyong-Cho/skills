@@ -3,6 +3,10 @@
 - stage: Explore
 
 ## Goal
+- Top goal
+  - Sub goal
+    - Sub goal
+**ONLY FOR RELATED CURRENT THINKING** 
 
 ## Current State
 
@@ -10,4 +14,4 @@
 
 ## Gap
 
-## Action
+## Opinion
