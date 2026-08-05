@@ -11,6 +11,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
 
 1. **Follow document style.** Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and size limits govern the draft.
 2. **Draft the plan**, covering:
+   - Target project (e.g. path of the repo)
    - Spec changes
    - Acceptance criteria
    - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
