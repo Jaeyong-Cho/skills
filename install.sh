@@ -89,7 +89,7 @@ install_skill_library() {
       [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
     done < "$manifest"
   fi
-  for dir in preferences; do
+  for dir in references; do
     rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
   done
 
@@ -102,11 +102,11 @@ install_skill_library() {
     (cd "$SKILLS_DIR/skills" && ls -1) > "$manifest"
   fi
 
-  for dir in preferences; do
+  for dir in references; do
     [ -d "$SKILLS_DIR/$dir" ] || continue
     cp -R "$SKILLS_DIR/$dir" "$CLAUDE_SKILLS_DIR/"
   done
-  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, preferences)"
+  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, references)"
 }
 
 setup_claude() {
@@ -143,13 +143,13 @@ setup_copilot() {
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
   echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
 
-  # Install skills and preferences for Copilot CLI, if the user has a ~/.copilot/skills directory.
+  # Install skills and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
   if [ -d "$HOME/.copilot" ]; then
-      # Clear existing skills and preferences to avoid duplicates
-      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/preferences"
+      # Clear existing skills and references to avoid duplicates
+      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/references"
       cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
-      cp -R "$SKILLS_DIR/preferences/." "$HOME/.copilot/skills/preferences"
-      echo "  ✓ skills and preferences → ~/.copilot"
+      cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
+      echo "  ✓ skills and references → ~/.copilot"
   fi
 
   # Copilot CLI has no hooks API — tmux-agent-status can only see it via
