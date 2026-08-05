@@ -12,6 +12,6 @@ Turn a question into a minimal scientific-method run instead of guessing at an a
 2. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. Completion criterion: real output captured, not inferred.
 3. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
 
-Write the plan, raw output, and verdict under `.context/experiment/{slug}/` (kebab-case slug of the question), in `../references/document-style.md` style.
+Write the plan, raw output, and verdict under `experiments/{slug}/` (kebab-case slug of the question), in `../references/document-style.md` style.
 
 Completion criterion: the question has a stated verdict backed by real, recorded output.
