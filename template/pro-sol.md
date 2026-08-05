@@ -3,6 +3,11 @@
 - AI and Human can use this context to solve the problems together.
 - The purpose of this context is to provide a clear
 
+## Documentation Style
+All of the documentations **MUST FOLLOW** this style:
+- Basically write document with two phase (Abstract -> Detailed)
+- Abstraction: Abstraction is a model consisted of object and their interactions, relationships, categories Detailed: Detailed description is a representative detailed example for about the model
+
 ## Directory Structure
 - opens/ (The context for about what is the unknown, not decided, and open questions)
 - problems/ (The context for about what is the gap between the expected state and the actual state)
