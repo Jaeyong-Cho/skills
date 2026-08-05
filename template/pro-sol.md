@@ -6,7 +6,8 @@
 ## Documentation Style
 All of the documentations **MUST FOLLOW** this style:
 - Basically write document with two phase (Abstract -> Detailed)
-- Abstraction: Abstraction is a model consisted of object and their interactions, relationships, categories Detailed: Detailed description is a representative detailed example for about the model
+- **Abstraction**: Abstraction is a model consisted of object and their interactions, relationships, categories
+- **Detailed**: Detailed description is a representative detailed example for about the model
 
 ## Directory Structure
 - opens/ (The context for about what is the unknown, not decided, and open questions)
