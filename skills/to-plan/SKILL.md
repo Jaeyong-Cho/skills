@@ -12,9 +12,9 @@ Turn this session's decisions into a plan document instead of leaving them to ev
 2. **Draft the plan**, covering:
    - Spec changes
    - Acceptance criteria
-   - Action items
-3. **Write it** to `.context/inbox/plans/{timestamp}-{slug}.md` (kebab-case slug of the plan's topic, timestamp from `date +%Y%m%d-%H%M%S`), creating the directory if needed.
+   - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
+3. **Write it** to `plans/{timestamp}-{slug}.md` (kebab-case slug of the plan's topic, timestamp from `date +%Y%m%d-%H%M%S`), creating the directory if needed.
 
 Completion criterion: the file exists, and spec changes, acceptance criteria, and action items are each present and traceable to something decided in this session.
 
-Tell the user the file path when done.
+Tell the user the file path, and that `/do-plan` executes it, when done.
