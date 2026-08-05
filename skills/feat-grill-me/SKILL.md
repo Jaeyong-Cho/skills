@@ -7,6 +7,7 @@ disable-model-invocation: true
 # Feat Grill Me
 
 Run `/grilling` session with remember these key points for effective feature design and implementation:
+- Values
 - Scope-in / scope-out
 - Expected
 - Architecture — components and interfaces
