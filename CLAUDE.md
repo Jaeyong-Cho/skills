@@ -9,6 +9,11 @@ Unless the user specifies otherwise, write and communicate only in English.
 
 @RTK.md
 
+## Context Structure
+- Journal: `~/wiki/journal/YYYY/YYYY-MM-DD.md` — one file per day, daily log.
+- Research: `~/wiki/research/YYYY/YYYY-MM-DD/NN-{job}/` — one directory per day; `NN-{job}` is a zero-padded sequence number plus a short slug per research task that day (e.g. `01-vendor-eval/`).
+- Handoff: before starting work, check the most recent `~/wiki/journal/YYYY/YYYY-MM-DD-handoff.md` (highest date, may not be today) for open items and carried decisions from the prior session.
+
 ## Skill Journal Logging
 Today's journal file: `~/wiki/journal/$(date +%Y)/$(date +%Y-%m-%d).md`. If it doesn't exist, skip logging.
 
