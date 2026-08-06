@@ -23,7 +23,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Release
    - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
 7. **Write it** to `plans/{timestamp}-{slug}.md` (kebab-case slug of the plan's topic, timestamp from `date +%Y%m%d-%H%M%S`), creating the directory if needed.
-8. **Split if too large.** If the file exceeds document-style's 500-word limit, split it into `plans/{timestamp}-{slug}-{n}-{part-slug}.md`, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
+8. **Split if too large.** If the file is large and many topics split it into `plans/{timestamp}-{slug}-{n}-{part-slug}.md`, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
 
 Completion criterion: the file (or files, if split) exists, and spec changes, acceptance criteria, and action items are each present and traceable to something decided in this session.
 
