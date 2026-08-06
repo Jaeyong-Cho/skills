@@ -1,0 +1,5 @@
+#!/bin/bash
+
+f=~/wiki/journal/$(date +%Y/%m/%Y-%m-%d).md
+mkdir -p "$(dirname "$f")"
+echo "- $(date +%H:%M): END FOCUS" >> "$f"
