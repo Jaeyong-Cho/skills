@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Run `/grilling` session with remember these key points for effective feature design and implementation:
 - Intent and purpose
-- Values and effect
+- Value for end-user
 - Scope-in / scope-out
 - Expected
 - Architecture — components and interfaces
