@@ -12,7 +12,7 @@ Run `/grilling` session with remember these key points for effective bug fix:
 - Expected
 - Root cause
 - Impact scope
-- Solution
+- Fundamental Solution
 - Architecture — components and interfaces
 - Observability
 - Monitoring
