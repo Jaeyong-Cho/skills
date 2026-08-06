@@ -4,3 +4,4 @@ assets/
 ~$*
 
 peon-*
+__pycache__/
