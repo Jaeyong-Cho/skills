@@ -17,6 +17,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Spec changes
    - Acceptance criteria
    - Commit
+   - Branch
    - Release
    - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
 5. **Write it** to `plans/{timestamp}-{slug}.md` (kebab-case slug of the plan's topic, timestamp from `date +%Y%m%d-%H%M%S`), creating the directory if needed.
