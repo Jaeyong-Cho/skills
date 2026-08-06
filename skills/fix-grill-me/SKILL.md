@@ -17,6 +17,7 @@ Run `/grilling` session with remember these key points for effective bug fix:
 - Observability
 - Monitoring
 - New simple and representative testcase
+- Branch
 - Release and ship plan
 
 Completion criterion: each branch above has an explicit, recorded answer — not skipped — and **MUST NOT** implementation work has started.
