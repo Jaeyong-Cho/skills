@@ -11,6 +11,7 @@ Run `/grilling` session with remember these key points for effective feature des
 - Value for end-user
 - Scope-in / scope-out
 - Expected
+- Fundamental Solution (MUST NOT Ad-Hoc or Worksaround)
 - Architecture — components and interfaces
 - Observability
 - Testability
