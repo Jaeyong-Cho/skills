@@ -11,10 +11,10 @@ Run `/grilling` session with remember these key points for effective feature des
 - Value for end-user
 - Scope-in / scope-out
 - Expected
-- Fundamental Solution (MUST NOT Ad-Hoc or Worksaround)
+- Fundamental Solution (**MUST NOT** Ad-Hoc or Worksaround)
 - Architecture — components and interfaces
 - Observability
 - Testability
 - Release and ship plan
 
-Completion criterion: each branch above has an explicit, recorded answer — not skipped — and no implementation work has started.
+Completion criterion: each branch above has an explicit, recorded answer — not skipped — and **MUST NOT** implementation work has started.
