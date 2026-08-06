@@ -141,7 +141,7 @@ setup_copilot() {
 
   mkdir -p "$HOME/.copilot"
   ln -sf "$SKILLS_DIR/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
-  echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/AGENTS.md"
+  echo "  ✓ ~/.copilot/copilot-instructions.md → $SKILLS_DIR/copilot-instructions.md"
 
   # Install skills and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
   if [ -d "$HOME/.copilot" ]; then
