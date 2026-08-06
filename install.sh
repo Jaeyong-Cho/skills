@@ -122,7 +122,6 @@ setup_claude() {
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
 
   setup_tmux_agent_status_claude
-  setup_skill_journal_log_hook_claude
 
   ensure_rtk_binary
   if command -v rtk &>/dev/null; then
@@ -153,11 +152,8 @@ setup_copilot() {
       echo "  ✓ skills and references → ~/.copilot"
   fi
 
-  setup_skill_journal_log_hook_copilot
-
   # tmux-agent-status itself has no Copilot CLI integration (process presence
-  # auto-detection only) — unrelated to Copilot's own hook support, which
-  # does exist (see setup_skill_journal_log_hook_copilot above).
+  # auto-detection only).
   echo "  note: tmux-agent-status has no Copilot CLI support (process presence only)"
 
   ensure_rtk_binary
@@ -191,10 +187,10 @@ ensure_rtk_binary() {
 # ── JSON hook wiring (shared) ────────────────────────────────────────────────
 # add_json_hook merges one hook command into settings.json without clobbering
 # existing hooks/settings, and is idempotent (skips if the command is already
-# registered for that event). Used below by both tmux-agent-status and the
-# skill-journal-log hook. matcher is optional — omit it to fire on every
-# event of that type (tmux-agent-status wants that); pass a tool name (e.g.
-# "Skill") to scope a PostToolUse/PreToolUse hook to just that tool.
+# registered for that event). Used below by tmux-agent-status. matcher is
+# optional — omit it to fire on every event of that type (tmux-agent-status
+# wants that); pass a tool name (e.g. "Skill") to scope a
+# PostToolUse/PreToolUse hook to just that tool.
 
 add_json_hook() {
   local settings="$1" event="$2" cmd="$3" matcher="${4:-}"
@@ -231,64 +227,6 @@ setup_tmux_agent_status_claude() {
     add_json_hook "$settings" "$event" "~/.tmux/plugins/tmux-agent-status/hooks/better-hook.sh $event"
   done
   echo "  ✓ tmux-agent-status hooks → ~/.claude/settings.json"
-}
-
-# Logs every Skill-tool invocation to today's journal file — deterministic
-# by design, since a model reliably forgets a passive "remember to log this"
-# instruction over a long session. Two scripts, two blind spots each covers:
-# skill-journal-log.sh (PostToolUse, matcher Skill) sees agent-initiated tool
-# calls but not typed "/skill-name" commands, which the CLI's command layer
-# intercepts before any tool call happens; skill-prompt-log.sh
-# (UserPromptSubmit) pattern-matches the raw typed prompt to catch that case
-# instead. Both read the model id from transcript_path when available.
-setup_skill_journal_log_hook_claude() {
-  if ! command -v jq &>/dev/null; then
-    echo "  jq not found, skipping skill-journal-log hooks"
-    return
-  fi
-
-  local settings="$CLAUDE_DIR/settings.json"
-  [ -f "$settings" ] || echo '{}' > "$settings"
-
-  add_json_hook "$settings" "PostToolUse" "$SKILLS_DIR/hooks/skill-journal-log.sh" "Skill"
-  add_json_hook "$settings" "UserPromptSubmit" "$SKILLS_DIR/hooks/skill-prompt-log.sh"
-  echo "  ✓ skill-journal-log hooks → ~/.claude/settings.json"
-}
-
-# Copilot CLI hooks are separate personal JSON files under ~/.copilot/hooks/
-# (schema confirmed empirically: PreToolUse payload has tool_name/tool_input
-# like Claude Code, but tool_name is "skill" lowercase, and there's no
-# PostToolUse-success event — only PreToolUse and PostToolUseFailure — so
-# this uses PreToolUse, same as the invocation-moment logging it already does
-# on Claude Code. No matcher field exists in this schema; each script filters
-# itself. UserPromptSubmit's payload shape on Copilot CLI is unverified
-# (couldn't safely probe it — see hooks/skill-prompt-log.sh); it degrades
-# gracefully to a no-op if the field names don't match.
-setup_skill_journal_log_hook_copilot() {
-  local hooks_dir="$HOME/.copilot/hooks"
-  mkdir -p "$hooks_dir"
-  cat > "$hooks_dir/skill-journal-log.json" <<EOF
-{
-  "version": 1,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "type": "command",
-        "bash": "$SKILLS_DIR/hooks/skill-journal-log.sh",
-        "timeoutSec": 5
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "type": "command",
-        "bash": "$SKILLS_DIR/hooks/skill-prompt-log.sh",
-        "timeoutSec": 5
-      }
-    ]
-  }
-}
-EOF
-  echo "  ✓ skill-journal-log hooks → ~/.copilot/hooks/skill-journal-log.json"
 }
 
 # ── Bin scripts ──────────────────────────────────────────────────────────────
