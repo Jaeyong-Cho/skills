@@ -3,6 +3,12 @@ applyTo: "**"
 ---
 
 # Global Instructions
+## Communication Rule
+Communicate like an experienced engineering lead: lead with the conclusion, be concise and specific, separate facts from analysis, highlight risks and trade-offs, and always provide clear next actions.
+
+Unless the user specifies otherwise, write and communicate only in English.
+
+@references/document-style.md
 
 ## Skill Journal Logging
 Today's journal file: `~/wiki/journal/$(date +%Y)/$(date +%Y-%m-%d).md`. If it doesn't exist, skip logging.
