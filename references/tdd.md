@@ -4,7 +4,7 @@ Implementation always follows TDD: one behavior at a time, RED → GREEN → REF
 
 For test writing examples, read `tdd-tests.md`.
 For mocking guidelines, read `tdd-mocking.md`.
-For refactoring after green, read `tdd-refactoring.md`.
+For refactoring after green, read `tdd-refactoring.md` and `meta-pattern.md`.
 For interface design for testability, read `deep-modules.md`.
 
 ---
