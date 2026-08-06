@@ -122,6 +122,7 @@ setup_claude() {
   echo "  ✓ ~/.claude/CLAUDE.md → $CLAUDE_MD"
 
   setup_tmux_agent_status_claude
+  setup_skill_journal_log_hook_claude
 
   ensure_rtk_binary
   if command -v rtk &>/dev/null; then
@@ -152,9 +153,12 @@ setup_copilot() {
       echo "  ✓ skills and references → ~/.copilot"
   fi
 
-  # Copilot CLI has no hooks API — tmux-agent-status can only see it via
-  # process presence auto-detection, not working/done transitions.
-  echo "  note: tmux-agent-status has no hook support for Copilot CLI (process presence only)"
+  setup_skill_journal_log_hook_copilot
+
+  # tmux-agent-status itself has no Copilot CLI integration (process presence
+  # auto-detection only) — unrelated to Copilot's own hook support, which
+  # does exist (see setup_skill_journal_log_hook_copilot above).
+  echo "  note: tmux-agent-status has no Copilot CLI support (process presence only)"
 
   ensure_rtk_binary
   if command -v rtk &>/dev/null; then
@@ -184,23 +188,31 @@ ensure_rtk_binary() {
   fi
 }
 
-# ── tmux-agent-status hook wiring ────────────────────────────────────────────
-# https://github.com/samleeney/tmux-agent-status — merges into settings.json
-# without clobbering existing hooks/settings; skips if jq or the plugin
-# (installed via TPM) aren't present.
+# ── JSON hook wiring (shared) ────────────────────────────────────────────────
+# add_json_hook merges one hook command into settings.json without clobbering
+# existing hooks/settings, and is idempotent (skips if the command is already
+# registered for that event). Used below by both tmux-agent-status and the
+# skill-journal-log hook. matcher is optional — omit it to fire on every
+# event of that type (tmux-agent-status wants that); pass a tool name (e.g.
+# "Skill") to scope a PostToolUse/PreToolUse hook to just that tool.
 
 add_json_hook() {
-  local settings="$1" event="$2" cmd="$3"
+  local settings="$1" event="$2" cmd="$3" matcher="${4:-}"
   local tmp
   tmp="$(mktemp)"
-  jq --arg event "$event" --arg cmd "$cmd" '
+  jq --arg event "$event" --arg cmd "$cmd" --arg matcher "$matcher" '
     .hooks[$event] = ((.hooks[$event] // []) as $existing |
       if ($existing | any(.hooks[]?.command == $cmd)) then $existing
-      else $existing + [{"hooks": [{"type": "command", "command": $cmd}]}]
+      else $existing + [
+        (if $matcher != "" then {"matcher": $matcher} else {} end)
+        + {"hooks": [{"type": "command", "command": $cmd}]}
+      ]
       end)
   ' "$settings" > "$tmp" && mv "$tmp" "$settings"
 }
 
+# https://github.com/samleeney/tmux-agent-status — skips if jq or the plugin
+# (installed via TPM) aren't present.
 setup_tmux_agent_status_claude() {
   local hook_script="$HOME/.tmux/plugins/tmux-agent-status/hooks/better-hook.sh"
   if [ ! -x "$hook_script" ]; then
@@ -219,6 +231,49 @@ setup_tmux_agent_status_claude() {
     add_json_hook "$settings" "$event" "~/.tmux/plugins/tmux-agent-status/hooks/better-hook.sh $event"
   done
   echo "  ✓ tmux-agent-status hooks → ~/.claude/settings.json"
+}
+
+# Logs every Skill-tool invocation to today's journal file — deterministic
+# by design, since a model reliably forgets a passive "remember to log this"
+# instruction over a long session. See hooks/skill-journal-log.sh.
+setup_skill_journal_log_hook_claude() {
+  if ! command -v jq &>/dev/null; then
+    echo "  jq not found, skipping skill-journal-log hook"
+    return
+  fi
+
+  local settings="$CLAUDE_DIR/settings.json"
+  [ -f "$settings" ] || echo '{}' > "$settings"
+
+  add_json_hook "$settings" "PostToolUse" "$SKILLS_DIR/hooks/skill-journal-log.sh" "Skill"
+  echo "  ✓ skill-journal-log hook → ~/.claude/settings.json"
+}
+
+# Copilot CLI hooks are separate personal JSON files under ~/.copilot/hooks/
+# (schema confirmed empirically: PreToolUse payload has tool_name/tool_input
+# like Claude Code, but tool_name is "skill" lowercase, and there's no
+# PostToolUse-success event — only PreToolUse and PostToolUseFailure — so
+# this uses PreToolUse, same as the invocation-moment logging it already does
+# on Claude Code. No matcher field exists in this schema; the script itself
+# filters by tool_name (see hooks/skill-journal-log.sh).
+setup_skill_journal_log_hook_copilot() {
+  local hooks_dir="$HOME/.copilot/hooks"
+  mkdir -p "$hooks_dir"
+  cat > "$hooks_dir/skill-journal-log.json" <<EOF
+{
+  "version": 1,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "type": "command",
+        "bash": "$SKILLS_DIR/hooks/skill-journal-log.sh",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}
+EOF
+  echo "  ✓ skill-journal-log hook → ~/.copilot/hooks/skill-journal-log.json"
 }
 
 # ── Bin scripts ──────────────────────────────────────────────────────────────
