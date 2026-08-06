@@ -11,9 +11,9 @@ Run `/grilling` session with remember these key points for effective bug fix:
 - Scope-in / scope-out
 - Expected
 - Root cause
-- Impact scope
 - Fundamental Solution
 - Architecture — components and interfaces
+- Impact scope
 - Observability
 - Monitoring
 - New simple and representative testcase
