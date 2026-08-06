@@ -1,0 +1,18 @@
+---
+name: to-context
+description: Write up this session as a context document — objective, background, key facts, current state — so a fresh session can resume it cold. Filed alongside /explore and /experiment output. Invoke as /to-context.
+disable-model-invocation: true
+---
+
+# To-Context
+
+Capture this session as reusable context instead of leaving it locked in chat history.
+
+1. **Follow document style.** Read `../references/document-style.md` first — its structure and size limits govern the draft.
+2. **Scope the session** — reread it in full. Pull out: Objective (what was asked), Background (why it matters / what triggered it), Key facts (decisions, findings, constraints discovered), Current state (what exists now, what changed), Open questions (anything unresolved). Completion criterion: each has content traceable to the session, or is explicitly noted empty.
+3. **Draft the context** — per `../references/document-style.md` priority order: key-value block for Objective/Background/Current state, bullets for Key facts and Open questions. No invented facts.
+4. **Write it** to `~/wiki/research/{date}/{NN}-{slug}/contexts/{nn}-{slug}.md`, creating the directory if needed — `{date}` from `date +%Y/%m/%Y-%m-%d`, `{slug}` a kebab-case slug of the session's topic, `{NN}` the next zero-padded sequence number for that day (count existing `NN-*` directories under the day's folder; reuse the same `{NN}-{slug}` directory as `/explore` or `/experiment` if this session continues one of those jobs), `{nn}` the next zero-padded sequence number inside `contexts/` (count existing files there; starts at `01`).
+
+Completion criterion: the file exists, and a fresh reader with zero session history could resume the work from it alone.
+
+Tell the user the file path when done.
