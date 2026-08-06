@@ -13,5 +13,6 @@ Run `/grilling` session with remember these key points for effective bug fix:
 - Impact scope
 - Observation
 - Monitoring
+- New simple and representative testcase
 
 Completion criterion: each branch above has an explicit, recorded answer — not skipped — and no implementation work has started.
