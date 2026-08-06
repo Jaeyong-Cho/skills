@@ -22,8 +22,8 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Branch
    - Release
    - Action items, each as `- [ ] {item}` — `/do-plan` executes and checks these off in place
-7. **Write it** to `~/wiki/research/{date}/{NN}-{slug}/plan.md`, creating the directory if needed — `{date}` from `date +%Y/%m/%Y-%m-%d`, `{slug}` a kebab-case slug of the plan's topic, `{NN}` the next zero-padded sequence number for that day (count existing `NN-*` directories under the day's folder).
-8. **Split if too large.** If the file is large and many topics split it into `plan-{n}-{part-slug}.md` files in the same `{NN}-{slug}/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
+7. **Write it** to `~/wiki/research/{date}/{NN}-{slug}/plans/{nn}-{slug}.md`, creating the directory if needed — `{date}` from `date +%Y/%m/%Y-%m-%d`, `{slug}` a kebab-case slug of the plan's topic, `{NN}` the next zero-padded sequence number for that day (count existing `NN-*` directories under the day's folder), `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`).
+8. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
 
 Completion criterion: the file (or files, if split) exists, and spec changes, acceptance criteria, and action items are each present and traceable to something decided in this session.
 
