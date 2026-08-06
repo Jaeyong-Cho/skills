@@ -19,4 +19,4 @@ Run `/grilling` session with remember these key points for effective bug fix:
 - New simple and representative testcase
 - Release and ship plan
 
-Completion criterion: each branch above has an explicit, recorded answer — not skipped — and no implementation work has started.
+Completion criterion: each branch above has an explicit, recorded answer — not skipped — and **MUST NOT** implementation work has started.
