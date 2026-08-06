@@ -6,6 +6,8 @@
 # moment is logged here instead. tool_name casing differs by platform
 # ("Skill" on Claude Code, "skill" on Copilot CLI, confirmed empirically),
 # hence the case-insensitive match below — one script covers both.
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 HOOK_JSON="$(cat 2>/dev/null || true)"
 [ -n "$HOOK_JSON" ] || exit 0
 
@@ -18,7 +20,14 @@ SKILL_NAME=$(printf '%s' "$HOOK_JSON" | python3 -c "import json,sys; print(json.
 JOURNAL="$HOME/wiki/journal/$(date +%Y)/$(date +%m)/$(date +%Y-%m-%d).md"
 [ -f "$JOURNAL" ] || exit 0
 
+TRANSCRIPT=$(printf '%s' "$HOOK_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('transcript_path',''))" 2>/dev/null)
+MODEL=$(model_from_transcript "$TRANSCRIPT")
+
 {
-  printf -- '- %s: SKILL invoked\n' "$(date +%H:%M:%S)"
+  if [ -n "$MODEL" ]; then
+    printf -- '- %s: SKILL invoked (model: %s)\n' "$(date +%H:%M:%S)" "$MODEL"
+  else
+    printf -- '- %s: SKILL invoked\n' "$(date +%H:%M:%S)"
+  fi
   printf '  - skill: %s\n' "$SKILL_NAME"
 } >> "$JOURNAL"

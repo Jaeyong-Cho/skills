@@ -235,10 +235,15 @@ setup_tmux_agent_status_claude() {
 
 # Logs every Skill-tool invocation to today's journal file — deterministic
 # by design, since a model reliably forgets a passive "remember to log this"
-# instruction over a long session. See hooks/skill-journal-log.sh.
+# instruction over a long session. Two scripts, two blind spots each covers:
+# skill-journal-log.sh (PostToolUse, matcher Skill) sees agent-initiated tool
+# calls but not typed "/skill-name" commands, which the CLI's command layer
+# intercepts before any tool call happens; skill-prompt-log.sh
+# (UserPromptSubmit) pattern-matches the raw typed prompt to catch that case
+# instead. Both read the model id from transcript_path when available.
 setup_skill_journal_log_hook_claude() {
   if ! command -v jq &>/dev/null; then
-    echo "  jq not found, skipping skill-journal-log hook"
+    echo "  jq not found, skipping skill-journal-log hooks"
     return
   fi
 
@@ -246,7 +251,8 @@ setup_skill_journal_log_hook_claude() {
   [ -f "$settings" ] || echo '{}' > "$settings"
 
   add_json_hook "$settings" "PostToolUse" "$SKILLS_DIR/hooks/skill-journal-log.sh" "Skill"
-  echo "  ✓ skill-journal-log hook → ~/.claude/settings.json"
+  add_json_hook "$settings" "UserPromptSubmit" "$SKILLS_DIR/hooks/skill-prompt-log.sh"
+  echo "  ✓ skill-journal-log hooks → ~/.claude/settings.json"
 }
 
 # Copilot CLI hooks are separate personal JSON files under ~/.copilot/hooks/
@@ -254,8 +260,10 @@ setup_skill_journal_log_hook_claude() {
 # like Claude Code, but tool_name is "skill" lowercase, and there's no
 # PostToolUse-success event — only PreToolUse and PostToolUseFailure — so
 # this uses PreToolUse, same as the invocation-moment logging it already does
-# on Claude Code. No matcher field exists in this schema; the script itself
-# filters by tool_name (see hooks/skill-journal-log.sh).
+# on Claude Code. No matcher field exists in this schema; each script filters
+# itself. UserPromptSubmit's payload shape on Copilot CLI is unverified
+# (couldn't safely probe it — see hooks/skill-prompt-log.sh); it degrades
+# gracefully to a no-op if the field names don't match.
 setup_skill_journal_log_hook_copilot() {
   local hooks_dir="$HOME/.copilot/hooks"
   mkdir -p "$hooks_dir"
@@ -269,11 +277,18 @@ setup_skill_journal_log_hook_copilot() {
         "bash": "$SKILLS_DIR/hooks/skill-journal-log.sh",
         "timeoutSec": 5
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "type": "command",
+        "bash": "$SKILLS_DIR/hooks/skill-prompt-log.sh",
+        "timeoutSec": 5
+      }
     ]
   }
 }
 EOF
-  echo "  ✓ skill-journal-log hook → ~/.copilot/hooks/skill-journal-log.json"
+  echo "  ✓ skill-journal-log hooks → ~/.copilot/hooks/skill-journal-log.json"
 }
 
 # ── Bin scripts ──────────────────────────────────────────────────────────────
