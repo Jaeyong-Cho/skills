@@ -12,7 +12,10 @@ Turn a question into a minimal scientific-method run instead of guessing at an a
 2. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. Completion criterion: real output captured, not inferred. 
 3. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
 
-**MUST Write** the plan, raw output, and verdict (as sections in one file). If this session already wrote an `experiments/{nn}-{slug}.md` file for the same question, update that file in place with the new run instead of creating another one. Otherwise write to `~/wiki/research/{date}/{NN}-{slug}/experiments/{nn}-{slug}.md`, in `../references/document-style.md` style — `{date}` from `date +%Y/%m/%Y-%m-%d`, `{slug}` a kebab-case slug of the question, `{NN}` the zero-padded sequence number for that day, starting at `00` (count existing `NN-*` directories under the day's folder; reuse the same `{NN}-{slug}` directory as `/explore` when escalated from it), `{nn}` the next zero-padded sequence number inside `experiments/` (count existing files there; starts at `01`).
+The report is in `experiments/{nn}-{slug}/report.md`
+The raw code, data, result is in `experiments/{nn}-{slug}/raw/`
+
+**MUST Write** the plan, raw output, and verdict (as sections in one file). If this session already wrote an `experiments/{nn}-{slug}/report.md` file for the same question, update that file in place with the new run instead of creating another one. Otherwise write to `~/wiki/research/{date}/{NN}-{slug}/experiments/{nn-{slug}/report.md`, in `../references/document-style.md` style — `{date}` from `date +%Y/%m/%Y-%m-%d`, `{slug}` a kebab-case slug of the question, `{NN}` the zero-padded sequence number for that day, starting at `00` (count existing `NN-*` directories under the day's folder; reuse the same `{NN}-{slug}` directory as `/explore` when escalated from it), `{nn}` the next zero-padded sequence number inside `experiments/` (count existing files there; starts at `01`).
 
 **MUST NOT** Fix product code directly. If needed, **USE** worktree, sandbox, etc for experiment.
 
