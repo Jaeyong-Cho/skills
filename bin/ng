@@ -3,8 +3,10 @@
 # "## Active" in ~/wiki/goals.md, links it into ~/wiki/today/research/NN-<slug>
 # so it's visible immediately, and appends a checklist entry to
 # ~/wiki/today/journal.md.
-# ng rm <slug> — deletes a goal: the directory, its goals.md line (Active or
-# Done), and any today/research symlink pointing at it.
+# ng list — prints every goal with a 1-based index, grouped by Active/Done.
+# ng rm <slug|index> — deletes a goal (by slug, or by the index `ng list`
+# just showed): the directory, its goals.md line (Active or Done), and any
+# today/research symlink pointing at it.
 # This is the canonical goal command; any skill that starts a persistent,
 # multi-day research effort should call `ng <slug>` rather than writing to
 # ~/wiki/goals/ directly. daily-report re-links active goals each day and
@@ -51,6 +53,44 @@ create_goal() {
   printf -- '- %s: New goal: %s\n  - [ ] %s\n' "$(date +%H:%M:%S)" "$slug" "$desc" >> "$journal"
 }
 
+# Prints every goal line with a 1-based index shared across Active/Done,
+# so `ng rm <index>` can target what was just listed.
+list_goals() {
+  local wiki="$1"
+  local goals_md="$wiki/goals.md" i=0
+  [ -f "$goals_md" ] || { echo "no goals yet"; return 0; }
+
+  while IFS= read -r line; do
+    case "$line" in
+      "## "*) echo "$line"; continue ;;
+    esac
+    if [[ "$line" == "- "*": "* ]]; then
+      i=$((i + 1))
+      printf '  %d) %s\n' "$i" "${line#- }"
+    fi
+  done < "$goals_md"
+}
+
+# Resolves the slug at a 1-based index from `ng list`'s ordering.
+# ponytail: index is recomputed from goals.md's current order each call, not
+# a stored id — stale if goals.md changed since the last `ng list`.
+slug_at_index() {
+  local wiki="$1" idx="$2"
+  local goals_md="$wiki/goals.md" i=0 line slug
+  [ -f "$goals_md" ] || return 1
+
+  while IFS= read -r line; do
+    [[ "$line" == "- "*": "* ]] || continue
+    i=$((i + 1))
+    if [ "$i" -eq "$idx" ]; then
+      slug="${line#- }"; slug="${slug%%:*}"
+      echo "$slug"
+      return 0
+    fi
+  done < "$goals_md"
+  return 1
+}
+
 delete_goal() {
   local wiki="$1" slug="$2"
 
@@ -87,6 +127,15 @@ self_test() {
     echo "FAIL: duplicate slug was allowed"; exit 1
   fi
 
+  create_goal "$tmp" "other-goal" "Second thing"
+  # New entries insert right after "## Active", so the most recent goal is index 1.
+  list_goals "$tmp" | grep -q "1) other-goal: Second thing" || { echo "FAIL: list missing entry 1"; exit 1; }
+  list_goals "$tmp" | grep -q "2) vendor-eval: Evaluate vendor X vs Y" || { echo "FAIL: list missing entry 2"; exit 1; }
+
+  [ "$(slug_at_index "$tmp" 1)" = "other-goal" ] || { echo "FAIL: slug_at_index wrong lookup"; exit 1; }
+  delete_goal "$tmp" "$(slug_at_index "$tmp" 1)"
+  [ ! -d "$tmp/goals/other-goal" ] || { echo "FAIL: index-based delete didn't remove goal dir"; exit 1; }
+
   delete_goal "$tmp" "vendor-eval"
   [ ! -d "$tmp/goals/vendor-eval" ] || { echo "FAIL: goal dir not deleted"; exit 1; }
   [ ! -e "$tmp/today/research/00-vendor-eval" ] || { echo "FAIL: today/research symlink not cleaned up"; exit 1; }
@@ -105,16 +154,26 @@ if [ "${1:-}" = "--test" ]; then
   exit 0
 fi
 
+if [ "${1:-}" = "list" ]; then
+  list_goals "$HOME/wiki"
+  exit 0
+fi
+
 if [ "${1:-}" = "rm" ]; then
-  slug="${2:-}"
-  [ -n "$slug" ] || { echo "usage: ng rm <slug>" >&2; exit 1; }
+  arg="${2:-}"
+  [ -n "$arg" ] || { echo "usage: ng rm <slug|index>" >&2; exit 1; }
+  if [[ "$arg" =~ ^[0-9]+$ ]]; then
+    slug="$(slug_at_index "$HOME/wiki" "$arg")" || { echo "FAIL: no goal at index $arg" >&2; exit 1; }
+  else
+    slug="$arg"
+  fi
   delete_goal "$HOME/wiki" "$slug"
   echo "deleted ~/wiki/goals/$slug"
   exit 0
 fi
 
 slug="${1:-}"
-[ -n "$slug" ] || { echo "usage: ng <slug> [description]  |  ng rm <slug>" >&2; exit 1; }
+[ -n "$slug" ] || { echo "usage: ng <slug> [description]  |  ng list  |  ng rm <slug|index>" >&2; exit 1; }
 desc="${2:-}"
 
 create_goal "$HOME/wiki" "$slug" "$desc"
