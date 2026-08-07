@@ -1,12 +1,29 @@
 #!/bin/bash
 # ng <slug> [description] — creates ~/wiki/goals/<slug>/, registers it under
-# "## Active" in ~/wiki/goals.md, and appends a checklist entry to
-# ~/wiki/today/journal.md. This is the canonical goal-creation command; any
-# skill that starts a persistent, multi-day research effort should call
-# `ng <slug>` rather than writing to ~/wiki/goals/ directly. daily-report
-# re-links active goals each day and archives ones moved to "## Done" (see
+# "## Active" in ~/wiki/goals.md, links it into ~/wiki/today/research/NN-<slug>
+# so it's visible immediately, and appends a checklist entry to
+# ~/wiki/today/journal.md.
+# ng rm <slug> — deletes a goal: the directory, its goals.md line (Active or
+# Done), and any today/research symlink pointing at it.
+# This is the canonical goal command; any skill that starts a persistent,
+# multi-day research effort should call `ng <slug>` rather than writing to
+# ~/wiki/goals/ directly. daily-report re-links active goals each day and
+# archives ones moved to "## Done" (see
 # skills/daily-report/scripts/archive_today.sh).
 set -euo pipefail
+
+# Next zero-padded NN- sequence number unused among NN-* dirs in $1.
+next_seq() {
+  local dir="$1" max=-1 n d
+  for d in "$dir"/[0-9][0-9]-*/; do
+    [ -e "$d" ] || continue
+    d="${d%/}"
+    n="${d##*/}"; n="${n%%-*}"
+    n=$((10#$n))
+    (( n > max )) && max=$n
+  done
+  printf '%02d' $((max + 1))
+}
 
 create_goal() {
   local wiki="$1" slug="$2" desc="$3"
@@ -26,10 +43,32 @@ create_goal() {
   ' "$goals_md" > "$goals_md.tmp"
   mv "$goals_md.tmp" "$goals_md"
 
+  mkdir -p "$wiki/today/research"
+  ln -s "$wiki/goals/$slug" "$wiki/today/research/$(next_seq "$wiki/today/research")-$slug"
+
   local journal="$wiki/today/journal.md"
-  mkdir -p "$wiki/today"
   [ -f "$journal" ] || printf '# %s\n' "$(date +%Y-%m-%d)" > "$journal"
   printf -- '- %s: New goal: %s\n  - [ ] %s\n' "$(date +%H:%M:%S)" "$slug" "$desc" >> "$journal"
+}
+
+delete_goal() {
+  local wiki="$1" slug="$2"
+
+  [ -d "$wiki/goals/$slug" ] || { echo "FAIL: goal '$slug' not found" >&2; return 1; }
+
+  local l
+  for l in "$wiki/today/research"/*; do
+    [ -L "$l" ] || continue
+    [ "$(readlink "$l")" = "$wiki/goals/$slug" ] && rm "$l"
+  done
+
+  rm -rf "$wiki/goals/$slug"
+
+  local goals_md="$wiki/goals.md"
+  if [ -f "$goals_md" ]; then
+    grep -v "^- $slug:" "$goals_md" > "$goals_md.tmp" || true
+    mv "$goals_md.tmp" "$goals_md"
+  fi
 }
 
 self_test() {
@@ -42,9 +81,19 @@ self_test() {
   grep -A1 "^## Active$" "$tmp/goals.md" | grep -q "vendor-eval" || { echo "FAIL: not listed under Active"; exit 1; }
   grep -q "New goal: vendor-eval" "$tmp/today/journal.md" || { echo "FAIL: journal entry not written"; exit 1; }
   grep -q "^  - \[ \] Evaluate vendor X vs Y$" "$tmp/today/journal.md" || { echo "FAIL: checklist item not written"; exit 1; }
+  [ -L "$tmp/today/research/00-vendor-eval" ] || { echo "FAIL: not linked into today/research"; exit 1; }
 
   if create_goal "$tmp" "vendor-eval" "dup" 2>/dev/null; then
     echo "FAIL: duplicate slug was allowed"; exit 1
+  fi
+
+  delete_goal "$tmp" "vendor-eval"
+  [ ! -d "$tmp/goals/vendor-eval" ] || { echo "FAIL: goal dir not deleted"; exit 1; }
+  [ ! -e "$tmp/today/research/00-vendor-eval" ] || { echo "FAIL: today/research symlink not cleaned up"; exit 1; }
+  grep -q "vendor-eval" "$tmp/goals.md" && { echo "FAIL: goal still listed in goals.md"; exit 1; }
+
+  if delete_goal "$tmp" "vendor-eval" 2>/dev/null; then
+    echo "FAIL: deleting a missing goal was allowed"; exit 1
   fi
 
   rm -rf "$tmp"
@@ -56,9 +105,17 @@ if [ "${1:-}" = "--test" ]; then
   exit 0
 fi
 
+if [ "${1:-}" = "rm" ]; then
+  slug="${2:-}"
+  [ -n "$slug" ] || { echo "usage: ng rm <slug>" >&2; exit 1; }
+  delete_goal "$HOME/wiki" "$slug"
+  echo "deleted ~/wiki/goals/$slug"
+  exit 0
+fi
+
 slug="${1:-}"
-[ -n "$slug" ] || { echo "usage: ng <slug> [description]" >&2; exit 1; }
+[ -n "$slug" ] || { echo "usage: ng <slug> [description]  |  ng rm <slug>" >&2; exit 1; }
 desc="${2:-}"
 
 create_goal "$HOME/wiki" "$slug" "$desc"
-echo "created ~/wiki/goals/$slug and registered it as Active in ~/wiki/goals.md"
+echo "created ~/wiki/goals/$slug, linked into today/research/, and registered it as Active in ~/wiki/goals.md"
