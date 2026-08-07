@@ -1,6 +1,6 @@
 #!/bin/bash
 
-f=~/wiki/journal/$(date +%Y/%m/%Y-%m-%d).md
+f=~/wiki/today/journal.md
 mkdir -p "$(dirname "$f")"
 echo "- $(date +%H:%M:%S): START REST" >> "$f"
 $EDITOR "$f"

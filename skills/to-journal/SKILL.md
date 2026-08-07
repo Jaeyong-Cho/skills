@@ -22,6 +22,6 @@ Turn this session into a journal entry a total non-expert could understand at a 
      - done: {ELI5, 1 sentence}
    ```
    Get the timestamp with `date +%H:%M:%S`.
-6. **Append to today's journal** — `~/wiki/journal/YYYY/MM/YYYY-MM-DD.md` (`date +%Y/%m/%Y-%m-%d`), creating the file with a `# YYYY-MM-DD` heading if it doesn't exist yet. Never overwrite existing content.
+6. **Append to today's journal** — `~/wiki/today/journal.md`, creating the file with a `# YYYY-MM-DD` heading (`date +%Y-%m-%d`) if it doesn't exist yet. Never overwrite existing content. `/daily-report` archives it into the dated `~/wiki/journal/` path at day's end — write to `today/journal.md` regardless of what day it is.
 
 Tell the user the journal path when done.
