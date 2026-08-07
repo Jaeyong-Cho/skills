@@ -22,5 +22,5 @@ Run `/grilling` covering every point below, whether the work is a feature or a f
 - New simple and representative testcase
 - Release and ship plan
 
-Completion criterion: each point above has an explicit, recorded answer — not skipped — and **MUST NOT** implementation work has started.
+**MUST NOT** implementation work has started.
 Once complete, next step is `/to-plan` to dump the recorded answers into a plan document.
