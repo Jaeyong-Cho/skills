@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Dev Grill Me
 
-Run `/grilling` covering every point below, whether the work is a feature or a fix:
+Run `/grilling` covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
 
 - Intent and purpose
 - Scope-in / scope-out
