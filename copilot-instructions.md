@@ -15,6 +15,7 @@ Unless the user specifies otherwise, write and communicate only in English.
 - Goals: `~/wiki/goals/{slug}/` — persistent, multi-day research directory for an ongoing goal, tracked (active/done) in `~/wiki/goals.md`. Create with `ng <slug>` (`bin/ng`, on PATH; skills should call it, not write to `~/wiki/goals/` directly). `/daily-report` re-links every active goal into `today/research/NN-{slug}/` each day, and archives a goal marked `done` into `research/YYYY/MM/YYYY-MM-DD/NN-{slug}/` (that day's date) same as a one-off job.
 - Index: `index.md` files under `~/wiki/`, `journal/`, `research/`, and `goals/` are nav chains (year -> month -> day); `/daily-report` rebuilds the `research/` and `goals/` chains on each archive.
 - Advisor: `~/wiki/advisor/YYYY/MM/YYYY-MM-DD.md` — one file per day, recurring friction and automation candidates from the last 14 days.
+- Today's context: before starting work, read `~/wiki/today/journal.md` and `~/wiki/today/research/NN-{job}/` (if present) for what's already in progress today.
 - Handoff: before starting work, check the most recent `~/wiki/journal/YYYY/MM/YYYY-MM-DD-handoff.md` (highest date, may not be today or this month) for open items and carried decisions from the prior session.
 
 @references/document-style.md
