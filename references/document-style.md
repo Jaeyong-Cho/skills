@@ -32,7 +32,7 @@ floor: a single fact, yes/no answer, or one-item confirmation stays plain text â
 - Sentence: 15 word
 - Paragraph: 50 word
 - Key message: 1-3 sentence
-- Section: 200 word
-- File: 500 word
+- Section: 200 word (almost)
+- File: 500 word (almost)
 
 **MUST** Split the file if the size over then below
