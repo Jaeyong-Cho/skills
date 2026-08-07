@@ -61,6 +61,18 @@ conn = sqlite3.connect('$copilot_db')
 cur = conn.cursor()
 cur.execute('SELECT id, created_at FROM sessions WHERE cwd = ? ORDER BY updated_at DESC LIMIT 1', ('$(pwd)',))
 row = cur.fetchone()
+# Prefer the exact session id (set by the Copilot CLI runtime) over a cwd-based
+# guess — multiple sessions can share the same cwd, and 'most recently
+# updated' can pick a sibling session instead of this one.
+env_session_id = '${COPILOT_AGENT_SESSION_ID:-}'
+if env_session_id:
+    cur.execute('SELECT id, created_at FROM sessions WHERE id = ?', (env_session_id,))
+    row = cur.fetchone()
+else:
+    row = None
+if row is None:
+    cur.execute('SELECT id, created_at FROM sessions WHERE cwd = ? ORDER BY updated_at DESC LIMIT 1', ('$(pwd)',))
+    row = cur.fetchone()
 
 if not row:
     print('START=unknown')
