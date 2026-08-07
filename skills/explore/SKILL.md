@@ -6,6 +6,7 @@ disable-model-invocation: true
 
 # Explore
 
+**MUST ASK** anytime the ambiguous information or user intent
 Answer a question by reading and searching before falling back to running anything.
 
 1. **Explore.** Search the codebase, web, known things and docs for the answer. Completion criterion: the question is answered with cited evidence, or exploring genuinely can't resolve it.
