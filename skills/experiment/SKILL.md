@@ -6,11 +6,13 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
 
 # Experiment
 
+**MUST ASK** anytime the ambiguous information or user intent
 Turn a question into a minimal scientific-method run instead of guessing at an answer.
 
 1. **Plan.** Run `/ponytail` (Skill tool) to find the cheapest method that would resolve the question, and state what result would count as supported/refuted. Completion criterion: a stated method and a stated pass/fail expectation. **MUST FIND** simple and representative testcase for the complext situation.
-2. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. Completion criterion: real output captured, not inferred. 
-3. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
+2. **Confirm.** Explain to user the hypothesis, purpose and expected result to the user and confirm.
+3. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. Completion criterion: real output captured, not inferred. 
+4. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
 
 The report is in `experiments/{nn}-{slug}/report.md`
 The raw code, data, result is in `experiments/{nn}-{slug}/raw/`
