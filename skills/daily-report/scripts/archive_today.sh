@@ -1,31 +1,101 @@
 #!/bin/bash
 # Archives ~/wiki/today/{journal.md,research/} into the dated journal/research
-# paths for today, then removes ~/wiki/today/. Run once per day, at day's end.
+# paths for today, archives any goal moved to "## Done" in ~/wiki/goals.md
+# into that same dated research folder, then relinks remaining "## Active"
+# goals into a fresh ~/wiki/today/research/. Run once per day, at day's end.
 set -euo pipefail
+
+# Next zero-padded NN- sequence number unused among NN-* dirs in $1.
+next_seq() {
+  local dir="$1" max=-1 n d
+  for d in "$dir"/[0-9][0-9]-*/; do
+    [ -e "$d" ] || continue
+    d="${d%/}"
+    n="${d##*/}"; n="${n%%-*}"
+    n=$((10#$n))
+    (( n > max )) && max=$n
+  done
+  printf '%02d' $((max + 1))
+}
+
+# Moves every goal listed under "## Done" in goals.md into $dest/NN-<slug>/
+# and drops it from goals.md (it's now archived history, same as a one-off
+# research job).
+archive_done_goals() {
+  local wiki="$1" dest="$2"
+  local goals_md="$wiki/goals.md"
+  [ -f "$goals_md" ] || return 0
+
+  local in_done=0 out="" slug
+  while IFS= read -r line; do
+    case "$line" in
+      "## Done") in_done=1; out+="$line"$'\n'; continue ;;
+      "## "*) in_done=0; out+="$line"$'\n'; continue ;;
+    esac
+    if [ "$in_done" -eq 1 ] && [[ "$line" == "- "*": "* ]]; then
+      slug="${line#- }"; slug="${slug%%:*}"
+      if [ -d "$wiki/goals/$slug" ]; then
+        mkdir -p "$dest"
+        mv "$wiki/goals/$slug" "$dest/$(next_seq "$dest")-$slug"
+        continue
+      fi
+    fi
+    out+="$line"$'\n'
+  done < "$goals_md"
+  printf '%s' "$out" > "$goals_md"
+}
+
+# Symlinks every goal listed under "## Active" in goals.md into
+# $wiki/today/research/NN-<slug>, so it shows up in today's work area.
+relink_active_goals() {
+  local wiki="$1"
+  local goals_md="$wiki/goals.md"
+  [ -f "$goals_md" ] || return 0
+
+  local in_active=0 slug
+  while IFS= read -r line; do
+    case "$line" in
+      "## Active") in_active=1; continue ;;
+      "## "*) in_active=0; continue ;;
+    esac
+    if [ "$in_active" -eq 1 ] && [[ "$line" == "- "*": "* ]]; then
+      slug="${line#- }"; slug="${slug%%:*}"
+      if [ -d "$wiki/goals/$slug" ]; then
+        mkdir -p "$wiki/today/research"
+        ln -s "$wiki/goals/$slug" "$wiki/today/research/$(next_seq "$wiki/today/research")-$slug"
+      fi
+    fi
+  done < "$goals_md"
+}
 
 archive() {
   local wiki="$1" today_date="$2"
   local year="${today_date%%-*}" month="${today_date:5:2}"
+  local dest="$wiki/research/$year/$month/$today_date"
 
   if [ -f "$wiki/today/journal.md" ]; then
     mkdir -p "$wiki/journal/$year/$month"
-    local dest="$wiki/journal/$year/$month/$today_date.md"
-    if [ -f "$dest" ]; then
-      cat "$wiki/today/journal.md" >> "$dest"
+    local jdest="$wiki/journal/$year/$month/$today_date.md"
+    if [ -f "$jdest" ]; then
+      cat "$wiki/today/journal.md" >> "$jdest"
     else
-      mv "$wiki/today/journal.md" "$dest"
+      mv "$wiki/today/journal.md" "$jdest"
     fi
   fi
 
   if [ -d "$wiki/today/research" ]; then
-    mkdir -p "$wiki/research/$year/$month/$today_date"
+    mkdir -p "$dest"
     for d in "$wiki/today/research"/*/; do
       [ -d "$d" ] || continue
-      mv "$d" "$wiki/research/$year/$month/$today_date/"
+      mv "$d" "$dest/"
     done
   fi
 
+  archive_done_goals "$wiki" "$dest"
+
   rm -rf "$wiki/today"
+
+  relink_active_goals "$wiki"
 }
 
 self_test() {
@@ -35,11 +105,18 @@ self_test() {
   echo "- 09:00:00: did a thing" > "$tmp/today/journal.md"
   echo "notes" > "$tmp/today/research/00-demo/explores/01-x.md"
 
+  mkdir -p "$tmp/goals/vendor-eval" "$tmp/goals/old-goal"
+  printf '# Goals\n\n## Active\n- vendor-eval: Evaluate vendor X vs Y\n\n## Done\n- old-goal: Finished thing\n' > "$tmp/goals.md"
+
   archive "$tmp" "2026-01-15"
 
   [ -f "$tmp/journal/2026/01/2026-01-15.md" ] || { echo "FAIL: journal not archived"; exit 1; }
   [ -f "$tmp/research/2026/01/2026-01-15/00-demo/explores/01-x.md" ] || { echo "FAIL: research not archived"; exit 1; }
-  [ ! -d "$tmp/today" ] || { echo "FAIL: today/ not cleared"; exit 1; }
+  [ -d "$tmp/research/2026/01/2026-01-15/01-old-goal" ] || { echo "FAIL: done goal not archived"; exit 1; }
+  [ ! -d "$tmp/goals/old-goal" ] || { echo "FAIL: done goal dir not removed"; exit 1; }
+  grep -q "old-goal" "$tmp/goals.md" && { echo "FAIL: done goal still listed in goals.md"; exit 1; }
+  grep -q "^- vendor-eval:" "$tmp/goals.md" || { echo "FAIL: active goal dropped from goals.md"; exit 1; }
+  [ -L "$tmp/today/research/00-vendor-eval" ] || { echo "FAIL: active goal not relinked into today/research"; exit 1; }
 
   rm -rf "$tmp"
   echo "self-test passed"
