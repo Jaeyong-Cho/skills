@@ -1,10 +1,11 @@
 #!/bin/bash
-# ng <slug> [description] — creates ~/wiki/goals/<slug>/ and registers it
-# under "## Active" in ~/wiki/goals.md. This is the canonical goal-creation
-# command; any skill that starts a persistent, multi-day research effort
-# should call `ng <slug>` rather than writing to ~/wiki/goals/ directly.
-# daily-report re-links active goals each day and archives ones moved to
-# "## Done" (see skills/daily-report/scripts/archive_today.sh).
+# ng <slug> [description] — creates ~/wiki/goals/<slug>/, registers it under
+# "## Active" in ~/wiki/goals.md, and appends a checklist entry to
+# ~/wiki/today/journal.md. This is the canonical goal-creation command; any
+# skill that starts a persistent, multi-day research effort should call
+# `ng <slug>` rather than writing to ~/wiki/goals/ directly. daily-report
+# re-links active goals each day and archives ones moved to "## Done" (see
+# skills/daily-report/scripts/archive_today.sh).
 set -euo pipefail
 
 create_goal() {
@@ -24,6 +25,11 @@ create_goal() {
     /^## Active$/ { print line }
   ' "$goals_md" > "$goals_md.tmp"
   mv "$goals_md.tmp" "$goals_md"
+
+  local journal="$wiki/today/journal.md"
+  mkdir -p "$wiki/today"
+  [ -f "$journal" ] || printf '# %s\n' "$(date +%Y-%m-%d)" > "$journal"
+  printf -- '- %s: New goal: %s\n  - [ ] %s\n' "$(date +%H:%M:%S)" "$slug" "$desc" >> "$journal"
 }
 
 self_test() {
@@ -34,6 +40,8 @@ self_test() {
   [ -d "$tmp/goals/vendor-eval" ] || { echo "FAIL: goal dir not created"; exit 1; }
   grep -q "^- vendor-eval: Evaluate vendor X vs Y$" "$tmp/goals.md" || { echo "FAIL: not registered in goals.md"; exit 1; }
   grep -A1 "^## Active$" "$tmp/goals.md" | grep -q "vendor-eval" || { echo "FAIL: not listed under Active"; exit 1; }
+  grep -q "New goal: vendor-eval" "$tmp/today/journal.md" || { echo "FAIL: journal entry not written"; exit 1; }
+  grep -q "^  - \[ \] Evaluate vendor X vs Y$" "$tmp/today/journal.md" || { echo "FAIL: checklist item not written"; exit 1; }
 
   if create_goal "$tmp" "vendor-eval" "dup" 2>/dev/null; then
     echo "FAIL: duplicate slug was allowed"; exit 1
