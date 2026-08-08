@@ -17,12 +17,12 @@ Write a handoff document summarising the current conversation so a fresh agent c
 6. **Follow ELI5.** Make plan the so a fresh cheapest model agent can understand.
 7. **Draft the plan**, covering:
    - Target project (e.g. path of the repo)
-   - Spec changes — locate the target project's spec document (common paths: `SPEC.md`, `docs/spec.md`, `requirements.md`; if none exists, pick one and note it'll be created). List each requirement being added, changed, or removed, one line each.
+   - Spec changes — locate the target project's spec file(s) per `../references/spec-convention.md` (`spec/**/*.md`; create `spec/` if it doesn't exist yet). List each requirement being added, changed, or removed, one line each.
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places.
    - Commit
    - Branch
    - Release
-   - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's spec document file, so the persisted spec stays synchronized with this plan. `/do-plan` executes and checks these off in place.
+   - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `/do-plan` executes and checks these off in place.
 8. **Write it** to `~/wiki/today/research/{NN}-{slug}/plans/{nn}-{slug}.md`, creating the directory if needed — `{slug}` a kebab-case slug of the plan's topic, `{NN}` the zero-padded sequence number for today, starting at `00` (count existing `NN-*` directories under `~/wiki/today/research/`), `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`). `/end-of-day` archives `today/research/` into the dated `~/wiki/research/` path at day's end.
 9. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
 
