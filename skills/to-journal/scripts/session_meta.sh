@@ -17,6 +17,7 @@ from datetime import datetime
 start = None
 models = []
 skills = []
+usage_by_id = {}  # dedupe streamed re-emits of the same assistant message
 
 with open('$transcript') as f:
     for line in f:
@@ -32,6 +33,10 @@ with open('$transcript') as f:
             m = message.get('model')
             if m and m not in models:
                 models.append(m)
+            usage = message.get('usage')
+            mid = message.get('id')
+            if usage and mid:
+                usage_by_id[mid] = usage
         content = message.get('content')
         if isinstance(content, list):
             for item in content:
@@ -47,6 +52,17 @@ else:
     print('START=unknown')
 print('MODEL=' + (','.join(models) or 'unknown'))
 print('SKILLS=' + (','.join(skills) or 'none'))
+
+inp = sum(u.get('input_tokens', 0) for u in usage_by_id.values())
+out = sum(u.get('output_tokens', 0) for u in usage_by_id.values())
+cache_w = sum(u.get('cache_creation_input_tokens', 0) for u in usage_by_id.values())
+cache_r = sum(u.get('cache_read_input_tokens', 0) for u in usage_by_id.values())
+total = inp + out + cache_w + cache_r
+if usage_by_id:
+    print(f'TOKENS={total:,} (in:{inp:,} out:{out:,} cache_write:{cache_w:,} cache_read:{cache_r:,})')
+else:
+    print('TOKENS=unknown')
+print('AIU=n/a')
 "
   exit 0
 fi
@@ -66,6 +82,8 @@ if not row:
     print('START=unknown')
     print('MODEL=unknown')
     print('SKILLS=none')
+    print('TOKENS=unknown')
+    print('AIU=unknown')
 else:
     session_id, created_at = row
     dt = datetime.fromisoformat(created_at.replace('Z', '+00:00')).astimezone()
@@ -84,6 +102,21 @@ else:
             if s and s not in skills:
                 skills.append(s)
     print('SKILLS=' + (','.join(skills) or 'none'))
+
+    cur.execute('''
+        SELECT COALESCE(SUM(input_tokens), 0), COALESCE(SUM(output_tokens), 0),
+               COALESCE(SUM(cache_read_tokens), 0), COALESCE(SUM(cache_write_tokens), 0),
+               COALESCE(SUM(total_nano_aiu), 0)
+        FROM assistant_usage_events WHERE session_id = ?
+    ''', (session_id,))
+    inp, out, cache_r, cache_w, nano_aiu = cur.fetchone()
+    total = inp + out + cache_r + cache_w
+    if total:
+        print(f'TOKENS={total:,} (in:{inp:,} out:{out:,} cache_write:{cache_w:,} cache_read:{cache_r:,})')
+    else:
+        print('TOKENS=unknown')
+    # total_nano_aiu is AIU (Copilot's premium-request billing unit) scaled by 1e9.
+    print(f'AIU={nano_aiu / 1e9:.4f}' if nano_aiu else 'AIU=unknown')
 "
   exit 0
 fi
@@ -91,3 +124,5 @@ fi
 echo "START=unknown"
 echo "MODEL=unknown"
 echo "SKILLS=none"
+echo "TOKENS=unknown"
+echo "AIU=unknown"
