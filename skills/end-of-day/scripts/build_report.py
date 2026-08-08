@@ -8,7 +8,7 @@ Usage:
 
 Manifest schema:
 {
-  "eyebrow": "DAILY REPORT", "title": "...", "dek": "...",
+  "eyebrow": "END OF DAY", "title": "...", "dek": "...",
   "meta": [["date", "2026-08-06"], ["items", "5"]],
   "footer": "...",
   "items": [
@@ -91,7 +91,7 @@ def main():
     cards = "\n".join(card_html(item, base_dir) for item in m["items"])
 
     out = (tpl
-           .replace("{{EYEBROW}}", html.escape(m.get("eyebrow", "DAILY REPORT")))
+           .replace("{{EYEBROW}}", html.escape(m.get("eyebrow", "END OF DAY")))
            .replace("{{TITLE}}", html.escape(m["title"]))
            .replace("{{DEK}}", mono(m.get("dek", "")))
            .replace("{{META_ROW}}", meta_row)

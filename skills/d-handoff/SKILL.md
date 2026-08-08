@@ -1,6 +1,6 @@
 ---
 name: d-handoff
-description: Handoff today's open items and key decisions into a dated file for tomorrow's session, distilled from today's journal and research notes. Use when the user wants to end the day, wrap up before stopping, or hand off context to tomorrow; also reached by daily-report before drafting.
+description: Handoff today's open items and key decisions into a dated file for tomorrow's session, distilled from today's journal and research notes. Use when the user wants to end the day, wrap up before stopping, or hand off context to tomorrow; also reached by end-of-day before drafting.
 ---
 
 # Handoff

@@ -1,10 +1,10 @@
 ---
-name: daily-report
-description: Run d-handoff and advisor, then compile today's journal, research notes, handoff, and advisor findings into a report with a table of contents, an Introduction/Abstraction/Detailed breakdown per topic, and a themed, servable HTML gallery with an insight diagram per topic. Invoke as /daily-report.
+name: end-of-day
+description: Run d-handoff and advisor, then compile today's journal, research notes, handoff, and advisor findings into a report with a table of contents, an Introduction/Abstraction/Detailed breakdown per topic, and a themed, servable HTML gallery with an insight diagram per topic. Invoke as /end-of-day.
 disable-model-invocation: true
 ---
 
-# Daily Report
+# End of Day
 
 Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and priority order (key-value > table > bullets > prose) govern every section this skill writes.
 

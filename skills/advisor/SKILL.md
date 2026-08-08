@@ -1,6 +1,6 @@
 ---
 name: advisor
-description: Advisor for recurring work-pattern friction and unclaimed value — scans the last 14 days of journal and research notes, turns repeated friction into automation candidates (script, custom agent, or AI-usage change), and surfaces valuable items, open tasks, and project ideas mentioned but not pursued. Use when the user wants advice on improving their workflow, asks what to automate, wants a work-pattern review, or wants ideas for what to do next; also reached by daily-report before drafting.
+description: Advisor for recurring work-pattern friction and unclaimed value — scans the last 14 days of journal and research notes, turns repeated friction into automation candidates (script, custom agent, or AI-usage change), and surfaces valuable items, open tasks, and project ideas mentioned but not pursued. Use when the user wants advice on improving their workflow, asks what to automate, wants a work-pattern review, or wants ideas for what to do next; also reached by end-of-day before drafting.
 ---
 
 # Advisor

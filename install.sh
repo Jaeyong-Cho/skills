@@ -89,7 +89,7 @@ install_skill_library() {
       [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
     done < "$manifest"
   fi
-  for dir in references; do
+  for dir in references template; do
     rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
   done
 
@@ -102,11 +102,11 @@ install_skill_library() {
     (cd "$SKILLS_DIR/skills" && ls -1) > "$manifest"
   fi
 
-  for dir in references; do
+  for dir in references template; do
     [ -d "$SKILLS_DIR/$dir" ] || continue
     cp -R "$SKILLS_DIR/$dir" "$CLAUDE_SKILLS_DIR/"
   done
-  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, references)"
+  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, references, template)"
 }
 
 setup_claude() {
@@ -145,11 +145,12 @@ setup_copilot() {
 
   # Install skills and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
   if [ -d "$HOME/.copilot" ]; then
-      # Clear existing skills and references to avoid duplicates
+      # Clear existing skills, references, and template to avoid duplicates
       rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/references"
       cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
       cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
-      echo "  ✓ skills and references → ~/.copilot"
+      cp -R "$SKILLS_DIR/template/." "$HOME/.copilot/skills/template"
+      echo "  ✓ skills, references, and template → ~/.copilot"
   fi
 
   # tmux-agent-status itself has no Copilot CLI integration (process presence

@@ -9,9 +9,9 @@
 # today/research symlink pointing at it.
 # This is the canonical goal command; any skill that starts a persistent,
 # multi-day research effort should call `ng <slug>` rather than writing to
-# ~/wiki/goals/ directly. daily-report re-links active goals each day and
+# ~/wiki/goals/ directly. end-of-day re-links active goals each day and
 # archives ones moved to "## Done" (see
-# skills/daily-report/scripts/archive_today.sh).
+# skills/end-of-day/scripts/archive_today.sh).
 set -euo pipefail
 
 # Next zero-padded NN- sequence number unused among NN-* dirs in $1.
