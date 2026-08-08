@@ -5,6 +5,19 @@
 # goals into a fresh ~/wiki/today/research/. Run once per day, at day's end.
 set -euo pipefail
 
+# The work day is dated by when it started, not by whatever calendar day
+# archiving happens to run on: a session starting in the evening that runs
+# past midnight (e.g. 20:00-01:00) still belongs to the day it started.
+# $1 overrides the journal path (for the self-test); default is the real one.
+work_date() {
+  local journal="${1:-$HOME/wiki/today/journal.md}"
+  if [ -f "$journal" ]; then
+    date -r "$(stat -f %B "$journal")" +%Y-%m-%d
+  else
+    date +%Y-%m-%d
+  fi
+}
+
 # Next zero-padded NN- sequence number unused among NN-* dirs in $1.
 next_seq() {
   local dir="$1" max=-1 n d
@@ -100,6 +113,13 @@ archive() {
 
 self_test() {
   local tmp
+
+  tmp="$(mktemp -d)"
+  touch "$tmp/journal.md"
+  [ "$(work_date "$tmp/journal.md")" = "$(date +%Y-%m-%d)" ] || { echo "FAIL: work_date should use the journal's creation date"; exit 1; }
+  [ "$(work_date "$tmp/missing.md")" = "$(date +%Y-%m-%d)" ] || { echo "FAIL: work_date should fall back to today when no journal exists"; exit 1; }
+  rm -rf "$tmp"
+
   tmp="$(mktemp -d)"
   mkdir -p "$tmp/today/research/00-demo/explores"
   echo "- 09:00:00: did a thing" > "$tmp/today/journal.md"
@@ -127,5 +147,12 @@ if [ "${1:-}" = "--test" ]; then
   exit 0
 fi
 
-archive "$HOME/wiki" "$(date +%Y-%m-%d)"
-echo "archived ~/wiki/today/ into ~/wiki/journal/ and ~/wiki/research/ for $(date +%Y-%m-%d)"
+# d-handoff and advisor call this so their dated output files agree with
+# the date this script will archive under, even if invoked standalone.
+if [ "${1:-}" = "--date" ]; then
+  work_date
+  exit 0
+fi
+
+archive "$HOME/wiki" "$(work_date)"
+echo "archived ~/wiki/today/ into ~/wiki/journal/ and ~/wiki/research/ for $(work_date)"
