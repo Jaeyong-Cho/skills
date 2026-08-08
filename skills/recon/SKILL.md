@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Given a goal, gather the information needed to answer it with a team instead of researching alone: dispatch parallel haiku scouts to explore its sub-questions and sonnet probes to experiment on the ones exploring can't resolve, then converge on one evidence-backed answer.
 
+Recon investigates only — scouts and probes never edit product code. `/experiment` probes may run throwaway scripts to test a hypothesis, but any product-code fix belongs to a separate follow-up, not this skill.
+
 1. **Claim the directory and decompose.** Pick a kebab-case slug for the goal and the next `{NN}` (count existing `NN-*` dirs under `~/wiki/today/research/`); `mkdir -p` that directory. Split the goal into independent sub-questions — each answerable on its own, together covering the goal — and number them `01, 02, ...`, each with its own kebab-case slug. Completion criterion: a numbered list of sub-questions covering the goal, plus the claimed directory.
 
 2. **MUST DISPATCH scouts.** For every sub-question, dispatch a separate `subagent_type: general-purpose`, `model: haiku` subagent, all in one batch (parallel — never one at a time). Instruct each one: run `/explore` (Skill tool) for this exact sub-question, but stop at its search step only — if that can't resolve it, report back "unresolved" instead of escalating to `/experiment` itself. Give it the exact file to write: `.../{NN}-{slug}/explores/{nn}-{sub-slug}.md` (its own pre-assigned `{nn}`, so parallel writes never collide). Do not use the `Explore` agent type — it lacks Write access and can't save the file. Completion criterion: every sub-question comes back either answered-with-evidence or flagged unresolved.
