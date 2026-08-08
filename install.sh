@@ -6,7 +6,19 @@ CLAUDE_DIR="$HOME/.claude"
 CLAUDE_MD="$SKILLS_DIR/CLAUDE.md"
 CLAUDE_SKILLS_DIR="$CLAUDE_DIR/skills"
 
-echo "=== Skills Install ==="
+# overwrite (default): copy over existing files, leave stale/renamed skills
+#   and manually-added skills alone.
+# clean (--clean): also remove skills this repo installed previously but no
+#   longer ships (renamed/deleted), tracked via the install manifest.
+MODE="overwrite"
+for arg in "$@"; do
+  case "$arg" in
+    --clean) MODE="clean" ;;
+    --overwrite) MODE="overwrite" ;;
+  esac
+done
+
+echo "=== Skills Install ($MODE) ==="
 echo ""
 
 # ── Detect installed agents ───────────────────────────────────────────────────
@@ -79,19 +91,23 @@ install_skill_library() {
     return
   fi
 
-  # Clear what a previous run of this script installed so renamed/removed
-  # skills (e.g. socratic → deleted, viz-gallery → renamed viewpoints) don't
-  # linger. Tracked via a manifest since "skills" flattens directly under
-  # $CLAUDE_SKILLS_DIR alongside anything else that may live there.
+  # clean: clear what a previous run of this script installed so
+  # renamed/removed skills (e.g. socratic → deleted, viz-gallery → renamed
+  # viewpoints) don't linger. Tracked via a manifest since "skills" flattens
+  # directly under $CLAUDE_SKILLS_DIR alongside anything else that may live
+  # there. overwrite (default): skip this, cp -R below merges in place and
+  # leaves stale/renamed and manually-added skills untouched.
   manifest="$CLAUDE_SKILLS_DIR/.installed-by-skills-repo"
-  if [ -f "$manifest" ]; then
-    while IFS= read -r name; do
-      [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
-    done < "$manifest"
+  if [ "$MODE" = "clean" ]; then
+    if [ -f "$manifest" ]; then
+      while IFS= read -r name; do
+        [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
+      done < "$manifest"
+    fi
+    for dir in references template; do
+      rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
+    done
   fi
-  for dir in references template; do
-    rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
-  done
 
   # "skills" is special: its contents must land directly under
   # $CLAUDE_SKILLS_DIR (e.g. $CLAUDE_SKILLS_DIR/archi), not nested one level
@@ -145,8 +161,9 @@ setup_copilot() {
 
   # Install skills and references for Copilot CLI, if the user has a ~/.copilot/skills directory.
   if [ -d "$HOME/.copilot" ]; then
-      # Clear existing skills, references, and template to avoid duplicates
-      rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/references"
+      if [ "$MODE" = "clean" ]; then
+        rm -rf "$HOME/.copilot/skills" "$HOME/.copilot/references"
+      fi
       cp -R "$SKILLS_DIR/skills/." "$HOME/.copilot/skills"
       cp -R "$SKILLS_DIR/references/." "$HOME/.copilot/skills/references"
       cp -R "$SKILLS_DIR/template/." "$HOME/.copilot/skills/template"
