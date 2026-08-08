@@ -1,2 +1,9 @@
 #!/usr/bin/env bash
-tmux-split 5 "$1"
+agent="$1"
+if [ -z "$agent" ]; then
+  PS3="agent? "
+  select agent in claude copilot; do
+    [ -n "$agent" ] && break
+  done
+fi
+tmux-split 5 "$agent"
