@@ -3,8 +3,9 @@
 #        tmux-split 3   → left top+bottom, right 1
 #        tmux-split 4   → top 2, bottom 2
 #        tmux-split 5   → left 20% (3 stacked) / right 80% (2 stacked)
+#        tmux-split 5 claude|copilot → same, plus launch opus/sonnet/haiku in the left panes
 
-ORIGIN=$(tmux display-message -p '#P')
+ORIGIN=$(tmux display-message -p '#{pane_id}')
 
 case "${1:-}" in
   ts2)
@@ -25,19 +26,42 @@ case "${1:-}" in
     tmux select-pane -t "$ORIGIN"
     ;;
   5)
-    tmux split-window -h -p 80    # left(20%) / right(80%); focus → right
-    tmux split-window -v          # right-top / right-bottom; focus → bottom
-    tmux select-pane -t "$ORIGIN" # back to left
-    tmux split-window -v -p 67    # left-top(1/3) / left-rest(2/3); focus → bottom
-    tmux split-window -v          # left-rest → left-middle / left-bottom
-    tmux select-pane -t "$ORIGIN" # back to left-top
+    AGENT="${2:-}"
+    LEFT_TOP="$ORIGIN"
+
+    RIGHT_TOP=$(tmux split-window -h -p 80 -P -F '#{pane_id}')   # left(20%) / right(80%)
+    tmux split-window -v -t "$RIGHT_TOP" >/dev/null               # right-top / right-bottom
+
+    LEFT_MIDDLE=$(tmux split-window -v -p 67 -t "$LEFT_TOP" -P -F '#{pane_id}')  # left-top(1/3) / left-rest(2/3)
+    LEFT_BOTTOM=$(tmux split-window -v -t "$LEFT_MIDDLE" -P -F '#{pane_id}')     # left-rest → left-middle / left-bottom
+
+    tmux select-pane -t "$LEFT_TOP"
+
+    case "$AGENT" in
+      claude)
+        tmux send-keys -t "$LEFT_TOP" 'cco' Enter
+        tmux send-keys -t "$LEFT_MIDDLE" 'ccs' Enter
+        tmux send-keys -t "$LEFT_BOTTOM" 'cch' Enter
+        ;;
+      copilot)
+        tmux send-keys -t "$LEFT_TOP" 'cgo' Enter
+        tmux send-keys -t "$LEFT_MIDDLE" 'cgs' Enter
+        tmux send-keys -t "$LEFT_BOTTOM" 'cgh' Enter
+        ;;
+      "") ;;
+      *)
+        echo "Unknown agent '$AGENT' (use claude|copilot)" >&2
+        exit 1
+        ;;
+    esac
     ;;
   *)
-    echo "Usage: tmux-split ts2|3|4|5"
+    echo "Usage: tmux-split ts2|3|4|5 [claude|copilot]"
     echo "  ts2 → left / right"
     echo "  3   → left top+bottom, right 1"
     echo "  4   → top 2, bottom 2"
     echo "  5   → left 20% (3 stacked) / right 80% (2 stacked)"
+    echo "  5 claude|copilot → also launches opus/sonnet/haiku in the left panes"
     exit 1
     ;;
 esac
