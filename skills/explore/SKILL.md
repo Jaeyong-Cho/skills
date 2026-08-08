@@ -1,7 +1,6 @@
 ---
 name: explore
-description: Explore the codebase or docs to answer a question, escalating to /experiment when exploring alone can't resolve it. Invoke as /explore.
-disable-model-invocation: true
+description: Explore the codebase, docs, or web to answer a question before acting, escalating to /experiment when exploring alone can't resolve it. Use when the user asks something that needs looking up or investigating before you can answer, or invoke as /explore; also reached by /recon's scout dispatches.
 ---
 
 # Explore
