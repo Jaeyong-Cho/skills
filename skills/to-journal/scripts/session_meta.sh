@@ -17,7 +17,7 @@ from datetime import datetime
 start = None
 models = []
 skills = []
-usage_by_id = {}  # dedupe streamed re-emits of the same assistant message
+usage_by_id = {}  # dedupe streamed re-emits of the same assistant message; mid -> (model, usage)
 
 with open('$transcript') as f:
     for line in f:
@@ -36,7 +36,7 @@ with open('$transcript') as f:
             usage = message.get('usage')
             mid = message.get('id')
             if usage and mid:
-                usage_by_id[mid] = usage
+                usage_by_id[mid] = (m, usage)
         content = message.get('content')
         if isinstance(content, list):
             for item in content:
@@ -53,16 +53,54 @@ else:
 print('MODEL=' + (','.join(models) or 'unknown'))
 print('SKILLS=' + (','.join(skills) or 'none'))
 
-inp = sum(u.get('input_tokens', 0) for u in usage_by_id.values())
-out = sum(u.get('output_tokens', 0) for u in usage_by_id.values())
-cache_w = sum(u.get('cache_creation_input_tokens', 0) for u in usage_by_id.values())
-cache_r = sum(u.get('cache_read_input_tokens', 0) for u in usage_by_id.values())
+usages = [u for _, u in usage_by_id.values()]
+inp = sum(u.get('input_tokens', 0) for u in usages)
+out = sum(u.get('output_tokens', 0) for u in usages)
+cache_w = sum(u.get('cache_creation_input_tokens', 0) for u in usages)
+cache_r = sum(u.get('cache_read_input_tokens', 0) for u in usages)
 total = inp + out + cache_w + cache_r
 if usage_by_id:
     print(f'TOKENS={total:,} (in:{inp:,} out:{out:,} cache_write:{cache_w:,} cache_read:{cache_r:,})')
 else:
     print('TOKENS=unknown')
-print('AIU=n/a')
+
+# \$/1M tokens (input, output). Cache write: 1.25x input (5m) / 2x input (1h). Cache read: 0.1x input.
+PRICING = [
+    ('claude-sonnet-5', 3.00, 15.00),
+    ('claude-opus-5', 5.00, 25.00),
+    ('claude-haiku-4-5', 1.00, 5.00),
+]
+def price_for(model):
+    for prefix, p_in, p_out in PRICING:
+        if model and model.startswith(prefix):
+            return p_in, p_out
+    return None
+
+cost = 0.0
+unpriced = 0
+for model, u in usage_by_id.values():
+    price = price_for(model)
+    if not price:
+        unpriced += 1
+        continue
+    p_in, p_out = price
+    cc = u.get('cache_creation') or {}
+    w5m = cc.get('ephemeral_5m_input_tokens', 0)
+    w1h = cc.get('ephemeral_1h_input_tokens', 0)
+    r = u.get('cache_read_input_tokens', 0)
+    cost += (
+        u.get('input_tokens', 0) * p_in
+        + w5m * p_in * 1.25
+        + w1h * p_in * 2.0
+        + r * p_in * 0.1
+    ) / 1e6
+    cost += u.get('output_tokens', 0) * p_out / 1e6
+
+if usage_by_id and cost > 0:
+    suffix = f' (approx; {unpriced} unpriced msgs)' if unpriced else ''
+    print(f'AIU=\${cost:.4f}{suffix}')
+else:
+    print('AIU=unknown')
 "
   exit 0
 fi
