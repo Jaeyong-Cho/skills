@@ -4,6 +4,7 @@
 #        tmux-split 4   → top 2, bottom 2
 #        tmux-split 5   → left 20% (3 stacked) / right 80% (2 stacked)
 #        tmux-split 5 claude|copilot → same, plus launch opus/sonnet/haiku in the left panes
+#        tmux-split 5 claude|copilot -f → same, but fable instead of opus in the top pane
 
 ORIGIN=$(tmux display-message -p '#{pane_id}')
 
@@ -27,6 +28,7 @@ case "${1:-}" in
     ;;
   5)
     AGENT="${2:-}"
+    FABLE="${3:-}"
     LEFT_TOP="$ORIGIN"
 
     RIGHT_TOP=$(tmux split-window -h -p 80 -P -F '#{pane_id}')   # left(20%) / right(80%)
@@ -39,12 +41,12 @@ case "${1:-}" in
 
     case "$AGENT" in
       claude)
-        tmux send-keys -t "$LEFT_TOP" 'cco' Enter
+        tmux send-keys -t "$LEFT_TOP" "$([ "$FABLE" = "-f" ] && echo ccf || echo cco)" Enter
         tmux send-keys -t "$LEFT_MIDDLE" 'ccs' Enter
         tmux send-keys -t "$LEFT_BOTTOM" 'cch' Enter
         ;;
       copilot)
-        tmux send-keys -t "$LEFT_TOP" 'cgo' Enter
+        tmux send-keys -t "$LEFT_TOP" "$([ "$FABLE" = "-f" ] && echo cgf || echo cgo)" Enter
         tmux send-keys -t "$LEFT_MIDDLE" 'cgs' Enter
         tmux send-keys -t "$LEFT_BOTTOM" 'cgh' Enter
         ;;

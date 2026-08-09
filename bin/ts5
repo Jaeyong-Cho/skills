@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
-agent="$1"
+agent=""
+fable=""
+for arg in "$@"; do
+  if [ "$arg" = "-f" ]; then
+    fable="-f"
+  else
+    agent="$arg"
+  fi
+done
 if [ -z "$agent" ]; then
   PS3="agent? "
   select agent in claude copilot; do
     [ -n "$agent" ] && break
   done
 fi
-tmux-split 5 "$agent"
+tmux-split 5 "$agent" "$fable"
