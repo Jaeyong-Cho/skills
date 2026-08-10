@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Turn this session's decisions into a plan document instead of leaving them to evaporate at the end of the chat.
 Write a handoff document summarising the current conversation so a fresh agent can continue the work.
+**MUST** instruct the detailed step-by-step so a cheap agent model can run.
+**MUST NOT** skip or abstract the action items.
 
 1. **Follow document style.** Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and size limits govern the draft.
 2. **Follow ponytail style.** Run `/ponytail` (Skill tool) over the action items — cut speculative scope, keep each item to the smallest change that works.
@@ -26,6 +28,8 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `/do-plan` executes and checks these off in place.
 8. **Write it** to `~/wiki/today/research/{NN}-{slug}/plans/{nn}-{slug}.md`, creating the directory if needed — `{slug}` a kebab-case slug of the plan's topic, `{NN}` the zero-padded sequence number for today, starting at `00` (count existing `NN-*` directories under `~/wiki/today/research/`), `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`). `/end-of-day` archives `today/research/` into the dated `~/wiki/research/` path at day's end.
 9. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
+
+
 
 Completion criterion: the file (or files, if split) exists; spec changes, acceptance criteria, and action items are each present and traceable to something decided in this session; every acceptance criteria row names a real Verification Method; and an action item exists to write those rows into the target project's spec document.
 
