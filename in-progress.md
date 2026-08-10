@@ -1,5 +1,5 @@
 # In-progress
-// top-down-understand
+// understand
 
 From human request or question, first check the human understanding for archive the goal with top-down sub question.
 If found the unknown, misunderstanding of human, then stop it and start understand it first.
