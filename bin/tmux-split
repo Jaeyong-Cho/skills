@@ -2,7 +2,7 @@
 # Usage: tmux-split ts2  → left / right
 #        tmux-split 3   → left top+bottom, right 1
 #        tmux-split 4   → top 2, bottom 2
-#        tmux-split 5   → left 20% (3 stacked) / right 80% (2 stacked)
+#        tmux-split 5   → left 30% (3 stacked) / right 70% (2 stacked)
 #        tmux-split 5 claude|copilot → same, plus launch opus/sonnet/haiku in the left panes
 #        tmux-split 5 claude|copilot -f → same, but fable instead of opus in the top pane
 
