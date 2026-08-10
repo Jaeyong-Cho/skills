@@ -15,4 +15,4 @@ Do not anticipate future questions or add unnecessary context.
 
 **ELI5.** Explain like i'm 5
 
-Top-down scaffolding -> Progressive disclosure -> Bottom-up verification -> Model revision
+Top-down scaffolding (Explore understanding) -> Progressive disclosure (expands branch) -> Bottom-up verification -> Model revision
