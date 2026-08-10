@@ -14,5 +14,3 @@ From human current understanding, focus on the smallest gap needed for next reas
 Do not anticipate future questions or add unnecessary context.
 
 **ELI5.** Explain like i'm 5
-
-Top-down scaffolding (Explore understanding) -> Progressive disclosure (expands branch) -> Bottom-up verification -> Model revision
