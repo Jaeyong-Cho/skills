@@ -2,9 +2,9 @@
 # Usage: tmux-split ts2  → left / right
 #        tmux-split 3   → left top+bottom, right 1
 #        tmux-split 4   → top 2, bottom 2
-#        tmux-split 5   → left 30% (3 stacked) / right 70% (2 stacked)
-#        tmux-split 5 claude|copilot → same, plus launch opus/sonnet/haiku in the left panes
-#        tmux-split 5 claude|copilot -f → same, but fable instead of opus in the top pane
+#        tmux-split 5   → left 30% (3 stacked) / right 70% (2 stacked); right panes stay plain terminals
+#        tmux-split 5 claude|copilot → same, plus launch sonnet (middle) + haiku (bottom) in the left panes
+#        tmux-split 5 claude|copilot [sonnet|opus|fable] → also picks the top-pane "main" model (default opus)
 
 ORIGIN=$(tmux display-message -p '#{pane_id}')
 
@@ -28,7 +28,7 @@ case "${1:-}" in
     ;;
   5)
     AGENT="${2:-}"
-    FABLE="${3:-}"
+    MAIN="${3:-opus}"
     LEFT_TOP="$ORIGIN"
 
     RIGHT_TOP=$(tmux split-window -h -l 70% -P -F '#{pane_id}')   # left(30%) / right(70%)
@@ -41,12 +41,22 @@ case "${1:-}" in
 
     case "$AGENT" in
       claude)
-        tmux send-keys -t "$LEFT_TOP" "$([ "$FABLE" = "-f" ] && echo ccf || echo cco)" Enter
+        case "$MAIN" in
+          sonnet) TOP_CMD=ccs ;;
+          fable)  TOP_CMD=ccf ;;
+          *)      TOP_CMD=cco ;;
+        esac
+        tmux send-keys -t "$LEFT_TOP" "$TOP_CMD" Enter
         tmux send-keys -t "$LEFT_MIDDLE" 'ccs' Enter
         tmux send-keys -t "$LEFT_BOTTOM" 'cch' Enter
         ;;
       copilot)
-        tmux send-keys -t "$LEFT_TOP" "$([ "$FABLE" = "-f" ] && echo cgf || echo cgo)" Enter
+        case "$MAIN" in
+          sonnet) TOP_CMD=cgs ;;
+          fable)  TOP_CMD=cgf ;;
+          *)      TOP_CMD=cgo ;;
+        esac
+        tmux send-keys -t "$LEFT_TOP" "$TOP_CMD" Enter
         tmux send-keys -t "$LEFT_MIDDLE" 'cgs' Enter
         tmux send-keys -t "$LEFT_BOTTOM" 'cgh' Enter
         ;;

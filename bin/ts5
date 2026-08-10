@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 agent=""
-fable=""
+main="opus"
 for arg in "$@"; do
-  if [ "$arg" = "-f" ]; then
-    fable="-f"
-  else
-    agent="$arg"
-  fi
+  case "$arg" in
+    -f) main="fable" ;;
+    sonnet|opus|fable) main="$arg" ;;
+    *) agent="$arg" ;;
+  esac
 done
 if [ -z "$agent" ]; then
   PS3="agent? "
@@ -14,4 +14,4 @@ if [ -z "$agent" ]; then
     [ -n "$agent" ] && break
   done
 fi
-tmux-split 5 "$agent" "$fable"
+tmux-split 5 "$agent" "$main"
