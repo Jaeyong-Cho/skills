@@ -1,6 +1,6 @@
 ---
 name: end-of-day
-description: Run d-handoff and advisor, then compile today's journal, research notes, handoff, and advisor findings into a report with a table of contents, an Introduction/Abstraction/Detailed breakdown per topic, and a themed, servable HTML gallery. Invoke as /end-of-day.
+description: Run d-handoff and advisor, then compile today's journal, research notes, handoff, and advisor findings into a report with a table of contents and an Introduction/Abstraction/Detailed breakdown per topic. Invoke as /end-of-day.
 disable-model-invocation: true
 ---
 
@@ -20,7 +20,5 @@ Read `../references/document-style.md` first — its Introduction/Abstraction/De
 7. **Draft each content item** in three phases per `../references/document-style.md`: Introduction (1-3 sentences, why/what), Abstraction (the objects, interactions, and relationships involved), Detailed (one representative concrete example, including any research result or finding). Completion criterion: every content item has all three phases, each obeying that file's size limits.
 8. **Build the table of contents** — list content item titles in the order they appear, each linking to its section. Completion criterion: ToC entry count equals the content item count from step 6.
 9. **Write the markdown report** — assemble ToC + all content items into `~/wiki/journal/YYYY/MM/YYYY-MM-DD-report.md` (`mkdir -p` the parent directory if needed). If it would exceed the 500-word file cap in `../references/document-style.md`, split the largest content items into separate linked files instead of shrinking their phases. Completion criterion: the file exists with a ToC and every content item's three phases.
-10. **Assemble the HTML gallery via script** — build a manifest JSON (schema in `scripts/build_report.py`'s docstring) with one entry per content item (title, introduction/abstraction/detailed; omit `svg`), then run `python scripts/build_report.py manifest.json ~/wiki/journal/YYYY/MM/YYYY-MM-DD-report/index.html`. Completion criterion: `index.html` exists in that directory, embeds every content item, with no external asset references, and opens standalone in a browser.
-11. **Make the gallery servable** — copy `scripts/serve.sh` into `~/wiki/journal/YYYY/MM/YYYY-MM-DD-report/`. MUST NOT run it yourself; the user runs it manually (binds `0.0.0.0:4801`, pass an argument to override the port). Completion criterion: `serve.sh` exists next to `index.html` in that directory.
 
-Tell the user the markdown path, the report directory (containing `index.html` and `serve.sh`), and the URL to open (http://localhost:4801) once they've run it.
+Tell the user the markdown report path.
