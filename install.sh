@@ -148,7 +148,6 @@ setup_claude() {
 
   if command -v claude &>/dev/null; then
     install_agent_plugin claude DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
-    install_agent_plugin claude mattpocock/skills mattpocock-skills@mattpocock "mattpocock-skills plugin (grilling, grill-me)"
   fi
 }
 
@@ -183,7 +182,6 @@ setup_copilot() {
 
   if command -v copilot &>/dev/null; then
     install_agent_plugin copilot DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
-    install_agent_plugin copilot mattpocock/skills mattpocock-skills@mattpocock "mattpocock-skills plugin (grilling, grill-me)"
   fi
 }
 

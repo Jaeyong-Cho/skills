@@ -27,21 +27,18 @@ The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
 |-------|----------------------|
-| Claude Code | Copies `skills/` and `preferences/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` and `mattpocock-skills` plugins (marketplace installs) |
-| GitHub Copilot CLI | Copies `skills/` and `preferences/` to `~/.copilot/skills/`; `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same two plugins |
+| Claude Code | Copies `skills/` and `preferences/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
+| GitHub Copilot CLI | Copies `skills/` and `preferences/` to `~/.copilot/skills/`; `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
 
 `references/` is not copied by the installer — skills read it from this repo's own path (`../references/...`), since `skills/` and `references/` land as siblings either way.
-
-## Grilling and grill-me
-
-`/grilling` and `/grill-me` are not local skills in this repo — they're installed from the `mattpocock-skills` plugin (marketplace `mattpocock`, repo `mattpocock/skills`; see `install.sh`). `dev-grill-me` below depends on `/grilling` being installed (named to avoid colliding with the plugin's own `/grill-me`).
 
 ## Skills
 
 | Skill | Output | What it does |
 |-------|--------|-------------|
-| `/dev-grill-me` | — | Run `/grilling` covering both feature and fix concerns in one pass: intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan |
-| `/refact-grill-me` | — | Run `/grilling` to build understanding of an unfamiliar target through four lenses — architecture fit (meta-pattern), interface depth (deep-modules), naming, simplicity (ponytail) — then value, behavior-preservation proof, impact scope, testability, release plan — run before `/to-plan` |
+| `/grill-me` | — | Personal grilling engine: interview one question at a time from a design-tree frontier; when the user can't answer, drop into progressive-disclosure clarification before returning to the question |
+| `/dev-grill-me` | — | Run `/grill-me` covering both feature and fix concerns in one pass: intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan |
+| `/refact-grill-me` | — | Run `/grill-me` to build understanding of an unfamiliar target through four lenses — architecture fit (meta-pattern), interface depth (deep-modules), naming, simplicity (ponytail) — then value, behavior-preservation proof, impact scope, testability, release plan — run before `/to-plan` |
 | `/end-of-day` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD-report.md`, `.../YYYY-MM-DD-report/index.html` | Run `/d-handoff` and `/advisor`, then compile the day's journal/research/handoff/advisor findings into a ToC report with an Introduction/Abstraction/Detailed section per topic, plus a themed, servable HTML gallery with an insight diagram per topic |
 | `/d-handoff` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD-handoff.md` | Distill today's open items and key decisions into a dated file for tomorrow's session |
 | `/advisor` | `~/wiki/advisor/YYYY/MM/YYYY-MM-DD.md` | Scan the last 14 days of journal/research notes for recurring friction and turn it into automation candidates (script, custom agent, or AI-usage change) |
