@@ -23,7 +23,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places.
    - Commit
    - Branch
-   - Refactor (Boy-Scout: before release or merge, make code clean)
+   - Refactor (Boy-Scout with `/boy-scout` skill: before release or merge, make code clean)
    - Release
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `/do-plan` executes and checks these off in place.
