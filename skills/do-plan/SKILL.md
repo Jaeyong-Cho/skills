@@ -16,3 +16,4 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, and the report file exists reflecting both.
 
 Tell the user the report file path when done.
+Tell the user to do `/boy-scout` to refactor
