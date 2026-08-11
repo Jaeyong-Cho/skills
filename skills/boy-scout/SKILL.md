@@ -1,7 +1,7 @@
 ---
 name: boy-scout
 description: Understand the code changed in recent work — current branch's diff against its base, or since the last refactor commit — then scan it for one small opportunistic cleanup worth doing while the code is already open. Report only, never edit. Invoke as /boy-scout.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Boy Scout
