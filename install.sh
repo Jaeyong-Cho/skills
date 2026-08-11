@@ -202,6 +202,17 @@ ensure_rtk_binary() {
   fi
 }
 
+# ── pi binary ────────────────────────────────────────────────────────────────
+# https://github.com/earendil-works/pi — AI coding agent CLI, npm global
+# install. bin/pi shims it onto PATH since npm's global bin dir isn't on it.
+
+ensure_pi_binary() {
+  command -v npm &>/dev/null || return
+  npm list -g @earendil-works/pi-coding-agent &>/dev/null && return
+  echo "  installing pi..."
+  npm install -g @earendil-works/pi-coding-agent &>/dev/null
+}
+
 # ── JSON hook wiring (shared) ────────────────────────────────────────────────
 # add_json_hook merges one hook command into settings.json without clobbering
 # existing hooks/settings, and is idempotent (skips if the command is already
@@ -268,6 +279,7 @@ setup_bin() {
 echo ""
 selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
+ensure_pi_binary
 setup_bin && echo ""
 
 echo "Done."

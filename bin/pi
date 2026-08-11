@@ -1,0 +1,3 @@
+#!/bin/bash
+# pi's npm global bin isn't on PATH here (npm prefix bin dir); shim it.
+exec "$(npm config get prefix)/bin/pi" "$@"
