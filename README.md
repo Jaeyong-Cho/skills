@@ -32,6 +32,8 @@ The script detects which AI agents are installed and sets up each one:
 
 `references/` is not copied by the installer — skills read it from this repo's own path (`../references/...`), since `skills/` and `references/` land as siblings either way.
 
+The script also copies `skills/`, `references/`, and `template/` to `~/.agents/skills/`, the global directory defined by the [Agent Skills standard](https://agentskills.io/specification) — read by `pi` and other harnesses that follow it, independent of Claude/Copilot.
+
 ## Skills
 
 | Skill | Output | What it does |
@@ -53,6 +55,7 @@ The script detects which AI agents are installed and sets up each one:
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
 | `/progressive` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
+| `/teach` | teaching workspace (`MISSION.md`, `reference/`, `lessons/`, `learning-records/`, `RESOURCES.md`) | Vendored from [mattpocock/skills](https://github.com/mattpocock/skills). Teach the user a topic over multiple sessions: gather trusted resources, build short interactive HTML lessons in the user's zone of proximal development, log learning records |
 
 All skills above are user-invoked, except `/experiment`, `/d-handoff`, and `/advisor`, which the agent can also fire on its own — `/experiment` when a question needs something actually run to get evidence; `/d-handoff` and `/advisor` when the user wants to wrap up the day or get workflow advice, or when `/end-of-day` reaches for them before drafting. Most artifacts land in a skill-named directory at the project root; `/end-of-day`, `/d-handoff`, `/advisor`, `/to-plan`, `/explore`, and `/experiment` instead read and write the global `~/wiki/` layout documented in `CLAUDE.md`'s Context Structure section (journal/research/advisor/handoff), since they're personal daily-workflow tools rather than per-project outputs.
 

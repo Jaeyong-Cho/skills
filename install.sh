@@ -80,55 +80,56 @@ install_agent_plugin() {
 # ── Setup functions ───────────────────────────────────────────────────────────
 
 install_skill_library() {
+  local dest="$1"
   local source_root destination_root dir manifest name
 
-  mkdir -p "$CLAUDE_SKILLS_DIR"
+  mkdir -p "$dest"
   source_root="$(cd "$SKILLS_DIR" && pwd -P)"
-  destination_root="$(cd "$CLAUDE_SKILLS_DIR" && pwd -P)"
+  destination_root="$(cd "$dest" && pwd -P)"
 
   if [ "$source_root" = "$destination_root" ]; then
-    echo "  ✓ skill library already at $CLAUDE_SKILLS_DIR"
+    echo "  ✓ skill library already at $dest"
     return
   fi
 
   # clean: clear what a previous run of this script installed so
   # renamed/removed skills (e.g. socratic → deleted, viz-gallery → renamed
   # viewpoints) don't linger. Tracked via a manifest since "skills" flattens
-  # directly under $CLAUDE_SKILLS_DIR alongside anything else that may live
-  # there. overwrite (default): skip this, cp -R below merges in place and
-  # leaves stale/renamed and manually-added skills untouched.
-  manifest="$CLAUDE_SKILLS_DIR/.installed-by-skills-repo"
+  # directly under $dest alongside anything else that may live there.
+  # overwrite (default): skip this, cp -R below merges in place and leaves
+  # stale/renamed and manually-added skills untouched.
+  manifest="$dest/.installed-by-skills-repo"
   if [ "$MODE" = "clean" ]; then
     if [ -f "$manifest" ]; then
       while IFS= read -r name; do
-        [ -n "$name" ] && rm -rf "${CLAUDE_SKILLS_DIR:?}/$name"
+        [ -n "$name" ] && rm -rf "${dest:?}/$name"
       done < "$manifest"
     fi
     for dir in references template; do
-      rm -rf "${CLAUDE_SKILLS_DIR:?}/$dir"
+      rm -rf "${dest:?}/$dir"
     done
   fi
 
-  # "skills" is special: its contents must land directly under
-  # $CLAUDE_SKILLS_DIR (e.g. $CLAUDE_SKILLS_DIR/archi), not nested one level
-  # deeper as $CLAUDE_SKILLS_DIR/skills/archi — Claude Code only discovers
-  # skills at $CLAUDE_SKILLS_DIR/<name>/SKILL.md.
+  # "skills" is special: its contents must land directly under $dest (e.g.
+  # $dest/archi), not nested one level deeper as $dest/skills/archi — Claude
+  # Code and the agentskills.io standard only discover skills at
+  # $dest/<name>/SKILL.md.
   if [ -d "$SKILLS_DIR/skills" ]; then
-    cp -R "$SKILLS_DIR/skills/." "$CLAUDE_SKILLS_DIR/"
+    cp -R "$SKILLS_DIR/skills/." "$dest/"
     (cd "$SKILLS_DIR/skills" && ls -1) > "$manifest"
   fi
 
   for dir in references template; do
     [ -d "$SKILLS_DIR/$dir" ] || continue
-    cp -R "$SKILLS_DIR/$dir" "$CLAUDE_SKILLS_DIR/"
+    cp -R "$SKILLS_DIR/$dir" "$dest/"
   done
-  echo "  ✓ skill library → $CLAUDE_SKILLS_DIR (skills, references, template)"
+  echo "  ✓ skill library → $dest (skills, references, template)"
 }
 
 setup_claude() {
   echo "→ Claude Code"
 
-  install_skill_library
+  install_skill_library "$CLAUDE_SKILLS_DIR"
 
   if [ -f "$CLAUDE_DIR/CLAUDE.md" ] && [ ! -L "$CLAUDE_DIR/CLAUDE.md" ]; then
     cp "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.bak"
@@ -245,6 +246,15 @@ setup_tmux_agent_status_claude() {
   echo "  ✓ tmux-agent-status hooks → ~/.claude/settings.json"
 }
 
+# ── Agent Skills standard (~/.agents/skills) ────────────────────────────────
+# https://agentskills.io/specification — global skills dir read by pi and
+# other harnesses that follow the standard, independent of Claude/Copilot.
+
+setup_agents_skills() {
+  echo "→ Agent Skills standard (~/.agents/skills)"
+  install_skill_library "$HOME/.agents/skills"
+}
+
 # ── Bin scripts ──────────────────────────────────────────────────────────────
 
 setup_bin() {
@@ -266,6 +276,7 @@ setup_bin() {
 echo ""
 selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
+setup_agents_skills && echo ""
 setup_bin && echo ""
 
 echo "Done."
