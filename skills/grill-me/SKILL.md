@@ -26,6 +26,8 @@ genuine decisions go to the user.
 Ask the whole frontier in one round: number each question and give your
 recommended answer.
 
+**MUST NOT** use ask question tool. 
+
 ```
 ❓ **Q1** - <title>: <body>
 
