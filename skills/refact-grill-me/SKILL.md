@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Reach for this when a target's code isn't understood well yet — the grilling below forces the investigation that builds that understanding; only once it's answered does a real refactor decision follow.
 
-Run `/grill-me` covering every point below. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
+Run `/grill-me` skill covering every point below. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
 
 - Target scope — which file, module, or directory, and what's unclear about it
 - Architecture fit (meta-pattern) — per `../references/meta-pattern.md`'s Level-of-Pain table, is the target decomposed too early, too late, or split along the wrong axis (Abstractness / Subdomain / Sharding)?
