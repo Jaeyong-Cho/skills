@@ -1,3 +1,3 @@
 #!/bin/bash
 
-claude --system-prompt "$(cat $HOME/.claude/skills/references/pi-system-prompt.md)" --tools "Read,Write,Edit,Bash" "$@"
+claude --system-prompt "$(pi-prompt Read Write Edit Bash)" --tools "Read,Write,Edit,Bash" "$@"

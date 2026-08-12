@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Usage: pi-prompt [Tool ...]   (default: Read Write Edit Bash)
+# Builds a system prompt the way pi's buildSystemPrompt() does: tool
+# list + guidelines that adapt to which tools are present, instead of
+# a hand-copied static prompt.
+set -euo pipefail
+
+declare -A snippet=(
+  [Read]="read file contents"
+  [Write]="create or overwrite files"
+  [Edit]="make targeted edits to existing files"
+  [Bash]="execute shell commands"
+  [Grep]="search file contents"
+  [Glob]="find files by pattern"
+)
+
+tools=("$@")
+[ ${#tools[@]} -eq 0 ] && tools=(Read Write Edit Bash)
+
+tools_list=""
+has_bash=0 has_grep=0 has_glob=0
+for t in "${tools[@]}"; do
+  [ "$t" = Bash ] && has_bash=1
+  [ "$t" = Grep ] && has_grep=1
+  [ "$t" = Glob ] && has_glob=1
+  tools_list+="- $t: ${snippet[$t]:-custom tool}"$'\n'
+done
+
+guidelines="- Be concise in your responses"$'\n'"- Show file paths clearly when working with files"
+if [ "$has_bash" = 1 ] && [ "$has_grep" = 0 ] && [ "$has_glob" = 0 ]; then
+  guidelines="- Use bash for file operations like ls, rg, find"$'\n'"$guidelines"
+fi
+
+cat <<EOF
+You are an expert coding assistant. You help users by reading files, executing commands, editing code, and writing new files.
+
+Available tools:
+${tools_list%$'\n'}
+
+Guidelines:
+$guidelines
+
+Current working directory: $PWD
+EOF
