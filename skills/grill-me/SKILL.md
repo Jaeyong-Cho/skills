@@ -15,6 +15,8 @@ Each question should be formatted like so:
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
++ Explain more details for a question (examples/edge cases) explain like i'm 5 (ELI5)
+
 ➡️ <your recommended answer>
 ```
 
