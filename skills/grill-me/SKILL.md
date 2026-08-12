@@ -1,7 +1,7 @@
 ---
 name: grill-me
 description: Personal grilling engine — interview the user round by round over a design-tree frontier; any question the user can't answer gets progressive-disclosure clarification before being re-asked. Invoke as /grill-me, or via dev-grill-me / refact-grill-me's checklists.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Grill Me
