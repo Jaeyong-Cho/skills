@@ -29,3 +29,11 @@ Answer each question at two levels:
 - L1 = key reasoning, tied to a specific file/line.
 
 Skip a question that doesn't apply (e.g. no external API) — write "N/A", don't force an answer.
+
+** MUST USE ** hide for answer with this tags
+```md
+<details>
+<summary> Answer </summary>
+{Answer}
+</details>
+```
