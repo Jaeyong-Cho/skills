@@ -39,6 +39,7 @@ detect() {
 
 detect "claude"  "Claude Code        (claude CLI)" "command -v claude"
 detect "copilot" "GitHub Copilot CLI (copilot)"    "command -v copilot"
+detect "pi"      "pi coding agent    (pi CLI)"     "command -v pi"
 
 if [ ${#DETECTED_KEYS[@]} -eq 0 ]; then
   echo "No supported AI agents detected. Exiting."
@@ -186,6 +187,14 @@ setup_copilot() {
   fi
 }
 
+setup_pi() {
+  echo "→ pi coding agent"
+
+  pi install git:github.com/DietrichGebert/ponytail &>/dev/null \
+    && echo "  ✓ ponytail extension" \
+    || echo "  ponytail install failed, run manually: pi install git:github.com/DietrichGebert/ponytail"
+}
+
 # ── rtk binary ───────────────────────────────────────────────────────────────
 # https://github.com/rtk-ai/rtk — CLI proxy that filters/compresses command
 # output before it reaches the agent's context.
@@ -276,6 +285,7 @@ setup_bin() {
 echo ""
 selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
+selected "pi"      && setup_pi      && echo ""
 setup_agents_skills && echo ""
 setup_bin && echo ""
 
