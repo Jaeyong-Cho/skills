@@ -23,6 +23,7 @@ For every file in the diff, check:
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
 - Naming — per `../references/naming.md`, does a name in the changed code carry one of its listed smells?
 - Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility.
+- Others (Clean code rule except above)
 
 Every changed file gets checked against all four lenses before ranking.
 
