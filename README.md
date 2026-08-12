@@ -29,7 +29,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/` and `preferences/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/` and `preferences/` to `~/.copilot/skills/`; `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Installs the `ponytail` extension (`pi install git:github.com/DietrichGebert/ponytail`) |
+| pi coding agent | Installs `ponytail`'s skill commands via [skills.sh](https://www.skills.sh/) (`npx skills add DietrichGebert/ponytail -a pi -g -y`) |
 
 `references/` is not copied by the installer — skills read it from this repo's own path (`../references/...`), since `skills/` and `references/` land as siblings either way.
 
@@ -56,7 +56,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
 | `/progressive` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
-| `/teach` | teaching workspace (`MISSION.md`, `reference/`, `lessons/`, `learning-records/`, `RESOURCES.md`) | Vendored from [mattpocock/skills](https://github.com/mattpocock/skills). Teach the user a topic over multiple sessions: gather trusted resources, build short interactive HTML lessons in the user's zone of proximal development, log learning records |
+| `/teach` | teaching workspace (`MISSION.md`, `reference/`, `lessons/`, `learning-records/`, `RESOURCES.md`) | Installed via skills.sh from [mattpocock/skills](https://github.com/mattpocock/skills), not vendored in this repo. Teach the user a topic over multiple sessions: gather trusted resources, build short interactive HTML lessons in the user's zone of proximal development, log learning records |
 
 All skills above are user-invoked, except `/experiment`, `/d-handoff`, and `/advisor`, which the agent can also fire on its own — `/experiment` when a question needs something actually run to get evidence; `/d-handoff` and `/advisor` when the user wants to wrap up the day or get workflow advice, or when `/end-of-day` reaches for them before drafting. Most artifacts land in a skill-named directory at the project root; `/end-of-day`, `/d-handoff`, `/advisor`, `/to-plan`, `/explore`, and `/experiment` instead read and write the global `~/wiki/` layout documented in `CLAUDE.md`'s Context Structure section (journal/research/advisor/handoff), since they're personal daily-workflow tools rather than per-project outputs.
 
