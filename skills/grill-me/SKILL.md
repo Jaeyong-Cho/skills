@@ -6,41 +6,21 @@ disable-model-invocation: true
 
 # Grill Me
 
-Interview the user until shared understanding. Work the design tree in
-rounds — a round is every frontier question asked together in one message.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-## Design tree
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
 
-Map the topic as a design tree: every decision branches into the decisions
-that hang off it. The **frontier** is every decision whose prerequisites are
-already settled — answerable now, without guessing at answers not yet heard.
-
-## Facts vs decisions
-
-Finding facts is your job, never the user's. Dispatch a sub-agent for
-anything findable in the environment (filesystem, tools, code). Only
-genuine decisions go to the user.
-
-## Ask the round
-
-Ask the whole frontier in one round: number each question and give your
-recommended answer.
-
-**MUST NOT** use ask question tool. 
+Each question should be formatted like so:
 
 ```
-❓ **Q1** - <title>: <body>
+❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
-➡️ <recommended answer>
-
-❓ **Q2** - <title>: <body>
-
-➡️ <recommended answer>
+➡️ <your recommended answer>
 ```
 
-Wait for the user's reply before the next round. A question whose answer
-depends on another question still open this round belongs to a later round,
-not this one.
+Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
+
+Finding _facts_ is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), dispatch a sub-agent to find it — don't ask the user for anything you could look up yourself. Don't block on it: a running exploration is an unsettled prerequisite, so only the questions downstream of it wait for the sub-agent to report — ask the rest of the frontier now. The _decisions_ are the user's — put each to them and wait.
 
 ## When the user can't answer one
 
