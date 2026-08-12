@@ -1,6 +1,0 @@
-#!/bin/bash
-
-f=~/wiki/today/journal.md
-mkdir -p "$(dirname "$f")"
-echo "- $(date +%H:%M:%S): END REST" >> "$f"
-$EDITOR "$f"
