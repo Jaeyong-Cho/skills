@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pi --model claude-opus-5 --thinking high

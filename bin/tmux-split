@@ -3,8 +3,8 @@
 #        tmux-split 3   → left top+bottom, right 1
 #        tmux-split 4   → top 2, bottom 2
 #        tmux-split 5   → left 30% (3 stacked) / right 70% (2 stacked); right panes stay plain terminals
-#        tmux-split 5 claude|copilot → same, plus launch sonnet (middle) + haiku (bottom) in the left panes
-#        tmux-split 5 claude|copilot [sonnet|opus|fable] → also picks the top-pane "main" model (default opus)
+#        tmux-split 5 claude|copilot|pi → same, plus launch sonnet (middle) + haiku (bottom) in the left panes
+#        tmux-split 5 claude|copilot|pi [sonnet|opus|fable] → also picks the top-pane "main" model (default opus)
 
 ORIGIN=$(tmux display-message -p '#{pane_id}')
 
@@ -60,20 +60,30 @@ case "${1:-}" in
         tmux send-keys -t "$LEFT_MIDDLE" 'cgs' Enter
         tmux send-keys -t "$LEFT_BOTTOM" 'cgh' Enter
         ;;
+      pi)
+        case "$MAIN" in
+          sonnet) TOP_CMD=cps ;;
+          fable)  TOP_CMD=cpf ;;
+          *)      TOP_CMD=cpo ;;
+        esac
+        tmux send-keys -t "$LEFT_TOP" "$TOP_CMD" Enter
+        tmux send-keys -t "$LEFT_MIDDLE" 'cps' Enter
+        tmux send-keys -t "$LEFT_BOTTOM" 'cph' Enter
+        ;;
       "") ;;
       *)
-        echo "Unknown agent '$AGENT' (use claude|copilot)" >&2
+        echo "Unknown agent '$AGENT' (use claude|copilot|pi)" >&2
         exit 1
         ;;
     esac
     ;;
   *)
-    echo "Usage: tmux-split ts2|3|4|5 [claude|copilot]"
+    echo "Usage: tmux-split ts2|3|4|5 [claude|copilot|pi]"
     echo "  ts2 → left / right"
     echo "  3   → left top+bottom, right 1"
     echo "  4   → top 2, bottom 2"
     echo "  5   → left 30% (3 stacked) / right 70% (2 stacked)"
-    echo "  5 claude|copilot → also launches opus/sonnet/haiku in the left panes"
+    echo "  5 claude|copilot|pi → also launches opus/sonnet/haiku in the left panes"
     exit 1
     ;;
 esac

@@ -10,7 +10,7 @@ for arg in "$@"; do
 done
 if [ -z "$agent" ]; then
   PS3="agent? "
-  select agent in claude copilot; do
+  select agent in claude copilot pi; do
     [ -n "$agent" ] && break
   done
 fi

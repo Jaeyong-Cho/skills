@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pi --model claude-sonnet-5 --thinking high
