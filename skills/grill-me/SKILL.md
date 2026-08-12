@@ -46,7 +46,7 @@ not this one.
 
 If the reply to a given Qn isn't an answer — a question back, "I don't
 know", "not sure" — answer that one first, in layers, before moving on to
-the rest of the round's replies:
+the rest of the round's replies with `/progressive` skill:
 
 - L0: core answer, 1-2 sentences
 - L1: key reasoning, only if they push further
