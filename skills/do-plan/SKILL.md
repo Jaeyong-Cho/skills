@@ -1,6 +1,6 @@
 ---
 name: do-plan
-description: Execute a /to-plan document's action items in order, checking each off in place, verify the plan's acceptance criteria, write up the run as a report, and quiz comprehension of the touched code. Invoke as /do-plan.
+description: Execute a @skills/to-plan document's action items in order, checking each off in place, verify the plan's acceptance criteria, write up the run as a report, and quiz comprehension of the touched code. Invoke as /do-plan.
 disable-model-invocation: true
 ---
 
@@ -19,4 +19,4 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, the report file exists reflecting both, and the quiz file exists covering the touched code at L0 and L1 for both categories.
 
 Tell the user the report and quiz file paths when done.
-Tell the user to do `/boy-scout` to refactor
+Tell the user to do `@skills/boy-scout` to refactor

@@ -1,12 +1,12 @@
 ---
 name: dev-grill-me
-description: Run a /grill-me interview covering both feature and fix concerns in one pass — intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan.
+description: Run a @skills/grill-me interview covering both feature and fix concerns in one pass — intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan.
 disable-model-invocation: true
 ---
 
 # Dev Grill Me
 
-Run `/grill-me` skill covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
+Run `@skills/grill-me` covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
 
 - Intent and purpose
 - Scope-in / scope-out
@@ -23,4 +23,4 @@ Run `/grill-me` skill covering every point below, whether the work is a feature 
 - Release and ship plan
 
 **MUST NOT** implementation work has started.
-Once complete, next step is `/to-plan` to dump the recorded answers into a plan document.
+Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.

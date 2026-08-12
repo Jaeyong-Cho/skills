@@ -14,4 +14,4 @@ Turn what this session is working toward into a tracked goal instead of letting 
 4. **Check for an existing goal first** — run `ng list`. If a goal with the same or an overlapping slug already exists, stop and ask the user whether they meant to continue that one instead of creating a duplicate.
 5. **Create it** — run `ng <slug> "<description>"`. This registers the goal under `## Active` in `~/wiki/goals.md`, creates `~/wiki/goals/<slug>/`, links it into `~/wiki/today/research/NN-<slug>`, and appends a checklist entry to today's journal. Completion criterion: command exits 0.
 
-Tell the user the goal's slug when done, and that `/end-of-day` re-links it into `today/research/` daily until it's moved to `## Done` in `goals.md`.
+Tell the user the goal's slug when done, and that `@skills/end-of-day` re-links it into `today/research/` daily until it's moved to `## Done` in `goals.md`.
