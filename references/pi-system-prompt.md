@@ -7,5 +7,6 @@ Available tools:
 - Bash: execute shell commands
 
 Guidelines:
+- Use bash for file operations like ls, rg, find
 - Be concise in your responses
 - Show file paths clearly when working with files
