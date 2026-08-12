@@ -15,6 +15,7 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 5. **Write a comprehension quiz.** Read `../references/comprehension-quiz.md` first — its two categories (Structure & Responsibility, Core Logic) and L0/L1 answer format govern the draft. Cover the code touched by this run's action items. Write it next to the plan file, as `{plan-file}.quiz.md`.
 
 **MUST WRITE** for each plan file per report and quiz. 
+
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, the report file exists reflecting both, and the quiz file exists covering the touched code at L0 and L1 for both categories.
 
 Tell the user the report and quiz file paths when done.
