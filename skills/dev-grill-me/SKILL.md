@@ -34,25 +34,25 @@ Run `@skills/grill-me` covering every point below, whether the work is a feature
 - Single-module data structure
 
 ### Medium Level (1)
-Multi-function logic
-Multi-file change
-Module internal behavior
-Module interface
-Shared data structure
+- Multi-function logic
+- Multi-file change
+- Module internal behavior
+- Module interface
+- Shared data structure
 
 ### High Level (2)
-Database schema
-Cross-service logic
-API contract
-Data migration
-External library / service integration
-Protocol / file format
-Deployment architecture
-System architecture
-Cross-system contract
-Platform / OS / hardware dependency
-External organization / vendor contract
-Production-scale breaking change
+- Database schema
+- Cross-service logic
+- API contract
+- Data migration
+- External library / service integration
+- Protocol / file format
+- Deployment architecture
+- System architecture
+- Cross-system contract
+- Platform / OS / hardware dependency
+- External organization / vendor contract
+- Production-scale breaking change
 
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
