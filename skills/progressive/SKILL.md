@@ -22,7 +22,7 @@ Use adaptive **progressive disclosure** with three levels when response:
 - L1 = key reasoning
 - L2 = details/examples/edge cases
 
-**Response** with L0 and L1 only; provide L2 only when necessary or explicitly requested.
+**Response** with Core (L0) and Reasoning (L1) only; provide L2 only when necessary or explicitly requested.
 From human current understanding, focus on the smallest gap needed for next reasoning step.
 Do not anticipate future questions or add unnecessary context.
 
