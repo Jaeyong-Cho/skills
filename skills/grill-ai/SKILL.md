@@ -1,16 +1,16 @@
 ---
-name: progressive
-description: Manual mode for calibrated answers using progressive disclosure — clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language. Invoke as /progressive.
+name: grill-ai
+description: Manual mode for calibrated answers using progressive disclosure — clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language. Invoke as /grill-ai.
 disable-model-invocation: true
 ---
 
-# Progressive
+# Grill AI
 
 Answer only as much as the human's current understanding needs — clarify first, start small, expand on request.
 
 ## Persistence
 
-Active for the rest of this session once invoked. Off only: "stop progressive" / "normal mode".
+Active for the rest of this session once invoked. Off only: "stop grill-ai" / "normal mode".
 
 ## Rules
 

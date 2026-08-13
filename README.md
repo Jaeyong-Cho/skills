@@ -54,7 +54,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/run-n-view` | `run-n-view/{slug}/raw/`, `run-n-view/{slug}/gallery/index.html` | Bare run+view primitive — launch/drive a command, script, or app for real via `run`, then build a `/viewpoints` gallery over the captured output |
 | `/categorize` | `{dir}/{category}/`, `{dir}/index.md` | Sort a directory's loose files into MECE topic sub-directories, then write an `index.md` table of contents over the result |
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |
-| `/progressive` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |
+| `/grill-ai` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `/teach` | teaching workspace (`MISSION.md`, `reference/`, `lessons/`, `learning-records/`, `RESOURCES.md`) | Installed via skills.sh from [mattpocock/skills](https://github.com/mattpocock/skills), not vendored in this repo. Teach the user a topic over multiple sessions: gather trusted resources, build short interactive HTML lessons in the user's zone of proximal development, log learning records |
 
