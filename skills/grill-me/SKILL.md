@@ -13,7 +13,8 @@ Work the tree in **rounds**. The **frontier** is every decision whose prerequisi
 Each question should be formatted like so:
 
 ```
-❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+❓ **Q1** - **<question title>**:
+<question body, might be multiple paragraphs, including multiple choices>
 
 + Explain more details for about question **SHOW** examples/edge cases/etc'
 
