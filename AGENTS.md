@@ -16,5 +16,6 @@ Unless the user specifies otherwise, write and communicate only in English.
 - Advisor: `~/wiki/advisor/YYYY/MM/YYYY-MM-DD.md` — one file per day, recurring friction and automation candidates from the last 14 days.
 - Today's context: before starting work, read `~/wiki/today/journal.md` and `~/wiki/today/research/NN-{job}/` (if present) for what's already in progress today.
 - Handoff: before starting work, check the most recent `~/wiki/journal/YYYY/MM/YYYY-MM-DD-handoff.md` (highest date, may not be today or this month) for open items and carried decisions from the prior session.
+- Human: `~/wiki/human/` — human-only space. Never write, edit, or delete here.
 
 @RTK.md
