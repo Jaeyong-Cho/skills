@@ -22,11 +22,37 @@ Run `@skills/grill-me` covering every point below, whether the work is a feature
 - New simple and representative testcase
 - Release and ship plan
 
-## Grill ME Level
-- 0: When the first feature or functionality implementation, ask the big, important decision branch (skip details)
-- 1: When the revise the existing feature or functionality, ask more details decision branch
-- 2: When the bug fix, important feature, ask maximum decision branch
-**MUST SHOW** The level to user before starting grill-me session
+## Impact Level
+**MUST MARK** for each question's impact level
+
+### Low Level (0)
+- Constant value
+- Configuration value
+- Local variable / internal logic
+- Function implementation
+- Single-module internal structure
+- Single-module data structure
+
+### Medium Level (1)
+Multi-function logic
+Multi-file change
+Module internal behavior
+Module interface
+Shared data structure
+
+### High Level (2)
+Database schema
+Cross-service logic
+API contract
+Data migration
+External library / service integration
+Protocol / file format
+Deployment architecture
+System architecture
+Cross-system contract
+Platform / OS / hardware dependency
+External organization / vendor contract
+Production-scale breaking change
 
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
