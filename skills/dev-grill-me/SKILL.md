@@ -63,7 +63,7 @@ Run `@skills/grill-me` covering every point below, whether the work is a feature
 - Low impact level + Low uncertainty = Skip question. Just show.
 - Low impact level + High uncertainty = Skip question. Mark to add assertion point (like assert in c++ or something)
 - High impact level + Low uncertainty = Ask question and confirm.
-- High impact level + High uncertainty = Ask question and confirm also assertion point  
+- High impact level + High uncertainty = Ask question and confirm. Mark to add assertion point  
 
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
