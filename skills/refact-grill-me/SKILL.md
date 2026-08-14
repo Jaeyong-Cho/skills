@@ -1,7 +1,7 @@
 ---
 name: refact-grill-me
 description: Run a @skills/grill-me interview to build understanding of a codebase you don't know well yet, through four lenses — architecture fit, interface depth, naming, simplicity — before deciding whether and how to refactor it. Invoke as /refact-grill-me.
-disable-model-invocation: true
+disable-model-invocation: flase
 ---
 
 # Refact Grill Me
