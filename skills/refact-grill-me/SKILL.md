@@ -23,6 +23,9 @@ Run `@skills/grill-me` covering every point below. Phrase every question in plai
 - Branch (git)
 - Release and ship plan
 
+## Priority
+- High priority for High abstraction layer (`../references/meta-pattern.md`) that close to clients, business logic. Make readable the business logic.
+- Low priority for Low abstraction layer that far from to clients, e.g. algorithm. Just consider their function's interface.
 
 
 **MUST NOT** implementation work has started.
