@@ -23,14 +23,12 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places. Pass all of the unit + integration test.
    - Assertions - Use assertions aggressively wherever there is any uncertainty (in the code: cpp assert, python assert etc...)
    - Commit
-   - Branch
-   - Release
+   - Branch — merging into the target branch is an action item only after a `/boy-scout` action item (human-invoked, `@skills/do-plan` cannot run it) directly before it.
+   - Release - **MUST CONFIRM** to the human before release, after `/boy-scout` has run.
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `@skills/do-plan` executes and checks these off in place.
 8. **Write it** to `~/wiki/today/research/{NN}-{slug}/plans/{nn}-{slug}.md`, creating the directory if needed — `{slug}` a kebab-case slug of the plan's topic, `{NN}` the zero-padded sequence number for today, starting at `00` (count existing `NN-*` directories under `~/wiki/today/research/`), `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`). `@skills/end-of-day` archives `today/research/` into the dated `~/wiki/research/` path at day's end.
 9. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
-
-
 
 Completion criterion: the file (or files, if split) exists; spec changes, acceptance criteria, and action items are each present and traceable to something decided in this session; every acceptance criteria row names a real Verification Method; and an action item exists to write those rows into the target project's spec document.
 
