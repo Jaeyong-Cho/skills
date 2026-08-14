@@ -54,5 +54,10 @@ Run `@skills/grill-me` covering every point below, whether the work is a feature
 - External organization / vendor contract
 - Production-scale breaking change
 
+## Uncertainty
+**MUST MARK** for each questions uncertainty
+- High: Can not known until execute and see the result
+- Low: Obviously know the expected result
+
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
