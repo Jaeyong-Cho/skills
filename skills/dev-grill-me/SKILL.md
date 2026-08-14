@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Dev Grill Me
 
+**MUST CHECK** Human has complete criteria for about this topic (which result that human agree this topic is done)
+
 Run `@skills/grill-me` covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
 
 - Intent and purpose
