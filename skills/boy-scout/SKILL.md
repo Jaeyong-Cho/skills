@@ -21,7 +21,7 @@ Read the diff and state in 1-3 sentences what it does and why. Skip this and the
 For every file in the diff, check:
 - Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis or wrong level?
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
-- Naming — per `../references/naming.md`, does a name in the changed code carry one of its listed smells?
+- Clean code - per `../references/clean-code.md`
 - Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility.
 - Others (Clean code rule except above)
 
