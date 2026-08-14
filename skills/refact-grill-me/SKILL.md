@@ -15,12 +15,15 @@ Run `@skills/grill-me` covering every point below. Phrase every question in plai
 - Interface depth (deep-module) — per `../references/deep-modules.md`'s Design Smells table, which smells apply and where (shallow module, duplicated logic, information leakage, temporal decomposition, pass-through method, leaky interface, conjoined twins)
 - Naming — per `../references/naming.md`'s Smells table, which apply and where
 - Simplicity (ponytail) — run `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility
+- Clean code - `../references/clean-code.md` 
 - Value — now that the target is understood, what gets easier or safer after refactoring, for which future change
 - Behavior preservation — what proves nothing changed: existing tests, or new characterization tests written first if none exist
 - Impact scope — every caller or consumer touched
 - Testability
 - Branch (git)
 - Release and ship plan
+
+
 
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
