@@ -21,7 +21,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Target project (e.g. path of the repo)
    - Spec changes — locate the target project's spec file(s) per `../references/spec-convention.md` (`spec/**/*.md`; create `spec/` if it doesn't exist yet). List each requirement being added, changed, or removed, one line each.
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places. Pass all of the unit + integration test.
-   - Assertions - Use aggresively assertion for about any uncertained things. 
+   - Assertions - Use assertions aggressively wherever there is any uncertainty
    - Commit
    - Branch
    - Refactor (Boy-Scout with `@skills/boy-scout`: before release or merge, make code clean)
