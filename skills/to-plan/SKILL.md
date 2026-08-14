@@ -24,7 +24,6 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Assertions - Use assertions aggressively wherever there is any uncertainty (in the code: cpp assert, python assert etc...)
    - Commit
    - Branch
-   - Refactor (Boy-Scout with `@skills/boy-scout`: before release or merge, make code clean)
    - Release
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `@skills/do-plan` executes and checks these off in place.
