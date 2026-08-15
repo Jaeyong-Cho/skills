@@ -8,6 +8,11 @@ disable-model-invocation: true
 
 Leave the code cleaner than you found it, scoped to what recent work already touched — not the whole repo (that's `/ponytail-audit`'s job) and not a fix pass (that's `/simplify`'s job).
 
+## Purpose
+Run this after implementation is done. Understanding the diff you just
+wrote is the point — cleaning follows from that understanding, not from
+pattern-matching the code cold.
+
 ## Find the patrol area
 - On the default branch: diff since the most recent commit whose subject matches `refactor`/`refact` (`git log --grep`); if none exists, diff since `HEAD~10`. (First priority)
 - On a non-default branch: diff against `git merge-base <default-branch> HEAD`. (Second priority)
