@@ -25,10 +25,10 @@ Read the diff and state in 1-3 sentences what it does and why. Skip this and the
 
 ## Scan through five lenses
 For every file in the diff, check:
-- Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis or wrong level? Check the touched file/module's line count against its Level-of-Pain table (~10/100/5000/100000 lines) to judge over- or under-decomposition for its size.
+- Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis/level? Check line count against its Level-of-Pain table (~10/100/5k/100k lines) for size fit.
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
 - Naming — per `../references/naming.md`'s Smells table, which apply and where
-- Clean code - per `../references/clean-code.md`
+- Clean code — per `../references/clean-code.md`'s map, open only the chapter(s) matching what the diff touches
 - Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility.
 
 Every changed file gets checked against all five lenses before ranking.
