@@ -16,8 +16,9 @@ pattern-matching the code cold.
 ## Find the patrol area
 - On the default branch: diff since the most recent commit whose subject matches `refactor`/`refact` (`git log --grep`); if none exists, diff since `HEAD~10`. (First priority)
 - On a non-default branch: diff against `git merge-base <default-branch> HEAD`. (Second priority)
+- Given a tag or tag range (e.g. `/boy-scout v1.2.0..v1.3.0`): diff between those tags instead. (Third priority, only when asked)
 
-State the base commit chosen before scanning.
+State the base commit or tag range chosen before scanning.
 
 ## Understand the change
 Read the diff and state in 1-3 sentences what it does and why. Skip this and the lens-scan below degrades to a blind pattern-match.
