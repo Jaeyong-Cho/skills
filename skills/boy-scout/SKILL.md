@@ -33,6 +33,10 @@ For every file in the diff, check:
 
 Every changed file gets checked against all four lenses before ranking.
 
+## Priority
+- High priority for high abstraction layer (`../references/meta-pattern.md`) close to clients, business logic. Make readable the business logic.
+- Low priority for low abstraction layer far from clients, e.g. algorithm. Just consider their function's interface.
+
 ## Report, don't fix
 Lead with the 1-3 sentence understanding from above. Then rank candidates by size — smallest, most self-contained wins — and surface the single best boy-scout tidy: small enough to do in passing, next to code already touched. One line per finding: location, lens, what to cut/change. List up to three only if they're close; say so plainly if nothing clears the bar.
 
