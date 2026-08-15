@@ -29,4 +29,4 @@ Run `@skills/grill-me` covering every point below. Phrase every question in plai
 
 
 **MUST NOT** implementation work has started.
-Once complete, next step is `@skills/to-plan` by human  sto dump the recorded answers into a plan document.
+Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document.
