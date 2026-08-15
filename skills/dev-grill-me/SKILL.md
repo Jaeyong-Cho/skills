@@ -68,4 +68,4 @@ Run `@skills/grill-me` covering every point below, whether the work is a feature
 
 **MUST** Use assertions aggressively wherever there is any uncertainty
 **MUST NOT** implementation work has started.
-Once complete, next step is `@skills/to-plan` to dump the recorded answers into a plan document.
+Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document.
