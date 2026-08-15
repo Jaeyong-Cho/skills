@@ -1,6 +1,6 @@
 ---
 name: boy-scout
-description: Understand the code changed in recent work — current branch's diff against its base, or since the last refactor commit — then scan it for one small opportunistic cleanup worth doing while the code is already open. Report only, never edit. Invoke as /boy-scout.
+description: Understand the code changed in recent work — current branch's diff against its base, or since the last refactor commit — then scan it for one small opportunistic cleanup worth doing while the code is already open, and grill the user on whether/how to do it. Report only, never edit. Invoke as /boy-scout.
 disable-model-invocation: true
 ---
 
@@ -23,22 +23,25 @@ State the base commit or tag range chosen before scanning.
 ## Understand the change
 Read the diff and state in 1-3 sentences what it does and why. Skip this and the lens-scan below degrades to a blind pattern-match.
 
-## Scan through four lenses
+## Scan through five lenses
 For every file in the diff, check:
-- Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis or wrong level?
+- Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis or wrong level? Check the touched file/module's line count against its Level-of-Pain table (~10/100/5000/100000 lines) to judge over- or under-decomposition for its size.
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
+- Naming — per `../references/naming.md`'s Smells table, which apply and where
 - Clean code - per `../references/clean-code.md`
 - Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility.
-- Others (Clean code rule except above)
 
-Every changed file gets checked against all four lenses before ranking.
+Every changed file gets checked against all five lenses before ranking.
 
 ## Priority
 - High priority for high abstraction layer (`../references/meta-pattern.md`) close to clients, business logic. Make readable the business logic.
 - Low priority for low abstraction layer far from clients, e.g. algorithm. Just consider their function's interface.
 
-## Report, don't fix
+## Report, then grill
 Lead with the 1-3 sentence understanding from above. Then rank candidates by size — smallest, most self-contained wins — and surface the single best boy-scout tidy: small enough to do in passing, next to code already touched. One line per finding: location, lens, what to cut/change. List up to three only if they're close; say so plainly if nothing clears the bar.
 
 **MUST REPORT** with example and ELI5
-**MUST NOT** edit files or apply the fix. Next step is `@skills/refact-grill-me` to apply it, or fix it by hand.
+
+Then run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to tidy — cover: value (what gets easier/safer after), behavior preservation (what proves nothing changed), impact scope (every caller touched), and testability.
+
+**MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/do-plan`.
