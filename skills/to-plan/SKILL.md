@@ -23,7 +23,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places. Pass all of the unit + integration test.
    - Assertions - Use assertions aggressively wherever there is any uncertainty (in the code: cpp assert, python assert etc...)
    - Commit
-   - Branch — merging into the target branch is an action item only after a `/boy-scout` action item (human-invoked, `@skills/do-plan` cannot run it) directly before it.
+   - Branch — merging into the target branch is an action item only after a `/boy-scout` action item (human-invoked, `@skills/do-plan` cannot run it) directly before it — skip this if `/boy-scout` already ran earlier this session (e.g. it's the reason this plan exists); don't re-add it.
    - Release - **MUST CONFIRM** to the human before release, after `/boy-scout` has run.
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/**/*.md` file(s) and updates `spec/index.md`, so the persisted spec stays synchronized with this plan. `@skills/do-plan` executes and checks these off in place.
