@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Dev Grill Me
 
-Run `@skills/grill-me` covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
+**MUST RUN** `@skills/grill-me` covering every point below, whether the work is a feature or a fix. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms — even when the topic itself is technical:
 
 - Human Acceptance Criteria (HAC) - (**MUST CHECK** which result make human agree and satisfy when this topic is done: detailed step-by-step e.g. run test script, see the db result, found the expected column...)
 - Intent and purpose
