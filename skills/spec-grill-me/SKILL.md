@@ -1,6 +1,6 @@
 ---
 name: spec-grill-me
-description: Run a @skills/grill-me interview covering spec-writing concerns for one or more spec topics in one pass — intent, scope, functional/non-functional requirements, acceptance criteria, traceability, target spec file.
+description: Run a @skills/grill-me interview covering spec-writing concerns for one or more spec topics in one pass — intent, scope, functional/non-functional requirements, acceptance criteria, vertical-slice todos, traceability, target spec and todo files.
 disable-model-invocation: true
 ---
 
@@ -14,9 +14,11 @@ disable-model-invocation: true
 - Functional requirements — what the system must do, one line each
 - Non-functional requirements — performance, security, availability, usability
 - Acceptance Criteria per `../references/requirement-engineering.md` — Given-When-Then, Category (normal/boundary/exception), Verification Method naming a real test
+- Todo per slice — each sub-topic is one vertical slice, a complete independently-shippable unit; concrete `- [ ] action` items to build that slice end-to-end, not layered by frontend/backend
 - Traceability — every AC row traces to a Requirements or User Scenario line; anything that doesn't goes to Out of Scope instead
 - Conflicts and prioritization — any requirement that contradicts another (within or across this session's topics), and which one wins
 - Target spec file — per `../references/spec-convention.md` (`spec/{topic-slug}.md` per topic, with `spec/index.md` updated in the same change)
+- Target todo file — per `../references/todo-convention.md` (`todo/{topic-slug}.md` per slice, with `todo/index.md` updated in the same change)
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
