@@ -18,7 +18,7 @@ disable-model-invocation: true
 - Traceability — every AC row traces to a Requirements or User Scenario line; anything that doesn't goes to Out of Scope instead
 - Conflicts and prioritization — any requirement that contradicts another (within or across this session's topics), and which one wins
 - Target spec file — per `../references/spec-convention.md` (`spec/{topic-slug}.md` per topic, with `spec/index.md` updated in the same change)
-- Target todo file — per `../references/todo-convention.md` (`todo/{topic-slug}.md` per slice, with `todo/index.md` updated in the same change)
+- Target todo file — per `../references/todo-convention.md` (`todo/{topic-slug}.md` per slice, temp scratch, no index)
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
