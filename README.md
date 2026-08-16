@@ -53,7 +53,6 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/to-journal` | `~/wiki/today/journal.md` | Summarize this session very short, ELI5-simple, and append it as a formatted entry to today's journal |
 | `/boy-scout` | — | Scan the diff since the last refactor commit (or branch base) through five lenses — architecture fit, interface depth, naming, clean code, simplicity — report one small opportunistic cleanup worth doing, then `/grill-me` on value, behavior preservation, impact scope, testability; never edit |
 | `/to-docs` | user-selected path | Write the current session's work as a report-style document |
-| `/to-todo` | inbox `TODO.md` | Turn a completed `/breakdown` tree (external to this repo) into an inbox TODO: objective/background/scope framing, a checkbox body numbered by the breakdown's dotted ids, and a conclusion with critical path and parallel-ready execution order |
 | `/run-n-view` | `run-n-view/{slug}/raw/`, `run-n-view/{slug}/gallery/index.html` | Bare run+view primitive — launch/drive a command, script, or app for real via `run`, then build a `/viewpoints` gallery over the captured output |
 | `/categorize` | `{dir}/{category}/`, `{dir}/index.md` | Sort a directory's loose files into MECE topic sub-directories, then write an `index.md` table of contents over the result |
 | `/viewpoints` | `gallery/{slug}/index.html` | Build a gallery of complementary chart/diagram views on a dataset or structure instead of picking one form |

@@ -17,8 +17,9 @@ disable-model-invocation: true
 - Todo per slice — each sub-topic is one vertical slice, a complete independently-shippable unit; concrete `- [ ] action` items to build that slice end-to-end, not layered by frontend/backend
 - Traceability — every AC row traces to a Requirements or User Scenario line; anything that doesn't goes to Out of Scope instead
 - Conflicts and prioritization — any requirement that contradicts another (within or across this session's topics), and which one wins
+- Slice ordering — which slices block which, across this session's topics; what can run in parallel
 - Target spec file — per `../references/spec-convention.md` (`spec/{topic-slug}.md` per topic, with `spec/index.md` updated in the same change)
-- Target todo file — per `../references/todo-convention.md` (`todo/{topic-slug}.md` per slice, temp scratch, no index)
+- Target todo file — per `../references/todo-convention.md` (`todo/{topic-slug}.md` per slice, temp scratch, with `todo/index.md` as the WBS guide)
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
