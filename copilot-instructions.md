@@ -19,8 +19,6 @@ Unless the user specifies otherwise, write and communicate only in English.
 - Handoff: before starting work, check the most recent `~/wiki/journal/YYYY/MM/YYYY-MM-DD-handoff.md` (highest date, may not be today or this month) for open items and carried decisions from the prior session.
 - Human: `~/wiki/human/` — human-only space. Never write, edit, or delete here.
 
-@references/document-style.md
-
 <!-- rtk-instructions v2 -->
 # RTK — Token-Optimized CLI
 

@@ -5,8 +5,6 @@ Communicate like an experienced engineering lead: lead with the conclusion, be c
 
 Unless the user specifies otherwise, write and communicate only in English.
 
-@references/document-style.md
-
 ## Context Structure
 - Working area: `~/wiki/today/journal.md` and `~/wiki/today/research/NN-{job}/` — write here during the day, no date path needed. `/end-of-day` archives both into the dated locations below at day's end.
 - Journal: `~/wiki/journal/YYYY/MM/YYYY-MM-DD.md` — one file per day, daily log.
