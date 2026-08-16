@@ -19,7 +19,7 @@ disable-model-invocation: true
 - Conflicts and prioritization — any requirement that contradicts another (within or across this session's topics), and which one wins
 - Task ordering — which tasks block which, across this session's stories; what can run in parallel
 - Target spec file — per `../references/spec-convention.md` (`spec/{topic-slug}.md` per EPIC, with `spec/index.md` updated in the same change)
-- Target todo file — per `../references/todo-convention.md` (`todo/{task-slug}.md` per TASK, temp scratch, with `todo/index.md` as the EPIC/STORY/TASK WBS guide)
+- Target todo file — per `../references/todo-convention.md` (`todo/{epic-slug}/{story-slug}/{task-slug}.md` per TASK, temp scratch, with `todo/index.md` as the EPIC/STORY/TASK WBS guide)
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
