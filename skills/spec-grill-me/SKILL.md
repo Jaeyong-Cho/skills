@@ -23,4 +23,4 @@ Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, an
 
 **MUST** Use assertions aggressively wherever there is any uncertainty (e.g. an AC row with no automatable Verification Method).
 **MUST NOT** implementation work has started.
-Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document.
+Once complete, next step is `@skills/to-spec` by human to dump the recorded answers straight into the target project's spec — or `@skills/to-plan` instead if code work (action items, branch, release) is also needed.
