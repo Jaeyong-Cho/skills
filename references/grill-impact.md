@@ -37,7 +37,7 @@
 - Low: Obviously know the expected result
 
 ## Action
-- Low impact level + Low uncertainty = Skip question. Just show.
-- Low impact level + High uncertainty = Skip question. Mark to add assertion point (like assert in c++ or something)
+- Low impact level + Low uncertainty = Always show the question; asking for confirmation is optional (skip-if-obvious).
+- Low impact level + High uncertainty = Always show the question; asking for confirmation is optional (skip-if-obvious). Mark to add assertion point (like assert in c++ or something)
 - High impact level + Low uncertainty = Ask question and confirm.
 - High impact level + High uncertainty = Ask question and confirm. Mark to add assertion point
