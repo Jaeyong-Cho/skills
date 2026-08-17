@@ -28,4 +28,4 @@ Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, an
 
 **MUST** Use assertions aggressively wherever there is any uncertainty
 **MUST NOT** implementation work has started.
-Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document.
+Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document — see `../references/workflow.md` for the full `/dev-grill-me` → `/to-plan` → `/do-plan` → `/boy-scout` → `/to-plan` → `/do-plan` chain.

@@ -47,4 +47,4 @@ Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, an
 
 Then run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to tidy — cover: value (what gets easier/safer after), behavior preservation (what proves nothing changed), impact scope (every caller touched), and testability.
 
-**MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/do-plan`.
+**MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan` — per `../references/workflow.md`, that plan resumes the feature/fix plan that led here and does not require another `/boy-scout` pass.

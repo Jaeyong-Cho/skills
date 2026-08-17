@@ -19,11 +19,12 @@ Write a handoff document summarising the current conversation so a fresh agent c
 6. **Follow ELI5.** Make plan the so a fresh cheapest model agent can understand.
 7. **Draft the plan**, covering:
    - Target project (e.g. path of the repo)
+   - Next step — per `../references/workflow.md`: if this plan's decisions came from `/boy-scout`, name the feature/fix plan file path to resume after this one's `/do-plan` finishes, and state plainly that no further `/boy-scout` run is needed. Otherwise, state that `/boy-scout` runs after this plan's `/do-plan` stops before merge/release.
    - Spec changes — locate the target project's spec file(s) per `../references/spec-convention.md` (`spec/{epic-slug}.md`, one per EPIC; create `spec/` if it doesn't exist yet). List each requirement being added, changed, or removed, one line each, grouped under its STORY.
    - Acceptance criteria — the same requirements as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. This table is the link between the spec and its test cases — write it once, reuse it in both places. Pass all of the unit + integration test.
    - Assertions - Use assertions aggressively wherever there is any uncertainty (in the code: cpp assert, python assert etc...)
    - Commit
-   - Branch — merging into the target branch is an action item only after a `/boy-scout` action item (human-invoked, `@skills/do-plan` cannot run it) directly before it — skip this if `/boy-scout` already ran earlier this session (e.g. it's the reason this plan exists); don't re-add it.
+   - Branch — merging into the target branch is an action item only after a `/boy-scout` action item (human-invoked, `@skills/do-plan` cannot run it) directly before it — skip this if `/boy-scout` already ran earlier this session (e.g. it's the reason this plan exists, per the Next step field above); don't re-add it.
    - Release - **MUST CONFIRM** to the human before release, after `/boy-scout` has run.
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes
    - Action items, each as `- [ ] {item}` — must include one item that writes the Spec changes and Acceptance Criteria rows into the target project's `spec/{epic-slug}/{story-slug}.md` file(s) and updates both `spec/{epic-slug}/index.md` and the top-level `spec/index.md`, so the persisted spec stays synchronized with this plan. `@skills/do-plan` executes and checks these off in place.
