@@ -26,6 +26,6 @@ disable-model-invocation: true
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 
-**MUST** Use assertions aggressively wherever there is any uncertainty
+**MUST** surface assertions aggressively wherever there is any uncertainty — for each, name the function/file, and whether it's a precondition, invariant, or postcondition, so `@skills/to-plan` can carry it into the plan's Assertions section as a real runtime assert (not a comment, not test-only).
 **MUST NOT** implementation work has started.
 Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document — see `../references/workflow.md` for the full `/dev-grill-me` → `/to-plan` → `/do-plan` → `/boy-scout` → `/to-plan` → `/do-plan` chain.
