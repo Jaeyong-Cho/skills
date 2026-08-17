@@ -21,9 +21,7 @@ pattern-matching the code cold.
 State the base commit or tag range chosen before scanning.
 
 ## Understand the change
-1. List the diff first: the base commit/tag and every changed file, so the human sees the shape of the patrol area before any explanation.
-2. Open a `@skills/grill-ai` session on that diff: give the core answer (L0) — 1-3 sentences on what it does and why — in ELI5 language, then let the human ask about the code. Answer each question in layers (L0 → L1 → L2) per grill-ai's progressive disclosure.
-3. The understanding phase ends when the human stops asking questions. Only then start the scan below — skip straight to scanning and it degrades to a blind pattern-match.
+List the diff first — the base commit/tag and every changed file — then state the core answer (L0): 1-3 sentences on what it does and why, in ELI5 language. Skip this and the lens-scan below degrades to a blind pattern-match.
 
 ## Scan through five lenses
 For every file in the diff, check:
@@ -44,9 +42,11 @@ Lead with the 1-3 sentence understanding from above. Then rank candidates by siz
 
 **MUST REPORT** with example and ELI5
 
+Then open a `@skills/grill-ai` session on the finding(s): let the human ask about the code, answering in layers (L0 → L1 → L2) per grill-ai's progressive disclosure. This ends when the human stops asking questions.
+
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 
-Then run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to tidy — cover: value (what gets easier/safer after), behavior preservation (what proves nothing changed), impact scope (every caller touched), and testability.
+Once the grill-ai session settles, run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to tidy — cover: value (what gets easier/safer after), behavior preservation (what proves nothing changed), impact scope (every caller touched), and testability.
 
 **MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan` — per `../references/workflow.md`, that plan resumes the feature/fix plan that led here and does not require another `/boy-scout` pass.
