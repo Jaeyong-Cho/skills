@@ -4,7 +4,7 @@
 #        tmux-split 4   → top 2, bottom 2
 #        tmux-split 5   → left 30% (3 stacked) / right 70% (2 stacked); right panes stay plain terminals
 #        tmux-split 5 claude|copilot|pi [pattern] → launch a model per left pane (top/middle/bottom)
-#          pattern: 3 chars of o=opus s=sonnet h=haiku f=fable, e.g. osh (default) or ooo
+#          pattern: 3 chars of o=opus s=sonnet h=haiku f=fable y=yolo(sonnet, skip permissions), e.g. osh (default) or ooo or yyy
 
 ORIGIN=$(tmux display-message -p '#{pane_id}')
 
@@ -51,8 +51,8 @@ case "${1:-}" in
     esac
 
     if [ -n "$PREFIX" ]; then
-      if [[ ! "$PATTERN" =~ ^[oshf][oshf][oshf]$ ]]; then
-        echo "Unknown pattern '$PATTERN' (3 chars of o/s/h/f, e.g. osh)" >&2
+      if [[ ! "$PATTERN" =~ ^[oshfy][oshfy][oshfy]$ ]]; then
+        echo "Unknown pattern '$PATTERN' (3 chars of o/s/h/f/y, e.g. osh)" >&2
         exit 1
       fi
       tmux send-keys -t "$LEFT_TOP" "${PREFIX}${PATTERN:0:1}" Enter
@@ -66,7 +66,7 @@ case "${1:-}" in
     echo "  3   → left top+bottom, right 1"
     echo "  4   → top 2, bottom 2"
     echo "  5   → left 30% (3 stacked) / right 70% (2 stacked)"
-    echo "  5 claude|copilot|pi [pattern] → launches models per left pane, e.g. osh (default) or ooo"
+    echo "  5 claude|copilot|pi [pattern] → launches models per left pane, e.g. osh (default), ooo, or yyy for yolo"
     exit 1
     ;;
 esac
