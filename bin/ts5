@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
+# Usage: ts5 [claude|copilot|pi] [pattern]
+#   pattern: 3 chars of o=opus s=sonnet h=haiku f=fable, one per left pane (top/middle/bottom)
+#   e.g. ts5 claude osh (default), ts5 claude ooo
 agent=""
-main="opus"
+pattern="osh"
 for arg in "$@"; do
   case "$arg" in
-    -f) main="fable" ;;
-    sonnet|opus|fable) main="$arg" ;;
+    [oshf][oshf][oshf]) pattern="$arg" ;;
     *) agent="$arg" ;;
   esac
 done
@@ -14,4 +16,4 @@ if [ -z "$agent" ]; then
     [ -n "$agent" ] && break
   done
 fi
-tmux-split 5 "$agent" "$main"
+tmux-split 5 "$agent" "$pattern"
