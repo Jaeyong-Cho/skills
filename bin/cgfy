@@ -1,0 +1,3 @@
+#!/bin/bash
+
+copilot --allow-all --yolo --model claude-fable-5 --effort high
