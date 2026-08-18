@@ -1,5 +1,5 @@
 # {STORY}
-- 1 sentence spec
+- Value to user: 1 sentence — what the user can do, or gets, once this ships.
 - 1 sentence spec
 - 1 sentence spec
 

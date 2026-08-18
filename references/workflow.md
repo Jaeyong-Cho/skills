@@ -1,5 +1,11 @@
 # Dev Workflow Chain
 
+`/wbs` breaks a big idea into an EPIC/STORY backlog before either loop below
+starts (see `../skills/wbs/SKILL.md`) — a draft in the personal wiki, not the
+target repo. Each loop iteration then works one STORY at a time, and that
+STORY's `/to-plan` is what actually materializes it into the target
+project's `spec/`. `/wbs` never produces Task-level items itself.
+
 Two loops share `/to-plan` and `/do-plan`:
 
 1. **Feature/fix loop**: `/dev-grill-me` → `/to-plan` → `/do-plan`.

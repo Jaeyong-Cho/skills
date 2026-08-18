@@ -1,6 +1,6 @@
 # Prototype (throwaway code as the experiment method)
 
-Source: [mattpocock/skills — engineering/prototype](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype). Use when the question is "does this state model / logic feel right?" or "what should this look like?" — cases where reading code can't resolve it but a full production build is overkill.
+Use when the question is "does this state model / logic feel right?" or "what should this look like?" — cases where reading code can't resolve it but a full production build is overkill.
 
 ## Pick a branch
 - **Logic / state model question** → `prototype/LOGIC.md`. One shareable HTML file with free-play buttons plus guided walkthroughs, driving the state machine through the cases that are hard to reason about on paper. A non-developer should be able to drive it.
