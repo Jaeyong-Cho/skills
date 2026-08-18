@@ -23,15 +23,16 @@ State the base commit or tag range chosen before scanning.
 ## Understand the change
 List the diff first — the base commit/tag and every changed file — then teach it back in three layers, ELI5 language: L0 — what changed and why, 1-3 sentences; L1 — how it works, the mechanism tied to specific file/line; L2 — one concrete example, a sample input/call and its result. Skip this and the lens-scan below degrades to a blind pattern-match.
 
-## Scan through five lenses
+## Scan through six lenses
 For every file in the diff, check:
 - Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis/level? Check line count against its Level-of-Pain table (~10/100/5k/100k lines) for size fit.
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
 - Naming — per `../references/naming.md`'s Smells table, which apply and where
 - Clean code — per `../references/clean-code.md`'s map, open only the chapter(s) matching what the diff touches
-- Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility.
+- Simplicity — `/ponytail-review`'s lens: reinvented stdlib, unneeded dependencies, speculative abstractions, dead flexibility, independent work serialized for no reason when it could just run in parallel.
+- Ambitious restructuring — per `../references/thermo-nuclear-code-quality-review.md`: a "code judo" move that deletes whole branches/layers, a file crossing the 1k-line threshold, spaghetti/ad-hoc branching, or boundary/type sloppiness (casts, `any`, unjustified optionality).
 
-Every changed file gets checked against all five lenses before ranking.
+Every changed file gets checked against all six lenses before ranking.
 
 ## Priority
 - High priority for high abstraction layer (`../references/meta-pattern.md`) close to clients, business logic. Make readable the business logic.
