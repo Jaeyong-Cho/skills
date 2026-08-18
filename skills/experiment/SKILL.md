@@ -8,7 +8,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
 
 Turn a question into a minimal scientific-method run instead of guessing at an answer.
 
-1. **Plan.** Run `/ponytail` (Skill tool) to find the cheapest method that would resolve the question, and state what result would count as supported/refuted. Completion criterion: a stated method and a stated pass/fail expectation.
+1. **Plan.** Run `/ponytail` (Skill tool) to find the cheapest method that would resolve the question, and state what result would count as supported/refuted. If the question is "does this state model / logic feel right?" or "what should this look like?", the cheapest method is usually a throwaway prototype — see `../references/prototype.md`. Completion criterion: a stated method and a stated pass/fail expectation.
 2. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. Completion criterion: real output captured, not inferred.
 3. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
 
