@@ -4,6 +4,7 @@
 - 1 sentence spec
 
 ## AC
-- Given {context}, when {action}, then {outcome}.
-- Type: normal/boundary/exception
-- Method: {test method, test file path}
+<!-- one row per criterion, per ../references/requirement-engineering.md -->
+|AC|Category|Verification Method|
+|--|--|--|
+|Given {context} - When {action} - Then {outcome}|normal/boundary/exception|{test method, test file path}|
