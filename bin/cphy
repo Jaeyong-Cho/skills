@@ -1,4 +1,4 @@
 #!/bin/bash
 
-pi --approve --model gpt-5.6-luna --thinking xhigh
+pi --approve --model gpt-5.6-luna --thinking high
 
