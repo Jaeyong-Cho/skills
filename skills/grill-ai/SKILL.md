@@ -8,6 +8,10 @@ disable-model-invocation: true
 
 Answer only as much as the human's current understanding needs — clarify first, start small, expand on request.
 
+Finding facts is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), dispatch a sub-agent to find it; don't ask the user for anything you could look up yourself. Don't block on it: a running exploration is an unsettled prerequisite, so only the questions downstream of it wait for the sub-agent to report; ask the rest of the frontier now. The decisions are the user's: put each to them and wait.
+
+If needed some experiment to find the question's answer, run the `@skills/experiment`.
+
 ## Persistence
 
 Active for the rest of this session once invoked. Off only: "stop grill-ai" / "normal mode".
