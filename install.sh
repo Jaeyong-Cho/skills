@@ -265,20 +265,6 @@ setup_agents_skills() {
   install_skill_library "$HOME/.agents/skills"
 }
 
-# ── teach skill (skills.sh) ──────────────────────────────────────────────────
-# https://skills.sh/mattpocock/skills — installed via skills.sh instead of
-# vendored in this repo, so it stays in sync with upstream and fans out to
-# every agent skills.sh detects on this machine (not just the ones this
-# script's own detect() knows about).
-
-setup_teach_skill() {
-  echo "→ teach skill (skills.sh)"
-  command -v npx &>/dev/null || { echo "  npx not found, skipping"; return; }
-  npx --yes skills add mattpocock/skills -s teach -a claude-code -a github-copilot -a pi -g -y &>/dev/null \
-    && echo "  ✓ teach" \
-    || echo "  teach install failed, run manually: npx skills add mattpocock/skills -s teach -a claude-code -a github-copilot -a pi -g -y"
-}
-
 # ── Bin scripts ──────────────────────────────────────────────────────────────
 
 setup_bin() {
@@ -302,7 +288,6 @@ selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
 selected "pi"      && setup_pi      && echo ""
 setup_agents_skills && echo ""
-setup_teach_skill && echo ""
 setup_bin && echo ""
 
 echo "Done."
