@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # WBS
 
-A work breakdown structure stops at STORY, never Task. An EPIC is a slice of business value big enough to matter on its own; a STORY is the smallest slice where you can still answer "what can the user do, or get, once this ships?" A candidate that can't answer that is a Task — too small for this skill, and `/to-plan`'s action items handle it per STORY instead.
+A work breakdown structure stops at STORY, never Task. For about the project an EPIC is a slice of business value big enough to matter on its own; a STORY is the smallest slice where you can still answer "what can the user do, or get, once this ships?" A candidate that can't answer that is a Task — too small for this skill, and `/to-plan`'s action items handle it per STORY instead.
 
 **MUST NOT** write into the target project's repo — this is a draft, not the persisted spec. It lands in the personal wiki; a STORY's own `/to-plan` materializes its slice into the target project's `spec/{epic-slug}/{story-slug}.md` (per `../references/spec-convention.md`) when that STORY is actually picked up.
 
