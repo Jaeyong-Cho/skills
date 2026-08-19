@@ -9,7 +9,9 @@ The user has asked you to teach them something. This is a stateful request - the
 
 ## Teaching Workspace
 
-Treat the current directory as a teaching workspace. The state of their learning is captured in this directory in several files:
+The workspace lives at `~/wiki/today/research/NN-{topic-slug}/` — ask what topic if not already given, and slugify it (kebab-case) for `{topic-slug}`. `{NN}` is the zero-padded sequence number for today (count existing `NN-*` directories under `~/wiki/today/research/`, starting at `00`); reuse the same `NN-{topic-slug}` directory if this session already has one for the same topic. `@skills/end-of-day` archives it into `~/wiki/research/YYYY/MM/DD/NN-{topic-slug}/` at day's end like everything else in `today/research/` — resuming the topic on a later day means finding it at that dated path and pointing this skill at it directly.
+
+The state of their learning is captured in this directory in several files:
 
 - `MISSION.md`: A document capturing the _reason_ the user is interested in the topic. This should be used to ground all teaching. Use the format in [MISSION-FORMAT.md](./MISSION-FORMAT.md).
 - `./reference/*.html`: A directory of reference materials. These are the compressed learnings from the lessons - cheat sheets, reference algorithms, syntax, yoga poses, glossaries. They are the raw units of learning. They should be beautiful documents which print out well, and are designed for quick reference.
