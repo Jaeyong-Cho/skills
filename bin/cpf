@@ -1,3 +1,0 @@
-#!/bin/bash
-
-pi --model claude-fable-5 --thinking high

@@ -1,3 +1,0 @@
-#!/bin/bash
-
-claude --strict-mcp-config --model fable --system-prompt "$(pi-prompt Read Write Edit Bash)" --tools "Read,Write,Edit,Bash"

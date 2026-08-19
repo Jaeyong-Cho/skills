@@ -1,3 +1,0 @@
-#!/bin/bash
-
-claude --strict-mcp-config --dangerously-skip-permissions --model fable --effort high --system-prompt "$(pi-prompt Read Write Edit Bash)" --tools "Read,Write,Edit,Bash"
