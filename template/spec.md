@@ -1,3 +1,11 @@
+---
+type: Spec Story
+title: {STORY}
+description: {one-line summary of the Value to user below}
+tags: [spec, {epic-slug}]
+timestamp: {YYYY-MM-DDThh:mm:ssZ}
+---
+
 # {STORY}
 
 ## Value to user
