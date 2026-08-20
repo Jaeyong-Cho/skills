@@ -20,5 +20,7 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, the report file exists reflecting both.
 
+5. **Update the project's wiki** — if the plan has a `Target project` field, invoke `@skills/project-wiki {target-project} {plan-file} {report-file}` to synthesize the plan's findings into the project-scoped wiki. Read the `Target project` value from the plan file. Skip this step if the plan has no Target project field (a plan that isn't scoped to a single project). Completion criterion: the skill completes successfully or is skipped due to missing field.
+
 Tell the user the report file path when done.
 Tell the user the plan's Next step line (per `../references/workflow.md`): run `@skills/boy-scout` if this plan wasn't itself a `/boy-scout` cleanup plan; otherwise resume the feature/fix plan it named — don't suggest another `/boy-scout` run.
