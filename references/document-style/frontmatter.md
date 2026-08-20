@@ -15,7 +15,7 @@ timestamp: <ISO 8601 datetime, when this content was last meaningfully written>
 ---
 ```
 
-- `type` — a short, descriptive string; pick what fits, there's no central registry. Examples already implied by what writes into `~/wiki`/`spec/`: `Journal Entry`, `Handoff`, `Advisor Report`, `Research Explore`, `Research Experiment`, `Research Plan`, `Research Recon`, `Research Context`, `Roadmap Project`, `Roadmap Epic`, `Roadmap Story`, `Goal`, `Spec Story`.
+- `type` — a short, descriptive string; pick what fits, there's no central registry. Examples already implied by what writes into `~/wiki`/`spec/`: `Journal Entry`, `Handoff`, `Research Explore`, `Research Experiment`, `Research Plan`, `Research Recon`, `Research Context`, `Roadmap Project`, `Roadmap Epic`, `Roadmap Story`, `Goal`, `Spec Story`.
 - `title`, `description`, `tags` — what a search index or an `index.md` entry pulls from first.
 - `resource` — the canonical URI the doc is *about* (a PR, a dashboard, a repo, an external doc). Most `~/wiki` entries describe work rather than a resource — omit the line rather than inventing one.
 - `timestamp` — when the content was last meaningfully written, not the file's mtime.
