@@ -10,9 +10,9 @@ The method comes from sociologist Niklas Luhmann, who kept a paper slip-box (*Ze
 
 ## The three note types, and why they're separate
 
-- **Fleeting notes** exist because a thought or fact loses value if capturing it takes any real effort — so fleeting notes have no format requirements at all. They are explicitly disposable: reviewed within a day or two and either promoted into something durable or discarded. A fleeting-notes pile that keeps growing has failed at its one job.
+- **Fleeting notes** are a rough jot of a sudden thought or something learned — they exist because that thought or fact loses value if capturing it takes any real effort, so fleeting notes have no format requirements at all. They are explicitly disposable: reviewed within a day or two and either promoted into something durable or discarded. A fleeting-notes pile that keeps growing has failed at its one job.
 - **Literature notes** exist because a source's ideas need to be translated into your own understanding before they're reusable — copying a passage verbatim preserves the source's words, not your comprehension of it. One note per source keeps that translation anchored to what it came from.
-- **Permanent notes** exist because an idea only compounds in value once it's disconnected from *when* or *why* you wrote it down and reconnected to *what else it relates to*. A permanent note must stand alone if someone (including future-you) opens it with zero context — that's what "atomic" and "own words" are both really enforcing.
+- **Permanent notes** are not freestanding — each one is a fleeting or literature note *refined*: reworked until it's atomic, until it stands alone with zero context, and until it's linked to what else it relates to. An idea only compounds in value once it's gone through that refining and reconnection; that's what "atomic," "own words," and the mandatory `## Links` are each enforcing a piece of.
 
 Skipping straight to permanent notes without the first two stages tends to produce notes that are really just relocated fleeting thoughts or paraphrased source material — atomic in form but not actually distilled. The friction of passing through fleeting/literature first is what does the distilling.
 
