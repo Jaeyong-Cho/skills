@@ -13,7 +13,7 @@ A project's roadmap as a tree — EPIC > STORY > Task — governed by exactly tw
 
 Follow the user's input, not a script: whatever they raise about a project's roadmap is in scope. The patterns in step 3 are what's been seen so far, not an exhaustive menu — something that fits none of them is still in scope if it's about the roadmap or its directory layout.
 
-1. **Follow document style.** Read `../references/document-style/` first, starting with `understanding-and-structure.md` — every Goal below is conclusion-first and as long as the item warrants, never truncated to fit a fixed sentence count.
+1. **Follow document style.** Read `../references/document-style/` first, starting with `understanding-and-structure.md` and `frontmatter.md` — every Goal below is conclusion-first and as long as the item warrants, never truncated to fit a fixed sentence count; every `index.md`/EPIC/STORY file carries the OKF frontmatter block from the templates.
 2. **Find the project(s) in play.** A topic scoped to one project (a deadline, a breakdown, a specific EPIC/STORY) needs `{project}` (kebab-case slug) named — ask if not given. A topic that spans the whole roadmap (e.g. "what's on my plate today") doesn't — scan every `~/wiki/roadmap/{project}/` instead.
 3. **Run grill-me open-ended.** `@skills/grill-me` over whatever came up, grouped CRUD-style. Fix is an Update, not its own category — a misnamed, mis-scoped, or misplaced item gets corrected in place, same as a deadline edit.
    - **Create**

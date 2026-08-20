@@ -15,5 +15,6 @@ Unless the user specifies otherwise, write and communicate only in English.
 - Roadmap: `~/wiki/roadmap/{project}/{open,in-progress,done}/{epic-slug}/{story-slug}.md` — persistent EPIC/STORY/Task project schedule; state is which directory an item sits in, managed with `/roadmap`. Finished projects move to `~/wiki/roadmap/archive/{project}/`.- Today's context: before starting work, read `~/wiki/today/journal.md` and `~/wiki/today/research/NN-{job}/` (if present) for what's already in progress today.
 - Handoff: before starting work, check the most recent `~/wiki/journal/YYYY/MM/YYYY-MM-DD-handoff.md` (highest date, may not be today or this month) for open items and carried decisions from the prior session.
 - Human: `~/wiki/human/` — human-only space. Never write, edit, or delete here.
+- Format: every document written under `~/wiki/**/*.md` carries OKF frontmatter (`type` required) per `references/document-style/frontmatter.md`.
 
 @RTK.md

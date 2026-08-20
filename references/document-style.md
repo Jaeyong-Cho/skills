@@ -10,6 +10,8 @@ Each topic below is its own file under `document-style/`, loaded only when neede
 
 **MUST** read `document-style/understanding-and-structure.md` for every document, no exceptions — it decides what goes in and in what order, before any situational file below applies.
 
+**MUST** also read `document-style/frontmatter.md` for every document written under `~/wiki/**/*.md` — the OKF frontmatter block (`type`/`title`/`description`/`resource`/`tags`/`timestamp`) every such file carries.
+
 ## How To Use This Map
 
 - Editing or tightening prose sentence by sentence: open `document-style/writing-rules.md`.
@@ -23,6 +25,7 @@ Each topic below is its own file under `document-style/`, loaded only when neede
 | File | Core lesson |
 | --- | --- |
 | `document-style/understanding-and-structure.md` | **MUST READ, every document.** Identify purpose/audience/action/scope/evidence first; conclusion before details. |
+| `document-style/frontmatter.md` | **MUST READ, every document under `~/wiki/**`.** OKF YAML frontmatter block: `type`, `title`, `description`, `resource`, `tags`, `timestamp`. |
 | `document-style/writing-rules.md` | Simple concrete language, short focused sentences, facts separated from opinion, never invent facts. |
 | `document-style/structures.md` | Templates for bug reports, README, design docs, meeting notes, work reports, and evidence-based arguments. |
 | `document-style/polish.md` | Specific titles, ambiguity-reducing examples, cut performative writing. |

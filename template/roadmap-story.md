@@ -1,3 +1,11 @@
+---
+type: Roadmap Story
+title: {STORY}
+description: {one-line summary of the Goal below}
+tags: [roadmap, {project}]
+timestamp: {YYYY-MM-DDThh:mm:ssZ}
+---
+
 # {STORY}
 - Deadline: {YYYY-MM-DD, or "—" to inherit the EPIC's}
 
