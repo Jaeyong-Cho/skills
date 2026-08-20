@@ -270,7 +270,11 @@ setup_qmd_collections() {
   add_qmd_collection journal "$HOME/wiki/journal" "Raw dated journal/research log — provenance, what happened when"
   add_qmd_collection roadmap "$HOME/wiki/roadmap" "Live EPIC/STORY/Task project plans"
   add_qmd_collection today   "$HOME/wiki/today"   "In-flight work not yet archived for the day"
-  qmd embed &>/dev/null || echo "  qmd embed failed, run manually: qmd embed"
+
+  # qmd embed alone won't discover new/changed files — update finds them
+  # (there's no per-collection -c filter on update, it's always all
+  # collections), embed then vectorizes whatever update queued as pending.
+  bash "$SKILLS_DIR/skills/kb-ingest/scripts/qmd_sync.sh"
   echo "  ✓ qmd collections (kb, journal, roadmap, today)"
   return 0
 }

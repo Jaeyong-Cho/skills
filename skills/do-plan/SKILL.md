@@ -22,5 +22,7 @@ Completion criterion: every action item is checked or blocked, every acceptance 
 
 5. **Update the project's wiki** — if the plan has a `Target project` field, invoke `@skills/project-wiki {target-project} {plan-file} {report-file}` to synthesize the plan's findings into the project-scoped wiki. Read the `Target project` value from the plan file. Skip this step if the plan has no Target project field (a plan that isn't scoped to a single project). Completion criterion: the skill completes successfully or is skipped due to missing field.
 
+6. **Refresh search index** — run `bash ../kb-ingest/scripts/qmd_sync.sh`, regardless of whether step 5 ran (a plan with no Target project still touched `roadmap`/`today`/`journal`, which stay searchable through this same call). One cycle through this plan = one wiki-search refresh. Completion criterion: the command runs; a failure here is search staleness, not lost work — note it in the report if it fails, don't block on it.
+
 Tell the user the report file path when done.
 Tell the user the plan's Next step line (per `../references/workflow.md`): run `@skills/boy-scout` if this plan wasn't itself a `/boy-scout` cleanup plan; otherwise resume the feature/fix plan it named — don't suggest another `/boy-scout` run.

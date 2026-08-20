@@ -26,11 +26,7 @@ timestamp: <ISO 8601 datetime, when this content was last meaningfully written>
 
 **Frontmatter/header first, always** — read it before the body, on every `.md` file under `~/wiki` or a target repo's `spec/`, and on every first-party source-code file, even when the path is already known. For documents, read the YAML frontmatter. For source code, read only the language-safe metadata header first. It confirms `type`/relevance/`timestamp`-freshness before paying for the rest of the file; skip the body read entirely if the metadata alone answers the question.
 
-1. **Search with `qmd query`** — the primary path for `~/wiki` documents if a `qmd` collection exists. Start with `qmd query "<question>" -c kb` to search synthesized knowledge first, then `qmd query -c journal -c roadmap -c today` if the initial search misses. This returns candidates with their snippets and context tags — read those snippets before opening the full file.
-2. **If `qmd` returns nothing** (not yet embedded, or a project with no `qmd` collection set up), fall back to the `index.md` chain-walk:
-   - Walk the `index.md` chain down from the relevant document root (`journal/`, `research/`, `roadmap/`, or `spec/`) toward the likely date/project/EPIC — each `index.md` narrows which subdirectory to enter next. For source code, use the repository's package/module path and any local index.
-   - Once in a candidate directory, `grep`/read just the metadata header (`type`/`title`/`description`/`tags`) of each candidate before opening its body.
-   - Open the full body only for files whose metadata makes them relevant.
+Finding candidate documents in the first place — search vs. `index.md` chain-walk fallback — is a separate concern from this file: see `../qmd-search.md`.
 
 This is the whole point of carrying metadata: a read should resolve from the header alone whenever it can, and only pay for a full read on an actual candidate.
 

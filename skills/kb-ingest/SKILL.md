@@ -25,6 +25,6 @@ Per karpathy's LLM-wiki pattern, synthesize and cross-reference the day's journa
 
 7. **Append the log** — call `bash scripts/append_log.sh ~/wiki/kb/log.md {date-from-step-1} {comma-separated page slugs from step 5}` (relative to this skill's directory). This records what was ingested today; it creates the log if it doesn't exist. Completion criterion: `~/wiki/kb/log.md` contains one new line matching `## [YYYY-MM-DD] ingest | {slugs}`.
 
-8. **Index for search** — run `qmd update -c kb` if the collection already exists, or `qmd embed -c kb` if this is the first run. This makes new/updated pages searchable immediately. Completion criterion: the command succeeds and `qmd collection show kb` reports indexed file count > 0.
+8. **Index for search** — run `bash scripts/qmd_sync.sh` (relative to this skill's directory). This makes new/updated pages searchable immediately (lexical right away, vectors after the embed step it runs). Completion criterion: the command runs and `qmd collection show kb` reports indexed file count > 0.
 
 Tell the user the target date and how many pages were touched.

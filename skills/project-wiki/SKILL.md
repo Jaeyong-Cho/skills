@@ -28,12 +28,11 @@ Synthesize and cross-reference a project's plan and report into compounding know
 8. **Index for search** — check if the qmd collection exists: run `qmd collection show {project-slug}`. If it fails (collection doesn't exist):
    - Create it: `qmd collection add ~/wiki/projects/{project-slug}/wiki --name {project-slug}`.
    - Add context: `qmd context add qmd://{project-slug} "Synthesized project knowledge for {project-slug}"`.
-   - Then run `qmd embed -c {project-slug}` to index the pages.
-   
-   If the collection already exists, run `qmd update -c {project-slug}` instead.
-   
-   Assertion (postcondition): After the `qmd collection show`/`qmd collection add`/`qmd update` sequence, exactly one of the following must be true: (a) the collection existed before this run, or (b) the collection was just created. If neither or both are somehow true, a race or swallowed error has occurred — fail hard rather than silently leave the project un-indexed.
-   
-   Completion criterion: the command succeeds, no errors, and `qmd collection show {project-slug}` reports indexed file count > 0.
+
+   Assertion (postcondition): before the next line, exactly one of the following must be true: (a) the collection existed before this run, or (b) the collection was just created. If neither or both are somehow true, a race or swallowed error has occurred — fail hard rather than silently leave the project un-indexed.
+
+   Then, either way, run `bash ../kb-ingest/scripts/qmd_sync.sh` — this refreshes every collection, not just this project's (cheap, and catches anything else that's lagged behind).
+
+   Completion criterion: the command runs, no errors, and `qmd collection show {project-slug}` reports indexed file count > 0.
 
 Tell the user the project slug and how many pages were touched.
