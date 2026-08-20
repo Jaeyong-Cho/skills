@@ -6,11 +6,12 @@ Agents (this skills repo's own `/explore`, `/recon`, `/advisor`→removed, `/end
 
 ## Completion criteria
 
-All four STORIES below shipped:
+All five STORIES below shipped:
 - Raw `~/wiki` archive restructured (`journal/research` merged, `advisor` removed) via a reusable, idempotent skill.
 - `qmd` installed and indexing `~/wiki` as named collections.
 - `~/wiki/kb/` exists, synthesized from `journal/` on every `/end-of-day`, searched before the `index.md`-chain fallback.
 - Every project touched via `/do-plan` gets its own `~/wiki/projects/{slug}/wiki/`, kept current and independently searchable.
+- Every `/do-plan` cycle updates `~/wiki/kb/` directly (not just `/end-of-day`), and every session's `CLAUDE.md`-level search-first instruction is imperative, not descriptive.
 
 ## Overview
 
@@ -32,3 +33,4 @@ Out of scope (explicitly, from the grill-me session): MCP server, any lint/healt
 - [qmd-search-setup](./qmd-search-setup.md)
 - [kb-ingestion](./kb-ingestion.md)
 - [project-wiki](./project-wiki.md)
+- [per-cycle-kb-sync](./per-cycle-kb-sync.md)

@@ -1,15 +1,21 @@
 ---
 name: kb-ingest
-description: Ingest today's journal and research into the knowledge base (~/wiki/kb/), creating or updating synthesized pages with cross-references per karpathy's LLM-wiki pattern. Invoke as /kb-ingest [YYYY-MM-DD].
+description: Ingest today's journal and research into the knowledge base (~/wiki/kb/), creating or updating synthesized pages with cross-references per karpathy's LLM-wiki pattern. Invoke as /kb-ingest [YYYY-MM-DD] (whole-day mode) or /kb-ingest {plan-file} {report-file} (per-cycle mode, invoked by /do-plan).
 ---
 
 # KB Ingestion
 
 Per karpathy's LLM-wiki pattern, synthesize and cross-reference the day's journal and research into compounding knowledge pages. This is an agent-executed skill — the LLM decides which pages to create/update, not a deterministic script.
 
-1. **Get the target date** — if called with a date argument `/kb-ingest YYYY-MM-DD`, use that; otherwise use today via `bash ../end-of-day/scripts/archive_today.sh --date`. Completion criterion: a date in `YYYY-MM-DD` format is set.
+1. **Get the target source** — two invocation modes:
+   - *Whole-day mode* (as before): if called with a date argument `/kb-ingest YYYY-MM-DD`, use that; otherwise use today via `bash ../end-of-day/scripts/archive_today.sh --date`. Set a date in `YYYY-MM-DD` format.
+   - *Per-cycle mode* (new, invoked by `@skills/do-plan`): if called with two file path arguments `/kb-ingest {plan-file} {report-file}`, those files are the source; no date to resolve. Set both file paths.
+   - Completion criterion: either a date in `YYYY-MM-DD` format is set (whole-day mode), or both file paths are set (per-cycle mode).
 
-2. **Read the target day's sources** — read `~/wiki/journal/YYYY/MM/YYYY-MM-DD/{journal.md,handoff.md,research/**/*.md}` in full for the target date. Skip any files that don't exist. If no journal entry exists for this date at all, tell the user and stop. Completion criterion: every file that exists for the target date is read in full.
+2. **Read the sources** — two invocation modes:
+   - *Whole-day mode* (as before): read `~/wiki/journal/YYYY/MM/YYYY-MM-DD/{journal.md,handoff.md,research/**/*.md}` in full for the target date. Skip any files that don't exist. If no journal entry exists for this date at all, tell the user and stop.
+   - *Per-cycle mode* (new): read `{plan-file}` and `{report-file}` in full, skipping either that doesn't exist yet. If neither file exists, tell the user and stop.
+   - Completion criterion: every file that exists for the target source is read in full.
 
 3. **Read the knowledge base index** — read `~/wiki/kb/index.md` in full to see what pages already exist. If the file doesn't exist, create it with a single line: `# Knowledge Base`. Completion criterion: the index is read or created.
 
@@ -23,7 +29,7 @@ Per karpathy's LLM-wiki pattern, synthesize and cross-reference the day's journa
 
 6. **Update the index** — edit `~/wiki/kb/index.md` to add or update one line per page touched in step 5: link + one-line description (e.g., `- [Foo Concept](./foo-concept.md) — How foo and bar interact.`). Keep the index as a simple catalog. Completion criterion: every page from step 5 has an entry in the index.
 
-7. **Append the log** — call `bash scripts/append_log.sh ~/wiki/kb/log.md {date-from-step-1} {comma-separated page slugs from step 5}` (relative to this skill's directory). This records what was ingested today; it creates the log if it doesn't exist. Completion criterion: `~/wiki/kb/log.md` contains one new line matching `## [YYYY-MM-DD] ingest | {slugs}`.
+7. **Append the log** — call `bash scripts/append_log.sh ~/wiki/kb/log.md {date} {comma-separated page slugs from step 5}` (relative to this skill's directory). The `{date}` is the target date from step 1 in whole-day mode, or today's actual date (`date +%Y-%m-%d`) in per-cycle mode, since a cycle's ingest always happens on the day it runs. This records what was ingested today; it creates the log if it doesn't exist. Completion criterion: `~/wiki/kb/log.md` contains one new line matching `## [YYYY-MM-DD] ingest | {slugs}`.
 
 8. **Index for search** — run `bash scripts/qmd_sync.sh` (relative to this skill's directory). This makes new/updated pages searchable immediately (lexical right away, vectors after the embed step it runs). Completion criterion: the command runs and `qmd collection show kb` reports indexed file count > 0.
 
