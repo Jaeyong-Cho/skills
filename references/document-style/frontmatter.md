@@ -15,7 +15,7 @@ timestamp: <ISO 8601 datetime, when this content was last meaningfully written>
 ---
 ```
 
-- `type` — a short, descriptive string; pick what fits, there's no central registry. Examples already implied by what writes into `~/wiki`/`spec/`: `Journal Entry`, `Handoff`, `Research Explore`, `Research Experiment`, `Research Plan`, `Research Recon`, `Research Context`, `Roadmap Project`, `Roadmap Epic`, `Roadmap Story`, `Goal`, `Spec Story`.
+- `type` — a short, descriptive string; pick what fits, there's no central registry. Examples already implied by what writes into `~/wiki`/`spec/`: `Journal Entry`, `Handoff`, `Advisor Report`, `Research Explore`, `Research Experiment`, `Research Plan`, `Research Recon`, `Research Context`, `Roadmap Project`, `Roadmap Epic`, `Roadmap Story`, `Goal`, `Spec Story`.
 - `title`, `description`, `tags` — what a search index or an `index.md` entry pulls from first.
 - `resource` — the canonical URI the doc is *about* (a PR, a dashboard, a repo, an external doc). Most `~/wiki` entries describe work rather than a resource — omit the line rather than inventing one.
 - `timestamp` — when the content was last meaningfully written, not the file's mtime.
@@ -26,7 +26,9 @@ timestamp: <ISO 8601 datetime, when this content was last meaningfully written>
 
 **Frontmatter/header first, always** — read it before the body, on every `.md` file under `~/wiki` or a target repo's `spec/`, and on every first-party source-code file, even when the path is already known. For documents, read the YAML frontmatter. For source code, read only the language-safe metadata header first. It confirms `type`/relevance/`timestamp`-freshness before paying for the rest of the file; skip the body read entirely if the metadata alone answers the question.
 
-Finding candidate documents in the first place — search vs. `index.md` chain-walk fallback — is a separate concern from this file: see `../qmd-search.md`.
+1. Walk the `index.md` chain down from the relevant document root (`journal/`, `research/`, `roadmap/`, or `spec/`) toward the likely date/project/EPIC — each `index.md` narrows which subdirectory to enter next. For source code, use the repository's package/module path and any local index.
+2. Once in a candidate directory, `grep`/read just the metadata header (`type`/`title`/`description`/`tags`) of each candidate before opening its body.
+3. Open the full body only for files whose metadata makes them relevant.
 
 This is the whole point of carrying metadata: a read should resolve from the header alone whenever it can, and only pay for a full read on an actual candidate.
 

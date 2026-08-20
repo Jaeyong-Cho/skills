@@ -20,9 +20,5 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, the report file exists reflecting both.
 
-5. **Update the project's wiki** — if the plan has a `Target project` field, invoke `@skills/project-wiki {target-project} {plan-file} {report-file}` to synthesize the plan's findings into the project-scoped wiki. Read the `Target project` value from the plan file. Skip this step if the plan has no Target project field (a plan that isn't scoped to a single project). Completion criterion: the skill completes successfully or is skipped due to missing field.
-
-6. **Update the global kb** — invoke `@skills/kb-ingest {plan-file} {report-file}` unconditionally, every cycle (unlike step 5, no `Target project` gate — the global kb isn't project-scoped). This uses `kb-ingest`'s new per-cycle mode — the cycle's own plan and report are the delta, no day-wide re-read. Note that `kb-ingest`'s step 8 already refreshes every `qmd` collection, which is why the old standalone sync step is removed rather than kept alongside. Completion criterion: the skill completes and `~/wiki/kb/log.md` has a new line for today.
-
 Tell the user the report file path when done.
 Tell the user the plan's Next step line (per `../references/workflow.md`): run `@skills/boy-scout` if this plan wasn't itself a `/boy-scout` cleanup plan; otherwise resume the feature/fix plan it named — don't suggest another `/boy-scout` run.

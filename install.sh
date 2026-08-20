@@ -171,13 +171,6 @@ setup_copilot() {
       echo "  ✓ skills, references, and template → ~/.copilot"
   fi
 
-  # qmd's own skill isn't part of this repo's skills/ dir — Copilot doesn't
-  # read ~/.agents/skills like Claude/pi do, so mirror it in explicitly.
-  if [ -d "$HOME/.agents/skills/qmd" ]; then
-    cp -R "$HOME/.agents/skills/qmd" "$HOME/.copilot/skills/qmd"
-    echo "  ✓ qmd skill → ~/.copilot/skills/qmd"
-  fi
-
   # tmux-agent-status itself has no Copilot CLI integration (process presence
   # auto-detection only).
   echo "  note: tmux-agent-status has no Copilot CLI support (process presence only)"
@@ -216,74 +209,6 @@ ensure_rtk_binary() {
   else
     curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
   fi
-}
-
-# ── qmd (local hybrid BM25/vector search over ~/wiki) ───────────────────────
-# https://github.com/tobilu/qmd — CLI-only (no MCP). Installs the binary,
-# its bundled agent-facing skill (this is what makes an agent discover qmd's
-# CLI syntax at all — without it the skill file simply doesn't exist in any
-# agent's skills dir), and indexes the personal wiki if ~/wiki exists.
-# Every guard clause below returns 0 explicitly and every external call is
-# tolerant of failure so a flaky/missing npm or qmd never aborts the rest of
-# this script under `set -e`.
-
-ensure_qmd_binary() {
-  command -v qmd &>/dev/null && return 0
-  if ! command -v npm &>/dev/null; then
-    echo "  npm not found, skipping qmd"
-    return 0
-  fi
-  echo "  installing qmd..."
-  npm install -g @tobilu/qmd &>/dev/null \
-    || echo "  qmd install failed, run manually: npm install -g @tobilu/qmd"
-  return 0
-}
-
-ensure_qmd_skill() {
-  command -v qmd &>/dev/null || return 0
-  [ -d "$HOME/.agents/skills/qmd" ] && return 0
-  if qmd skill install --global --yes &>/dev/null; then
-    echo "  ✓ qmd skill → ~/.agents/skills/qmd (+ ~/.claude/skills/qmd)"
-  else
-    echo "  qmd skill install failed, run manually: qmd skill install --global --yes"
-  fi
-  return 0
-}
-
-# One qmd collection per top-level ~/wiki dir (qmd binds one root per name;
-# a second `add` with the same name errors rather than merging), skipped if
-# already added.
-add_qmd_collection() {
-  local name="$1" dir="$2" desc="$3"
-  qmd collection show "$name" &>/dev/null && return 0
-  qmd collection add "$dir" --name "$name" &>/dev/null \
-    || { echo "  qmd collection add $name failed"; return 0; }
-  qmd context add "qmd://$name" "$desc" &>/dev/null || true
-  return 0
-}
-
-setup_qmd_collections() {
-  [ -d "$HOME/wiki" ] || return 0
-  command -v qmd &>/dev/null || return 0
-
-  add_qmd_collection kb      "$HOME/wiki/kb"      "Synthesized, cross-referenced knowledge — check here first"
-  add_qmd_collection journal "$HOME/wiki/journal" "Raw dated journal/research log — provenance, what happened when"
-  add_qmd_collection roadmap "$HOME/wiki/roadmap" "Live EPIC/STORY/Task project plans"
-  add_qmd_collection today   "$HOME/wiki/today"   "In-flight work not yet archived for the day"
-
-  # qmd embed alone won't discover new/changed files — update finds them
-  # (there's no per-collection -c filter on update, it's always all
-  # collections), embed then vectorizes whatever update queued as pending.
-  bash "$SKILLS_DIR/skills/kb-ingest/scripts/qmd_sync.sh"
-  echo "  ✓ qmd collections (kb, journal, roadmap, today)"
-  return 0
-}
-
-setup_qmd() {
-  echo "→ qmd (local wiki search)"
-  ensure_qmd_binary
-  ensure_qmd_skill
-  setup_qmd_collections
 }
 
 # ── JSON hook wiring (shared) ────────────────────────────────────────────────
@@ -359,7 +284,6 @@ setup_bin() {
 # ── Run selected setups ───────────────────────────────────────────────────────
 
 echo ""
-setup_qmd && echo ""
 selected "claude"  && setup_claude  && echo ""
 selected "copilot" && setup_copilot && echo ""
 selected "pi"      && setup_pi      && echo ""
