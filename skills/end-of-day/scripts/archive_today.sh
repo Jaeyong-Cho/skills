@@ -1,5 +1,5 @@
 #!/bin/bash
-# Archives ~/wiki/today/{journal.md,research/} into the dated journal/research
+# Archives ~/wiki/today/{journal.md,research/} into the dated journal nested
 # paths for today. Run once per day, at day's end.
 set -euo pipefail
 
@@ -19,11 +19,14 @@ work_date() {
 archive() {
   local wiki="$1" today_date="$2"
   local year="${today_date%%-*}" month="${today_date:5:2}"
-  local dest="$wiki/research/$year/$month/$today_date"
+  local dest="$wiki/journal/$year/$month/$today_date"
+
+  # Assertion: destination must never equal the working directory
+  [ "$dest" != "$wiki/today" ] || { echo "ERROR: date parsing bug would archive into $wiki/today"; exit 1; }
 
   if [ -f "$wiki/today/journal.md" ]; then
-    mkdir -p "$wiki/journal/$year/$month"
-    local jdest="$wiki/journal/$year/$month/$today_date.md"
+    mkdir -p "$dest"
+    local jdest="$dest/journal.md"
     if [ -f "$jdest" ]; then
       cat "$wiki/today/journal.md" >> "$jdest"
     else
@@ -32,10 +35,10 @@ archive() {
   fi
 
   if [ -d "$wiki/today/research" ]; then
-    mkdir -p "$dest"
+    mkdir -p "$dest/research"
     for d in "$wiki/today/research"/*/; do
       [ -d "$d" ] || continue
-      mv "$d" "$dest/"
+      mv "$d" "$dest/research/"
     done
   fi
 
@@ -58,8 +61,8 @@ self_test() {
 
   archive "$tmp" "2026-01-15"
 
-  [ -f "$tmp/journal/2026/01/2026-01-15.md" ] || { echo "FAIL: journal not archived"; exit 1; }
-  [ -f "$tmp/research/2026/01/2026-01-15/00-demo/explores/01-x.md" ] || { echo "FAIL: research not archived"; exit 1; }
+  [ -f "$tmp/journal/2026/01/2026-01-15/journal.md" ] || { echo "FAIL: journal not archived to nested dir"; exit 1; }
+  [ -f "$tmp/journal/2026/01/2026-01-15/research/00-demo/explores/01-x.md" ] || { echo "FAIL: research not archived to nested dir"; exit 1; }
   [ ! -d "$tmp/today" ] || { echo "FAIL: today/ not removed"; exit 1; }
 
   rm -rf "$tmp"
@@ -71,12 +74,12 @@ if [ "${1:-}" = "--test" ]; then
   exit 0
 fi
 
-# d-handoff and advisor call this so their dated output files agree with
-# the date this script will archive under, even if invoked standalone.
+# d-handoff calls this so its dated output file agrees with the date this
+# script will archive under, even if invoked standalone.
 if [ "${1:-}" = "--date" ]; then
   work_date
   exit 0
 fi
 
 archive "$HOME/wiki" "$(work_date)"
-echo "archived ~/wiki/today/ into ~/wiki/journal/ and ~/wiki/research/ for $(work_date)"
+echo "archived ~/wiki/today/ into ~/wiki/journal/YYYY/MM/YYYY-MM-DD/ for $(work_date)"

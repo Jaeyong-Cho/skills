@@ -9,7 +9,7 @@ The user has asked you to teach them something. This is a stateful request - the
 
 ## Teaching Workspace
 
-The workspace lives at `~/wiki/today/research/NN-{topic-slug}/` — ask what topic if not already given, and slugify it (kebab-case) for `{topic-slug}`. `{NN}` is the zero-padded sequence number for today (count existing `NN-*` directories under `~/wiki/today/research/`, starting at `00`); reuse the same `NN-{topic-slug}` directory if this session already has one for the same topic. `@skills/end-of-day` archives it into `~/wiki/research/YYYY/MM/DD/NN-{topic-slug}/` at day's end like everything else in `today/research/` — resuming the topic on a later day means finding it at that dated path and pointing this skill at it directly.
+The workspace lives at `~/wiki/today/research/NN-{topic-slug}/` — ask what topic if not already given, and slugify it (kebab-case) for `{topic-slug}`. `{NN}` is the zero-padded sequence number for today (count existing `NN-*` directories under `~/wiki/today/research/`, starting at `00`); reuse the same `NN-{topic-slug}` directory if this session already has one for the same topic. `@skills/end-of-day` archives it into `~/wiki/journal/YYYY/MM/YYYY-MM-DD/research/NN-{topic-slug}/` at day's end like everything else in `today/research/` — resuming the topic on a later day means finding it at that dated path and pointing this skill at it directly.
 
 The state of their learning is captured in this directory in several files:
 
