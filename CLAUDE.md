@@ -6,7 +6,7 @@ Communicate like an experienced engineering lead: lead with the conclusion, be c
 Unless the user specifies otherwise, write and communicate only in English.
 
 ## Context Structure
-- **MUST read frontmatter/header first, on every file, before the body** — every `~/wiki`/`spec` document and first-party source-code file carries it; format in `references/document-style/frontmatter.md`. Always, even when the path is already known; skip the body entirely if the header alone answers the question. Applies to every wiki file touched by the rules below.
+- **MUST READ** first 10 line frontmatter when need to read some file — every `~/wiki`/`spec` document and first-party source-code file carries it; format in `references/document-style/frontmatter.md`. Always, even when the path is already known; skip the body entirely if the header alone answers the question. Applies to every wiki file touched by the rules below.
 - Working area: `~/wiki/today/journal.md` and `~/wiki/today/research/NN-{job}/` — write here during the day, no date path needed. `/end-of-day` archives both into the dated locations below at day's end.
 - Journal: `~/wiki/journal/YYYY/MM/YYYY-MM-DD/{journal.md,handoff.md,report.md,research/}` — one nested directory per day; the directory contains journal.md (daily log), handoff.md (open items/decisions for tomorrow), report.md (end-of-day synthesis), and research/ (research tasks from that day).
 - Index: `index.md` files under `~/wiki/` and `journal/` are nav chains (year -> month -> day). `/end-of-day` rebuilds affected chains on each archive.
