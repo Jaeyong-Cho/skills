@@ -10,6 +10,7 @@ A project's roadmap as a tree — EPIC > STORY > Task — governed by exactly tw
 
 1. **State is location.** Which of `open/`, `in-progress/`, `done/` an EPIC's directory sits under *is* its state — moving it (`mv`) is the state change, never a separate status field to drift out of sync. STORIES nest inside their EPIC as a single file (`{epic-slug}/{story-slug}.md`) and move with it.
 2. **This manages the roadmap, not the spec.** It never writes into a target repo's `spec/`, and has nothing to do with `/to-plan` or `/do-plan`. A `{project}` here is personal/organizational, not a code repo — it may span several repos or none.
+3. **MUST FOCUS** on the **GOAL** and **EXPECTED RESULT** not detailed plan.
 
 Follow the user's input, not a script: whatever they raise about a project's roadmap is in scope. The patterns in step 3 are what's been seen so far, not an exhaustive menu — something that fits none of them is still in scope if it's about the roadmap or its directory layout.
 
