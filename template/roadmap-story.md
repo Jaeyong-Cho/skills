@@ -12,6 +12,11 @@ timestamp: {YYYY-MM-DDThh:mm:ssZ}
 ## Goal
 <!-- conclusion first: what done looks like. As short as it warrants — expand with context only if the reader needs it to act. -->
 
+## Expected Results
+
 ## Tasks
 - [ ] {task}
 - [x] {task done}
+
+## Context
+Detailed Context for about this STORY. Any format.
