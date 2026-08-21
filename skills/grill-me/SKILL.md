@@ -8,7 +8,7 @@ disable-model-invocation: false
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the frontier in one round, **capped at 5 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
 
 Each question should be formatted like so:
 
@@ -28,9 +28,15 @@ The session is done when the frontier is empty: every branch of the design tree 
 
 ## When the user can't answer one
 
-If the reply to a given Qn isn't an answer — a question back, "I don't
-know", "not sure" — answer that one first, in layers, before moving on to
-the rest of the round's replies with `@skills/grill-ai`:
+"I don't know" / "not sure" / "you decide" is itself a valid answer, not a
+stall — don't push back or re-ask it. Take the recommended answer (➡️) as
+the decision, tag it as an assumption with its uncertainty (per
+`../references/grill-impact.md`) so it carries into `@skills/to-plan`'s
+Assertions section, and move straight to the rest of the round.
+
+Only when the reply is an actual question back — they're asking *you*
+something, not declining to decide — answer it first, in layers, with
+`@skills/grill-ai`:
 
 - L0: core answer, 1-2 sentences
 - L1: key reasoning, only if they push further
