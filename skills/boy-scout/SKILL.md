@@ -45,13 +45,9 @@ Lead with the 1-3 sentence understanding from above. Then rank candidates: any C
 
 **MUST REPORT** with example and ELI5
 
-Then open a `@skills/grill-ai` session on the finding(s): let the human ask about the code, answering in layers (L0 → L1 → L2) per grill-ai's progressive disclosure. This ends when the human stops asking questions.
-
-If the human's questions outgrow one-off clarification — they want to actually learn the area (a pattern, a subsystem, a language feature) over multiple sessions, not just understand this one diff — recommend `/teach`: a standing multi-session workspace built for that, not something this pass should try to substitute for.
-
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 
-Once the grill-ai session settles, run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to fix or tidy — cover: value (what gets easier/safer/more correct after), the finding's own proof bar (a tidy proves behavior didn't change; a Correctness bug proves the wrong behavior is now right — state which), impact scope (every caller touched), and testability.
+Run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to fix or tidy — cover: value (what gets easier/safer/more correct after), the finding's own proof bar (a tidy proves behavior didn't change; a Correctness bug proves the wrong behavior is now right — state which), impact scope (every caller touched), and testability.
 
 **MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan` — per `../references/workflow.md`, that plan resumes the feature/fix plan that led here and does not require another `/boy-scout` pass.
