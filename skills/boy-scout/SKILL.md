@@ -1,6 +1,6 @@
 ---
 name: boy-scout
-description: Understand the code changed in recent work — current branch's diff against its base, or since the last refactor commit — then scan it for one small opportunistic cleanup or code-review issue (bug, missed edge case, wrong behavior) worth flagging while the code is already open, and grill the user on whether/how to fix it. Report only, never edit. Invoke as /boy-scout.
+description: Understand the code changed in recent work — current branch's diff against its base, or since the last refactor commit, or a user-named target when given one — then scan it for one small opportunistic cleanup or code-review issue (bug, missed edge case, wrong behavior) worth flagging while the code is already open, and grill the user on whether/how to fix it. Report only, never edit. Invoke as /boy-scout.
 disable-model-invocation: true
 ---
 
@@ -14,17 +14,19 @@ wrote is the point — cleaning follows from that understanding, not from
 pattern-matching the code cold.
 
 ## Find the patrol area
-- On the default branch: diff since the most recent commit whose subject matches `refactor`/`refact` (`git log --grep`); if none exists, diff since `HEAD~10`. (First priority)
-- On a non-default branch: diff against `git merge-base <default-branch> HEAD`. (Second priority)
-- Given a tag or tag range (e.g. `/boy-scout v1.2.0..v1.3.0`): diff between those tags instead. (Third priority, only when asked)
+- User names a specific target (a function, file, or "this is hard to read"): scan exactly that, skip the diff entirely — the patrol area is the user's ask, not recent history. (Highest priority, only when given)
+- User gives a `@skills/to-plan` plan file path: read its Target project field, work in that project, then patrol the changed area there per the branch/tag rules below — the plan file names *where*, not *what*, to scan. (Second priority, only when given)
+- On the default branch: diff since the most recent commit whose subject matches `refactor`/`refact` (`git log --grep`); if none exists, diff since `HEAD~10`. (Third priority)
+- On a non-default branch: diff against `git merge-base <default-branch> HEAD`. (Fourth priority)
+- Given a tag or tag range (e.g. `/boy-scout v1.2.0..v1.3.0`): diff between those tags instead. (Fifth priority, only when asked)
 
-State the base commit or tag range chosen before scanning.
+State the base commit or tag range chosen before scanning — or, for a user-named target, state the file/function scanned instead of a base commit.
 
 ## Understand the change
-List the diff first — the base commit/tag and every changed file — then teach it back in three layers, ELI5 language: L0 — what changed and why, 1-3 sentences; L1 — how it works, the mechanism tied to specific file/line; L2 — one concrete example, a sample input/call and its result. Skip this and the lens-scan below degrades to a blind pattern-match.
+List the patrol area first — the base commit/tag and every changed file, or the user-named file/function — then teach it back in three layers, ELI5 language: L0 — what it does and why (for a diff: what changed and why), 1-3 sentences; L1 — how it works, the mechanism tied to specific file/line; L2 — one concrete example, a sample input/call and its result. Skip this and the lens-scan below degrades to a blind pattern-match.
 
 ## Scan through seven lenses
-For every file in the diff, check:
+For every file in the patrol area, check:
 - Correctness — is the diff's behavior actually right? Per `../references/clean-code.md`'s ch07 (error handling) and `17-smells-and-heuristics.md` (G3 boundary/edge-case bugs, G21 algorithm misunderstood, G26 type/comparison imprecision), look for a missed edge case, wrong condition, silent failure path, or behavior the diff plainly gets wrong.
 - Architecture fit — per `../references/meta-pattern.md`, decomposed along the wrong axis/level? Check line count against its Level-of-Pain table (~10/100/5k/100k lines) for size fit.
 - Interface depth — per `../references/deep-modules.md`, a shallow module, leaky interface, or pass-through method touched by the change?
@@ -49,6 +51,6 @@ Lead with the 1-3 sentence understanding from above. Then rank candidates: any C
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 **MUST NOT** skip this reference for low-impact findings: every finding still gets marked with its impact level and uncertainty and shown, even when the Action rule says to skip asking it outright.
 
-Run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to fix or tidy — cover: value (what gets easier/safer/more correct after), the finding's own proof bar (a tidy proves behavior didn't change; a Correctness bug proves the wrong behavior is now right — state which), impact scope (every caller touched), and testability.
+Run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to fix or tidy — cover: value (what gets easier/safer/more correct after), the finding's own proof bar (a tidy proves behavior didn't change; a Correctness bug proves the wrong behavior is now right — state which), impact scope (every caller touched), and testability. Classify each of these four (value, proof bar, impact scope, testability) by impact level and uncertainty before asking: Low impact level → **do not ask** — state the auto-decided answer as a plain `Decision:` line and move on; only High impact ones become `❓` questions.
 
 **MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan` — per `../references/workflow.md`, that plan resumes the feature/fix plan that led here and does not require another `/boy-scout` pass.
