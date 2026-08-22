@@ -53,4 +53,4 @@ Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, an
 
 Run `@skills/grill-me` on the surfaced finding(s) to reach a shared decision on whether and how to fix or tidy — cover: value (what gets easier/safer/more correct after), the finding's own proof bar (a tidy proves behavior didn't change; a Correctness bug proves the wrong behavior is now right — state which), impact scope (every caller touched), and testability. Classify each of these four (value, proof bar, impact scope, testability) by impact level and uncertainty before asking: Low impact level → **do not ask** — state the auto-decided answer as a plain `Decision:` line and move on; only High impact ones become `❓` questions.
 
-**MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan` — per `../references/workflow.md`, that plan resumes the feature/fix plan that led here and does not require another `/boy-scout` pass.
+**MUST NOT** edit files or apply the fix during this skill. Once the grill settles, fix it by hand or via `@skills/to-plan` → `@skills/do-plan`.

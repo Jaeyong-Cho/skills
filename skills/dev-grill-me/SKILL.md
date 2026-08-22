@@ -30,4 +30,4 @@ For every point in the checklist above: classify impact level and uncertainty fi
 **MUST** surface assertions aggressively wherever there is any uncertainty — for each, name the function/file, and whether it's a precondition, invariant, or postcondition, so `@skills/to-plan` can carry it into the plan's Assertions section as a real runtime assert (not a comment, not test-only).
 **MUST NOT** skip this reference for low-impact findings: every finding still gets marked with its impact level and uncertainty and shown, even when the Action rule says to skip asking it outright.
 **MUST NOT** implementation work has started.
-Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document — see `../references/workflow.md` for the full `/dev-grill-me` → `/to-plan` → `/do-plan` → `/boy-scout` → `/to-plan` → `/do-plan` chain.
+Once complete, next step is `@skills/to-plan` by human to dump the recorded answers into a plan document.
