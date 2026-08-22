@@ -17,6 +17,7 @@ disable-model-invocation: true
 - Negative scenarios (invalid input, denied permission, failure — Given/When/Then too)
 - Out of scope
 - Dependencies / preconditions (data, state, other stories that must land first)
+- Branch (git)
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
 
 ## Impact Level and Uncertainty
