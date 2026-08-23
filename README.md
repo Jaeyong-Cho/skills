@@ -50,7 +50,6 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/to-notes` | `~/wiki/notes/{fleeting,literature,permanent}/{slug}.md` | Zettelkasten note wiki: capture fleeting (raw/session-state) or literature (per-source) notes fast, then Promote whatever's durable into atomic, own-words, densely linked permanent notes |
 | `/to-context` | `~/wiki/today/research/NN-{slug}/contexts/nn-{slug}.md` | Write up this session as a context document — objective, background, key facts, current state — so a fresh session can resume it cold |
 | `/to-journal` | `~/wiki/today/journal.md` | Summarize this session very short, ELI5-simple, and append it as a formatted entry to today's journal |
-| `/boy-scout` | — | Scan the diff since the last refactor commit (or branch base) through seven lenses — correctness, architecture fit, interface depth, naming, clean code, simplicity, ambitious restructuring — report the single best cleanup or code-review bug found (correctness first), then `/grill-me` on value, proof bar, impact scope, testability; never edit |
 | `/categorize` | `{dir}/{category}/`, `{dir}/index.md` | Sort a directory's loose files into MECE topic sub-directories, then write an `index.md` table of contents over the result |
 | `/grill-ai` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
