@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Enforces Conventional Commits: type(scope): subject
+# Types: feat fix docs style refactor perf test build ci chore
+# Git's own auto-generated Merge/Revert messages pass through unchecked.
+set -euo pipefail
+
+msg_file="$1"
+first_line="$(head -n1 "$msg_file")"
+
+case "$first_line" in
+  "Merge "*|"Revert "*) exit 0 ;;
+esac
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore)(\([a-zA-Z0-9._/-]+\))?!?: .{1,100}$'
+
+if [[ ! "$first_line" =~ $pattern ]]; then
+  echo "commit-msg: reject — first line must match 'type(scope): subject'" >&2
+  echo "  types: feat fix docs style refactor perf test build ci chore" >&2
+  echo "  got:   $first_line" >&2
+  exit 1
+fi

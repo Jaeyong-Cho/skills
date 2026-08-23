@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Reminds to reinstall dependencies when a merge touched a manifest file.
+set -euo pipefail
+
+manifests="go.mod go.sum package.json package-lock.json requirements.txt pyproject.toml Cargo.toml Cargo.lock"
+changed="$(git diff --name-only ORIG_HEAD HEAD 2>/dev/null || true)"
+
+for f in $manifests; do
+  if echo "$changed" | grep -qx "$f"; then
+    echo "post-merge: $f changed — re-run install (see INSTALL.md)"
+  fi
+done
