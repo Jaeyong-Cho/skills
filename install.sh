@@ -190,10 +190,28 @@ setup_copilot() {
 setup_pi() {
   echo "→ pi coding agent"
 
-  command -v npx &>/dev/null || { echo "  npx not found, skipping ponytail"; return; }
-  npx --yes skills add DietrichGebert/ponytail -a pi -g -y &>/dev/null \
-    && echo "  ✓ ponytail (skills.sh)" \
-    || echo "  ponytail install failed, run manually: npx skills add DietrichGebert/ponytail -a pi -g -y"
+  if command -v npx &>/dev/null; then
+    npx --yes skills add DietrichGebert/ponytail -a pi -g -y &>/dev/null \
+      && echo "  ✓ ponytail (skills.sh)" \
+      || echo "  ponytail install failed, run manually: npx skills add DietrichGebert/ponytail -a pi -g -y"
+  else
+    echo "  npx not found, skipping ponytail"
+  fi
+
+  command -v pi &>/dev/null || return
+  local pkg
+  for pkg in \
+    "https://github.com/nicobailon/pi-powerline-footer" \
+    "https://github.com/MasuRii/pi-tool-display" \
+    "npm:@narumitw/pi-usage" \
+    "npm:pi-must-have-extension"
+  do
+    if pi install "$pkg" &>/dev/null; then
+      echo "  ✓ $pkg"
+    else
+      echo "  $pkg install failed, run manually: pi install $pkg"
+    fi
+  done
 }
 
 # ── rtk binary ───────────────────────────────────────────────────────────────
