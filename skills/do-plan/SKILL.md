@@ -12,7 +12,7 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 2. **Execute each unchecked action item, in order.** For each: implement it for real, verify the result, then edit the plan file to check it off (`- [x]`) before moving to the next. Stop and ask the user if an item is ambiguous or its prerequisite failed — don't skip it.
    - **Assert on uncertainty.** If the item touches a function named in the plan's Assertions section, write that line's assert as a real runtime statement in the implementation code, at the exact point it checks (language-native `assert`/equivalent, not a comment, not test-only) — same rigor as Verification Method rows.
    - **Keep the spec in sync.** If the item writes or updates the target project's spec, follow `../references/spec-convention.md`: `spec/{epic-slug}/{story-slug}.md` per `../template/spec.md`, with its `spec/{epic-slug}/index.md` and the top-level `spec/index.md` kept in sync.
-   - **STOP before merging a branch or releasing** — these are human-invoked only, `@skills/do-plan` cannot run them. Leave the branch-merge/release item unchecked and tell the user to handle it manually.
+   - **STOP before merging a branch or releasing** — these are human-invoked only, `@skills/do-plan` cannot run them. Leave the branch-merge/release item unchecked and **MUST ASK the human to confirm** before either happens; never merge or release on the agent's own judgment.
    - **Dogfood test.**
 
    Completion criterion: every action item in the plan is either `- [x]` or explicitly called out as blocked.
