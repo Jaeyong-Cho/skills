@@ -151,6 +151,8 @@ setup_claude() {
   if command -v claude &>/dev/null; then
     install_agent_plugin claude DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
   fi
+
+  setup_boy_scout claude
 }
 
 setup_copilot() {
@@ -185,6 +187,8 @@ setup_copilot() {
   if command -v copilot &>/dev/null; then
     install_agent_plugin copilot DietrichGebert/ponytail ponytail@ponytail "ponytail plugin"
   fi
+
+  setup_boy_scout copilot
 }
 
 setup_pi() {
@@ -212,6 +216,8 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
+
+  setup_boy_scout pi
 }
 
 # ── rtk binary ───────────────────────────────────────────────────────────────
@@ -227,6 +233,45 @@ ensure_rtk_binary() {
   else
     curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
   fi
+}
+
+# ── boy-scout binary ─────────────────────────────────────────────────────────
+# https://github.com/Jaeyong-Cho/boy-scout — private repo, no release binary
+# yet, so build from source via its Makefile (installs to ~/.agents/bin).
+
+ensure_boy_scout_binary() {
+  command -v boy-scout &>/dev/null && return
+  [ -x "$HOME/.agents/bin/boy-scout" ] && return
+
+  command -v go &>/dev/null || { echo "  go not found, skipping boy-scout"; return; }
+
+  echo "  installing boy-scout..."
+  local tmp
+  tmp="$(mktemp -d)"
+  if git clone --depth 1 git@github.com:Jaeyong-Cho/boy-scout.git "$tmp" &>/dev/null \
+    && make -C "$tmp" install &>/dev/null; then
+    echo "  ✓ boy-scout → ~/.agents/bin/boy-scout"
+  else
+    echo "  boy-scout install failed, run manually: git clone git@github.com:Jaeyong-Cho/boy-scout.git && cd boy-scout && make install"
+  fi
+  rm -rf "$tmp"
+}
+
+# setup_boy_scout runs `boy-scout setup --global <target>` (target one of
+# claude/copilot/pi/agents, matching boy-scout's own setup targets).
+setup_boy_scout() {
+  local target="$1" bin
+  ensure_boy_scout_binary
+  if command -v boy-scout &>/dev/null; then
+    bin="boy-scout"
+  elif [ -x "$HOME/.agents/bin/boy-scout" ]; then
+    bin="$HOME/.agents/bin/boy-scout"
+  else
+    return
+  fi
+  "$bin" setup --global "$target" &>/dev/null \
+    && echo "  ✓ boy-scout setup --global $target" \
+    || echo "  boy-scout setup failed, run manually: boy-scout setup --global $target"
 }
 
 # ── JSON hook wiring (shared) ────────────────────────────────────────────────
