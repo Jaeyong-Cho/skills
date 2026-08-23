@@ -18,9 +18,10 @@ disable-model-invocation: true
 - Impact scope
 - Observability and Monitoring
 - Testability
-- Branch (git)
+- Branch to work this topic(git)
 - New simple and representative testcase with **built program integration test**, not just unit test
 - Release and ship plan
+- Dogfood test
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.

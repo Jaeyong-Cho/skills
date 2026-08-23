@@ -17,9 +17,10 @@ disable-model-invocation: true
 - Negative scenarios (invalid input, denied permission, failure — Given/When/Then too)
 - Out of scope
 - Dependencies / preconditions (data, state, other stories that must land first)
-- Git branch (fit/*, feature/*, refactor/*, ...)
+- Git branch to work this story (fit/*, feature/*, refactor/*, ...)
 - New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data")
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
+- Dogfood test
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
