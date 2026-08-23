@@ -18,6 +18,7 @@ disable-model-invocation: true
 - Out of scope
 - Dependencies / preconditions (data, state, other stories that must land first)
 - Git branch (fit/*, feature/*, refactor/*, ...)
+- New simple and representative testcase (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data")
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
 
 ## Impact Level and Uncertainty
