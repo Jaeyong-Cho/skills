@@ -17,14 +17,14 @@ disable-model-invocation: true
 - Negative scenarios (invalid input, denied permission, failure — Given/When/Then too)
 - Out of scope
 - Dependencies / preconditions (data, state, other stories that must land first)
-- Git branch (fit/*, feature/*, refactor/*, ...) — **MUST NOT** skip this as low-impact; always ask it as a `❓` question regardless of impact level
+- Git branch (fit/*, feature/*, refactor/*, ...)
 - New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data")
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
 
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 
-For every point in the checklist above except Git branch: classify impact level and uncertainty first. Low impact level → **do not ask** a `❓` question — state the auto-decided answer as a plain line (`Decision:` + impact/uncertainty tag, assertion mark if uncertainty is High) and move on. Only High impact points become `❓` questions in the round. Git branch is always asked, never auto-decided.
+For every point in the checklist above: classify impact level and uncertainty first. Low impact level → **do not ask** a `❓` question — state the auto-decided answer as a plain line (`Decision:` + impact/uncertainty tag, assertion mark if uncertainty is High) and move on. Only High impact points become `❓` questions in the round.
 
 **MUST** surface assertions aggressively wherever there is any uncertainty — for each, name the scenario it belongs to and whether it's a precondition, invariant, or postcondition, so `@skills/to-plan` can carry it into the plan's Assertions section.
 **MUST NOT** draft the Gherkin file or QA procedure before the frontier is empty — every scenario bullet still open above is a scenario the spec would get wrong.
