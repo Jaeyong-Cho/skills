@@ -19,7 +19,7 @@ disable-model-invocation: true
 - Observability and Monitoring
 - Testability
 - Branch (git)
-- New simple and representative testcase
+- New simple and representative testcase with **built program integration test**, not just unit test
 - Release and ship plan
 
 ## Impact Level and Uncertainty
