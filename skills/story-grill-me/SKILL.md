@@ -15,7 +15,7 @@ disable-model-invocation: true
 - Alternate scenarios (other valid Given/When/Then paths to the same value)
 - Edge cases (boundary: empty, max, first-of-its-kind, exactly-at-the-limit)
 - Negative scenarios (invalid input, denied permission, failure — Given/When/Then too)
-- Out of scope
+- Out of scope — tag any item worth remembering with `TODO:` so `@skills/to-plan` files it into the target project's TODO.md
 - Dependencies / preconditions (data, state, other stories that must land first)
 - Git branch to work this story (fit/*, feature/*, refactor/*, ...)
 - New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data") — name its fixture (real seed data, mock/stub setup, or existing state it needs) so the test isn't blocked writing it
