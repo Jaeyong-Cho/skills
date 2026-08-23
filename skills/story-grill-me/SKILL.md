@@ -18,7 +18,7 @@ disable-model-invocation: true
 - Out of scope
 - Dependencies / preconditions (data, state, other stories that must land first)
 - Git branch to work this story (fit/*, feature/*, refactor/*, ...)
-- New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data")
+- New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data") — name its fixture (real seed data, mock/stub setup, or existing state it needs) so the test isn't blocked writing it
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
 - Dogfood test
 
