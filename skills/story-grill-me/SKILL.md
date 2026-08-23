@@ -24,7 +24,7 @@ disable-model-invocation: true
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark.
 
-For every point in the checklist above: classify impact level and uncertainty first. Low impact level → **do not ask** a `❓` question — state the auto-decided answer as a plain line (`Decision:` + impact/uncertainty tag, assertion mark if uncertainty is High) and move on. Only High impact points become `❓` questions in the round.
+For every point in the checklist above: classify impact level and uncertainty first. Low impact level → **do not ask** a `❓` question — state the auto-decided answer as a plain line (`Decision:` + impact/uncertainty tag, assertion mark if uncertainty is High) and move on. Only High impact points become `❓` questions in the round. **MUST NOT** silently drop any checklist point — every one above appears in the transcript, either as a `❓` question or a `Decision:` line; "skip" means skip the question, never skip discussing it.
 
 **MUST** surface assertions aggressively wherever there is any uncertainty — for each, name the scenario it belongs to and whether it's a precondition, invariant, or postcondition, so `@skills/to-plan` can carry it into the plan's Assertions section.
 **MUST NOT** draft the Gherkin file or QA procedure before the frontier is empty — every scenario bullet still open above is a scenario the spec would get wrong.
