@@ -1,6 +1,6 @@
 ---
 name: story-grill-me
-description: Run a @skills/grill-me interview to build an agile Story in one pass — persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check. Feeds a Gherkin specification and a manual QA procedure.
+description: Run a @skills/grill-me interview to build an agile Story in one pass — persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check. Feeds a plan's Gherkin-style acceptance criteria and a manual QA procedure.
 disable-model-invocation: true
 ---
 
@@ -31,4 +31,4 @@ For every point in the checklist above: classify impact level and uncertainty fi
 **MUST** surface assertions aggressively wherever there is any uncertainty — for each, name the scenario it belongs to and whether it's a precondition, invariant, or postcondition, so `@skills/to-plan` can carry it into the plan's Assertions section.
 **MUST NOT** draft the Gherkin file or QA procedure before the frontier is empty — every scenario bullet still open above is a scenario the spec would get wrong.
 
-Once complete, next step is `@skills/to-plan` by human to turn the recorded scenarios into a Story spec: its Acceptance criteria table (Given/When/Then, per `../references/requirement-engineering.md`) already *is* this Story's Gherkin scenarios, one row per scenario bullet above; its Spec changes section already covers the persona/user-value ("Value to user"); its QA Procedure section is the human-executable check for each of those rows. `@skills/do-plan` then copies that QA Procedure into its report as a "Try it yourself" checklist, so the human sees plainly what changed and how to check it works, no digging through the diff.
+Once complete, next step is `@skills/to-plan` by human to turn the recorded scenarios into a plan: its Acceptance criteria table (Given/When/Then, per `../references/requirement-engineering.md`) already *is* this Story's Gherkin scenarios, one row per scenario bullet above; its QA Procedure section is the human-executable check for each of those rows. `@skills/do-plan` then copies that QA Procedure into its report as a "Try it yourself" checklist, so the human sees plainly what changed and how to check it works, no digging through the diff.
