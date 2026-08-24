@@ -21,7 +21,7 @@ disable-model-invocation: true
 - Testability
 - Branch to work this topic(git)
 - New simple and representative testcase with **built program integration test**, not just unit test — name its fixture (real seed data, mock/stub setup, or existing state it needs) so the test isn't blocked writing it
-- **MUST CHECK** Deterministic evaluation methodology
+- Deterministic evaluation method — integration test or e2e test, per `../references/deterministic-evaluation.md`
 - Release and ship plan
 - Dogfood test
 
