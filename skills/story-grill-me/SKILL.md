@@ -20,8 +20,7 @@ disable-model-invocation: true
 - Git branch to work this story (fit/*, feature/*, refactor/*, ...)
 - New simple and representative testcase with **built program integration test** not just unit test. (one concrete example per scenario bullet above — real names/numbers, not "a user" / "some data") — name its fixture (real seed data, mock/stub setup, or existing state it needs) so the test isn't blocked writing it
 - **INVEST** check (Independent, Negotiable, Valuable, Estimable, Small, Testable) — a Story failing any letter goes back into the round, not into the spec
-- Expected result — the observable outcome of the happy path scenario above, not a restatement of it
-- How to evaluate it — deterministic check for the Expected line above: integration test or e2e test, per `../references/deterministic-evaluation.md`
+- Deterministic evaluation method — integration test or e2e test, per `../references/deterministic-evaluation.md`
 - Dogfood test
 
 ## Impact Level and Uncertainty
