@@ -248,7 +248,7 @@ ensure_boy_scout_binary() {
   echo "  installing boy-scout..."
   local tmp
   tmp="$(mktemp -d)"
-  if git clone --depth 1 git@github.com:Jaeyong-Cho/boy-scout.git "$tmp" &>/dev/null \
+  if git clone --depth 1 https://github.com/Jaeyong-Cho/boy-scout.git "$tmp" &>/dev/null \
     && make -C "$tmp" install &>/dev/null; then
     echo "  ✓ boy-scout → ~/.agents/bin/boy-scout"
   else
