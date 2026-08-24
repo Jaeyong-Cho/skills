@@ -20,8 +20,8 @@ disable-model-invocation: true
 - Testability
 - Branch to work this topic(git)
 - New simple and representative testcase with **built program integration test**, not just unit test — name its fixture (real seed data, mock/stub setup, or existing state it needs) so the test isn't blocked writing it
-- Expected result — the observable outcome (a value, a state, a visible change), not a restatement of the intent above
-- How to evaluate it — deterministic check for the Expected line above: integration test or e2e test, per `../references/deterministic-evaluation.md`
+- What I want — the observable outcome (a value, a state, a visible change), not a restatement of the intent above
+- How to evaluate it — deterministic check for the line above: integration test or e2e test, per `../references/deterministic-evaluation.md`
 - Release and ship plan
 - Dogfood test
 
