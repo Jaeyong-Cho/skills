@@ -18,9 +18,9 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
   "results": "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.",
   "conclusion": "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.",
   "diagrams": [
-    { "id": "fig1", "file": "assets/fig1-pipeline.svg", "caption": "The pipeline end to end.", "section": "methodology" },
-    { "id": "fig2", "file": "assets/fig2-results.svg", "caption": "Results by cohort.", "section": "results" },
-    { "id": "fig3", "file": "assets/fig3-architecture.svg", "caption": "System architecture.", "section": "background" },
+    { "id": "fig1", "diagram_type": "Flowchart", "file": "assets/fig1-pipeline.svg", "caption": "The pipeline end to end.", "section": "methodology" },
+    { "id": "fig2", "diagram_type": "Bar chart", "file": "assets/fig2-results.svg", "caption": "Results by cohort.", "section": "results" },
+    { "id": "fig3", "diagram_type": "Architecture", "file": "assets/fig3-architecture.svg", "caption": "System architecture.", "section": "background" },
     { "id": "tbl1", "type": "table", "rows": [["Metric", "Before", "After"], ["Latency", "85ms", "20ms"]], "caption": "Latency before and after.", "section": "results" }
   ]
 }
@@ -44,8 +44,10 @@ At least 5 entries — a floor, not a target. More figures are good: add one any
   - Omit, or name a section/subsection that doesn't exist, to have it placed in an appendix at the end of the paper instead.
 
 Two kinds, chosen by an optional `type` field:
-- **Diagram (default, no `type` field)** — `file`, a path to a standalone `.svg` file relative to `manifest.json`'s directory (normally `assets/{id}-{slug}.svg`). Every `.svg` needs a `viewBox` attribute (not just `width`/`height`) — without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly.
-- **Table (`"type": "table"`)** — `rows`, an array of arrays: the first row is the header, every row (including the header) must have the same number of columns. No `file`. Rendered as a real `<table>`, not an image — reach for this whenever the content is naturally rows and columns (a before/after comparison, a results breakdown) rather than forcing it into a chart.
+- **Diagram (default, no `type` field)** — `diagram_type`, the exact "Use" name from `DIAGRAM-SELECTION.md`'s Visual-type guide (e.g. `"Flowchart"`, `"Bar chart"`, `"Architecture"`) — required, and what the diversity rule below counts. `file`, a path to a standalone `.svg` file relative to `manifest.json`'s directory (normally `assets/{id}-{slug}.svg`). Every `.svg` needs a `viewBox` attribute (not just `width`/`height`) — without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly.
+- **Table (`"type": "table"`)** — `rows`, an array of arrays: the first row is the header, every row (including the header) must have the same number of columns. No `file`, no `diagram_type` (it counts as its own kind, `"table"`). Rendered as a real `<table>`, not an image — reach for this whenever the content is naturally rows and columns (a before/after comparison, a results breakdown) rather than forcing it into a chart.
+
+**At least 3 different kinds** across all `diagrams[]` entries — the distinct `diagram_type` values used, plus `"table"` if any table entries exist. Five flowcharts is one kind; `lint_paper.py` rejects it. Pick each figure's type independently from `DIAGRAM-SELECTION.md` (step 3 of `SKILL.md`) instead of reusing whatever type the last figure happened to use.
 
 ## Numbering
 

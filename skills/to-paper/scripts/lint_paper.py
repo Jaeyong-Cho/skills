@@ -11,16 +11,21 @@ Checks:
 - diagrams: at least 5 entries (a floor, not a target — more is fine),
   each with id/caption, each caption at most 140 characters (a long
   caption doesn't shrink the figure — see assets/template.html — it
-  wraps, but a runaway caption is still a paragraph in disguise). Two
-  kinds:
-  - svg (default, no "type" field) — a `file` existing (relative to
-    manifest.json's directory) and passing the same accessible-SVG
-    contract diagram-design's scripts/self_check.py enforces:
-    role="img", <title> first child, non-empty <title>/<desc> with
-    diagram-prefixed ids, aria-labelledby naming title then desc —
-    plus a viewBox, so scaling to the page's max-width never crops it.
+  wraps, but a runaway caption is still a paragraph in disguise), and
+  at least 3 different diagram_type/table kinds used across them (per
+  DIAGRAM-SELECTION.md's Visual-type guide — don't draw five
+  flowcharts). Two kinds:
+  - svg (default, no "type" field) — a `diagram_type` naming its
+    diagram-design visual type (e.g. "Flowchart", "Bar chart"), a
+    `file` existing (relative to manifest.json's directory) and
+    passing the same accessible-SVG contract diagram-design's
+    scripts/self_check.py enforces: role="img", <title> first child,
+    non-empty <title>/<desc> with diagram-prefixed ids, aria-labelledby
+    naming title then desc — plus a viewBox, so scaling to the page's
+    max-width never crops it.
   - table ("type": "table") — a `rows` array: a header row plus at
-    least one data row, every row the same length as the header.
+    least one data row, every row the same length as the header;
+    counts as its own kind ("table") toward the 3-kind minimum.
 - every {{fig:some-id}} reference in any prose block names a real
   diagrams[].id (build_paper.py resolves these to "Fig N" links).
 
@@ -45,6 +50,7 @@ MAX_PARAGRAPH_SENTENCES = 8
 MIN_SECTION_PARAGRAPHS = 3
 MAX_SECTION_PARAGRAPHS = 8
 MIN_DIAGRAMS = 5
+MIN_DIAGRAM_TYPES = 3
 MAX_CAPTION_CHARS = 140
 
 
@@ -161,15 +167,17 @@ def check_diagrams(diagrams, manifest_dir, errors):
     if not isinstance(diagrams, list) or len(diagrams) < MIN_DIAGRAMS:
         errors.append(f"diagrams: need at least {MIN_DIAGRAMS}, found {len(diagrams) if isinstance(diagrams, list) else 0}")
         diagrams = diagrams if isinstance(diagrams, list) else []
+    used_types = set()
     for i, diagram in enumerate(diagrams, start=1):
         is_table = diagram.get("type") == "table"
-        required_fields = ("id", "caption", "rows") if is_table else ("id", "file", "caption")
+        required_fields = ("id", "caption", "rows") if is_table else ("id", "file", "caption", "diagram_type")
         for field in required_fields:
             if not diagram.get(field):
                 errors.append(f"diagrams[{i}]: missing '{field}'")
         caption = diagram.get("caption", "")
         if len(caption) > MAX_CAPTION_CHARS:
             errors.append(f"diagrams[{i}]: caption is {len(caption)} chars, max {MAX_CAPTION_CHARS}")
+        used_types.add("table" if is_table else diagram.get("diagram_type", "").strip().lower())
         if is_table:
             if diagram.get("rows"):
                 check_table_rows(diagram["rows"], f"diagrams[{i}]", errors)
@@ -182,6 +190,12 @@ def check_diagrams(diagrams, manifest_dir, errors):
             errors.append(f"diagrams[{i}]: file not found: {file_field}")
             continue
         check_svg_accessibility(svg_path, f"diagrams[{i}] ({file_field})", errors)
+    used_types.discard("")
+    if len(used_types) < MIN_DIAGRAM_TYPES:
+        errors.append(
+            f"diagrams: need at least {MIN_DIAGRAM_TYPES} different diagram_type/table kinds, "
+            f"found {len(used_types)} ({', '.join(sorted(used_types)) or 'none'}) — don't draw the same visual type repeatedly"
+        )
 
 
 def lint(manifest, manifest_dir):
@@ -244,11 +258,11 @@ def self_test():
             "results": block(3),
             "conclusion": block(3),
             "diagrams": [
-                {"id": "fig1", "file": "assets/fig1.svg", "caption": "c1", "section": "methodology"},
-                {"id": "fig2", "file": "assets/fig2.svg", "caption": "c2", "section": "results"},
-                {"id": "fig3", "file": "assets/fig3.svg", "caption": "c3", "section": "background"},
-                {"id": "fig4", "file": "assets/fig4.svg", "caption": "c4", "section": "introduction"},
-                {"id": "fig5", "file": "assets/fig5.svg", "caption": "c5", "section": "conclusion"},
+                {"id": "fig1", "file": "assets/fig1.svg", "caption": "c1", "section": "methodology", "diagram_type": "Flowchart"},
+                {"id": "fig2", "file": "assets/fig2.svg", "caption": "c2", "section": "results", "diagram_type": "Bar chart"},
+                {"id": "fig3", "file": "assets/fig3.svg", "caption": "c3", "section": "background", "diagram_type": "Architecture"},
+                {"id": "fig4", "file": "assets/fig4.svg", "caption": "c4", "section": "introduction", "diagram_type": "Flowchart"},
+                {"id": "fig5", "file": "assets/fig5.svg", "caption": "c5", "section": "conclusion", "diagram_type": "Timeline"},
                 {
                     "id": "tbl1",
                     "type": "table",
@@ -295,6 +309,21 @@ def self_test():
         ]
         errors = lint(no_viewbox_manifest, tmp)
         assert any("viewBox" in e for e in errors), "\n".join(errors)
+
+        low_variety_manifest = dict(good_manifest)
+        low_variety_manifest["diagrams"] = [
+            dict(d, id=f"fc{i}", file=f"assets/fig{i}.svg", diagram_type="Flowchart")
+            for i, d in enumerate(good_manifest["diagrams"][:5], start=1)
+        ]
+        errors = lint(low_variety_manifest, tmp)
+        assert any("different diagram_type" in e for e in errors), "\n".join(errors)
+
+        missing_diagram_type_manifest = dict(good_manifest)
+        missing_diagram_type_manifest["diagrams"] = [dict(good_manifest["diagrams"][0])]
+        del missing_diagram_type_manifest["diagrams"][0]["diagram_type"]
+        missing_diagram_type_manifest["diagrams"] += good_manifest["diagrams"][1:]
+        errors = lint(missing_diagram_type_manifest, tmp)
+        assert any("missing 'diagram_type'" in e for e in errors), "\n".join(errors)
 
         bad_table_manifest = dict(good_manifest)
         bad_table_manifest["diagrams"] = good_manifest["diagrams"][:5] + [
