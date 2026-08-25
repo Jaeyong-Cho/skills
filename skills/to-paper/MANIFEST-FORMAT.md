@@ -29,7 +29,7 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 
 ## Section values
 
-Every section's prose is a **JSON array of paragraph strings** — one element per paragraph, never a single string with blank lines inside it. Each array element becomes one `<p>`.
+Every section's prose is a **JSON array of paragraph strings** — one element per paragraph, never a single string with blank lines inside it. Each array element becomes one `<p>` — except an element that's itself a **JSON array of item strings**, which renders as one `<ul>` bullet list instead (e.g. `["Intro paragraph.", ["First point.", "Second point."], "Closing paragraph."]`). A bullet-list element counts as one paragraph toward the range below; it needs 2-8 items, each at most 20 words (`lint_paper.py`'s `MIN_LIST_ITEMS`/`MAX_LIST_ITEMS`), and skips the per-paragraph sentence-count check. Not valid inside `abstract`, which must stay a single plain paragraph string.
 
 Paragraph count is checked per section (a subsection inherits its parent section's range), not one flat rule: introduction 3-5, background 4-8, methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3 (`lint_paper.py`'s `SECTION_PARAGRAPH_RANGES`).
 
@@ -46,7 +46,8 @@ At least 5 entries — a floor, not a target. More figures are good: add one any
 - `section` — where the figure is placed, right after that target's own text:
   - a top-level section key (`introduction`, `background`, `methodology`, `results`, `discussion`, `conclusion`) — placed at the end of that section, after every one of its subsections.
   - `"{section}.{subsection-key}"` (e.g. `"methodology.data-collection"`) — sub-title granularity: placed right after that one subsection's text, not the whole section. Only valid when that section is given as an object and the key names one of its subsections.
-  - Omit, or name a section/subsection that doesn't exist, to have it placed in an appendix at the end of the paper instead.
+  - `"{target}@{N}"` (e.g. `"introduction@2"` or `"methodology.data-collection@1"`, 1-based) — paragraph granularity: placed right after that target's Nth paragraph specifically (a bullet-list element counts as one paragraph here too), not at the end of the whole section/subsection. `N` must be a real paragraph index for that target.
+  - Omit, or name a section/subsection/paragraph that doesn't exist, to have it placed in an appendix at the end of the paper instead.
 
 Two kinds, chosen by an optional `type` field:
 - **Diagram (default, no `type` field)** — `diagram_type`, the exact "Use" name from `DIAGRAM-SELECTION.md`'s Visual-type guide (e.g. `"Flowchart"`, `"Bar chart"`, `"Architecture"`) — required, and what the diversity rule below counts. `file`, a path relative to `manifest.json`'s directory — **the `.diagram.html` draft itself** (normally `assets/{id}-{slug}.diagram.html`), not an exported `.svg`. `build_paper.py` extracts the `<svg>...</svg>` block straight out of whatever `file` points to and inlines it directly into `index.html` at build time — no `<img>`, no separate export step, no staleness risk from an unexported edit. (A standalone `.svg` still works too, e.g. if one already exists — the extraction is identical either way.) Its `<svg>` needs **both** a `viewBox` (without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly) **and** explicit `width`/`height` attributes matching it (they establish the correct aspect ratio unambiguously).

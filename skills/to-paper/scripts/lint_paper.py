@@ -34,7 +34,9 @@ Checks:
     naming title then desc — plus a viewBox (so scaling to the page's
     max-width never crops it) and explicit width/height attributes (an
     <img src> pointing at an SVG with only a viewBox renders at a
-    300x150px default, ignoring max-width). Also flags any rect/circle/
+    300x150px default, ignoring max-width) that numerically match the
+    viewBox's own width/height (a mismatch distorts the aspect ratio when
+    scaled). Also flags any rect/circle/
     ellipse/line whose own coordinates place it outside the declared
     viewBox — the outermost <svg> clips to its viewBox by default (unlike
     the page-level max-width/height:auto scaling, which only shrinks
@@ -70,6 +72,8 @@ MAX_TITLE_WORDS = 15
 MAX_SENTENCE_WORDS = 20
 MIN_PARAGRAPH_SENTENCES = 3
 MAX_PARAGRAPH_SENTENCES = 8
+MIN_LIST_ITEMS = 2
+MAX_LIST_ITEMS = 8
 # Paragraph-count range per top-level section, standard academic-writing
 # guidance (a subsection inherits its parent section's range).
 SECTION_PARAGRAPH_RANGES = {
@@ -97,9 +101,28 @@ def paragraphs(text):
     return [p.strip() for p in text.split("\n\n") if p.strip()]
 
 
+def check_bullet_list(label, p_index, items, errors):
+    """items is a paragraph-array element that's itself a list of item
+    strings — build_paper.py renders it as one <ul> instead of a <p>."""
+    if not (MIN_LIST_ITEMS <= len(items) <= MAX_LIST_ITEMS):
+        errors.append(
+            f"{label} paragraph {p_index}: bullet list needs {MIN_LIST_ITEMS}-{MAX_LIST_ITEMS} items, found {len(items)}"
+        )
+    for i_index, item in enumerate(items, start=1):
+        w = words(item) if isinstance(item, str) else []
+        if not isinstance(item, str):
+            errors.append(f"{label} paragraph {p_index} item {i_index}: must be a string, got {type(item).__name__}")
+        elif len(w) > MAX_SENTENCE_WORDS:
+            errors.append(f"{label} paragraph {p_index} item {i_index}: {len(w)} words, max {MAX_SENTENCE_WORDS}")
+
+
 def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_range=None):
     """paras is a list of paragraph strings — a manifest section/subsection's
     text field, or paragraphs(some_markdown_text) for a plain-string caller.
+    An element may itself be a list of item strings (a bullet list) instead
+    of a paragraph string; it still counts as one element toward the
+    paragraph-count range below, but skips the sentence checks in favor of
+    check_bullet_list's own item-count/item-length checks.
 
     paragraph_range is a (min, max) tuple, typically SECTION_PARAGRAPH_RANGES
     looked up by the section's key; pass None to skip the paragraph-count
@@ -112,6 +135,9 @@ def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_ra
         if not (lo <= len(paras) <= hi):
             errors.append(f"{label}: expected {lo}-{hi} paragraphs, found {len(paras)}")
     for p_index, para in enumerate(paras, start=1):
+        if isinstance(para, list):
+            check_bullet_list(label, p_index, para, errors)
+            continue
         sents = sentences(para)
         if not (MIN_PARAGRAPH_SENTENCES <= len(sents) <= MAX_PARAGRAPH_SENTENCES):
             errors.append(
@@ -125,6 +151,12 @@ def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_ra
                 )
 
 
+def flatten_prose_text(paras):
+    """paras -> one string to scan for {{fig:...}} refs — a bullet-list
+    element's items get space-joined into its slot rather than dropped."""
+    return "\n\n".join(" ".join(p) if isinstance(p, list) else p for p in paras)
+
+
 def check_fig_refs(label, text, valid_ids, errors):
     for m in FIG_REF_RE.finditer(text):
         fig_id = m.group(1)
@@ -136,13 +168,13 @@ def check_section(key, value, valid_ids, errors):
     paragraph_range = SECTION_PARAGRAPH_RANGES.get(key)
     if isinstance(value, list):
         check_prose_block(key, value, errors, paragraph_range=paragraph_range)
-        check_fig_refs(key, "\n\n".join(value), valid_ids, errors)
+        check_fig_refs(key, flatten_prose_text(value), valid_ids, errors)
     elif isinstance(value, dict):
         for sub_key, sub_value in value.items():
             label = f"{key}.{sub_key}"
             paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
             check_prose_block(label, paras, errors, paragraph_range=paragraph_range)
-            check_fig_refs(label, "\n\n".join(paras), valid_ids, errors)
+            check_fig_refs(label, flatten_prose_text(paras), valid_ids, errors)
     else:
         errors.append(f"{key}: must be a list of paragraphs or an object of subsections, got {type(value).__name__}")
 
@@ -160,18 +192,38 @@ SVG_BOUNDS_SKIP_TAGS = {"defs", "marker", "symbol", "clipPath", "mask", "pattern
 SVG_BOUNDS_TOLERANCE = 1.0
 
 
-def check_svg_bounds(root, view_box, label, errors):
+def parse_view_box(view_box):
+    """'minX minY width height' (space- or comma-separated) -> a 4-tuple of
+    floats, or None if it's not well-formed enough to check against."""
+    parts = [p for p in re.split(r"[ ,]+", view_box.strip()) if p]
+    if len(parts) != 4:
+        return None
+    try:
+        return tuple(float(p) for p in parts)
+    except ValueError:
+        return None
+
+
+def parse_length(value):
+    """A width/height attribute value ('240', '240px') -> float, or None
+    for anything else (percentages, calc()) — outside this file's reach."""
+    v = value.strip()
+    if v.endswith("px"):
+        v = v[:-2]
+    try:
+        return float(v)
+    except ValueError:
+        return None
+
+
+def check_svg_bounds(root, view_box_parts, label, errors):
     """The outermost <svg> clips to its viewBox by default (UA overflow:
     hidden) — unlike the page-level max-width/height:auto scaling in
     assets/template.html, content drawn past the viewBox edge doesn't
     shrink into view, it's just gone. Flags the common, cheaply-detectable
     case: a shape whose own coordinates place it outside the declared
     viewBox (e.g. a legend row added without widening the viewBox to fit)."""
-    parts = re.split(r"[ ,]+", view_box.strip())
-    try:
-        min_x, min_y, vb_w, vb_h = (float(p) for p in parts if p)
-    except ValueError:
-        return
+    min_x, min_y, vb_w, vb_h = view_box_parts
     max_x, max_y = min_x + vb_w, min_y + vb_h
 
     def bbox_of(tag, elem):
@@ -242,18 +294,38 @@ def check_svg_accessibility(svg_path, label, errors):
     if root.get("role") != "img":
         errors.append(f'{label}: <svg> needs role="img"')
     view_box = (root.get("viewBox") or "").strip()
+    vb_parts = None
     if not view_box:
         errors.append(
             f"{label}: <svg> needs a viewBox attribute — width/height alone won't scale "
             "cleanly to the page's max-width and can crop the figure"
         )
     else:
-        check_svg_bounds(root, view_box, label, errors)
-    if not (root.get("width") or "").strip() or not (root.get("height") or "").strip():
+        vb_parts = parse_view_box(view_box)
+        if vb_parts is None:
+            errors.append(f"{label}: <svg> viewBox {view_box!r} must be four numbers")
+        else:
+            check_svg_bounds(root, vb_parts, label, errors)
+    width_attr = (root.get("width") or "").strip()
+    height_attr = (root.get("height") or "").strip()
+    if not width_attr or not height_attr:
         errors.append(
             f"{label}: <svg> needs width and height attributes (matching viewBox), not just "
             "viewBox — they establish the correct aspect ratio unambiguously across renderers"
         )
+    elif vb_parts is not None:
+        _, _, vb_w, vb_h = vb_parts
+        w_val, h_val = parse_length(width_attr), parse_length(height_attr)
+        if (
+            w_val is not None
+            and h_val is not None
+            and (abs(w_val - vb_w) > SVG_BOUNDS_TOLERANCE or abs(h_val - vb_h) > SVG_BOUNDS_TOLERANCE)
+        ):
+            errors.append(
+                f"{label}: width/height ({width_attr}x{height_attr}) don't match the viewBox's "
+                f"dimensions ({vb_w:g}x{vb_h:g}) — a mismatch distorts the figure's aspect ratio "
+                "when scaled to the page's max-width"
+            )
     children = list(root)
     if not children or local_tag(children[0]) != "title":
         errors.append(f"{label}: <title> must be the first child of <svg>")
@@ -344,8 +416,13 @@ def lint(manifest, manifest_dir):
     if not isinstance(abstract, list):
         errors.append(f"abstract: must be a list of paragraphs (one element), got {type(abstract).__name__}")
         abstract = []
+    elif abstract and not isinstance(abstract[0], str):
+        # No bullet lists in the abstract — build_paper.py inlines it as
+        # one plain string, not through paragraph_html's list-aware path.
+        errors.append(f"abstract: must be a plain paragraph string, got {type(abstract[0]).__name__}")
+        abstract = []
     check_prose_block("abstract", abstract, errors, one_paragraph=True)
-    check_fig_refs("abstract", "\n\n".join(abstract), valid_ids, errors)
+    check_fig_refs("abstract", flatten_prose_text(abstract), valid_ids, errors)
 
     for key in SECTION_ORDER:
         check_section(key, manifest[key], valid_ids, errors)
@@ -434,6 +511,12 @@ def self_test():
             '<rect x="150" y="80" width="100" height="60"/>'
             "</svg>"
         )
+        (assets / "mismatched-dims.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" '
+            'width="400" height="100" aria-labelledby="md-t md-d">'
+            '<title id="md-t">Mismatched Dims</title><desc id="md-d">Width doubled vs. viewBox.</desc>'
+            "</svg>"
+        )
         (assets / "fig6.diagram.html").write_text(
             "<!DOCTYPE html><html><head><title>draft</title></head><body>"
             '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" width="200" height="100" '
@@ -484,6 +567,13 @@ def self_test():
         ]
         errors = lint(out_of_bounds_manifest, tmp)
         assert any("extends outside the viewBox" in e for e in errors), "\n".join(errors)
+
+        mismatched_dims_manifest = dict(good_manifest)
+        mismatched_dims_manifest["diagrams"] = good_manifest["diagrams"][:4] + [
+            {"id": "fig10", "file": "assets/mismatched-dims.svg", "caption": "c10", "section": "results", "diagram_type": "Flowchart"}
+        ]
+        errors = lint(mismatched_dims_manifest, tmp)
+        assert any("don't match the viewBox" in e for e in errors), "\n".join(errors)
 
         low_variety_manifest = dict(good_manifest)
         low_variety_manifest["diagrams"] = [
@@ -541,6 +631,29 @@ def self_test():
         ]
         errors = lint(missing_file_manifest, tmp)
         assert any("not found" in e for e in errors), "\n".join(errors)
+
+        # A bullet list (a paragraph-array element that's itself a list of
+        # item strings) counts as one paragraph and skips sentence checks
+        # in favor of its own item-count/item-length checks.
+        good_list_manifest = dict(good_manifest)
+        good_list_manifest["methodology"] = block(2) + [["First item.", "Second item.", "Third item."]]
+        errors = lint(good_list_manifest, tmp)
+        assert not errors, f"a well-formed bullet list should lint clean, got: {errors}"
+
+        bad_list_manifest = dict(good_manifest)
+        bad_list_manifest["methodology"] = block(2) + [["Only one item."]]
+        errors = lint(bad_list_manifest, tmp)
+        assert any("bullet list needs" in e for e in errors), "\n".join(errors)
+
+        long_item_manifest = dict(good_manifest)
+        long_item_manifest["methodology"] = block(2) + [["First item.", " ".join(f"word{i}" for i in range(25))]]
+        errors = lint(long_item_manifest, tmp)
+        assert any("item 2" in e and "words, max" in e for e in errors), "\n".join(errors)
+
+        list_abstract_manifest = dict(good_manifest)
+        list_abstract_manifest["abstract"] = [["Not", "allowed", "here"]]
+        errors = lint(list_abstract_manifest, tmp)
+        assert any("abstract" in e and "plain paragraph string" in e for e in errors), "\n".join(errors)
 
         print("self-test passed")
     finally:

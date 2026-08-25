@@ -5,9 +5,13 @@ Build index.html from a to-paper manifest.json.
 Numbering is derived, never read from the manifest: Introduction=1,
 Background=2, Methodology=3, Results=4, Discussion=5, Conclusion=6; a
 section given as an object of subsections gets them numbered N-1, N-2... in
-key order. Every
-section/subsection's prose is a JSON array of paragraph strings, one <p>
-per element. See ../MANIFEST-FORMAT.md for the manifest schema.
+key order. Every section/subsection's prose is a JSON array of paragraph
+strings, one <p> per element (or one <ul> if an element is itself a list of
+item strings — a bullet list). A diagram's "section" field can target a
+whole section/subsection, or "{target}@{N}" for that target's Nth paragraph
+specifically, placing the figure right after just that one paragraph
+instead of at the end of the whole section/subsection. See
+../MANIFEST-FORMAT.md for the manifest schema.
 
 Usage:
   python build_paper.py <manifest.json>
@@ -61,10 +65,27 @@ def render_fig_refs(escaped_text, figure_numbers):
     return FIG_REF_RE.sub(repl, escaped_text)
 
 
-def paragraphs_html(paragraphs, figure_numbers):
-    """paragraphs is a list of paragraph strings — a manifest section or
-    subsection's text field. One <p> per element, in order."""
-    return "\n".join(f"<p>{render_fig_refs(html.escape(p), figure_numbers)}</p>" for p in paragraphs)
+def paragraph_html(p, figure_numbers):
+    """One paragraph-array element -> one <p>, or one <ul> if the element
+    is itself a list of item strings (a bullet list)."""
+    if isinstance(p, list):
+        items = "".join(f"<li>{render_fig_refs(html.escape(item), figure_numbers)}</li>" for item in p)
+        return f"<ul>{items}</ul>"
+    return f"<p>{render_fig_refs(html.escape(p), figure_numbers)}</p>"
+
+
+def render_paragraphs_with_diagrams(paragraphs, target, diagrams_by_target, figure_numbers, manifest_dir):
+    """paragraphs is a list of paragraph strings/bullet-list arrays — a
+    manifest section or subsection's text field. One <p>/<ul> per element,
+    in order, with any diagram targeting "{target}@{N}" (1-based) inlined
+    right after that Nth paragraph — finer-grained than the whole-target
+    placement the caller still handles separately for plain "{target}"."""
+    parts = []
+    for idx, p in enumerate(paragraphs, start=1):
+        parts.append(paragraph_html(p, figure_numbers))
+        for diagram in diagrams_by_target.get(f"{target}@{idx}", []):
+            parts.append(figure_html(diagram, figure_numbers, manifest_dir))
+    return "\n".join(parts)
 
 
 def table_html(rows):
@@ -95,24 +116,29 @@ def render_section(number, key, value, diagrams_by_target, figure_numbers, manif
     heading = title_case(key)
     parts = [f"<h2>{number}. {html.escape(heading)}</h2>"]
     if isinstance(value, list):
-        parts.append(paragraphs_html(value, figure_numbers))
+        parts.append(render_paragraphs_with_diagrams(value, key, diagrams_by_target, figure_numbers, manifest_dir))
     elif isinstance(value, dict):
         for sub_index, (sub_key, sub_value) in enumerate(value.items(), start=1):
             sub_number = f"{number}-{sub_index}"
+            sub_target = f"{key}.{sub_key}"
             if isinstance(sub_value, dict):
                 sub_title = sub_value.get("title", "")
                 sub_text = sub_value.get("text", [])
                 if sub_title:
                     parts.append(f"<h3>{sub_number}. {html.escape(sub_title)}</h3>")
-                parts.append(paragraphs_html(sub_text, figure_numbers))
+                parts.append(render_paragraphs_with_diagrams(sub_text, sub_target, diagrams_by_target, figure_numbers, manifest_dir))
             else:
-                parts.append(paragraphs_html(sub_value, figure_numbers))
-            for diagram in diagrams_by_target.get(f"{key}.{sub_key}", []):
+                parts.append(render_paragraphs_with_diagrams(sub_value, sub_target, diagrams_by_target, figure_numbers, manifest_dir))
+            # Figures targeting the subsection as a whole (no @N paragraph
+            # anchor) land at the end of that subsection, after its own
+            # paragraph-anchored figures.
+            for diagram in diagrams_by_target.get(sub_target, []):
                 parts.append(figure_html(diagram, figure_numbers, manifest_dir))
     else:
         raise ValueError(f"section {key!r} must be a list of paragraphs or an object, got {type(value)}")
-    # Figures targeting the section as a whole (no subsection named) always
-    # land at the end, after every subsection's own figures.
+    # Figures targeting the section as a whole (no subsection or @N
+    # paragraph anchor named) always land at the very end, after every
+    # subsection's own figures.
     for diagram in diagrams_by_target.get(key, []):
         parts.append(figure_html(diagram, figure_numbers, manifest_dir))
     return "\n".join(parts)
@@ -122,12 +148,23 @@ def ordered_diagrams(manifest, diagrams_by_target, appendix):
     """Every diagram in the exact order render_section + the appendix loop
     will place it — figure numbers follow this reading order, not the
     diagrams array's order."""
+    def paragraph_anchored(target, paragraphs):
+        ordered = []
+        for idx in range(1, len(paragraphs) + 1):
+            ordered.extend(diagrams_by_target.get(f"{target}@{idx}", []))
+        return ordered
+
     ordered = []
     for key in SECTION_ORDER:
         value = manifest[key]
         if isinstance(value, dict):
-            for sub_key in value:
-                ordered.extend(diagrams_by_target.get(f"{key}.{sub_key}", []))
+            for sub_key, sub_value in value.items():
+                sub_target = f"{key}.{sub_key}"
+                paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
+                ordered.extend(paragraph_anchored(sub_target, paras))
+                ordered.extend(diagrams_by_target.get(sub_target, []))
+        else:
+            ordered.extend(paragraph_anchored(key, value))
         ordered.extend(diagrams_by_target.get(key, []))
     ordered.extend(appendix)
     return ordered
@@ -135,13 +172,23 @@ def ordered_diagrams(manifest, diagrams_by_target, appendix):
 
 def valid_diagram_targets(manifest):
     """Every string a diagram's "section" field can name: each top-level
-    section key, plus "{key}.{sub_key}" for each subsection of a section
-    given as an object — sub-title granularity, per MANIFEST-FORMAT.md."""
+    section key, "{key}.{sub_key}" for each subsection of a section given
+    as an object (sub-title granularity), and "{target}@{N}" (1-based) for
+    any of those targets' Nth paragraph specifically — paragraph-level
+    granularity, placing the figure right after that one paragraph instead
+    of at the end of the whole section/subsection. Per MANIFEST-FORMAT.md."""
     targets = set(SECTION_ORDER)
     for key in SECTION_ORDER:
         value = manifest.get(key)
         if isinstance(value, dict):
-            targets.update(f"{key}.{sub_key}" for sub_key in value)
+            for sub_key, sub_value in value.items():
+                sub_target = f"{key}.{sub_key}"
+                targets.add(sub_target)
+                paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
+                if isinstance(paras, list):
+                    targets.update(f"{sub_target}@{i}" for i in range(1, len(paras) + 1))
+        elif isinstance(value, list):
+            targets.update(f"{key}@{i}" for i in range(1, len(value) + 1))
     return targets
 
 
@@ -320,6 +367,28 @@ def self_test():
             raise AssertionError("should have raised on a diagram file with no <svg> block")
         except (ValueError, OSError):
             pass
+
+        # Paragraph-level diagram placement ("{target}@{N}") and bullet
+        # lists (a paragraph-array element that's itself a list of items).
+        anchored_manifest = dict(manifest)
+        anchored_manifest["introduction"] = [
+            "First para.",
+            ["Bullet one.", "Bullet two.", "Bullet three."],
+            "Second para.",
+        ]
+        anchored_manifest["diagrams"] = [
+            {"id": "fig1", "file": "assets/fig1.svg", "caption": "Cap 1", "section": "introduction@1"},
+        ]
+        html_out = build(anchored_manifest, tmp)
+        assert "<ul><li>Bullet one.</li><li>Bullet two.</li><li>Bullet three.</li></ul>" in html_out
+        first_para_pos = html_out.index("First para.")
+        fig1_pos = html_out.index("FIG1-MARKER")
+        bullets_pos = html_out.index("Bullet one.")
+        second_para_pos = html_out.index("Second para.")
+        assert first_para_pos < fig1_pos < bullets_pos < second_para_pos, (
+            "a diagram targeting introduction@1 must land right after the 1st paragraph, "
+            "before the 2nd (the bullet list)"
+        )
 
         index_path, serve_path = write_output(tmp, html_out)
         assert index_path.is_file() and index_path.read_text(encoding="utf-8") == html_out
