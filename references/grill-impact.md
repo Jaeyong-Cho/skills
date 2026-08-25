@@ -1,5 +1,8 @@
 # Grill Impact Level and Uncertainty
 
+## Mode
+**MUST ASK** the user once, before round 1: **Fast** mode (skip Low impact questions, state the decision and move on) or **Default** mode (ask every question, whatever its impact level). No answer given → **Default**, since asking is the safe default and skipping is the opt-in. Carry the choice for the rest of the session — don't re-ask each round.
+
 **MUST MARK** each question's impact level. 
 
 ### Low Level (0)
@@ -41,7 +44,9 @@
 For every High uncertainty question, recommend the smallest experiment (spike, prototype, one-off script, manual probe) that would turn it into Low uncertainty before committing to an answer.
 
 ## Action
-- Low impact level + Low uncertainty = Skip the question; just show the decisions.
-- Low impact level + High uncertainty = Skip the question; just show the decisions. Mark to add assertion point (like assert in c++ or something). Recommend an experiment.
-- High impact level + Low uncertainty = Ask question and confirm.
-- High impact level + High uncertainty = Ask question and confirm. Mark to add assertion point. Recommend an experiment.
+- **Default mode** — ask every question and confirm, whatever the impact/uncertainty combination below. High uncertainty still gets an assertion-point mark and a recommended experiment.
+- **Fast mode**:
+  - Low impact level + Low uncertainty = Skip the question; just show the decisions.
+  - Low impact level + High uncertainty = Skip the question; just show the decisions. Mark to add assertion point (like assert in c++ or something). Recommend an experiment.
+  - High impact level + Low uncertainty = Ask question and confirm.
+  - High impact level + High uncertainty = Ask question and confirm. Mark to add assertion point. Recommend an experiment.
