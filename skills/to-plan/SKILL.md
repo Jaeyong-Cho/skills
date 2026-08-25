@@ -6,18 +6,19 @@ disable-model-invocation: true
 
 # To-Plan
 
-Turn this session's decisions into a plan document instead of leaving them to evaporate at the end of the chat.
+Turn decisions into a plan document instead of leaving them to evaporate at the end of the chat.
 Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 **MUST** instruct the detailed step-by-step so a cheap agent model can run.
 **MUST NOT** skip or abstract the action items.
 
-1. **Follow document style.** Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and size limits govern the draft.
-2. **Follow ponytail style.** Run `/ponytail` (Skill tool) over the action items — cut speculative scope, keep each item to the smallest change that works.
-3. **Follow deep module.** Read `../references/deep-modules.md` first - follow this philosophy.
-4. **Follow TDD Rule.** Read `../references/tdd.md` to plan tdd development plan.
-5. **Follow requirements engineering.** Read `../references/requirement-engineering.md` first — its Acceptance Criteria table (Given-When-Then, Category, Verification Method) is the format for step 7's Acceptance criteria below; Verification Method is what keeps each criterion traceable to a real test.
-6. **Follow ELI5.** Make plan the so a fresh cheapest model agent can understand.
-7. **Draft the plan**, covering:
+1. **Determine the input.** Default to this session's decisions — whatever `@skills/dev-grill-me`/`@skills/story-grill-me` (or plain conversation) settled so far. If instead the user names a specific target when invoking this skill (an issue, a feature, a topic not yet discussed this session), scope the plan to that named target instead — and if it hasn't been grilled yet, run the checklist that fits (`@skills/dev-grill-me` for a feature/fix, `@skills/story-grill-me` for a Story) on it first, don't draft from assumptions. Completion criterion: the plan's scope is stated as either "this session" or a named target, never assumed silently.
+2. **Follow document style.** Read `../references/document-style.md` first — its Introduction/Abstraction/Detailed structure and size limits govern the draft.
+3. **Follow ponytail style.** Run `/ponytail` (Skill tool) over the action items — cut speculative scope, keep each item to the smallest change that works.
+4. **Follow deep module.** Read `../references/deep-modules.md` first - follow this philosophy.
+5. **Follow TDD Rule.** Read `../references/tdd.md` to plan tdd development plan.
+6. **Follow requirements engineering.** Read `../references/requirement-engineering.md` first — its Acceptance Criteria table (Given-When-Then, Category, Verification Method) is the format for step 8's Acceptance criteria below; Verification Method is what keeps each criterion traceable to a real test.
+7. **Follow ELI5.** Make plan the so a fresh cheapest model agent can understand.
+8. **Draft the plan**, covering:
    - Target project (e.g. path of the repo)
    - Acceptance criteria — the session's decisions as a table per `../references/requirement-engineering.md`; each row's Verification Method must name a real test file/path (existing or to be written), not "manual" unless the check genuinely can't be automated. Pass all of the unit + integration test.
    - QA Procedure — one numbered, human-executable step per Acceptance criteria row, same order (precondition, exact steps to do, exact observable result to expect). No jargon — this is the doc a human with zero context uses to check the feature actually works.
@@ -28,10 +29,10 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes; also name the unit and integration test commands so `@skills/do-plan` can run both before committing
    - Action items, each as `- [ ] {item}` — the first item **MUST** be creating/checking out the git branch named in the grill-me session (`git checkout -b {branch}`), before any other action item runs. `@skills/do-plan` executes and checks these off in place.
    - Dogfood test
-8. **Confirm the topic directory.** Read `../references/research-topic-directory.md` first — confirm `{NN}-{slug}` with the user (new directory vs. an existing one from today) before writing; skip re-asking if already confirmed earlier this session.
-9. **Write it** to `{NN}-{slug}/plans/{nn}-{slug}.md` under `~/wiki/today/research/`, creating the directory if needed — `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`).
-10. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
+9. **Confirm the topic directory.** Read `../references/research-topic-directory.md` first — confirm `{NN}-{slug}` with the user (new directory vs. an existing one from today) before writing; skip re-asking if already confirmed earlier this session.
+10. **Write it** to `{NN}-{slug}/plans/{nn}-{slug}.md` under `~/wiki/today/research/`, creating the directory if needed — `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`).
+11. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
 
-Completion criterion: the file (or files, if split) exists; acceptance criteria and action items are each present and traceable to something decided in this session; every acceptance criteria row names a real Verification Method. This plan document is the only artifact — no spec document is written.
+Completion criterion: the file (or files, if split) exists; acceptance criteria and action items are each present and traceable to a decision from step 1's determined input (this session or the named target); every acceptance criteria row names a real Verification Method. This plan document is the only artifact — no spec document is written.
 
 Tell the user the file path(s), and that `@skills/do-plan` executes it, when done.
