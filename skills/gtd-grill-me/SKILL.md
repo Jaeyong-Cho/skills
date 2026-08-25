@@ -24,6 +24,7 @@ For every item, work David Allen's **clarify** tree until it lands in exactly on
    - Otherwise → **Next Action** (optional context tag: `@computer`, `@calls`, `@errands`, `@home`...)
 
 **MUST NOT** silently drop a captured item — every one above ends up tagged with its bucket in the transcript, even Trash.
+**MUST STOP** grill session when finding the immediately actionable item.
 
 ## When the user can't decide a bucket
 Per `@skills/grill-me`'s "When the user can't answer one": take Someday/Maybe as the default bucket rather than stalling the round, tag it as an assumption, and move on.
