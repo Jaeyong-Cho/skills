@@ -206,7 +206,6 @@ setup_pi() {
   local pkg
   for pkg in \
     "https://github.com/nicobailon/pi-powerline-footer" \
-    "https://github.com/MasuRii/pi-tool-display" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
     "https://github.com/lajarre/pi-vim" \
