@@ -34,11 +34,14 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 
 ## `diagrams`
 
-At least 3 entries. Each needs:
+At least 5 entries — a floor, not a target. More figures are good: add one anywhere a reader would learn more from a picture than a paragraph (per `DIAGRAM-SELECTION.md`'s gate), don't stop once the floor is met. Each needs:
 - `id` — short identifier, used nowhere but this file.
 - `file` — path to a standalone `.svg` file, relative to `manifest.json`'s directory (normally `assets/{id}-{slug}.svg`).
 - `caption` — one sentence, rendered under the figure.
-- `section` — which top-level section key (`introduction`, `background`, `methodology`, `results`, or `conclusion`) the figure is placed inside, right after that section's text. Omit or name an unknown section to have it placed in an appendix at the end instead.
+- `section` — where the figure is placed, right after that target's own text:
+  - a top-level section key (`introduction`, `background`, `methodology`, `results`, `conclusion`) — placed at the end of that section, after every one of its subsections.
+  - `"{section}.{subsection-key}"` (e.g. `"methodology.data-collection"`) — sub-title granularity: placed right after that one subsection's text, not the whole section. Only valid when that section is given as an object and the key names one of its subsections.
+  - Omit, or name a section/subsection that doesn't exist, to have it placed in an appendix at the end of the paper instead.
 
 ## Numbering
 

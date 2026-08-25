@@ -15,11 +15,14 @@ Writes index.html as a sibling of manifest.json. Exit code 0 on success,
 """
 import html
 import json
+import shutil
+import stat
 import sys
 from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE = SKILL_DIR / "assets" / "template.html"
+SERVE_SCRIPT = SKILL_DIR / "scripts" / "serve.sh"
 
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
 REQUIRED_KEYS = ["title", "abstract", *SECTION_ORDER, "diagrams"]
@@ -43,13 +46,13 @@ def title_case(slug):
     return slug.replace("-", " ").replace("_", " ").title()
 
 
-def render_section(number, key, value, diagrams_by_section):
+def render_section(number, key, value, diagrams_by_target):
     heading = title_case(key)
     parts = [f"<h2>{number}. {html.escape(heading)}</h2>"]
     if isinstance(value, str):
         parts.append(paragraphs_html(value))
     elif isinstance(value, dict):
-        for sub_index, (_sub_key, sub_value) in enumerate(value.items(), start=1):
+        for sub_index, (sub_key, sub_value) in enumerate(value.items(), start=1):
             sub_number = f"{number}-{sub_index}"
             if isinstance(sub_value, dict):
                 sub_title = sub_value.get("title", "")
@@ -59,11 +62,27 @@ def render_section(number, key, value, diagrams_by_section):
                 parts.append(paragraphs_html(sub_text))
             else:
                 parts.append(paragraphs_html(sub_value))
+            for diagram in diagrams_by_target.get(f"{key}.{sub_key}", []):
+                parts.append(figure_html(diagram))
     else:
         raise ValueError(f"section {key!r} must be a string or an object, got {type(value)}")
-    for diagram in diagrams_by_section.get(key, []):
+    # Figures targeting the section as a whole (no subsection named) always
+    # land at the end, after every subsection's own figures.
+    for diagram in diagrams_by_target.get(key, []):
         parts.append(figure_html(diagram))
     return "\n".join(parts)
+
+
+def valid_diagram_targets(manifest):
+    """Every string a diagram's "section" field can name: each top-level
+    section key, plus "{key}.{sub_key}" for each subsection of a section
+    given as an object — sub-title granularity, per MANIFEST-FORMAT.md."""
+    targets = set(SECTION_ORDER)
+    for key in SECTION_ORDER:
+        value = manifest.get(key)
+        if isinstance(value, dict):
+            targets.update(f"{key}.{sub_key}" for sub_key in value)
+    return targets
 
 
 def build(manifest):
@@ -71,18 +90,19 @@ def build(manifest):
     if missing:
         raise ValueError(f"manifest missing required key(s): {', '.join(missing)}")
 
-    diagrams_by_section = {}
+    targets = valid_diagram_targets(manifest)
+    diagrams_by_target = {}
     appendix = []
     for diagram in manifest["diagrams"]:
         section = diagram.get("section")
-        if section in SECTION_ORDER:
-            diagrams_by_section.setdefault(section, []).append(diagram)
+        if section in targets:
+            diagrams_by_target.setdefault(section, []).append(diagram)
         else:
             appendix.append(diagram)
 
     body_parts = []
     for number, key in enumerate(SECTION_ORDER, start=1):
-        body_parts.append(render_section(number, key, manifest[key], diagrams_by_section))
+        body_parts.append(render_section(number, key, manifest[key], diagrams_by_target))
 
     if appendix:
         body_parts.append("<h2>Appendix: Figures</h2>")
@@ -98,6 +118,18 @@ def build(manifest):
     )
 
 
+def write_output(manifest_dir, html_output):
+    """Write index.html and copy in an executable serve.sh, both as
+    siblings of manifest.json. Returns (index_path, serve_path)."""
+    out_path = manifest_dir / "index.html"
+    out_path.write_text(html_output, encoding="utf-8")
+
+    serve_path = manifest_dir / "serve.sh"
+    shutil.copyfile(SERVE_SCRIPT, serve_path)
+    serve_path.chmod(serve_path.stat().st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
+    return out_path, serve_path
+
+
 def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
@@ -108,14 +140,12 @@ def main():
     except ValueError as e:
         print(f"FAIL: {e}")
         sys.exit(1)
-    out_path = manifest_path.parent / "index.html"
-    out_path.write_text(output, encoding="utf-8")
-    print(f"OK: wrote {out_path}")
+    out_path, serve_path = write_output(manifest_path.parent, output)
+    print(f"OK: wrote {out_path} and {serve_path}")
     sys.exit(0)
 
 
 def self_test():
-    import shutil
     import tempfile
 
     tmp = Path(tempfile.mkdtemp())
@@ -134,6 +164,7 @@ def self_test():
             "diagrams": [
                 {"id": "fig1", "file": "assets/fig1.svg", "caption": "Cap 1", "section": "methodology"},
                 {"id": "fig2", "file": "assets/fig2.svg", "caption": "Cap 2", "section": "nowhere"},
+                {"id": "fig3", "file": "assets/fig3.svg", "caption": "Cap 3", "section": "background.bg2"},
             ],
         }
         html_out = build(manifest)
@@ -145,6 +176,14 @@ def self_test():
         assert "assets/fig1.svg" in html_out
         assert "<h2>Appendix: Figures</h2>" in html_out
         assert "assets/fig2.svg" in html_out
+        # fig3 targets background.bg2 (sub-title granularity): it must sit
+        # right after that subsection's own heading/text, not after bg1's.
+        prior_work_pos = html_out.index("<h3>2-2. Prior Work</h3>")
+        bg1_pos = html_out.index("Plain subsection text.")
+        fig3_pos = html_out.index("assets/fig3.svg")
+        assert bg1_pos < prior_work_pos < fig3_pos, "fig3 should land after bg2's own content, not before it"
+        methodology_pos = html_out.index("<h2>3. Methodology</h2>")
+        assert fig3_pos < methodology_pos, "fig3 should still be inside Background, before Methodology starts"
 
         bad_manifest = dict(manifest)
         del bad_manifest["conclusion"]
@@ -153,6 +192,12 @@ def self_test():
             raise AssertionError("should have raised on missing key")
         except ValueError:
             pass
+
+        index_path, serve_path = write_output(tmp, html_out)
+        assert index_path.is_file() and index_path.read_text(encoding="utf-8") == html_out
+        assert serve_path.is_file(), "serve.sh should be copied alongside index.html"
+        assert serve_path.stat().st_mode & stat.S_IXUSR, "serve.sh should be executable"
+        assert serve_path.read_text(encoding="utf-8") == SERVE_SCRIPT.read_text(encoding="utf-8")
 
         print("self-test passed")
     finally:

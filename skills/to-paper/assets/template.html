@@ -27,10 +27,29 @@ body {
   font-family: 'Geist', sans-serif;
   font-size: 16px;
   line-height: 1.65;
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 56px 24px 96px;
+  transition: max-width 0.2s ease;
 }
+body.wide { max-width: 1400px; }
+#width-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+#width-toggle:hover { color: var(--ink); border-color: var(--ink); }
+@media print { #width-toggle { display: none; } }
 h1 {
   font-family: 'Instrument Serif', serif;
   font-weight: 400;
@@ -88,8 +107,19 @@ a { color: var(--link); }
 </style>
 </head>
 <body>
+<button id="width-toggle" type="button" aria-pressed="false">Widen</button>
 <h1>{{TITLE}}</h1>
 <div class="abstract"><span class="abstract-label">Abstract</span>{{ABSTRACT}}</div>
 {{BODY}}
+<script>
+(function () {
+  var btn = document.getElementById('width-toggle');
+  btn.addEventListener('click', function () {
+    var wide = document.body.classList.toggle('wide');
+    btn.textContent = wide ? 'Narrow' : 'Widen';
+    btn.setAttribute('aria-pressed', String(wide));
+  });
+})();
+</script>
 </body>
 </html>

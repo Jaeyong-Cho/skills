@@ -8,7 +8,8 @@ Checks:
 - every other section/subsection: 3-5 paragraphs.
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
-- diagrams: at least 3 entries, each with id/file/caption/section, each
+- diagrams: at least 5 entries (a floor, not a target — more is fine),
+  each with id/file/caption/section, each
   file existing (relative to manifest.json's directory) and passing the
   same accessible-SVG contract diagram-design's scripts/self_check.py
   enforces: role="img", <title> first child, non-empty <title>/<desc>
@@ -33,7 +34,7 @@ MIN_PARAGRAPH_SENTENCES = 3
 MAX_PARAGRAPH_SENTENCES = 8
 MIN_SECTION_PARAGRAPHS = 3
 MAX_SECTION_PARAGRAPHS = 5
-MIN_DIAGRAMS = 3
+MIN_DIAGRAMS = 5
 
 
 def words(text):
@@ -198,11 +199,13 @@ def self_test():
                 {"id": "fig1", "file": "assets/fig1.svg", "caption": "c1", "section": "methodology"},
                 {"id": "fig2", "file": "assets/fig2.svg", "caption": "c2", "section": "results"},
                 {"id": "fig3", "file": "assets/fig3.svg", "caption": "c3", "section": "background"},
+                {"id": "fig4", "file": "assets/fig4.svg", "caption": "c4", "section": "introduction"},
+                {"id": "fig5", "file": "assets/fig5.svg", "caption": "c5", "section": "conclusion"},
             ],
         }
         assets = tmp / "assets"
         assets.mkdir()
-        for i, name in enumerate(("fig1.svg", "fig2.svg", "fig3.svg"), start=1):
+        for i, name in enumerate(("fig1.svg", "fig2.svg", "fig3.svg", "fig4.svg", "fig5.svg"), start=1):
             (assets / name).write_text(
                 f'<svg xmlns="http://www.w3.org/2000/svg" role="img" '
                 f'aria-labelledby="fig{i}-t fig{i}-d">'
@@ -216,8 +219,8 @@ def self_test():
         assert not errors, f"good manifest should lint clean, got: {errors}"
 
         inaccessible_manifest = dict(good_manifest)
-        inaccessible_manifest["diagrams"] = good_manifest["diagrams"][:2] + [
-            {"id": "fig4", "file": "assets/inaccessible.svg", "caption": "c4", "section": "results"}
+        inaccessible_manifest["diagrams"] = good_manifest["diagrams"][:4] + [
+            {"id": "fig6", "file": "assets/inaccessible.svg", "caption": "c6", "section": "results"}
         ]
         errors = lint(inaccessible_manifest, tmp)
         joined = "\n".join(errors)
@@ -229,7 +232,7 @@ def self_test():
         bad_manifest["title"] = " ".join(f"word{i}" for i in range(20))
         bad_manifest["abstract"] = block(2)  # two paragraphs, not one
         bad_manifest["introduction"] = block(1)  # too few paragraphs
-        bad_manifest["diagrams"] = good_manifest["diagrams"][:2]  # only 2
+        bad_manifest["diagrams"] = good_manifest["diagrams"][:2]  # only 2, below the floor of 5
 
         errors = lint(bad_manifest, tmp)
         joined = "\n".join(errors)
