@@ -1,6 +1,7 @@
 .claude
 assets/
 !skills/diagram-design/assets/
+!skills/to-paper/assets/
 *.pptx
 ~$*
 
