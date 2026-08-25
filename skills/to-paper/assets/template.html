@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ponytail: token values are a hand-copied snapshot of this repo's
    ../diagram-design/references/style-guide.md default light skin, so a
@@ -27,12 +27,12 @@ body {
   font-family: 'Geist', sans-serif;
   font-size: 16px;
   line-height: 1.65;
-  max-width: 960px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 56px 24px 96px;
   transition: max-width 0.2s ease;
 }
-body.wide { max-width: 1400px; }
+body.wide { max-width: 1600px; }
 .title-row {
   display: flex;
   align-items: center;
@@ -63,8 +63,8 @@ h1 {
 #width-toggle:hover { color: var(--ink); border-color: var(--ink); }
 @media print { #width-toggle { display: none; } }
 h2 {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
   font-size: 1.6rem;
   border-bottom: 1px solid var(--rule);
   padding-bottom: 6px;
@@ -95,16 +95,19 @@ p { margin: 1em 0; }
   display: block;
   margin-bottom: 0.5em;
 }
-/* display:table makes the <figure> box shrink-to-fit its image (never
-   wider, never narrower), so the caption below — a table-caption — is
-   forced to that same width and wraps instead of stretching past it or
-   the image shrinking to match a long caption. */
+/* display:table makes the <figure> box shrink-to-fit its inlined <svg>
+   (never wider, never narrower), so the caption below — a table-caption —
+   is forced to that same width and wraps instead of stretching past it or
+   the diagram shrinking to match a long caption. Diagrams are inlined
+   directly (build_paper.py extracts <svg>...</svg> from the source file),
+   not referenced via <img src>, so there's no separate-file replaced-
+   element sizing quirk to work around. */
 figure {
   display: table;
   margin: 2em auto;
   max-width: 100%;
 }
-figure img, figure svg {
+figure svg {
   display: block;
   max-width: 100%;
   height: auto;
