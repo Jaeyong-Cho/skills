@@ -12,7 +12,7 @@ The GTD system lives at `~/wiki/gtd/`, one file per list plus one file per proje
 2. **First run only — scaffold.** If `~/wiki/gtd/` doesn't exist yet: `mkdir -p ~/wiki/gtd/{projects,archive}`, write `index.md` and `projects/index.md` from `../template/gtd-index.md` and `../template/gtd-projects-index.md`. Don't create a list file (`next-actions.md`, etc.) until step 3 has something to put in it — an empty list is noise.
 3. **File each bucketed item**, per its `@skills/gtd-grill-me` bucket (create the target file from its template on first use, whichever order the buckets were hit in):
    - **Next Action** — append `- [ ] {action}` to `next-actions.md` (from `../template/gtd-next-actions.md`), under its `## @{context}` heading if a context was given, else under `## Next`.
-   - **Project** — write/update `projects/{project-slug}.md` from `../template/gtd-project.md`: an `## Outcome` line, and a `## Next Actions` checklist of its broken-down leaves. Link it from `projects/index.md`. Also `projects/context/{context-slug}.md` for context. 
+   - **Project** — write/update `projects/{project-slug}.md` from `../template/gtd-project.md`: an `## Outcome` line, and a `## Next Actions` checklist of its broken-down leaves. Link it from `projects/index.md`. Also `projects/contexts/NN-{context-slug}.md` for context. 
    - **Waiting For** — append `- [ ] {what} — waiting on {who}, follow up {YYYY-MM-DD}` to `waiting-for.md` (from `../template/gtd-waiting-for.md`).
    - **Calendar** — append `- [ ] {YYYY-MM-DD}: {item}` to `calendar.md` (from `../template/gtd-calendar.md`), keeping the list sorted by date.
    - **Someday/Maybe** — append `- [ ] {item}` to `someday-maybe.md` (from `../template/gtd-someday-maybe.md`).
@@ -28,3 +28,15 @@ The GTD system lives at `~/wiki/gtd/`, one file per list plus one file per proje
 6. **Lint.** Run `python3 scripts/lint_gtd.py ~/wiki/gtd` (relative to this skill's directory) after every write in steps 3-5. Fix every reported violation and re-run before finishing — a red lint is not a done write.
 
 Tell the user which files changed, and the lint result, when done.
+
+# To-Context for GTD Projects.
+
+Capture this session as reusable context instead of leaving it locked in chat history.
+
+1. **Scope the session** — reread it in full. Pull out: Objective (what was asked), Background (why it matters / what triggered it), Key facts (decisions, findings, constraints discovered), Current state (what exists now, what changed), Open questions (anything unresolved). Completion criterion: each has content traceable to the session, or is explicitly noted empty.
+2. **Draft the context, exact not paraphrased** — per `../references/document-style.md` priority order: key-value block for Objective/Background/Current state, bullets for Key facts and Open questions. Any file, command, or identifier the session touched is written as its exact string (`../references/good-harness.md`, not "a harness reference doc"; `npm run test:unit`, not "the test command") — a fresh reader must be able to open or run it verbatim. No invented facts.
+3. **Write it.** If this session already wrote a `contexts/{nn}-{slug}.md` file, update that file in place with the current Objective/Background/Key facts/Current state/Open questions instead of creating another one — a context document tracks the session's latest state, not a history of drafts. Otherwise write to `~/wiki/gtd/projects/contexts/NN-{context-slug}.md`, creating the directory if needed — `{slug}` a kebab-case slug of the session's topic, `{NN}` the zero-padded sequence number for today, starting at `00` (count existing `NN-*` directories under `~/wiki/gtd/projects/context/` reuse the same `{NN}-{slug}` directory as `@skills/experiment` if this session continues that job), `{nn}` the next zero-padded sequence number inside `contexts/` (count existing files there; starts at `01`).
+
+Completion criterion: the file exists, and a fresh reader with zero session history could resume the work from it alone.
+
+Tell the user the file path when done.
