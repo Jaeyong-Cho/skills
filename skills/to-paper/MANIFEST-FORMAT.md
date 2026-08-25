@@ -20,7 +20,8 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
   "diagrams": [
     { "id": "fig1", "file": "assets/fig1-pipeline.svg", "caption": "The pipeline end to end.", "section": "methodology" },
     { "id": "fig2", "file": "assets/fig2-results.svg", "caption": "Results by cohort.", "section": "results" },
-    { "id": "fig3", "file": "assets/fig3-architecture.svg", "caption": "System architecture.", "section": "background" }
+    { "id": "fig3", "file": "assets/fig3-architecture.svg", "caption": "System architecture.", "section": "background" },
+    { "id": "tbl1", "type": "table", "rows": [["Metric", "Before", "After"], ["Latency", "85ms", "20ms"]], "caption": "Latency before and after.", "section": "results" }
   ]
 }
 ```
@@ -34,16 +35,17 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 
 ## `diagrams`
 
-At least 5 entries — a floor, not a target. More figures are good: add one anywhere a reader would learn more from a picture than a paragraph (per `DIAGRAM-SELECTION.md`'s gate), don't stop once the floor is met. Each needs:
+At least 5 entries — a floor, not a target. More figures are good: add one anywhere a reader would learn more from a picture (or a table) than a paragraph (per `DIAGRAM-SELECTION.md`'s gate), don't stop once the floor is met. Every entry needs:
 - `id` — short identifier, used nowhere but this file.
-- `file` — path to a standalone `.svg` file, relative to `manifest.json`'s directory (normally `assets/{id}-{slug}.svg`).
 - `caption` — one sentence, at most 140 characters, rendered under the figure. A caption never shrinks the figure to fit — it wraps within the figure's own width instead (`assets/template.html`'s figure/figcaption CSS) — but a caption this long is really a paragraph in disguise; shorten it.
 - `section` — where the figure is placed, right after that target's own text:
   - a top-level section key (`introduction`, `background`, `methodology`, `results`, `conclusion`) — placed at the end of that section, after every one of its subsections.
   - `"{section}.{subsection-key}"` (e.g. `"methodology.data-collection"`) — sub-title granularity: placed right after that one subsection's text, not the whole section. Only valid when that section is given as an object and the key names one of its subsections.
   - Omit, or name a section/subsection that doesn't exist, to have it placed in an appendix at the end of the paper instead.
 
-Every `.svg` file needs a `viewBox` attribute (not just `width`/`height`) — without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly.
+Two kinds, chosen by an optional `type` field:
+- **Diagram (default, no `type` field)** — `file`, a path to a standalone `.svg` file relative to `manifest.json`'s directory (normally `assets/{id}-{slug}.svg`). Every `.svg` needs a `viewBox` attribute (not just `width`/`height`) — without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly.
+- **Table (`"type": "table"`)** — `rows`, an array of arrays: the first row is the header, every row (including the header) must have the same number of columns. No `file`. Rendered as a real `<table>`, not an image — reach for this whenever the content is naturally rows and columns (a before/after comparison, a results breakdown) rather than forcing it into a chart.
 
 ## Numbering
 

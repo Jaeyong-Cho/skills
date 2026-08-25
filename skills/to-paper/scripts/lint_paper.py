@@ -9,14 +9,18 @@ Checks:
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
 - diagrams: at least 5 entries (a floor, not a target — more is fine),
-  each with id/file/caption/section, each caption at most 140 characters
-  (a long caption doesn't shrink the figure — see assets/template.html —
-  it wraps, but a runaway caption is still a paragraph in disguise), each
-  file existing (relative to manifest.json's directory) and passing the
-  same accessible-SVG contract diagram-design's scripts/self_check.py
-  enforces: role="img", <title> first child, non-empty <title>/<desc>
-  with diagram-prefixed ids, aria-labelledby naming title then desc — plus
-  a viewBox, so scaling to the page's max-width never crops it.
+  each with id/caption, each caption at most 140 characters (a long
+  caption doesn't shrink the figure — see assets/template.html — it
+  wraps, but a runaway caption is still a paragraph in disguise). Two
+  kinds:
+  - svg (default, no "type" field) — a `file` existing (relative to
+    manifest.json's directory) and passing the same accessible-SVG
+    contract diagram-design's scripts/self_check.py enforces:
+    role="img", <title> first child, non-empty <title>/<desc> with
+    diagram-prefixed ids, aria-labelledby naming title then desc —
+    plus a viewBox, so scaling to the page's max-width never crops it.
+  - table ("type": "table") — a `rows` array: a header row plus at
+    least one data row, every row the same length as the header.
 - every {{fig:some-id}} reference in any prose block names a real
   diagrams[].id (build_paper.py resolves these to "Fig N" links).
 
@@ -143,17 +147,33 @@ def check_svg_accessibility(svg_path, label, errors):
         errors.append(f"{label}: svg aria-labelledby must name the title id then the desc id")
 
 
+def check_table_rows(rows, label, errors):
+    if not isinstance(rows, list) or len(rows) < 2:
+        errors.append(f"{label}: 'rows' needs a header row plus at least one data row")
+        return
+    header_len = len(rows[0]) if isinstance(rows[0], list) else -1
+    for r, row in enumerate(rows):
+        if not isinstance(row, list) or len(row) != header_len:
+            errors.append(f"{label}: row {r} has a different column count than the header")
+
+
 def check_diagrams(diagrams, manifest_dir, errors):
     if not isinstance(diagrams, list) or len(diagrams) < MIN_DIAGRAMS:
         errors.append(f"diagrams: need at least {MIN_DIAGRAMS}, found {len(diagrams) if isinstance(diagrams, list) else 0}")
         diagrams = diagrams if isinstance(diagrams, list) else []
     for i, diagram in enumerate(diagrams, start=1):
-        for field in ("id", "file", "caption"):
+        is_table = diagram.get("type") == "table"
+        required_fields = ("id", "caption", "rows") if is_table else ("id", "file", "caption")
+        for field in required_fields:
             if not diagram.get(field):
                 errors.append(f"diagrams[{i}]: missing '{field}'")
         caption = diagram.get("caption", "")
         if len(caption) > MAX_CAPTION_CHARS:
             errors.append(f"diagrams[{i}]: caption is {len(caption)} chars, max {MAX_CAPTION_CHARS}")
+        if is_table:
+            if diagram.get("rows"):
+                check_table_rows(diagram["rows"], f"diagrams[{i}]", errors)
+            continue
         file_field = diagram.get("file")
         if not file_field:
             continue
@@ -229,6 +249,13 @@ def self_test():
                 {"id": "fig3", "file": "assets/fig3.svg", "caption": "c3", "section": "background"},
                 {"id": "fig4", "file": "assets/fig4.svg", "caption": "c4", "section": "introduction"},
                 {"id": "fig5", "file": "assets/fig5.svg", "caption": "c5", "section": "conclusion"},
+                {
+                    "id": "tbl1",
+                    "type": "table",
+                    "rows": [["Metric", "Before", "After"], ["Latency", "85ms", "20ms"]],
+                    "caption": "c6",
+                    "section": "results",
+                },
             ],
         }
         assets = tmp / "assets"
@@ -268,6 +295,13 @@ def self_test():
         ]
         errors = lint(no_viewbox_manifest, tmp)
         assert any("viewBox" in e for e in errors), "\n".join(errors)
+
+        bad_table_manifest = dict(good_manifest)
+        bad_table_manifest["diagrams"] = good_manifest["diagrams"][:5] + [
+            {"id": "tbl2", "type": "table", "rows": [["A", "B"], ["x"]], "caption": "c7", "section": "results"}
+        ]
+        errors = lint(bad_table_manifest, tmp)
+        assert any("column count" in e for e in errors), "\n".join(errors)
 
         long_caption_manifest = dict(good_manifest)
         long_caption_manifest["diagrams"] = list(good_manifest["diagrams"])

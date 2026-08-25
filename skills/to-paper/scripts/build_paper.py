@@ -47,15 +47,24 @@ def paragraphs_html(text, figure_numbers):
     return "\n".join(f"<p>{render_fig_refs(html.escape(p), figure_numbers)}</p>" for p in parts)
 
 
+def table_html(rows):
+    header, *body = rows
+    thead = "<tr>" + "".join(f"<th>{html.escape(str(c))}</th>" for c in header) + "</tr>"
+    tbody = "\n".join(
+        "<tr>" + "".join(f"<td>{html.escape(str(c))}</td>" for c in row) + "</tr>" for row in body
+    )
+    return f"<table><thead>{thead}</thead><tbody>{tbody}</tbody></table>"
+
+
 def figure_html(diagram, figure_numbers):
     number = figure_numbers[diagram["id"]]
     anchor = html.escape(diagram["id"])
-    src = html.escape(diagram["file"])
     caption = html.escape(diagram.get("caption", ""))
-    return (
-        f'<figure id="fig-{anchor}"><img src="{src}" alt="Fig {number}: {caption}">'
-        f"<figcaption><strong>Fig {number}.</strong> {caption}</figcaption></figure>"
-    )
+    figcaption = f"<figcaption><strong>Fig {number}.</strong> {caption}</figcaption>"
+    if diagram.get("type") == "table":
+        return f'<figure class="table-figure" id="fig-{anchor}">{table_html(diagram["rows"])}{figcaption}</figure>'
+    src = html.escape(diagram["file"])
+    return f'<figure id="fig-{anchor}"><img src="{src}" alt="Fig {number}: {caption}">{figcaption}</figure>'
 
 
 def title_case(slug):
@@ -201,6 +210,13 @@ def self_test():
                 {"id": "fig1", "file": "assets/fig1.svg", "caption": "Cap 1", "section": "methodology"},
                 {"id": "fig2", "file": "assets/fig2.svg", "caption": "Cap 2", "section": "nowhere"},
                 {"id": "fig3", "file": "assets/fig3.svg", "caption": "Cap 3", "section": "background.bg2"},
+                {
+                    "id": "tbl1",
+                    "type": "table",
+                    "rows": [["Metric", "Before", "After"], ["Latency", "85ms", "20ms"]],
+                    "caption": "Cap 4",
+                    "section": "results",
+                },
             ],
         }
         html_out = build(manifest)
@@ -221,13 +237,20 @@ def self_test():
         methodology_pos = html_out.index("<h2>3. Methodology</h2>")
         assert fig3_pos < methodology_pos, "fig3 should still be inside Background, before Methodology starts"
 
+        # A "table" diagram renders as a <table>, not an <img>, but is still
+        # a numbered, captioned <figure>.
+        assert '<figure class="table-figure" id="fig-tbl1">' in html_out
+        assert "<th>Metric</th><th>Before</th><th>After</th>" in html_out
+        assert "<td>Latency</td><td>85ms</td><td>20ms</td>" in html_out
+
         # Figure numbers follow reading order (fig3 appears first in the
         # document, inside Background), not the diagrams array's order.
         assert "<figure id=\"fig-fig3\">" in html_out
         assert "<strong>Fig 1.</strong> Cap 3" in html_out
         assert "<figure id=\"fig-fig1\">" in html_out
         assert "<strong>Fig 2.</strong> Cap 1" in html_out
-        assert "<strong>Fig 3.</strong> Cap 2" in html_out  # fig2, appendix, is last
+        assert "<strong>Fig 3.</strong> Cap 4" in html_out  # tbl1, in Results
+        assert "<strong>Fig 4.</strong> Cap 2" in html_out  # fig2, appendix, is last
         # {{fig:fig1}} in the introduction resolves to a link with fig1's
         # actual number (2); an unknown id degrades visibly, doesn't crash.
         assert '<a href="#fig-fig1">Fig 2</a>' in html_out

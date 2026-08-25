@@ -120,6 +120,33 @@ figcaption {
   text-align: left;
   overflow-wrap: break-word;
 }
+/* A "table" diagram is data, not an image — the shrink-to-fit trick above
+   doesn't apply; the <table> already sets its own width (100%, capped by
+   the page), so its figcaption just needs to be a normal block to match. */
+figure.table-figure {
+  display: block;
+}
+figure.table-figure figcaption {
+  display: block;
+}
+figure.table-figure table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+figure.table-figure th, figure.table-figure td {
+  border-bottom: 1px solid var(--rule);
+  padding: 6px 10px;
+  text-align: left;
+}
+figure.table-figure thead th {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--soft);
+  border-bottom: 1px solid var(--rule-solid, var(--rule));
+}
 a { color: var(--link); }
 </style>
 </head>
