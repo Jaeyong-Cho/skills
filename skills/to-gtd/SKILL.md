@@ -12,7 +12,7 @@ The GTD system lives at `~/wiki/gtd/`, one file per list plus one file per proje
 2. **First run only — scaffold.** If `~/wiki/gtd/` doesn't exist yet: `mkdir -p ~/wiki/gtd/{projects,archive}`, write `index.md` and `projects/index.md` from `../template/gtd-index.md` and `../template/gtd-projects-index.md`. Don't create a list file (`next-actions.md`, etc.) until step 3 has something to put in it — an empty list is noise.
 3. **File each bucketed item**, per its `@skills/gtd-grill-me` bucket (create the target file from its template on first use, whichever order the buckets were hit in):
    - **Next Action** — append `- [ ] {action}` to `next-actions.md` (from `../template/gtd-next-actions.md`), under its `## @{context}` heading if a context was given, else under `## Next`.
-   - **Project** — write/update `projects/{project-slug}.md` from `../template/gtd-project.md`: an `## Outcome` line, and a `## Next Actions` checklist of its broken-down leaves. Link it from `projects/index.md`.
+   - **Project** — write/update `projects/{project-slug}.md` from `../template/gtd-project.md`: an `## Outcome` line, and a `## Next Actions` checklist of its broken-down leaves. Link it from `projects/index.md`. Also `projects/context/{context-slug}.md` for context. 
    - **Waiting For** — append `- [ ] {what} — waiting on {who}, follow up {YYYY-MM-DD}` to `waiting-for.md` (from `../template/gtd-waiting-for.md`).
    - **Calendar** — append `- [ ] {YYYY-MM-DD}: {item}` to `calendar.md` (from `../template/gtd-calendar.md`), keeping the list sorted by date.
    - **Someday/Maybe** — append `- [ ] {item}` to `someday-maybe.md` (from `../template/gtd-someday-maybe.md`).
