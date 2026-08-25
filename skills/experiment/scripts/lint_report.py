@@ -47,6 +47,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "to-paper
 from lint_paper import (  # noqa: E402
     MAX_TITLE_WORDS,
     check_prose_block,
+    paragraphs,
     words,
 )
 
@@ -97,9 +98,9 @@ def lint(text):
         errors.append(f"report missing required section(s): {', '.join('## ' + m.title() for m in missing)}")
         return errors
 
-    check_prose_block("abstract", sections["abstract"], errors, one_paragraph=True)
+    check_prose_block("abstract", paragraphs(sections["abstract"]), errors, one_paragraph=True)
     for key in SECTION_ORDER:
-        check_prose_block(key, sections[key], errors)
+        check_prose_block(key, paragraphs(sections[key]), errors)
     return errors
 
 
