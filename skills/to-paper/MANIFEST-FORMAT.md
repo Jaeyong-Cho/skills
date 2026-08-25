@@ -1,6 +1,6 @@
 # manifest.json format
 
-Everything `scripts/build_paper.py` renders into `index.html`, and everything `scripts/lint_paper.py` checks, lives in one `manifest.json`. Six fixed section keys, in this order, plus `diagrams`:
+Everything `scripts/build_paper.py` renders into `index.html`, and everything `scripts/lint_paper.py` checks, lives in one `manifest.json`. Seven fixed section keys, in this order, plus `diagrams`:
 
 ```json
 {
@@ -16,6 +16,7 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
     "analysis": { "title": "Analysis", "text": ["..."] }
   },
   "results": ["First paragraph.", "Second paragraph.", "Third paragraph."],
+  "discussion": ["First paragraph.", "Second paragraph.", "Third paragraph."],
   "conclusion": ["First paragraph.", "Second paragraph.", "Third paragraph."],
   "diagrams": [
     { "id": "fig1", "diagram_type": "Flowchart", "file": "assets/fig1-pipeline.diagram.html", "caption": "The pipeline end to end.", "section": "methodology" },
@@ -30,7 +31,9 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 
 Every section's prose is a **JSON array of paragraph strings** — one element per paragraph, never a single string with blank lines inside it. Each array element becomes one `<p>`.
 
-- **`introduction`, `results`, `conclusion`** — an array of paragraph strings.
+Paragraph count is checked per section (a subsection inherits its parent section's range), not one flat rule: introduction 3-5, background 4-8, methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3 (`lint_paper.py`'s `SECTION_PARAGRAPH_RANGES`).
+
+- **`introduction`, `results`, `discussion`, `conclusion`** — an array of paragraph strings.
 - **`background`, `methodology`** — either an array of paragraph strings (same as above, no subsections), or an object of subsections. Each subsection value is either an array of paragraph strings (no subtitle, just folded into the section) or `{"title": ..., "text": [...]}` (gets its own numbered sub-heading, `text` an array of paragraph strings). Subtitles are optional — use them only where the section genuinely splits into distinct parts.
 - **`abstract`** — an array of paragraph strings, constrained to exactly one element (one paragraph).
 - **`title`** — a plain string, no paragraph/sentence structure (never an array).
@@ -41,7 +44,7 @@ At least 5 entries — a floor, not a target. More figures are good: add one any
 - `id` — short identifier, used nowhere but this file.
 - `caption` — one sentence, at most 140 characters, rendered under the figure. A caption never shrinks the figure to fit — it wraps within the figure's own width instead (`assets/template.html`'s figure/figcaption CSS) — but a caption this long is really a paragraph in disguise; shorten it.
 - `section` — where the figure is placed, right after that target's own text:
-  - a top-level section key (`introduction`, `background`, `methodology`, `results`, `conclusion`) — placed at the end of that section, after every one of its subsections.
+  - a top-level section key (`introduction`, `background`, `methodology`, `results`, `discussion`, `conclusion`) — placed at the end of that section, after every one of its subsections.
   - `"{section}.{subsection-key}"` (e.g. `"methodology.data-collection"`) — sub-title granularity: placed right after that one subsection's text, not the whole section. Only valid when that section is given as an object and the key names one of its subsections.
   - Omit, or name a section/subsection that doesn't exist, to have it placed in an appendix at the end of the paper instead.
 
@@ -53,6 +56,6 @@ Two kinds, chosen by an optional `type` field:
 
 ## Numbering
 
-Sections are fixed by order, not stored in the manifest — `build_paper.py` derives it: Introduction = 1, Background = 2, Methodology = 3, Results = 4, Conclusion = 5. A section given as an object gets its subsections numbered `N-1`, `N-2`... in the object's key order. Title and Abstract are never numbered.
+Sections are fixed by order, not stored in the manifest — `build_paper.py` derives it: Introduction = 1, Background = 2, Methodology = 3, Results = 4, Discussion = 5, Conclusion = 6. A section given as an object gets its subsections numbered `N-1`, `N-2`... in the object's key order. Title and Abstract are never numbered.
 
 **Figures are numbered too** — Fig 1, Fig 2..., in the order they're placed in the built paper (reading order, not the `diagrams` array's order), never written by hand. To cite one from prose, write `{{fig:some-id}}` anywhere in a section/subsection/abstract's text (e.g. `"...as shown in {{fig:fig1}}, throughput..."`) — `build_paper.py` replaces it with a link reading "Fig N" to that exact figure. `some-id` must be a real `diagrams[].id`; `lint_paper.py` checks this.

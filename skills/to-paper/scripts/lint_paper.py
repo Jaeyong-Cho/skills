@@ -9,7 +9,13 @@ same array, constrained to exactly one element. See ../MANIFEST-FORMAT.md.
 Checks:
 - title: fewer than 15 words.
 - abstract: exactly one paragraph (array of length 1).
-- every other section/subsection: 3-8 paragraphs (array length).
+- every other section/subsection: a paragraph-count range that varies by
+  section (a subsection inherits its parent section's range) — see
+  SECTION_PARAGRAPH_RANGES below: introduction 3-5, background 4-8,
+  methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3.
+- each non-table diagram's file also gets diagram-design's own
+  self_check.py verifier run against it (single-file safety rules, motion
+  contract) — not just the accessible-SVG subset re-checked below.
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
 - diagrams: at least 5 entries (a floor, not a target — more is fine),
@@ -46,7 +52,10 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from self_check import verify as diagram_self_check  # noqa: E402 (vendored copy, see self_check.py's docstring)
+
+SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
 SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
 SVG_BLOCK_RE = re.compile(r"<svg\b.*?</svg>", re.DOTALL)
@@ -54,8 +63,16 @@ MAX_TITLE_WORDS = 15
 MAX_SENTENCE_WORDS = 20
 MIN_PARAGRAPH_SENTENCES = 3
 MAX_PARAGRAPH_SENTENCES = 8
-MIN_SECTION_PARAGRAPHS = 3
-MAX_SECTION_PARAGRAPHS = 8
+# Paragraph-count range per top-level section, standard academic-writing
+# guidance (a subsection inherits its parent section's range).
+SECTION_PARAGRAPH_RANGES = {
+    "introduction": (3, 5),
+    "background": (4, 8),
+    "methodology": (2, 4),
+    "results": (2, 4),
+    "discussion": (3, 6),
+    "conclusion": (1, 3),
+}
 MIN_DIAGRAMS = 5
 MIN_DIAGRAM_TYPES = 3
 MAX_CAPTION_CHARS = 140
@@ -73,17 +90,20 @@ def paragraphs(text):
     return [p.strip() for p in text.split("\n\n") if p.strip()]
 
 
-def check_prose_block(label, paras, errors, *, one_paragraph=False, check_paragraph_count=True):
+def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_range=None):
     """paras is a list of paragraph strings — a manifest section/subsection's
-    text field, or paragraphs(some_markdown_text) for a plain-string caller."""
+    text field, or paragraphs(some_markdown_text) for a plain-string caller.
+
+    paragraph_range is a (min, max) tuple, typically SECTION_PARAGRAPH_RANGES
+    looked up by the section's key; pass None to skip the paragraph-count
+    check entirely (only sentence/word checks run)."""
     if one_paragraph:
         if len(paras) != 1:
             errors.append(f"{label}: must be exactly one paragraph, found {len(paras)}")
-    elif check_paragraph_count:
-        if not (MIN_SECTION_PARAGRAPHS <= len(paras) <= MAX_SECTION_PARAGRAPHS):
-            errors.append(
-                f"{label}: expected {MIN_SECTION_PARAGRAPHS}-{MAX_SECTION_PARAGRAPHS} paragraphs, found {len(paras)}"
-            )
+    elif paragraph_range is not None:
+        lo, hi = paragraph_range
+        if not (lo <= len(paras) <= hi):
+            errors.append(f"{label}: expected {lo}-{hi} paragraphs, found {len(paras)}")
     for p_index, para in enumerate(paras, start=1):
         sents = sentences(para)
         if not (MIN_PARAGRAPH_SENTENCES <= len(sents) <= MAX_PARAGRAPH_SENTENCES):
@@ -106,14 +126,15 @@ def check_fig_refs(label, text, valid_ids, errors):
 
 
 def check_section(key, value, valid_ids, errors):
+    paragraph_range = SECTION_PARAGRAPH_RANGES.get(key)
     if isinstance(value, list):
-        check_prose_block(key, value, errors)
+        check_prose_block(key, value, errors, paragraph_range=paragraph_range)
         check_fig_refs(key, "\n\n".join(value), valid_ids, errors)
     elif isinstance(value, dict):
         for sub_key, sub_value in value.items():
             label = f"{key}.{sub_key}"
             paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
-            check_prose_block(label, paras, errors)
+            check_prose_block(label, paras, errors, paragraph_range=paragraph_range)
             check_fig_refs(label, "\n\n".join(paras), valid_ids, errors)
     else:
         errors.append(f"{key}: must be a list of paragraphs or an object of subsections, got {type(value).__name__}")
@@ -171,6 +192,14 @@ def check_svg_accessibility(svg_path, label, errors):
     labelled = (root.get("aria-labelledby", "") or "").split()
     if labelled != [title_id, desc_id]:
         errors.append(f"{label}: svg aria-labelledby must name the title id then the desc id")
+
+    # Beyond this file's own viewBox/width/height/accessible-SVG checks
+    # above (specific to embedding into the paper), run diagram-design's
+    # own self_check.py against the whole file — single-file safety rules
+    # (no remote assets, no executable attributes) and, if present, the
+    # structural motion contract.
+    for e in diagram_self_check(svg_path):
+        errors.append(f"{label}: [self_check.py] {e}")
 
 
 def check_table_rows(rows, label, errors):
@@ -277,10 +306,11 @@ def self_test():
             "title": "A Short Study Title",
             "abstract": [three_sentences],
             "introduction": block(3),
-            "background": {"bg1": block(3), "bg2": {"title": "Prior Work", "text": block(3)}},
+            "background": {"bg1": block(4), "bg2": {"title": "Prior Work", "text": block(4)}},
             "methodology": block(3),
             "results": block(3),
-            "conclusion": block(3),
+            "discussion": block(3),
+            "conclusion": block(2),
             "diagrams": [
                 {"id": "fig1", "file": "assets/fig1.svg", "caption": "c1", "section": "methodology", "diagram_type": "Flowchart"},
                 {"id": "fig2", "file": "assets/fig2.svg", "caption": "c2", "section": "results", "diagram_type": "Bar chart"},
@@ -394,7 +424,7 @@ def self_test():
         assert any("caption is" in e and "max" in e for e in errors), "\n".join(errors)
 
         bad_fig_ref_manifest = dict(good_manifest)
-        # Add a 4th paragraph (keeps the 3-8 paragraph rule satisfied) whose
+        # Add a 4th paragraph (still within introduction's 3-5 range) whose
         # extra sentence references a diagram id that doesn't exist.
         bad_fig_ref_manifest["introduction"] = block(3) + [three_sentences + " See {{fig:no-such-id}}."]
         errors = lint(bad_fig_ref_manifest, tmp)

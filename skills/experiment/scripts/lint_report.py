@@ -2,8 +2,11 @@
 """
 Lint an experiment write-up markdown report for writing-quality rules.
 
-Same prose rules as to-paper's lint_paper.py (title word count, paragraph
-count per section, sentences per paragraph, words per sentence) — reused
+Same prose rules as to-paper's lint_paper.py (title word count, a
+paragraph-count range that varies by section — see SECTION_PARAGRAPH_RANGES
+there, e.g. introduction 3-5, background 4-8, methodology 2-4, results 2-4,
+discussion 3-6, conclusion 1-3 — sentences per paragraph, words per
+sentence) — reused
 from that script rather than duplicated — applied to a plain markdown
 report instead of a manifest.json. No diagram requirement: an experiment
 report doesn't need a figure to be complete.
@@ -27,11 +30,14 @@ Expected shape:
     ## Results
     {paragraphs}
 
+    ## Discussion
+    {paragraphs}
+
     ## Conclusion
     {paragraphs}
 
 `##` headings may optionally carry a leading number ("## 1. Introduction"),
-matched case-insensitively; each of the six sections is required exactly
+matched case-insensitively; each of the seven sections is required exactly
 once and flat (no subsections).
 
 Usage:
@@ -46,12 +52,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "to-paper" / "scripts"))
 from lint_paper import (  # noqa: E402
     MAX_TITLE_WORDS,
+    SECTION_PARAGRAPH_RANGES,
     check_prose_block,
     paragraphs,
     words,
 )
 
-SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
+SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
 HEADING_RE = re.compile(r"^##\s+(?:\d+\.\s+)?(.+?)\s*$")
 
 
@@ -100,7 +107,7 @@ def lint(text):
 
     check_prose_block("abstract", paragraphs(sections["abstract"]), errors, one_paragraph=True)
     for key in SECTION_ORDER:
-        check_prose_block(key, paragraphs(sections[key]), errors)
+        check_prose_block(key, paragraphs(sections[key]), errors, paragraph_range=SECTION_PARAGRAPH_RANGES[key])
     return errors
 
 
@@ -128,24 +135,27 @@ def self_test():
         "# A Short Report Title\n\n"
         f"## Abstract\n{three_sentences}\n\n"
         f"## 1. Introduction\n{block(3)}\n\n"
-        f"## 2. Background\n{block(3)}\n\n"
+        f"## 2. Background\n{block(4)}\n\n"
         f"## 3. Methodology\n{block(3)}\n\n"
         f"## 4. Results\n{block(3)}\n\n"
-        f"## 5. Conclusion\n{block(3)}\n"
+        f"## 5. Discussion\n{block(3)}\n\n"
+        f"## 6. Conclusion\n{block(2)}\n"
     )
     errors = lint(good_report)
     assert not errors, f"good report should lint clean, got: {errors}"
 
     title, sections = parse_report(good_report)
     assert title == "A Short Report Title"
-    assert set(sections) == {"abstract", "introduction", "background", "methodology", "results", "conclusion"}
+    assert set(sections) == {
+        "abstract", "introduction", "background", "methodology", "results", "discussion", "conclusion",
+    }
     assert sections["introduction"] == block(3)
 
     no_title = good_report.split("\n\n", 1)[1]
     errors = lint(no_title)
     assert any("missing '# Title'" in e for e in errors), "\n".join(errors)
 
-    missing_section = good_report.replace(f"## 5. Conclusion\n{block(3)}\n", "")
+    missing_section = good_report.replace(f"## 6. Conclusion\n{block(2)}\n", "")
     errors = lint(missing_section)
     assert any("conclusion" in e.lower() and "missing" in e.lower() for e in errors), "\n".join(errors)
 

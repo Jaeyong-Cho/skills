@@ -3,8 +3,9 @@
 Build index.html from a to-paper manifest.json.
 
 Numbering is derived, never read from the manifest: Introduction=1,
-Background=2, Methodology=3, Results=4, Conclusion=5; a section given as an
-object of subsections gets them numbered N-1, N-2... in key order. Every
+Background=2, Methodology=3, Results=4, Discussion=5, Conclusion=6; a
+section given as an object of subsections gets them numbered N-1, N-2... in
+key order. Every
 section/subsection's prose is a JSON array of paragraph strings, one <p>
 per element. See ../MANIFEST-FORMAT.md for the manifest schema.
 
@@ -26,7 +27,7 @@ SKILL_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE = SKILL_DIR / "assets" / "template.html"
 SERVE_SCRIPT = SKILL_DIR / "scripts" / "serve.sh"
 
-SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
+SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
 REQUIRED_KEYS = ["title", "abstract", *SECTION_ORDER, "diagrams"]
 FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
 SVG_BLOCK_RE = re.compile(r"<svg\b.*?</svg>", re.DOTALL)
@@ -248,6 +249,7 @@ def self_test():
             },
             "methodology": ["One methodology paragraph."],
             "results": ["Some results."],
+            "discussion": ["One discussion paragraph."],
             "conclusion": ["We conclude."],
             "diagrams": [
                 {"id": "fig1", "file": "assets/fig1.svg", "caption": "Cap 1", "section": "methodology"},
