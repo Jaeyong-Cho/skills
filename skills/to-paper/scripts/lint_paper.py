@@ -34,7 +34,14 @@ Checks:
     naming title then desc — plus a viewBox (so scaling to the page's
     max-width never crops it) and explicit width/height attributes (an
     <img src> pointing at an SVG with only a viewBox renders at a
-    300x150px default, ignoring max-width).
+    300x150px default, ignoring max-width). Also flags any rect/circle/
+    ellipse/line whose own coordinates place it outside the declared
+    viewBox — the outermost <svg> clips to its viewBox by default (unlike
+    the page-level max-width/height:auto scaling, which only shrinks
+    content that already fits inside it), so a box added without widening
+    the viewBox to match is silently cut off, not shrunk into view. A
+    heuristic, not a real renderer: <path>/<text>/<polygon> bounding boxes
+    aren't checked.
   - table ("type": "table") — a `rows` array: a header row plus at
     least one data row, every row the same length as the header;
     counts as its own kind ("table") toward the 3-kind minimum.
@@ -144,6 +151,74 @@ def local_tag(elem):
     return elem.tag.rsplit("}", 1)[-1]
 
 
+# ponytail: geometry check covers only rect/circle/ellipse/line — the
+# shapes with numeric coordinates cheap to read off attributes. <path>,
+# <text>, and <polygon> bounding boxes need a real renderer to compute, so
+# a stray label or curve past the edge won't be caught here; the taste-gate
+# checklist's own eyeballing is still the backstop for those.
+SVG_BOUNDS_SKIP_TAGS = {"defs", "marker", "symbol", "clipPath", "mask", "pattern"}
+SVG_BOUNDS_TOLERANCE = 1.0
+
+
+def check_svg_bounds(root, view_box, label, errors):
+    """The outermost <svg> clips to its viewBox by default (UA overflow:
+    hidden) — unlike the page-level max-width/height:auto scaling in
+    assets/template.html, content drawn past the viewBox edge doesn't
+    shrink into view, it's just gone. Flags the common, cheaply-detectable
+    case: a shape whose own coordinates place it outside the declared
+    viewBox (e.g. a legend row added without widening the viewBox to fit)."""
+    parts = re.split(r"[ ,]+", view_box.strip())
+    try:
+        min_x, min_y, vb_w, vb_h = (float(p) for p in parts if p)
+    except ValueError:
+        return
+    max_x, max_y = min_x + vb_w, min_y + vb_h
+
+    def bbox_of(tag, elem):
+        try:
+            if tag == "rect":
+                x, y = float(elem.get("x", "0")), float(elem.get("y", "0"))
+                w, h = float(elem.get("width", "0")), float(elem.get("height", "0"))
+                return (x, y, x + w, y + h)
+            if tag == "circle":
+                cx, cy, r = (float(elem.get(k, "0")) for k in ("cx", "cy", "r"))
+                return (cx - r, cy - r, cx + r, cy + r)
+            if tag == "ellipse":
+                cx, cy = float(elem.get("cx", "0")), float(elem.get("cy", "0"))
+                rx, ry = float(elem.get("rx", "0")), float(elem.get("ry", "0"))
+                return (cx - rx, cy - ry, cx + rx, cy + ry)
+            if tag == "line":
+                x1, y1, x2, y2 = (float(elem.get(k, "0")) for k in ("x1", "y1", "x2", "y2"))
+                return (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
+        except ValueError:
+            pass  # non-numeric (percentages, calc()) — outside this heuristic's reach
+        return None
+
+    def walk(elem):
+        tag = local_tag(elem)
+        if tag in SVG_BOUNDS_SKIP_TAGS:
+            return
+        bbox = bbox_of(tag, elem)
+        if bbox is not None:
+            x0, y0, x1, y1 = bbox
+            if (
+                x0 < min_x - SVG_BOUNDS_TOLERANCE
+                or y0 < min_y - SVG_BOUNDS_TOLERANCE
+                or x1 > max_x + SVG_BOUNDS_TOLERANCE
+                or y1 > max_y + SVG_BOUNDS_TOLERANCE
+            ):
+                errors.append(
+                    f"{label}: <{tag}> at ({x0:g},{y0:g})-({x1:g},{y1:g}) extends outside the "
+                    f"viewBox ({min_x:g},{min_y:g})-({max_x:g},{max_y:g}) — the outermost <svg> "
+                    "clips content past its viewBox by default (it won't scale into view), "
+                    "widen the viewBox (and matching width/height) to enclose it"
+                )
+        for child in elem:
+            walk(child)
+
+    walk(root)
+
+
 def check_svg_accessibility(svg_path, label, errors):
     """Same accessible-SVG contract as diagram-design's scripts/self_check.py
     (role=img, <title> first child, non-empty <title>/<desc>, diagram-prefixed
@@ -166,11 +241,14 @@ def check_svg_accessibility(svg_path, label, errors):
         return
     if root.get("role") != "img":
         errors.append(f'{label}: <svg> needs role="img"')
-    if not (root.get("viewBox") or "").strip():
+    view_box = (root.get("viewBox") or "").strip()
+    if not view_box:
         errors.append(
             f"{label}: <svg> needs a viewBox attribute — width/height alone won't scale "
             "cleanly to the page's max-width and can crop the figure"
         )
+    else:
+        check_svg_bounds(root, view_box, label, errors)
     if not (root.get("width") or "").strip() or not (root.get("height") or "").strip():
         errors.append(
             f"{label}: <svg> needs width and height attributes (matching viewBox), not just "
@@ -349,6 +427,13 @@ def self_test():
             '<title id="nd-t">No Dims</title><desc id="nd-d">Missing width/height.</desc>'
             "</svg>"
         )
+        (assets / "out-of-bounds.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" '
+            'width="200" height="100" aria-labelledby="oob-t oob-d">'
+            '<title id="oob-t">Out Of Bounds</title><desc id="oob-d">A box past the viewBox edge.</desc>'
+            '<rect x="150" y="80" width="100" height="60"/>'
+            "</svg>"
+        )
         (assets / "fig6.diagram.html").write_text(
             "<!DOCTYPE html><html><head><title>draft</title></head><body>"
             '<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" width="200" height="100" '
@@ -392,6 +477,13 @@ def self_test():
         ]
         errors = lint(no_dims_manifest, tmp)
         assert any("width and height attributes" in e for e in errors), "\n".join(errors)
+
+        out_of_bounds_manifest = dict(good_manifest)
+        out_of_bounds_manifest["diagrams"] = good_manifest["diagrams"][:4] + [
+            {"id": "fig9", "file": "assets/out-of-bounds.svg", "caption": "c9", "section": "results", "diagram_type": "Flowchart"}
+        ]
+        errors = lint(out_of_bounds_manifest, tmp)
+        assert any("extends outside the viewBox" in e for e in errors), "\n".join(errors)
 
         low_variety_manifest = dict(good_manifest)
         low_variety_manifest["diagrams"] = [

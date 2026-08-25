@@ -352,7 +352,7 @@ Run before producing any diagram.
 - [ ] Every arrow label has an opaque `fill="#f5f5f5"` rect behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?
-- [ ] `viewBox` expanded for the legend strip (~60px)?
+- [ ] `viewBox` (and matching `width`/`height`) widened to enclose every element actually drawn — including the legend strip (~60px) — not just the nominal canvas? The outermost `<svg>` clips to its `viewBox` by default; a box or row added late without widening it is cut off, not scaled into view. `lint_paper.py` catches this for rect/circle/ellipse/line but not path/text/polygon — eyeball those.
 - [ ] Every font size, coord, width, height, gap divisible by 4?
 - [ ] Did `python3 scripts/self_check.py <file>` (this skill's vendored copy) pass? (Accessible-SVG contract, single-file safety, motion basics.)
 - [ ] If animated, does the complete static/no-JS frame work, does reduced motion hide/disable playback, and is the controller copied verbatim from `../diagram-design/assets/template-motion.html`? From a repository checkout, also run `python3 <repo-root>/scripts/verify-motion.py path/to/generated.html` plus the skin linter; otherwise manually check print and static-query states on top of the self-check.
