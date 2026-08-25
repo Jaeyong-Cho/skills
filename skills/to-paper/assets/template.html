@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ponytail: token values are a hand-copied snapshot of this repo's
    ../diagram-design/references/style-guide.md default light skin, so a
@@ -33,10 +33,22 @@ body {
   transition: max-width 0.2s ease;
 }
 body.wide { max-width: 1400px; }
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+h1 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 2.75rem;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
 #width-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
+  flex: 0 0 auto;
   font-family: 'Geist Mono', monospace;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
@@ -50,13 +62,6 @@ body.wide { max-width: 1400px; }
 }
 #width-toggle:hover { color: var(--ink); border-color: var(--ink); }
 @media print { #width-toggle { display: none; } }
-h1 {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
-  font-size: 2.5rem;
-  line-height: 1.15;
-  margin-bottom: 0.5em;
-}
 h2 {
   font-family: 'Instrument Serif', serif;
   font-weight: 400;
@@ -67,8 +72,9 @@ h2 {
 }
 h3 {
   font-family: 'Geist', sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
   margin-top: 1.75em;
 }
 p { margin: 1em 0; }
@@ -89,26 +95,39 @@ p { margin: 1em 0; }
   display: block;
   margin-bottom: 0.5em;
 }
+/* display:table makes the <figure> box shrink-to-fit its image (never
+   wider, never narrower), so the caption below — a table-caption — is
+   forced to that same width and wraps instead of stretching past it or
+   the image shrinking to match a long caption. */
 figure {
-  margin: 2em 0;
-  text-align: center;
+  display: table;
+  margin: 2em auto;
+  max-width: 100%;
 }
 figure img, figure svg {
+  display: block;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
 }
 figcaption {
+  display: table-caption;
+  caption-side: bottom;
   font-family: 'Geist Mono', monospace;
   font-size: 0.8rem;
   color: var(--soft);
   margin-top: 10px;
+  text-align: left;
+  overflow-wrap: break-word;
 }
 a { color: var(--link); }
 </style>
 </head>
 <body>
-<button id="width-toggle" type="button" aria-pressed="false">Widen</button>
+<div class="title-row">
 <h1>{{TITLE}}</h1>
+<button id="width-toggle" type="button" aria-pressed="false">Widen</button>
+</div>
 <div class="abstract"><span class="abstract-label">Abstract</span>{{ABSTRACT}}</div>
 {{BODY}}
 <script>

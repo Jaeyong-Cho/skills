@@ -5,15 +5,20 @@ Lint a to-paper manifest.json for writing-quality and diagram rules.
 Checks:
 - title: fewer than 15 words.
 - abstract: exactly one paragraph.
-- every other section/subsection: 3-5 paragraphs.
+- every other section/subsection: 3-8 paragraphs.
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
 - diagrams: at least 5 entries (a floor, not a target — more is fine),
-  each with id/file/caption/section, each
+  each with id/file/caption/section, each caption at most 140 characters
+  (a long caption doesn't shrink the figure — see assets/template.html —
+  it wraps, but a runaway caption is still a paragraph in disguise), each
   file existing (relative to manifest.json's directory) and passing the
   same accessible-SVG contract diagram-design's scripts/self_check.py
   enforces: role="img", <title> first child, non-empty <title>/<desc>
-  with diagram-prefixed ids, aria-labelledby naming title then desc.
+  with diagram-prefixed ids, aria-labelledby naming title then desc — plus
+  a viewBox, so scaling to the page's max-width never crops it.
+- every {{fig:some-id}} reference in any prose block names a real
+  diagrams[].id (build_paper.py resolves these to "Fig N" links).
 
 Usage:
   python lint_paper.py <manifest.json>
@@ -28,13 +33,15 @@ from pathlib import Path
 
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
 SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
+FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
 MAX_TITLE_WORDS = 15
 MAX_SENTENCE_WORDS = 20
 MIN_PARAGRAPH_SENTENCES = 3
 MAX_PARAGRAPH_SENTENCES = 8
 MIN_SECTION_PARAGRAPHS = 3
-MAX_SECTION_PARAGRAPHS = 5
+MAX_SECTION_PARAGRAPHS = 8
 MIN_DIAGRAMS = 5
+MAX_CAPTION_CHARS = 140
 
 
 def words(text):
@@ -73,14 +80,23 @@ def check_prose_block(label, text, errors, *, one_paragraph=False, check_paragra
                 )
 
 
-def check_section(key, value, errors):
+def check_fig_refs(label, text, valid_ids, errors):
+    for m in FIG_REF_RE.finditer(text):
+        fig_id = m.group(1)
+        if fig_id not in valid_ids:
+            errors.append(f"{label}: {{{{fig:{fig_id}}}}} references an unknown diagram id")
+
+
+def check_section(key, value, valid_ids, errors):
     if isinstance(value, str):
         check_prose_block(key, value, errors)
+        check_fig_refs(key, value, valid_ids, errors)
     elif isinstance(value, dict):
         for sub_key, sub_value in value.items():
             label = f"{key}.{sub_key}"
             text = sub_value.get("text", "") if isinstance(sub_value, dict) else sub_value
             check_prose_block(label, text, errors)
+            check_fig_refs(label, text, valid_ids, errors)
     else:
         errors.append(f"{key}: must be a string or an object, got {type(value).__name__}")
 
@@ -104,6 +120,11 @@ def check_svg_accessibility(svg_path, label, errors):
         return
     if root.get("role") != "img":
         errors.append(f'{label}: <svg> needs role="img"')
+    if not (root.get("viewBox") or "").strip():
+        errors.append(
+            f"{label}: <svg> needs a viewBox attribute — width/height alone won't scale "
+            "cleanly to the page's max-width and can crop the figure"
+        )
     children = list(root)
     if not children or local_tag(children[0]) != "title":
         errors.append(f"{label}: <title> must be the first child of <svg>")
@@ -130,6 +151,9 @@ def check_diagrams(diagrams, manifest_dir, errors):
         for field in ("id", "file", "caption"):
             if not diagram.get(field):
                 errors.append(f"diagrams[{i}]: missing '{field}'")
+        caption = diagram.get("caption", "")
+        if len(caption) > MAX_CAPTION_CHARS:
+            errors.append(f"diagrams[{i}]: caption is {len(caption)} chars, max {MAX_CAPTION_CHARS}")
         file_field = diagram.get("file")
         if not file_field:
             continue
@@ -152,10 +176,14 @@ def lint(manifest, manifest_dir):
     if len(title_words) >= MAX_TITLE_WORDS:
         errors.append(f"title: {len(title_words)} words, must be fewer than {MAX_TITLE_WORDS}")
 
+    diagrams = manifest["diagrams"] if isinstance(manifest["diagrams"], list) else []
+    valid_ids = {d.get("id") for d in diagrams if isinstance(d, dict) and d.get("id")}
+
     check_prose_block("abstract", manifest["abstract"], errors, one_paragraph=True)
+    check_fig_refs("abstract", manifest["abstract"], valid_ids, errors)
 
     for key in SECTION_ORDER:
-        check_section(key, manifest[key], errors)
+        check_section(key, manifest[key], valid_ids, errors)
 
     check_diagrams(manifest["diagrams"], manifest_dir, errors)
     return errors
@@ -207,13 +235,19 @@ def self_test():
         assets.mkdir()
         for i, name in enumerate(("fig1.svg", "fig2.svg", "fig3.svg", "fig4.svg", "fig5.svg"), start=1):
             (assets / name).write_text(
-                f'<svg xmlns="http://www.w3.org/2000/svg" role="img" '
+                f'<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" '
                 f'aria-labelledby="fig{i}-t fig{i}-d">'
                 f'<title id="fig{i}-t">Figure {i}</title>'
                 f'<desc id="fig{i}-d">What figure {i} shows.</desc>'
                 f"</svg>"
             )
         (assets / "inaccessible.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        (assets / "no-viewbox.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" role="img" '
+            'aria-labelledby="nv-t nv-d">'
+            '<title id="nv-t">No Viewbox</title><desc id="nv-d">Missing viewBox.</desc>'
+            "</svg>"
+        )
 
         errors = lint(good_manifest, tmp)
         assert not errors, f"good manifest should lint clean, got: {errors}"
@@ -227,6 +261,28 @@ def self_test():
         assert any('role="img"' in e for e in errors), joined
         assert any("<title>" in e and "first child" in e for e in errors), joined
         assert any("aria-labelledby" in e for e in errors), joined
+
+        no_viewbox_manifest = dict(good_manifest)
+        no_viewbox_manifest["diagrams"] = good_manifest["diagrams"][:4] + [
+            {"id": "fig7", "file": "assets/no-viewbox.svg", "caption": "c7", "section": "results"}
+        ]
+        errors = lint(no_viewbox_manifest, tmp)
+        assert any("viewBox" in e for e in errors), "\n".join(errors)
+
+        long_caption_manifest = dict(good_manifest)
+        long_caption_manifest["diagrams"] = list(good_manifest["diagrams"])
+        long_caption_manifest["diagrams"][0] = dict(
+            long_caption_manifest["diagrams"][0], caption="x" * (MAX_CAPTION_CHARS + 1)
+        )
+        errors = lint(long_caption_manifest, tmp)
+        assert any("caption is" in e and "max" in e for e in errors), "\n".join(errors)
+
+        bad_fig_ref_manifest = dict(good_manifest)
+        # Add a 4th paragraph (keeps the 3-8 paragraph rule satisfied) whose
+        # extra sentence references a diagram id that doesn't exist.
+        bad_fig_ref_manifest["introduction"] = block(3) + "\n\n" + three_sentences + " See {{fig:no-such-id}}."
+        errors = lint(bad_fig_ref_manifest, tmp)
+        assert any("fig:no-such-id" in e and "unknown" in e for e in errors), "\n".join(errors)
 
         bad_manifest = dict(good_manifest)
         bad_manifest["title"] = " ".join(f"word{i}" for i in range(20))

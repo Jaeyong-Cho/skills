@@ -15,6 +15,7 @@ Writes index.html as a sibling of manifest.json. Exit code 0 on success,
 """
 import html
 import json
+import re
 import shutil
 import stat
 import sys
@@ -26,19 +27,34 @@ SERVE_SCRIPT = SKILL_DIR / "scripts" / "serve.sh"
 
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "conclusion"]
 REQUIRED_KEYS = ["title", "abstract", *SECTION_ORDER, "diagrams"]
+FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
 
 
-def paragraphs_html(text):
+def render_fig_refs(escaped_text, figure_numbers):
+    """Replace {{fig:some-id}} — already HTML-escaped, so the braces/colon
+    survive untouched — with a link to that figure's number, e.g. Fig 3."""
+    def repl(match):
+        fig_id = match.group(1)
+        number = figure_numbers.get(fig_id)
+        if number is None:
+            return f"[unknown fig: {html.escape(fig_id)}]"
+        return f'<a href="#fig-{html.escape(fig_id)}">Fig {number}</a>'
+    return FIG_REF_RE.sub(repl, escaped_text)
+
+
+def paragraphs_html(text, figure_numbers):
     parts = [p.strip() for p in text.split("\n\n") if p.strip()]
-    return "\n".join(f"<p>{html.escape(p)}</p>" for p in parts)
+    return "\n".join(f"<p>{render_fig_refs(html.escape(p), figure_numbers)}</p>" for p in parts)
 
 
-def figure_html(diagram):
+def figure_html(diagram, figure_numbers):
+    number = figure_numbers[diagram["id"]]
+    anchor = html.escape(diagram["id"])
     src = html.escape(diagram["file"])
     caption = html.escape(diagram.get("caption", ""))
     return (
-        f'<figure><img src="{src}" alt="{caption}">'
-        f"<figcaption>{caption}</figcaption></figure>"
+        f'<figure id="fig-{anchor}"><img src="{src}" alt="Fig {number}: {caption}">'
+        f"<figcaption><strong>Fig {number}.</strong> {caption}</figcaption></figure>"
     )
 
 
@@ -46,11 +62,11 @@ def title_case(slug):
     return slug.replace("-", " ").replace("_", " ").title()
 
 
-def render_section(number, key, value, diagrams_by_target):
+def render_section(number, key, value, diagrams_by_target, figure_numbers):
     heading = title_case(key)
     parts = [f"<h2>{number}. {html.escape(heading)}</h2>"]
     if isinstance(value, str):
-        parts.append(paragraphs_html(value))
+        parts.append(paragraphs_html(value, figure_numbers))
     elif isinstance(value, dict):
         for sub_index, (sub_key, sub_value) in enumerate(value.items(), start=1):
             sub_number = f"{number}-{sub_index}"
@@ -59,18 +75,33 @@ def render_section(number, key, value, diagrams_by_target):
                 sub_text = sub_value.get("text", "")
                 if sub_title:
                     parts.append(f"<h3>{sub_number}. {html.escape(sub_title)}</h3>")
-                parts.append(paragraphs_html(sub_text))
+                parts.append(paragraphs_html(sub_text, figure_numbers))
             else:
-                parts.append(paragraphs_html(sub_value))
+                parts.append(paragraphs_html(sub_value, figure_numbers))
             for diagram in diagrams_by_target.get(f"{key}.{sub_key}", []):
-                parts.append(figure_html(diagram))
+                parts.append(figure_html(diagram, figure_numbers))
     else:
         raise ValueError(f"section {key!r} must be a string or an object, got {type(value)}")
     # Figures targeting the section as a whole (no subsection named) always
     # land at the end, after every subsection's own figures.
     for diagram in diagrams_by_target.get(key, []):
-        parts.append(figure_html(diagram))
+        parts.append(figure_html(diagram, figure_numbers))
     return "\n".join(parts)
+
+
+def ordered_diagrams(manifest, diagrams_by_target, appendix):
+    """Every diagram in the exact order render_section + the appendix loop
+    will place it — figure numbers follow this reading order, not the
+    diagrams array's order."""
+    ordered = []
+    for key in SECTION_ORDER:
+        value = manifest[key]
+        if isinstance(value, dict):
+            for sub_key in value:
+                ordered.extend(diagrams_by_target.get(f"{key}.{sub_key}", []))
+        ordered.extend(diagrams_by_target.get(key, []))
+    ordered.extend(appendix)
+    return ordered
 
 
 def valid_diagram_targets(manifest):
@@ -100,20 +131,25 @@ def build(manifest):
         else:
             appendix.append(diagram)
 
+    figure_numbers = {
+        d["id"]: i + 1
+        for i, d in enumerate(ordered_diagrams(manifest, diagrams_by_target, appendix))
+    }
+
     body_parts = []
     for number, key in enumerate(SECTION_ORDER, start=1):
-        body_parts.append(render_section(number, key, manifest[key], diagrams_by_target))
+        body_parts.append(render_section(number, key, manifest[key], diagrams_by_target, figure_numbers))
 
     if appendix:
         body_parts.append("<h2>Appendix: Figures</h2>")
         for diagram in appendix:
-            body_parts.append(figure_html(diagram))
+            body_parts.append(figure_html(diagram, figure_numbers))
 
     template = TEMPLATE.read_text(encoding="utf-8")
     return (
         template
         .replace("{{TITLE}}", html.escape(manifest["title"]))
-        .replace("{{ABSTRACT}}", html.escape(manifest["abstract"]))
+        .replace("{{ABSTRACT}}", render_fig_refs(html.escape(manifest["abstract"]), figure_numbers))
         .replace("{{BODY}}", "\n".join(body_parts))
     )
 
@@ -153,7 +189,7 @@ def self_test():
         manifest = {
             "title": "A Small Study",
             "abstract": "This is the abstract paragraph.",
-            "introduction": "First para.\n\nSecond para.",
+            "introduction": "First para, see {{fig:fig1}} and {{fig:nope}}.\n\nSecond para.",
             "background": {
                 "bg1": "Plain subsection text.",
                 "bg2": {"title": "Prior Work", "text": "Some prior work text."},
@@ -184,6 +220,18 @@ def self_test():
         assert bg1_pos < prior_work_pos < fig3_pos, "fig3 should land after bg2's own content, not before it"
         methodology_pos = html_out.index("<h2>3. Methodology</h2>")
         assert fig3_pos < methodology_pos, "fig3 should still be inside Background, before Methodology starts"
+
+        # Figure numbers follow reading order (fig3 appears first in the
+        # document, inside Background), not the diagrams array's order.
+        assert "<figure id=\"fig-fig3\">" in html_out
+        assert "<strong>Fig 1.</strong> Cap 3" in html_out
+        assert "<figure id=\"fig-fig1\">" in html_out
+        assert "<strong>Fig 2.</strong> Cap 1" in html_out
+        assert "<strong>Fig 3.</strong> Cap 2" in html_out  # fig2, appendix, is last
+        # {{fig:fig1}} in the introduction resolves to a link with fig1's
+        # actual number (2); an unknown id degrades visibly, doesn't crash.
+        assert '<a href="#fig-fig1">Fig 2</a>' in html_out
+        assert "[unknown fig: nope]" in html_out
 
         bad_manifest = dict(manifest)
         del bad_manifest["conclusion"]
