@@ -217,6 +217,16 @@ setup_pi() {
     fi
   done
 
+  # https://github.com/agegr/pi-web — web UI for the pi coding agent, a
+  # standalone global npm package (`pi-web` CLI), not a `pi install` plugin.
+  if command -v npm &>/dev/null; then
+    npm install -g @agegr/pi-web@latest &>/dev/null \
+      && echo "  ✓ pi-web (npm)" \
+      || echo "  pi-web install failed, run manually: npm install -g @agegr/pi-web@latest"
+  else
+    echo "  npm not found, skipping pi-web"
+  fi
+
   setup_boy_scout pi
 }
 
