@@ -39,6 +39,12 @@ Turn a question into a minimal scientific-method run instead of guessing at an a
    ```
    **MUST KEEP** any script/query/asset used in step 2 as a real file under `experiments/{nn}-{slug}.raw/`, sibling to this report — copy it there if it started elsewhere (e.g. a scratch dir) — plus one `regenerate.sh` (or equivalent) in that same folder that reproduces the whole Act step end-to-end with a single command, so a human re-runs the experiment themselves instead of reading the script.
 5. **Write it.** If this session already wrote an `experiments/{nn}-{slug}.md` file for the same question, update that file (and its `.raw/` dir) in place with the new run instead of creating another one. Otherwise, read `../references/research-topic-directory.md` first — confirm `{NN}-{slug}` with the user (new directory vs. an existing one from today) before writing, skipping re-asking if already confirmed earlier this session — then write to `{NN}-{slug}/experiments/{nn}-{slug}.md` under `~/wiki/today/research/`, `{nn}` the next zero-padded sequence number inside `experiments/` (count existing files there; starts at `01`).
+Use bellow question format
+```
+❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+
+➡️ <your recommended answer>
+```
 6. **Lint the report.** Run `python3 scripts/lint_report.py {NN}-{slug}/experiments/{nn}-{slug}.md` (relative to this skill's directory) — same title-length/paragraph-count/sentence-count/word-count rules as `to-paper`, reused from its `lint_paper.py` (per-section paragraph-count range: introduction 3-5, background 4-8, methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3), minus any diagram requirement. Fix every reported violation in the file and re-run until clean.
 
 Completion criterion: the question has a stated verdict backed by real, recorded output, and step 6's lint is clean.
