@@ -22,7 +22,7 @@ Completion criterion: `manifest.json`, `index.html`, `serve.sh`, and at least 5 
 
 Tell the user the output directory path, that it's clean of lint errors, and the `cd {dir} && ./serve.sh` command to preview it, when done.
 
-Bellow question format
+Use bellow question format
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
