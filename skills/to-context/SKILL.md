@@ -17,7 +17,7 @@ Completion criterion: the file exists, and a fresh reader with zero session hist
 
 Tell the user the file path when done.
 
-Bellow question format
+Use bellow question format
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
