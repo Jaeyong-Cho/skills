@@ -208,8 +208,7 @@ setup_pi() {
     "https://github.com/nicobailon/pi-powerline-footer" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
-    "https://github.com/lajarre/pi-vim" \
-    "https://github.com/nicobailon/pi-subagents"
+    "https://github.com/lajarre/pi-vim"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"

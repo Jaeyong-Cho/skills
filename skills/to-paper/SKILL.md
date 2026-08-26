@@ -21,3 +21,10 @@ A research paper as one manifest.json plus a build script, the same split `@skil
 Completion criterion: `manifest.json`, `index.html`, `serve.sh`, and at least 5 figures (`assets/*.diagram.html`/`*.svg`; table entries are separate and don't count toward this floor) exist; step 7's lint is clean; `index.html`'s headings show the numbering step 8 derived.
 
 Tell the user the output directory path, that it's clean of lint errors, and the `cd {dir} && ./serve.sh` command to preview it, when done.
+
+Use bellow question format
+```
+❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+
+➡️ <your recommended answer>
+```
