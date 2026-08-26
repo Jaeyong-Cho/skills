@@ -16,3 +16,10 @@ Capture this session as reusable context instead of leaving it locked in chat hi
 Completion criterion: the file exists, and a fresh reader with zero session history could resume the work from it alone.
 
 Tell the user the file path when done.
+
+Bellow question format
+```
+❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+
+➡️ <your recommended answer>
+```
