@@ -29,13 +29,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
    - Build — the target project's build command (e.g. `npm run build`, `make`), and confirmation it currently passes; also name the unit and integration test commands so `@skills/do-plan` can run both before committing
    - Action items, each as `- [ ] {item}` — the first item **MUST** be creating/checking out the git branch named in the grill-me session (`git checkout -b {branch}`), before any other action item runs. `@skills/do-plan` executes and checks these off in place.
    - Dogfood test
-9. **Confirm the topic directory.** Read `../references/research-topic-directory.md` first — confirm `{NN}-{slug}` with the user (new directory vs. an existing one from today) before writing; skip re-asking if already confirmed earlier this session.
-Use bellow question format
-```
-❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
-
-➡️ <your recommended answer>
-```
+9. **Confirm the topic directory.** Read `../references/research-topic-directory.md` first — confirm `{NN}-{slug}` with the user (new directory vs. an existing one from today) before writing, per `../references/question-format.md`'s ❓/➡️ format; skip re-asking if already confirmed earlier this session.
 10. **Write it** to `{NN}-{slug}/plans/{nn}-{slug}.md` under `~/wiki/today/research/`, creating the directory if needed — `{nn}` the next zero-padded sequence number inside `plans/` (count existing files there; starts at `01`).
 11. **Split if too large.** If the file is large and many topics split it into `{nn}-{slug}-{part-slug}.md` files in the same `plans/` directory, one file per vertical slice — each file a complete, independently executable unit with its own acceptance criteria and action items, not a horizontal layer (e.g. not "backend" + "frontend" for one feature).
 
