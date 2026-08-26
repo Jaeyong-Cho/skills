@@ -11,7 +11,6 @@ disable-model-invocation: true
 - Human Acceptance Criteria (HAC) - (**MUST CHECK** which result make human agree and satisfy when this topic is done: detailed step-by-step e.g. run test script, see the db result, found the expected column...)
 - Intent and purpose
 - Scope-in / scope-out
-- Deferred work (scoped out now but shouldn't be forgotten) — tag each with `TODO:` so `@skills/to-plan` records it in the plan's Deferred items list
 - Root cause (for fix)
 - Fundamental Solution (**MUST NOT** Ad-Hoc or Workaround)
 - Architecture — components and interfaces
