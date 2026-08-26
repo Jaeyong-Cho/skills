@@ -159,6 +159,15 @@ def self_test():
     errors = lint(missing_section)
     assert any("conclusion" in e.lower() and "missing" in e.lower() for e in errors), "\n".join(errors)
 
+    # An extra "## Appendix" heading isn't one of the 7 required sections,
+    # so it's parsed but never linted — the documented escape hatch for raw
+    # experiment output/stats too detailed for the prose-quality rules.
+    with_appendix = good_report + "\n## Appendix: Raw Data\nrun_id,latency_ms\n1,85\n2,20\n" + "x " * 500 + "\n"
+    errors = lint(with_appendix)
+    assert not errors, f"an unlisted Appendix section should never be linted, got: {errors}"
+    _, sections = parse_report(with_appendix)
+    assert "run_id,latency_ms" in sections["appendix: raw data"]
+
     bad_report = good_report.replace(
         f"## Abstract\n{three_sentences}", f"## Abstract\n{block(2)}"
     ).replace(

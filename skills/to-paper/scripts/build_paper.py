@@ -10,7 +10,13 @@ strings, one <p> per element (or one <ul> if an element is itself a list of
 item strings — a bullet list). A diagram's "section" field can target a
 whole section/subsection, or "{target}@{N}" for that target's Nth paragraph
 specifically, placing the figure right after just that one paragraph
-instead of at the end of the whole section/subsection. See
+instead of at the end of the whole section/subsection. A table ("type":
+"table") is not a figure: it's numbered as its own "Table N" sequence,
+separate from "Fig N", cited with {{tbl:some-id}} instead of {{fig:...}}.
+An optional trailing "appendix" key, same shape as any section, renders
+as an unnumbered "Appendix" heading after Conclusion — for raw
+output/stats too detailed for the word/sentence-limited prose sections;
+lint_paper.py skips its prose-quality checks entirely. See
 ../MANIFEST-FORMAT.md for the manifest schema.
 
 Usage:
@@ -33,7 +39,7 @@ SERVE_SCRIPT = SKILL_DIR / "scripts" / "serve.sh"
 
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
 REQUIRED_KEYS = ["title", "abstract", *SECTION_ORDER, "diagrams"]
-FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
+FIG_REF_RE = re.compile(r"\{\{(fig|tbl):([\w-]+)\}\}")
 SVG_BLOCK_RE = re.compile(r"<svg\b.*?</svg>", re.DOTALL)
 
 
@@ -53,28 +59,35 @@ def extract_svg_markup(path):
     return match.group(0)
 
 
-def render_fig_refs(escaped_text, figure_numbers):
-    """Replace {{fig:some-id}} — already HTML-escaped, so the braces/colon
-    survive untouched — with a link to that figure's number, e.g. Fig 3."""
+def render_fig_refs(escaped_text, figure_numbers, table_numbers):
+    """Replace {{fig:some-id}} / {{tbl:some-id}} — already HTML-escaped, so
+    the braces/colon survive untouched — with a link to that figure's or
+    table's number, e.g. Fig 3 / Table 2. Tables get their own numbering
+    sequence and prefix, separate from figures — a table is not a figure."""
     def repl(match):
-        fig_id = match.group(1)
-        number = figure_numbers.get(fig_id)
+        kind, ref_id = match.group(1), match.group(2)
+        numbers, label, prefix = (
+            (figure_numbers, "Fig", "fig") if kind == "fig" else (table_numbers, "Table", "tbl")
+        )
+        number = numbers.get(ref_id)
         if number is None:
-            return f"[unknown fig: {html.escape(fig_id)}]"
-        return f'<a href="#fig-{html.escape(fig_id)}">Fig {number}</a>'
+            return f"[unknown {kind}: {html.escape(ref_id)}]"
+        return f'<a href="#{prefix}-{html.escape(ref_id)}">{label} {number}</a>'
     return FIG_REF_RE.sub(repl, escaped_text)
 
 
-def paragraph_html(p, figure_numbers):
+def paragraph_html(p, figure_numbers, table_numbers):
     """One paragraph-array element -> one <p>, or one <ul> if the element
     is itself a list of item strings (a bullet list)."""
     if isinstance(p, list):
-        items = "".join(f"<li>{render_fig_refs(html.escape(item), figure_numbers)}</li>" for item in p)
+        items = "".join(
+            f"<li>{render_fig_refs(html.escape(item), figure_numbers, table_numbers)}</li>" for item in p
+        )
         return f"<ul>{items}</ul>"
-    return f"<p>{render_fig_refs(html.escape(p), figure_numbers)}</p>"
+    return f"<p>{render_fig_refs(html.escape(p), figure_numbers, table_numbers)}</p>"
 
 
-def render_paragraphs_with_diagrams(paragraphs, target, diagrams_by_target, figure_numbers, manifest_dir):
+def render_paragraphs_with_diagrams(paragraphs, target, diagrams_by_target, figure_numbers, table_numbers, manifest_dir):
     """paragraphs is a list of paragraph strings/bullet-list arrays — a
     manifest section or subsection's text field. One <p>/<ul> per element,
     in order, with any diagram targeting "{target}@{N}" (1-based) inlined
@@ -82,9 +95,9 @@ def render_paragraphs_with_diagrams(paragraphs, target, diagrams_by_target, figu
     placement the caller still handles separately for plain "{target}"."""
     parts = []
     for idx, p in enumerate(paragraphs, start=1):
-        parts.append(paragraph_html(p, figure_numbers))
+        parts.append(paragraph_html(p, figure_numbers, table_numbers))
         for diagram in diagrams_by_target.get(f"{target}@{idx}", []):
-            parts.append(figure_html(diagram, figure_numbers, manifest_dir))
+            parts.append(figure_html(diagram, figure_numbers, table_numbers, manifest_dir))
     return "\n".join(parts)
 
 
@@ -97,13 +110,17 @@ def table_html(rows):
     return f"<table><thead>{thead}</thead><tbody>{tbody}</tbody></table>"
 
 
-def figure_html(diagram, figure_numbers, manifest_dir):
-    number = figure_numbers[diagram["id"]]
+def figure_html(diagram, figure_numbers, table_numbers, manifest_dir):
     anchor = html.escape(diagram["id"])
     caption = html.escape(diagram.get("caption", ""))
-    figcaption = f"<figcaption><strong>Fig {number}.</strong> {caption}</figcaption>"
     if diagram.get("type") == "table":
-        return f'<figure class="table-figure" id="fig-{anchor}">{table_html(diagram["rows"])}{figcaption}</figure>'
+        # A table is not a figure — its own "Table N" sequence/anchor
+        # prefix, never folded into the Fig N count.
+        number = table_numbers[diagram["id"]]
+        figcaption = f"<figcaption><strong>Table {number}.</strong> {caption}</figcaption>"
+        return f'<figure class="table-figure" id="tbl-{anchor}">{table_html(diagram["rows"])}{figcaption}</figure>'
+    number = figure_numbers[diagram["id"]]
+    figcaption = f"<figcaption><strong>Fig {number}.</strong> {caption}</figcaption>"
     svg_markup = extract_svg_markup(manifest_dir / diagram["file"])
     return f'<figure id="fig-{anchor}">{svg_markup}{figcaption}</figure>'
 
@@ -112,42 +129,63 @@ def title_case(slug):
     return slug.replace("-", " ").replace("_", " ").title()
 
 
-def render_section(number, key, value, diagrams_by_target, figure_numbers, manifest_dir):
+def render_section(number, key, value, diagrams_by_target, figure_numbers, table_numbers, manifest_dir):
+    """number is None for the optional trailing "appendix" section — it
+    renders an unnumbered "<h2>Appendix</h2>" (and unnumbered "<h3>"
+    subsection titles) instead of the "N. "/"N-M. " prefixes every fixed
+    section gets."""
     heading = title_case(key)
-    parts = [f"<h2>{number}. {html.escape(heading)}</h2>"]
+    heading_prefix = f"{number}. " if number is not None else ""
+    parts = [f"<h2>{heading_prefix}{html.escape(heading)}</h2>"]
     if isinstance(value, list):
-        parts.append(render_paragraphs_with_diagrams(value, key, diagrams_by_target, figure_numbers, manifest_dir))
+        parts.append(render_paragraphs_with_diagrams(value, key, diagrams_by_target, figure_numbers, table_numbers, manifest_dir))
     elif isinstance(value, dict):
         for sub_index, (sub_key, sub_value) in enumerate(value.items(), start=1):
-            sub_number = f"{number}-{sub_index}"
+            sub_number = f"{number}-{sub_index}" if number is not None else None
             sub_target = f"{key}.{sub_key}"
             if isinstance(sub_value, dict):
                 sub_title = sub_value.get("title", "")
                 sub_text = sub_value.get("text", [])
                 if sub_title:
-                    parts.append(f"<h3>{sub_number}. {html.escape(sub_title)}</h3>")
-                parts.append(render_paragraphs_with_diagrams(sub_text, sub_target, diagrams_by_target, figure_numbers, manifest_dir))
+                    sub_prefix = f"{sub_number}. " if sub_number is not None else ""
+                    parts.append(f"<h3>{sub_prefix}{html.escape(sub_title)}</h3>")
+                parts.append(render_paragraphs_with_diagrams(sub_text, sub_target, diagrams_by_target, figure_numbers, table_numbers, manifest_dir))
             else:
-                parts.append(render_paragraphs_with_diagrams(sub_value, sub_target, diagrams_by_target, figure_numbers, manifest_dir))
+                parts.append(render_paragraphs_with_diagrams(sub_value, sub_target, diagrams_by_target, figure_numbers, table_numbers, manifest_dir))
             # Figures targeting the subsection as a whole (no @N paragraph
             # anchor) land at the end of that subsection, after its own
             # paragraph-anchored figures.
             for diagram in diagrams_by_target.get(sub_target, []):
-                parts.append(figure_html(diagram, figure_numbers, manifest_dir))
+                parts.append(figure_html(diagram, figure_numbers, table_numbers, manifest_dir))
     else:
         raise ValueError(f"section {key!r} must be a list of paragraphs or an object, got {type(value)}")
     # Figures targeting the section as a whole (no subsection or @N
     # paragraph anchor named) always land at the very end, after every
     # subsection's own figures.
     for diagram in diagrams_by_target.get(key, []):
-        parts.append(figure_html(diagram, figure_numbers, manifest_dir))
+        parts.append(figure_html(diagram, figure_numbers, table_numbers, manifest_dir))
     return "\n".join(parts)
 
 
-def ordered_diagrams(manifest, diagrams_by_target, appendix):
-    """Every diagram in the exact order render_section + the appendix loop
-    will place it — figure numbers follow this reading order, not the
-    diagrams array's order."""
+def section_keys(manifest):
+    """SECTION_ORDER plus the optional trailing "appendix" key if present —
+    a diagram can target it too, and it's placed/numbered exactly like any
+    other section (render_section just gets number=None for it, see
+    build())."""
+    keys = list(SECTION_ORDER)
+    if "appendix" in manifest:
+        keys.append("appendix")
+    return keys
+
+
+def ordered_diagrams(manifest, diagrams_by_target, orphan_diagrams):
+    """Every diagram in the exact order render_section + the orphan-diagram
+    appendix loop will place it — figure numbers follow this reading
+    order, not the diagrams array's order. orphan_diagrams are diagrams
+    whose "section" named nothing real, placed in a final "Appendix:
+    Figures" block — distinct from the manifest's own optional "appendix"
+    section (a diagrams[]-targetable section like any other, included via
+    section_keys() below)."""
     def paragraph_anchored(target, paragraphs):
         ordered = []
         for idx in range(1, len(paragraphs) + 1):
@@ -155,7 +193,7 @@ def ordered_diagrams(manifest, diagrams_by_target, appendix):
         return ordered
 
     ordered = []
-    for key in SECTION_ORDER:
+    for key in section_keys(manifest):
         value = manifest[key]
         if isinstance(value, dict):
             for sub_key, sub_value in value.items():
@@ -166,19 +204,20 @@ def ordered_diagrams(manifest, diagrams_by_target, appendix):
         else:
             ordered.extend(paragraph_anchored(key, value))
         ordered.extend(diagrams_by_target.get(key, []))
-    ordered.extend(appendix)
+    ordered.extend(orphan_diagrams)
     return ordered
 
 
 def valid_diagram_targets(manifest):
     """Every string a diagram's "section" field can name: each top-level
-    section key, "{key}.{sub_key}" for each subsection of a section given
-    as an object (sub-title granularity), and "{target}@{N}" (1-based) for
-    any of those targets' Nth paragraph specifically — paragraph-level
-    granularity, placing the figure right after that one paragraph instead
-    of at the end of the whole section/subsection. Per MANIFEST-FORMAT.md."""
-    targets = set(SECTION_ORDER)
-    for key in SECTION_ORDER:
+    section key (including the optional "appendix"), "{key}.{sub_key}" for
+    each subsection of a section given as an object (sub-title
+    granularity), and "{target}@{N}" (1-based) for any of those targets'
+    Nth paragraph specifically — paragraph-level granularity, placing the
+    figure right after that one paragraph instead of at the end of the
+    whole section/subsection. Per MANIFEST-FORMAT.md."""
+    targets = set(section_keys(manifest))
+    for key in section_keys(manifest):
         value = manifest.get(key)
         if isinstance(value, dict):
             for sub_key, sub_value in value.items():
@@ -199,33 +238,46 @@ def build(manifest, manifest_dir):
 
     targets = valid_diagram_targets(manifest)
     diagrams_by_target = {}
-    appendix = []
+    orphan_diagrams = []
     for diagram in manifest["diagrams"]:
         section = diagram.get("section")
         if section in targets:
             diagrams_by_target.setdefault(section, []).append(diagram)
         else:
-            appendix.append(diagram)
+            orphan_diagrams.append(diagram)
 
-    figure_numbers = {
-        d["id"]: i + 1
-        for i, d in enumerate(ordered_diagrams(manifest, diagrams_by_target, appendix))
-    }
+    # A table is not a figure: it gets its own "Table N" sequence, counted
+    # separately from "Fig N" — both still follow overall reading order.
+    figure_numbers, table_numbers = {}, {}
+    fig_i = tbl_i = 0
+    for d in ordered_diagrams(manifest, diagrams_by_target, orphan_diagrams):
+        if d.get("type") == "table":
+            tbl_i += 1
+            table_numbers[d["id"]] = tbl_i
+        else:
+            fig_i += 1
+            figure_numbers[d["id"]] = fig_i
 
     body_parts = []
     for number, key in enumerate(SECTION_ORDER, start=1):
-        body_parts.append(render_section(number, key, manifest[key], diagrams_by_target, figure_numbers, manifest_dir))
+        body_parts.append(render_section(number, key, manifest[key], diagrams_by_target, figure_numbers, table_numbers, manifest_dir))
 
-    if appendix:
+    # The optional raw-data appendix (unnumbered, exempt from lint's
+    # prose-quality checks) — distinct from the orphan-diagram appendix
+    # below.
+    if "appendix" in manifest:
+        body_parts.append(render_section(None, "appendix", manifest["appendix"], diagrams_by_target, figure_numbers, table_numbers, manifest_dir))
+
+    if orphan_diagrams:
         body_parts.append("<h2>Appendix: Figures</h2>")
-        for diagram in appendix:
-            body_parts.append(figure_html(diagram, figure_numbers, manifest_dir))
+        for diagram in orphan_diagrams:
+            body_parts.append(figure_html(diagram, figure_numbers, table_numbers, manifest_dir))
 
     template = TEMPLATE.read_text(encoding="utf-8")
     return (
         template
         .replace("{{TITLE}}", html.escape(manifest["title"]))
-        .replace("{{ABSTRACT}}", render_fig_refs(html.escape(manifest["abstract"][0]), figure_numbers))
+        .replace("{{ABSTRACT}}", render_fig_refs(html.escape(manifest["abstract"][0]), figure_numbers, table_numbers))
         .replace("{{BODY}}", "\n".join(body_parts))
     )
 
@@ -289,7 +341,7 @@ def self_test():
         manifest = {
             "title": "A Small Study",
             "abstract": ["This is the abstract paragraph."],
-            "introduction": ["First para, see {{fig:fig1}} and {{fig:nope}}.", "Second para."],
+            "introduction": ["First para, see {{fig:fig1}}, {{tbl:tbl1}} and {{fig:nope}}.", "Second para."],
             "background": {
                 "bg1": ["Plain subsection text."],
                 "bg2": {"title": "Prior Work", "text": ["Some prior work text."]},
@@ -333,24 +385,53 @@ def self_test():
         methodology_pos = html_out.index("<h2>3. Methodology</h2>")
         assert fig3_pos < methodology_pos, "fig3 should still be inside Background, before Methodology starts"
 
-        # A "table" diagram renders as a <table>, not an <img>/<svg>, but is
-        # still a numbered, captioned <figure>.
-        assert '<figure class="table-figure" id="fig-tbl1">' in html_out
+        # A "table" diagram renders as a <table>, not an <img>/<svg>, and is
+        # a numbered, captioned <figure> — but a table is not a figure: its
+        # own "Table N" sequence/anchor prefix, never folded into Fig N.
+        assert '<figure class="table-figure" id="tbl-tbl1">' in html_out
         assert "<th>Metric</th><th>Before</th><th>After</th>" in html_out
         assert "<td>Latency</td><td>85ms</td><td>20ms</td>" in html_out
+        assert "<strong>Table 1.</strong> Cap 4" in html_out  # tbl1, in Results
 
         # Figure numbers follow reading order (fig3 appears first in the
-        # document, inside Background), not the diagrams array's order.
+        # document, inside Background), not the diagrams array's order, and
+        # skip over tbl1 entirely (it's numbered in its own sequence).
         assert "<figure id=\"fig-fig3\">" in html_out
         assert "<strong>Fig 1.</strong> Cap 3" in html_out
         assert "<figure id=\"fig-fig1\">" in html_out
         assert "<strong>Fig 2.</strong> Cap 1" in html_out
-        assert "<strong>Fig 3.</strong> Cap 4" in html_out  # tbl1, in Results
-        assert "<strong>Fig 4.</strong> Cap 2" in html_out  # fig2, appendix, is last
+        assert "<strong>Fig 3.</strong> Cap 2" in html_out  # fig2, appendix, is last
         # {{fig:fig1}} in the introduction resolves to a link with fig1's
         # actual number (2); an unknown id degrades visibly, doesn't crash.
         assert '<a href="#fig-fig1">Fig 2</a>' in html_out
         assert "[unknown fig: nope]" in html_out
+        # {{tbl:tbl1}} resolves the same way, into a link to tbl1's own
+        # "Table 1" number/anchor, not the figure sequence.
+        assert '<a href="#tbl-tbl1">Table 1</a>' in html_out
+
+        # The optional "appendix" key: unnumbered heading, unnumbered
+        # subsection title, placed after Conclusion but before the
+        # orphan-diagram "Appendix: Figures" block, and a diagram can
+        # target it ("appendix" / "appendix.<sub>") like any real section.
+        appendix_manifest = dict(manifest)
+        appendix_manifest["appendix"] = {
+            "raw-timings": {"title": "Raw Timings", "text": ["latency_ms,85,20", "throughput_rps,120,410"]},
+        }
+        appendix_manifest["diagrams"] = manifest["diagrams"] + [
+            {"id": "fig9", "file": "assets/fig1.svg", "caption": "Raw data chart.", "section": "appendix.raw-timings"}
+        ]
+        html_out = build(appendix_manifest, tmp)
+        assert "<h2>Appendix</h2>" in html_out, "the raw-data appendix heading must be unnumbered"
+        assert "<h3>Raw Timings</h3>" in html_out, "its subsection title must be unnumbered too"
+        assert "latency_ms,85,20" in html_out
+        conclusion_pos = html_out.index("<h2>6. Conclusion</h2>")
+        appendix_pos = html_out.index("<h2>Appendix</h2>")
+        appendix_figures_pos = html_out.index("<h2>Appendix: Figures</h2>")
+        fig9_pos = html_out.index('id="fig-fig9"')
+        assert conclusion_pos < appendix_pos < fig9_pos < appendix_figures_pos, (
+            "the raw-data appendix (and diagrams targeting it) must land after Conclusion "
+            "but before the orphan-diagram appendix"
+        )
 
         bad_manifest = dict(manifest)
         del bad_manifest["conclusion"]

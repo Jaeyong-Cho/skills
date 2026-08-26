@@ -18,7 +18,8 @@ Checks:
   contract) — not just the accessible-SVG subset re-checked below.
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
-- diagrams: at least 5 entries (a floor, not a target — more is fine),
+- diagrams: at least 5 non-table entries (a floor, not a target — more is
+  fine; a table is not a figure, so it doesn't count toward this floor),
   each with id/caption, each caption at most 140 characters (a long
   caption doesn't shrink the figure — see assets/template.html — it
   wraps, but a runaway caption is still a paragraph in disguise), and
@@ -48,7 +49,16 @@ Checks:
     least one data row, every row the same length as the header;
     counts as its own kind ("table") toward the 3-kind minimum.
 - every {{fig:some-id}} reference in any prose block names a real
-  diagrams[].id (build_paper.py resolves these to "Fig N" links).
+  non-table diagrams[].id (build_paper.py resolves these to "Fig N"
+  links); every {{tbl:some-id}} names a real table id (resolves to
+  "Table N" — a table is not a figure, so it has its own placeholder
+  and id space).
+- the optional trailing "appendix" key (same list-of-paragraphs/object-of-
+  subsections shape as any section) skips paragraph-count, sentence-count,
+  and word-count checks entirely — meant for raw experiment output/stats
+  too detailed for the word/sentence-limited prose sections above. Only
+  structurally checked (paragraphs must be strings or bullet lists of
+  strings); {{fig:...}}/{{tbl:...}} refs inside it are still validated.
 
 Usage:
   python lint_paper.py <manifest.json>
@@ -66,7 +76,7 @@ from self_check import verify as diagram_self_check  # noqa: E402 (vendored copy
 
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
 SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
-FIG_REF_RE = re.compile(r"\{\{fig:([\w-]+)\}\}")
+FIG_REF_RE = re.compile(r"\{\{(fig|tbl):([\w-]+)\}\}")
 SVG_BLOCK_RE = re.compile(r"<svg\b.*?</svg>", re.DOTALL)
 MAX_TITLE_WORDS = 15
 MAX_SENTENCE_WORDS = 20
@@ -151,30 +161,75 @@ def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_ra
                 )
 
 
+def check_appendix_block(label, paras, errors):
+    """The optional raw-data "appendix" section holds output/stats too
+    detailed for the word/sentence-limited prose sections — so, unlike
+    check_prose_block, it skips paragraph-count/sentence-count/word-count
+    entirely. Only a structural check: paras must be a list of strings
+    and/or bullet-list (list-of-string) elements, same two shapes
+    paragraph_html renders — everything else is a build-time error, not a
+    prose-quality one."""
+    if not isinstance(paras, list):
+        errors.append(f"{label}: must be a list of paragraphs, got {type(paras).__name__}")
+        return
+    for p_index, para in enumerate(paras, start=1):
+        if isinstance(para, list):
+            for i_index, item in enumerate(para, start=1):
+                if not isinstance(item, str):
+                    errors.append(f"{label} paragraph {p_index} item {i_index}: must be a string, got {type(item).__name__}")
+        elif not isinstance(para, str):
+            errors.append(f"{label} paragraph {p_index}: must be a string or a list of strings, got {type(para).__name__}")
+
+
+def check_appendix(value, fig_ids, tbl_ids, errors):
+    def check_block(label, paras):
+        before = len(errors)
+        check_appendix_block(label, paras, errors)
+        # A structurally malformed block (a non-string paragraph/item) can't
+        # be safely flattened to scan for {{fig:...}}/{{tbl:...}} refs —
+        # the structural error above already covers it.
+        if len(errors) == before:
+            check_fig_refs(label, flatten_prose_text(paras), fig_ids, tbl_ids, errors)
+
+    if isinstance(value, list):
+        check_block("appendix", value)
+    elif isinstance(value, dict):
+        for sub_key, sub_value in value.items():
+            label = f"appendix.{sub_key}"
+            paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
+            check_block(label, paras)
+    else:
+        errors.append(f"appendix: must be a list of paragraphs or an object of subsections, got {type(value).__name__}")
+
+
 def flatten_prose_text(paras):
     """paras -> one string to scan for {{fig:...}} refs — a bullet-list
     element's items get space-joined into its slot rather than dropped."""
     return "\n\n".join(" ".join(p) if isinstance(p, list) else p for p in paras)
 
 
-def check_fig_refs(label, text, valid_ids, errors):
+def check_fig_refs(label, text, fig_ids, tbl_ids, errors):
+    """{{fig:some-id}} must name a real non-table diagram id; {{tbl:some-id}}
+    must name a real table id — a table isn't a figure, so the two id
+    spaces (and placeholders) are checked separately."""
     for m in FIG_REF_RE.finditer(text):
-        fig_id = m.group(1)
-        if fig_id not in valid_ids:
-            errors.append(f"{label}: {{{{fig:{fig_id}}}}} references an unknown diagram id")
+        kind, ref_id = m.group(1), m.group(2)
+        valid_ids = fig_ids if kind == "fig" else tbl_ids
+        if ref_id not in valid_ids:
+            errors.append(f"{label}: {{{{{kind}:{ref_id}}}}} references an unknown {'diagram' if kind == 'fig' else 'table'} id")
 
 
-def check_section(key, value, valid_ids, errors):
+def check_section(key, value, fig_ids, tbl_ids, errors):
     paragraph_range = SECTION_PARAGRAPH_RANGES.get(key)
     if isinstance(value, list):
         check_prose_block(key, value, errors, paragraph_range=paragraph_range)
-        check_fig_refs(key, flatten_prose_text(value), valid_ids, errors)
+        check_fig_refs(key, flatten_prose_text(value), fig_ids, tbl_ids, errors)
     elif isinstance(value, dict):
         for sub_key, sub_value in value.items():
             label = f"{key}.{sub_key}"
             paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
             check_prose_block(label, paras, errors, paragraph_range=paragraph_range)
-            check_fig_refs(label, flatten_prose_text(paras), valid_ids, errors)
+            check_fig_refs(label, flatten_prose_text(paras), fig_ids, tbl_ids, errors)
     else:
         errors.append(f"{key}: must be a list of paragraphs or an object of subsections, got {type(value).__name__}")
 
@@ -363,9 +418,12 @@ def check_table_rows(rows, label, errors):
 
 
 def check_diagrams(diagrams, manifest_dir, errors):
-    if not isinstance(diagrams, list) or len(diagrams) < MIN_DIAGRAMS:
-        errors.append(f"diagrams: need at least {MIN_DIAGRAMS}, found {len(diagrams) if isinstance(diagrams, list) else 0}")
-        diagrams = diagrams if isinstance(diagrams, list) else []
+    diagrams = diagrams if isinstance(diagrams, list) else []
+    # A table is not a figure: it doesn't count toward the figure floor,
+    # only real (non-table) diagram entries do.
+    fig_count = sum(1 for d in diagrams if isinstance(d, dict) and d.get("type") != "table")
+    if fig_count < MIN_DIAGRAMS:
+        errors.append(f"diagrams: need at least {MIN_DIAGRAMS} figures (tables don't count), found {fig_count}")
     used_types = set()
     for i, diagram in enumerate(diagrams, start=1):
         is_table = diagram.get("type") == "table"
@@ -410,7 +468,8 @@ def lint(manifest, manifest_dir):
         errors.append(f"title: {len(title_words)} words, must be fewer than {MAX_TITLE_WORDS}")
 
     diagrams = manifest["diagrams"] if isinstance(manifest["diagrams"], list) else []
-    valid_ids = {d.get("id") for d in diagrams if isinstance(d, dict) and d.get("id")}
+    fig_ids = {d.get("id") for d in diagrams if isinstance(d, dict) and d.get("id") and d.get("type") != "table"}
+    tbl_ids = {d.get("id") for d in diagrams if isinstance(d, dict) and d.get("id") and d.get("type") == "table"}
 
     abstract = manifest["abstract"]
     if not isinstance(abstract, list):
@@ -422,10 +481,13 @@ def lint(manifest, manifest_dir):
         errors.append(f"abstract: must be a plain paragraph string, got {type(abstract[0]).__name__}")
         abstract = []
     check_prose_block("abstract", abstract, errors, one_paragraph=True)
-    check_fig_refs("abstract", flatten_prose_text(abstract), valid_ids, errors)
+    check_fig_refs("abstract", flatten_prose_text(abstract), fig_ids, tbl_ids, errors)
 
     for key in SECTION_ORDER:
-        check_section(key, manifest[key], valid_ids, errors)
+        check_section(key, manifest[key], fig_ids, tbl_ids, errors)
+
+    if "appendix" in manifest:
+        check_appendix(manifest["appendix"], fig_ids, tbl_ids, errors)
 
     check_diagrams(manifest["diagrams"], manifest_dir, errors)
     return errors
@@ -612,6 +674,37 @@ def self_test():
         errors = lint(bad_fig_ref_manifest, tmp)
         assert any("fig:no-such-id" in e and "unknown" in e for e in errors), "\n".join(errors)
 
+        # {{tbl:tbl1}} is a valid reference to the table entry; {{fig:tbl1}}
+        # is not — a table isn't a figure, so it's not in the fig id space.
+        good_tbl_ref_manifest = dict(good_manifest)
+        good_tbl_ref_manifest["introduction"] = block(2) + [three_sentences + " See {{tbl:tbl1}}."]
+        errors = lint(good_tbl_ref_manifest, tmp)
+        assert not errors, f"a {{{{tbl:...}}}} ref to a real table id should lint clean, got: {errors}"
+
+        bad_tbl_ref_manifest = dict(good_manifest)
+        bad_tbl_ref_manifest["introduction"] = block(3) + [three_sentences + " See {{tbl:no-such-table}}."]
+        errors = lint(bad_tbl_ref_manifest, tmp)
+        assert any("tbl:no-such-table" in e and "unknown table id" in e for e in errors), "\n".join(errors)
+
+        fig_ref_to_table_manifest = dict(good_manifest)
+        fig_ref_to_table_manifest["introduction"] = block(3) + [three_sentences + " See {{fig:tbl1}}."]
+        errors = lint(fig_ref_to_table_manifest, tmp)
+        assert any("fig:tbl1" in e and "unknown diagram id" in e for e in errors), "\n".join(errors)
+
+        # A table doesn't count toward the 5-figure floor: 5 real figures
+        # and zero tables still passes...
+        no_table_manifest = dict(good_manifest)
+        no_table_manifest["diagrams"] = good_manifest["diagrams"][:5]
+        errors = lint(no_table_manifest, tmp)
+        assert not errors, f"5 non-table figures alone should meet the floor, got: {errors}"
+        # ...but 5 tables and zero real figures does not.
+        tables_only_manifest = dict(good_manifest)
+        tables_only_manifest["diagrams"] = [
+            dict(good_manifest["diagrams"][5], id=f"tbl{i}") for i in range(1, 6)
+        ]
+        errors = lint(tables_only_manifest, tmp)
+        assert any("diagrams" in e and "at least 5 figures" in e for e in errors), "\n".join(errors)
+
         bad_manifest = dict(good_manifest)
         bad_manifest["title"] = " ".join(f"word{i}" for i in range(20))
         bad_manifest["abstract"] = block(2)  # two paragraphs, not one
@@ -654,6 +747,26 @@ def self_test():
         list_abstract_manifest["abstract"] = [["Not", "allowed", "here"]]
         errors = lint(list_abstract_manifest, tmp)
         assert any("abstract" in e and "plain paragraph string" in e for e in errors), "\n".join(errors)
+
+        # The optional raw-data "appendix": a single one-sentence "paragraph"
+        # and a 1-item bullet list would both fail check_prose_block's
+        # sentence-count/item-count rules — but the appendix is exempt.
+        good_appendix_manifest = dict(good_manifest)
+        good_appendix_manifest["appendix"] = {
+            "raw": {"title": "Raw Data", "text": ["metric,before,after", ["one-item list is fine here"]]},
+        }
+        errors = lint(good_appendix_manifest, tmp)
+        assert not errors, f"a raw-data appendix should skip prose-quality checks, got: {errors}"
+
+        bad_appendix_manifest = dict(good_manifest)
+        bad_appendix_manifest["appendix"] = [123]  # not a string or a bullet list
+        errors = lint(bad_appendix_manifest, tmp)
+        assert any("appendix paragraph 1" in e and "must be a string" in e for e in errors), "\n".join(errors)
+
+        appendix_fig_ref_manifest = dict(good_manifest)
+        appendix_fig_ref_manifest["appendix"] = ["See {{tbl:tbl1}} and {{tbl:no-such}}."]
+        errors = lint(appendix_fig_ref_manifest, tmp)
+        assert any("tbl:no-such" in e and "unknown table id" in e for e in errors), "\n".join(errors)
 
         print("self-test passed")
     finally:
