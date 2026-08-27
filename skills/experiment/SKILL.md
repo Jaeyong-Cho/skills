@@ -8,7 +8,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
 
 Turn a question into a minimal scientific-method run instead of guessing at an answer.
 
-1. **Plan.** Run `/ponytail` (Skill tool) to find the cheapest method that would resolve the question, and state what result would count as supported/refuted. If the question is "does this state model / logic feel right?" or "what should this look like?", the cheapest method is usually a throwaway prototype — see `../references/prototype.md`. Completion criterion: a stated method and a stated pass/fail expectation.
+1. **Plan.** Run `/ponytail` (Skill tool) to find the cheapest method that would resolve the question, and state what result would count as supported/refuted. If the question is "does this state model / logic feel right?" or "what should this look like?", the cheapest method is usually a throwaway prototype — see `../references/prototype.md`. Completion criterion: a stated method and a stated pass/fail expectation. Before act **MUST CONFIRM** The experiment plan and ask user with this `../references/question-format.md` ❓/➡️ format
 2. **Act.** Execute the method for real — script, query, test, read — not a simulated or imagined result. **MUST NOT** write to or edit outside this experiments directory — read it, or `cp` it to a scratch location first if the experiment needs a modified copy to run against. Keep whatever file did the running (script, query, scratch project) — don't let it live only in a shell history or a `/tmp` dir that evaporates. Completion criterion: real output captured, not inferred, and the file that produced it saved.
 3. **Analyze.** Compare the real result against the plan's expectation and state a verdict: supported, refuted, or inconclusive.
 
