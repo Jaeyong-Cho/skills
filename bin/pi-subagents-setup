@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Usage: pi-subagents-setup
+# Installs nicobailon/pi-subagents project-locally (.pi/settings.json,
+# not the user-global ~/.pi/agent/settings.json) and disables its builtin
+# agents (scout/researcher/worker/reviewer/oracle/delegate/...) so only
+# this repo's own custom agents (e.g. from @skills/system-grill-me) run.
+# https://github.com/nicobailon/pi-subagents
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+pi install npm:pi-subagents -l --approve
+
+settings=".pi/settings.json"
+mkdir -p .pi
+[ -f "$settings" ] || echo '{}' > "$settings"
+
+tmp="$(mktemp)"
+jq '.subagents.disableBuiltins = true' "$settings" > "$tmp" && mv "$tmp" "$settings"
+
+echo "pi-subagents installed locally; builtin agents disabled in $settings"
