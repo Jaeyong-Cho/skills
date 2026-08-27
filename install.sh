@@ -205,7 +205,7 @@ setup_pi() {
   command -v pi &>/dev/null || return
   local pkg
   for pkg in \
-    "https://github.com/nicobailon/pi-powerline-footer" \
+    "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
     "https://github.com/lajarre/pi-vim"
