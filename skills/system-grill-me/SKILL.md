@@ -21,6 +21,34 @@ disable-model-invocation: true
 - CLI tooling — any local script/wrapper the Leader needs beyond the existing skills to dispatch sub-agents unattended
 - Build target — where locally the agent team, skills, and CLI tools get written — any path, not necessarily inside a repo — confirmed before this skill writes them there
 
+## What are Subagents?
+Subagents are specialized assistants that an AI agent can delegate tasks to. Characteristics:
+- Isolated context: Each subagent has its own context window
+- Parallel execution: Multiple subagents can run simultaneously
+- Specialization: Configured with specific prompts and expertise
+- Reusable: Defined once, used in multiple contexts
+
+When to Use Subagents vs Skills
+```
+Is the task complex with multiple steps?
+├─ YES → Does it require isolated context?
+│         ├─ YES → Use SUBAGENT
+│         └─ NO → Use SKILL
+│
+└─ NO → Use SKILL
+```
+
+Use Subagents for:
+- Complex workflows requiring isolated context
+- Long-running tasks that benefit from specialization
+- Verification and auditing (independent perspective)
+- Parallel workstreams
+
+Use Skills for:
+- Quick, one-off actions
+- Domain knowledge without context isolation
+- Reusable procedures that don't need isolation
+
 ## Impact Level and Uncertainty
 Read `../references/grill-impact.md` first — ask its Mode question before round 1, then its Impact Level, Uncertainty, and Action rules govern which questions get asked outright versus skipped-with-an-assertion-mark for the rest of this session.
 
