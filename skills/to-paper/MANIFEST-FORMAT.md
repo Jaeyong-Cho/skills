@@ -4,6 +4,7 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 
 ```json
 {
+  "size": "5page",
   "title": "A short, plain-language title",
   "abstract": ["One paragraph, one array element."],
   "introduction": ["First paragraph.", "Second paragraph.", "Third paragraph."],
@@ -30,6 +31,18 @@ Everything `scripts/build_paper.py` renders into `index.html`, and everything `s
 }
 ```
 
+## `size`
+
+One of `"2page"`, `"5page"`, `"11page"` — required, chosen with the user in `SKILL.md` step 1. It doesn't change how `build_paper.py` renders the paper; it only sets `lint_paper.py`'s thresholds for how much content that length can carry (`lint_paper.py`'s `SIZE_PROFILES`):
+
+| size | min figures (`diagrams[]`, tables excluded) | min distinct `diagram_type`/table kinds | subsections per section (if given as an object) |
+|---|---|---|---|
+| `2page` | 3 | 2 | 1-2 |
+| `5page` | 6 | 3 | 2-4 |
+| `11page` | 10 | 4 | 3-8 |
+
+"Subsections per section" is the number of keys in `background`/`methodology` when given as an object (see below) — the only two sections that can carry named subsections at all; `introduction`/`results`/`discussion`/`conclusion` are always a flat paragraph array and `abstract` is always a single paragraph, so this range never applies to them. The range only binds once you choose to split a section into subsections at all — giving `background`/`methodology` as a flat paragraph array instead is always fine, at any size; splitting into fewer subsections than the minimum is really a flat section pretending otherwise, so put it back into a plain array rather than pad it with a token second subsection.
+
 ## Section values
 
 Every section's prose is a **JSON array of paragraph strings** — one element per paragraph, never a single string with blank lines inside it. Each array element becomes one `<p>` — except an element that's itself a **JSON array of item strings**, which renders as one `<ul>` bullet list instead (e.g. `["Intro paragraph.", ["First point.", "Second point."], "Closing paragraph."]`). A bullet-list element counts as one paragraph toward the range below; it needs 2-8 items, each at most 20 words (`lint_paper.py`'s `MIN_LIST_ITEMS`/`MAX_LIST_ITEMS`), and skips the per-paragraph sentence-count check. Not valid inside `abstract`, which must stay a single plain paragraph string.
@@ -47,7 +60,7 @@ Same shape as `background`/`methodology` above — an array of paragraph strings
 
 ## `diagrams`
 
-At least 5 non-table entries — a floor, not a target; a table is not a figure, so table entries don't count toward it (see "Two kinds" below). More figures are good: add one anywhere a reader would learn more from a picture (or a table) than a paragraph (per `DIAGRAM-SELECTION.md`'s gate), don't stop once the floor is met. Every entry needs:
+At least the chosen `size`'s minimum figure count (`size`'s table above) of non-table entries — a floor, not a target; a table is not a figure, so table entries don't count toward it (see "Two kinds" below). More figures are good: add one anywhere a reader would learn more from a picture (or a table) than a paragraph (per `DIAGRAM-SELECTION.md`'s gate), don't stop once the floor is met. Every entry needs:
 - `id` — short identifier, used nowhere but this file.
 - `caption` — one sentence, at most 140 characters, rendered under the figure. A caption never shrinks the figure to fit — it wraps within the figure's own width instead (`assets/template.html`'s figure/figcaption CSS) — but a caption this long is really a paragraph in disguise; shorten it.
 - `section` — where the figure is placed, right after that target's own text:
@@ -58,9 +71,9 @@ At least 5 non-table entries — a floor, not a target; a table is not a figure,
 
 Two kinds, chosen by an optional `type` field:
 - **Diagram (default, no `type` field)** — `diagram_type`, the exact "Use" name from `DIAGRAM-SELECTION.md`'s Visual-type guide (e.g. `"Flowchart"`, `"Bar chart"`, `"Architecture"`) — required, and what the diversity rule below counts. `file`, a path relative to `manifest.json`'s directory — **the `.diagram.html` draft itself** (normally `assets/{id}-{slug}.diagram.html`), not an exported `.svg`. `build_paper.py` extracts the `<svg>...</svg>` block straight out of whatever `file` points to and inlines it directly into `index.html` at build time — no `<img>`, no separate export step, no staleness risk from an unexported edit. (A standalone `.svg` still works too, e.g. if one already exists — the extraction is identical either way.) Its `<svg>` needs **both** a `viewBox` (without one, scaling it down to the page's `max-width` can crop it instead of shrinking it cleanly) **and** explicit `width`/`height` attributes matching it (they establish the correct aspect ratio unambiguously).
-- **Table (`"type": "table"`)** — `rows`, an array of arrays: the first row is the header, every row (including the header) must have the same number of columns. No `file`, no `diagram_type` (it counts as its own kind, `"table"`, toward the diversity rule below). Rendered as a real `<table>`, not an image — reach for this whenever the content is naturally rows and columns (a before/after comparison, a results breakdown) rather than forcing it into a chart. A table is not a figure: it gets its own "Table N" numbering (see Numbering below), separate from and not counted toward the 5-figure floor above.
+- **Table (`"type": "table"`)** — `rows`, an array of arrays: the first row is the header, every row (including the header) must have the same number of columns. No `file`, no `diagram_type` (it counts as its own kind, `"table"`, toward the diversity rule below). Rendered as a real `<table>`, not an image — reach for this whenever the content is naturally rows and columns (a before/after comparison, a results breakdown) rather than forcing it into a chart. A table is not a figure: it gets its own "Table N" numbering (see Numbering below), separate from and not counted toward the figure floor above.
 
-**At least 3 different kinds** across all `diagrams[]` entries — the distinct `diagram_type` values used, plus `"table"` if any table entries exist. Five flowcharts is one kind; `lint_paper.py` rejects it. Pick each figure's type independently from `DIAGRAM-SELECTION.md` (step 3 of `SKILL.md`) instead of reusing whatever type the last figure happened to use.
+**At least the chosen `size`'s minimum distinct kinds** (`size`'s table above) across all `diagrams[]` entries — the distinct `diagram_type` values used, plus `"table"` if any table entries exist. Five flowcharts is one kind; `lint_paper.py` rejects it. Pick each figure's type independently from `DIAGRAM-SELECTION.md` (step 3 of `SKILL.md`) instead of reusing whatever type the last figure happened to use.
 
 ## Numbering
 

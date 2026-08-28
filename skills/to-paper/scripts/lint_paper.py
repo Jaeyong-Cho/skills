@@ -7,23 +7,37 @@ element per paragraph — never a single "\n\n"-joined blob. abstract is that
 same array, constrained to exactly one element. See ../MANIFEST-FORMAT.md.
 
 Checks:
+- size: one of "2page"/"5page"/"11page" (SIZE_PROFILES below) — sets the
+  min figure count, min distinct diagram/table kinds, and max subsections
+  per section checked further down; an invalid/missing value still runs
+  every other check against the "5page" defaults so a bad size doesn't
+  hide unrelated violations.
 - title: fewer than 15 words.
 - abstract: exactly one paragraph (array of length 1).
 - every other section/subsection: a paragraph-count range that varies by
   section (a subsection inherits its parent section's range) — see
   SECTION_PARAGRAPH_RANGES below: introduction 3-5, background 4-8,
   methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3.
+- background/methodology given as an object of subsections: between
+  SIZE_PROFILES[size]["min_subsections"] and ["max_subsections"] keys — a
+  short paper has no room for many named subsections, and splitting into
+  fewer than the minimum is really a flat section pretending otherwise
+  (give it as a plain paragraph array instead). The only two sections
+  that can be given as an object at all; every other section is exempt,
+  and giving one as a flat array (no subsections) is always fine
+  regardless of size.
 - each non-table diagram's file also gets diagram-design's own
   self_check.py verifier run against it (single-file safety rules, motion
   contract) — not just the accessible-SVG subset re-checked below.
 - every paragraph, anywhere: 3-8 sentences.
 - every sentence, anywhere: at most 20 words.
-- diagrams: at least 5 non-table entries (a floor, not a target — more is
-  fine; a table is not a figure, so it doesn't count toward this floor),
-  each with id/caption, each caption at most 140 characters (a long
-  caption doesn't shrink the figure — see assets/template.html — it
-  wraps, but a runaway caption is still a paragraph in disguise), and
-  at least 3 different diagram_type/table kinds used across them (per
+- diagrams: at least SIZE_PROFILES[size]["min_diagrams"] non-table entries
+  (a floor, not a target — more is fine; a table is not a figure, so it
+  doesn't count toward this floor), each with id/caption, each caption at
+  most 140 characters (a long caption doesn't shrink the figure — see
+  assets/template.html — it wraps, but a runaway caption is still a
+  paragraph in disguise), and at least SIZE_PROFILES[size]["min_diagram_types"]
+  different diagram_type/table kinds used across them (per
   DIAGRAM-SELECTION.md's Visual-type guide — don't draw five
   flowcharts). Two kinds:
   - svg (default, no "type" field) — a `diagram_type` naming its
@@ -94,9 +108,18 @@ SECTION_PARAGRAPH_RANGES = {
     "discussion": (3, 6),
     "conclusion": (1, 3),
 }
-MIN_DIAGRAMS = 5
-MIN_DIAGRAM_TYPES = 3
 MAX_CAPTION_CHARS = 140
+# Paper size sets how much content that length can carry — min figures, min
+# distinct diagram/table kinds, and the min/max subsections a background/
+# methodology section may split into (only checked when that section is
+# given as an object at all — a flat paragraph array is exempt from both).
+# See ../MANIFEST-FORMAT.md's size table.
+SIZE_PROFILES = {
+    "2page": {"min_diagrams": 3, "min_diagram_types": 2, "min_subsections": 1, "max_subsections": 2},
+    "5page": {"min_diagrams": 6, "min_diagram_types": 3, "min_subsections": 2, "max_subsections": 4},
+    "11page": {"min_diagrams": 10, "min_diagram_types": 4, "min_subsections": 3, "max_subsections": 8},
+}
+DEFAULT_SIZE = "5page"
 
 
 def words(text):
@@ -219,12 +242,21 @@ def check_fig_refs(label, text, fig_ids, tbl_ids, errors):
             errors.append(f"{label}: {{{{{kind}:{ref_id}}}}} references an unknown {'diagram' if kind == 'fig' else 'table'} id")
 
 
-def check_section(key, value, fig_ids, tbl_ids, errors):
+def check_section(key, value, fig_ids, tbl_ids, errors, min_subsections, max_subsections):
     paragraph_range = SECTION_PARAGRAPH_RANGES.get(key)
     if isinstance(value, list):
         check_prose_block(key, value, errors, paragraph_range=paragraph_range)
         check_fig_refs(key, flatten_prose_text(value), fig_ids, tbl_ids, errors)
     elif isinstance(value, dict):
+        if len(value) < min_subsections:
+            errors.append(
+                f"{key}: {len(value)} subsections, need at least {min_subsections} for this paper size "
+                "(or give it as a flat paragraph array instead of splitting into too few subsections)"
+            )
+        elif len(value) > max_subsections:
+            errors.append(
+                f"{key}: {len(value)} subsections, max {max_subsections} for this paper size"
+            )
         for sub_key, sub_value in value.items():
             label = f"{key}.{sub_key}"
             paras = sub_value.get("text", []) if isinstance(sub_value, dict) else sub_value
@@ -417,13 +449,13 @@ def check_table_rows(rows, label, errors):
             errors.append(f"{label}: row {r} has a different column count than the header")
 
 
-def check_diagrams(diagrams, manifest_dir, errors):
+def check_diagrams(diagrams, manifest_dir, errors, min_diagrams, min_diagram_types):
     diagrams = diagrams if isinstance(diagrams, list) else []
     # A table is not a figure: it doesn't count toward the figure floor,
     # only real (non-table) diagram entries do.
     fig_count = sum(1 for d in diagrams if isinstance(d, dict) and d.get("type") != "table")
-    if fig_count < MIN_DIAGRAMS:
-        errors.append(f"diagrams: need at least {MIN_DIAGRAMS} figures (tables don't count), found {fig_count}")
+    if fig_count < min_diagrams:
+        errors.append(f"diagrams: need at least {min_diagrams} figures for this paper size (tables don't count), found {fig_count}")
     used_types = set()
     for i, diagram in enumerate(diagrams, start=1):
         is_table = diagram.get("type") == "table"
@@ -448,20 +480,26 @@ def check_diagrams(diagrams, manifest_dir, errors):
             continue
         check_svg_accessibility(svg_path, f"diagrams[{i}] ({file_field})", errors)
     used_types.discard("")
-    if len(used_types) < MIN_DIAGRAM_TYPES:
+    if len(used_types) < min_diagram_types:
         errors.append(
-            f"diagrams: need at least {MIN_DIAGRAM_TYPES} different diagram_type/table kinds, "
+            f"diagrams: need at least {min_diagram_types} different diagram_type/table kinds for this paper size, "
             f"found {len(used_types)} ({', '.join(sorted(used_types)) or 'none'}) — don't draw the same visual type repeatedly"
         )
 
 
 def lint(manifest, manifest_dir):
     errors = []
-    required = ["title", "abstract", *SECTION_ORDER, "diagrams"]
+    required = ["size", "title", "abstract", *SECTION_ORDER, "diagrams"]
     missing = [k for k in required if k not in manifest]
     if missing:
         errors.append(f"manifest missing required key(s): {', '.join(missing)}")
         return errors
+
+    size = manifest["size"]
+    if size not in SIZE_PROFILES:
+        errors.append(f"size: must be one of {sorted(SIZE_PROFILES)}, got {size!r}")
+        size = DEFAULT_SIZE  # fall back so the rest of the checks below still run
+    profile = SIZE_PROFILES[size]
 
     title_words = words(manifest["title"])
     if len(title_words) >= MAX_TITLE_WORDS:
@@ -484,12 +522,12 @@ def lint(manifest, manifest_dir):
     check_fig_refs("abstract", flatten_prose_text(abstract), fig_ids, tbl_ids, errors)
 
     for key in SECTION_ORDER:
-        check_section(key, manifest[key], fig_ids, tbl_ids, errors)
+        check_section(key, manifest[key], fig_ids, tbl_ids, errors, profile["min_subsections"], profile["max_subsections"])
 
     if "appendix" in manifest:
         check_appendix(manifest["appendix"], fig_ids, tbl_ids, errors)
 
-    check_diagrams(manifest["diagrams"], manifest_dir, errors)
+    check_diagrams(manifest["diagrams"], manifest_dir, errors, profile["min_diagrams"], profile["min_diagram_types"])
     return errors
 
 
@@ -520,6 +558,7 @@ def self_test():
             return [three_sentences for _ in range(n_paragraphs)]
 
         good_manifest = {
+            "size": "5page",
             "title": "A Short Study Title",
             "abstract": [three_sentences],
             "introduction": block(3),
@@ -534,18 +573,19 @@ def self_test():
                 {"id": "fig3", "file": "assets/fig3.svg", "caption": "c3", "section": "background", "diagram_type": "Architecture"},
                 {"id": "fig4", "file": "assets/fig4.svg", "caption": "c4", "section": "introduction", "diagram_type": "Flowchart"},
                 {"id": "fig5", "file": "assets/fig5.svg", "caption": "c5", "section": "conclusion", "diagram_type": "Timeline"},
+                {"id": "fig6", "file": "assets/fig6.svg", "caption": "c6", "section": "methodology", "diagram_type": "Sequence"},
                 {
                     "id": "tbl1",
                     "type": "table",
                     "rows": [["Metric", "Before", "After"], ["Latency", "85ms", "20ms"]],
-                    "caption": "c6",
+                    "caption": "c7",
                     "section": "results",
                 },
             ],
         }
         assets = tmp / "assets"
         assets.mkdir()
-        for i, name in enumerate(("fig1.svg", "fig2.svg", "fig3.svg", "fig4.svg", "fig5.svg"), start=1):
+        for i, name in enumerate(("fig1.svg", "fig2.svg", "fig3.svg", "fig4.svg", "fig5.svg", "fig6.svg"), start=1):
             (assets / name).write_text(
                 f'<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 200 100" '
                 f'width="200" height="100" aria-labelledby="fig{i}-t fig{i}-d">'
@@ -593,7 +633,7 @@ def self_test():
         # A diagram-design .diagram.html draft (never exported to a bare
         # .svg) lints exactly the same as one — only its <svg> block matters.
         draft_manifest = dict(good_manifest)
-        draft_manifest["diagrams"] = good_manifest["diagrams"][:4] + [
+        draft_manifest["diagrams"] = good_manifest["diagrams"][:5] + [
             {"id": "fig6", "file": "assets/fig6.diagram.html", "caption": "c6", "section": "results", "diagram_type": "Sequence"}
         ]
         errors = lint(draft_manifest, tmp)
@@ -640,7 +680,7 @@ def self_test():
         low_variety_manifest = dict(good_manifest)
         low_variety_manifest["diagrams"] = [
             dict(d, id=f"fc{i}", file=f"assets/fig{i}.svg", diagram_type="Flowchart")
-            for i, d in enumerate(good_manifest["diagrams"][:5], start=1)
+            for i, d in enumerate(good_manifest["diagrams"][:6], start=1)
         ]
         errors = lint(low_variety_manifest, tmp)
         assert any("different diagram_type" in e for e in errors), "\n".join(errors)
@@ -691,25 +731,87 @@ def self_test():
         errors = lint(fig_ref_to_table_manifest, tmp)
         assert any("fig:tbl1" in e and "unknown diagram id" in e for e in errors), "\n".join(errors)
 
-        # A table doesn't count toward the 5-figure floor: 5 real figures
-        # and zero tables still passes...
+        # A table doesn't count toward the 6-figure floor (5page): 6 real
+        # figures and zero tables still passes...
         no_table_manifest = dict(good_manifest)
-        no_table_manifest["diagrams"] = good_manifest["diagrams"][:5]
+        no_table_manifest["diagrams"] = good_manifest["diagrams"][:6]
         errors = lint(no_table_manifest, tmp)
-        assert not errors, f"5 non-table figures alone should meet the floor, got: {errors}"
-        # ...but 5 tables and zero real figures does not.
+        assert not errors, f"6 non-table figures alone should meet the floor, got: {errors}"
+        # ...but 6 tables and zero real figures does not.
         tables_only_manifest = dict(good_manifest)
         tables_only_manifest["diagrams"] = [
-            dict(good_manifest["diagrams"][5], id=f"tbl{i}") for i in range(1, 6)
+            dict(good_manifest["diagrams"][6], id=f"tbl{i}") for i in range(1, 7)
         ]
         errors = lint(tables_only_manifest, tmp)
-        assert any("diagrams" in e and "at least 5 figures" in e for e in errors), "\n".join(errors)
+        assert any("diagrams" in e and "at least 6 figures" in e for e in errors), "\n".join(errors)
+
+        # size: a required key, must name a real profile.
+        missing_size_manifest = {k: v for k, v in good_manifest.items() if k != "size"}
+        errors = lint(missing_size_manifest, tmp)
+        assert any("size" in e for e in errors), "\n".join(errors)
+
+        invalid_size_manifest = dict(good_manifest)
+        invalid_size_manifest["size"] = "3page"
+        errors = lint(invalid_size_manifest, tmp)
+        assert any("size" in e and "must be one of" in e for e in errors), "\n".join(errors)
+
+        # An unrecognized size still falls back to the 5page profile for
+        # every other check, so it doesn't mask unrelated violations.
+        invalid_size_masks_nothing_manifest = dict(invalid_size_manifest)
+        invalid_size_masks_nothing_manifest["title"] = " ".join(f"word{i}" for i in range(20))
+        errors = lint(invalid_size_masks_nothing_manifest, tmp)
+        assert any("title" in e for e in errors), "\n".join(errors)
+
+        # max_subsections: 5page allows at most 4; a 5th subsection fails.
+        too_many_subsections_manifest = dict(good_manifest)
+        too_many_subsections_manifest["background"] = {
+            "bg1": block(4), "bg2": block(4), "bg3": block(4), "bg4": block(4), "bg5": block(4),
+        }
+        errors = lint(too_many_subsections_manifest, tmp)
+        assert any("background" in e and "max 4" in e for e in errors), "\n".join(errors)
+
+        # min_subsections: 5page needs at least 2 once you split at all; a
+        # lone subsection is really a flat section pretending otherwise.
+        too_few_subsections_manifest = dict(good_manifest)
+        too_few_subsections_manifest["background"] = {"bg1": block(4)}
+        errors = lint(too_few_subsections_manifest, tmp)
+        assert any("background" in e and "at least 2" in e for e in errors), "\n".join(errors)
+
+        # ...but a flat paragraph array (no subsections at all) is exempt
+        # from min_subsections regardless of size.
+        flat_background_manifest = dict(good_manifest)
+        flat_background_manifest["background"] = block(4)
+        errors = lint(flat_background_manifest, tmp)
+        assert not errors, f"a flat (non-object) background should skip the subsection-count check, got: {errors}"
+
+        # A smaller size lowers the figure/diagram-type floor: 3 figures of
+        # 2 distinct kinds is enough for "2page" (flat background — 2page's
+        # max_subsections of 2 would still accept good_manifest's 2
+        # subsections, so no need to flatten it here).
+        two_page_manifest = dict(good_manifest)
+        two_page_manifest["size"] = "2page"
+        two_page_manifest["diagrams"] = good_manifest["diagrams"][:3]
+        errors = lint(two_page_manifest, tmp)
+        assert not errors, f"2page with 3 figures of 3 kinds should lint clean, got: {errors}"
+
+        # ...but those same 3 figures fall short of the default 5page floor.
+        three_figures_at_5page_manifest = dict(good_manifest)
+        three_figures_at_5page_manifest["diagrams"] = good_manifest["diagrams"][:3]
+        errors = lint(three_figures_at_5page_manifest, tmp)
+        assert any("at least 6 figures" in e for e in errors), "\n".join(errors)
+
+        # A larger size raises the floor: 11page needs 10, good_manifest's 6
+        # non-table figures fall short.
+        eleven_page_manifest = dict(good_manifest)
+        eleven_page_manifest["size"] = "11page"
+        errors = lint(eleven_page_manifest, tmp)
+        assert any("at least 10 figures" in e for e in errors), "\n".join(errors)
 
         bad_manifest = dict(good_manifest)
         bad_manifest["title"] = " ".join(f"word{i}" for i in range(20))
         bad_manifest["abstract"] = block(2)  # two paragraphs, not one
         bad_manifest["introduction"] = block(1)  # too few paragraphs
-        bad_manifest["diagrams"] = good_manifest["diagrams"][:2]  # only 2, below the floor of 5
+        bad_manifest["diagrams"] = good_manifest["diagrams"][:2]  # only 2, below the floor of 6
 
         errors = lint(bad_manifest, tmp)
         joined = "\n".join(errors)
