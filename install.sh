@@ -204,17 +204,11 @@ setup_pi() {
 
   command -v pi &>/dev/null || return
   local pkg
-  # pi-interactive-subagents: gives `subagent`/`/plan`/`/iterate` for
-  # @skills/system-grill-me-designed teams (see
-  # references/pi-custom-subagent.md) — only spawns sub-agents when pi is
-  # started inside a supported multiplexer (cmux/tmux/zellij/WezTerm), but
-  # installs fine either way.
   for pkg in \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
-    "https://github.com/lajarre/pi-vim" \
-    "https://github.com/hazat/pi-interactive-subagents"
+    "https://github.com/lajarre/pi-vim"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"
@@ -222,6 +216,13 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
+
+  # pi-interactive-subagents is installed per-project, not globally: run
+  # bin/pi-interactive-subagents-setup from inside the target repo, which
+  # both `pi install`s it and stubs out its bundled agents
+  # (planner/scout/worker/reviewer/visual-tester) so only this repo's own
+  # custom agents (e.g. from @skills/system-grill-me) get suggested/spawned.
+  echo "  note: pi-interactive-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-interactive-subagents-setup inside a target repo"
 
   setup_boy_scout pi
 }
