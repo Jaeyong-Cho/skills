@@ -20,6 +20,7 @@ disable-model-invocation: true
 - Review cadence — what AI and human discuss once a cycle ends, and that this discussion is the input to re-running `system-grill-me` to update the system
 - CLI tooling — any local script/wrapper the Leader needs beyond the existing skills to dispatch sub-agents unattended
 - Build target — where locally the agent team, skills, and CLI tools get written — any path, not necessarily inside a repo — confirmed before this skill writes them there
+- Human in the loop — when human must review and confirm in the cycle.
 
 ## What are Subagents?
 Subagents are specialized assistants that an AI agent can delegate tasks to. Characteristics:
