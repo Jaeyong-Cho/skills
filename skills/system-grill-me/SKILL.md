@@ -16,7 +16,7 @@ disable-model-invocation: true
 - Agent team topology — Leader vs. sub-agent(s): who owns which phase, how many sub-agents, and the dispatch/report contract between them
 - Target platform(s) — claude / copilot / pi, and this goal's chosen sub-agent mechanic per platform: Claude's Task tool, Copilot's `--agent`, or pi's `pi-subagents` plugin per `../references/pi-custom-subagent.md` — anything not covered by that reference (Claude, Copilot, or a pi-subagents field the reference doesn't mention) is found by dispatching a sub-agent to check the real installed tool (`--help`, its docs), never assumed from memory
 - Autonomy boundary — which HITL gates in the normal workflow (branch-merge, release, commit confirmation) stay human-gated vs. get delegated to the Leader for this system, and what "stuck, escalate to the human" looks like when the loop can't proceed
-- Stop condition — what tells the Leader one cycle is done vs. blocked, same bar as `@skills/do-plan`'s completion criterion
+- Stop condition — what tells the Leader one cycle is done vs. blocked, same bar as `@skills/do-plan`'s completion criterion. **MUST NOT** block caused minor issue. (cli option error, just quoting error, ... ) 
 - Review cadence — what AI and human discuss once a cycle ends, and that this discussion is the input to re-running `system-grill-me` to update the system
 - CLI tooling — any local script/wrapper the Leader needs beyond the existing skills to dispatch sub-agents unattended
 - Build target — where locally the agent team, skills, and CLI tools get written — any path, not necessarily inside a repo — confirmed before this skill writes them there
