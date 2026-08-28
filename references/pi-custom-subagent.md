@@ -29,7 +29,3 @@ Only `name` and `description` are required. `tools` is the strict child tool all
 ## Calling it
 
 No slash command or registration step needed once the file exists — ask in plain language ("Use reviewer to review this diff") and Pi resolves the name. `subagent({ agent: "reviewer", task: "..." })` is the same call made explicitly.
-
-## Overriding instead of writing a new file
-
-Don't need a whole new agent, just a tweak to a builtin? Set `subagents.agentOverrides.<name>` in `.pi/settings.json` instead (`model`, `tools`, `disabled`, `systemPromptMode`, ...) — cheaper than a full custom file. `subagent({ action: "eject", agent: "<name>" })` copies a builtin into `.pi/agents/` as an editable starting point when the override surface isn't enough.
