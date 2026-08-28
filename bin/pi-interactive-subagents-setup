@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Usage: pi-interactive-subagents-setup
+#
+# pi-interactive-subagents has no global "disable builtins" toggle — a
+# bundled agent (planner/scout/worker/reviewer/visual-tester) can only be
+# turned off by a same-named project agent winning discovery precedence
+# (project > user > bundled). This writes one inert, hidden stub per
+# bundled name into .pi/agents/, so only this repo's own custom agents
+# (e.g. from @skills/system-grill-me) get suggested or spawned.
+#
+# Idempotent: skips any name that already has a .pi/agents/<name>.md file
+# — re-run safely, it only fills in what's missing.
+# https://github.com/hazat/pi-interactive-subagents
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+mkdir -p .pi/agents
+
+for name in planner scout worker reviewer visual-tester; do
+  file=".pi/agents/$name.md"
+  if [ -e "$file" ]; then
+    echo "  skip $file (already exists)"
+    continue
+  fi
+  cat > "$file" <<EOF
+---
+name: $name
+description: Disabled for this project — overridden by a stub so the bundled '$name' agent never runs; use this project's own custom agents instead.
+disable-model-invocation: true
+spawning: false
+auto-exit: true
+---
+
+This bundled agent is disabled for this project. Do not do the task —
+tell the caller to use one of this project's own custom agents
+(.pi/agents/, typically from @skills/system-grill-me) instead.
+EOF
+  echo "  ✓ $file"
+done
+
+echo "bundled pi-interactive-subagents agents disabled via .pi/agents/ stubs"
