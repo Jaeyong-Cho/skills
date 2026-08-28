@@ -24,8 +24,6 @@ thinking: low
 You are a review subagent. Check the diff against the stated task and plan...
 ```
 
-Only `name` and `description` are required. `tools` is the strict child tool allowlist (omit it to inherit Pi's normal tools) — accepts a comma list or a `- item` block list, same for `defaultReads`/`skills`/`fallbackModels`/`extensions`. Everything else (`model`, `systemPromptMode`, `output`, `timeoutMs`, `acceptance`, per-agent `memory`, ...) is optional and defaults sanely; see the full field table in the installed package's `docs/agents.md` (`~/.pi/agent/git/github.com/nicobailon/pi-subagents/docs/agents.md`) rather than duplicating it here — it changes with the package version.
-
 ## Calling it
 
 No slash command or registration step needed once the file exists — ask in plain language ("Use reviewer to review this diff") and Pi resolves the name. `subagent({ agent: "reviewer", task: "..." })` is the same call made explicitly.
