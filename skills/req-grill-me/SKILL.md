@@ -1,5 +1,5 @@
 ---
-name: story-grill-me
+name: req-grill-me
 description: Run a @skills/grill-me interview to build an agile Story in one pass — persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check. Feeds a plan's Gherkin-style acceptance criteria and a manual QA procedure.
 disable-model-invocation: true
 ---
