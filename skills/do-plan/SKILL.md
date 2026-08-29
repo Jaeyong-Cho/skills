@@ -22,4 +22,4 @@ Turn a written plan into done work instead of leaving its action items unbuilt.
 
 Completion criterion: every action item is checked or blocked, every acceptance criterion has a stated pass/fail, a commit hash is recorded (or a failing build/test/acceptance-criteria run, or a commit still awaiting the human's confirmation, explains why not), the report file exists reflecting all three.
 
-Tell the user the report file path when done.
+Tell the user the report file path when done, and paste the "Try it yourself" QA Procedure checklist directly into the session (not just the file path) so the human can act on it without opening the file.
