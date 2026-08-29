@@ -8,6 +8,10 @@ disable-model-invocation: false
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
+## Scope check
+
+Before round 1: if the topic handed to this skill looks too large for a handful of rounds to converge (a whole system, a whole app, several unrelated features bundled together), **MUST ASK** for confirmation before diving in — show 2-3 candidate narrower sub-scopes, each a single focused target this session could actually finish, with your recommended one marked `➡️`. "No, keep the full scope" is a valid answer — treat it as confirmation and proceed with everything. A topic that's already a single focused target skips this check — go straight to round 1.
+
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the frontier in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
 
 Each question should be formatted like so:
