@@ -6,6 +6,7 @@ For test writing examples, read `tdd-tests.md`.
 For mocking guidelines, read `tdd-mocking.md`.
 For refactoring after green, read `tdd-refactoring.md` and `meta-pattern.md`.
 For interface design for testability, read `deep-modules.md`.
+For which kind of test each abstraction level needs (L1/L2/L3), read `abstraction-levels.md`'s Testing by level section.
 
 ---
 
@@ -82,7 +83,7 @@ Rules:
 
 ### 4. Refactor
 
-After all tests are green, check for deep module opportunities (see `../pf/references/deep-modules.md`):
+After all tests are green, check for deep module opportunities (see `deep-modules.md`):
 
 - [ ] Can any interface be narrowed?
 - [ ] Is complexity hidden or exposed?

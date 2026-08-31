@@ -14,7 +14,7 @@ Every architecture is plotted on three axes. The axis you move along determines 
        ╱ Sharding (diagonal — parallel deployed instances)
 ```
 
-- **Abstractness** (vertical) — inversely proportional to distance from the system's clients; a graphical UI is highly abstract (users interact with it directly), while device drivers at the opposite end operate in raw bits and registers; intermediate layers (routing, proxies, OS) are placed toward the top even if not highly abstract, to keep diagrams simple — high-level above, low-level below; vertical split extracts a layer
+- **Abstractness** (vertical) — inversely proportional to distance from the system's clients; a graphical UI is highly abstract (users interact with it directly), while device drivers at the opposite end operate in raw bits and registers; intermediate layers (routing, proxies, OS) are placed toward the top even if not highly abstract, to keep diagrams simple — high-level above, low-level below; vertical split extracts a layer. Same L1/L2/L3 split as `abstraction-levels.md`, at module/service-decomposition scale rather than per-function.
 - **Subdomain** (horizontal) — distinct functional areas side by side; horizontal split separates domains
 - **Sharding** (diagonal) — multiple deployed instances; combine collapses unnecessary instances
 -

@@ -1,5 +1,7 @@
 # Deep Modules
 
+Shapes the interface at an abstraction-level boundary (L1→L2 or L2→L3, per `abstraction-levels.md`) once one exists — narrow the interface, hide the rest.
+
 From "A Philosophy of Software Design":
 
 **Deep module** = small interface + lots of implementation

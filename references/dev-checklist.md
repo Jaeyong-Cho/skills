@@ -8,7 +8,7 @@ Every point a `@skills/grill-me` interview must cover for a feature or a fix. Ph
 - Root cause (for fix)
 - Fundamental Solution (**MUST NOT** Ad-Hoc or Workaround)
 - Architecture — components and interfaces
-- Function abstraction shape (L1/L2/L3) — does the changed public function read as L1 intent with no L2/L3 leaking in; which L2 domain functions and L3 mechanism functions does it need, and do they already exist or need creating? (`abstraction-levels.md`)
+- Function abstraction shape (L1/L2/L3) — does the changed public function read as L1 intent with no L2/L3 leaking in; which L2 domain functions and L3 mechanism functions does it need, and do they already exist or need creating? Each new/changed L2/L3 function gets TDD (RED → GREEN → REFACTOR), per `abstraction-levels.md`'s Testing by level section.
 - Impact scope
 - Observability and Monitoring
 - Testability
