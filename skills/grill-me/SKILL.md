@@ -43,9 +43,9 @@ Only when the reply is an actual question back — they're asking *you*
 something, not declining to decide — answer it first, in layers, with
 `@skills/grill-ai`:
 
-- L0: core answer, 1-2 sentences
-- L1: key reasoning, only if they push further
-- L2: examples/edge cases, only if explicitly requested
+- Core: answer, 1-2 sentences
+- Reason: key reasoning, only if they push further
+- Detail: examples/edge cases, only if explicitly requested
 
 Re-ask that Qn, unchanged, in the next round alongside whatever else the
 frontier opens up. Don't let one unanswered question block recording the
