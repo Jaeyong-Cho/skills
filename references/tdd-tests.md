@@ -33,6 +33,43 @@ it("calls PaymentGateway.charge", async () => {
 - Breaks when you rename or restructure internals
 - Passes even if behavior is wrong
 
+## Tautological test
+
+Expected value must be an independent literal, not recomputed the same way the implementation does — otherwise the test passes by construction even when the logic is wrong.
+
+```typescript
+// Bad — expected value recomputed via the same formula the code uses
+it("sums line items", () => {
+  const items = [{ price: 10 }, { price: 5 }]
+  const expected = items.reduce((sum, i) => sum + i.price, 0)
+  expect(calculateTotal(items)).toBe(expected)
+})
+
+// Good — expected value is a known literal
+it("sums line items", () => {
+  expect(calculateTotal([{ price: 10 }, { price: 5 }])).toBe(15)
+})
+```
+
+## Verify through the interface, not storage
+
+Checking a database row directly after a call couples the test to L3 (per `abstraction-levels.md`) instead of the function's actual contract.
+
+```typescript
+// Bad — bypasses the interface to verify
+it("createUser saves to database", async () => {
+  await createUser({ name: "Alice" })
+  const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"])
+  expect(row).toBeDefined()
+})
+
+// Good — verifies through the interface
+it("createUser makes the user retrievable", async () => {
+  const user = await createUser({ name: "Alice" })
+  expect((await getUser(user.id)).name).toBe("Alice")
+})
+```
+
 ## Rule
 
 If test breaks after refactor but behavior hasn't changed, test was wrong.

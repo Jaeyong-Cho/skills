@@ -1,4 +1,4 @@
-# TDD in VAO
+# TDD
 
 Implementation always follows TDD: one behavior at a time, RED → GREEN → REFACTOR.
 
@@ -90,24 +90,3 @@ After all tests are green, check for deep module opportunities (see `deep-module
 - [ ] Any duplication to extract?
 
 Run tests after each refactor step. **Never refactor while RED.**
-
----
-
-## VAO layer guidance
-
-| Layer | What to test |
-|---|---|
-| **Value** | Entry point behavior — correct result for user need |
-| **Aspect** | Workflow outcome — given these objects, right result is produced |
-| **Object** | Public actions and behaviors — state transitions, not internal fields |
-
-## Checklist per cycle
-
-```
-[ ] Test names match User Stories from ADR
-[ ] Test describes behavior, not implementation
-[ ] Test uses public interface only
-[ ] Test would survive internal refactor
-[ ] Code is minimal for this test
-[ ] No speculative features added
-```

@@ -327,7 +327,7 @@ Technical details are delegated downward.
 
 ## 8. Prefer a Clear Dependency Direction
 
-The preferred conceptual direction is:
+The rule is **never call upward** — not "always exactly one hop down." The preferred conceptual direction is:
 
 ```text
 L1 — Intent
@@ -337,7 +337,14 @@ L2 — Domain / Business Behavior
 L3 — Implementation / Mechanism
 ```
 
-However, higher-level code should depend on **abstractions**, not necessarily concrete L3 implementations.
+but two shapes both satisfy the rule and are both normal, not exceptions:
+
+- **Same-level composition** — an L1 function calling another L1 function (`L1 → L1 → L2`), an orchestration composed of orchestrations. Same for L2 calling L2.
+- **Level skip** — an L1 function calling L3 directly (`L1 → L3`), when there's genuinely no business rule between the intent and the mechanism and the direct call still reads as intent. Skip only because there's truly nothing for L2 to add — not to avoid writing a domain rule that should exist. Skipping *that* rule, not the absence of one, is the smell (Missing L2, in `../abstraction-levels.md`'s smells table).
+
+What's never acceptable, regardless of shape: L3 calling L2 or L1, or L2 calling L1 — a dependency pointing toward more abstract code from more mechanical code.
+
+Higher-level code should also depend on **abstractions**, not necessarily concrete L3 implementations.
 
 ```text
              L1
