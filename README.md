@@ -79,7 +79,6 @@ Referenced by workflow skills — loaded at the point they're needed.
 | `model-selection.md` | Pick opus/sonnet/haiku by task ambiguity, mistake cost, and verifiability |
 | `good-harness.md` | Turn a natural-language constraint into a local, executable pass/fail check: Layer/Determinism axes, harness-by-shape table, anti-patterns |
 | `document-style.md` | Structured-format style, key-value format: priority order (diagram/table > bullets > prose), when to use a flow diagram vs a table, Introduction/Body/Conclusion structure — covers both chat/plans and standalone docs |
-| `preference-format.md` | Standing-vs-one-off test and entry format for recorded preferences |
 | `requirement-engineering.md` | Elicitation, analysis, specification, validation, management — the five requirement-engineering activities |
 | `spec-convention.md` | A target project's spec documents live under `spec/{epic-slug}/{story-slug}.md` (format: `template/spec.md`), indexed by `spec/{epic-slug}/index.md` and the top-level `spec/index.md` |
 | `top-down-decompose.md` | MECE top-down decomposition methodology to split a goal into atomic sub-goals |
