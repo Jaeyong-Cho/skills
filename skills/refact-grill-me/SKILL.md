@@ -10,7 +10,7 @@ disable-model-invocation: true
 
 ## Rule this refactor follows
 
-Read `../references/abstraction-levels.md` first — every "Current shape" and "Target decomposition" answer classifies against its L1/L2/L3 table and smells table. Open `../references/abstraction-levels/full-guidelines.md` only when the human asks why a smell matters or wants the Good/Bad example behind it.
+Read `../references/abstraction-levels.md` first — every "Current shape" and "Target decomposition" answer classifies against its L1/L2/L3 table and smells table, and it carries the full 15-rule set with Good/Bad examples for when the human asks why a smell matters.
 
 ## Impact Level and Uncertainty
 
