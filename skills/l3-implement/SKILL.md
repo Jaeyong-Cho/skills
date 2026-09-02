@@ -1,6 +1,6 @@
 ---
 name: l3-implement
-description: Implement one L3 mechanism function directly from a plain-language description of a technical operation (DB, HTTP, SDK, filesystem, ...), per references/abstraction-levels.md — exposes a simple interface upward, no business decisions inside. Code only, no test — see @skills/func-test. Invoke as /l3-implement, or via l1-implement/l2-implement.
+description: Implement one L3 mechanism function directly from a plain-language description of a technical operation (DB, HTTP, SDK, filesystem, ...), per references/abstraction-levels.md — exposes a simple interface upward, no business decisions inside. Code only, no test — see @skills/func-test. Invoke as /l3-implement, or via l1-implement/l2-implement/to-code.
 disable-model-invocation: true
 ---
 

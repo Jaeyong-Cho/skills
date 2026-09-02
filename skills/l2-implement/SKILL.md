@@ -1,6 +1,6 @@
 ---
 name: l2-implement
-description: Implement one L2 domain function directly from a plain-language description of a business rule/behavior, per references/abstraction-levels.md — depends on L3 only through an interface, never a concrete implementation. Code only, no test — see @skills/func-test. Invoke as /l2-implement, or via l1-implement.
+description: Implement one L2 domain function directly from a plain-language description of a business rule/behavior, per references/abstraction-levels.md — depends on L3 only through an interface, never a concrete implementation. Code only, no test — see @skills/func-test. Invoke as /l2-implement, or via l1-implement/to-code.
 disable-model-invocation: true
 ---
 

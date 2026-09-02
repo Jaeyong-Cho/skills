@@ -1,6 +1,6 @@
 ---
 name: l1-implement
-description: Implement one L1 orchestration function directly from a plain-language description of a use case/flow, decomposed per references/abstraction-levels.md — reuses existing L2/L3 functions, stubs every missing one as a visible TODO (never builds them here; that's a separate l2-implement/l3-implement call). Invoke as /l1-implement.
+description: Implement one L1 orchestration function directly from a plain-language description of a use case/flow, decomposed per references/abstraction-levels.md — reuses existing L2/L3 functions, stubs every missing one as a visible TODO (never builds them here; that's a separate l2-implement/l3-implement call). Invoke as /l1-implement, or via to-code.
 disable-model-invocation: true
 ---
 
