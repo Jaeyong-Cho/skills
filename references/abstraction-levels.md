@@ -6,6 +6,16 @@ This file is self-contained: table, dependency direction, agent questions, smell
 
 **Related docs, different scale of the same idea:** `meta-pattern.md`'s Abstractness axis (use cases / domain logic / infrastructure) is this same vertical split, but at the system/module-decomposition scale rather than per-function — read it when the question is "does this need a new module or service," not "what level is this function." `deep-modules.md` is how to shape the interface at an L1→L2 or L2→L3 boundary once it exists — small interface, hidden complexity, dependencies accepted not created.
 
+## Levels recurse across scale
+
+L1/L2/L3 is not a fixed, system-wide label — it's relative to whatever unit you're currently decomposing (a function inside a file, a method inside a class, a file inside a service, a service inside the system), and the same three-level split repeats one scale down whenever you step inside a unit.
+
+A DB service, seen from the rest of the system, is L3 (a mechanism the rest of the system calls). Step inside that service and it has its own L1 (its public entry-point files/API — "what does this service do for a caller"), L2 (its internal domain rules — e.g. connection-pool policy, retry/migration ordering), and L3 (the code that actually touches the driver/socket). Same one scale further down: an L3 file can itself contain an L1 function (its public entry point) orchestrating L2 helper functions down to the L3 functions that make the real driver calls.
+
+The **never call upward** rule applies independently at each scale — a service's internal L3 code never calls its own L2, same as a function's L3 never calls its own L2 — but crossing a scale boundary (an L1 file inside an externally-L3 service, being called by another service) isn't a violation of that rule; it's just a different scale. Before classifying, name the unit you're looking at and apply the Three-level test relative to *that unit's own callers* — don't classify a function as L1 globally just because the service containing it happens to be L3 from the outside.
+
+**The point of recursing is to keep each scale from mixing, not to excuse mixing.** Rule 7 (Keep One Abstraction Level Per Function) still holds at every scale: if a "DB service" file has its top-level entry point issuing raw driver calls right next to its orchestration logic, that's the same L1-leaking-L3 smell as inside a single function — the fix is the same too, decompose that file/service into its own L1→L2→L3 units instead of leaving them interleaved in one place. Recursion is not a loophole for "it's fine to mix here because this is a lower scale" — every scale gets its own clean split, or it doesn't recurse, it just mixes.
+
 | Level | Answers | Typical examples | DDD equivalent |
 |-------|---------|-------------------|-----------------|
 | **L1 — Intent** | What does this do, from the caller's view? | Public APIs, use cases, app services, orchestration methods | Application Service |
