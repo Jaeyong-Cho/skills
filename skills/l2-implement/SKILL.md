@@ -10,8 +10,6 @@ Turn a human's plain-language description of one business rule into a real L2 fu
 
 ## Scope check
 
-Before starting: if the description covers more than one business rule, needs a new domain concept/entity to hold it, or reads like a whole feature, **MUST STOP** and recommend `@skills/dev-grill-me` → `@skills/to-plan` → `@skills/do-plan` instead (or `@skills/refact-grill-me` if this is about splitting existing code) — name why in one line. A single, clear business rule skips this and goes straight to step 1.
-
 1. **Name the L2 function.** From the description, state its one-sentence test (per `../references/abstraction-levels.md`) in domain terms, not technical terms — if it needs "and", it's more than one rule; go back to the scope check.
 2. **Find its L3 dependency, if any.** Does deciding this rule need a technical capability (current price, inventory count, a stored record, ...)? If so it depends on an *interface* for that capability, never a concrete implementation, per `../references/abstraction-levels.md`. Dispatch a sub-agent to check the repo: does the interface exist, does an implementation of it exist — reuse before creating, per `../references/deep-modules.md`. If neither exists, that's an `@skills/l3-implement` follow-up, not this skill's job — name it plainly, and depend on the interface (declared but not yet implemented) so this function still compiles/type-checks.
 3. **Write the L2 function.** Domain terminology, the business rule only — no direct database/HTTP/SDK/filesystem call inline; call the L3 interface from step 2 instead, if there is one, per `../references/abstraction-levels.md`'s L2 rules. Name it per `../references/naming.md`.

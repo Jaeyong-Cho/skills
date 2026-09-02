@@ -10,8 +10,6 @@ Turn a human's plain-language description of one use case into a real, working L
 
 ## Scope check
 
-Before starting: if the description covers more than one L1 flow, or reads like a whole feature (new schema, new service, cross-system contract, ambiguous acceptance criteria), **MUST STOP** and recommend `@skills/dev-grill-me` → `@skills/to-plan` → `@skills/do-plan` instead — name why in one line. A single, clear use case skips this and goes straight to step 1.
-
 1. **Name the L1 function.** From the description, state its one-sentence test (per `../references/abstraction-levels.md`) — if it can't be said in one sentence without "and", it's more than one L1 flow; go back to the scope check.
 2. **Decompose.** Run the Decomposition check from `../references/abstraction-levels.md`: list the L2 domain functions and L3 mechanism functions this L1 function needs. Dispatch a sub-agent to check the repo for each — reuse before creating, per `../references/deep-modules.md`; never re-implement what already exists a few files over.
 3. **Stub every gap — never implement one here.** For each L2/L3 function from step 2 that doesn't exist yet: write only a stub — right name and signature, a `# TODO: implement via @skills/l2-implement` or `# TODO: implement via @skills/l3-implement` comment (whichever level it is) naming the missing decision/mechanism, and a body that fails loudly (raise/throw "not implemented: {decision}"). This applies regardless of how completely the description specifies the behavior — **MUST NOT** write real L2/L3 logic in this skill, even when the description fully specifies it; building a stubbed function for real is a separate, later call to that level's own `-implement` skill.
