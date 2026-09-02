@@ -63,6 +63,7 @@ Apply the baseline prompt above, plus these explicit review rules:
    - Call out feature logic leaking into shared paths or implementation details leaking through APIs.
    - Prefer existing canonical utilities/helpers over bespoke one-offs.
    - Push code toward the right package, service, or module instead of normalizing architectural drift.
+   - Check every changed function/file/service against `../references/abstraction-levels.md`'s smells table (L1 leaking L3, L2 leaking L3, Missing L2, domain rule hidden as plumbing, shallow L1) — a business rule mixed with an inline DB/HTTP/SDK call, or an orchestration making that call itself, is a structural regression, not a nit; the doc's "Levels recurse across scale" section applies the same check whether the unit is a function or a whole service.
 
 7. **Treat unnecessary sequential orchestration and non-atomic updates as design smells when the cleaner structure is obvious.**
    - If independent work is serialized for no good reason, ask whether the flow should run in parallel instead.
