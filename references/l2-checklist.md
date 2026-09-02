@@ -7,3 +7,4 @@ Every point a `@skills/grill-me` interview must cover to nail down one L2 busine
 - Rule — the decision logic itself: every condition/branch, stated precisely in domain terms
 - L3 dependency — does deciding this rule need a technical capability (current price, inventory count, a stored record, ...)? If so, the interface it depends on (never a concrete implementation) — does that interface already exist?
 - Output — what this function returns, or the state transition it produces
+- File — which existing file this rule's function belongs in, per the repo's own module/folder convention (evidence: sibling L2 functions found there) — a new file only when no existing one fits
