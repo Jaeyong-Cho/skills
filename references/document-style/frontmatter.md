@@ -1,6 +1,6 @@
 # Frontmatter (OKF)
 
-**MUST**, every new document written under `~/wiki/**/*.md` or a target repo's `spec/**/*.md` carry [Open Knowledge Format](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing?hl=en) frontmatter. **MUST** every new first-party source-code file in a target repo carry the same metadata in a language-safe comment header. Source code uses a comment header instead of bare YAML so the metadata cannot break the interpreter or compiler. Out of scope: `index.md`/`log.md`, generated files, dependencies, vendored skills like `diagram-design` that keep their own format, and everything else outside `~/wiki`/`spec/` or first-party source code.
+**MUST**, every new document written under `~/wiki/**/*.md` or a target repo's `spec/**/*.md` carry [Open Knowledge Format](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing?hl=en) frontmatter (full spec vendored at `../okf/SPEC.md`). **MUST** every new first-party source-code file in a target repo carry the same metadata in a language-safe comment header. Source code uses a comment header instead of bare YAML so the metadata cannot break the interpreter or compiler. Out of scope: `index.md`/`log.md`, generated files, dependencies, vendored skills like `diagram-design` that keep their own format, and everything else outside `~/wiki`/`spec/` or first-party source code.
 
 Add a YAML frontmatter block at the top of the file, all six fields, every time:
 

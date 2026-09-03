@@ -7,7 +7,11 @@ Usage:
   python3 kb.py search <word> [<word> ...]  # rank kb/ docs by OKF-field match
   python3 kb.py hit <doc.md>         # hit_count += 1, last_hit_at = today
   python3 kb.py deprecate <doc.md>   # move to ~/wiki/kb-deprecated, same
-                                      # relative path (git mv if in a repo)
+                                      # relative path (git mv if in a repo);
+                                      # also appends a log.md entry
+  python3 kb.py log <create|update> <doc.md>  # append a log.md entry
+                                      # (deprecate logs itself, no separate
+                                      # call needed)
 
 `search` is what `@skills/grill-me` shells out to before asking a question —
 it matches every OKF descriptive field (`type`, `title`, `description`,
@@ -33,6 +37,7 @@ import yaml
 KB_ROOT = Path.home() / "wiki" / "kb"
 DEPRECATED_ROOT = Path.home() / "wiki" / "kb-deprecated"
 FRONTMATTER_RE_START = "---\n"
+LOG_ACTIONS = ("create", "update", "deprecate")
 
 
 def load(path):
@@ -86,6 +91,48 @@ def cmd_search(words):
         print(f"{score}\t{path}")
 
 
+LOG_LABELS = {"create": "Creation", "update": "Update", "deprecate": "Deprecation"}
+LOG_HEADER = "# KB Update Log\n"
+
+
+def cmd_log(action, path):
+    """Append one entry to ~/wiki/kb/log.md, per references/okf/SPEC.md §9
+    (repo root): a flat, date-grouped list, newest date heading first, entries newest-last
+    within a day (append order)."""
+    if action not in LOG_ACTIONS:
+        sys.exit(f"log action must be one of {LOG_ACTIONS}, got {action!r}")
+    try:
+        rel = path.resolve().relative_to(KB_ROOT.resolve())
+    except ValueError:
+        rel = path
+    title = rel.stem
+    try:
+        meta, _ = load(path)
+        title = meta.get("title", title)
+    except SystemExit:
+        pass  # doc already moved/gone (e.g. deprecate after the git mv) — use filename
+
+    entry = f"* **{LOG_LABELS[action]}**: [{title}](/{rel})\n"
+    today_heading = f"## {date.today().isoformat()}\n"
+
+    log_path = KB_ROOT / "log.md"
+    lines = log_path.read_text(encoding="utf-8").splitlines(keepends=True) \
+        if log_path.exists() else [LOG_HEADER, "\n"]
+
+    first_heading = next((i for i, l in enumerate(lines) if l.startswith("## ")), len(lines))
+    if first_heading < len(lines) and lines[first_heading] == today_heading:
+        # today's section already exists — append the entry at its end,
+        # right before the next date heading (or EOF)
+        insert_at = first_heading + 1
+        while insert_at < len(lines) and not lines[insert_at].startswith("## "):
+            insert_at += 1
+        lines.insert(insert_at, entry)
+    else:
+        lines[first_heading:first_heading] = [today_heading, entry, "\n"]
+
+    log_path.write_text("".join(lines), encoding="utf-8")
+
+
 def cmd_hit(path):
     meta, body = load(path)
     meta["hit_count"] = int(meta.get("hit_count", 0)) + 1
@@ -102,6 +149,7 @@ def cmd_deprecate(path):
         sys.exit(f"{path}: not under {KB_ROOT}, refusing to deprecate")
     target = DEPRECATED_ROOT / rel
     target.parent.mkdir(parents=True, exist_ok=True)
+    cmd_log("deprecate", path)  # read title before the file moves away
     in_git = subprocess.run(
         ["git", "-C", str(path.parent), "rev-parse", "--is-inside-work-tree"],
         capture_output=True, text=True,
@@ -121,6 +169,11 @@ def main():
         if len(sys.argv) < 3:
             sys.exit(__doc__)
         cmd_search(sys.argv[2:])
+        return
+    if action == "log":
+        if len(sys.argv) < 4:
+            sys.exit(__doc__)
+        cmd_log(sys.argv[2], Path(sys.argv[3]))
         return
     if len(sys.argv) < 3:
         sys.exit(__doc__)
@@ -186,9 +239,19 @@ def self_test():
         old_kb, old_dep = KB_ROOT, DEPRECATED_ROOT
         KB_ROOT, DEPRECATED_ROOT = tmp, tmp / "deprecated"
         try:
+            cmd_log("create", doc)
+            cmd_log("update", doc)  # same day -> appended under the same heading
+            log_text = (tmp / "log.md").read_text(encoding="utf-8")
+            assert log_text.count(f"## {date.today().isoformat()}") == 1, log_text
+            assert "**Creation**: [Test](/doc.md)" in log_text, log_text
+            assert "**Update**: [Test](/doc.md)" in log_text, log_text
+            assert log_text.index("**Creation**") < log_text.index("**Update**")
+
             cmd_deprecate(doc)
             assert (tmp / "deprecated" / "doc.md").exists()
             assert not doc.exists()
+            log_text = (tmp / "log.md").read_text(encoding="utf-8")
+            assert "**Deprecation**: [Test](/doc.md)" in log_text, log_text
         finally:
             KB_ROOT, DEPRECATED_ROOT = old_kb, old_dep
 
