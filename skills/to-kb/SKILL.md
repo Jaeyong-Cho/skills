@@ -38,4 +38,4 @@ Any session can cite an existing `~/wiki/kb` doc while answering something — n
 
 Completion criterion: every session finding is gated IN/OUT, every KB citation is classified and (if a hit) recorded, every IN finding has an explicit store/skip answer and is filed accordingly, `lint_kb.py` is clean of errors, and every pruning candidate has an explicit deprecate/keep answer.
 
-Tell the user what was recorded (hits, docs merged/filed, anything deprecated, anything dropped as OUT-of-scope) when done.
+Tell the user the outcome of *every* candidate — never let one go unmentioned: hits recorded, docs merged/filed, anything deprecated, anything dropped as OUT-of-scope (step 2), and anything the human declined to store or deprecate (step 5/8) — a decline is a decision, report it the same as a store, not silently.
