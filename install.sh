@@ -208,7 +208,7 @@ setup_pi() {
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
-    "https://github.com/lajarre/pi-vim"
+    "npm:pi-vimmode"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"
