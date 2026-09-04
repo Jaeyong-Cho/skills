@@ -40,6 +40,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | Skill | Output | What it does |
 |-------|--------|-------------|
 | `/grill-me` | — | Personal grilling engine: interview one question at a time from a design-tree frontier; when the user can't answer, drop into progressive-disclosure clarification before returning to the question |
+| `/now` | — | Break out of whatever's running — a `/grill-me` round, any conversation — and get one task done immediately, no plan/round/confirmation, then resume the interrupted flow exactly where it paused |
 | `/dev-grill-me` | — | Run `/grill-me` covering both feature and fix concerns in one pass: intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan |
 | `/req-grill-me` | — | Run `/grill-me` to build an agile Story in one pass: persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check |
 | `/refact-grill-me` | — | Run `/grill-me` to refactor a named function or usecase sequence against `abstraction-levels.md`'s L1/L2/L3 rule: current shape and smells, behavior-preservation baseline, target decomposition |
