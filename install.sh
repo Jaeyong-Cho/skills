@@ -5,6 +5,8 @@ SKILLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
 CLAUDE_MD="$SKILLS_DIR/CLAUDE.md"
 CLAUDE_SKILLS_DIR="$CLAUDE_DIR/skills"
+PI_AGENT_DIR="$HOME/.pi/agent"
+AGENTS_MD="$SKILLS_DIR/AGENTS.md"
 
 # overwrite (default): copy over existing files, leave stale/renamed skills
 #   and manually-added skills alone.
@@ -194,6 +196,14 @@ setup_copilot() {
 setup_pi() {
   echo "→ pi coding agent"
 
+  mkdir -p "$PI_AGENT_DIR"
+  if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
+    cp "$PI_AGENT_DIR/AGENTS.md" "$PI_AGENT_DIR/AGENTS.md.bak"
+    echo "  backed up existing AGENTS.md"
+  fi
+  ln -sf "$AGENTS_MD" "$PI_AGENT_DIR/AGENTS.md"
+  echo "  ✓ ~/.pi/agent/AGENTS.md → $AGENTS_MD"
+
   if command -v npx &>/dev/null; then
     npx --yes skills add DietrichGebert/ponytail -a pi -g -y &>/dev/null \
       && echo "  ✓ ponytail (skills.sh)" \
@@ -217,12 +227,21 @@ setup_pi() {
     fi
   done
 
-  # pi-interactive-subagents is installed per-project, not globally: run
-  # bin/pi-interactive-subagents-setup from inside the target repo, which
-  # both `pi install`s it and stubs out its bundled agents
-  # (planner/scout/worker/reviewer/visual-tester) so only this repo's own
-  # custom agents (e.g. from @skills/system-grill-me) get suggested/spawned.
+  # Both subagent extensions are installed per-project, not globally: run
+  # the matching bin/ script from inside the target repo.
+  #
+  # pi-interactive-subagents backs @skills/system-grill-me-designed agent
+  # teams — bin/pi-interactive-subagents-setup `pi install`s it and stubs
+  # out its bundled agents (planner/scout/worker/reviewer/visual-tester).
+  #
+  # pi-subagents backs the intent-to-cycle problem-solving skills
+  # (@skills/define-problem, @skills/find-solutions, @skills/evaluate-solution)
+  # — bin/pi-subagents-setup `pi install`s it (+ pi-web-access), writes the
+  # fact-finder/experimenter agents, and disables its scout/worker/reviewer/
+  # oracle/delegate builtins (keeps researcher, for web reference search).
+  # See references/pi-subagents.md.
   echo "  note: pi-interactive-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-interactive-subagents-setup inside a target repo"
+  echo "  note: pi-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-subagents-setup inside a target repo"
 
   setup_boy_scout pi
 }

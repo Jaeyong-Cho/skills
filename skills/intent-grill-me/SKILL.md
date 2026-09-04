@@ -31,4 +31,4 @@ Run `python3 ../to-kb/scripts/lint_kb.py --plain {path to intents.md}` (relative
 
 Completion criterion: `intents.md` exists at the confirmed path, carries valid OKF frontmatter, `lint_kb.py --plain` is clean, every checklist point has a section, nothing left silently assumed.
 
-Once complete, tell the user the file path. Next step in this skill set (current-state capture, problem definition) is not built yet — say so rather than inventing it.
+Once complete, tell the user the file path. Next step in this skill set is `@skills/define-problem`.

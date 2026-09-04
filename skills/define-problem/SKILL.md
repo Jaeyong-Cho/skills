@@ -10,9 +10,9 @@ Turn an `intents.md`'s desired state into one or more concrete problems by findi
 
 1. **Read the intent.** Take the `intents.md` the user names, or the newest one under the current directory / today's `~/wiki/today/research/` tree if none is named — **MUST ASK** which one if more than one candidate exists and it's not obvious. Pull its Desired outcome and Constraints sections as-is; this is the desired state, not re-derived. Completion criterion: a stated desired state and constraint list, each traceable to that file.
 
-2. **Dispatch sub-agents for the current state.** For every part of the desired state, dispatch a sub-agent to find the real current state by inspecting the codebase/environment/docs (grep/read/run a read-only command), per `../references/subagents-vs-skills.md`. Never ask the user for a fact a sub-agent can find. Record each finding with its file:line or command-output evidence attached — never "should"/"probably"/"likely". Completion criterion: every part of the desired state has a current-state finding with cited evidence.
+2. **Dispatch sub-agents for the current state.** For every part of the desired state, dispatch a sub-agent to find the real current state by inspecting the codebase/environment/docs (grep/read/run a read-only command), per `../references/subagents-vs-skills.md` — on pi, that's the `fact-finder` agent, named explicitly, never a bare dispatch (`../references/pi-subagents.md`). Never ask the user for a fact a sub-agent can find. Record each finding with its file:line or command-output evidence attached — never "should"/"probably"/"likely". Completion criterion: every part of the desired state has a current-state finding with cited evidence.
 
-3. **Run an experiment where reading can't settle it.** A claim only observable by actually running something (not by reading) goes to `@skills/experiment` instead of being guessed — dispatch a sub-agent to run it (plan the cheapest experiment, run it for real, report back a verdict), same as step 2's dispatch, and use that verdict as the evidence for that finding.
+3. **Run an experiment where reading can't settle it.** A claim only observable by actually running something (not by reading) goes to `@skills/experiment` instead of being guessed — dispatch a sub-agent to run it (plan the cheapest experiment, run it for real, report back a verdict), same as step 2's dispatch — on pi, that's the `experimenter` agent (`../references/pi-subagents.md`) — and use that verdict as the evidence for that finding.
 
 4. **Compute the gap.** Diff the current state (steps 2-3) against the desired state (step 1) — one gap per point where they diverge. A desired-state point the current state already satisfies is not a gap; drop it, don't write a problem for something already true. Completion criterion: every divergence is a named gap, every match is explicitly dropped (not silently ignored).
 
@@ -28,4 +28,4 @@ Turn an `intents.md`'s desired state into one or more concrete problems by findi
 
 Completion criterion: every problem file exists at the confirmed path, carries valid OKF frontmatter and a `derived_from` line, `lint_kb.py --plain` is clean on each, every body section is backed by real evidence (steps 1-4) or a recorded decision with reasoning (step 5), nothing left silently assumed.
 
-Once complete, tell the user the file path(s). Next step in this skill set (explore/execute/evaluate) is not built yet — say so rather than inventing it.
+Once complete, tell the user the file path(s). Next step in this skill set is `@skills/find-solutions`.

@@ -12,7 +12,7 @@ A green test in `@skills/do-plan`'s report is evidence the plan's acceptance cri
 
 2. **Read the execution result.** Pull the report's acceptance-criteria pass/fail table and "what changed" list as-is — this is evidence already produced, not re-derived.
 
-3. **Re-check the real current state.** Dispatch a sub-agent to verify, right now, whether the codebase/environment actually matches the problem's original Desired state — grep/read/run a read-only inspection command, per `../references/subagents-vs-skills.md`. Don't stop at "the report says pass" — code can drift after a commit, and a green test can miss what the Desired state actually asked for. Cite file:line or command output for every claim, same as `@skills/define-problem`'s Current state step.
+3. **Re-check the real current state.** Dispatch a sub-agent to verify, right now, whether the codebase/environment actually matches the problem's original Desired state — grep/read/run a read-only inspection command, per `../references/subagents-vs-skills.md` — on pi, that's the `fact-finder` agent, named explicitly, never a bare dispatch (`../references/pi-subagents.md`). Don't stop at "the report says pass" — code can drift after a commit, and a green test can miss what the Desired state actually asked for. Cite file:line or command output for every claim, same as `@skills/define-problem`'s Current state step.
 
 4. **Compute the remaining gap.** Diff step 3's fresh current state against the Desired state — same method as `@skills/define-problem`'s Gap step. An empty diff means fully closed; anything else is a named remaining gap, not silently dropped.
 

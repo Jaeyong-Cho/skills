@@ -23,4 +23,4 @@ Turn a picked solution into a real change instead of re-deriving what to build â
 
 Completion criterion: the plan is executed (or its blocker is named), the report exists, and both the solution and problem files reflect the real outcome with a pointer to it.
 
-Once complete, tell the user the plan and report file paths, and paste `do-plan`'s "Try it yourself" QA checklist into the session. Next step in this skill set (evaluate) is not built yet â€” say so rather than inventing it.
+Once complete, tell the user the plan and report file paths, and paste `do-plan`'s "Try it yourself" QA checklist into the session. Next step in this skill set is `@skills/evaluate-solution`.
