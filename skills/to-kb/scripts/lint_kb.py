@@ -30,7 +30,11 @@ NEW_DOC_GRACE_DAYS) is exempt; the rest is ranked by `last_hit_at`
 ascending and the bottom PRUNING_PERCENTILE are flagged as candidates.
 
 Usage:
-  python3 lint_kb.py [kb_root]     # defaults to ~/wiki/kb
+  python3 lint_kb.py [kb_root]           # defaults to ~/wiki/kb, full schema
+  python3 lint_kb.py --plain [dir]       # plain OKF (5 fields, no hit-lifecycle
+                                          # fields, no eviction) — for any other
+                                          # skill's OKF-frontmatter output dir,
+                                          # e.g. intent-grill-me's / define-problem's
 Exit code 1 if any ERROR-level violation is found, 0 otherwise (warnings
 and pruning candidates are informational, not failures).
 """
@@ -58,6 +62,11 @@ REQUIRED_FIELDS = [
     "type", "title", "description", "tags", "timestamp",
     "created_at", "owner", "last_hit_at", "hit_count",
 ]
+# Plain OKF (document-style/frontmatter.md's six fields, minus optional
+# `resource`) — for a document that isn't a `~/wiki/kb` entry and so never
+# carries the hit-lifecycle fields (`created_at`/`owner`/`last_hit_at`/
+# `hit_count`), only `@skills/to-kb` writes those.
+PLAIN_REQUIRED_FIELDS = ["type", "title", "description", "tags", "timestamp"]
 RESERVED_NAMES = {"index.md", "log.md"}
 
 
@@ -80,8 +89,35 @@ def content_files(kb_root):
     return [p for p in sorted(kb_root.rglob("*.md")) if p.name not in RESERVED_NAMES]
 
 
-def lint(kb_root):
-    """Returns (errors, warnings, pruning_candidates) — each a list of str."""
+def lint_file(path, required_fields):
+    """Frontmatter + length check for a single file — no index.md/depth/
+    per-dir/total/eviction checks, those only make sense for a curated
+    multi-file tree, not one document sitting wherever its skill wrote it.
+    Returns (errors, warnings) — each a list of str.
+    """
+    errors, warnings = [], []
+    n_lines = len(path.read_text(encoding="utf-8").splitlines())
+    if n_lines > ERROR_LINES:
+        errors.append(f"{path}: {n_lines} lines, must be <= {ERROR_LINES}")
+    elif n_lines > WARN_LINES:
+        warnings.append(f"{path}: {n_lines} lines, recommended <= {WARN_LINES}")
+
+    meta, err = load_frontmatter(path)
+    if err:
+        errors.append(f"{path}: {err}")
+    else:
+        missing = [k for k in required_fields if k not in meta]
+        if missing:
+            errors.append(f"{path}: frontmatter missing field(s): {', '.join(missing)}")
+    return errors, warnings
+
+
+def lint(kb_root, required_fields=REQUIRED_FIELDS, plain=False):
+    """Returns (errors, warnings, pruning_candidates) — each a list of str.
+
+    `plain=True` skips SLRU eviction reporting — that's a hit-count concept,
+    meaningless for a doc that never carries `hit_count`.
+    """
     errors, warnings = [], []
     files = content_files(kb_root)
 
@@ -112,7 +148,7 @@ def lint(kb_root):
         if err:
             errors.append(f"{f}: {err}")
         else:
-            missing = [k for k in REQUIRED_FIELDS if k not in meta]
+            missing = [k for k in required_fields if k not in meta]
             if missing:
                 errors.append(f"{f}: frontmatter missing field(s): {', '.join(missing)}")
             else:
@@ -134,7 +170,7 @@ def lint(kb_root):
         warnings.append(f"{kb_root}: {total} total files, recommended <= {WARN_FILES_TOTAL}")
 
     candidates = []
-    breached = total > MAX_FILES_TOTAL or any(len(fs) > MAX_FILES_PER_DIRECTORY for fs in per_dir.values())
+    breached = not plain and (total > MAX_FILES_TOTAL or any(len(fs) > MAX_FILES_PER_DIRECTORY for fs in per_dir.values()))
     if breached:
         today = date.today()
         probational = []
@@ -165,11 +201,20 @@ def _parse_date(value):
 
 
 def main():
-    kb_root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.home() / "wiki" / "kb"
-    if not kb_root.is_dir():
-        sys.exit(f"{kb_root}: not a directory")
+    args = sys.argv[1:]
+    plain = "--plain" in args
+    args = [a for a in args if a != "--plain"]
+    default_root = Path.cwd() if plain else Path.home() / "wiki" / "kb"
+    target = Path(args[0]) if args else default_root
+    if not target.exists():
+        sys.exit(f"{target}: not found")
 
-    errors, warnings, candidates = lint(kb_root)
+    required_fields = PLAIN_REQUIRED_FIELDS if plain else REQUIRED_FIELDS
+    if target.is_file():
+        errors, warnings = lint_file(target, required_fields)
+        candidates = []
+    else:
+        errors, warnings, candidates = lint(target, required_fields=required_fields, plain=plain)
     for w in warnings:
         print(f"WARN  {w}")
     for e in errors:
@@ -258,6 +303,30 @@ def self_test():
         doc(root, "domain/cat/f1.md", last_hit_at="2020-01-01", created_at=date.today().isoformat())
         _, _, candidates = lint(root)
         assert all(c.name != "f1.md" for c in candidates), [c.name for c in candidates]
+
+    # --plain mode: a 5-field OKF doc (no hit-lifecycle fields) passes, and
+    # a huge directory never reports eviction candidates.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "index.md").write_text("# problems\n", encoding="utf-8")
+        plain_doc = "---\n" + "\n".join(
+            f"{k}: v" for k in PLAIN_REQUIRED_FIELDS
+        ) + "\n---\n\nbody\n"
+        (root / "01-slug.md").write_text(plain_doc, encoding="utf-8")
+        errors, warnings, candidates = lint(root, required_fields=PLAIN_REQUIRED_FIELDS, plain=True)
+        assert errors == [], errors
+        assert candidates == [], candidates
+
+        missing = "---\ntype: v\ntitle: v\n---\n\nbody\n"
+        (root / "02-missing.md").write_text(missing, encoding="utf-8")
+        errors, _, _ = lint(root, required_fields=PLAIN_REQUIRED_FIELDS, plain=True)
+        assert any("missing field(s)" in e for e in errors), errors
+        (root / "02-missing.md").unlink()
+
+        for i in range(MAX_FILES_PER_DIRECTORY + 1):
+            (root / f"many-{i}.md").write_text(plain_doc, encoding="utf-8")
+        errors, warnings, candidates = lint(root, required_fields=PLAIN_REQUIRED_FIELDS, plain=True)
+        assert candidates == [], "plain mode must never report eviction candidates"
 
     print("self-test passed")
 

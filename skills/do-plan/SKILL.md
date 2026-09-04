@@ -1,7 +1,6 @@
 ---
 name: do-plan
-description: Execute a @skills/to-plan document's action items in order, checking each off in place, verify the plan's acceptance criteria, commit the change, write up the run as a report. Invoke as /do-plan.
-disable-model-invocation: true
+description: Execute a @skills/to-plan document's action items in order, checking each off in place, verify the plan's acceptance criteria, commit the change, write up the run as a report. Reached by @skills/execute-solution right after @skills/to-plan drafts the plan. Invoke as /do-plan.
 ---
 
 # Do-Plan
