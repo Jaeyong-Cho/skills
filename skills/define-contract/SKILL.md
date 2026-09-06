@@ -1,6 +1,6 @@
 ---
 name: define-contract
-description: Define the smallest executable contract for one selected requirement after its OOD responsibilities are settled: a function, CLI command, API, or job-stage boundary with explicit inputs, outputs, errors, and side effects. Use after define-req or ood and before writing the test.
+description: "Define the smallest executable contract for one selected requirement after its OOD responsibilities are settled: a function, CLI command, API, or job-stage boundary with explicit inputs, outputs, errors, and side effects. Use after define-req or ood and before writing the test."
 disable-model-invocation: true
 ---
 
