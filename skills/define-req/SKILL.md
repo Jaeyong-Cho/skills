@@ -34,7 +34,7 @@ Do not use this skill to:
 - choose libraries, algorithms, or infrastructure
 - write tests or implementation code
 
-Those belong to `/skill:ood`, `/skill:define-contract`, and `/skill:tdd`.
+Those belong to `/skill:ood` and `/skill:tdd`.
 
 ## Human interview
 
@@ -104,9 +104,8 @@ Omit the exception row when no directly relevant exception changes the slice. Do
 
 After this card is confirmed:
 
-1. Use `/skill:ood` only if the slice has meaningful state, domain responsibilities, or object collaboration.
-2. Otherwise use `/skill:define-contract` directly.
-3. Then use `/skill:tdd` to complete RED → GREEN → REFACTOR in one invocation.
+1. Use `/skill:ood` for the complete slice. It combines object-oriented design, external and internal Interfaces, workflow, contract, and human verification; it may omit domain Objects when the slice has no meaningful state or collaboration.
+2. Then use `/skill:tdd` to complete RED → GREEN → REFACTOR in one invocation.
 
 Downstream skills must use this slice and must not pull deferred topics back into it.
 

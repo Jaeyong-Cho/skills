@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: "Run one complete RED → GREEN → REFACTOR cycle for an approved requirement and defined contract: prove the behavior is missing, implement the smallest fix, then improve structure without changing behavior."
+description: "Run one complete RED → GREEN → REFACTOR cycle for an approved requirement and its OOD contract: prove the behavior is missing, implement the smallest fix, then improve structure without changing behavior."
 disable-model-invocation: true
 ---
 
@@ -23,7 +23,7 @@ Do not stop between phases for a separate skill handoff.
 ## Input
 
 - One approved requirement and acceptance criterion
-- One defined contract from `/skill:define-contract`
+- The approved requirement and complete OOD contract from `/skill:ood`, including its primary public boundary and internal Interfaces
 - The repository's existing code and test conventions
 
 ## Output
@@ -33,7 +33,7 @@ One deterministic behavior test, the smallest production change that makes it pa
 ## Rules
 
 - Work on one behavior at a time; do not write several tests before implementing them.
-- Test observable behavior through the public contract, not private helpers or implementation details.
+- Test observable behavior through the primary public contract from `/skill:ood`, not private helpers or implementation details. When a user-facing CLI, HTTP API, UI action, or job trigger exists, exercise that boundary first; internal tests may support it but do not replace it.
 - Prefer the cheapest test that cannot lie: unit for pure domain logic, integration for a real boundary, end-to-end for a user-visible flow.
 - Use deterministic fixtures and isolated state. Mock only external system boundaries.
 - Do not write production behavior during RED.

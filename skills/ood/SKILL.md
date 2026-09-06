@@ -1,12 +1,12 @@
 ---
 name: ood
-description: Turn a defined requirement set into a bounded vertical-slice object-oriented design by settling the domain model, responsibilities, data model, APIs, user-facing boundaries, internal boundaries, workflow, edge cases, failures, and trade-offs before implementation. Use between define-req and define-contract when behavior has meaningful state or responsibilities.
+description: Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after define-req and before tdd.
 disable-model-invocation: true
 ---
 
 # OOD
 
-Design the smallest coherent object-oriented solution without writing implementation code.
+Design the smallest coherent object-oriented solution and its complete boundary contracts without writing implementation code or feature tests.
 
 ## Input
 
@@ -16,13 +16,13 @@ Design the smallest coherent object-oriented solution without writing implementa
 
 ## Output
 
-A design brief covering the domain model, responsibility owners, data model, every applicable boundary in the vertical slice, workflow, bounded edge cases, failure modes, trade-offs, and the contract-set handoff. It is input to `/skill:define-contract`. At completion, propose an exact path in the current directory, such as `./<slice-slug>-design.md`, and ask the human to confirm before writing it. Do not create a design/ directory by default.
+One design-and-contract brief covering the Objects, responsibility owners, data model, every applicable boundary in the vertical slice, exact Interfaces, end-to-end workflow, bounded edge cases, failure modes, trade-offs, and human verification. It is input to `/skill:tdd`. At completion, propose an exact path in the current directory, such as `./<slice-slug>-design.md`, and ask the human to confirm before writing it. Do not create a design/ directory by default.
 
 ## Human checkpoint
 
 Do not conduct another design interview. Derive the design from the approved requirement, repository evidence, and existing conventions. Ask one focused clarification only when an unresolved decision would change observable behavior; otherwise choose the simplest compatible design and mark any assumption explicitly.
 
-Present the completed design brief for confirmation before handing it to `/skill:define-contract`.
+Present the completed design and contract brief for confirmation before writing it. Ask for one confirmation only; do not split OOD and contract design into separate checkpoints.
 
 ## Source process
 
@@ -41,8 +41,11 @@ Do not jump straight from requirements to workflow. That invents entities and fi
 - Prefer the smallest design that satisfies the requirements. Do not add classes, interfaces, services, or patterns for hypothetical future flexibility.
 - Keep non-goals explicit.
 - Defer mechanics until the data model and APIs exist; do not decide implementation details prematurely.
+- Inspect repository conventions and existing code before defining new Objects or Interfaces.
 - Treat one requirement as a vertical slice, not only an internal API. Enumerate every real boundary needed for its outcome: user-facing entrypoint (CLI, HTTP, UI, or job trigger) and the applicable application, domain, persistence, and external-service boundaries. Omit layers that do not exist; do not invent abstractions.
 - Design the user-facing boundary first when one exists, then trace its input, observable output, errors, and side effects through the internal boundaries. The slice is incomplete if a user-visible requirement stops at an internal API.
+- Define the smallest practical Interface at every applicable boundary. For a CLI, specify the command, arguments/options, stdout/stderr, exit codes, side effects, and an exact human verification command. Do not create abstract types without a real substitution boundary or multiple implementations.
+- Do not implement behavior or write the feature test. Define only the signatures, schemas, boundary shapes, observable results, dependency seams, and documentation needed to make the slice unambiguous.
 
 ## Design sequence
 
@@ -50,8 +53,8 @@ Do not jump straight from requirements to workflow. That invents entities and fi
 2. **Domain model** — name the meaningful entities, value objects, and external collaborators. Do not create an object merely because there is a pipeline stage.
 3. **Responsibilities** — assign each rule, state, and transition to one owner. For every non-obvious assignment, answer: “Why here and not elsewhere?”
 4. **Data model** — identify the state each owner needs and its invariants. Keep data ownership singular.
-5. **APIs** — define the smallest intent-revealing public operations and their inputs, outputs, errors, and allowed state transitions at each applicable boundary.
-6. **Workflow** — describe the normal call sequence from the user-facing entrypoint through the internal APIs and dependencies, without leaking database, HTTP, SDK, or filesystem details into the domain narrative.
+5. **Interfaces and contracts** — define the smallest intent-revealing operation or boundary shape at every applicable layer, including inputs, outputs, errors, side effects, allowed state transitions, dependency seams, and external-to-internal translation.
+6. **Workflow** — describe the normal call sequence from the user-facing entrypoint through the designed Objects and Interfaces to dependencies, without leaking database, HTTP, SDK, or filesystem details into the domain narrative.
 7. **Edge cases** — walk this fixed checklist against the actual APIs:
    - boundary values: zero, one, maximum, empty, negative where meaningful
    - state transitions the APIs allow, including duplicate calls
@@ -91,8 +94,8 @@ The goal is not exhaustive imagination. The goal is no undecided behavior inside
 ## Requirements
 [Core actions, invariants, non-goals]
 
-## Domain model
-[Entities, value objects, collaborators]
+## Objects
+[Entities, value objects, collaborators, and each responsibility owner]
 
 ## Responsibilities
 [Owner -> behavior/state, with reasons for non-obvious assignments]
@@ -105,11 +108,28 @@ The goal is not exhaustive imagination. The goal is no undecided behavior inside
 |---|---|---|---|---|---|
 | [CLI/API/application/domain/dependency] | [name] | [caller] | [shape] | [result] | [effect] |
 
-## APIs
-[Intent-revealing operations, inputs, outputs, errors, allowed transitions for every applicable boundary]
+## Interfaces and contracts
+### External interface
+Boundary: [CLI | HTTP API | UI action | job trigger | none]
+Invocation/request shape: [exact command, arguments/options, request, or trigger]
+Inputs/preconditions: [shape and validation]
+Output: [stdout/response/state/result]
+Errors: [stderr/response, exit codes, failure outcomes]
+Side effects: [writes, calls, state changes]
+Human verification: [exact command or observable check]
+
+### Internal interfaces
+| Object/boundary | Caller | Signature/shape | Inputs | Outputs/errors | Side effects | Dependencies/test seams |
+|---|---|---|---|---|---|---|
+| [application/domain/persistence/dependency] | [caller] | [exact shape] | [inputs] | [results] | [effects] | [seams] |
 
 ## Workflow
-[Normal call sequence from the external entrypoint through internal boundaries]
+[Explicit sequence: user -> external interface -> Objects -> internal Interfaces -> dependencies -> observable result]
+
+## Traceability
+| Acceptance criterion | Observable at external interface | Object/interface responsible |
+|---|---|---|
+| [criterion] | [how] | [where] |
 
 ## Edge cases
 | Case | Concrete trigger | Scope | Decision | Verification |
@@ -122,10 +142,9 @@ The goal is not exhaustive imagination. The goal is no undecided behavior inside
 ## Trade-offs
 [Chosen simple option, cost, upgrade condition]
 
-## Contract-set handoff
-[The complete set of applicable boundaries, with the user-facing boundary first and the primary public boundary identified for `/skill:define-contract`]
+Next skill: `/skill:tdd`
 ```
 
 ## Completion criterion
 
-The design follows all nine steps, every in-scope core action and invariant has an owner and observable behavior, every applicable boundary in the vertical slice is identified, no user-facing path stops at an internal API, edge cases were checked mechanically, and non-goals and deferred decisions are explicit. The contract-set handoff is small enough to define, test, and implement.
+The design follows all nine steps, every in-scope core action and invariant has an owner and observable behavior, every applicable boundary in the vertical slice is identified, every Object and Interface needed for the outcome is explicit, the workflow connects the external interface to the designed Objects and internal Interfaces, no user-facing path stops at an internal API, edge cases were checked mechanically, non-goals and deferred decisions are explicit, and the contract is small enough to test and implement.
