@@ -1,27 +1,91 @@
 ---
 name: grill-me
-description: Personal grilling engine — interview the user round by round over a design-tree frontier; any question the user can't answer gets progressive-disclosure clarification before being re-asked. Invoke as /grill-me, or via dev-grill-me's checklists.
+description: Calibrate the user's understanding, teach only the knowledge needed for the session, then interview round by round over a design-tree frontier with clear, specific questions. Invoke as /grill-me, or via dev-grill-me's checklists.
 disable-model-invocation: false
 ---
 
 # Grill Me
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
+Interview the user until you reach a shared understanding. First calibrate what the user already understands, then teach only the knowledge needed for this session, then work the decision tree. Do not jump straight into grilling.
+
+## Session sequence
+
+Run these stages in order. Keep the user's learning level and unresolved decisions visible throughout the session.
+
+### 0. Calibrate current understanding
+
+Before explaining the topic or asking design questions, ask one Socratic baseline question. Ask the user to explain, predict, compare, or give an example; do not ask only “Do you understand?”. Use the answer to classify:
+
+- **Known** — the user can explain it accurately.
+- **Assumed** — plausible, but not confirmed by the user's answer.
+- **Needs teaching** — a concept or fact required for the selected session is missing or incorrect.
+
+Use this format, filling in the real topic and situation:
+
+```
+❓ **Q1** - **What is your current model?**:
+Context: We are working on [topic and goal].
+Current situation: [what is already known or observed].
+Specific question: In your own words, what do you think is happening, what outcome matters, and which part is uncertain?
+Desired answer: A short explanation, one example or prediction, and the point you are least sure about.
+
+➡️ Recommended answer: Explain your current understanding without looking anything up; uncertainty is useful here.
+```
+
+Do not correct or grill yet. First reflect the answer back and record **Known**, **Assumed**, and **Needs teaching**. If the topic is too broad, narrow it after this calibration and before teaching.
+
+### 1. Teach the needed knowledge
+
+Inspect repository and environment facts yourself. Then make a small knowledge map for this session:
+
+1. **Essential** — the minimum concepts, terms, constraints, or facts needed to answer the upcoming questions.
+2. **Relevant** — useful context that may affect a decision.
+3. **Not needed now** — interesting detail to defer.
+
+Teach only **Essential** knowledge first. For each item, use: plain definition, why it matters here, one concrete example, and the decision it affects. Define jargon before using it. Correct misunderstandings directly but briefly; do not dump documentation or teach unrelated theory.
+
+After the minimum briefing, use one teach-back checkpoint before grilling:
+
+```
+❓ **Q2** - **Can we use this model?**:
+Context: We need to decide [the selected session decision].
+Current situation: We now know [the minimum facts/concepts just explained].
+Specific question: Which part changes your original understanding, and how would you apply it to [one concrete example]?
+Desired answer: A short restatement and application; say “I don't know” if the explanation is still unclear.
+
+➡️ Recommended answer: Restate [the core concept] and apply it to [the example], while naming any remaining uncertainty.
+```
+
+If the teach-back reveals a gap, explain only that gap and repeat the checkpoint. Move on when the user can state the selected scope, the key terms, and the consequence relevant to the session. Do not require encyclopedic knowledge.
+
+### 2. Grill with a clear question framework
+
+Only now start the design-tree interview. Every question must make the following explicit:
+
+1. **Context** — why this question matters.
+2. **Current situation** — the facts and decisions already settled.
+3. **Specific question** — one decision, not a vague request for opinions.
+4. **Desired answer** — the response shape wanted (choice, comparison, example, priority, constraint, or trade-off).
+
+Use plain language, define vague terms, and state the user's available choices when useful. Before sending a question, check: “If someone heard this for the first time, would they know exactly what I need from them?” Include the recommendation and its brief reason.
+
+Continue numbering from the calibration and teach-back questions:
+
+```
+❓ **Q3** - **<specific decision>**:
+Context: [why this decision matters].
+Current situation: [settled facts and the unresolved choice].
+Specific question: [one precise question].
+Desired answer: [the form and detail of answer wanted].
+
+➡️ Recommended answer: [answer and brief reason].
+```
 
 ## Scope check
 
-Before round 1: if the topic handed to this skill looks too large for a handful of rounds to converge (a whole system, a whole app, several unrelated features bundled together), **MUST ASK** for confirmation before diving in — show 2-3 candidate narrower sub-scopes, each a single focused target this session could actually finish, with your recommended one marked `➡️`. "No, keep the full scope" is a valid answer — treat it as confirmation and proceed with everything. A topic that's already a single focused target skips this check — go straight to round 1.
+After calibration and before building the minimum knowledge map: if the topic looks too large for a handful of rounds to converge (a whole system, a whole app, several unrelated features bundled together), **MUST ASK** for confirmation — show 2-3 candidate narrower sub-scopes, each a single focused target this session could actually finish, with your recommended one marked `➡️`. “No, keep the full scope” is a valid answer — treat it as confirmation and proceed with everything. A topic that's already a single focused target skips this check. Teach only after the slice is selected.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier (after the KB check above) in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
-
-Each question should be formatted like so:
-
-```
-❓ **Q1** - **<question title>**:
-<question body, might be multiple paragraphs, including multiple choices>
-
-➡️ <your recommended answer>
-```
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 3, ask the 3 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
 
