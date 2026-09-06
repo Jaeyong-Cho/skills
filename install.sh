@@ -213,12 +213,17 @@ setup_pi() {
   fi
 
   command -v pi &>/dev/null || return
+
+  # Remove the legacy package before installing pi-subagents.
+  pi remove "https://github.com/hazat/pi-interactive-subagents" &>/dev/null || true
+
   local pkg
   for pkg in \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
-    "npm:pi-vimmode"
+    "npm:pi-vimmode" \
+    "npm:pi-subagents"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"
@@ -227,14 +232,8 @@ setup_pi() {
     fi
   done
 
-  # Both subagent extensions are installed per-project, not globally: run
-  # the matching bin/ script from inside the target repo.
-  #
-  # pi-interactive-subagents backs @skills/system-grill-me-designed agent
-  # teams — bin/pi-interactive-subagents-setup `pi install`s it and stubs
-  # out its bundled agents (planner/scout/worker/reviewer/visual-tester).
-  #
-  echo "  note: pi-interactive-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-interactive-subagents-setup inside a target repo"
+  # pi-subagents provides the global subagent delegation tool. Its bundled
+  # agents can be overridden or disabled per-project in .pi/settings.json.
 
   setup_boy_scout pi
 }
