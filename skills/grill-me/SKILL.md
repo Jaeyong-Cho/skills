@@ -8,43 +8,47 @@ disable-model-invocation: false
 
 Interview the user until you reach a shared understanding. Calibrate first, teach only what this session needs, then work through the decision tree. Do not jump straight into grilling.
 
-## Ask understandable questions
+## Good question framework
 
-Each question must give the user enough information to answer without reconstructing the conversation. Cover:
+Build each question from these parts:
 
-- **Background context** — the goal and why the decision matters.
-- **Current situation** — relevant facts, prior decisions, constraints, and remaining uncertainty.
-- **Specific question** — one clear decision or teach-back prompt.
-- **Expected response** — the useful answer shape.
+1. **Purpose** — state the goal and why this decision matters.
+2. **Grounding** — summarize the relevant evidence, current situation, prior decisions, and constraints.
+3. **Gap** — identify the uncertainty or trade-off that remains.
+4. **Helpful example** — give one concrete scenario that makes the choice easier to understand.
+5. **Focused question** — ask for one decision or one teach-back response.
+6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
+7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
 
-These are content requirements, not a rigid form. Use natural prose, combine sections when that reads better, and omit empty labels. Do not reduce context to vague one-line fragments when the user needs more explanation.
+These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
 
-Include one concrete **helpful example** by default. An example should let the user compare, predict, or choose rather than merely repeat the question. Replace or support it with:
+Use a fenced code block instead of prose when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
 
-- a fenced code block for syntax, data, requests, or implementation shapes;
-- an ASCII diagram for flows, relationships, states, boundaries, or alternatives.
-
-Use only aids that clarify the decision. Do not use Mermaid or image-only diagrams.
-
-A good default—not a mandatory template—is:
+A good default—not a rigid template—is:
 
 ```text
 ❓ **Qn — <short title>**
 
-<Background and current situation in enough detail to make the question self-contained.>
+<Why this matters, what is already true, and what remains uncertain.>
 
 **Example**
 <Concrete scenario, fenced code, or ASCII diagram.>
 
 **Question:** <one precise question>
-**Answer with:** <choice, comparison, example, priority, constraint, or trade-off>
+**Answer with:** <the expected response shape>
 
 ➡️ **Recommendation:** <answer and brief reason>
 ```
 
-Adapt the format to the question. Keep numbering and recommendations for decision questions; calibration and teach-back prompts may use a more natural response suggestion instead of prescribing a decision.
+Keep numbering and recommendations for decision questions. Calibration and teach-back may use a natural response suggestion instead of a recommendation.
 
-Before sending, check: “Could someone joining now understand why this matters, what is already true, and exactly what answer I need?”
+Before sending, verify that the question:
+
+- is answerable from the context provided;
+- asks one thing rather than bundling dependent decisions;
+- uses plain, neutral language and defines necessary jargon;
+- does not ask the user for facts you can inspect yourself;
+- makes the consequence of the answer clear.
 
 ## Session sequence
 
@@ -80,12 +84,7 @@ Then ask one teach-back question: have the user restate the core concept and app
 
 The **frontier** is every decision whose prerequisites are settled. Ask the surviving frontier in rounds of at most three questions, prioritizing the highest-impact or most-blocking decisions per `../references/grill-impact.md` where applicable.
 
-For each decision question:
-
-- ask one precise decision;
-- include a helpful example;
-- show available choices when useful;
-- give a recommended answer with a brief reason.
+Apply the good question framework to each frontier decision and show the available choices when useful.
 
 After each response, record the decisions, recompute the frontier, and ask the next round. Do not ask a question while one of its prerequisites remains unresolved.
 
