@@ -1,139 +1,114 @@
 ---
 name: define-req
-description: Interview a human to narrow a vague request into one coherent, executable requirement slice with clear scope, acceptance criteria, dependencies, failure behavior, and a safe next action. Use when a request contains multiple topics, is too broad, or needs clarification before implementation.
+description: Interview a human to narrow a request into one focused, executable requirement slice with a clear boundary, observable success condition, and safe next action. Use when a request is broad or ambiguous before design or implementation.
 disable-model-invocation: true
 ---
 
 # Define Requirement Slice
 
-Interview the human and produce one coherent requirement slice. The slice may contain normal, boundary, and failure requirements, but they must all belong to the same topic, category, purpose, and execution boundary.
+Define one focused slice that a human can understand, implement, and verify. Do not turn this into a full product specification or system design.
 
 ## Input
 
-- A human's vague request, goal, or problem description
-- Available repository, documents, and constraints when they exist
+- A human's request, goal, or problem description
+- Repository context only when it is needed to establish the slice
 
 ## Output
 
-A requirement set for one specific slice: a human-understandable scope, related requirements, acceptance criteria, dependencies, failure behavior, explicit non-goals, and one next action. Return it in the conversation unless the human asks for a file.
+One focused requirement slice with its scope, outcome, essential preconditions, acceptance criteria, explicit exclusions, and next action. Return it in the conversation unless the human asks for a file.
 
-## Hard scope rule
+## Scope rule
 
-Do not combine various things merely because they are in the same project or sentence.
+**Exactly one specific slice per invocation.** The slice must stay within one topic or category, one purpose, and one coherent execution boundary.
 
-Keep requirements together only when they share:
+Keep only what is needed to verify that one outcome. Do not produce a list of sibling requirements. If the request contains another feature, user goal, data area, or release boundary, record it as out of scope or deferred. Do not solve it in this interview.
 
-- the same topic or category
-- the same purpose and actor/system
-- the same context or state
-- one coherent execution boundary
-- acceptance criteria that verify the same outcome
+One slice consists of the main happy path plus the directly relevant edge, boundary, and failure cases for that same outcome. Do not split those scenarios into separate slices unless they introduce a different purpose or execution boundary. It does not need every possible edge case.
 
-Split or defer a request when it combines unrelated features, different users, different purposes, separate release boundaries, or unrelated data/state. Do not solve every discovered topic in the same interview.
+## What this skill does not do
 
-A requirement set may contain multiple rows for one slice—for example, normal behavior, an invalid input, and a dependency failure. Those are scenarios of one outcome, not unrelated requirements.
+Do not use this skill to:
+
+- design the domain model, classes, data model, APIs, or workflow
+- enumerate every edge case or failure mode
+- choose libraries, algorithms, or infrastructure
+- write tests or implementation code
+
+Those belong to `/skill:ood`, `/skill:define-contract`, `/skill:red-test`, and the later skills.
 
 ## Human interview
 
-Run an interactive interview; do not produce a large questionnaire.
+Use a short, focused interview. Ask one plain-language question at a time.
 
-1. Start by restating the candidate slice in plain language and ask the human to confirm or narrow it:
+1. Restate the proposed slice and ask the human to confirm or narrow it:
 
-   > “Which one topic should we make executable now? What should be included, and what should wait?”
+   > “What single topic and outcome should we make executable now?”
 
-2. Ask **one question at a time**, in plain language. Ask only questions that can change scope, acceptance, risk, or verification.
-3. After each answer, briefly update:
-   - **Confirmed** — decisions now fixed
-   - **Still open** — the next uncertainty
-4. Do not silently fill in product decisions. State a low-risk assumption or ask the human.
-5. If the answer introduces a different topic, park it under **Deferred topics** and return to the selected slice.
-6. Confirm the scope boundary before asking detailed edge-case questions.
-7. Do not draft the final requirement set until the slice has a clear outcome, boundary, and verification method.
+2. Ask only the next question needed to define this slice:
+   - Who or what uses it?
+   - What triggers it?
+   - What is the one useful outcome?
+   - What input or starting state is essential?
+   - What observable result means success?
+   - Is there one directly relevant failure or boundary case that changes the scope?
+3. After each answer, summarize **Confirmed**, **Still open**, and **Next question**.
+4. If the human introduces a different topic, park it under **Deferred topics** and return to the selected slice.
+5. Do not ask questions whose answers belong to OOD or implementation. State “deferred to design” instead.
+6. Stop when the slice boundary and success condition are clear. Do not keep interviewing for completeness.
 
-## Interview order
-
-Use this order, skipping only what is already known:
-
-1. **Topic and boundary** — What single topic/category are we solving now? What is explicitly not part of it?
-2. **Actor and value** — Who uses or depends on it? What useful outcome do they get?
-3. **Trigger and context** — What event or starting state begins it?
-4. **Normal outcome** — What should happen on the ordinary successful path?
-5. **Inputs and dependencies** — What data, state, tools, or services are required?
-6. **Failure and boundary behavior** — What should happen for empty, invalid, duplicate, unavailable, or maximum cases that are relevant to this slice?
-7. **Verification** — What observable result proves it works, and what is the cheapest trustworthy check?
-8. **First action** — What small, safe, reversible action can start implementation or an experiment?
-
-Do not ask implementation questions such as “Should this use a class or a hashmap?” during this interview. Save responsibility, data model, APIs, workflow mechanics, and trade-offs for `/skill:ood` when the slice needs OOD.
-
-## Bounded scope check
-
-Before finishing, scan the selected slice for:
-
-- boundary values: zero, one, empty, maximum, negative where meaningful
-- state transitions the requested behavior allows, including duplicate calls
-- concurrency, only if the system is actually concurrent
-- failure of each named dependency once
-- invalid or adversarial input at each trust boundary
-
-For every candidate case, name the concrete input, state, or call sequence that triggers it, then mark it **in scope**, **out of scope**, or **deferred with a condition**. Only in-scope cases need acceptance criteria now. Do not invent mechanics before `/skill:ood` defines the actual data model and APIs. A hypothetical case with no concrete trigger is recorded once and not pursued.
-
-## Requirement set
+## Focused requirement card
 
 ```markdown
 ## Slice
-- Topic/category: [one coherent topic]
-- Purpose: [the outcome this slice provides]
+- Topic/category: [one topic]
+- Purpose: [one outcome]
 - Actor/system: [who or what uses it]
 - Trigger/context: [what starts it]
 
 ## Scope
-- In scope: [the boundary of this slice]
-- Out of scope: [unrelated topics and excluded behavior]
-- Deferred topics: [new topics parked for later, if any]
+- In scope: [the smallest useful behavior]
+- Out of scope: [other topics, features, or mechanics]
+- Deferred topics: [new topics parked for later]
 
-## Requirements
+## Requirement
+When [trigger], [actor/system] shall [one action] so that [observable outcome].
 
-### R{id}: [short name]
-When [trigger], [actor/system] shall [one action] so that [observable value].
-
-[Repeat only for scenarios belonging to this same slice]
-
-## Preconditions and dependencies
-- [required state, data, tool, or service]
+## Preconditions and essential dependencies
+- [only dependencies required to define or verify this slice]
 
 ## Acceptance criteria
-| Requirement | Category | Given | When | Then | Verification |
-|---|---|---|---|---|---|
-| R{id} | Normal | ... | ... | ... | ... |
-| R{id} | Exception/Boundary | ... | ... | ... | ... |
+| Category | Given | When | Then | Verification |
+|---|---|---|---|---|
+| Normal | ... | ... | ... | ... |
+| Relevant exception/boundary | ... | ... | ... | ... |
 
-## Failure behavior
-[What stops, retries, rolls back, waits, or gets reported. Use “not specified” rather than inventing policy.]
-
-## Open decisions
-[Only decisions that block safe implementation or verification]
+## Relevant failure behavior
+[Only behavior that changes this slice's scope or safe execution; otherwise “deferred to design”.]
 
 ## First executable action
-[One safe, reversible action or experiment with its expected observable result]
+[One safe, reversible action with its expected observable result]
 ```
+
+Omit the exception row when no directly relevant exception changes the slice. Do not invent empty requirements or fill the card with hypothetical cases.
 
 ## Handoff
 
-After this slice is complete:
+After this card is confirmed:
 
-1. Use `/skill:ood` when it has meaningful state, domain responsibilities, or object collaboration.
+1. Use `/skill:ood` only if the slice has meaningful state, domain responsibilities, or object collaboration.
 2. Otherwise use `/skill:define-contract` directly.
 3. Then use `/skill:red-test`, `/skill:green-implement`, and `/skill:refactor-green`.
 
-Downstream skills must take this selected slice, not the parked topics. They must not combine unrelated requirements into one contract or test.
+Downstream skills must use this slice and must not pull deferred topics back into it.
 
 ## Completion criterion
 
 The interview is complete when:
 
-- The request is bounded to one topic/category and one coherent purpose.
-- A human can tell what belongs in the slice and what does not.
-- The actor, trigger, outcome, inputs, success condition, and relevant failure behavior are clear.
-- Related scenarios have observable acceptance criteria and verification methods.
-- Unrelated topics are explicitly deferred or out of scope.
+- Exactly one specific slice is defined: one happy path plus its directly relevant edge, boundary, and failure cases.
+- Sibling features are not mixed into it.
+- The slice covers one understandable topic, purpose, and execution boundary.
+- A human can tell what belongs and what does not.
+- The actor, trigger, outcome, essential input, and success condition are clear.
+- Only directly relevant exception behavior is included.
 - The first action is safe, reversible, and testable.
