@@ -8,6 +8,28 @@ disable-model-invocation: false
 
 Interview the user until you reach a shared understanding. First calibrate what the user already understands, then teach only the knowledge needed for this session, then work the decision tree. Do not jump straight into grilling.
 
+## Question format (mandatory)
+
+Every user-facing question must use this format; never send a bare question. Include all three core parts: **Background context**, **Current situation**, and **Specific question**. Explain the background and situation sufficiently for the user to understand why the question is being asked; do not compress either into a single vague or fragmentary sentence. Include the relevant facts, prior decisions, constraints, and uncertainty, while omitting unrelated detail. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
+
+```text
+❓ **Qn** - **<short title>**:
+
+**Background context**
+- **Goal:** [what we are trying to understand or decide]
+- **Why it matters:** [the impact or reason this question is relevant]
+
+**Current situation**
+- **Known or observed:** [relevant facts and evidence]
+- **Already decided:** [prior answers or constraints]
+- **Uncertain:** [the specific gap this question addresses]
+
+**Specific question:** [one precise question]
+**Desired answer:** [the response shape wanted: choice, comparison, example, priority, constraint, or trade-off]
+
+➡️ **Recommended answer:** [answer and brief reason, when applicable]
+```
+
 ## Session sequence
 
 Run these stages in order. Keep the user's learning level and unresolved decisions visible throughout the session.
@@ -24,12 +46,20 @@ Use this format, filling in the real topic and situation:
 
 ```
 ❓ **Q1** - **What is your current model?**:
-Context: We are working on [topic and goal].
-Current situation: [what is already known or observed].
-Specific question: In your own words, what do you think is happening, what outcome matters, and which part is uncertain?
-Desired answer: A short explanation, one example or prediction, and the point you are least sure about.
 
-➡️ Recommended answer: Explain your current understanding without looking anything up; uncertainty is useful here.
+**Background context**
+- **Goal:** We are working on [topic and goal].
+- **Why it matters:** [why calibrating your current model matters for this session].
+
+**Current situation**
+- **Known or observed:** [what is already known or observed].
+- **Already decided:** [any confirmed scope or constraints].
+- **Uncertain:** [what is not yet understood].
+
+**Specific question:** In your own words, what do you think is happening, what outcome matters, and which part is uncertain?
+**Desired answer:** A short explanation, one example or prediction, and the point you are least sure about.
+
+➡️ **Recommended answer:** Explain your current understanding without looking anything up; uncertainty is useful here.
 ```
 
 Do not correct or grill yet. First reflect the answer back and record **Known**, **Assumed**, and **Needs teaching**. If the topic is too broad, narrow it after this calibration and before teaching.
@@ -48,12 +78,20 @@ After the minimum briefing, use one teach-back checkpoint before grilling:
 
 ```
 ❓ **Q2** - **Can we use this model?**:
-Context: We need to decide [the selected session decision].
-Current situation: We now know [the minimum facts/concepts just explained].
-Specific question: Which part changes your original understanding, and how would you apply it to [one concrete example]?
-Desired answer: A short restatement and application; say “I don't know” if the explanation is still unclear.
 
-➡️ Recommended answer: Restate [the core concept] and apply it to [the example], while naming any remaining uncertainty.
+**Background context**
+- **Goal:** We need to decide [the selected session decision].
+- **Why it matters:** [why this minimum model is necessary before grilling].
+
+**Current situation**
+- **Known or observed:** We now know [the minimum facts or concepts just explained].
+- **Already decided:** [the selected scope and any constraints].
+- **Uncertain:** [the remaining concept or consequence that needs checking].
+
+**Specific question:** Which part changes your original understanding, and how would you apply it to [one concrete example]?
+**Desired answer:** A short restatement and application; say “I don't know” if the explanation is still unclear.
+
+➡️ **Recommended answer:** Restate [the core concept] and apply it to [the example], while naming any remaining uncertainty.
 ```
 
 If the teach-back reveals a gap, explain only that gap and repeat the checkpoint. Move on when the user can state the selected scope, the key terms, and the consequence relevant to the session. Do not require encyclopedic knowledge.
@@ -62,23 +100,31 @@ If the teach-back reveals a gap, explain only that gap and repeat the checkpoint
 
 Only now start the design-tree interview. Every question must make the following explicit:
 
-1. **Context** — why this question matters.
+1. **Background context** — why this question matters.
 2. **Current situation** — the facts and decisions already settled.
 3. **Specific question** — one decision, not a vague request for opinions.
 4. **Desired answer** — the response shape wanted (choice, comparison, example, priority, constraint, or trade-off).
 
-Use plain language, define vague terms, and state the user's available choices when useful. Before sending a question, check: “If someone heard this for the first time, would they know exactly what I need from them?” Include the recommendation and its brief reason.
+Use plain language, define vague terms, and state the user's available choices when useful. Give enough background and current-situation detail that someone joining the conversation could understand the question without guessing; one-line labels are not sufficient when more explanation is needed. Before sending a question, check: “If someone heard this for the first time, would they know exactly what I need from them?” Include the recommendation and its brief reason.
 
 Continue numbering from the calibration and teach-back questions:
 
 ```
 ❓ **Q3** - **<specific decision>**:
-Context: [why this decision matters].
-Current situation: [settled facts and the unresolved choice].
-Specific question: [one precise question].
-Desired answer: [the form and detail of answer wanted].
 
-➡️ Recommended answer: [answer and brief reason].
+**Background context**
+- **Goal:** [what this decision will determine]
+- **Why it matters:** [the impact of this decision on the next branch]
+
+**Current situation**
+- **Known or observed:** [relevant facts and evidence]
+- **Already decided:** [settled facts, prior answers, and constraints]
+- **Uncertain:** [the unresolved choice or trade-off]
+
+**Specific question:** [one precise question]
+**Desired answer:** [the form and detail of answer wanted]
+
+➡️ **Recommended answer:** [answer and brief reason].
 ```
 
 ## Scope check
