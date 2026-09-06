@@ -16,7 +16,7 @@ Turn one approved requirement into a concrete boundary that the test and impleme
 
 ## Output
 
-One written executable contract in the codebase: a function, command, API, or job-stage boundary with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:red-test`. Confirm the exact code path before writing and report it at completion.
+One written executable contract in the codebase: a function, command, API, or job-stage boundary with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:tdd`. Confirm the exact code path before writing and report it at completion.
 
 ## Rules
 
@@ -27,13 +27,13 @@ One written executable contract in the codebase: a function, command, API, or jo
 - Create an abstract interface only when there is a real substitution boundary or multiple implementations.
 - Do not implement behavior and do not write the feature test here.
 
-## Human interview
+## Human checkpoint
 
-MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to selecting and confirming this contract. Before writing the contract, show the candidate boundary in plain language and ask:
+Derive the contract from the approved requirement, applicable OOD decisions, repository evidence, and existing conventions. Before writing it, show the candidate boundary in plain language and ask once:
 
 > “Is this the one behavior and boundary you want to test and implement now?”
 
-If the answer is unclear, ask one focused question about the actor, input, output, error, or side effect. Confirm the contract before editing the codebase.
+Ask one focused clarification only when the requirement or design leaves the actor, input, output, error, or side effect unresolved. Confirm the contract before editing the codebase.
 
 ## OOD check
 
@@ -70,7 +70,7 @@ Output: [type and observable result]
 Errors: [failure outcomes]
 Side effects: [writes, calls, state changes]
 Dependencies: [real services and test seams]
-Next skill: `/skill:red-test`
+Next skill: `/skill:tdd`
 ```
 
 ## Completion criterion

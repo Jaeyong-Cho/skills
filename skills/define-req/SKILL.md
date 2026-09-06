@@ -34,7 +34,7 @@ Do not use this skill to:
 - choose libraries, algorithms, or infrastructure
 - write tests or implementation code
 
-Those belong to `/skill:ood`, `/skill:define-contract`, `/skill:red-test`, and the later skills.
+Those belong to `/skill:ood`, `/skill:define-contract`, and `/skill:tdd`.
 
 ## Human interview
 
@@ -106,7 +106,7 @@ After this card is confirmed:
 
 1. Use `/skill:ood` only if the slice has meaningful state, domain responsibilities, or object collaboration.
 2. Otherwise use `/skill:define-contract` directly.
-3. Then use `/skill:red-test`, `/skill:green-implement`, and `/skill:refactor-green`.
+3. Then use `/skill:tdd` to complete RED → GREEN → REFACTOR in one invocation.
 
 Downstream skills must use this slice and must not pull deferred topics back into it.
 

@@ -18,19 +18,11 @@ Design the smallest coherent object-oriented solution without writing implementa
 
 A design brief covering the domain model, responsibility owners, data model, APIs, workflow, bounded edge cases, failure modes, trade-offs, and the first contract. It is input to `/skill:define-contract`. At completion, propose an exact path in the current directory, such as `./<slice-slug>-design.md`, and ask the human to confirm before writing it. Do not create a design/ directory by default.
 
-## Human interview
+## Human checkpoint
 
-MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`. Scope the grill to OOD decisions for this selected slice only: domain model, responsibility ownership, data invariants, APIs, relevant edge cases, failures, and trade-offs. Do not let it interview implementation details or unrelated features.
+Do not conduct another design interview. Derive the design from the approved requirement, repository evidence, and existing conventions. Ask one focused clarification only when an unresolved decision would change observable behavior; otherwise choose the simplest compatible design and mark any assumption explicitly.
 
-Ask about, in order:
-
-1. Which domain concept or state is actually in scope?
-2. Who owns each behavior and why does it belong there?
-3. What state and invariant must be protected?
-4. What public operation should a caller use?
-5. Which edge case or failure decision changes the design?
-
-Confirm the design brief before handing it to `/skill:define-contract`.
+Present the completed design brief for confirmation before handing it to `/skill:define-contract`.
 
 ## Source process
 
