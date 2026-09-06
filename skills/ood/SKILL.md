@@ -1,6 +1,6 @@
 ---
 name: ood
-description: Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after req and before tdd.
+description: "Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after req and before tdd."
 disable-model-invocation: true
 ---
 
