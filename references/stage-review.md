@@ -42,7 +42,7 @@ Use `Critical` or `Major` only when the issue can invalidate the stage outcome, 
 Goal: decide whether the right problem is specified, without designing its implementation.
 
 - **Domain Expert — primary:** domain correctness, rules, terminology, assumptions, contradictions.
-- **User:** understandable workflow, missing scenarios, mistakes, recovery, unnecessary steps.
+- **User — required:** understandable workflow, missing scenarios, mistakes, recovery, unnecessary steps. Include this persona even when the actor is an operator, administrator, or API client.
 - **Tester:** objective verification, success/failure conditions, boundaries, error cases, precise acceptance criteria.
 - **Skeptic:** necessity, outcome, simpler alternatives, speculative scope.
 
