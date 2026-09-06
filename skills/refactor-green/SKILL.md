@@ -29,7 +29,7 @@ A behavior-preserving, clearer implementation with all required tests still pass
 
 ## Human interview
 
-MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to selecting one behavior-preserving refactor. Before editing, name one concrete smell and the proposed change in plain language. Get confirmation before editing; do not turn refactoring into a redesign interview.
+Do **not** run a full `/skill:grill-me` here. Passing tests and the original contract bound the work. Before editing, name one concrete smell and the proposed behavior-preserving change. Ask one focused clarification only if the refactor could change observable behavior; otherwise proceed without another interview round.
 
 ## OOD check
 

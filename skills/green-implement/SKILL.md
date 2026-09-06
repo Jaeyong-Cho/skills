@@ -31,7 +31,7 @@ The smallest production implementation that makes the focused test pass, plus pa
 
 ## Human interview
 
-MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to interpreting this failure and confirming the smallest implementation boundary. After reading the failing test, explain the boundary in plain language and get confirmation before editing production code.
+Do **not** run a full `/skill:grill-me` here. The failing test and contract already define the behavior. After reading the failure, explain the smallest implementation boundary and ask one focused question only if multiple behaviorally different fixes are possible. Otherwise implement without another interview round.
 
 ## OOD check
 

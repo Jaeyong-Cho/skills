@@ -30,11 +30,11 @@ A deterministic test at the appropriate abstraction level that fails specificall
 
 ## Human interview
 
-MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to selecting the acceptance scenario and verification level for this test. Before writing the test, present the scenario in plain language:
+Do **not** run a full `/skill:grill-me` here. The requirement and contract already define the scope. Before writing the test, state the scenario in plain language:
 
 > “Given [starting state], when [action], should [observable result] happen?”
 
-Ask the human to confirm the scenario or correct it. If the acceptance criterion is already explicit, state the chosen criterion and ask only for confirmation before creating the test.
+Proceed from the acceptance criterion. Ask one focused clarification only if the criterion is ambiguous or conflicts with the contract.
 
 ## OOD check
 

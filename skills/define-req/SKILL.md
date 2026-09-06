@@ -15,7 +15,7 @@ Define one focused slice that a human can understand, implement, and verify. Do 
 
 ## Output
 
-One focused requirement slice with its scope, outcome, essential preconditions, acceptance criteria, explicit exclusions, and next action. At completion, propose an exact path relative to the current directory, such as `./requirements/<slice-slug>.md`, and ask the human to confirm before writing it.
+One focused requirement slice with its scope, outcome, essential preconditions, acceptance criteria, explicit exclusions, and next action. At completion, propose an exact path in the current directory, such as `./<slice-slug>-requirements.md`, and ask the human to confirm before writing it. Do not create a requirements/ directory by default.
 
 ## Scope rule
 

@@ -19,7 +19,7 @@ Facts are the agent's job to inspect. Decisions belong to the human. If an exper
 At session completion, distinguish the result from its persistence:
 
 1. Summarize **Confirmed**, **Assumptions**, **Deferred**, **Next action**, and the artifact to preserve.
-2. Propose the exact file path relative to the current working directory (`./`). Use an existing local convention when one exists; otherwise recommend a minimal path such as `./requirements/<slice-slug>.md` or `./design/<slice-slug>.md`.
+2. Propose the exact file path in the current working directory (`./`). Use an existing local convention when one exists; otherwise recommend a direct path such as `./<slice-slug>-requirements.md` or `./<slice-slug>-design.md`; do not create a requirements/ or design/ directory by default.
 3. Ask the human to confirm both the content and location before writing. Do not silently create, overwrite, or choose a new path.
 4. If the result is code or a test, confirm the exact source/test path before editing and report the paths at completion.
 
