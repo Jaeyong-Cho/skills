@@ -20,7 +20,7 @@ Do not review implementation, classes, interfaces, frameworks, schemas, or datab
 Launch exactly one fresh, read-only `stage-reviewer` sub-agent with this task:
 
 - Stage: Requirements.
-- Personas: Domain Expert (primary), User (required), Tester, Skeptic. The User persona must be included even when the actor is an operator, administrator, or API client.
+- Personas: Domain Expert (primary), User (primary), Tester, Skeptic.
 - Artifact: include the requirement card verbatim or give its exact path.
 - Scope: inspect the artifact and relevant repository evidence; report only concrete findings.
 - Output: use the shared finding format and end with Must fix, Should improve, Deliberately deferred, and `Verdict: BLOCK | PROCEED`.
