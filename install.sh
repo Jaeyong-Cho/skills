@@ -193,10 +193,30 @@ setup_copilot() {
   setup_boy_scout copilot
 }
 
+configure_pi_settings() {
+  local settings="$PI_AGENT_DIR/settings.json" tmp
+
+  [ -f "$settings" ] || printf '{}\n' > "$settings"
+  tmp="$(mktemp "$PI_AGENT_DIR/settings.json.XXXXXX")"
+  node -e '
+    const fs = require("fs");
+    const [settingsPath, outputPath] = process.argv.slice(1);
+    const settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
+    settings.tuiMode = "fullscreen";
+    settings.fullscreenScrollbar = "auto";
+    fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
+  ' "$settings" "$tmp"
+  mv "$tmp" "$settings"
+  echo "  ✓ pi TUI → fullscreen (scrollbar: auto)"
+}
+
 setup_pi() {
   echo "→ pi coding agent"
 
   mkdir -p "$PI_AGENT_DIR"
+  configure_pi_settings
+  cp "$SKILLS_DIR/config/open-tui.json" "$PI_AGENT_DIR/open-tui.json"
+  echo "  ✓ ~/.pi/agent/open-tui.json ← $SKILLS_DIR/config/open-tui.json"
   if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
     cp "$PI_AGENT_DIR/AGENTS.md" "$PI_AGENT_DIR/AGENTS.md.bak"
     echo "  backed up existing AGENTS.md"
@@ -214,16 +234,16 @@ setup_pi() {
 
   command -v pi &>/dev/null || return
 
-  # Remove the legacy package before installing pi-subagents.
+  # Remove subagent packages no longer managed by this installer.
   pi remove "https://github.com/hazat/pi-interactive-subagents" &>/dev/null || true
+  pi remove "npm:pi-subagents" &>/dev/null || true
 
   local pkg
   for pkg in \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
-    "npm:pi-vimmode" \
-    "npm:pi-subagents"
+    "npm:pi-vimmode"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"
@@ -231,9 +251,6 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
-
-  # pi-subagents provides the global subagent delegation tool. Its bundled
-  # agents can be overridden or disabled per-project in .pi/settings.json.
 
   setup_boy_scout pi
 }
