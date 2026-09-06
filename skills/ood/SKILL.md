@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # OOD
 
-Design the smallest coherent object-oriented solution and its complete boundary contracts without writing implementation code or feature tests.
+Design the smallest coherent object-oriented solution and its complete boundary contracts. OOD must not implement the design directly: produce only the design-and-contract brief; implementation belongs to `/skill:tdd` and later implementation work. Do not write implementation code or feature tests.
 
 ## Input
 
