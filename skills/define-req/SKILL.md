@@ -1,91 +1,102 @@
 ---
 name: define-req
-description: Turn a vague request into a small set of executable, testable requirements with observable acceptance criteria, dependencies, failure behavior, and a safe next action. Use when a request is broad, ambiguous, or needs clarification before implementation.
+description: Interview a human to narrow a vague request into one coherent, executable requirement slice with clear scope, acceptance criteria, dependencies, failure behavior, and a safe next action. Use when a request contains multiple topics, is too broad, or needs clarification before implementation.
 disable-model-invocation: true
 ---
 
-# Define Requirements
+# Define Requirement Slice
 
-Turn a request into requirements that a person or agent can execute and verify without guessing.
+Interview the human and produce one coherent requirement slice. The slice may contain normal, boundary, and failure requirements, but they must all belong to the same topic, category, purpose, and execution boundary.
 
 ## Input
 
-- A user's vague request, goal, or problem description
+- A human's vague request, goal, or problem description
 - Available repository, documents, and constraints when they exist
 
 ## Output
 
-A requirement set containing a coherent scope, related requirements, acceptance criteria, dependencies, failure behavior, explicit non-goals, a first executable slice, and one next action. It is the input to `/skill:ood` or `/skill:define-contract`.
+A requirement set for one specific slice: a human-understandable scope, related requirements, acceptance criteria, dependencies, failure behavior, explicit non-goals, and one next action. Return it in the conversation unless the human asks for a file.
 
-## Rules
+## Hard scope rule
 
-- Do not force the request into one requirement. Preserve related requirements when they belong to the same requested outcome.
-- Split independent outcomes when they need different acceptance criteria, dependencies, or execution boundaries.
-- Specify **what** must happen, not an implementation design.
-- Ask only questions whose answers can change scope, acceptance, risk, or verification.
-- Inspect the repository or documents before asking for facts that can be found there.
-- If an answer requires running something to know, run a small experiment instead of guessing.
-- Do not implement unless the user explicitly asks for implementation.
-- For stateful or domain behavior, identify the likely owner of the state or rule without forcing a class design into the requirement.
-- Keep execution order separate from responsibility: a pipeline stage is not automatically a domain object.
-- Include core actions, hard constraints/invariants, and explicit non-goals; do not turn implementation details into requirements.
-- Bound the scope to one understandable topic or category: related actors, purpose, state, and acceptance criteria should belong together.
-- Do not measure scope quality by sentence count or requirement count. Split only when the request contains unrelated topics, different purposes, or a real execution boundary.
+Do not combine various things merely because they are in the same project or sentence.
 
-## Workflow
+Keep requirements together only when they share:
 
-1. State the desired outcome in the user's words.
-2. Identify the actors or systems, triggers, value, inputs, outputs, constraints, and failure concerns.
-3. Bound the scope before decomposing it:
-   - one understandable topic or category
-   - one coherent purpose and context
-   - one change boundary, unless related requirements must be delivered together
-   - core verbs/actions and hard invariants
-   - explicit non-goals
-   If the request mixes unrelated topics or purposes, ask one scope question or split it at that real boundary.
-4. Group the request into the smallest coherent requirements. Each requirement should have one primary observable outcome; do not split merely to make a longer checklist.
-5. For each requirement, write:
+- the same topic or category
+- the same purpose and actor/system
+- the same context or state
+- one coherent execution boundary
+- acceptance criteria that verify the same outcome
 
-   > When **[trigger]**, **[actor/system]** shall **[action]** so that **[observable value]**.
+Split or defer a request when it combines unrelated features, different users, different purposes, separate release boundaries, or unrelated data/state. Do not solve every discovered topic in the same interview.
 
-6. Check the minimum contract for every requirement:
-   - actor or system
-   - trigger
-   - inputs and preconditions
-   - observable output or state change
-   - failure behavior
-   - verification method
-7. Check the OOD implications without designing the solution:
-   - Which behavior or state has a clear owner?
-   - Is the requirement mixing intent, business rules, and technical mechanisms?
-   - Is a proposed boundary needed for a real responsibility or only for future flexibility?
-8. Run a bounded requirements edge-case scan: boundary values, allowed state transitions, concurrency if relevant, named dependency failures, and invalid input at trust boundaries. Record scope decisions now; leave mechanics for OOD design.
-9. Classify the next move:
-   - **Act directly** when the change is small, isolated, reversible, and easy to verify.
-   - **Run a spike** when the unknown is factual or environment-specific.
-   - **Think/design first** when the change affects production data, rollback, security, shared contracts, or other irreversible behavior.
-10. Ask the single highest-impact unanswered question. Repeat only until the next action is safe, testable, and reversible. State low-risk assumptions instead of conducting an endless interview.
-11. Produce the requirement set below. If several requirements are present, identify which one is the first executable slice.
+A requirement set may contain multiple rows for one slice—for example, normal behavior, an invalid input, and a dependency failure. Those are scenarios of one outcome, not unrelated requirements.
+
+## Human interview
+
+Run an interactive interview; do not produce a large questionnaire.
+
+1. Start by restating the candidate slice in plain language and ask the human to confirm or narrow it:
+
+   > “Which one topic should we make executable now? What should be included, and what should wait?”
+
+2. Ask **one question at a time**, in plain language. Ask only questions that can change scope, acceptance, risk, or verification.
+3. After each answer, briefly update:
+   - **Confirmed** — decisions now fixed
+   - **Still open** — the next uncertainty
+4. Do not silently fill in product decisions. State a low-risk assumption or ask the human.
+5. If the answer introduces a different topic, park it under **Deferred topics** and return to the selected slice.
+6. Confirm the scope boundary before asking detailed edge-case questions.
+7. Do not draft the final requirement set until the slice has a clear outcome, boundary, and verification method.
+
+## Interview order
+
+Use this order, skipping only what is already known:
+
+1. **Topic and boundary** — What single topic/category are we solving now? What is explicitly not part of it?
+2. **Actor and value** — Who uses or depends on it? What useful outcome do they get?
+3. **Trigger and context** — What event or starting state begins it?
+4. **Normal outcome** — What should happen on the ordinary successful path?
+5. **Inputs and dependencies** — What data, state, tools, or services are required?
+6. **Failure and boundary behavior** — What should happen for empty, invalid, duplicate, unavailable, or maximum cases that are relevant to this slice?
+7. **Verification** — What observable result proves it works, and what is the cheapest trustworthy check?
+8. **First action** — What small, safe, reversible action can start implementation or an experiment?
+
+Do not ask implementation questions such as “Should this use a class or a hashmap?” during this interview. Save responsibility, data model, APIs, workflow mechanics, and trade-offs for `/skill:ood` when the slice needs OOD.
+
+## Bounded scope check
+
+Before finishing, scan the selected slice for:
+
+- boundary values: zero, one, empty, maximum, negative where meaningful
+- state transitions the requested behavior allows, including duplicate calls
+- concurrency, only if the system is actually concurrent
+- failure of each named dependency once
+- invalid or adversarial input at each trust boundary
+
+At this stage, decide whether each relevant case is **in scope**, **out of scope**, or **deferred with a condition**. Do not invent mechanics before a design exists.
 
 ## Requirement set
 
-Use the following as a stable handoff schema. Keep the field names, but repeat or omit requirement and acceptance-criteria rows as needed; do not invent empty requirements.
-
 ```markdown
-## Desired outcome
-[What the user wants to change or obtain]
+## Slice
+- Topic/category: [one coherent topic]
+- Purpose: [the outcome this slice provides]
+- Actor/system: [who or what uses it]
+- Trigger/context: [what starts it]
+
+## Scope
+- In scope: [the boundary of this slice]
+- Out of scope: [unrelated topics and excluded behavior]
+- Deferred topics: [new topics parked for later, if any]
 
 ## Requirements
 
 ### R{id}: [short name]
-When [trigger], [actor/system] shall [one primary action] so that [observable value].
+When [trigger], [actor/system] shall [one action] so that [observable value].
 
-[Repeat for each related requirement]
-
-## Scope
-- Human-readable scope: [one topic/category, its purpose, and its boundary in plain language]
-- In scope: [requirements covered by this slice]
-- Out of scope: [explicitly excluded work]
+[Repeat only for scenarios belonging to this same slice]
 
 ## Preconditions and dependencies
 - [required state, data, tool, or service]
@@ -93,43 +104,36 @@ When [trigger], [actor/system] shall [one primary action] so that [observable va
 ## Acceptance criteria
 | Requirement | Category | Given | When | Then | Verification |
 |---|---|---|---|---|---|
-| R1 | Normal | ... | ... | ... | ... |
-| R1 | Exception/Boundary | ... | ... | ... | ... |
+| R{id} | Normal | ... | ... | ... | ... |
+| R{id} | Exception/Boundary | ... | ... | ... | ... |
 
 ## Failure behavior
-[What stops, retries, rolls back, or gets reported. Use “not specified” rather than inventing policy.]
+[What stops, retries, rolls back, waits, or gets reported. Use “not specified” rather than inventing policy.]
 
-## First executable slice
-[The first requirement to take through contract -> red test -> implementation -> refactor.]
+## Open decisions
+[Only decisions that block safe implementation or verification]
 
-## Next executable action
-[One command or small action, with the expected observable result.]
+## First executable action
+[One safe, reversible action or experiment with its expected observable result]
 ```
-
-Include only relevant acceptance-criteria rows; every row must be observable and have a verification method. Use a unit test, integration test, query, or command when possible. Use manual verification only when automation cannot check the result. The schema is strict at handoff boundaries; the number of requirements, questions, and criteria is flexible.
 
 ## Handoff
 
-After the requirement set is ready, use the separate skills:
+After this slice is complete:
 
-1. `/skill:ood` when the behavior has meaningful state or responsibility assignment
-2. `/skill:define-contract`
-3. `/skill:red-test`
-4. `/skill:green-implement`
-5. `/skill:refactor-green`
+1. Use `/skill:ood` when it has meaningful state, domain responsibilities, or object collaboration.
+2. Otherwise use `/skill:define-contract` directly.
+3. Then use `/skill:red-test`, `/skill:green-implement`, and `/skill:refactor-green`.
 
-If the first slice has not been selected, ask the user to select it before handing off. OOD design may cover the related requirement set, but downstream contract and test skills must take one selected slice at a time.
+Downstream skills must take this selected slice, not the parked topics. They must not combine unrelated requirements into one contract or test.
 
 ## Completion criterion
 
-The requirement set is ready when:
+The interview is complete when:
 
-- Related requirements are captured without artificial one-item limitation.
-- The scope is one understandable topic or category with a clear purpose and boundary.
-- Independent outcomes are split enough to have clear acceptance criteria and execution boundaries.
-- A developer can start the first slice without guessing its trigger, input, output, or success condition.
-- Failure behavior is stated or explicitly marked unknown.
-- The next action is safe, reversible, and testable.
-- Another person can verify completion without asking what “works” means.
-
-If it is not ready, ask one focused question or propose one time-boxed experiment; do not expand into a full system design.
+- The request is bounded to one topic/category and one coherent purpose.
+- A human can tell what belongs in the slice and what does not.
+- The actor, trigger, outcome, inputs, success condition, and relevant failure behavior are clear.
+- Related scenarios have observable acceptance criteria and verification methods.
+- Unrelated topics are explicitly deferred or out of scope.
+- The first action is safe, reversible, and testable.
