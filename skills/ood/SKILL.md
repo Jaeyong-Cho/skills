@@ -18,6 +18,20 @@ Design the smallest coherent object-oriented solution without writing implementa
 
 A design brief covering the domain model, responsibility owners, data model, APIs, workflow, bounded edge cases, failure modes, trade-offs, and the first contract. It is input to `/skill:define-contract`.
 
+## Human interview
+
+Follow `../references/human-checkpoint.md`. Before each design stage, summarize the current decision and ask only the next highest-impact question in plain language. Do not design silently.
+
+Ask about, in order:
+
+1. Which domain concept or state is actually in scope?
+2. Who owns each behavior and why does it belong there?
+3. What state and invariant must be protected?
+4. What public operation should a caller use?
+5. Which edge case or failure decision changes the design?
+
+Confirm the design brief before handing it to `/skill:define-contract`.
+
 ## Source process
 
 Follow this order and settle each step in one or two sentences before moving on:

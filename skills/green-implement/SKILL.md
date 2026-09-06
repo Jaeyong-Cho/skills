@@ -29,6 +29,10 @@ The smallest production implementation that makes the focused test pass, plus pa
 - Keep one abstraction level per function: L1 orchestrates, L2 expresses domain rules, and L3 performs technical mechanisms.
 - Keep each responsibility with its cohesive owner; accept dependencies instead of constructing them inside the rule under test.
 
+## Human interview
+
+Follow `../references/human-checkpoint.md`. After reading the failing test, explain the smallest implementation boundary in plain language and ask the human to confirm it before editing production code. Ask one question if the failure could be fixed in more than one behaviorally different way.
+
 ## OOD check
 
 Read `../references/abstraction-levels.md` before editing. Do not let an L1 function issue raw infrastructure calls or an L2 function embed database, HTTP, SDK, or filesystem details. Use a narrow capability contract when a mechanism must be substituted.

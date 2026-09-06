@@ -27,6 +27,14 @@ One written executable contract in the codebase: a function, command, API, or jo
 - Create an abstract interface only when there is a real substitution boundary or multiple implementations.
 - Do not implement behavior and do not write the feature test here.
 
+## Human interview
+
+Follow `../references/human-checkpoint.md`. Before writing the contract, show the candidate boundary in plain language and ask:
+
+> “Is this the one behavior and boundary you want to test and implement now?”
+
+If the answer is unclear, ask one focused question about the actor, input, output, error, or side effect. Confirm the contract before editing the codebase.
+
 ## OOD check
 
 Read `../references/abstraction-levels.md` and `../references/deep-modules.md` before defining the boundary.

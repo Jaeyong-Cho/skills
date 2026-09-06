@@ -28,6 +28,14 @@ A deterministic test at the appropriate abstraction level that fails specificall
 - Test through the contract's public behavior, not private helpers or implementation details.
 - For L1 orchestration, prefer an integration test; for L2 domain behavior, isolate only the L3 contract; for L3 mechanisms, test the real test instance or vendor contract.
 
+## Human interview
+
+Follow `../references/human-checkpoint.md`. Before writing the test, present the scenario in plain language:
+
+> “Given [starting state], when [action], should [observable result] happen?”
+
+Ask the human to confirm the scenario or correct it. If the acceptance criterion is already explicit, state the chosen criterion and ask only for confirmation before creating the test.
+
 ## OOD check
 
 Use `../references/abstraction-levels.md` to choose the test level and `../references/deep-modules.md` to avoid coupling the test to a wide interface.

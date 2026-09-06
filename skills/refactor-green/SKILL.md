@@ -27,6 +27,10 @@ A behavior-preserving, clearer implementation with all required tests still pass
 - Rerun the focused test after every meaningful change.
 - Preserve responsibility ownership and dependency direction; do not move business rules into mechanisms or infrastructure details into domain code.
 
+## Human interview
+
+Follow `../references/human-checkpoint.md`. Before editing, name one concrete smell and the proposed behavior-preserving change in plain language. Ask the human to confirm that this is the intended refactor. Do not turn refactoring into a redesign interview.
+
 ## OOD check
 
 Read `../references/abstraction-levels.md` and `../references/deep-modules.md`. Check the one-sentence test, cohesion, interface width, dependency direction, and whether any extraction names a real concept rather than merely shortening a long function.
