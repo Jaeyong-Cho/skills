@@ -14,4 +14,13 @@ Run the grill in rounds. Keep the frontier limited to the highest-impact questio
 
 Facts are the agent's job to inspect. Decisions belong to the human. If an experiment is required, use `/skill:experiment` rather than guessing. If the human says “I don't know,” use the recommended answer as an explicitly marked assumption and continue.
 
-After `/skill:grill-me` completes, summarize **Confirmed**, **Assumptions**, **Deferred**, and **Next action**. Get confirmation before writing or editing behavior, data, interfaces, or structure.
+## File confirmation
+
+At session completion, distinguish the result from its persistence:
+
+1. Summarize **Confirmed**, **Assumptions**, **Deferred**, **Next action**, and the artifact to preserve.
+2. Propose the exact file path relative to the current working directory (`./`). Use an existing local convention when one exists; otherwise recommend a minimal path such as `./requirements/<slice-slug>.md` or `./design/<slice-slug>.md`.
+3. Ask the human to confirm both the content and location before writing. Do not silently create, overwrite, or choose a new path.
+4. If the result is code or a test, confirm the exact source/test path before editing and report the paths at completion.
+
+A session is not persistently recorded until the human confirms the artifact and path.

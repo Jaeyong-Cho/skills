@@ -16,7 +16,7 @@ Improve the code only after the requirement is working and protected by a test.
 
 ## Output
 
-A behavior-preserving, clearer implementation with all required tests still passing and no scope expansion. The workflow is complete for this slice.
+A behavior-preserving, clearer implementation with all required tests still passing and no scope expansion. The workflow is complete for this slice. Confirm the exact changed paths before editing and report them at completion.
 
 ## Rules
 

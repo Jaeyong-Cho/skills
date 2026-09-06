@@ -16,7 +16,7 @@ Turn one approved requirement into a concrete boundary that the test and impleme
 
 ## Output
 
-One written executable contract in the codebase: a function, command, API, or job-stage boundary with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:red-test`.
+One written executable contract in the codebase: a function, command, API, or job-stage boundary with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:red-test`. Confirm the exact code path before writing and report it at completion.
 
 ## Rules
 

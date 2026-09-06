@@ -16,7 +16,7 @@ Make one failing requirement test pass with the smallest correct implementation.
 
 ## Output
 
-The smallest production implementation that makes the focused test pass, plus passing focused and relevant regression tests. It is input to `/skill:refactor-green`.
+The smallest production implementation that makes the focused test pass, plus passing focused and relevant regression tests. It is input to `/skill:refactor-green`. Confirm the exact source path before editing and report changed paths at completion.
 
 ## Rules
 

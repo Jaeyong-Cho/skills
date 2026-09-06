@@ -16,7 +16,7 @@ Turn one requirement's acceptance criterion into evidence that the behavior is m
 
 ## Output
 
-A deterministic test at the appropriate abstraction level that fails specifically because the required behavior is missing. It is input to `/skill:green-implement`.
+A deterministic test at the appropriate abstraction level that fails specifically because the required behavior is missing. It is input to `/skill:green-implement`. Confirm the exact test path before writing and report it at completion.
 
 ## Rules
 

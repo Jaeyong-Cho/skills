@@ -16,7 +16,7 @@ Design the smallest coherent object-oriented solution without writing implementa
 
 ## Output
 
-A design brief covering the domain model, responsibility owners, data model, APIs, workflow, bounded edge cases, failure modes, trade-offs, and the first contract. It is input to `/skill:define-contract`.
+A design brief covering the domain model, responsibility owners, data model, APIs, workflow, bounded edge cases, failure modes, trade-offs, and the first contract. It is input to `/skill:define-contract`. At completion, propose an exact path relative to the current directory, such as `./design/<slice-slug>.md`, and ask the human to confirm before writing it.
 
 ## Human interview
 
