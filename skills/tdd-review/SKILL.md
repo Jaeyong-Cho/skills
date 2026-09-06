@@ -18,15 +18,20 @@ Inspect the supplied diff and changed files directly. Review tests and productio
 
 ## Review step
 
-Launch exactly one fresh, read-only `stage-reviewer` sub-agent with this task:
+Launch one workflowScript that fans out **one fresh, read-only `stage-reviewer` child per applicable persona**:
 
-- Stage: TDD implementation.
-- Personas: TDD Practitioner, Clean Code Reviewer, Tester, Maintainer, and Simplifier as primary; Domain Expert as supporting; Security Reviewer or Performance/SRE only when materially relevant.
-- Artifacts: requirement and OOD paths/content, the complete relevant `git diff --` output, changed paths, and test commands/results. Capture the diff before launching the child and include it in the task; the read-only reviewer has no shell or edit tools.
-- Scope: verify observable behavior, meaningful edge/failure coverage, refactoring safety, clarity, maintainability, and feedback to OOD/requirements. Report only concrete findings in the current implementation.
-- Output: use the shared finding format and end with Must fix, Should improve, Deliberately deferred, and `Verdict: BLOCK | PROCEED`.
+- Stage: TDD implementation; Persona: TDD Practitioner (primary).
+- Stage: TDD implementation; Persona: Clean Code Reviewer (primary).
+- Stage: TDD implementation; Persona: Tester (primary).
+- Stage: TDD implementation; Persona: Maintainer (primary).
+- Stage: TDD implementation; Persona: Simplifier (primary).
+- Stage: TDD implementation; Persona: Domain Expert (supporting).
+- Stage: TDD implementation; Persona: Security Reviewer only when materially relevant.
+- Stage: TDD implementation; Persona: Performance/SRE only when materially relevant.
 
-Use the `subagent` tool through a `workflowScript`, with `agent: "stage-reviewer"`, `context: "fresh"`, and no write tools or edits. The workflow body must await the child (`const result = await runs.run("stage-review", {...}); return result.output;`). Launch the workflow asynchronously, then wait for its completion result before declaring the TDD cycle complete; do not continue while it is still detached. If `stage-reviewer` is unavailable, stop and report that `./install.sh` must install `npm:pi-subagents` and the custom agent.
+Each child receives the requirement and OOD paths/content, the complete relevant `git diff --` output, changed paths, and test commands/results. Capture the diff before launching the children. Each child inspects only its assigned persona and reports only concrete findings in the current implementation. Do not send all personas to one reviewer; the independent contexts are the point of this review.
+
+Use the `subagent` tool through one `workflowScript` with `runs.all([...])`; every child uses `agent: "stage-reviewer"`, `context: "fresh"`, and no write tools or edits. The workflow must await all children and return clearly labelled persona reports. The parent is the aggregator: merge duplicate findings, preserve the responsible persona, and classify the combined result. Launch the workflow asynchronously, then wait for its completion result before declaring the TDD cycle complete; do not continue while it is still detached. If `stage-reviewer` is unavailable, stop and report that `./install.sh` must install `npm:pi-subagents` and the custom agent.
 
 ## Parent disposition
 

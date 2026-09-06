@@ -18,15 +18,16 @@ Review the design, responsibilities, boundaries, collaborations, dependencies, w
 
 ## Review step
 
-Launch exactly one fresh, read-only `stage-reviewer` sub-agent with this task:
+Launch one workflowScript that fans out **one fresh, read-only `stage-reviewer` child per applicable persona**:
 
-- Stage: OOD.
-- Personas: Implementer (primary), Future Developer (primary), Simplifier, and Security/SRE only when the slice has material risk.
-- Artifacts: include the requirement and design verbatim or give their exact paths.
-- Scope: inspect the design and relevant repository evidence; use concrete likely change scenarios; report only evidence-backed findings.
-- Output: use the shared finding format and end with Must fix, Should improve, Deliberately deferred, and `Verdict: BLOCK | PROCEED`.
+- Stage: OOD; Persona: Implementer (primary).
+- Stage: OOD; Persona: Future Developer (primary).
+- Stage: OOD; Persona: Simplifier.
+- Stage: OOD; Persona: Security/SRE only when the slice has material security, reliability, distributed-system, or operational risk.
 
-Use the `subagent` tool through a `workflowScript`, with `agent: "stage-reviewer"`, `context: "fresh"`, and no write tools or edits. The workflow body must await the child (`const result = await runs.run("stage-review", {...}); return result.output;`). Launch the workflow asynchronously, then wait for its completion result before the human design checkpoint; do not proceed while it is still detached. If `stage-reviewer` is unavailable, stop and report that `./install.sh` must install `npm:pi-subagents` and the custom agent.
+Each child receives the requirement and design verbatim or their exact paths, inspects only its assigned persona, and reports only evidence-backed findings. Do not send all personas to one reviewer; the independent contexts are the point of this review.
+
+Use the `subagent` tool through one `workflowScript` with `runs.all([...])`; every child uses `agent: "stage-reviewer"`, `context: "fresh"`, and no write tools or edits. The workflow must await all children and return clearly labelled persona reports. The parent is the aggregator: merge duplicate findings, preserve the responsible persona, and classify the combined result. Launch the workflow asynchronously, then wait for its completion result before the human design checkpoint; do not proceed while it is still detached. If `stage-reviewer` is unavailable, stop and report that `./install.sh` must install `npm:pi-subagents` and the custom agent.
 
 ## Parent disposition
 
