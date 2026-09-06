@@ -4,7 +4,7 @@
 .pi/*
 !.pi/settings.json
 !.pi/agents/
-!.pi/agents/stage-reviewer.md
+!.pi/agents/*.md
 assets/
 !skills/diagram-design/assets/
 *.pptx
