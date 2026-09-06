@@ -1,7 +1,6 @@
 ---
 name: tdd
 description: "Run one complete RED → GREEN → REFACTOR cycle for an approved requirement and its OOD contract: prove the behavior is missing, implement the smallest fix, then improve structure without changing behavior."
-disable-model-invocation: true
 ---
 
 # TDD

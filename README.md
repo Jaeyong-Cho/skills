@@ -54,6 +54,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/req-review` | — | Review one requirement slice with domain, user, tester, and skeptic personas through the `stage-reviewer` sub-agent |
 | `/ood-review` | — | Review one OOD and contract brief with implementer, future-developer, simplifier, and risk-based personas through the `stage-reviewer` sub-agent |
 | `/tdd-review` | — | Review one TDD checkpoint as tests, behavior, production code, and refactoring through the `stage-reviewer` sub-agent |
+| `/req-ood-tdd` | — | Orchestrate one complete requirement → review → OOD → review → human approval → TDD → review pipeline |
 | `/end-of-day` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/report.md`, `.../YYYY-MM-DD/report/index.html` | Run `/d-handoff`, then compile the day's journal/research/handoff findings into a ToC report with an Introduction/Abstraction/Detailed section per topic, plus a themed, servable HTML gallery with an insight diagram per topic |
 | `/d-handoff` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/handoff.md` | Distill today's open items and key decisions into a dated file for tomorrow's session |
 | `/to-plan` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/research/NN-{slug}/plans/nn-{slug}.md` | Write up this session's decisions as a plan: spec changes, acceptance criteria, and `- [ ]` action items — run after `/dev-grill-me` |

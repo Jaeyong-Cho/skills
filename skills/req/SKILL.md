@@ -1,7 +1,6 @@
 ---
 name: req
 description: Interview a human to narrow a request into one focused, executable requirement slice with a clear boundary, observable success condition, and safe next action. Use when a request is broad or ambiguous before design or implementation.
-disable-model-invocation: true
 ---
 
 # Requirement Slice
