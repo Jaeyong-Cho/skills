@@ -1,12 +1,12 @@
 ---
 name: define-contract
-description: "Define the smallest executable contract for one selected requirement after its OOD responsibilities are settled: a function, CLI command, API, or job-stage boundary with explicit inputs, outputs, errors, and side effects. Use after define-req or ood and before writing the test."
+description: "Define the complete executable contract set for one selected requirement after its OOD responsibilities are settled: its user-facing boundary plus every applicable internal boundary, with explicit inputs, outputs, errors, and side effects. Use after define-req or ood and before writing the test."
 disable-model-invocation: true
 ---
 
 # Define Contract
 
-Turn one approved requirement into a concrete boundary that the test and implementation can share.
+Turn one approved requirement into a complete vertical-slice contract set that the test and implementation can share.
 
 ## Input
 
@@ -16,22 +16,23 @@ Turn one approved requirement into a concrete boundary that the test and impleme
 
 ## Output
 
-One written executable contract in the codebase: a function, command, API, or job-stage boundary with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:tdd`. Confirm the exact code path before writing and report it at completion.
+One written executable contract set in the codebase for one requirement: the user-facing boundary (when one exists) plus every applicable internal boundary—such as application, domain, persistence, or external-service seams—with explicit inputs, outputs, errors, side effects, and dependency seams, but no feature behavior. It is input to `/skill:tdd`; identify the primary public boundary that TDD will exercise. Confirm the exact code paths before writing and report them at completion.
 
 ## Rules
 
 - Start from one selected requirement from `/skill:define-req`, using the responsibility and API decisions from `/skill:ood` when that design step applies; do not combine it with sibling requirements.
-- Inspect the repository and reuse its conventions before creating a new boundary.
-- Define the smallest useful contract: inputs, output, errors, side effects, and dependency seams.
+- Treat the requirement as one vertical slice. Enumerate every real boundary needed to deliver its outcome: start with the user-facing CLI, HTTP, UI, or job entrypoint when present, then cover the applicable application, domain, persistence, and external-service boundaries. Omit layers that do not exist; do not invent abstractions.
+- Inspect the repository and reuse its conventions before creating new boundaries.
+- Define the smallest useful contract for each applicable boundary: inputs, output, errors, side effects, and dependency seams. The outer boundary must be concrete enough for a human to invoke or inspect—for a CLI, specify the command, arguments/options, stdout/stderr, exit codes, and a manual verification command.
 - An interface means a practical boundary (function, command, API, or stage), not automatically an abstract type.
 - Create an abstract interface only when there is a real substitution boundary or multiple implementations.
 - Do not implement behavior and do not write the feature test here.
 
 ## Human checkpoint
 
-Derive the contract from the approved requirement, applicable OOD decisions, repository evidence, and existing conventions. Before writing it, show the candidate boundary in plain language and ask once:
+Derive the contract from the approved requirement, applicable OOD decisions, repository evidence, and existing conventions. Before writing it, show the candidate contract set in plain language, including the outer/user-facing boundary and its internal path, and ask once:
 
-> “Is this the one behavior and boundary you want to test and implement now?”
+> “Is this the one behavior and complete boundary set you want to test and implement now?”
 
 Ask one focused clarification only when the requirement or design leaves the actor, input, output, error, or side effect unresolved. Confirm the contract before editing the codebase.
 
@@ -48,31 +49,47 @@ Read `../references/abstraction-levels.md` and `../references/deep-modules.md` b
 ## Workflow
 
 1. Read the requirement card and its acceptance criteria.
-2. Find the natural location and neighboring conventions in the repository.
-3. State the contract in plain language:
+2. Find the natural locations and neighboring conventions in the repository.
+3. Map the complete contract set in plain language, starting at the outer boundary:
    - trigger/caller
    - inputs and preconditions
    - output or state change
    - errors and failure behavior
    - side effects and dependencies
-4. Write the smallest signature, schema, CLI shape, or job-stage contract needed by the requirement. Add only compile/type information and documentation necessary to make the boundary unambiguous.
-5. Check that every acceptance criterion can be observed through this boundary.
+   - translation between external and internal shapes
+4. Write the smallest signature, schema, CLI shape, or job-stage contract needed at each applicable boundary. For a CLI, include a concrete human invocation and expected observable result. Add only compile/type information and documentation necessary to make each boundary unambiguous.
+5. Check that every acceptance criterion is observable through the primary public boundary and traceable to the internal boundaries.
 6. Report any unresolved contract question instead of inventing policy.
 
 ## Output
 
 ```markdown
-## Contract
-Boundary: [function | command | API | job stage]
-Signature/shape: [exact shape]
-Inputs: [types and preconditions]
-Output: [type and observable result]
-Errors: [failure outcomes]
+## Contract set
+Requirement: [one selected requirement]
+Primary public boundary: [CLI | HTTP API | UI action | job trigger | internal API]
+
+### External contract
+Boundary: [exact user-facing boundary, or “none”]
+Invocation/request shape: [exact command, arguments/options, request, or trigger]
+Inputs/preconditions: [shape and validation]
+Output: [stdout/response/state/result]
+Errors: [stderr/response, exit codes, failure outcomes]
 Side effects: [writes, calls, state changes]
-Dependencies: [real services and test seams]
+Human verification: [exact command or observable check, when applicable]
+
+### Internal boundary contracts
+| Boundary | Caller | Signature/shape | Inputs | Outputs/errors | Side effects | Dependencies/test seams |
+|---|---|---|---|---|---|---|
+| [application/domain/persistence/dependency] | [caller] | [exact shape] | [inputs] | [results] | [effects] | [seams] |
+
+### Traceability
+| Acceptance criterion | Observable at public boundary | Internal boundary(s) |
+|---|---|---|
+| [criterion] | [how] | [where] |
+
 Next skill: `/skill:tdd`
 ```
 
 ## Completion criterion
 
-The contract is written in the codebase's normal location, has no production behavior, maps to one requirement, assigns a clear responsibility, keeps the interface narrow, and makes the test's inputs and expected observable result unambiguous.
+The contract set is written in the codebase's normal location, has no production behavior, maps to exactly one requirement, includes every applicable boundary in that vertical slice, starts with a concrete user-facing contract when one exists, assigns each responsibility clearly, keeps every interface narrow, and makes both human verification and automated test inputs and expected observable results unambiguous.
