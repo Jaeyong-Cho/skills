@@ -16,25 +16,24 @@ Build each question from these parts:
 2. **Grounding** — summarize the relevant evidence, current situation, prior decisions, and constraints.
 3. **Gap** — identify the uncertainty or trade-off that remains.
 4. **Helpful example (required)** — give one concrete scenario that makes the choice easier to understand.
-5. **Focused question** — ask for one decision or one teach-back response.
+5. **Focused question (required H1)** — put the complete question at the top as `# ❓ Qn — <actual question?>`. It must be a real question ending in `?`, not a topic or short title.
 6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
 7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
 
-These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value—except the helpful example, which is mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
+These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Two presentation elements are mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds: the question H1 at the top and a helpful example. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
 
 The example must be specific enough for the user to reason from; merely rephrasing the question does not count. Use a fenced code block when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
 
 A good default—not a rigid template—is:
 
 ```text
-❓ **Qn — <short title>**
+# ❓ Qn — <one precise question?>
 
 <Why this matters, what is already true, and what remains uncertain.>
 
 **Example**
 <Concrete scenario, fenced code, or ASCII diagram.>
 
-**Question:** <one precise question>
 **Answer with:** <the expected response shape>
 
 ➡️ **Recommendation:** <answer and brief reason>
@@ -44,6 +43,7 @@ Keep numbering and recommendations for decision questions. Calibration and teach
 
 Before sending, verify that the question:
 
+- starts with the complete question as an H1 and ends it with `?`;
 - includes a concrete helpful example;
 - is answerable from the context provided;
 - asks one thing rather than bundling dependent decisions;
