@@ -234,14 +234,7 @@ setup_pi() {
   # teams — bin/pi-interactive-subagents-setup `pi install`s it and stubs
   # out its bundled agents (planner/scout/worker/reviewer/visual-tester).
   #
-  # pi-subagents backs the intent-to-cycle problem-solving skills
-  # (@skills/define-problem, @skills/find-solutions, @skills/evaluate-solution)
-  # — bin/pi-subagents-setup `pi install`s it (+ pi-web-access), writes the
-  # fact-finder/experimenter agents, and disables its scout/worker/reviewer/
-  # oracle/delegate builtins (keeps researcher, for web reference search).
-  # See references/pi-subagents.md.
   echo "  note: pi-interactive-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-interactive-subagents-setup inside a target repo"
-  echo "  note: pi-subagents no longer auto-installed here — run $SKILLS_DIR/bin/pi-subagents-setup inside a target repo"
 
   setup_boy_scout pi
 }

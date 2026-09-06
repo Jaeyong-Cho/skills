@@ -1,6 +1,6 @@
 ---
 name: l1-implement
-description: Implement one L1 orchestration function directly from a plain-language description of a use case/flow, decomposed per references/abstraction-levels.md — reuses existing L2/L3 functions, stubs every missing one as a visible TODO (never builds them here; that's a separate l2-implement/l3-implement call). Invoke as /l1-implement, or via to-code.
+description: Implement one L1 orchestration function directly from a plain-language description of a use case/flow, decomposed per references/abstraction-levels.md — reuses existing L2/L3 functions, stubs every missing one as a visible TODO (never builds them here; that's a separate l2-implement/l3-implement call). Invoke as /l1-implement.
 disable-model-invocation: true
 ---
 
@@ -16,8 +16,8 @@ Turn a human's plain-language description of one use case into a real, working L
 4. **Place and write the L1 function.** Dispatch a sub-agent to find where sibling L1 flows already live in the repo (module/folder convention) — put it there; open a new file only when no existing one fits. Orchestration only — calls the L2/L3 functions from steps 2-3 in sequence, no direct database/HTTP/SDK/filesystem call inline, per `../references/abstraction-levels.md`'s L1 rules. Name it and its parts per `../references/naming.md`.
 5. **Review the diff for layer mixing.** Read back the actual function you just wrote (not the plan for it) against `../references/abstraction-levels.md`'s smells table — no L1-leaking-L3 (an inline DB/HTTP/SDK/filesystem call), no Shallow L1 (domain logic re-implemented inline instead of delegated). Found one → pull it out into an L2/L3 stub (step 3) instead of leaving it inline; don't just note it.
 
-This skill only writes code — no test. Run `@skills/func-test` on the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
+This skill only writes code — no test. Add and run a real test for the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
 
 Completion criterion: the L1 function exists and calls only named L2/L3 functions, no inline mechanism; every gap from step 2 is an explicit loud TODO stub naming the missing decision and which skill builds it for real; step 5's layer-mixing review found nothing left inline.
 
-Tell the human the function's file:line, which L2/L3 functions were reused vs. stubbed (and which skill each stub needs), that the layer-mixing review passed clean, and that `@skills/func-test` is the next step for coverage.
+Tell the human the function's file:line, which L2/L3 functions were reused vs. stubbed (and which skill each stub needs), that the layer-mixing review passed clean, and that a real test is the next step for coverage.

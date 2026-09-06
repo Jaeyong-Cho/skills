@@ -1,6 +1,6 @@
 ---
 name: to-plan
-description: Write up this session's decisions as a plan document — acceptance criteria, action items. Does not write a spec document. Reached by @skills/execute-solution once a solution is picked. Invoke as /to-plan.
+description: Write up this session's decisions as a plan document — acceptance criteria and action items. Does not write a spec document. Invoke as /to-plan.
 ---
 
 # To-Plan

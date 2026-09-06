@@ -1,6 +1,6 @@
 ---
 name: l2-implement
-description: Implement one L2 domain function directly from a plain-language description of a business rule/behavior, per references/abstraction-levels.md — depends on L3 only through an interface, never a concrete implementation. Code only, no test — see @skills/func-test. Invoke as /l2-implement, or via l1-implement/to-code.
+description: Implement one L2 domain function directly from a plain-language description of a business rule/behavior, per references/abstraction-levels.md — depends on L3 only through an interface, never a concrete implementation. Code only, no test. Invoke as /l2-implement.
 disable-model-invocation: true
 ---
 
@@ -16,8 +16,8 @@ Turn a human's plain-language description of one business rule into a real L2 fu
 4. **Check for deep-module opportunities** (`../references/deep-modules.md`) — narrow interface, hide complexity, no duplication.
 5. **Review the diff for layer mixing.** Read back the actual function you just wrote against `../references/abstraction-levels.md`'s smells table — no L2-leaking-L3 (a business rule mixed with an inline HTTP/DB call in the same function), no Domain rule hidden as plumbing (a real rule buried in a `_helper`/`_process` name). Found one → fix it (extract the mechanism behind the L3 interface, rename to a domain-revealing name) before finishing.
 
-This skill only writes code — no test. Run `@skills/func-test` on the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
+This skill only writes code — no test. Add and run a real test for the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
 
 Completion criterion: the L2 function exists, expresses the rule in domain terms, depends on L3 only through an interface if it depends on it at all, and step 5's layer-mixing review found nothing left inline.
 
-Tell the human the function's file:line, whether an L3 interface/implementation was reused, missing, or newly declared, that the layer-mixing review passed clean, and that `@skills/func-test` is the next step for coverage.
+Tell the human the function's file:line, whether an L3 interface/implementation was reused, missing, or newly declared, that the layer-mixing review passed clean, and that a real test is the next step for coverage.

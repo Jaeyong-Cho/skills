@@ -2,14 +2,12 @@
 """
 Lint an experiment write-up markdown report for writing-quality rules.
 
-Same prose rules as to-paper's lint_paper.py (title word count, a
-paragraph-count range that varies by section — see SECTION_PARAGRAPH_RANGES
-there, e.g. introduction 3-5, background 4-8, methodology 2-4, results 2-4,
-discussion 3-6, conclusion 1-3 — sentences per paragraph, words per
-sentence) — reused
-from that script rather than duplicated — applied to a plain markdown
-report instead of a manifest.json. No diagram requirement: an experiment
-report doesn't need a figure to be complete.
+Checks title word count, a paragraph-count range that varies by section —
+see SECTION_PARAGRAPH_RANGES below, e.g. introduction 3-5, background 4-8,
+methodology 2-4, results 2-4, discussion 3-6, conclusion 1-3 — sentences per
+paragraph, and words per sentence. It applies these rules to a plain markdown
+report. No diagram requirement: an experiment report doesn't need a figure to
+be complete.
 
 Expected shape:
 
@@ -49,17 +47,62 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "to-paper" / "scripts"))
-from lint_paper import (  # noqa: E402
-    MAX_TITLE_WORDS,
-    SECTION_PARAGRAPH_RANGES,
-    check_prose_block,
-    paragraphs,
-    words,
-)
-
 SECTION_ORDER = ["introduction", "background", "methodology", "results", "discussion", "conclusion"]
+SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 HEADING_RE = re.compile(r"^##\s+(?:\d+\.\s+)?(.+?)\s*$")
+MAX_TITLE_WORDS = 15
+MAX_SENTENCE_WORDS = 20
+MIN_PARAGRAPH_SENTENCES = 3
+MAX_PARAGRAPH_SENTENCES = 8
+SECTION_PARAGRAPH_RANGES = {
+    "introduction": (3, 5),
+    "background": (4, 8),
+    "methodology": (2, 4),
+    "results": (2, 4),
+    "discussion": (3, 6),
+    "conclusion": (1, 3),
+}
+
+
+def words(text):
+    return [w for w in re.split(r"\s+", text.strip()) if w]
+
+
+def sentences(paragraph):
+    return [s for s in SENTENCE_RE.split(paragraph.strip()) if s]
+
+
+def paragraphs(text):
+    return [p.strip() for p in text.split("\n\n") if p.strip()]
+
+
+def check_bullet_list(label, p_index, items, errors):
+    if not (2 <= len(items) <= 8):
+        errors.append(f"{label} paragraph {p_index}: bullet list needs 2-8 items, found {len(items)}")
+    for i_index, item in enumerate(items, start=1):
+        if not isinstance(item, str):
+            errors.append(f"{label} paragraph {p_index} item {i_index}: must be a string, got {type(item).__name__}")
+        elif len(words(item)) > MAX_SENTENCE_WORDS:
+            errors.append(f"{label} paragraph {p_index} item {i_index}: {len(words(item))} words, max {MAX_SENTENCE_WORDS}")
+
+
+def check_prose_block(label, paras, errors, *, one_paragraph=False, paragraph_range=None):
+    if one_paragraph and len(paras) != 1:
+        errors.append(f"{label}: must be exactly one paragraph, found {len(paras)}")
+    elif paragraph_range is not None:
+        lo, hi = paragraph_range
+        if not (lo <= len(paras) <= hi):
+            errors.append(f"{label}: expected {lo}-{hi} paragraphs, found {len(paras)}")
+    for p_index, para in enumerate(paras, start=1):
+        if isinstance(para, list):
+            check_bullet_list(label, p_index, para, errors)
+            continue
+        sents = sentences(para)
+        if not (MIN_PARAGRAPH_SENTENCES <= len(sents) <= MAX_PARAGRAPH_SENTENCES):
+            errors.append(f"{label} paragraph {p_index}: expected {MIN_PARAGRAPH_SENTENCES}-{MAX_PARAGRAPH_SENTENCES} sentences, found {len(sents)}")
+        for s_index, sent in enumerate(sents, start=1):
+            if len(words(sent)) > MAX_SENTENCE_WORDS:
+                errors.append(f"{label} paragraph {p_index} sentence {s_index}: {len(words(sent))} words, max {MAX_SENTENCE_WORDS}")
 
 
 def parse_report(text):

@@ -1,6 +1,6 @@
 ---
 name: l3-implement
-description: Implement one L3 mechanism function directly from a plain-language description of a technical operation (DB, HTTP, SDK, filesystem, ...), per references/abstraction-levels.md — exposes a simple interface upward, no business decisions inside. Code only, no test — see @skills/func-test. Invoke as /l3-implement, or via l1-implement/l2-implement/to-code.
+description: Implement one L3 mechanism function directly from a plain-language description of a technical operation (DB, HTTP, SDK, filesystem, ...), per references/abstraction-levels.md — exposes a simple interface upward, no business decisions inside. Code only, no test. Invoke as /l3-implement.
 disable-model-invocation: true
 ---
 
@@ -15,8 +15,8 @@ Turn a human's plain-language description of one technical operation into a real
 3. **Check for deep-module opportunities** (`../references/deep-modules.md`: narrow the interface, hide more of the client/SDK).
 4. **Review the diff for layer mixing.** Read back the actual function you just wrote against `../references/abstraction-levels.md`'s smells table — no business decision embedded (a discount rule, a validation policy, anything beyond retry/timeout/serialization). Found one → push it up to an L2 caller instead of deciding it here.
 
-This skill only writes code — no test. Run `@skills/func-test` on the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
+This skill only writes code — no test. Add and run a real test for the finished function separately when it needs coverage; this is a deliberate deviation from `../references/tdd.md`'s RED-first default, scoped to this lightweight path.
 
 Completion criterion: the L3 function exists behind a named interface, no business decision embedded in it, and step 4's layer-mixing review found nothing left inline.
 
-Tell the human the function's file:line, its interface, that the layer-mixing review passed clean, and that `@skills/func-test` is the next step for coverage (against the real mechanism, not a mock).
+Tell the human the function's file:line, its interface, that the layer-mixing review passed clean, and that a real test is the next step for coverage (against the real mechanism, not a mock).
