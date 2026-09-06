@@ -10,7 +10,14 @@ Interview the user until you reach a shared understanding. First calibrate what 
 
 ## Question format (mandatory)
 
-Every user-facing question must use this format; never send a bare question. Include all three core parts: **Background context**, **Current situation**, and **Specific question**. Explain the background and situation sufficiently for the user to understand why the question is being asked; do not compress either into a single vague or fragmentary sentence. Include the relevant facts, prior decisions, constraints, and uncertainty, while omitting unrelated detail. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
+Every user-facing question must use this format; never send a bare question. Include all three core parts: **Background context**, **Current situation**, and **Specific question**. Explain the background and situation sufficiently for the user to understand why the question is being asked; do not compress either into a single vague or fragmentary sentence. Include the relevant facts, prior decisions, constraints, and uncertainty, while omitting unrelated detail.
+
+Make the question easy to understand with the clearest aid for the topic:
+- Use a concrete **example** when the user must compare, predict, or choose.
+- Use a fenced **code block** when syntax, data, a request, or an implementation shape is relevant.
+- Use an **ASCII diagram** when showing flow, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
+
+Add one or more of these aids whenever they remove ambiguity; do not add decorative examples or diagrams that do not help answer the question. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
 
 ```text
 ❓ **Qn** - **<short title>**:
@@ -23,6 +30,9 @@ Every user-facing question must use this format; never send a bare question. Inc
 - **Known or observed:** [relevant facts and evidence]
 - **Already decided:** [prior answers or constraints]
 - **Uncertain:** [the specific gap this question addresses]
+
+**Helpful example / code / ASCII diagram (when useful)**
+[one concrete aid tied directly to the question]
 
 **Specific question:** [one precise question]
 **Desired answer:** [the response shape wanted: choice, comparison, example, priority, constraint, or trade-off]
@@ -105,7 +115,7 @@ Only now start the design-tree interview. Every question must make the following
 3. **Specific question** — one decision, not a vague request for opinions.
 4. **Desired answer** — the response shape wanted (choice, comparison, example, priority, constraint, or trade-off).
 
-Use plain language, define vague terms, and state the user's available choices when useful. Give enough background and current-situation detail that someone joining the conversation could understand the question without guessing; one-line labels are not sufficient when more explanation is needed. Before sending a question, check: “If someone heard this for the first time, would they know exactly what I need from them?” Include the recommendation and its brief reason.
+Use plain language, define vague terms, and state the user's available choices when useful. Give enough background and current-situation detail that someone joining the conversation could understand the question without guessing; one-line labels are not sufficient when more explanation is needed. Add a concrete example, fenced code block, or ASCII diagram when it makes the context, trade-off, or expected answer easier to understand. Before sending a question, check: “If someone heard this for the first time, would they know exactly what I need from them?” Include the recommendation and its brief reason.
 
 Continue numbering from the calibration and teach-back questions:
 
