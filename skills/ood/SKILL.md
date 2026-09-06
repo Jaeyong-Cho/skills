@@ -20,7 +20,7 @@ A design brief covering the domain model, responsibility owners, data model, API
 
 ## Human interview
 
-Follow `../references/human-checkpoint.md`. Before each design stage, summarize the current decision and ask only the next highest-impact question in plain language. Do not design silently.
+MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`. Scope the grill to OOD decisions for this selected slice only: domain model, responsibility ownership, data invariants, APIs, relevant edge cases, failures, and trade-offs. Do not let it interview implementation details or unrelated features.
 
 Ask about, in order:
 

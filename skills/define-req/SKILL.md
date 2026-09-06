@@ -38,23 +38,32 @@ Those belong to `/skill:ood`, `/skill:define-contract`, `/skill:red-test`, and t
 
 ## Human interview
 
-Use a short, focused interview. Ask one plain-language question at a time.
+MUST RUN `/skill:grill-me` as the interviewer with the focused scope below; do not conduct a separate questionnaire or let the grill expand beyond this slice.
 
-1. Restate the proposed slice and ask the human to confirm or narrow it:
+### Scope check before round 1
 
-   > “What single topic and outcome should we make executable now?”
+If the request contains several features, topics, or user goals, show two or three narrower candidate slices and mark one recommended with `➡️`. Ask the human to choose or confirm the recommendation before asking detailed questions. If the request is already one focused slice, start round 1.
 
-2. Ask only the next question needed to define this slice:
-   - Who or what uses it?
-   - What triggers it?
-   - What is the one useful outcome?
-   - What input or starting state is essential?
-   - What observable result means success?
-   - Is there one directly relevant failure or boundary case that changes the scope?
-3. After each answer, summarize **Confirmed**, **Still open**, and **Next question**.
-4. If the human introduces a different topic, park it under **Deferred topics** and return to the selected slice.
-5. Do not ask questions whose answers belong to OOD or implementation. State “deferred to design” instead.
-6. Stop when the slice boundary and success condition are clear. Do not keep interviewing for completeness.
+### Rounds
+
+1. Maintain a **frontier** of decisions that can be answered now without guessing at unsettled decisions.
+2. Ask at most three highest-impact frontier questions per round. Do not ask a later question whose answer depends on an earlier unanswered question.
+3. Format each question like this:
+
+   ```text
+   ❓ **Q1 — [short title]**
+   [Plain-language question and choices, if useful]
+
+   ➡️ Recommended: [recommended answer and brief reason]
+   ```
+
+4. Wait for the human's answers before asking the next round.
+5. After each round, summarize **Confirmed**, **Still open**, and **Deferred topics**, then recompute the frontier.
+6. If the human says “I don't know,” use the recommendation as an explicitly marked assumption and continue; do not block the rest of the round.
+7. If the human introduces a different topic, park it under **Deferred topics** and return to the selected slice.
+8. Find repository facts yourself. Ask the human only for decisions, intent, or constraints. Use an experiment for an unknown that can only be learned by running something.
+9. Do not ask questions whose answers belong to OOD or implementation. State “deferred to design” instead.
+10. Stop when the human confirms one slice containing its happy path plus directly relevant edge, boundary, and failure cases. Do not interview for completeness or exhaustiveness.
 
 ## Focused requirement card
 

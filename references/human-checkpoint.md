@@ -1,13 +1,17 @@
 # Human Checkpoint
 
-Use this protocol when a skill must interview the human instead of silently deciding.
+Reuse `/skill:grill-me` as the interviewer instead of reimplementing its round logic in each skill.
 
-1. Restate the current understanding and the artifact/action about to be produced.
-2. Identify the single highest-impact unresolved decision.
-3. Ask one plain-language question about that decision. Do not send a questionnaire.
-4. After the answer, summarize **Confirmed**, **Still open**, and **Next action**.
-5. Before writing or editing files, show the proposed boundary or change and get confirmation when it affects behavior, data, interfaces, or structure.
-6. Do not ask the human for facts that repository inspection can establish. Do not invent product policy.
-7. Use a stated low-risk assumption only when it is reversible and does not change scope, safety, data, or acceptance.
+Before invoking it, provide a narrow prompt containing:
 
-The checkpoint is complete when the human can explain what is being changed, what is not being changed, and how the result will be checked.
+- the current artifact or stage
+- the single slice being worked on
+- the decisions this skill is allowed to ask about
+- what is explicitly out of scope
+- the stop condition and artifact the skill needs back
+
+Run the grill in rounds. Keep the frontier limited to the highest-impact questions, no more than three per round. Wait for the human's answers, recompute the frontier, and do not act on unresolved decisions.
+
+Facts are the agent's job to inspect. Decisions belong to the human. If an experiment is required, use `/skill:experiment` rather than guessing. If the human says “I don't know,” use the recommended answer as an explicitly marked assumption and continue.
+
+After `/skill:grill-me` completes, summarize **Confirmed**, **Assumptions**, **Deferred**, and **Next action**. Get confirmation before writing or editing behavior, data, interfaces, or structure.

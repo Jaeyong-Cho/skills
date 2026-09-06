@@ -29,7 +29,7 @@ One written executable contract in the codebase: a function, command, API, or jo
 
 ## Human interview
 
-Follow `../references/human-checkpoint.md`. Before writing the contract, show the candidate boundary in plain language and ask:
+MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to selecting and confirming this contract. Before writing the contract, show the candidate boundary in plain language and ask:
 
 > “Is this the one behavior and boundary you want to test and implement now?”
 

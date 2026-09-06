@@ -30,7 +30,7 @@ A deterministic test at the appropriate abstraction level that fails specificall
 
 ## Human interview
 
-Follow `../references/human-checkpoint.md`. Before writing the test, present the scenario in plain language:
+MUST RUN `/skill:grill-me` using `../references/human-checkpoint.md`, scoped only to selecting the acceptance scenario and verification level for this test. Before writing the test, present the scenario in plain language:
 
 > “Given [starting state], when [action], should [observable result] happen?”
 
