@@ -275,6 +275,8 @@ setup_pi() {
   done
   configure_pi_subagents
 
+  # Remove the retired review agent from older installations.
+  rm -f "$PI_AGENT_DIR/agents/stage-reviewer.md"
   if [ -d "$SKILLS_DIR/.pi/agents" ]; then
     mkdir -p "$PI_AGENT_DIR/agents"
     cp -R "$SKILLS_DIR/.pi/agents/." "$PI_AGENT_DIR/agents/"

@@ -101,7 +101,7 @@ Omit the exception row when no directly relevant exception changes the slice. Do
 
 ## Handoff
 
-After this card is confirmed, run `/skill:req-review` with the card before moving to design. Resolve or explicitly accept every blocking finding.
+After this card is confirmed, use it as the input to `/skill:ood`.
 
 1. Use `/skill:ood` for the complete slice. It combines object-oriented design, external and internal Interfaces, workflow, contract, and human verification; it may omit domain Objects when the slice has no meaningful state or collaboration.
 2. Then use `/skill:tdd` to complete RED → GREEN → REFACTOR in one invocation.
@@ -119,4 +119,3 @@ The interview is complete when:
 - The actor, trigger, outcome, essential input, and success condition are clear.
 - Only directly relevant exception behavior is included.
 - The first action is safe, reversible, and testable.
-- `/skill:req-review` has run and every blocking finding is resolved or explicitly accepted.

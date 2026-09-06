@@ -21,7 +21,7 @@ One design-and-contract brief covering the Objects, responsibility owners, data 
 
 Do not conduct another design interview. Derive the design from the approved requirement, repository evidence, and existing conventions. Ask one focused clarification only when an unresolved decision would change observable behavior; otherwise choose the simplest compatible design and mark any assumption explicitly.
 
-After completing the design and contract brief, run `/skill:ood-review` with the requirement and brief. Merge the review result, then present it and ask exactly one design-review question: “Do you approve this design, or should I change anything before writing it to `<proposed-path>`?” Do not write the brief or proceed to `/skill:tdd` until the human confirms. Do not split OOD and contract design into separate checkpoints.
+After completing the design and contract brief, present it and ask exactly one design-review question: “Do you approve this design, or should I change anything before writing it to `<proposed-path>`?” Do not write the brief or proceed to `/skill:tdd` until the human confirms. Do not split OOD and contract design into separate checkpoints.
 
 ## Source process
 
@@ -146,4 +146,4 @@ Next skill: `/skill:tdd`
 
 ## Completion criterion
 
-The design follows all nine steps, every in-scope core action and invariant has an owner and observable behavior, every applicable boundary in the vertical slice is identified, every Object and Interface needed for the outcome is explicit, the workflow connects the external interface to the designed Objects and internal Interfaces, no user-facing path stops at an internal API, edge cases were checked mechanically, non-goals and deferred decisions are explicit, and the contract is small enough to test and implement, `/skill:ood-review` has run, and every blocking finding is resolved or explicitly accepted.
+The design follows all nine steps, every in-scope core action and invariant has an owner and observable behavior, every applicable boundary in the vertical slice is identified, every Object and Interface needed for the outcome is explicit, the workflow connects the external interface to the designed Objects and internal Interfaces, no user-facing path stops at an internal API, edge cases were checked mechanically, non-goals and deferred decisions are explicit, and the contract is small enough to test and implement.
