@@ -15,14 +15,14 @@ Build each question from these parts:
 1. **Purpose** — state the goal and why this decision matters.
 2. **Grounding** — summarize the relevant evidence, current situation, prior decisions, and constraints.
 3. **Gap** — identify the uncertainty or trade-off that remains.
-4. **Helpful example** — give one concrete scenario that makes the choice easier to understand.
+4. **Helpful example (required)** — give one concrete scenario that makes the choice easier to understand.
 5. **Focused question** — ask for one decision or one teach-back response.
 6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
 7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
 
-These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
+These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value—except the helpful example, which is mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
 
-Use a fenced code block instead of prose when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
+The example must be specific enough for the user to reason from; merely rephrasing the question does not count. Use a fenced code block when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
 
 A good default—not a rigid template—is:
 
@@ -44,6 +44,7 @@ Keep numbering and recommendations for decision questions. Calibration and teach
 
 Before sending, verify that the question:
 
+- includes a concrete helpful example;
 - is answerable from the context provided;
 - asks one thing rather than bundling dependent decisions;
 - uses plain, neutral language and defines necessary jargon;
