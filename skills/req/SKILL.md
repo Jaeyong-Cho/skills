@@ -1,10 +1,10 @@
 ---
-name: define-req
+name: req
 description: Interview a human to narrow a request into one focused, executable requirement slice with a clear boundary, observable success condition, and safe next action. Use when a request is broad or ambiguous before design or implementation.
 disable-model-invocation: true
 ---
 
-# Define Requirement Slice
+# Requirement Slice
 
 Define one focused slice that a human can understand, implement, and verify. Do not turn this into a full product specification or system design.
 

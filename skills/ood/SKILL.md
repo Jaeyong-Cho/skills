@@ -1,6 +1,6 @@
 ---
 name: ood
-description: Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after define-req and before tdd.
+description: Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after req and before tdd.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Design the smallest coherent object-oriented solution and its complete boundary 
 
 ## Input
 
-- A completed requirement set from `/skill:define-req`
+- A completed requirement set from `/skill:req`
 - The selected scope or first executable slice
 - Repository conventions and existing domain code, if available
 
@@ -34,7 +34,7 @@ Do not jump straight from requirements to workflow. That invents entities and fi
 
 ## Rules
 
-- Start from the requirement set produced by `/skill:define-req`.
+- Start from the requirement set produced by `/skill:req`.
 - Preserve the user's behavior and constraints; do not invent product policy.
 - Assign each state and behavior to one cohesive owner. Ask why it belongs there rather than elsewhere.
 - Separate intent, domain rules, and technical mechanisms. Use `../references/abstraction-levels.md` and `../references/deep-modules.md`.
