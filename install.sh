@@ -214,6 +214,23 @@ configure_pi_settings() {
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto)"
 }
 
+configure_pi_subagents() {
+  local config="$PI_AGENT_DIR/extensions/subagent/config.json" tmp
+
+  mkdir -p "$(dirname "$config")"
+  [ -f "$config" ] || printf '{}\n' > "$config"
+  tmp="$(mktemp "$config.XXXXXX")"
+  node -e '
+    const fs = require("fs");
+    const [configPath, outputPath] = process.argv.slice(1);
+    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    config.asyncWidget = true;
+    fs.writeFileSync(outputPath, JSON.stringify(config, null, 2) + "\n");
+  ' "$config" "$tmp"
+  mv "$tmp" "$config"
+  echo "  ✓ pi-subagents async widget enabled"
+}
+
 setup_pi() {
   echo "→ pi coding agent"
 
@@ -256,6 +273,7 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
+  configure_pi_subagents
 
   if [ -d "$SKILLS_DIR/.pi/agents" ]; then
     mkdir -p "$PI_AGENT_DIR/agents"
