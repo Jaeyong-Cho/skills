@@ -1,5 +1,10 @@
 .claude
 .pi
+!.pi/
+.pi/*
+!.pi/settings.json
+!.pi/agents/
+!.pi/agents/stage-reviewer.md
 assets/
 !skills/diagram-design/assets/
 *.pptx

@@ -204,6 +204,10 @@ configure_pi_settings() {
     const settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
     settings.tuiMode = "fullscreen";
     settings.fullscreenScrollbar = "auto";
+    if (!settings.subagents || typeof settings.subagents !== "object" || Array.isArray(settings.subagents)) {
+      settings.subagents = {};
+    }
+    settings.subagents.disableBuiltins = true;
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
   ' "$settings" "$tmp"
   mv "$tmp" "$settings"
@@ -234,12 +238,13 @@ setup_pi() {
 
   command -v pi &>/dev/null || return
 
-  # Remove subagent packages no longer managed by this installer.
+  # Remove the superseded interactive-subagents package, then install the
+  # current pi-subagents package and the other managed Pi extensions.
   pi remove "https://github.com/hazat/pi-interactive-subagents" &>/dev/null || true
-  pi remove "npm:pi-subagents" &>/dev/null || true
 
   local pkg
   for pkg in \
+    "npm:pi-subagents" \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
@@ -251,6 +256,12 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
+
+  if [ -d "$SKILLS_DIR/.pi/agents" ]; then
+    mkdir -p "$PI_AGENT_DIR/agents"
+    cp -R "$SKILLS_DIR/.pi/agents/." "$PI_AGENT_DIR/agents/"
+    echo "  ✓ custom subagents → $PI_AGENT_DIR/agents"
+  fi
 
   setup_boy_scout pi
 }

@@ -27,11 +27,11 @@ The script detects which AI agents are installed and sets up each one:
 
 | Agent | What gets configured |
 |-------|----------------------|
-| Claude Code | Copies `skills/` and `preferences/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
-| GitHub Copilot CLI | Copies `skills/` and `preferences/` to `~/.copilot/skills/`; `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Installs `ponytail`'s skill commands via [skills.sh](https://www.skills.sh/) and Pi packages for open-tui, usage, must-have, and Vim mode |
+| Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
+| GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
+| pi coding agent | Installs `ponytail`, `pi-subagents`, the custom stage reviewer, and the Pi UI packages; disables bundled subagents so project/user agents are used |
 
-`references/` is not copied by the installer — skills read it from this repo's own path (`../references/...`), since `skills/` and `references/` land as siblings either way.
+`references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
 The script also copies `skills/`, `references/`, and `template/` to `~/.agents/skills/`, the global directory defined by the [Agent Skills standard](https://agentskills.io/specification) — read by `pi` and other harnesses that follow it, independent of Claude/Copilot.
 
@@ -51,6 +51,9 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/l2-implement` | — | Implement one L2 domain function directly from a plain-language business-rule description, per `abstraction-levels.md`: depends on L3 only through an interface, never a concrete implementation, code only |
 | `/l3-implement` | — | Implement one L3 mechanism function directly from a plain-language technical-operation description, per `abstraction-levels.md`: exposes a simple interface upward, no business decisions inside, code only |
 | `/tdd` | — | Complete one vertical behavior slice in one invocation: write and verify the failing test, implement the smallest passing change, then refactor safely while tests remain green |
+| `/req-review` | — | Review one requirement slice with domain, user, tester, and skeptic personas through the `stage-reviewer` sub-agent |
+| `/ood-review` | — | Review one OOD and contract brief with implementer, future-developer, simplifier, and risk-based personas through the `stage-reviewer` sub-agent |
+| `/tdd-review` | — | Review one TDD checkpoint as tests, behavior, production code, and refactoring through the `stage-reviewer` sub-agent |
 | `/end-of-day` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/report.md`, `.../YYYY-MM-DD/report/index.html` | Run `/d-handoff`, then compile the day's journal/research/handoff findings into a ToC report with an Introduction/Abstraction/Detailed section per topic, plus a themed, servable HTML gallery with an insight diagram per topic |
 | `/d-handoff` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/handoff.md` | Distill today's open items and key decisions into a dated file for tomorrow's session |
 | `/to-plan` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/research/NN-{slug}/plans/nn-{slug}.md` | Write up this session's decisions as a plan: spec changes, acceptance criteria, and `- [ ]` action items — run after `/dev-grill-me` |

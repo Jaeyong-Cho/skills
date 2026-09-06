@@ -83,6 +83,8 @@ Do not continue until the focused and relevant regression tests are green.
 4. Run the relevant regression tests again.
 5. Stop when the code is clear enough.
 
+6. Run `/skill:tdd-review` on the approved requirement, OOD contract, current diff, and test results. Resolve or explicitly accept blocking findings, then rerun the focused and relevant regression tests.
+
 ## Completion criterion
 
 The cycle is complete only when:
@@ -91,4 +93,5 @@ The cycle is complete only when:
 - the same test passes without being weakened;
 - relevant regression tests pass;
 - any refactor preserved the contract and observable behavior;
-- the diff contains no unrelated scope or speculative design.
+- the diff contains no unrelated scope or speculative design;
+- `/skill:tdd-review` has run and every blocking finding is resolved or explicitly accepted.
