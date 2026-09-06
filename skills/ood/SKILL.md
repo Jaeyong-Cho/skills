@@ -67,9 +67,27 @@ Do not jump straight from requirements to workflow. That invents entities and fi
 8. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope. Every in-scope API behavior must be decided.
 9. **Trade-offs** — state the simplest option, what it gives up, and the condition that would justify changing it. Check 10x/100x scale only when relevant.
 
-## Avoid rabbit holes
+## Edge-case boundary rule
 
-An edge case is real when you can name the concrete input or call sequence that triggers it. Decide it, handle it, or defer it with a condition. If no concrete trigger exists, record it once and move on.
+An edge case is real only when you can name the concrete input, state, or call sequence that triggers it.
+
+For every candidate case:
+
+1. Name the concrete trigger.
+2. Mark it **in scope**, **out of scope**, or **deferred with a condition**.
+3. If it is in scope, decide the behavior and how it will be verified.
+4. If it is deferred, state the condition that brings it into scope.
+5. If it has no concrete trigger, record it once and move on.
+
+Use this fixed checklist, once against the actual APIs:
+
+- boundary values: zero, one, maximum, empty, negative where meaningful
+- state transitions the APIs allow, including duplicate calls
+- concurrency, only when the system is actually concurrent
+- failure of each named dependency once
+- invalid or adversarial input at every trust boundary
+
+At requirements time, decide whether a case belongs in scope. After the data model and APIs exist, decide its mechanics. Do not make the checklist an invitation to imagine unlimited failures.
 
 The goal is not exhaustive imagination. The goal is no undecided behavior inside the stated scope.
 
@@ -95,7 +113,9 @@ The goal is not exhaustive imagination. The goal is no undecided behavior inside
 [Normal call sequence at the appropriate abstraction level]
 
 ## Edge cases
-[Checklist result: handled, deferred with condition, or out of scope]
+| Case | Concrete trigger | Scope | Decision | Verification |
+|---|---|---|---|---|
+| [case] | [input/state/call sequence] | in/out/deferred | [behavior or condition] | [test/check] |
 
 ## Failure modes
 [Stop/retry/rollback/wait/alert decisions]

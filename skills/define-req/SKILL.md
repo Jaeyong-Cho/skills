@@ -75,7 +75,7 @@ Before finishing, scan the selected slice for:
 - failure of each named dependency once
 - invalid or adversarial input at each trust boundary
 
-At this stage, decide whether each relevant case is **in scope**, **out of scope**, or **deferred with a condition**. Do not invent mechanics before a design exists.
+For every candidate case, name the concrete input, state, or call sequence that triggers it, then mark it **in scope**, **out of scope**, or **deferred with a condition**. Only in-scope cases need acceptance criteria now. Do not invent mechanics before `/skill:ood` defines the actual data model and APIs. A hypothetical case with no concrete trigger is recorded once and not pursued.
 
 ## Requirement set
 
