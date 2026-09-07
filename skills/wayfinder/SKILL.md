@@ -89,4 +89,4 @@ Return one concise graph result in this order:
 [Repeat for every edge.]
 ```
 
-Include every branch and actionable leaf, in top-down order from the goal to the detailed low-level tasks. Keep `experiment` and `exploration` nodes actionable by naming the smallest test and its supporting or rejecting signal. Recommend one existing skill for each actionable leaf; recommend `/wayfinder` only when the leaf is not yet actionable. The result must be complete enough for `@skills/to-way` to write matching Markdown and JSON, with the same node and edge IDs.
+Include every branch and actionable leaf, in top-down order from the goal to the detailed low-level tasks. Keep `experiment` and `exploration` nodes actionable by naming the smallest test and its supporting or rejecting signal. Recommend one existing skill for each actionable leaf; recommend `/wayfinder` only when the leaf is not yet actionable. The result must be complete enough for `@skills/to-way` to write one Markdown group for every node, with the same node and edge IDs.

@@ -1,12 +1,12 @@
 ---
 name: to-way
-description: Record a complete Wayfinder route graph, including intent, nodes, edges, conditions, validation, and skill handoffs, in Markdown and JSON. Invoke as /to-way.
+description: Record a complete Wayfinder route graph as grouped Markdown files, including intent, nodes, edges, conditions, validation, and skill handoffs. Invoke as /to-way.
 disable-model-invocation: true
 ---
 
 # To-Way
 
-Turn one complete Wayfinder result into a concise, reusable route graph containing the user's intent, goal, every branch, each checkpoint, and all actionable tasks or experiments. Write the same graph in human-readable Markdown and machine-readable JSON; do not design or implement the solution.
+Turn one complete Wayfinder result into a concise, reusable route graph containing the user's intent, goal, every branch, each checkpoint, and all actionable tasks or experiments. Write one human-readable Markdown file for each node group; do not generate JSON, design, or implement the solution.
 
 ## Why this exists
 
@@ -14,27 +14,35 @@ A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, 
 
 ## Example output
 
-For the goal `Release the feature safely`, `to-way` writes one graph JSON file and one Markdown file per node:
+For the goal `Release the feature safely`, `to-way` writes one Markdown file for each node group:
 
 ```text
 ways/01-release-feature/
-├── graph.json
-├── goal-1.md
-├── way-a.md
-├── experiment-a.md
-├── way-b.md
-└── task-b.md
+├── goal-1.md       # goal-1 and its direct sub-goals
+├── way-a.md        # way-a and its direct sub-goals
+├── experiment-a.md # actionable leaf group
+├── way-b.md        # way-b and its direct sub-goals
+└── task-b.md       # actionable leaf group
 ```
 
 `goal-1.md`:
 
 ```markdown
-# Release the feature safely
+# Group: Release the feature safely
 
-## Node
+## Goal node
 - ID: goal-1
 - Kind: goal
 - Description: Choose a safe release route. Example: use an experiment when the release risk is unknown.
+
+## Sub-goals
+### way-a — Validate release risk
+- Kind: checkpoint
+- Description: Check unknown risk before release.
+
+### way-b — Use the verified route
+- Kind: checkpoint
+- Description: Follow existing release evidence.
 
 ## Edges
 ### edge-1 — goal-1 → way-a
@@ -48,30 +56,7 @@ ways/01-release-feature/
 - Condition: Use when release evidence already exists.
 ```
 
-`graph.json`:
-
-```json
-{
-  "intent": "Release the feature safely",
-  "goalId": "goal-1",
-  "nodes": [
-    {"id": "goal-1", "kind": "goal", "title": "Release the feature safely", "description": "Choose a safe release route."},
-    {"id": "way-a", "kind": "checkpoint", "title": "Validate release risk", "description": "Check unknown risk before release."},
-    {"id": "experiment-a", "kind": "experiment", "title": "Run a staging smoke test", "description": "Run the test and continue if the staging signal is clean."},
-    {"id": "way-b", "kind": "checkpoint", "title": "Use the verified route", "description": "Follow the existing release evidence."},
-    {"id": "task-b", "kind": "task", "title": "Run the regression suite", "description": "Run the suite and use a passing result as the release signal."}
-  ],
-  "edges": [
-    {"id": "edge-1", "from": "goal-1", "to": "way-a", "type": "decomposes", "description": "The goal can begin with risk validation.", "condition": "Use when release risk is unknown."},
-    {"id": "edge-2", "from": "way-a", "to": "experiment-a", "type": "decomposes", "description": "Risk validation requires the smoke test."},
-    {"id": "edge-3", "from": "goal-1", "to": "way-b", "type": "decomposes", "description": "The goal can use an existing verified route.", "condition": "Use when release evidence already exists."},
-    {"id": "edge-4", "from": "way-b", "to": "task-b", "type": "decomposes", "description": "The verified route requires regression checks."}
-  ],
-  "deferred": []
-}
-```
-
-The remaining node files use the same format and include their attached edges.
+Each sub-goal gets its own group file with its direct sub-goals and edges. Leaf groups contain only their actionable node description and attached edges.
 
 ## Workflow
 
@@ -79,33 +64,41 @@ The remaining node files use the same format and include their attached edges.
 2. **Keep the graph boundary.** Do not select, rank, discard, merge, or invent branches; rerun the decision; add deeper work; or turn the record into a design or implementation plan. If no Wayfinder result is available, tell the user to run `/wayfinder` first. If graph data is incomplete, do not fill it from assumptions. Preserve `/wayfinder` as the recommendation for any node that is not actionable.
 3. **Explain each node and route.** Give every node one concise description. Write it in a grill-me style: explain why it matters, include relevant grounding or uncertainty, and give a concrete example. For every actionable leaf, include the action, validation signal, and skill handoff in that same description. Do not add separate node fields or justify a node with unrelated future benefits.
 4. **Follow document style.** Read `../references/document-style.md` and `../references/document-style/understanding-and-structure.md`. Keep the conclusion before supporting details and use short, concrete language.
-5. **Confirm the location.** If this session has not already confirmed a destination, ask one `❓`/`➡️` question using `../references/question-format.md`. Recommend `./ways/` in the current directory. Once confirmed, create `./ways/{nn}-{slug}/`, write its aggregate graph to `graph.json`, and write one `<node-id>.md` file per node; update an existing same-goal directory instead of creating a duplicate.
+5. **Confirm the location.** If this session has not already confirmed a destination, ask one `❓`/`➡️` question using `../references/question-format.md`. Recommend `./ways/` in the current directory. Once confirmed, create `./ways/{nn}-{slug}/` and write one `<node-id>.md` group file per node; update an existing same-goal directory instead of creating a duplicate.
 6. **Validate and write the graph** with this structure:
 
    - Confirm node IDs and edge IDs are unique.
    - Confirm every edge endpoint refers to an existing node.
    - Confirm the goal is the root, its children are high-level ways, and each branch descends to detailed low-level tasks.
    - Confirm every terminal node is actionable or an explicitly deferred blocker.
-   - Confirm the aggregate JSON and every node Markdown file contain the same node description and attached-edge data, in goal-to-leaf order.
-   - Run `python3 scripts/lint_graph.py ./ways/{nn}-{slug}/graph.json` from the `to-way` skill directory. Fix every violation and rerun until it prints `OK`.
+   - Confirm every node has exactly one group file containing its description and direct subnodes.
+   - Confirm every decomposition edge is written in its parent group, and every dependency edge is written with its source node.
+   - Confirm every source node and edge appears in the grouped Markdown files, in goal-to-leaf order.
 
-   Each node Markdown file, written to `./ways/{nn}-{slug}/{node-id}.md`:
+   Each group Markdown file, written to `./ways/{nn}-{slug}/{node-id}.md`:
 
    ```markdown
    ---
-   type: Way Node
-   title: <node title>
-   description: <one-line explanation of this node>
+   type: Way Group
+   title: <group goal title>
+   description: <one-line explanation of this group>
    tags: [wayfinder, validation, graph]
    timestamp: <ISO 8601 datetime>
    ---
 
-   # <node title>
+   # Group: <group goal title>
 
-   ## Node
+   ## Goal node
    - ID: <node-id>
    - Kind: <goal | checkpoint | task | experiment | exploration>
-   - Description: <the same concise description from the section above>
+   - Description: <one concise grill-me-style description, including a concrete example when useful>
+
+   ## Sub-goals
+   ### <child-node-id> — <child title>
+   - Kind: <goal | checkpoint | task | experiment | exploration>
+   - Description: <one concise description>
+
+   <Repeat for every direct sub-goal of this group.>
 
    ## Edges
    ### <edge-id> — <from-id> → <to-id>
@@ -113,43 +106,14 @@ The remaining node files use the same format and include their attached edges.
    - Description: <what relationship this edge expresses>
    - Condition: <branch condition, or `None`>
 
-   <Repeat for every edge attached to this node.>
+   <Repeat for every edge owned by this group.>
+
+   ## Child groups
+   - `<child-node-id>.md`
+
+   <Repeat for every child group file.>
    ```
 
-   Aggregate JSON, written to `./ways/{nn}-{slug}/graph.json`:
+   Write one group file for every node, including leaf groups. A decomposition edge belongs to its parent group. A dependency edge belongs to the group of its source node. Child nodes are summarized in their parent group and fully described in their own group file. Completion criterion: grouped Markdown files preserve every source node, description, edge, and condition in goal-to-leaf order and can be used independently by a human or graph-rendering script.
 
-   ```json
-   {
-     "intent": "...",
-     "goalId": "goal-1",
-     "nodes": [
-       {
-         "id": "goal-1",
-         "kind": "goal",
-         "title": "...",
-         "description": "..."
-       },
-       {
-         "id": "task-1",
-         "kind": "task",
-         "title": "...",
-         "description": "..."
-       }
-     ],
-     "edges": [
-       {
-         "id": "edge-1",
-         "from": "goal-1",
-         "to": "task-1",
-         "type": "decomposes",
-         "description": "...",
-         "condition": "..."
-       }
-     ],
-     "deferred": []
-   }
-   ```
-
-   Omit empty optional fields consistently. Preserve node order from the goal through high-level ways to detailed low-level leaves. The JSON linter must pass before completion. Completion criterion: the aggregate JSON and every node Markdown file include the complete graph, preserve every source ID, description, and condition, and can be used independently by a human or graph-rendering script.
-
-Tell the user both file paths when done.
+Tell the user the output directory and every group file path when done.
