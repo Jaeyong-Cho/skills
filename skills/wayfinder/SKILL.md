@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Use one narrow grill-me interview to find validation-first ways forward for a single problem layer. Invoke as /wayfinder.
+description: Use one narrow grill-me interview to find validation-first ways forward for a single problem layer and recommend the existing skill that fits each way. Invoke as /wayfinder.
 disable-model-invocation: true
 ---
 
@@ -61,6 +61,12 @@ Do not choose the cheapest experiment when safety, compliance, data integrity, o
 - If only one valid way exists, return only one way.
 - If the current layer is already actionable, return it as an execution-ready way without asking deeper questions.
 
+## Skill Handoff
+
+For every way, recommend one existing skill that can execute or validate it. Use the available skill catalog and never invent a skill name. Choose the skill that fits the way's current abstraction level and give a short reason.
+
+A way is actionable only when it names a concrete next move and an observable result at the current layer. If a way is not actionable, recommend `/wayfinder` instead of a downstream skill.
+
 ## Output Format
 
 Return only this format:
@@ -70,11 +76,13 @@ Return only this format:
     - Describe the cheapest useful test, experiment, or exploration.
     - Describe the signal that would support or reject the way.
     - Describe how the result informs production work, when relevant.
+    - Recommend one existing skill for this way and briefly explain why it fits; if the way is not actionable, recommend `/wayfinder`.
 
 2. Way 2
     - Explain why this way is needed at this layer and the uncertainty it addresses.
     - Describe the cheapest useful test, experiment, or exploration.
     - Describe the signal that would support or reject the way.
     - Describe how the result informs production work, when relevant.
+    - Recommend one existing skill for this way and briefly explain why it fits; if the way is not actionable, recommend `/wayfinder`.
 
-Keep the output concise. Do not include headings, summaries, reasoning, recommendations, checkpoints, or details beyond the current layer.
+Keep the output concise. Do not include headings, summaries, reasoning, extra recommendations, checkpoints, or details beyond the current layer.

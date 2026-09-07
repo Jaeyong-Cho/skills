@@ -58,8 +58,8 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/to-plan` | `plans/{nn}-{slice}.md` (or the confirmed wiki path) | Write one independently executable TDD plan per vertical slice: acceptance criteria, deterministic checks, action items, review gate, and commit/merge/release gates |
 | `/do-plan` | `{plan-file}.report.md` | Execute a `/to-plan` document's action items in order, checking each off in place; verify acceptance criteria against real repo state; write up the run as a report |
 | `/experiment` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/research/NN-{slug}/experiments/nn-{slug}.md`, `.../nn-{slug}.raw/` | Plan the cheapest method that would answer a question (via `/ponytail`), act on it for real, analyze the result into a verdict — supported, refuted, or inconclusive — then write it up as a linted Title/Abstract/.../Conclusion markdown report |
-| `/wayfinder` | — | Invoke `/grill-me` for exactly one problem layer, then return concise ways forward with validation-first tests and signals |
-| `/to-way` | `ways/{nn}-{slug}.md` | Record one selected Wayfinder way, why it is needed now, and the validation evidence required before deeper work |
+| `/wayfinder` | — | Invoke `/grill-me` for exactly one problem layer, return validation-first ways, and recommend the existing skill that fits each way |
+| `/to-way` | `ways/{nn}-{slug}.md` | Record all Wayfinder ways for one problem layer, why each is needed, their validation evidence, and their recommended next skill |
 | `/to-context` | `~/wiki/today/research/NN-{slug}/contexts/nn-{slug}.md` | Write up this session as a context document — objective, background, key facts, current state — so a fresh session can resume it cold |
 | `/to-journal` | `~/wiki/today/journal.md` | Summarize this session very short, ELI5-simple, and append it as a formatted entry to today's journal |
 | `/to-anki` | `{slug}.anki.csv` | Turn a requested topic, notes file, or explicit Q&A list into an Anki-importable flashcard CSV — one atomic fact per Front/Back row, with the `#separator`/`#columns` header Anki's importer auto-detects |
