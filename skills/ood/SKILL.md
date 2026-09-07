@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # OOD
 
-Design the smallest coherent object-oriented solution for the complete approved requirement inventory. The primary output is one design-and-contract document per requirement slice. Process slices independently in dependency order, but validate their shared boundaries as one batch.
+First explore the existing codebase, then design the smallest coherent object-oriented solution for the complete approved requirement inventory. During design, explicitly choose whether each affected area is reused, modified, created, deleted, or left unchanged. The primary output is one design-and-contract document per requirement slice. Process slices independently in dependency order, but validate their shared boundaries as one batch.
 
 OOD does not implement the design or write feature tests. Implementation belongs to `/skill:tdd` and `/skill:do-plan`.
 
@@ -28,13 +28,26 @@ design/<epic>/<slice>.md
 ```
 
 - Traceability from every requirement and acceptance criterion to Objects, Interfaces, observable behavior, and verification
+- An evidence-based existing-codebase assessment and a reuse/modify/create/delete/unchanged decision for every affected area
 - Explicit cross-slice dependencies, shared boundaries, non-goals, deferred decisions, and trade-offs
 
 Reuse the target repository's design convention if it has one. Do not create a second design system. Follow `../references/document-style.md`; use the target's metadata convention for each design document.
 
-## Start with Grill Me
+## Start with repository exploration
 
-Before validating the input batch, gather only the approved requirement and repository context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on requirement interpretation, object responsibilities, boundaries, contracts, failure handling, and trade-offs. Preserve the approved behavior and scope. If the session finds behavioral ambiguity, stop and return it to `/skill:req`; resolve only design questions that cannot change observable behavior. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This is the only design interview and is separate from the batch approval gate below.
+Before the design interview or naming new Objects, explore the existing codebase for the selected requirement slices:
+
+1. Read repository instructions, relevant requirement documents, current design conventions, source files, tests, build configuration, and commands.
+2. Trace the current behavior from its public entrypoint through the relevant domain and infrastructure boundaries.
+3. Find callers, owned state, existing Objects, Interfaces, utilities, tests, and dead or duplicated paths that may be affected.
+4. Record exact file/path evidence and list candidate areas that could be reused, modified, created, deleted, or left unchanged.
+5. Do not select an action during exploration. Exploration records facts and options; design makes the selection.
+
+**Completion criterion:** the relevant current flow, boundaries, tests, callers, and candidate existing components are documented with evidence before design decisions are made.
+
+## Design interview
+
+After repository exploration, gather only the approved requirement and repository context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on requirement interpretation, object responsibilities, boundaries, contracts, failure handling, trade-offs, and the reuse/modify/create/delete choices. Preserve the approved behavior and scope. If the session finds behavioral ambiguity, stop and return it to `/skill:req`; resolve only design questions that cannot change observable behavior. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This is the only design interview and is separate from the batch approval gate below.
 
 ## Human checkpoint
 
@@ -51,6 +64,9 @@ Do not write any design document, start TDD, or reinterpret silence as approval 
 - Preserve the requirement inventory, scope, exclusions, edge-case decisions, and deferred topics exactly.
 - Design one vertical slice at a time. Do not design a horizontal backend/frontend/database layer.
 - A shared Object or Interface is allowed only when the repository or multiple approved slices provide a real shared boundary; record its ownership and all consumers.
+- Explore existing code before proposing a new Object, Interface, file, or layer.
+- In the design, classify every affected existing area as **reuse**, **modify**, **create**, **delete**, or **unchanged**, with evidence and a reason. Do not make this selection during exploration.
+- Prefer reuse or modification when it satisfies the approved behavior; create only when no suitable existing area exists; delete only when the area is dead, duplicated, or made unnecessary and its callers/tests are accounted for.
 - Omit layers that do not exist. Do not invent abstractions for hypothetical substitutions.
 - Do not write implementation code, feature tests, migration scripts, or library choices in a design brief.
 
@@ -69,17 +85,19 @@ Do not write any design document, start TDD, or reinterpret silence as approval 
 
 For each requirement, complete this sequence in order:
 
-> Requirements → Domain Model → Responsibilities → Data Model → APIs → Workflow → Edge Cases → Failure Modes → Trade-offs
+> Existing Code Assessment → Reuse/Modify/Create/Delete Selection → Requirements → Domain Model → Responsibilities → Data Model → APIs → Workflow → Edge Cases → Failure Modes → Trade-offs
 
-1. **Requirements** — list core actions, hard constraints/invariants, actors, acceptance criteria, and explicit non-goals. State what, not how.
-2. **Domain model** — name meaningful entities, value objects, and external collaborators. Do not create an Object merely because the workflow has a step.
-3. **Responsibilities** — assign each state, rule, and transition to one cohesive owner. For every non-obvious assignment, state why it belongs there.
-4. **Data model** — identify owned state and invariants. Keep data ownership singular.
-5. **Interfaces and contracts** — define the smallest intent-revealing operation at each applicable boundary: inputs, outputs, errors, side effects, allowed transitions, dependency seams, and external-to-internal translation.
-6. **Workflow** — trace the normal call sequence from the user-facing entrypoint through Objects and Interfaces to dependencies and the observable result. Do not leak database, HTTP, SDK, or filesystem details into the domain narrative.
-7. **Edge cases** — apply the fixed checklist below to the actual APIs.
-8. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope.
-9. **Trade-offs** — state the simplest option, what it gives up, and the condition that justifies changing it. Check scale only when relevant.
+1. **Existing code assessment** — summarize the explored current flow, affected files/components, callers, tests, and constraints with exact evidence. This is fact-finding, not a commitment.
+2. **Selection** — choose one action for every affected existing area: reuse, modify, create, delete, or unchanged. Explain why the selected action is the smallest coherent fit and name the behavior/tests affected. A new Object or Interface must have a concrete responsibility; a deletion must account for callers and replacement behavior.
+3. **Requirements** — list core actions, hard constraints/invariants, actors, acceptance criteria, and explicit non-goals. State what, not how.
+3. **Domain model** — name meaningful entities, value objects, and external collaborators. Do not create an Object merely because the workflow has a step.
+4. **Responsibilities** — assign each state, rule, and transition to one cohesive owner. For every non-obvious assignment, state why it belongs there.
+5. **Data model** — identify owned state and invariants. Keep data ownership singular.
+6. **Interfaces and contracts** — define the smallest intent-revealing operation at each applicable boundary: inputs, outputs, errors, side effects, allowed transitions, dependency seams, and external-to-internal translation.
+7. **Workflow** — trace the normal call sequence from the user-facing entrypoint through Objects and Interfaces to dependencies and the observable result. Do not leak database, HTTP, SDK, or filesystem details into the domain narrative.
+8. **Edge cases** — apply the fixed checklist below to the actual APIs.
+9. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope.
+10. **Trade-offs** — state the simplest option, what it gives up, and the condition that justifies changing it. Check scale only when relevant.
 
 Use `../references/abstraction-levels.md` for L1/L2/L3 ownership and `../references/deep-modules.md` for boundary shape. Prefer the smallest design that satisfies the requirement.
 
@@ -127,6 +145,7 @@ Before the human checkpoint, validate the batch:
 After the batch review, show:
 
 - one summary and exact path per slice;
+- the existing-code assessment and reuse/modify/create/delete/unchanged selection map;
 - the cross-slice dependency/shared-boundary map;
 - open assumptions and deferred decisions;
 - any requirement-to-design traceability gaps.
@@ -154,6 +173,12 @@ Use this structure for every slice:
 
 ## Requirements
 [Core actions, invariants, acceptance criteria, non-goals]
+
+## Existing code assessment and selection
+[Relevant current flow and exact evidence]
+
+| Existing area | Evidence | Decision: reuse / modify / create / delete / unchanged | Reason | Affected tests or behavior |
+|---|---|---|---|---|
 
 ## Objects
 [Entities, value objects, collaborators, ownership]

@@ -1,18 +1,29 @@
 ---
 name: req
-description: Turn prototype and repository context into an approved inventory of vertical requirement slices, then write one requirement document per slice with concrete edge cases and testable acceptance criteria. Use before OOD.
+description: Explore the existing codebase, then turn prototype and repository context into an approved inventory of vertical requirement slices with concrete edge cases and testable acceptance criteria. Use before OOD.
 disable-model-invocation: true
 ---
 
 # Requirements
 
-Cover the complete requirement set for one product goal in one invocation. The primary output is not a conversation transcript: it is one approved, independently verifiable requirement document per vertical slice plus the inventory that links them.
+First explore the existing codebase, then cover the complete requirement set for one product goal in one invocation. The primary output is not a conversation transcript: it is one approved, independently verifiable requirement document per vertical slice plus the inventory that links them.
 
 A batch may contain one slice. A slice owns one actor, purpose, outcome, and execution boundary. Keep its happy path and directly relevant edge, boundary, alternate, and failure cases together. Do not split by UI, backend, database, or other horizontal layers.
 
-## Start with Grill Me
+## Start with repository exploration
 
-Before establishing the slice inventory, gather only the context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on the actor, trigger, observable outcome, scope, directly relevant scenarios, dependencies, and verification. Do not design implementation. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This confirmation is separate from the batch approval gate below.
+Before interviewing or defining slices, explore the existing codebase:
+
+1. Read repository instructions, prototype/context evidence, current requirement indexes, relevant source files, tests, build configuration, and commands.
+2. Trace the current behavior from the relevant public entrypoint through the existing boundaries.
+3. Record existing behavior, callers, state, constraints, adjacent features, tests, and any already-implemented portion of the requested goal with exact file/path evidence.
+4. Identify gaps, overlaps, and behavior that must be preserved or clarified. Do not choose Objects, APIs, schemas, libraries, or other implementation mechanisms here.
+
+**Completion criterion:** the current behavior and repository evidence relevant to the product goal are recorded before the slice inventory or requirements interview begins.
+
+## Requirements interview
+
+After repository exploration, gather only the context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on the actor, trigger, observable outcome, scope, directly relevant scenarios, dependencies, and verification. Do not design implementation. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This confirmation is separate from the batch approval gate below.
 
 ## Input
 
@@ -27,6 +38,7 @@ If no inventory is supplied, derive one from the prototype and context before dr
 - An approved inventory of non-overlapping vertical slices in dependency order
 - One requirement document per approved slice
 - One index entry for every document
+- Existing behavior and repository evidence grounding each slice and scope decision
 - Each document's concrete edge, boundary, alternate, and failure decisions
 - Given–When–Then acceptance criteria with a deterministic Verification Method for every in-scope case
 
@@ -54,19 +66,28 @@ Those belong to `/skill:ood`, `/skill:tdd`, and `/skill:to-plan`.
 
 ## Workflow
 
-### 1. Establish the slice inventory
+### 1. Explore existing codebase
 
-1. Read the prototype verdict, trial results, context, current spec indexes, relevant repository code/tests, and target conventions.
-2. If the caller supplied an inventory, validate it. If not, use `../references/top-down-decompose.md` to derive candidate behaviors from the product goal.
-3. For every candidate, write one line for the actor, trigger, observable outcome, execution boundary, dependency, and proposed slug.
-4. Split overlapping candidates and expose gaps. Mark each candidate `accepted`, `not yet specified`, `out of scope`, or `blocked by [unknown]`.
-5. Order accepted slices by dependency and user value.
+1. Complete the repository exploration above and retain its exact evidence.
+2. Read the prototype verdict, trial results, context, current spec indexes, relevant repository code/tests, and target conventions.
+3. Trace the current behavior from each relevant public entrypoint through its existing boundaries.
+4. Record existing behavior, callers, state, constraints, adjacent features, tests, and already-implemented portions with exact file/path evidence.
+5. Identify gaps, overlaps, and behavior that must be preserved or clarified. Do not choose Objects, APIs, schemas, libraries, or other implementation mechanisms.
+
+**Completion criterion:** the current behavior and repository evidence relevant to the product goal are recorded before the slice inventory is defined.
+
+### 2. Establish the slice inventory
+
+1. If the caller supplied an inventory, validate it. If not, use `../references/top-down-decompose.md` to derive candidate behaviors from the product goal.
+2. For every candidate, write one line for the actor, trigger, observable outcome, execution boundary, dependency, and proposed slug.
+3. Split overlapping candidates and expose gaps. Mark each candidate `accepted`, `not yet specified`, `out of scope`, or `blocked by [unknown]`.
+4. Order accepted slices by dependency and user value.
 
 If an unresolved decision changes the observable behavior, ask only the blocking questions needed to settle it. Batch up to three questions, use `../references/question-format.md`, and state a recommended answer. If the answer can only be learned by running something, use `/skill:experiment` instead of guessing.
 
 **Completion criterion:** every accepted candidate has one actor, trigger, outcome, boundary, and slug; candidates do not overlap; gaps and blockers are explicit; and the inventory has an approved order.
 
-### 2. Define each slice and its edge cases
+### 3. Define each slice and its edge cases
 
 For every accepted slice, create a requirement card from the prototype, context, repository evidence, and confirmed inventory. Keep decisions behavior-focused.
 
@@ -77,6 +98,11 @@ For every accepted slice, create a requirement card from the prototype, context,
 - Actor/system: [who or what uses it]
 - Trigger/context: [what starts it]
 - Purpose: [one outcome]
+
+## Existing behavior and evidence
+- Entry point/current flow: [exact file/path and concise observed behavior]
+- Relevant code/tests/constraints: [exact paths]
+- Gap or change needed: [observable behavior still missing or changing]
 
 ## Scope
 - In scope: [smallest useful behavior]
@@ -108,7 +134,7 @@ Use a concrete trigger for every edge case. Include only cases that affect this 
 
 **Completion criterion:** every accepted slice has a complete card with a happy path, concrete relevant edge/boundary/failure cases, exclusions, dependencies, and testable acceptance criteria. No design decision is hidden in the card.
 
-### 3. Validate the batch
+### 4. Validate the batch
 
 Check the whole set before writing:
 
@@ -123,7 +149,7 @@ If validation exposes a behavior change, update only the affected card and reche
 
 **Completion criterion:** the inventory and every card pass the whole-batch check, with no unclassified overlap, missing outcome, or undecided in-scope behavior.
 
-### 4. Approve and write every document
+### 5. Approve and write every document
 
 Before writing, show the human:
 
