@@ -1,100 +1,157 @@
 ---
 name: ood
-description: "Turn one defined requirement into a complete vertical-slice object-oriented design and executable contract set: settle the Objects, Interfaces, user-facing boundary, workflow, edge cases, failures, and trade-offs before implementation. Use after req and before tdd."
+description: Design all approved requirement slices as small object-oriented vertical-slice solutions, then write one approved design-and-contract document per slice. Use after req and before to-plan/tdd.
 ---
 
 # OOD
 
-Design the smallest coherent object-oriented solution and its complete boundary contracts. OOD must not implement the design directly: produce only the design-and-contract brief; implementation belongs to `/skill:tdd` and later implementation work. Do not write implementation code or feature tests.
+Design the smallest coherent object-oriented solution for the complete approved requirement inventory. The primary output is one design-and-contract document per requirement slice. Process slices independently in dependency order, but validate their shared boundaries as one batch.
+
+OOD does not implement the design or write feature tests. Implementation belongs to `/skill:tdd` and `/skill:do-plan`.
 
 ## Input
 
-- A completed requirement set from `/skill:req`
-- The selected scope or first executable slice
-- Repository conventions and existing domain code, if available
+- The approved requirement inventory and its dependency order from `/skill:req`
+- Every confirmed requirement document, including its acceptance criteria and edge cases
+- Repository instructions, conventions, existing code, and existing tests
+
+A single requirement document is a valid one-slice batch.
 
 ## Output
 
-One design-and-contract brief covering the Objects, responsibility owners, data model, every applicable boundary in the vertical slice, exact Interfaces, end-to-end workflow, bounded edge cases, failure modes, trade-offs, and human verification. It is input to `/skill:tdd`. At completion, propose an exact path in the current directory, such as `./<slice-slug>-design.md`, and ask the human to confirm before writing it. Do not create a design/ directory by default.
+- One approved design-and-contract brief per requirement document
+- One exact design path per slice, defaulting to:
+
+```text
+design/<epic>/<slice>.md
+```
+
+- Traceability from every requirement and acceptance criterion to Objects, Interfaces, observable behavior, and verification
+- Explicit cross-slice dependencies, shared boundaries, non-goals, deferred decisions, and trade-offs
+
+Reuse the target repository's design convention if it has one. Do not create a second design system. Follow `../references/document-style.md`; use the target's metadata convention for each design document.
 
 ## Human checkpoint
 
-Do not conduct another design interview. Derive the design from the approved requirement, repository evidence, and existing conventions. Ask one focused clarification only when an unresolved decision would change observable behavior; otherwise choose the simplest compatible design and mark any assumption explicitly.
+Do not run a separate design interview. Derive the designs from the approved requirements, repository evidence, and existing conventions. Ask only a blocking clarification when its answer would change observable behavior, and use `../references/question-format.md`.
 
-After completing the design and contract brief, present it and ask exactly one design-review question: “Do you approve this design, or should I change anything before writing it to `<proposed-path>`?” Do not write the brief or proceed to `/skill:tdd` until the human confirms. Do not split OOD and contract design into separate checkpoints.
+Draft every slice before the approval gate. Present a compact summary, exact paths, cross-slice assumptions, and unresolved decisions. Ask exactly one batch question:
 
-## Source process
+> Do you approve these designs, or should I change anything before writing them to `<design-paths>`?
 
-Follow this order and settle each step in one or two sentences before moving on:
+Do not write any design document, start TDD, or reinterpret silence as approval until the human confirms. If one design changes, update its brief and re-present the affected batch before writing.
+
+## Batch boundaries
+
+- Preserve the requirement inventory, scope, exclusions, edge-case decisions, and deferred topics exactly.
+- Design one vertical slice at a time. Do not design a horizontal backend/frontend/database layer.
+- A shared Object or Interface is allowed only when the repository or multiple approved slices provide a real shared boundary; record its ownership and all consumers.
+- Omit layers that do not exist. Do not invent abstractions for hypothetical substitutions.
+- Do not write implementation code, feature tests, migration scripts, or library choices in a design brief.
+
+## Design workflow
+
+### 1. Validate the input batch
+
+1. Read the requirement inventory and every linked requirement document.
+2. Check that each accepted slice has one actor, trigger, outcome, boundary, acceptance criteria, and concrete edge-case decisions.
+3. Confirm the dependency order and identify shared external boundaries or state. Keep each slice's behavior separate even when implementation may reuse an Object.
+4. Inspect repository conventions and existing domain code before naming new Objects or Interfaces.
+
+**Completion criterion:** every design input exists, is approved, is traceable to the inventory, and has no missing or silently widened behavior.
+
+### 2. Design each slice
+
+For each requirement, complete this sequence in order:
 
 > Requirements → Domain Model → Responsibilities → Data Model → APIs → Workflow → Edge Cases → Failure Modes → Trade-offs
 
-Do not jump straight from requirements to workflow. That invents entities and fields mid-design.
+1. **Requirements** — list core actions, hard constraints/invariants, actors, acceptance criteria, and explicit non-goals. State what, not how.
+2. **Domain model** — name meaningful entities, value objects, and external collaborators. Do not create an Object merely because the workflow has a step.
+3. **Responsibilities** — assign each state, rule, and transition to one cohesive owner. For every non-obvious assignment, state why it belongs there.
+4. **Data model** — identify owned state and invariants. Keep data ownership singular.
+5. **Interfaces and contracts** — define the smallest intent-revealing operation at each applicable boundary: inputs, outputs, errors, side effects, allowed transitions, dependency seams, and external-to-internal translation.
+6. **Workflow** — trace the normal call sequence from the user-facing entrypoint through Objects and Interfaces to dependencies and the observable result. Do not leak database, HTTP, SDK, or filesystem details into the domain narrative.
+7. **Edge cases** — apply the fixed checklist below to the actual APIs.
+8. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope.
+9. **Trade-offs** — state the simplest option, what it gives up, and the condition that justifies changing it. Check scale only when relevant.
 
-## Rules
+Use `../references/abstraction-levels.md` for L1/L2/L3 ownership and `../references/deep-modules.md` for boundary shape. Prefer the smallest design that satisfies the requirement.
 
-- Start from the requirement set produced by `/skill:req`.
-- Preserve the user's behavior and constraints; do not invent product policy.
-- Assign each state and behavior to one cohesive owner. Ask why it belongs there rather than elsewhere.
-- Separate intent, domain rules, and technical mechanisms. Use `../references/abstraction-levels.md` and `../references/deep-modules.md`.
-- Prefer the smallest design that satisfies the requirements. Do not add classes, interfaces, services, or patterns for hypothetical future flexibility.
-- Keep non-goals explicit.
-- Defer mechanics until the data model and APIs exist; do not decide implementation details prematurely.
-- Inspect repository conventions and existing code before defining new Objects or Interfaces.
-- Treat one requirement as a vertical slice, not only an internal API. Enumerate every real boundary needed for its outcome: user-facing entrypoint (CLI, HTTP, UI, or job trigger) and the applicable application, domain, persistence, and external-service boundaries. Omit layers that do not exist; do not invent abstractions.
-- Design the user-facing boundary first when one exists, then trace its input, observable output, errors, and side effects through the internal boundaries. The slice is incomplete if a user-visible requirement stops at an internal API.
-- Define the smallest practical Interface at every applicable boundary. For a CLI, specify the command, arguments/options, stdout/stderr, exit codes, side effects, and an exact human verification command. Do not create abstract types without a real substitution boundary or multiple implementations.
-- Do not implement behavior or write the feature test. Define only the signatures, schemas, boundary shapes, observable results, dependency seams, and documentation needed to make the slice unambiguous.
+**Completion criterion:** the slice's external boundary, Objects, responsibilities, owned data, Interfaces, workflow, failures, edge cases, and trade-offs are all explicit and traceable to its requirement.
 
-## Design sequence
+### 3. Check edge cases mechanically
 
-1. **Requirements** — list core actions, hard constraints/invariants, relevant actors, and explicit non-goals. A requirement should say what, not how.
-2. **Domain model** — name the meaningful entities, value objects, and external collaborators. Do not create an object merely because there is a pipeline stage.
-3. **Responsibilities** — assign each rule, state, and transition to one owner. For every non-obvious assignment, answer: “Why here and not elsewhere?”
-4. **Data model** — identify the state each owner needs and its invariants. Keep data ownership singular.
-5. **Interfaces and contracts** — define the smallest intent-revealing operation or boundary shape at every applicable layer, including inputs, outputs, errors, side effects, allowed state transitions, dependency seams, and external-to-internal translation.
-6. **Workflow** — describe the normal call sequence from the user-facing entrypoint through the designed Objects and Interfaces to dependencies, without leaking database, HTTP, SDK, or filesystem details into the domain narrative.
-7. **Edge cases** — walk this fixed checklist against the actual APIs:
-   - boundary values: zero, one, maximum, empty, negative where meaningful
-   - state transitions the APIs allow, including duplicate calls
-   - concurrency, only when the system is actually concurrent
-   - failure of each named dependency once
-   - invalid or adversarial input at every trust boundary
-8. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope. Every in-scope API behavior must be decided.
-9. **Trade-offs** — state the simplest option, what it gives up, and the condition that would justify changing it. Check 10x/100x scale only when relevant.
+An edge case is real only when it names a concrete input, state, or call sequence. For every candidate:
 
-## Edge-case boundary rule
+1. Name the trigger.
+2. Mark it `in scope`, `out of scope`, or `deferred with a condition`.
+3. If in scope, decide the observable behavior and verification.
+4. If deferred, state the condition that reopens it.
+5. If there is no concrete trigger, record it once and move on.
 
-An edge case is real only when you can name the concrete input, state, or call sequence that triggers it.
+Apply this checklist once per slice against the actual designed APIs:
 
-For every candidate case:
+- boundary values: zero, one, maximum, empty, and negative where meaningful;
+- allowed state transitions, including duplicate calls;
+- concurrency only when the system is actually concurrent;
+- failure of each named dependency once;
+- invalid or adversarial input at every trust boundary.
 
-1. Name the concrete trigger.
-2. Mark it **in scope**, **out of scope**, or **deferred with a condition**.
-3. If it is in scope, decide the behavior and how it will be verified.
-4. If it is deferred, state the condition that brings it into scope.
-5. If it has no concrete trigger, record it once and move on.
+Do not use the checklist to invent unlimited hypothetical failures. Requirements decide scope; OOD decides mechanics.
 
-Use this fixed checklist, once against the actual APIs:
+**Completion criterion:** every in-scope edge case has a decided behavior and verification, and every out-of-scope/deferred case has a reason or reopening condition.
 
-- boundary values: zero, one, maximum, empty, negative where meaningful
-- state transitions the APIs allow, including duplicate calls
-- concurrency, only when the system is actually concurrent
-- failure of each named dependency once
-- invalid or adversarial input at every trust boundary
+### 4. Cross-slice and contract review
 
-At requirements time, decide whether a case belongs in scope. After the data model and APIs exist, decide its mechanics. Do not make the checklist an invitation to imagine unlimited failures.
+Before the human checkpoint, validate the batch:
 
-The goal is not exhaustive imagination. The goal is no undecided behavior inside the stated scope.
+- every acceptance criterion maps to an observable external result and one responsible Object/Interface;
+- every user-facing path reaches its real external boundary and does not stop at an internal API;
+- every applicable boundary is present: CLI/API/UI/job, application, domain, persistence, and external service;
+- each boundary has the smallest practical contract, with no interface created only for imagined substitution;
+- L1 intent, L2 business rules, and L3 mechanisms do not leak into one another;
+- shared Objects, state, and Interfaces have one owner and named consumers;
+- non-goals, deferred decisions, and assumptions are visible;
+- the designs do not introduce a product policy absent from the requirements.
 
-## Output
+**Completion criterion:** the full batch is internally consistent, every slice is independently understandable, shared boundaries are justified, and no requirement or edge case is unowned.
+
+### 5. Approve and write the design documents
+
+After the batch review, show:
+
+- one summary and exact path per slice;
+- the cross-slice dependency/shared-boundary map;
+- open assumptions and deferred decisions;
+- any requirement-to-design traceability gaps.
+
+Use the batch approval question from the Human checkpoint. After approval:
+
+1. Write one design document to `design/<epic>/<slice>.md` for every approved slice, or the repository's equivalent.
+2. Preserve the exact requirement path, acceptance criteria, edge-case table, and deferred topics in each design document.
+3. Add the boundary map, Objects, responsibilities, data model, Interfaces, workflow, failure modes, trade-offs, and traceability table.
+4. Link each design document back to its requirement and forward to its plan path when the target convention permits it.
+5. Do not write production code or feature tests.
+
+**Completion criterion:** every approved slice has exactly one written design document at its confirmed path, all documents preserve scope and edge cases, indexes/links are synchronized where the repository requires them, and no implementation code was written.
+
+## Design document shape
+
+Use this structure for every slice:
 
 ```markdown
+# [Slice]
+
+- Requirement: [exact requirement path]
+- Design: [exact design path]
+- Plan: [pending plan path]
+
 ## Requirements
-[Core actions, invariants, non-goals]
+[Core actions, invariants, acceptance criteria, non-goals]
 
 ## Objects
-[Entities, value objects, collaborators, and each responsibility owner]
+[Entities, value objects, collaborators, ownership]
 
 ## Responsibilities
 [Owner -> behavior/state, with reasons for non-obvious assignments]
@@ -105,45 +162,37 @@ The goal is not exhaustive imagination. The goal is no undecided behavior inside
 ## Boundary map
 | Layer | Boundary | Caller/user | Inputs | Observable outputs/errors | Side effects |
 |---|---|---|---|---|---|
-| [CLI/API/application/domain/dependency] | [name] | [caller] | [shape] | [result] | [effect] |
 
 ## Interfaces and contracts
 ### External interface
-Boundary: [CLI | HTTP API | UI action | job trigger | none]
-Invocation/request shape: [exact command, arguments/options, request, or trigger]
-Inputs/preconditions: [shape and validation]
-Output: [stdout/response/state/result]
-Errors: [stderr/response, exit codes, failure outcomes]
-Side effects: [writes, calls, state changes]
-Human verification: [exact command or observable check]
+[Exact invocation/request, validation, output, errors, side effects, human verification]
 
 ### Internal interfaces
 | Object/boundary | Caller | Signature/shape | Inputs | Outputs/errors | Side effects | Dependencies/test seams |
 |---|---|---|---|---|---|---|
-| [application/domain/persistence/dependency] | [caller] | [exact shape] | [inputs] | [results] | [effects] | [seams] |
 
 ## Workflow
-[Explicit sequence: user -> external interface -> Objects -> internal Interfaces -> dependencies -> observable result]
+[User -> external interface -> Objects -> internal Interfaces -> dependencies -> result]
 
 ## Traceability
-| Acceptance criterion | Observable at external interface | Object/interface responsible |
-|---|---|---|
-| [criterion] | [how] | [where] |
+| Acceptance criterion | Observable result | Object/interface responsible | Verification |
+|---|---|---|---|
 
 ## Edge cases
 | Case | Concrete trigger | Scope | Decision | Verification |
 |---|---|---|---|---|
-| [case] | [input/state/call sequence] | in/out/deferred | [behavior or condition] | [test/check] |
 
 ## Failure modes
 [Stop/retry/rollback/wait/alert decisions]
 
 ## Trade-offs
 [Chosen simple option, cost, upgrade condition]
-
-Next skill: `/skill:tdd`
 ```
+
+## Handoff
+
+Pass the complete design inventory and all design paths to `/skill:to-plan`. That skill writes one TDD implementation plan per slice. `/skill:tdd` then executes one behavior at a time from those approved plans; it must not pull deferred topics back into the design.
 
 ## Completion criterion
 
-The design follows all nine steps, every in-scope core action and invariant has an owner and observable behavior, every applicable boundary in the vertical slice is identified, every Object and Interface needed for the outcome is explicit, the workflow connects the external interface to the designed Objects and internal Interfaces, no user-facing path stops at an internal API, edge cases were checked mechanically, non-goals and deferred decisions are explicit, and the contract is small enough to test and implement.
+OOD is complete only when the complete approved requirement inventory has one human-approved design document per slice, every in-scope behavior and edge case has an owner, every applicable boundary and contract is explicit, cross-slice sharing is justified, no implementation code or feature test was written, and the exact design paths are ready for planning.

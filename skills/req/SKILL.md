@@ -1,123 +1,149 @@
 ---
 name: req
-description: Interview a human to narrow a request into one focused, executable requirement slice with a clear boundary, observable success condition, and safe next action. Use when a request is broad or ambiguous before design or implementation.
+description: Turn prototype and repository context into an approved inventory of vertical requirement slices, then write one requirement document per slice with concrete edge cases and testable acceptance criteria. Use before OOD.
 ---
 
-# Requirement Slice
+# Requirements
 
-Define one focused slice that a human can understand, implement, and verify. Do not turn this into a full product specification or system design.
+Cover the complete requirement set for one product goal in one invocation. The primary output is not a conversation transcript: it is one approved, independently verifiable requirement document per vertical slice plus the inventory that links them.
+
+A batch may contain one slice. A slice owns one actor, purpose, outcome, and execution boundary. Keep its happy path and directly relevant edge, boundary, alternate, and failure cases together. Do not split by UI, backend, database, or other horizontal layers.
 
 ## Input
 
-- A human's request, goal, or problem description
-- Repository context only when it is needed to establish the slice
+- Product goal and the prototype verdict, trial results, and context
+- An optional candidate-slice inventory from the caller
+- Existing repository instructions, specs, code, tests, and conventions needed to define observable behavior
+
+If no inventory is supplied, derive one from the prototype and context before drafting documents. Do not guess around a blocking unknown; use the smallest executable experiment when execution is the only way to learn it.
 
 ## Output
 
-One focused requirement slice with its scope, outcome, essential preconditions, acceptance criteria, explicit exclusions, and next action. At completion, propose an exact path in the current directory, such as `./<slice-slug>-requirements.md`, and ask the human to confirm before writing it. Do not create a requirements/ directory by default.
+- An approved inventory of non-overlapping vertical slices in dependency order
+- One requirement document per approved slice
+- One index entry for every document
+- Each document's concrete edge, boundary, alternate, and failure decisions
+- Given–When–Then acceptance criteria with a deterministic Verification Method for every in-scope case
 
-## Scope rule
+Default paths, unless the target repository has another convention:
 
-First show the possible scope lists for about requirements (feat, fix, ...)
+```text
+spec/index.md
+spec/<epic>/index.md
+spec/<epic>/<slice>.md
+```
 
-**Exactly one specific slice per invocation.** The slice must stay within one topic or category, one purpose, and one coherent execution boundary.
+Follow `../references/spec-convention.md`, `../references/document-style.md`, `../references/document-style/frontmatter.md`, and `template/spec.md`. Add the required metadata to Story documents and update both indexes with the same change. Do not create a combined `requirements.md` file when the repository uses the Story layout.
 
-Keep only what is needed to verify that one outcome. Do not produce a list of sibling requirements. If the request contains another feature, user goal, data area, or release boundary, record it as out of scope or deferred. Do not solve it in this interview.
+## Boundaries
 
-One slice consists of the main happy path plus the directly relevant edge, boundary, and failure cases for that same outcome. Do not split those scenarios into separate slices unless they introduce a different purpose or execution boundary. It does not need every possible edge case.
+This skill defines **what** must be true. It does not:
 
-## What this skill does not do
+- design Objects, classes, APIs, schemas, or infrastructure;
+- choose libraries or implementation mechanisms;
+- write production code or feature tests;
+- pull deferred topics into a slice;
+- invent every hypothetical failure.
 
-Do not use this skill to:
+Those belong to `/skill:ood`, `/skill:tdd`, and `/skill:to-plan`.
 
-- design the domain model, classes, data model, APIs, or workflow
-- enumerate every edge case or failure mode
-- choose libraries, algorithms, or infrastructure
-- write tests or implementation code
+## Workflow
 
-Those belong to `/skill:ood` and `/skill:tdd`.
+### 1. Establish the slice inventory
 
-## Human interview
+1. Read the prototype verdict, trial results, context, current spec indexes, relevant repository code/tests, and target conventions.
+2. If the caller supplied an inventory, validate it. If not, use `../references/top-down-decompose.md` to derive candidate behaviors from the product goal.
+3. For every candidate, write one line for the actor, trigger, observable outcome, execution boundary, dependency, and proposed slug.
+4. Split overlapping candidates and expose gaps. Mark each candidate `accepted`, `not yet specified`, `out of scope`, or `blocked by [unknown]`.
+5. Order accepted slices by dependency and user value.
 
-MUST RUN `/skill:grill-me` as the interviewer with the focused scope below; do not conduct a separate questionnaire or let the grill expand beyond this slice.
+If an unresolved decision changes the observable behavior, ask only the blocking questions needed to settle it. Batch up to three questions, use `../references/question-format.md`, and state a recommended answer. If the answer can only be learned by running something, use `/skill:experiment` instead of guessing.
 
-### Scope check before round 1
+**Completion criterion:** every accepted candidate has one actor, trigger, outcome, boundary, and slug; candidates do not overlap; gaps and blockers are explicit; and the inventory has an approved order.
 
-If the request contains several features, topics, or user goals, show two or three narrower candidate slices and mark one recommended with `➡️`. Ask the human to choose or confirm the recommendation before asking detailed questions. If the request is already one focused slice, start round 1.
+### 2. Define each slice and its edge cases
 
-### Rounds
-
-1. Maintain a **frontier** of decisions that can be answered now without guessing at unsettled decisions.
-2. Ask at most three highest-impact frontier questions per round. Do not ask a later question whose answer depends on an earlier unanswered question.
-3. Format each question like this:
-
-   ```text
-   ❓ **Q1 — [short title]**
-   [Plain-language question and choices, if useful]
-
-   ➡️ Recommended: [recommended answer and brief reason]
-   ```
-
-4. Wait for the human's answers before asking the next round.
-5. After each round, summarize **Confirmed**, **Still open**, and **Deferred topics**, then recompute the frontier.
-6. If the human says “I don't know,” use the recommendation as an explicitly marked assumption and continue; do not block the rest of the round.
-7. If the human introduces a different topic, park it under **Deferred topics** and return to the selected slice.
-8. Find repository facts yourself. Ask the human only for decisions, intent, or constraints. Use an experiment for an unknown that can only be learned by running something.
-9. Do not ask questions whose answers belong to OOD or implementation. State “deferred to design” instead.
-10. Stop when the human confirms one slice containing its happy path plus directly relevant edge, boundary, and failure cases. Do not interview for completeness or exhaustiveness.
-
-## Focused requirement card
+For every accepted slice, create a requirement card from the prototype, context, repository evidence, and confirmed inventory. Keep decisions behavior-focused.
 
 ```markdown
 ## Slice
-- Topic/category: [one topic]
-- Purpose: [one outcome]
+- ID/slug: [stable identifier]
+- Category: [feature | fix | refactor | other]
 - Actor/system: [who or what uses it]
 - Trigger/context: [what starts it]
+- Purpose: [one outcome]
 
 ## Scope
-- In scope: [the smallest useful behavior]
-- Out of scope: [other topics, features, or mechanics]
-- Deferred topics: [new topics parked for later]
+- In scope: [smallest useful behavior]
+- Out of scope: [nearby behavior intentionally excluded]
+- Deferred topics: [topic + condition that would reopen it]
 
 ## Requirement
-When [trigger], [actor/system] shall [one action] so that [observable outcome].
+When [trigger], [actor/system] shall [action] so that [observable outcome].
 
-## Preconditions and essential dependencies
-- [only dependencies required to define or verify this slice]
+## Preconditions and dependencies
+- [only state/data/dependency required to define or verify this slice]
+
+## Edge cases
+| Case | Concrete trigger | Scope | Decision | Verification |
+|---|---|---|---|---|
+| [case] | [input/state/call sequence] | in/out/deferred | [observable behavior or condition] | [test/check] |
 
 ## Acceptance criteria
 | Category | Given | When | Then | Verification |
 |---|---|---|---|---|
 | Normal | ... | ... | ... | ... |
-| Relevant exception/boundary | ... | ... | ... | ... |
-
-## Relevant failure behavior
-[Only behavior that changes this slice's scope or safe execution; otherwise “deferred to design”.]
+| Boundary/exception | ... | ... | ... | ... |
 
 ## First executable action
-[One safe, reversible action with its expected observable result]
+[one safe, reversible action and expected result]
 ```
 
-Omit the exception row when no directly relevant exception changes the slice. Do not invent empty requirements or fill the card with hypothetical cases.
+Use a concrete trigger for every edge case. Include only cases that affect this slice's outcome or safe execution. A relevant edge case must appear in both the card and its acceptance criteria or be explicitly deferred with a condition.
+
+**Completion criterion:** every accepted slice has a complete card with a happy path, concrete relevant edge/boundary/failure cases, exclusions, dependencies, and testable acceptance criteria. No design decision is hidden in the card.
+
+### 3. Validate the batch
+
+Check the whole set before writing:
+
+- every product-goal outcome belongs to exactly one accepted slice or is explicitly out of scope/deferred;
+- every slice has one coherent boundary and can be implemented independently in its listed order;
+- acceptance criteria are SMART and Given–When–Then per `../references/requirement-engineering.md`;
+- every Verification Method names an integration test, E2E test, query, or genuinely manual check with an observable result, per `../references/deterministic-evaluation.md`;
+- no acceptance criterion chooses a class, API, library, database shape, or other implementation detail;
+- the prototype's known states and trial findings are reflected or explicitly rejected.
+
+If validation exposes a behavior change, update only the affected card and recheck its neighboring slice boundaries. Do not silently widen the batch.
+
+**Completion criterion:** the inventory and every card pass the whole-batch check, with no unclassified overlap, missing outcome, or undecided in-scope behavior.
+
+### 4. Approve and write every document
+
+Before writing, show the human:
+
+- the final inventory and order;
+- one compact summary per slice;
+- the exact requirement path for every slice;
+- the unresolved assumptions and deferred topics.
+
+Ask one batch approval question using `../references/question-format.md`:
+
+> Do you approve these requirement slices and paths, or should I change anything before writing them?
+
+Do not write the documents until the human confirms. If the human changes one slice, update its card and the inventory, then ask for approval again. After approval:
+
+1. Write one Story document at `spec/<epic>/<slice>.md` for every accepted slice.
+2. Preserve the card's edge-case table and acceptance criteria in the Story's `Spec` and `AC` sections.
+3. Update `spec/<epic>/index.md` and `spec/index.md`; keep not-yet-specified and out-of-scope candidates visible where the convention supports them.
+4. Link each requirement document to its prototype/context evidence and leave a placeholder for its later design and plan paths when the target convention permits it.
+
+**Completion criterion:** all approved requirement files exist at their confirmed paths, every file contains its slice's edge cases and deterministic acceptance criteria, both indexes link to every file, and no unapproved file was written.
 
 ## Handoff
 
-After this card is confirmed, use it as the input to `/skill:ood`.
-
-1. Use `/skill:ood` for the complete slice. It combines object-oriented design, external and internal Interfaces, workflow, contract, and human verification; it may omit domain Objects when the slice has no meaningful state or collaboration.
-2. Then use `/skill:tdd` to complete RED → GREEN → REFACTOR in one invocation.
-
-Downstream skills must use this slice and must not pull deferred topics back into it.
+Pass the complete inventory and all written requirement paths to `/skill:ood`. OOD must process the same slices and must not reintroduce deferred topics or invent missing requirements.
 
 ## Completion criterion
 
-The interview is complete when:
-
-- Exactly one specific slice is defined: one happy path plus its directly relevant edge, boundary, and failure cases.
-- Sibling features are not mixed into it.
-- The slice covers one understandable topic, purpose, and execution boundary.
-- A human can tell what belongs and what does not.
-- The actor, trigger, outcome, essential input, and success condition are clear.
-- Only directly relevant exception behavior is included.
-- The first action is safe, reversible, and testable.
+This skill is complete only when one approved inventory exists, every accepted slice has exactly one requirement document, each document contains its happy path and concrete relevant edge cases, every in-scope behavior has a deterministic acceptance criterion, indexes are synchronized, and the human-approved scope is unchanged.
