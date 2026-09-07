@@ -12,6 +12,67 @@ Turn one complete Wayfinder result into a concise, reusable route graph containi
 
 A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, directed edges, dependencies, conditions, validation signals, and skill handoffs so a later script can render and traverse every path.
 
+## Example output
+
+For the goal `Release the feature safely`, `to-way` writes one graph JSON file and one Markdown file per node:
+
+```text
+ways/01-release-feature/
+├── graph.json
+├── goal-1.md
+├── way-a.md
+├── experiment-a.md
+├── way-b.md
+└── task-b.md
+```
+
+`goal-1.md`:
+
+```markdown
+# Release the feature safely
+
+## Node
+- ID: goal-1
+- Kind: goal
+- Description: Choose a safe release route. Example: use an experiment when the release risk is unknown.
+
+## Edges
+### edge-1 — goal-1 → way-a
+- Type: decomposes
+- Description: The goal can begin with risk validation.
+- Condition: Use when release risk is unknown.
+
+### edge-2 — goal-1 → way-b
+- Type: decomposes
+- Description: The goal can use an existing verified route.
+- Condition: Use when release evidence already exists.
+```
+
+`graph.json`:
+
+```json
+{
+  "intent": "Release the feature safely",
+  "goalId": "goal-1",
+  "nodes": [
+    {"id": "goal-1", "kind": "goal", "title": "Release the feature safely", "description": "Choose a safe release route."},
+    {"id": "way-a", "kind": "checkpoint", "title": "Validate release risk", "description": "Check unknown risk before release."},
+    {"id": "experiment-a", "kind": "experiment", "title": "Run a staging smoke test", "description": "Run the test and continue if the staging signal is clean."},
+    {"id": "way-b", "kind": "checkpoint", "title": "Use the verified route", "description": "Follow the existing release evidence."},
+    {"id": "task-b", "kind": "task", "title": "Run the regression suite", "description": "Run the suite and use a passing result as the release signal."}
+  ],
+  "edges": [
+    {"id": "edge-1", "from": "goal-1", "to": "way-a", "type": "decomposes", "description": "The goal can begin with risk validation.", "condition": "Use when release risk is unknown."},
+    {"id": "edge-2", "from": "way-a", "to": "experiment-a", "type": "decomposes", "description": "Risk validation requires the smoke test."},
+    {"id": "edge-3", "from": "goal-1", "to": "way-b", "type": "decomposes", "description": "The goal can use an existing verified route.", "condition": "Use when release evidence already exists."},
+    {"id": "edge-4", "from": "way-b", "to": "task-b", "type": "decomposes", "description": "The verified route requires regression checks."}
+  ],
+  "deferred": []
+}
+```
+
+The remaining node files use the same format and include their attached edges.
+
 ## Workflow
 
 1. **Gather the route graph.** Use the complete Wayfinder result from this session or from a supplied source. Record the user's intent, goal, relevant constraints, every node, every edge, all branch conditions, validation signals, and skill handoffs. Record each node with one concise description. Completion criterion: every node and edge in the source is included with its original ID.
@@ -26,6 +87,7 @@ A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, 
    - Confirm the goal is the root, its children are high-level ways, and each branch descends to detailed low-level tasks.
    - Confirm every terminal node is actionable or an explicitly deferred blocker.
    - Confirm the aggregate JSON and every node Markdown file contain the same node description and attached-edge data, in goal-to-leaf order.
+   - Run `python3 scripts/lint_graph.py ./ways/{nn}-{slug}/graph.json` from the `to-way` skill directory. Fix every violation and rerun until it prints `OK`.
 
    Each node Markdown file, written to `./ways/{nn}-{slug}/{node-id}.md`:
 
@@ -66,6 +128,12 @@ A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, 
          "kind": "goal",
          "title": "...",
          "description": "..."
+       },
+       {
+         "id": "task-1",
+         "kind": "task",
+         "title": "...",
+         "description": "..."
        }
      ],
      "edges": [
@@ -82,6 +150,6 @@ A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, 
    }
    ```
 
-   Omit empty optional fields consistently. Preserve node order from the goal through high-level ways to detailed low-level leaves. Completion criterion: the aggregate JSON and every node Markdown file include the complete graph, preserve every source ID, description, and condition, and can be used independently by a human or graph-rendering script.
+   Omit empty optional fields consistently. Preserve node order from the goal through high-level ways to detailed low-level leaves. The JSON linter must pass before completion. Completion criterion: the aggregate JSON and every node Markdown file include the complete graph, preserve every source ID, description, and condition, and can be used independently by a human or graph-rendering script.
 
 Tell the user both file paths when done.
