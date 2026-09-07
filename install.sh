@@ -218,23 +218,6 @@ configure_pi_settings() {
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
 }
 
-configure_pi_subagents() {
-  local config="$PI_AGENT_DIR/extensions/subagent/config.json" tmp
-
-  mkdir -p "$(dirname "$config")"
-  [ -f "$config" ] || printf '{}\n' > "$config"
-  tmp="$(mktemp "$config.XXXXXX")"
-  node -e '
-    const fs = require("fs");
-    const [configPath, outputPath] = process.argv.slice(1);
-    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    config.asyncWidget = true;
-    fs.writeFileSync(outputPath, JSON.stringify(config, null, 2) + "\n");
-  ' "$config" "$tmp"
-  mv "$tmp" "$config"
-  echo "  ✓ pi-subagents async widget enabled"
-}
-
 setup_pi() {
   echo "→ pi coding agent"
 
@@ -260,12 +243,11 @@ setup_pi() {
   command -v pi &>/dev/null || return
 
   # Remove the superseded interactive-subagents package, then install the
-  # current pi-subagents package and the other managed Pi extensions.
+  # managed Pi extensions.
   pi remove "https://github.com/hazat/pi-interactive-subagents" &>/dev/null || true
 
   local pkg
   for pkg in \
-    "npm:pi-subagents" \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:pi-must-have-extension" \
@@ -277,8 +259,6 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
-  configure_pi_subagents
-
   # Remove the retired review agent from older installations.
   rm -f "$PI_AGENT_DIR/agents/stage-reviewer.md"
   if [ -d "$SKILLS_DIR/.pi/agents" ]; then
