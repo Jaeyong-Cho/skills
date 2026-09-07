@@ -1,72 +1,87 @@
 ---
 name: to-way
-description: Record all Wayfinder ways for one problem layer, why each is needed, how each is validated, and which existing skill fits. Invoke as /to-way.
+description: Record a complete Wayfinder route graph, including intent, nodes, edges, conditions, validation, and skill handoffs, in Markdown and JSON. Invoke as /to-way.
 disable-model-invocation: true
 ---
 
 # To-Way
 
-Turn one complete Wayfinder result into a concise, reusable rationale document containing every way for one problem layer. It explains why each way is needed now, not a full design or implementation plan.
+Turn one complete Wayfinder result into a concise, reusable route graph containing the user's intent, goal, every branch, each checkpoint, and all actionable tasks or experiments. Write the same graph in human-readable Markdown and machine-readable JSON; do not design or implement the solution.
 
 ## Why this exists
 
-`@skills/wayfinder` produces candidate ways for one problem layer. Its alternatives can disappear into chat or become an unexamined recommendation. `to-way` preserves the complete set of ways, each way's purpose, uncertainty, validation signal, and existing skill handoff so later work can compare them without losing the current-layer boundary.
+A flat Wayfinder result hides the route structure. `to-way` preserves node IDs, directed edges, dependencies, conditions, validation signals, and skill handoffs so a later script can render and traverse every path.
 
 ## Workflow
 
-1. **Gather one layer's ways.** Use the complete Wayfinder result from this session or from a supplied source. Record the root problem, current layer, immediate objective, relevant constraints, and every way in the result. For each way, record its uncertainty, validation method, supporting signal, rejecting signal, recommended existing skill, and production handoff. Completion criterion: every way in the source is included; if the source has one way, include that one way.
-2. **Keep the boundary.** Do not select, rank, discard, or merge ways; rerun the decision; explore deeper layers; invent missing facts; or turn the record into a design or implementation plan. If no Wayfinder result is available, tell the user to run `/wayfinder` first. If current-layer facts are missing, do not fill them from assumptions. Preserve `/wayfinder` as the recommendation for any way that is not actionable.
-3. **Explain each need.** For every way, put its direct connection to the root problem and immediate objective first. Explain what would remain uncertain or unsafe without that way. Do not justify a way with unrelated future benefits.
+1. **Gather the route graph.** Use the complete Wayfinder result from this session or from a supplied source. Record the user's intent, goal, relevant constraints, every node, every edge, all branch conditions, validation signals, and skill handoffs. Record each node with one concise description. Completion criterion: every node and edge in the source is included with its original ID.
+2. **Keep the graph boundary.** Do not select, rank, discard, merge, or invent branches; rerun the decision; add deeper work; or turn the record into a design or implementation plan. If no Wayfinder result is available, tell the user to run `/wayfinder` first. If graph data is incomplete, do not fill it from assumptions. Preserve `/wayfinder` as the recommendation for any node that is not actionable.
+3. **Explain each node and route.** Give every node one concise description. Write it in a grill-me style: explain why it matters, include relevant grounding or uncertainty, and give a concrete example. For every actionable leaf, include the action, validation signal, and skill handoff in that same description. Do not add separate node fields or justify a node with unrelated future benefits.
 4. **Follow document style.** Read `../references/document-style.md` and `../references/document-style/understanding-and-structure.md`. Keep the conclusion before supporting details and use short, concrete language.
-5. **Confirm the location.** If this session has not already confirmed a destination, ask one `❓`/`➡️` question using `../references/question-format.md`. Recommend `./ways/` in the current directory. Once confirmed, write `./ways/{nn}-{slug}.md`, where `{nn}` is the next zero-padded sequence in `ways/`; update an existing same-layer file instead of creating a duplicate.
-6. **Write the record** with this structure:
+5. **Confirm the location.** If this session has not already confirmed a destination, ask one `❓`/`➡️` question using `../references/question-format.md`. Recommend `./ways/` in the current directory. Once confirmed, create `./ways/{nn}-{slug}/`, write its aggregate graph to `graph.json`, and write one `<node-id>.md` file per node; update an existing same-goal directory instead of creating a duplicate.
+6. **Validate and write the graph** with this structure:
+
+   - Confirm node IDs and edge IDs are unique.
+   - Confirm every edge endpoint refers to an existing node.
+   - Confirm the goal is the root, its children are high-level ways, and each branch descends to detailed low-level tasks.
+   - Confirm every terminal node is actionable or an explicitly deferred blocker.
+   - Confirm the aggregate JSON and every node Markdown file contain the same node description and attached-edge data, in goal-to-leaf order.
+
+   Each node Markdown file, written to `./ways/{nn}-{slug}/{node-id}.md`:
 
    ```markdown
    ---
-   type: Way Record
-   title: <short current-layer name>
-   description: <one-line explanation of why this layer needs these ways>
-   tags: [wayfinder, validation]
+   type: Way Node
+   title: <node title>
+   description: <one-line explanation of this node>
+   tags: [wayfinder, validation, graph]
    timestamp: <ISO 8601 datetime>
    ---
 
-   # <short current-layer name>
+   # <node title>
 
-   ## Why this layer needs a way
-   <Why these ways are necessary for the root problem and immediate objective at the current layer.>
+   ## Node
+   - ID: <node-id>
+   - Kind: <goal | checkpoint | task | experiment | exploration>
+   - Description: <the same concise description from the section above>
 
-   ## Current layer
-   - Root problem: ...
-   - Current layer: ...
-   - Immediate objective: ...
-   - Relevant constraints: ...
+   ## Edges
+   ### <edge-id> — <from-id> → <to-id>
+   - Type: <decomposes | depends_on>
+   - Description: <what relationship this edge expresses>
+   - Condition: <branch condition, or `None`>
 
-   ## Ways
-
-   ### Way 1 — <short way name>
-   - Why this way is needed: ...
-   - Approach and uncertainty: ...
-   - Cheapest useful test: ...
-   - Supporting signal: ...
-   - Rejecting signal: ...
-   - Recommended skill: `/skill-name` — why it fits; use `/wayfinder` if the way is not actionable.
-   - Handoff: ...
-
-   ### Way 2 — <short way name>
-   - Why this way is needed: ...
-   - Approach and uncertainty: ...
-   - Cheapest useful test: ...
-   - Supporting signal: ...
-   - Rejecting signal: ...
-   - Recommended skill: `/skill-name` — why it fits; use `/wayfinder` if the way is not actionable.
-   - Handoff: ...
-
-   <Repeat the Way block for every way in the result.>
-
-   ## Deferred beyond this layer
-   ...
+   <Repeat for every edge attached to this node.>
    ```
 
-   Completion criterion: the file includes every way from one Wayfinder result, explains why each way is needed, names the current layer, gives each way a validation method with supporting and rejecting signals, and records one existing next skill or `/wayfinder` when a way is not actionable.
+   Aggregate JSON, written to `./ways/{nn}-{slug}/graph.json`:
 
-Tell the user the file path when done.
+   ```json
+   {
+     "intent": "...",
+     "goalId": "goal-1",
+     "nodes": [
+       {
+         "id": "goal-1",
+         "kind": "goal",
+         "title": "...",
+         "description": "..."
+       }
+     ],
+     "edges": [
+       {
+         "id": "edge-1",
+         "from": "goal-1",
+         "to": "task-1",
+         "type": "decomposes",
+         "description": "...",
+         "condition": "..."
+       }
+     ],
+     "deferred": []
+   }
+   ```
+
+   Omit empty optional fields consistently. Preserve node order from the goal through high-level ways to detailed low-level leaves. Completion criterion: the aggregate JSON and every node Markdown file include the complete graph, preserve every source ID, description, and condition, and can be used independently by a human or graph-rendering script.
+
+Tell the user both file paths when done.

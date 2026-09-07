@@ -10,6 +10,10 @@ Cover the complete requirement set for one product goal in one invocation. The p
 
 A batch may contain one slice. A slice owns one actor, purpose, outcome, and execution boundary. Keep its happy path and directly relevant edge, boundary, alternate, and failure cases together. Do not split by UI, backend, database, or other horizontal layers.
 
+## Start with Grill Me
+
+Before establishing the slice inventory, gather only the context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on the actor, trigger, observable outcome, scope, directly relevant scenarios, dependencies, and verification. Do not design implementation. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This confirmation is separate from the batch approval gate below.
+
 ## Input
 
 - Product goal and the prototype verdict, trial results, and context

@@ -32,9 +32,13 @@ design/<epic>/<slice>.md
 
 Reuse the target repository's design convention if it has one. Do not create a second design system. Follow `../references/document-style.md`; use the target's metadata convention for each design document.
 
+## Start with Grill Me
+
+Before validating the input batch, gather only the approved requirement and repository context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on requirement interpretation, object responsibilities, boundaries, contracts, failure handling, and trade-offs. Preserve the approved behavior and scope. If the session finds behavioral ambiguity, stop and return it to `/skill:req`; resolve only design questions that cannot change observable behavior. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This is the only design interview and is separate from the batch approval gate below.
+
 ## Human checkpoint
 
-Do not run a separate design interview. Derive the designs from the approved requirements, repository evidence, and existing conventions. Ask only a blocking clarification when its answer would change observable behavior, and use `../references/question-format.md`.
+Derive the designs from the approved requirements, repository evidence, and existing conventions. After the opening grill, ask only a blocking clarification when its answer would change observable behavior, and use `../references/question-format.md`.
 
 Draft every slice before the approval gate. Present a compact summary, exact paths, cross-slice assumptions, and unresolved decisions. Ask exactly one batch question:
 
