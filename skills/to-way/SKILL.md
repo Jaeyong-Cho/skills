@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # To-Way
 
-Record one Wayfinder plan without redesigning or executing it. Preserve its goal, grounding, tree, concrete tasks, uncertainty details, dependencies, conditions, completion signals, and execution guidance. A tree alone is insufficient if the information needed to execute its leaves is missing.
+Record one Wayfinder plan without redesigning or executing it. Preserve its goal, grounding, tree, each task's Why/What/How, uncertainty details, dependencies, conditions, completion signals, and execution guidance. A tree alone is insufficient if the information needed to execute its leaves is missing.
 
 ## Layout: files for ways, tasks inline
 
@@ -34,7 +34,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
 1. **Gather and validate before writing.** Use the supplied plan or the complete Wayfinder result in the session, including its work map and execution notes. If missing, ask for it. Check:
    - one goal root, unique IDs, exactly one parent per non-root node;
    - concrete domain work rather than repeated lifecycle chains;
-   - every executable leaf has an action/result, prerequisites (explicitly none where appropriate), status, and completion signal;
+   - every executable leaf has a concrete Why (purpose/consequence of omission), What (scoped result), How (approach/steps or explicit blocking decision), prerequisites (explicitly none where appropriate), status, and completion signal;
    - uncertainties retain their question, impact, resolving action, exit signal, and affected IDs;
    - dependency references exist, point to executable leaves, and contain no cycles;
    - readiness and parallel guidance do not contradict prerequisites or recorded resource conflicts.
@@ -48,7 +48,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
 
    Once confirmed, use `ways/{nn}-{slug}/`; update an existing same-goal directory rather than creating a duplicate. Inspect existing files first. Preserve user annotations and completed-work evidence; if a revised tree conflicts with them, ask rather than overwrite. If migration/reordering would remove or strand old group or task files, show the affected paths and get confirmation before removing or moving them. Do not leave contradictory old files mixed into a reported-complete plan.
 3. **Map and write.** Build one source-ID → file/anchor mapping for the entire plan before writing. Root and ways own files; every executable leaf appears exactly once as a section in its parent's file. Link child ways and cross-way prerequisites using relative Markdown links. Preserve all source notes at their owning node; do not fabricate descriptions or signals to fill the format.
-4. **Check the recorded plan.** Compare every source node, dependency, uncertainty, condition, and completion signal with its recorded location. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes or unsupported parallel claims may be introduced by serialization.
+4. **Check the recorded plan.** Compare every source node's Why/What/How, dependency, uncertainty, condition, and completion signal with its recorded location. Preserve ordered How steps and their evidence references; do not compress them into a generic action label. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes or unsupported parallel claims may be introduced by serialization.
 5. **Report.** Give the output directory, root entry point, group-file count, and any remaining blockers. The linked root is the navigation index; do not dump every inline task as a file path.
 
 No JSON, implementation, detailed design documents, new planning decisions, or downstream skill handoffs.
@@ -86,13 +86,15 @@ For each inline leaf in `Work`:
 <a id="B3"></a>
 ### B3 — <concrete task title>
 - Kind: <task | uncertainty | checkpoint>
-- Action/result: <source action and deliverable>
+- Why: <source purpose, parent outcome, and consequence of omitting this task>
+- What: <source behavior/decision/artifact and scope boundaries>
+- How: <source approach; preserve ordered steps as a nested list when present, including any named blocking decision>
 - Needs: <linked prerequisite IDs and the result needed from each; or —>
 - Status: <ready | waiting | blocked | done, with source evidence where supplied>
 - Done when: <observable completion signal>
 - Conditions/conflicts: <only if present in source>
 
-<Source task-specific steps, if any. For an uncertainty, retain question, impact, resolving method/owner, exit signal, blocked IDs, and answer-dependent consequences.>
+<For an uncertainty, retain question, impact, resolving method/owner, exit signal, blocked IDs, and answer-dependent consequences. Reuse the Why/What/How fields for matching details rather than duplicating them.>
 ```
 
 An intra-file prerequisite can link to `[B1](#B1)`; a cross-way prerequisite links to its owning file and anchor, e.g. `[A2](1-1-edit-the-buffer.md#A2)` from the sibling B file. Use explicit anchors matching source IDs rather than title-derived anchors.

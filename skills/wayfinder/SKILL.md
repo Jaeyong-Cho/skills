@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Plan one goal as concrete ways and tasks, with evidence-backed uncertainties, dependencies, execution order, and safe parallel work. Invoke as /wayfinder.
+description: Use grill-me to reach shared understanding of one goal and its ways, then finalize concrete tasks, uncertainties, dependencies, and safe parallel work. Invoke as /wayfinder.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,20 @@ Produce a task plan, not a lifecycle checklist. Answer:
 
 > What work is actually needed, what do we not know yet, what can start now, and what must wait for what?
 
-Planning only: inspect context, but do not implement, run experiments, write detailed designs, or invoke downstream skills. Propose evidence-gathering work when needed; never report a proposed check as completed.
+Planning only: use grill-me for the user conversation and inspect context, but do not implement, run experiments, write detailed designs, or invoke execution/recording skills. Propose evidence-gathering work when needed; never report a proposed check as completed.
+
+## Shared understanding with grill-me
+
+**MUST RUN `@skills/grill-me`**: read `../grill-me/SKILL.md` and follow its session sequence in this conversation. Do not merely recommend that the user launch it, delegate the interview to a background agent, or replace it with a custom questionnaire.
+
+The interview is about **the user's goal and its ways**, not how to configure Wayfinder. It spans the planning process below:
+
+- Start with grill-me's calibration using a concrete scenario from the goal, then wait for the user's answer. Teach only essential gaps and use its teach-back before decision rounds. Reuse already established understanding and decisions rather than restarting an active session.
+- Use the goal's success signal, scope/exclusions, proposed ways and their boundaries, consequential unknowns, prerequisites, and safe parallel work as the decision tree. Settle parent scope before dependent decomposition; do not grill every routine implementation detail.
+- Show a small draft way tree as proposals become grounded. Ask whether its outcomes and boundaries match the user's intent, not just whether the user agrees with a finished plan. Update the draft and affected dependencies after each answer.
+- Let grill-me own question format, examples, mode selection, impact/uncertainty labels, and round size. Inspect repository facts yourself. Within this planning session, record proposed experiments as uncertainty-resolution tasks rather than executing them automatically.
+- Keep confirmed decisions, provisional assumptions, and unresolved evidence separate. A delegated choice such as “you decide” may adopt the recommendation provisionally; it does not establish an external fact or remove an evidence blocker.
+- Before finalizing, summarize the agreed goal, ways, ordering/parallel constraints, and remaining assumptions/blockers; ask for confirmation using grill-me's question format and wait. Confirmation may approve an explicitly partial plan, not pretend its unknowns are resolved. If corrected, revise affected work and confirm again.
 
 ## Ways and tasks
 
@@ -21,16 +34,27 @@ Planning only: inspect context, but do not implement, run experiments, write det
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
 - Name the actual change or decision: `Preserve the trailing newline when serializing the buffer`, not `Implement serialization`. If a title could be pasted into an unrelated feature unchanged, rewrite or remove it.
 - **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work.
-- Do not enumerate functions, classes, commands, or every test case. Include a short ordered procedure inside a task only when its sequence is not obvious from the action and completion signal.
+- Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
+
+## Task details: Why, What, How
+
+Every executable leaf, including uncertainty and checkpoint work, must explain:
+
+- **Why:** the parent outcome it enables, risk it reduces, or downstream work it unblocks—and what fails or stays blocked if it is omitted. “Needed for the feature” is not a reason; remove work with no concrete justification.
+- **What:** the specific behavior, decision, or artifact to deliver, with its scope and important boundaries. Do not just repeat the title. Keep **Done when** as the separate observable proof that this result exists.
+- **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach.
+
+Ground How in inspected context or explicit user decisions. If a consequential choice is unresolved, name the blocking uncertainty and what can be done before/after its resolution; do not invent a mechanism or leave only “TBD.” For uncertainty work, Why is its impact, What is the evidence/decision to obtain, and How is the resolving method; reuse those details rather than duplicating them. These are fields within the task, not extra child nodes or lifecycle stages.
 
 ## Planning process
 
-1. **Ground the goal.** Capture the success signal and scope. Inspect supplied context and the relevant repository paths, existing behavior, and tests. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, ask a focused question before proceeding.
+1. **Start grill-me and ground the goal.** Begin the shared-understanding session above. Capture the success signal and scope with the user. Inspect supplied context and the relevant repository paths, existing behavior, and tests. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it through grill-me before dependent planning.
 2. **Find consequential unknowns.** Look for gaps in behavior, integration contracts, feasibility, data safety, external dependencies, and validation. Record only those that could change the plan or prevent trustworthy completion; do not invent an uncertainty quota.
 3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
-6. **Prune and validate.** Apply the completion criterion below. Return a useful partial plan when blocked, with the next resolving action; do not claim the entire plan is executable.
+6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
+7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions; do not implement or record files automatically.
 
 ## Uncertainty handling
 
@@ -45,11 +69,7 @@ Use the uncertainty's ID as a prerequisite of known dependent tasks. If their ta
 
 An uncertainty can be ready to investigate while its consumers are blocked. Mark it done only with recorded evidence. If context is unavailable, say so and plan inspection rather than claiming a repository fact. If no consequential unknown remains, say why briefly; do not create an `Experiment` placeholder.
 
-For an owner question, use a standalone block with choices, consequences, and a recommendation:
-
-❓ **Q1** - **<decision>**: <question and consequences of each answer>
-
-➡️ <recommended answer and reason; not an approved decision until answered>
+Ask owner decisions through grill-me, with concrete examples, answer-dependent consequences, and a recommendation. Keep unresolved external-owner decisions as blockers when the current user cannot settle them.
 
 ## Dependencies and parallelism
 
@@ -62,11 +82,11 @@ For an owner question, use a standalone block with choices, consequences, and a 
 
 ## Output
 
-Keep the plan compact, but include the information needed to act:
+During the interview, show only the draft context needed for the current questions. After shared-understanding confirmation, return a compact final plan with:
 
 1. **Goal and grounding** — success, scope, key evidence/assumptions.
 2. **Way tree** — outcome-oriented ways and concrete leaves; give each way a concise scope and success signal, and mark partial branches.
-3. **Work map** — one row per executable leaf: ID, kind (`task | uncertainty | checkpoint`), action/result, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Add short task-specific procedures only where useful.
+3. **Work map** — one record per executable leaf: ID/title, kind (`task | uncertainty | checkpoint`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
 
@@ -89,11 +109,26 @@ G  Add modal insertion and explicit saving
 
 Example work-map entries (the actual output must cover every executable leaf):
 
-| ID | Kind | Action/result | Needs | Status | Done when |
-|----|------|---------------|-------|--------|-----------|
-| A1 | task | Route printable keys only in insert mode | — | ready | Insert mode changes text; normal-mode navigation does not |
-| B1 | task | Agree save request/result and snapshot contract | — | ready | Both modules can work from one documented contract, including failure results |
-| B3 | task | Persist snapshot using agreed safety policy | U1: file policy; B1: snapshot/result contract | blocked | Saved bytes match snapshot; forced failure preserves original and recoverable edits |
+### A1 — Route printable keys only in insert mode
+- Kind: task
+- Why: Enables text entry without making normal-mode navigation keys accidentally modify the buffer.
+- What: Mode-aware routing of printable ASCII input; preserve existing normal-mode navigation. Cursor adjustment belongs to A2.
+- How:
+  1. Trace the existing key-dispatch and mode state paths.
+  2. Route printable ASCII to buffer insertion only in insert mode; retain the existing normal-mode dispatch.
+  3. Exercise the same printable key in both modes to check that only insert mode changes text.
+- Needs: —
+- Status: ready
+- Done when: Insert mode changes text; normal-mode navigation does not.
+
+### B3 — Persist the snapshot using the agreed file-safety policy
+- Kind: task
+- Why: Makes edits durable without destroying the original file or recoverable edits when a write fails.
+- What: Save the snapshot from B1 to the supported target paths, returning success/failure through B1's contract. Command dispatch belongs to B2.
+- How: Blocked on U1's file-policy decision and B1's snapshot/result contract. Once resolved, adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure. Select the persistence mechanism after U1, not by assuming replace-by-rename is safe.
+- Needs: U1: file policy; B1: snapshot/result contract
+- Status: blocked
+- Done when: Saved bytes match the snapshot; forced failure preserves the original and recoverable edits.
 
 U1: inspect file-opening behavior and supported paths; ask the owner if policy is unspecified. Exit: supported file types and preservation guarantees are recorded. Blocks B3: replace-by-rename may work for regular files, but symlink/metadata requirements may change the strategy. Do not choose one without evidence.
 
@@ -101,9 +136,10 @@ Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's inse
 
 ## Completion criterion
 
+- Grill-me has established shared understanding of the goal and its ways, and the user has confirmed the summary, including any provisional assumptions and partial branches.
 - Every requested outcome is covered by concrete work or an explicitly blocked partial branch; existing work is not needlessly recreated.
 - No generic lifecycle chains, renamed single-child wrappers, or `Test the tests` branches remain.
-- Every executable leaf has a useful deliverable, correct prerequisites, status, and observable completion signal. Planned evidence is not presented as fact.
+- Every executable leaf has a concrete Why, scoped What, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
 - Every consequential uncertainty has a resolving action and clearly scoped blockers; there is no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
