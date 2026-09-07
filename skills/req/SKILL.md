@@ -18,6 +18,8 @@ One focused requirement slice with its scope, outcome, essential preconditions, 
 
 ## Scope rule
 
+First show the possible scope lists for about requirements (feat, fix, ...)
+
 **Exactly one specific slice per invocation.** The slice must stay within one topic or category, one purpose, and one coherent execution boundary.
 
 Keep only what is needed to verify that one outcome. Do not produce a list of sibling requirements. If the request contains another feature, user goal, data area, or release boundary, record it as out of scope or deferred. Do not solve it in this interview.
