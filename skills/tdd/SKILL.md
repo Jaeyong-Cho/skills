@@ -1,6 +1,7 @@
 ---
 name: tdd
 description: Execute approved requirement and OOD slices through deterministic RED → GREEN → REFACTOR cycles, one behavior at a time, and report the code/test evidence per slice. Use after OOD and its TDD plan.
+disable-model-invocation: true
 ---
 
 # TDD

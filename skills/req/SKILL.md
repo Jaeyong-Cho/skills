@@ -1,6 +1,7 @@
 ---
 name: req
 description: Turn prototype and repository context into an approved inventory of vertical requirement slices, then write one requirement document per slice with concrete edge cases and testable acceptance criteria. Use before OOD.
+disable-model-invocation: true
 ---
 
 # Requirements
