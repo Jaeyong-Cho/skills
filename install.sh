@@ -204,6 +204,10 @@ configure_pi_settings() {
     const settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
     settings.tuiMode = "fullscreen";
     settings.fullscreenScrollbar = "auto";
+    if (!settings.terminal || typeof settings.terminal !== "object" || Array.isArray(settings.terminal)) {
+      settings.terminal = {};
+    }
+    settings.terminal.trueColor = true;
     if (!settings.subagents || typeof settings.subagents !== "object" || Array.isArray(settings.subagents)) {
       settings.subagents = {};
     }
@@ -211,7 +215,7 @@ configure_pi_settings() {
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
   ' "$settings" "$tmp"
   mv "$tmp" "$settings"
-  echo "  ✓ pi TUI → fullscreen (scrollbar: auto)"
+  echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
 }
 
 configure_pi_subagents() {

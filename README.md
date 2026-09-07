@@ -29,7 +29,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Installs `ponytail`, `pi-subagents`, and the Pi UI packages; disables bundled subagents so project/user agents are used |
+| pi coding agent | Enables Pi truecolor, installs `ponytail`, `pi-subagents`, and the Pi UI packages; disables bundled subagents so project/user agents are used |
 
 `references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
