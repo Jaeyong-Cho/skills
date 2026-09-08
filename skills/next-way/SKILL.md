@@ -1,31 +1,49 @@
 ---
 name: next-way
-description: Find the next actionable Wayfinder node; for an implementation task, run its requirements, design, and planning handoff after checking it still matches the recorded way. Invoke as /next-way.
+description: Find the next actionable Wayfinder node; prepare an implementation task through planning, or review its do-plan result against the recorded outcome and purpose. Invoke as /next-way.
 disable-model-invocation: true
 ---
 
 # Next Way
 
-Find one useful next work package from the recorded `ways/` plan. Do not implement product code or change statuses. For an `IMPL` task, run its requirements, design, and planning handoff as described below; otherwise, only recommend the selected work.
+Find one useful next work package from the recorded `ways/` plan. Do not implement product code or change statuses. For an `IMPL` task, either run its requirements, design, and planning handoff or review a later `/do-plan` result as described below; otherwise, only recommend the selected work.
 
 ## Selection
 
-1. Inspect `./ways/`, or a user-supplied ways directory. Read each `0-goal.md`, linked way file, task status, `Needs`, `How`, root `Execution` section, and any existing task workspaces. Follow the recorded tree and links; do not infer order from filenames alone.
-2. Check for an in-progress marker before looking for new work. Recognize these fields only:
+1. Inspect `./ways/`, or a user-supplied ways directory. Read each way's purpose, expected result, hypothesis, assumptions, scope, and success signal; each task's status, `Needs`, and `How`; the root `Execution` section; and any existing task workspaces. Follow the recorded tree and links; do not infer order from filenames alone. If a way omits purpose, expected result, hypothesis, or assumptions, stop and recommend `/wayfinder` revise the invalid plan before selecting work.
+2. Before choosing new work, find any `IMPL` task whose linked plan has a `{plan-file}.report.md` result that its recorded Evidence does not yet review. Review the earliest one in way-tree order using the post-`/do-plan` review below. If that review must stop, do not select another node.
+3. Check for an in-progress marker before looking for new work. Recognize these fields only:
    - `- Status: in-progress` on an inline `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` task;
    - `- Scope/status: in-progress` on a way group, with optional detail after the value.
-3. If one in-progress node exists, recommend resuming it. If several exist, choose the earliest one in the recorded way-tree order, list the others as concurrent in-progress work, and explain why switching is not preferred.
-4. If none is in progress, choose the earliest ready node in the root's `start now` guidance and recorded tree order whose `Needs` are empty or satisfied by `done` prerequisites. Do not choose `waiting`, `blocked`, or `done` work.
-5. If no node is ready, report the first unresolved blocker or prerequisite that must change. If every node is done, report that the goal has no next way and recommend a new Wayfinder goal rather than inventing work.
-6. If the selected node has `Kind: IMPL`, preserve its recorded status and run the IMPL handoff below.
+4. If one in-progress node exists, recommend resuming it. If several exist, choose the earliest one in the recorded way-tree order, list the others as concurrent in-progress work, and explain why switching is not preferred.
+5. If none is in progress, choose the earliest ready node in the root's `start now` guidance and recorded tree order whose `Needs` are empty or satisfied by `done` prerequisites. Do not choose `waiting`, `blocked`, or `done` work.
+6. If no node is ready, report the first unresolved blocker or prerequisite that must change. If every node is done, report that the goal has no next way and recommend a new Wayfinder goal rather than inventing work.
+7. If the selected node has `Kind: IMPL`, preserve its recorded status and run the IMPL handoff below.
 
 Do not set `in-progress` yourself. Report the marker exactly as recorded so `/to-way` or the user can update it when work actually starts. The invoked handoff skills may write their approved artifacts, but `/next-way` must not edit the way or create the task workspace merely by selecting it.
+
+## Post-`/do-plan` result review
+
+When an `IMPL` task has a `/do-plan` report:
+
+1. Read the report, its plan, approved requirement/design artifacts, the task's `Why`, `What`, and `Done when`, the parent way's purpose/expected result/success signal/hypothesis/assumptions, and the root goal's same fields.
+2. Check the report's actual changed behavior, action-item outcome, acceptance results, test/check evidence, review findings, residual risks, and commit state. Do not treat a report path, green build, or commit alone as proof of the task outcome.
+3. Compare the actual observable result with the task's expected `What` and `Done when`, then decide whether it advances the parent way's purpose and expected outcome without refuting its hypothesis or required assumptions.
+4. Return one verdict:
+   - `MATCH` — the expected result is evidenced and still serves the recorded purpose;
+   - `PARTIAL` — some expected result or evidence is missing/blocked, but the way's purpose remains valid;
+   - `CONTRADICTION` — the result conflicts with the expected outcome, defeats the purpose, refutes a relied-on hypothesis, or invalidates a required assumption.
+5. On `MATCH`, cite the report and evidence, then stop if the way has not recorded this review; recommend `/to-way` record the evidence and status before selecting dependent work. If the matching review is already recorded, continue normal selection.
+6. On `PARTIAL`, stop and name the unmet `Done when` condition or missing evidence; recommend resuming the same plan or resolving its blocker. Do not mark the task done or unlock dependents.
+7. On `CONTRADICTION`, stop, show both conflicting statements with paths, and **SHOULD RUN** `/wayfinder` to revise the existing way. Preserve stable IDs and completed evidence; do not silently redefine success around what was built.
+
+`/next-way` reviews `/do-plan` output only on a later invocation; it still must not invoke `/do-plan` itself.
 
 ## IMPL handoff
 
 For a selected `Kind: IMPL` node:
 
-1. Read the selected task's `Why`, `What`, `How`, and `Done when`; its parent way's purpose, outcome, success signal, hypothesis, and assumptions when recorded; and the root goal's scope and grounding.
+1. Read the selected task's `Why`, `What`, `How`, and `Done when`; its parent way's purpose, expected result, success signal, hypothesis, and assumptions; and the root goal's same fields, scope, and grounding.
 2. Reuse approved requirement artifacts when they exist; otherwise **MUST RUN** `/req` in the current conversation and wait for its approval gate.
 3. Compare the approved requirements' actor, purpose, outcome, scope, acceptance criteria, dependencies, and assumptions with the selected task, parent way, and root goal.
 4. A contradiction is critical only when it changes or negates the recorded purpose/outcome, refutes a hypothesis the way depends on, invalidates an assumption required for scope, safety, or prerequisites, or makes the selected task no longer the right work package. Missing wording or compatible added detail is not critical.
@@ -37,10 +55,10 @@ For a selected `Kind: IMPL` node:
 Return one compact recommendation containing:
 
 - **Next:** source ID, title, kind, status, exact file/anchor, and expected task workspace path (`<ID>/`).
-- **Purpose:** the node's recorded `Why` and the parent outcome it enables.
+- **Purpose:** the node's recorded `Why`, the parent purpose it serves, and the expected result it enables.
 - **Context:** the current parent goal/way, relevant completed evidence, prerequisites, blockers, and why this node is next.
 - **How:** the node's recorded `How`, preserving its order. Do not invent implementation steps; if `How` is missing, report the invalid plan and ask for `/wayfinder` or `/to-way` correction.
-- **IMPL handoff:** if the node has `Kind: IMPL`, report the requirement-to-way consistency verdict and either the contradiction-driven `/wayfinder` revision or the approved requirement, design, and plan paths.
+- **IMPL review/handoff:** for an `IMPL` result, report `MATCH`, `PARTIAL`, or `CONTRADICTION` with evidence; for an `IMPL` not yet executed, report the requirement-to-way consistency verdict and either the contradiction-driven `/wayfinder` revision or the approved requirement, design, and plan paths.
 - **Done when:** the recorded completion signal.
 - **After it:** the nodes or way it unlocks, if the plan states them.
 
@@ -48,4 +66,4 @@ For an in-progress node, lead with the existing progress marker and resume from 
 
 ## Completion criterion
 
-Every recorded way and inline executable node relevant to selection was inspected; existing task workspaces and artifacts were considered; the recommendation follows an existing in-progress marker before readiness and recorded tree order before filename order; and the response names purpose, context, How, completion signal, and workspace path. For `IMPL`, approved requirements were checked against the way's purpose, hypothesis, and assumptions before design and planning; a critical contradiction stopped the handoff and routed revision through `/wayfinder`, otherwise `/req` → `/ood` → `/to-plan` completed from the first missing artifact. `/next-way` stopped after `/to-plan`; it did not run `/do-plan`, implement product code, or change status.
+Every recorded way and inline executable node relevant to selection was inspected; existing task workspaces, linked plans, and `/do-plan` reports were considered before new readiness. A pending result received a `MATCH`, `PARTIAL`, or `CONTRADICTION` verdict against the task's expected result and parent way's purpose, with exact evidence; unmatched or unrecorded results stopped before dependent selection. Otherwise, the recommendation follows an existing in-progress marker before readiness and recorded tree order before filename order, and names purpose, context, How, completion signal, and workspace path. For a not-yet-executed `IMPL`, approved requirements were checked against the way before `/ood` and `/to-plan`. `/next-way` stopped after `/to-plan` and never invoked `/do-plan`, implemented product code, or changed status.

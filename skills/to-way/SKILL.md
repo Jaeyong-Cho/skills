@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # To-Way
 
-Create or update one Wayfinder plan without redesigning or executing it. Preserve its goal, grounding, tree, each task's kind/Why/What/How, uncertainty details, dependencies, conditions, completion signals, execution guidance, and evidence for completed tasks. A tree alone is insufficient if the information needed to execute its leaves is missing.
+Create or update one Wayfinder plan without redesigning or executing it. Preserve every way's purpose, expected result, hypothesis, assumptions, grounding, tree, each task's kind/Why/What/How, uncertainty details, dependencies, conditions, completion signals, execution guidance, and evidence for completed tasks. A tree alone is insufficient if the information needed to execute its leaves is missing.
 
 ## Layout: files for ways, tasks inline
 
@@ -38,6 +38,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
 
 1. **Gather and validate before writing.** Use the supplied plan or the complete Wayfinder result in the session, including its work map and execution notes. If missing, ask for it. Check:
    - one goal root, unique IDs, exactly one parent per non-root node;
+   - every way, including the root, has a purpose, observable expected result, falsifiable hypothesis, and explicit assumptions (`—` when none), consistent with its parent and evidence;
    - concrete domain work rather than repeated lifecycle chains;
    - every executable leaf has exactly one allowed kind: `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT`; none is a separate way or root-level node;
    - `EXPLORE` is read-only search/inspection, `EXPERIMENT` runs `/experiment`, `IMPL` changes production code only after its context/uncertainty prerequisites are done, and `CHECKOUT` is a human decision/approval/check;
@@ -46,7 +47,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
    - uncertainties retain their question, impact, resolving action, exit signal, and affected IDs;
    - dependency references exist, point to executable leaves, and contain no cycles;
    - readiness and parallel guidance do not contradict prerequisites or recorded resource conflicts;
-   - every `done` task has supplied completion evidence; never infer evidence from its title or status alone.
+   - every `done` task has supplied completion evidence; an `IMPL` task additionally has its `/do-plan` report path and `/next-way` `MATCH` review against the expected result and parent purpose. Never infer evidence from its title, status, green build, or commit alone.
 
    Explicitly partial branches blocked by named uncertainties are valid; retain their limits. Missing planning information is not permission to invent it. For a legacy requirements/design/implement/test tree or other invalid source, explain the missing decisions and ask for a revised Wayfinder plan. Do not silently upgrade it or serialize empty placeholders.
 2. **Recommend create or update after inspection.** Reuse a destination confirmed in this session; otherwise ask one standalone question, recommending `./ways/`:
@@ -60,7 +61,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
    If a revised tree would move or remove files, strand tasks, or conflict with recorded evidence, show the affected paths and ask before changing them. A completed task omitted from a revised plan is not silently deleted; preserve it or get explicit removal confirmation.
 3. **Map and write.** Build one source-ID → file/anchor mapping for the entire plan before writing. Root and ways own files; every executable leaf appears exactly once as a section in its parent's file. Link child ways and cross-way prerequisites using relative Markdown links. Preserve all source notes at their owning node. In update mode, merge new/changed nodes into the existing files and retain annotations/evidence that the source did not supersede; do not fabricate descriptions, signals, or done evidence. If an active task or supplied artifact has a workspace, create or preserve its `<ID>/` directory beside the owning group file and link it from the task section; do not create empty directories. Downstream skills may require canonical `spec/` or `design/` paths, so link those paths from the task workspace instead of silently changing their conventions.
 4. **Record progress explicitly.** Preserve an existing `Status: in-progress` marker during updates. When work starts, record `Status: in-progress`; when the source supplies evidence that a task finished, write `Status: done` and retain the evidence beside that status. Keep not-started tasks `ready`, `waiting`, or `blocked`; do not infer completion because a dependent task is done. If a task is marked done without evidence, stop and request the evidence instead of writing a false completion.
-5. **Check the recorded plan.** Compare every source node's Why/What/How, dependency, uncertainty, condition, completion signal, status, and completion evidence with its recorded location. Preserve ordered How steps and their evidence references; do not compress them into a generic action label. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes, unsupported parallel claims, lost annotations, or unproven `done` statuses may be introduced by serialization.
+5. **Check the recorded plan.** Compare every way's purpose/expected result/hypothesis/assumptions and every task's Why/What/How, dependency, uncertainty, condition, completion signal, status, and completion evidence with its recorded location. Preserve ordered How steps and their evidence references; do not compress them into a generic action label. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes, unsupported parallel claims, lost annotations, or unproven `done` statuses may be introduced by serialization.
 6. **Report.** Give the model-recommended operation (`created` or `updated`), output directory, root entry point, group-file count, and any remaining blockers. Summarize created/updated ways and the IDs recorded as done; do not dump every inline task as a file path.
 
 No JSON, implementation, detailed design documents, new planning decisions, or downstream skill handoffs.
@@ -82,6 +83,10 @@ timestamp: <ISO 8601 datetime>
 - ID: <source ID>
 - Position: <D-N; 0 for root; presentation only>
 - Parent: <relative link; omit for root>
+- Purpose: <why this way exists and which need of its parent it serves>
+- Expected result: <observable state or capability when successful>
+- Hypothesis: <falsifiable reason this work should produce the result or advance the parent>
+- Assumptions: <explicit conditions with evidence/uncertainty links, or —>
 - Success: <source completion signal>
 - Scope/status: <source scope, conditions, partial/blocked status if present>
 
@@ -104,7 +109,7 @@ For each inline leaf in `Work`:
 - Needs: <linked prerequisite IDs and the result needed from each; or —>
 - Status: <ready | in-progress | waiting | blocked | done, with source evidence where supplied>
 - Workspace: <relative `<ID>/` directory for task artifacts, only when created or required>
-- Evidence: <proof for a done status, such as a test result, commit, or user-confirmed completion; required only when done>
+- Evidence: <proof for a done status; for IMPL include the `/do-plan` report path and `/next-way` MATCH verdict against `What`, `Done when`, and parent purpose; required only when done>
 - Done when: <observable completion signal>
 - Conditions/conflicts: <only if present in source>
 
@@ -123,4 +128,4 @@ Do not infer new prerequisites or parallel lanes from file numbers. If a needed 
 
 ## Completion criterion
 
-Every source node has exactly one canonical location; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. Every leaf retains one of `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT`; `IMPL` leaves remain inline with their handoff How preserved. New goals are created without collisions, existing goals are updated in place, task workspaces are created only when work or artifacts require them, annotations and in-progress/completed tasks are preserved, and every recorded `done` status has evidence. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.
+Every source node has exactly one canonical location; every way preserves its purpose, expected result, hypothesis, and assumptions; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. Every leaf retains one of `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT`; `IMPL` leaves remain inline with their handoff How and post-`/do-plan` `/next-way` review evidence preserved. New goals are created without collisions, existing goals are updated in place, task workspaces are created only when work or artifacts require them, annotations and in-progress/completed tasks are preserved, and every recorded `done` status has evidence. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.

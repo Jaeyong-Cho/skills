@@ -31,7 +31,7 @@ Every executable leaf has exactly one of these kinds:
 
 Use the cheapest reliable kind that can close the task: existing evidence before new work, `EXPLORE` before `EXPERIMENT`, and either before asking a human to discover a fact. Use `CHECKOUT` for human judgment or authority, not as a substitute for agent fact-finding. Do not create an `EXPLORE` step when inspection is already known to be unable to answer the question, and do not experiment when a search/read can settle it.
 
-An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes or expand the handoff into lifecycle children. `/next-way` runs `/req` → `/ood` → `/to-plan`, then stops and leaves `/do-plan` to the user; a critical requirement contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way.
+An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes or expand the handoff into lifecycle children. `/next-way` runs `/req` → `/ood` → `/to-plan`, then stops and leaves `/do-plan` to the user. On a later invocation, `/next-way` reviews the `/do-plan` report against the task's expected result and the way's purpose before dependent work proceeds. A critical requirement or result contradiction stops and should re-run `/wayfinder` to revise the existing way.
 
 ## Shared understanding with grill-me
 
@@ -48,7 +48,12 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 
 ## Ways and tasks
 
-- A **way** is an outcome-oriented work package contributing to its parent. Siblings are normally all needed, not competing solutions.
+- A **way** is an outcome-oriented work package contributing to its parent. Every way, including the root goal, records:
+  - **Purpose:** why this way exists and which need of its parent it serves.
+  - **Expected result:** the observable state or capability that should exist when the way succeeds.
+  - **Hypothesis:** why the planned work is expected to produce that result or advance the parent goal; keep it falsifiable rather than restating the expected result.
+  - **Assumptions:** conditions treated as true but not yet proven, each with evidence or an uncertainty task; write `—` when there are none rather than hiding assumptions.
+- Siblings are normally all needed, not competing solutions.
 - A **task** is a concrete `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` action with a usable result and an observable completion signal. A way may contain tasks, sub-ways, or both.
 - Give every node a stable, globally unique ID; every non-root node has exactly one parent. Dependencies are separate from parentage.
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
@@ -71,7 +76,7 @@ Every executable leaf, regardless of kind, must explain:
 
 - **Why:** the parent outcome it enables, risk it reduces, or downstream work it unblocks—and what fails or stays blocked if it is omitted. “Needed for the feature” is not a reason; remove work with no concrete justification.
 - **What:** the specific behavior, decision, or artifact to deliver, with its scope and important boundaries. Do not just repeat the title. Keep **Done when** as the separate observable proof that this result exists.
-- **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach.
+- **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach. An `IMPL` task ends with a later `/next-way` review of its `/do-plan` report against `What`, `Done when`, and the parent purpose.
 
 Ground How in inspected context or explicit user decisions. If a consequential choice is unresolved, name the blocking `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` task and what can happen before/after it; do not invent a mechanism or leave only “TBD.” For uncertainty work, Why is its impact, What is the evidence or decision to obtain, and How is the cheapest reliable resolving method. These are fields within the task, not extra child nodes or lifecycle stages.
 
@@ -79,7 +84,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 
 1. **Start grill-me and ground the goal.** Begin the shared-understanding session above. Capture the success signal and scope with the user. Inspect any supplied way plus relevant repository paths, existing behavior, and tests, but defer the create/update decision. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it through grill-me before dependent planning.
 2. **Find consequential unknowns.** Look for gaps in behavior, integration contracts, feasibility, data safety, external dependencies, and validation. Record only those that could change the plan or prevent trustworthy completion; do not invent an uncertainty quota.
-3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
+3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. For every way, state its purpose, expected result, falsifiable hypothesis, and assumptions before decomposing its children. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
 6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
@@ -103,7 +108,7 @@ Ask owner decisions through grill-me, with concrete examples, answer-dependent c
 ## Dependencies and parallelism
 
 - `Needs: —` means no prerequisite. Otherwise list executable leaf IDs plus the required result. A task becomes ready only when all its prerequisites are satisfied and its conditions hold.
-- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). Propagate blockers to dependent work. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
+- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). An `IMPL` task is not `done` until its `/do-plan` report exists and `/next-way` records a `MATCH` review against the expected result and parent purpose. Propagate blockers to dependent work. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
 - Dependencies must exist and be acyclic. Tree indentation and sibling order express scope/presentation, **not** a global serial schedule.
 - Recommend parallel tasks only when there is no dependency path between them and their write surfaces, mutable resources, and contracts do not conflict. State the reason or required isolation/contract. Different branches alone do not establish independence.
 - If work shares an unsettled interface, first plan the concrete contract decision that unlocks both sides. If work shares files/resources, sequence it or state an isolation and integration strategy. When context is insufficient, label parallelism conditional rather than promising it.
@@ -113,8 +118,8 @@ Ask owner decisions through grill-me, with concrete examples, answer-dependent c
 
 During the interview, show only the draft context needed for the current questions. After shared-understanding confirmation, return a compact final plan with:
 
-1. **Goal and grounding** — success, scope, key evidence/assumptions.
-2. **Way tree** — outcome-oriented ways and concrete leaves; give each way a concise scope and success signal, and mark partial branches.
+1. **Goal and grounding** — purpose, expected result, hypothesis, assumptions, success, scope, and key evidence.
+2. **Way tree** — outcome-oriented ways and concrete leaves; give each way its purpose, expected result, hypothesis, assumptions, concise scope, and success signal, and mark partial branches.
 3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
@@ -173,9 +178,10 @@ Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 n
 
 - Grill-me has established shared understanding of the goal and its ways, and the user has confirmed the summary, including any provisional assumptions and partial branches.
 - Every requested outcome is covered by concrete work or an explicitly blocked partial branch; existing work is not needlessly recreated.
+- Every way, including the root, explicitly records its purpose, expected result, falsifiable hypothesis, and assumptions (`—` when none); these fields agree with its parent and inspected evidence.
 - No generic lifecycle chains, renamed single-child wrappers, or `Test the tests` branches remain.
 - Every executable leaf has a concrete Why, scoped What, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
 - Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped blockers; every `IMPL` task has context and resolved-uncertainty prerequisites, with no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
-- Each product-code handoff is represented by an inline `Kind: IMPL` leaf, and `/next-way` runs its `/req` → `/ood` → `/to-plan` handoff, stops, and does not run `/do-plan`; no separate `IMPL` way or lifecycle chain exists. A critical requirement contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way.
+- Each product-code handoff is represented by an inline `Kind: IMPL` leaf. `/next-way` runs `/req` → `/ood` → `/to-plan` and stops without running `/do-plan`; after the user runs `/do-plan`, a later `/next-way` invocation reviews its report against the expected result and way purpose before the task is recorded done or dependents proceed. A critical requirement or result contradiction should re-run `/wayfinder` to revise the existing way.
