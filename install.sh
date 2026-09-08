@@ -229,28 +229,12 @@ configure_pi_settings() {
     const thinking = process.argv[3];
     settings.subagents.defaultModel = model;
     settings.subagents.defaultThinking = thinking;
-    const roles = ["delegate", "oracle", "researcher", "reviewer", "scout", "worker"];
-    const enabledRoles = new Set(["researcher", "scout", "worker"]);
-    if (!settings.subagents.agentOverrides || typeof settings.subagents.agentOverrides !== "object" || Array.isArray(settings.subagents.agentOverrides)) {
-      settings.subagents.agentOverrides = {};
-    }
-    for (const role of roles) {
-      const override = settings.subagents.agentOverrides[role];
-      const config = override && typeof override === "object" && !Array.isArray(override) ? { ...override } : {};
-      if (enabledRoles.has(role)) {
-        delete config.disabled;
-        config.model = model;
-        config.thinking = thinking;
-      } else {
-        config.disabled = true;
-      }
-      settings.subagents.agentOverrides[role] = config;
-    }
+    delete settings.subagents.agentOverrides;
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
   ' "$settings" "$tmp" "$PI_SUBAGENT_THINKING"
   mv "$tmp" "$settings"
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
-  echo "  ✓ pi subagents → researcher, scout, worker → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
+  echo "  ✓ pi subagent defaults → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
 }
 
 setup_pi() {

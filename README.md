@@ -38,7 +38,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Copies `agents/` to `~/.pi/agent/agents/`; enables Pi truecolor, installs `ponytail` and the Pi UI packages; enables `researcher`, `scout`, and `worker` on `openai-codex/gpt-5.6-luna` with the selected thinking level |
+| pi coding agent | Copies `agents/` to `~/.pi/agent/agents/`; enables Pi truecolor, installs `ponytail` and the Pi UI packages; sets the default subagent model/thinking to `openai-codex/gpt-5.6-luna` while custom agent files provide role-specific settings |
 
 `references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
