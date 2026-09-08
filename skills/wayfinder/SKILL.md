@@ -20,13 +20,12 @@ Plan first: use grill-me for the user conversation and inspect context, but do n
 - If updating would move or remove files, strand old tasks, or conflict with recorded evidence, stop and ask before changing them.
 - Do not write either form before the shared-understanding confirmation. If the user wants planning only, return the confirmed plan and the model's recommended operation without invoking `@skills/to-way`.
 
-## One implementation handoff
+## Implementation tasks
 
-- When the goal changes product code, add exactly one root-level node with the stable ID `IMPL`.
-- `IMPL` owns the complete implementation handoff for the goal; it is not repeated under each way, task, or vertical slice.
-- Its ordered How is: `/req` for the complete goal, `/ood` for the approved requirement batch, `/to-plan` for the implementation plan(s), then `/do-plan` for the approved plan(s). Let each skill create its required per-slice artifacts, but keep that decomposition inside `IMPL`, not in the Wayfinder tree.
-- Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes for individual ways or tasks. Way nodes describe product outcomes and dependencies; `IMPL` is the single bridge to product-code changes.
-- `IMPL` is blocked by unresolved scope or behavior decisions that affect implementation. It is ready only when the required way outcomes and blocking uncertainties are settled.
+- When a leaf changes product code, mark that leaf `Kind: IMPL`. `IMPL` is a task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains its stable ID.
+- An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage when possible.
+- Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes for individual ways or tasks. Do not expand the handoff into lifecycle children. Multiple ways may contain their own `IMPL` task when their product-code work has a separate handoff.
+- An `IMPL` task can be `ready` when its Wayfinder prerequisites are satisfied, but that readiness does not authorize direct implementation. `/next-way` recommends it like any other ready task and alerts the user to run the handoff skills; it never invokes them or implements the task.
 
 ## Shared understanding with grill-me
 
@@ -49,7 +48,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
 - Name the actual change or decision: `Preserve the trailing newline when serializing the buffer`, not `Implement serialization`. If a title could be pasted into an unrelated feature unchanged, rewrite or remove it.
-- **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work. Product-code implementation is represented once by `IMPL`, not as a lifecycle chain under every way.
+- **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work. Product-code implementation is represented by an inline `Kind: IMPL` task at the relevant outcome, not by a lifecycle chain beneath every leaf.
 - Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
 
 ## Prefered Ways and Tasks Order
@@ -129,9 +128,8 @@ G  Add modal insertion and explicit saving
 │   ├── U1  Determine whether saving must preserve symlinks and file metadata
 │   ├── B1  Agree the save request/result and buffer snapshot contract
 │   ├── B2  Dispatch write commands without exiting the session
-│   └── B3  Persist the snapshot using the agreed file-safety policy
+│   └── B3  Persist the snapshot using the agreed file-safety policy (IMPL)
 └── C  Verify edit → save → reopen and recovery after a failed save
-└── IMPL  Carry the confirmed goal through requirements, design, planning, and product-code execution
 ```
 
 Example work-map entries (the actual output must cover every executable leaf):
@@ -149,17 +147,18 @@ Example work-map entries (the actual output must cover every executable leaf):
 - Done when: Insert mode changes text; normal-mode navigation does not.
 
 ### B3 — Persist the snapshot using the agreed file-safety policy
-- Kind: task
+- Kind: IMPL
 - Why: Makes edits durable without destroying the original file or recoverable edits when a write fails.
 - What: Save the snapshot from B1 to the supported target paths, returning success/failure through B1's contract. Command dispatch belongs to B2.
-- How: Blocked on U1's file-policy decision and B1's snapshot/result contract. Once resolved, adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure. Select the persistence mechanism after U1, not by assuming replace-by-rename is safe.
+- How:
+  1. Run `/req` for the complete goal, `/ood` for the approved requirement batch, `/to-plan` for the resulting implementation plan, and `/do-plan` for that approved plan, starting at the first missing artifact.
+  2. Resolve U1's file-policy decision and B1's snapshot/result contract.
+  3. Adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure. Select the persistence mechanism after U1, not by assuming replace-by-rename is safe.
 - Needs: U1: file policy; B1: snapshot/result contract
 - Status: blocked
 - Done when: Saved bytes match the snapshot; forced failure preserves the original and recoverable edits.
 
 U1: inspect file-opening behavior and supported paths; ask the owner if policy is unspecified. Exit: supported file types and preservation guarantees are recorded. Blocks B3: replace-by-rename may work for regular files, but symlink/metadata requirements may change the strategy. Do not choose one without evidence.
-
-IMPL: run `/req` once for the complete goal, `/ood` once for the approved requirement batch, `/to-plan` for the resulting implementation plan(s), and `/do-plan` for those approved plan(s). Do not create one pipeline node per way or task. Exit: product code satisfies the approved acceptance criteria and the implementation report records any remaining blockers.
 
 Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's insertion behavior; B2 needs B1's command contract; B3 needs B1 and U1. B2 need not wait for U1. After B1, B2 and B3 can run in parallel once U1 is resolved, provided the separate-module boundary holds. C joins A2, B2, and B3 to verify the real session and failed-save recovery.
 
@@ -172,4 +171,4 @@ Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's inse
 - Every consequential uncertainty has a resolving action and clearly scoped blockers; there is no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
-- A product-code plan has exactly one `IMPL` handoff, whose ordered skill sequence is `/req` → `/ood` → `/to-plan` → `/do-plan`; no skill is duplicated per way or task.
+- Each product-code handoff is represented by an inline `Kind: IMPL` leaf, and `/next-way` recommends it with the handoff alert instead of executing it; no separate `IMPL` way or lifecycle chain exists.
