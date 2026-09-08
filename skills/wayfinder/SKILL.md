@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Use grill-me to reach shared understanding of one goal and its ways, then create or update a recorded way with concrete tasks, uncertainties, dependencies, and safe parallel work. Invoke as /wayfinder.
+description: Use grill-me to plan one goal as cheapest-first EXPLORE, EXPERIMENT, IMPL, and CHECKOUT tasks with explicit dependencies and safe parallel work. Invoke as /wayfinder.
 disable-model-invocation: true
 ---
 
@@ -20,12 +20,18 @@ Plan first: use grill-me for the user conversation and inspect context, but do n
 - If updating would move or remove files, strand old tasks, or conflict with recorded evidence, stop and ask before changing them.
 - Do not write either form before the shared-understanding confirmation. If the user wants planning only, return the confirmed plan and the model's recommended operation without invoking `@skills/to-way`.
 
-## Implementation tasks
+## Task types
 
-- When a leaf changes product code, mark that leaf `Kind: IMPL`. `IMPL` is a task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains its stable ID.
-- An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage when possible.
-- Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes for individual ways or tasks. Do not expand the handoff into lifecycle children. Multiple ways may contain their own `IMPL` task when their product-code work has a separate handoff.
-- An `IMPL` task can be `ready` when its Wayfinder prerequisites are satisfied, but that readiness does not authorize direct implementation. `/next-way` recommends it like any other ready task and alerts the user to run the handoff skills; it never invokes them or implements the task.
+Every executable leaf has exactly one of these kinds:
+
+- `EXPLORE` — resolve an uncertainty using read-only inspection: search, read files/docs, trace existing code, or inspect already-produced evidence. It must not edit files, run a behavioral trial, or change production state.
+- `EXPERIMENT` — resolve an uncertainty that inspection cannot answer by running `/experiment`. Its How names the question, expected distinguishing result, and `/experiment`; the experiment remains isolated from production per that skill.
+- `IMPL` — eventually change production code using inspected context and resolved consequential uncertainties. It is an inline task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains stable.
+- `CHECKOUT` — a human checkpoint for a decision, approval, or hands-on verification that cannot be delegated to inspection or experiment. It states exactly what the human must decide or check and what evidence/answer releases dependent work.
+
+Use the cheapest reliable kind that can close the task: existing evidence before new work, `EXPLORE` before `EXPERIMENT`, and either before asking a human to discover a fact. Use `CHECKOUT` for human judgment or authority, not as a substitute for agent fact-finding. Do not create an `EXPLORE` step when inspection is already known to be unable to answer the question, and do not experiment when a search/read can settle it.
+
+An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes or expand the handoff into lifecycle children. `/next-way` runs `/req` → `/ood` → `/to-plan`, then stops and leaves `/do-plan` to the user; a critical requirement contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way.
 
 ## Shared understanding with grill-me
 
@@ -36,14 +42,14 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 - Start with grill-me's calibration using a concrete scenario from the goal, then wait for the user's answer. Teach only essential gaps and use its teach-back before decision rounds. Reuse already established understanding and decisions rather than restarting an active session.
 - Use the goal's success signal, scope/exclusions, proposed ways and their boundaries, consequential unknowns, prerequisites, and safe parallel work as the decision tree. Settle parent scope before dependent decomposition; do not grill every routine implementation detail.
 - Show a small draft way tree as proposals become grounded. Ask whether its outcomes and boundaries match the user's intent, not just whether the user agrees with a finished plan. Update the draft and affected dependencies after each answer.
-- Let grill-me own question format, examples, mode selection, impact/uncertainty labels, and round size. Inspect repository facts yourself. Within this planning session, record proposed experiments as uncertainty-resolution tasks rather than executing them automatically.
+- Let grill-me own question format, examples, mode selection, impact/uncertainty labels, and round size. Inspect repository facts yourself. Within this planning session, record unresolved fact-finding as `EXPLORE` or `EXPERIMENT` work rather than executing it automatically.
 - Keep confirmed decisions, provisional assumptions, and unresolved evidence separate. A delegated choice such as “you decide” may adopt the recommendation provisionally; it does not establish an external fact or remove an evidence blocker.
 - Before finalizing, summarize the agreed goal, ways, ordering/parallel constraints, and remaining assumptions/blockers; ask for confirmation using grill-me's question format and wait. Confirmation may approve an explicitly partial plan, not pretend its unknowns are resolved. If corrected, revise affected work and confirm again.
 
 ## Ways and tasks
 
 - A **way** is an outcome-oriented work package contributing to its parent. Siblings are normally all needed, not competing solutions.
-- A **task** is a concrete action with a usable result and an observable completion signal. A way may contain tasks, sub-ways, or both.
+- A **task** is a concrete `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` action with a usable result and an observable completion signal. A way may contain tasks, sub-ways, or both.
 - Give every node a stable, globally unique ID; every non-root node has exactly one parent. Dependencies are separate from parentage.
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
@@ -51,23 +57,23 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 - **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work. Product-code implementation is represented by an inline `Kind: IMPL` task at the relevant outcome, not by a lifecycle chain beneath every leaf.
 - Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
 
-## Prefered Ways and Tasks Order
-- At the beginning of the starting goal, I don't want to fully completed output and result.
-- Uncertainty should be resolved with `/experience` or just explore. **MUST USE** the cheapest method.
-- Build first **fast**, **simple**, **not perfect** something first, It is important to see the **first working happy path vertical slice**. **Verification** for details should be later. 
-- After that review the edge cases, security and improvement for reach a perfect.
-- Increamentally improve and building a positive working loop and system from the working system.
-- Do not well made automation first. The automation system is create management effort. Fast experiment, finding uncertainty first, building automation system increamentally after. 
+## Preferred ways and task order
+
+- **MUST use the cheapest reliable method.** Reuse existing evidence first; use `EXPLORE` for search/read; use `EXPERIMENT` with `/experiment` only when inspection cannot answer; use `CHECKOUT` only when human judgment, authority, or hands-on verification is required.
+- Do not demand a complete or polished result at the beginning of a goal.
+- Build a fast, simple first working happy-path vertical slice before broad edge-case hardening when safety permits.
+- Then improve edge cases, security, and quality incrementally from the working system.
+- Do not build polished automation first. Automation creates management cost; add it incrementally after cheap exploration or experimentation shows it is needed.
 
 ## Task details: Why, What, How
 
-Every executable leaf, including uncertainty and checkpoint work, must explain:
+Every executable leaf, regardless of kind, must explain:
 
 - **Why:** the parent outcome it enables, risk it reduces, or downstream work it unblocks—and what fails or stays blocked if it is omitted. “Needed for the feature” is not a reason; remove work with no concrete justification.
 - **What:** the specific behavior, decision, or artifact to deliver, with its scope and important boundaries. Do not just repeat the title. Keep **Done when** as the separate observable proof that this result exists.
 - **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach.
 
-Ground How in inspected context or explicit user decisions. If a consequential choice is unresolved, name the blocking uncertainty and what can be done before/after its resolution; do not invent a mechanism or leave only “TBD.” For uncertainty work, Why is its impact, What is the evidence/decision to obtain, and How is the resolving method; reuse those details rather than duplicating them. These are fields within the task, not extra child nodes or lifecycle stages.
+Ground How in inspected context or explicit user decisions. If a consequential choice is unresolved, name the blocking `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` task and what can happen before/after it; do not invent a mechanism or leave only “TBD.” For uncertainty work, Why is its impact, What is the evidence or decision to obtain, and How is the cheapest reliable resolving method. These are fields within the task, not extra child nodes or lifecycle stages.
 
 ## Planning process
 
@@ -81,7 +87,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 
 ## Uncertainty handling
 
-Place each uncertainty at the smallest common parent of the work it affects. It is an executable leaf (kind `uncertainty`) with:
+Place each uncertainty at the smallest common parent of the work it affects. Represent it as `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` according to the cheapest reliable resolution method, with:
 
 - **Question and impact:** what is unknown and which choice, scope, or safety property depends on it.
 - **Resolve by:** the cheapest reliable inspection, focused experiment, or owner decision; name the evidence source or responsible decision-maker.
@@ -90,7 +96,7 @@ Place each uncertainty at the smallest common parent of the work it affects. It 
 
 Use the uncertainty's ID as a prerequisite of known dependent tasks. If their tasks cannot yet be named, mark the affected way `partial; blocked by <ID>` and return to decomposition after the answer. Do not block unrelated ways or require all uncertainties to resolve before any implementation.
 
-An uncertainty can be ready to investigate while its consumers are blocked. Mark it done only with recorded evidence. If context is unavailable, say so and plan inspection rather than claiming a repository fact. If no consequential unknown remains, say why briefly; do not create an `Experiment` placeholder.
+An uncertainty-resolution task can be ready while its consumers are blocked. Mark it done only with recorded evidence. If context is unavailable, use `EXPLORE` rather than claiming a repository fact. Escalate to `EXPERIMENT` only when read-only inspection cannot answer; use `CHECKOUT` only for a human-owned decision or check. If no consequential unknown remains, say why briefly; do not create a placeholder task.
 
 Ask owner decisions through grill-me, with concrete examples, answer-dependent consequences, and a recommendation. Keep unresolved external-owner decisions as blockers when the current user cannot settle them.
 
@@ -109,7 +115,7 @@ During the interview, show only the draft context needed for the current questio
 
 1. **Goal and grounding** — success, scope, key evidence/assumptions.
 2. **Way tree** — outcome-oriented ways and concrete leaves; give each way a concise scope and success signal, and mark partial branches.
-3. **Work map** — one record per executable leaf: ID/title, kind (`task | uncertainty | checkpoint`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
+3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
 6. **Persistence** — the model's end-of-plan recommendation: `create`, `update`, or planning-only; name the target directory, evidence for the recommendation, and any preservation/blocking condition.
@@ -123,26 +129,26 @@ Illustrative facts: insertion behavior is already agreed; the command loop and f
 ```text
 G  Add modal insertion and explicit saving
 ├── A  Edit the in-memory buffer
-│   ├── A1  Route printable keys only in insert mode
-│   └── A2  Keep cursor placement valid after insertion and mode exit
+│   ├── A1  Route printable keys only in insert mode (IMPL)
+│   └── A2  Keep cursor placement valid after insertion and mode exit (IMPL)
 ├── B  Save the current buffer without losing recoverable edits
-│   ├── U1  Determine whether saving must preserve symlinks and file metadata
-│   ├── B1  Agree the save request/result and buffer snapshot contract
-│   ├── B2  Dispatch write commands without exiting the session
+│   ├── U1  Inspect current path and metadata behavior (EXPLORE)
+│   ├── B1  Decide file policy and approve the save contract (CHECKOUT)
+│   ├── B2  Dispatch write commands without exiting the session (IMPL)
 │   └── B3  Persist the snapshot using the agreed file-safety policy (IMPL)
-└── C  Verify edit → save → reopen and recovery after a failed save
+└── C  Check edit → save → reopen and failed-save recovery (CHECKOUT)
 ```
 
 Example work-map entries (the actual output must cover every executable leaf):
 
 ### A1 — Route printable keys only in insert mode
-- Kind: task
+- Kind: IMPL
 - Why: Enables text entry without making normal-mode navigation keys accidentally modify the buffer.
 - What: Mode-aware routing of printable ASCII input; preserve existing normal-mode navigation. Cursor adjustment belongs to A2.
 - How:
-  1. Trace the existing key-dispatch and mode state paths.
+  1. Let `/next-way` run the approved `/req` → `/ood` → `/to-plan` handoff from the first missing artifact.
   2. Route printable ASCII to buffer insertion only in insert mode; retain the existing normal-mode dispatch.
-  3. Exercise the same printable key in both modes to check that only insert mode changes text.
+  3. Run `/do-plan` and exercise the same printable key in both modes to check that only insert mode changes text.
 - Needs: —
 - Status: ready
 - Done when: Insert mode changes text; normal-mode navigation does not.
@@ -152,16 +158,16 @@ Example work-map entries (the actual output must cover every executable leaf):
 - Why: Makes edits durable without destroying the original file or recoverable edits when a write fails.
 - What: Save the snapshot from B1 to the supported target paths, returning success/failure through B1's contract. Command dispatch belongs to B2.
 - How:
-  1. Run `/req` for the complete goal, `/ood` for the approved requirement batch, `/to-plan` for the resulting implementation plan, and `/do-plan` for that approved plan, starting at the first missing artifact.
-  2. Resolve U1's file-policy decision and B1's snapshot/result contract.
-  3. Adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure. Select the persistence mechanism after U1, not by assuming replace-by-rename is safe.
-- Needs: U1: file policy; B1: snapshot/result contract
+  1. Let `/next-way` run `/req`, `/ood`, and `/to-plan` from the first missing approved artifact; after it checks the requirements against this way's purpose, hypothesis, and assumptions, run `/do-plan` on the approved plan.
+  2. Use B1's approved file policy and snapshot/result contract.
+  3. Adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure.
+- Needs: B1: approved file policy and snapshot/result contract
 - Status: blocked
 - Done when: Saved bytes match the snapshot; forced failure preserves the original and recoverable edits.
 
-U1: inspect file-opening behavior and supported paths; ask the owner if policy is unspecified. Exit: supported file types and preservation guarantees are recorded. Blocks B3: replace-by-rename may work for regular files, but symlink/metadata requirements may change the strategy. Do not choose one without evidence.
+U1 (`EXPLORE`): search and read file-opening behavior and supported paths. Exit: repository evidence about supported file types and preservation behavior is recorded, including a clear “not specified” result when applicable. Blocks B1, whose human `CHECKOUT` decides any policy the evidence cannot establish.
 
-Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's insertion behavior; B2 needs B1's command contract; B3 needs B1 and U1. B2 need not wait for U1. After B1, B2 and B3 can run in parallel once U1 is resolved, provided the separate-module boundary holds. C joins A2, B2, and B3 to verify the real session and failed-save recovery.
+Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 needs U1's evidence; B2 and B3 need B1's approved contract. After B1, B2 and B3 can run in parallel if the separate-module boundary still holds. C joins A2, B2, and B3 for the human check of the real session and failed-save recovery.
 
 ## Completion criterion
 
@@ -169,7 +175,7 @@ Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's inse
 - Every requested outcome is covered by concrete work or an explicitly blocked partial branch; existing work is not needlessly recreated.
 - No generic lifecycle chains, renamed single-child wrappers, or `Test the tests` branches remain.
 - Every executable leaf has a concrete Why, scoped What, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
-- Every consequential uncertainty has a resolving action and clearly scoped blockers; there is no guessed decomposition behind a blocker.
+- Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped blockers; every `IMPL` task has context and resolved-uncertainty prerequisites, with no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
-- Each product-code handoff is represented by an inline `Kind: IMPL` leaf, and `/next-way` recommends it with the handoff alert instead of executing it; no separate `IMPL` way or lifecycle chain exists.
+- Each product-code handoff is represented by an inline `Kind: IMPL` leaf, and `/next-way` runs its `/req` → `/ood` → `/to-plan` handoff, stops, and does not run `/do-plan`; no separate `IMPL` way or lifecycle chain exists. A critical requirement contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way.

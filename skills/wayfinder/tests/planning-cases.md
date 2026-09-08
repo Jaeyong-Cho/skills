@@ -27,11 +27,11 @@ Pass when:
 
 - No repeated requirements/design/implement/test chains or renamed one-child wrappers appear.
 - A product-code handoff is an inline `Kind: IMPL` leaf under its relevant way (for example, A4 or B3), not a separate root-level way.
-- `/next-way` recommends a ready `IMPL` leaf in the same position as any other task, then alerts the user to run `/req` → `/ood` → `/to-plan` → `/do-plan`; it does not invoke those skills or implement the task.
+- `/next-way` selects a ready `IMPL` leaf in the same position as any other task, runs `/req` → `/ood` → `/to-plan` from the first missing approved artifact, then stops and leaves `/do-plan` to the user. It checks approved requirements against the way's purpose, hypothesis, and assumptions before OOD; a critical contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way.
 - Every executable leaf has Why (the outcome/risk and consequence of omission), What (a scoped result, not a repeated title), How (concrete approach/steps), and a separate observable completion signal.
 - How names meaningful actions such as tracing mode dispatch and checking the same key in both modes—not a generic lifecycle chain. Unknown file policy blocks selection of a persistence mechanism rather than inviting a guessed implementation.
 - Existing navigation/rendering is reused; relevant regressions are checked rather than planned as new capabilities.
-- File-policy uncertainty has a resolving action, an exit signal, affected work, and consequences for different answers.
+- File-policy uncertainty is an `EXPLORE` task because repository search/read is the cheapest reliable first method; it has an exit signal, affected work, and consequences for different answers. If inspection cannot settle a human-owned policy choice, a separate `CHECKOUT` owns that decision rather than mixing it into `EXPLORE`.
 - Save-contract agreement is a shared prerequisite, not duplicated in command and writer branches.
 - Buffer work can begin without waiting for file policy. Command work can begin after its contract is agreed without waiting for the writer.
 - Command/writer parallelism names the settled contract and separate-module boundary; end-to-end validation joins the relevant editing, command, and persistence tasks.
@@ -43,7 +43,7 @@ Input:
 
 > Change the existing settings label from "Colour" to "Color". There is one occurrence, no localization, no generated files, and no behavior change. The existing UI snapshot must reflect the new label. These facts are confirmed; plan only.
 
-Pass when: a small concrete task with a snapshot completion check suffices; no invented discovery/design work, uncertainty, sub-way wrappers, or parallel lanes. Why explains the requested spelling consistency; What scopes the label change without behavior changes; How says to replace the label and update/check the existing snapshot, without padding the task into phases. Recording needs only `0-goal.md`, with the task inline.
+Pass when: one concrete `IMPL` task with a snapshot completion check suffices; no invented `EXPLORE`/`EXPERIMENT` work, sub-way wrappers, or parallel lanes. Why explains the requested spelling consistency; What scopes the label change without behavior changes; How says to replace the label and update/check the existing snapshot, without padding the task into phases. Recording needs only `0-goal.md`, with the task inline.
 
 ## 3. A blocked branch and a shared write surface
 
@@ -53,10 +53,18 @@ Input:
 
 Pass when:
 
-- Leaderboard scope has an owner question with consequences and a recommendation, not an invented decision.
+- Leaderboard scope is a `CHECKOUT` task with an owner question, consequences, and a recommendation—not an invented decision.
 - The affected leaderboard branch stays partial; guessed sync/auth/database tasks do not appear.
 - Local score display can proceed independently of that decision.
 - UI implementation is not promised as safe parallel work merely because it belongs to separate ways; the shared file conflict is explicitly sequenced or conditioned on an isolation/integration strategy.
+
+## 3b. Runtime uncertainty needs an experiment
+
+Input:
+
+> The library documentation and source do not establish whether cancellation preserves partial output. Plan how to find out without changing production code.
+
+Pass when: one `EXPERIMENT` task runs `/experiment` with a distinguishing cancellation trial and isolated output. It does not add an `EXPLORE` task after inspection is already known insufficient, classify the trial as `IMPL`, or send factual discovery to a human `CHECKOUT`.
 
 ## 4. Recording and invalid-source handling
 
@@ -64,9 +72,9 @@ Record a valid result of case 1 with `/to-way` in a confirmed temporary director
 
 Pass when:
 
-- Root/ways have files; task, uncertainty, and checkpoint leaves have inline anchors, not separate files.
+- Root/ways have files; `EXPLORE`, `EXPERIMENT`, `IMPL`, and `CHECKOUT` leaves have inline anchors, not separate files.
 - Every source node has one canonical location; the root links the whole hierarchy.
-- Every dependency link resolves to the original ID and keeps its reason. Why/What/How details (including ordered steps, scope boundaries, and evidence references), uncertainty resolution details, completion signals, statuses, and parallel conditions survive unchanged.
+- Every leaf retains exactly one allowed kind and every dependency link resolves to the original ID with its reason. Why/What/How details (including ordered steps, scope boundaries, and evidence references), uncertainty resolution details, completion signals, statuses, and parallel conditions survive unchanged.
 - Numbering follows source presentation order without introducing serial prerequisites; nested ways use full ancestry without path collisions.
 - A blocked partial plan from case 3 can also be recorded without filling its missing branch.
 
@@ -76,6 +84,6 @@ Negative checks (each must stop before writing and request source correction):
 - Remove a task's Why, What, How, completion signal, or prerequisites field without explicitly marking a partial branch. Missing detail must not be silently invented by the recorder.
 - Replace Why with “needed for the feature,” What with only the title, or How with “design, implement, test.”
 - Add a dependency on an absent ID, or introduce a dependency cycle.
-- Mark a task ready despite its unresolved prerequisite, or assert parallelism across a dependency path.
+- Mark an `IMPL` task ready despite unresolved context or uncertainty prerequisites, choose `EXPERIMENT` where read/search can answer, use `CHECKOUT` to make the human discover an inspectable fact, or assert parallelism across a dependency path.
 
 Update check: place old task files or human completion annotations in the destination. Recording must not silently delete them, overwrite their evidence, or report completion while leaving contradictory legacy files mixed with the new plan.

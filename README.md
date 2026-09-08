@@ -52,15 +52,14 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/l3-implement` | — | Implement one L3 mechanism function directly from a plain-language technical-operation description, per `abstraction-levels.md`: exposes a simple interface upward, no business decisions inside, code only |
 | `/req` | `spec/<epic>/<slice>.md` per slice | Turn prototype/context into an approved vertical-slice inventory, then write one requirement document per slice with concrete edge cases and deterministic acceptance criteria |
 | `/ood` | `design/<epic>/<slice>.md` per slice | Design the approved requirement batch and write one object-oriented design-and-contract document per slice |
-| `/tdd` | — | Execute approved slices through one RED → GREEN → REFACTOR cycle per behavior, with per-slice test and validation evidence |
 | `/end-of-day` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/report.md`, `.../YYYY-MM-DD/report/index.html` | Run `/d-handoff`, then compile the day's journal/research/handoff findings into a ToC report with an Introduction/Abstraction/Detailed section per topic, plus a themed, servable HTML gallery with an insight diagram per topic |
 | `/d-handoff` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/handoff.md` | Distill today's open items and key decisions into a dated file for tomorrow's session |
-| `/to-plan` | `plans/{nn}-{slice}.md` (or the confirmed wiki path) | Write one independently executable TDD plan per vertical slice: acceptance criteria, deterministic checks, action items, review gate, and commit/merge/release gates |
+| `/to-plan` | `plans/{nn}-{slice}.md` (or the confirmed wiki path) | Write one independently executable plan per vertical slice with the lowest-cost sufficient tests/checks, acceptance criteria, action items, review gate, and commit/merge/release gates |
 | `/do-plan` | `{plan-file}.report.md` | Execute a `/to-plan` document's action items in order, checking each off in place; verify acceptance criteria against real repo state; write up the run as a report |
 | `/experiment` | `~/wiki/journal/YYYY/MM/YYYY-MM-DD/research/NN-{slug}/experiments/nn-{slug}.md`, `.../nn-{slug}.raw/` | Plan the cheapest method that would answer a question (via `/ponytail`), act on it for real, analyze the result into a verdict — supported, refuted, or inconclusive — then write it up as a linted Title/Abstract/.../Conclusion markdown report |
-| `/wayfinder` | — | Run `/grill-me` to agree on the goal and its ways, then finalize tasks with Why/What/How details, uncertainties, prerequisites, and safe parallel execution after user confirmation |
-| `/next-way` | — | Find the next actionable way by checking in-progress markers and dependencies, then explain its purpose, context, How, completion signal, and task workspace path |
-| `/to-way` | `ways/{nn}-{slug}/0-goal.md` and nested work-package files | Create or update a Wayfinder task plan, preserving Why/What/How details, dependency links, execution guidance, and done-task evidence |
+| `/wayfinder` | — | Plan work as `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` tasks, always choosing the cheapest reliable uncertainty-resolution method before production work |
+| `/next-way` | approved requirement, design, and plan artifacts for `IMPL` tasks | Find the next actionable way; for `IMPL`, run `/req` → `/ood` → `/to-plan` and stop—never run `/do-plan`—after checking requirements against the way's purpose, hypothesis, and assumptions, or stop earlier and revise the way on a critical contradiction |
+| `/to-way` | `ways/{nn}-{slug}/0-goal.md` and nested work-package files | Record a Wayfinder plan while preserving task kinds, Why/What/How details, dependency links, execution guidance, and done-task evidence |
 | `/to-context` | `~/wiki/today/research/NN-{slug}/contexts/nn-{slug}.md` | Write up this session as a context document — objective, background, key facts, current state — so a fresh session can resume it cold |
 | `/to-journal` | `~/wiki/today/journal.md` | Summarize this session very short, ELI5-simple, and append it as a formatted entry to today's journal |
 | `/to-anki` | `{slug}.anki.csv` | Turn a requested topic, notes file, or explicit Q&A list into an Anki-importable flashcard CSV — one atomic fact per Front/Back row, with the `#separator`/`#columns` header Anki's importer auto-detects |
@@ -71,7 +70,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `frontend-design` | — | Vendored from [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design) (Apache 2.0). Guidance for distinctive, intentional visual design when building or reshaping UI — deliberate palette/typography/layout choices, one justified aesthetic risk, avoiding the generic AI-design defaults |
 | `thermo-nuclear-code-quality-review` | — | Vendored from [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review) (MIT). An unusually strict maintainability review — abstraction quality, file-size/spaghetti smells, code-judo restructurings — for the current branch's diff |
 
-All skills above are user-invoked, except `/experiment`, `/d-handoff`, `/to-plan`, `/do-plan`, and `coding-interview`, which the agent can also fire on its own — `/experiment` when a question needs something actually run to get evidence; `/d-handoff` when the user wants to wrap up the day, or when `/end-of-day` reaches for it before drafting; `/to-plan` and `/do-plan` when a solution plan needs to be executed; `coding-interview` when the user says "interview me"/"study mode"/pastes code for interview practice, without needing to name it. Project development artifacts use the target repository's conventions. `/end-of-day`, `/d-handoff`, and `/experiment` retain the global `~/wiki/` layout documented in `CLAUDE.md`'s Context Structure section.
+All skills above are user-invoked, except `/experiment`, `/d-handoff`, `/req`, `/ood`, `/to-plan`, `/do-plan`, and `coding-interview`, which the agent can also fire on its own — `/experiment` when a question needs something actually run to get evidence; `/d-handoff` when the user wants to wrap up the day, or when `/end-of-day` reaches for it before drafting; `/req`, `/ood`, and `/to-plan` for an implementation handoff such as `/next-way`; `/do-plan` when an approved solution plan needs to be executed; `coding-interview` when the user says "interview me"/"study mode"/pastes code for interview practice, without needing to name it. Project development artifacts use the target repository's conventions. `/end-of-day`, `/d-handoff`, and `/experiment` retain the global `~/wiki/` layout documented in `CLAUDE.md`'s Context Structure section.
 
 
 ## References
@@ -85,7 +84,8 @@ Referenced by workflow skills — loaded at the point they're needed.
 | `deep-modules.md` | Hide complexity, widen interfaces |
 | `naming.md` | Intention-revealing names; a smells table (disinformative, noise words, encoded, mismatched part of speech, synonym drift, mental-mapping) |
 | `prototype.md` | Throwaway happy-path prototypes as an experiment method |
-| `tdd.md` | Test-driven development principles |
+| `testing-guidelines.md` | Choose the lowest-cost test level that provides confidence in important behavior and regressions |
+| `tdd.md` | Optional test-driven development technique |
 | `tdd-tests.md` | How to write good tests |
 | `tdd-mocking.md` | When and how to mock |
 | `tdd-refactoring.md` | Refactoring checklist — only after all tests pass |

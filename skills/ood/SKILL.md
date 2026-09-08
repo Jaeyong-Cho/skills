@@ -1,14 +1,13 @@
 ---
 name: ood
-description: Design all approved requirement slices as small object-oriented vertical-slice solutions, then write one approved design-and-contract document per slice. Use after req and before to-plan/tdd.
-disable-model-invocation: true
+description: Design all approved requirement slices as small object-oriented vertical-slice solutions, then write one approved design-and-contract document per slice. Use after req and before to-plan.
 ---
 
 # OOD
 
 First explore the existing codebase, then design the smallest coherent object-oriented solution for the complete approved requirement inventory. During design, explicitly choose whether each affected area is reused, modified, created, deleted, or left unchanged. The primary output is one design-and-contract document per requirement slice. Process slices independently in dependency order, but validate their shared component responsibilities and interfaces as one batch.
 
-OOD does not implement the design or write feature tests. Implementation belongs to `/skill:tdd` and `/skill:do-plan`.
+OOD does not implement the design or write feature tests. Implementation belongs to `/skill:do-plan`.
 
 Use specific names:
 - **Entry point:** where a user or system starts the flow, such as a Save button, CLI command, API endpoint, or job trigger.
@@ -41,7 +40,7 @@ Reuse the target repository's design convention if it has one. Do not create a s
 
 ## Start with repository exploration
 
-Before the design interview or naming new Objects, explore the existing codebase for the selected requirement slices:
+Before naming new Objects, explore the existing codebase for the selected requirement slices:
 
 1. Read repository instructions, relevant requirement documents, current design conventions, source files, tests, build configuration, and commands.
 2. Trace the current behavior from its public entry point through the relevant domain and infrastructure components and their interfaces.
@@ -51,19 +50,15 @@ Before the design interview or naming new Objects, explore the existing codebase
 
 **Completion criterion:** the relevant current flow, entry points, component interfaces, tests, callers, and candidate existing components are documented with evidence before design decisions are made.
 
-## Design interview
-
-After repository exploration, gather only the approved requirement and repository context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on requirement interpretation, object responsibilities, entry points, component interfaces and contracts, failure handling, trade-offs, and the reuse/modify/create/delete choices. Preserve the approved behavior and scope. If the session finds behavioral ambiguity, stop and return it to `/skill:req`; resolve only design questions that cannot change observable behavior. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This is the only design interview and is separate from the batch approval gate below.
-
 ## Human checkpoint
 
-Derive the designs from the approved requirements, repository evidence, and existing conventions. After the opening grill, ask only a blocking clarification when its answer would change observable behavior, and use `../references/question-format.md`.
+Derive the designs from the approved requirements, repository evidence, and existing conventions. Ask only a blocking clarification when its answer would change observable behavior, and use `../references/question-format.md`.
 
 Draft every slice before the approval gate. Present a compact summary, exact paths, cross-slice assumptions, and unresolved decisions. Ask exactly one batch question:
 
 > Do you approve these designs, or should I change anything before writing them to `<design-paths>`?
 
-Do not write any design document, start TDD, or reinterpret silence as approval until the human confirms. If one design changes, update its brief and re-present the affected batch before writing.
+Do not write any design document, start implementation or testing, or reinterpret silence as approval until the human confirms. If one design changes, update its brief and re-present the affected batch before writing.
 
 ## Scope and design constraints
 
@@ -105,7 +100,7 @@ For each requirement, complete this sequence in order:
 9. **Failure modes** — decide what stops, retries, rolls back, waits, alerts, or is explicitly out of scope.
 10. **Trade-offs** — state the simplest option, what it gives up, and the condition that justifies changing it. Check scale only when relevant.
 
-Use `../references/abstraction-levels.md` for L1/L2/L3 ownership and `../references/deep-modules.md` for small interfaces that hide implementation complexity. Prefer the smallest design that satisfies the requirement.
+Use `../references/abstraction-levels.md` for L1/L2/L3 ownership, `../references/deep-modules.md` for small interfaces that hide implementation complexity, and `../references/testing-guidelines.md` to choose the lowest-cost sufficient verification level. Prefer the smallest design that satisfies the requirement.
 
 **Completion criterion:** the slice's public entry points and observable outcomes, Objects, responsibilities, owned data, Interfaces, workflow, failures, edge cases, and trade-offs are all explicit and traceable to its requirement.
 
@@ -227,7 +222,7 @@ Use this structure for every slice:
 
 ## Handoff
 
-Pass the complete design inventory and all design paths to `/skill:to-plan`. That skill writes one TDD implementation plan per slice. `/skill:tdd` then executes one behavior at a time from those approved plans; it must not pull deferred topics back into the design.
+Pass the complete design inventory and all design paths to `/skill:to-plan`. That skill writes one implementation plan per slice with verification selected under `../references/testing-guidelines.md`, which `/skill:do-plan` executes without pulling deferred topics back into the design.
 
 ## Completion criterion
 

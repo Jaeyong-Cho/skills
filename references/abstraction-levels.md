@@ -47,9 +47,13 @@ Public vs. private answers "who can call this." L1/L2/L3 answers "what kind of c
 
 ## Testing by level
 
-- **L1** — no unit test of its own; it has nothing to unit-test beyond the calls it sequences. Covered by the integration test the checklists already require (per `deterministic-evaluation.md`), exercising L1 through to L3 for real.
-- **L2** — TDD it (`tdd.md`, `tdd-tests.md`): RED → GREEN → REFACTOR, one test per business rule, through the function's public behavior. Don't mock the domain rule under test — mock only the L3 interface it depends on (per `deep-modules.md`'s "accept dependencies, don't create them").
-- **L3** — TDD it too, but the test hits the real mechanism (a real test DB/HTTP call against a test instance) or the vendor's documented contract — not a mock of the thing the test is supposed to verify. L3 gets mocked *at* the L2/L3 interface by L2's tests, never inside its own.
+Choose tests by behavior and failure risk under `testing-guidelines.md`, not mechanically by function or abstraction level.
+
+- **L1** — usually verify the observable workflow with an integration or E2E test only when that workflow is important enough to warrant one; do not add a unit test merely for call sequencing.
+- **L2** — prefer a unit test for meaningful business rules, calculations, validation, state transitions, branches, and regressions. Test public behavior; mock only a genuine L3 boundary when isolation adds value.
+- **L3** — use an integration or contract test when correctness depends on the real database, HTTP service, filesystem, SDK, framework, or serialization behavior. Do not claim real integration confidence from a mock.
+
+TDD is optional. For bug fixes, whenever practical add a failing regression test before the fix at the lowest sufficient level.
 
 ## Smells
 

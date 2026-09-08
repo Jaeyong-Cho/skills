@@ -1,7 +1,6 @@
 ---
 name: req
 description: Explore the existing codebase, then turn prototype and repository context into an approved inventory of vertical requirement slices with concrete edge cases and testable acceptance criteria. Use before OOD.
-disable-model-invocation: true
 ---
 
 # Requirements
@@ -12,18 +11,14 @@ A batch may contain one slice. A slice owns one actor, purpose, outcome, and use
 
 ## Start with repository exploration
 
-Before interviewing or defining slices, explore the existing codebase:
+Before defining slices, explore the existing codebase:
 
 1. Read repository instructions, prototype/context evidence, current requirement indexes, relevant source files, tests, build configuration, and commands.
 2. Trace the current behavior from the relevant public entry point through the existing components and their calls to dependencies.
 3. Record existing behavior, callers, state, constraints, adjacent features, tests, and any already-implemented portion of the requested goal with exact file/path evidence.
 4. Identify gaps, overlaps, and behavior that must be preserved or clarified. Do not choose Objects, APIs, schemas, libraries, or other implementation mechanisms here.
 
-**Completion criterion:** the current behavior and repository evidence relevant to the product goal are recorded before the slice inventory or requirements interview begins.
-
-## Requirements interview
-
-After repository exploration, gather only the context needed to brief the interviewer, then **MUST RUN** `@skills/grill-me`. Keep the session focused on the actor, trigger, observable outcome, scope, directly relevant scenarios, dependencies, and verification. Do not design implementation. Continue only after shared understanding is confirmed, carrying forward confirmed decisions, assumptions, deferred topics, and blockers. This confirmation is separate from the batch approval gate below.
+**Completion criterion:** the current behavior and repository evidence relevant to the product goal are recorded before the slice inventory begins.
 
 ## Input
 
@@ -50,7 +45,7 @@ spec/<epic>/index.md
 spec/<epic>/<slice>.md
 ```
 
-Follow `../references/spec-convention.md`, `../references/document-style.md`, `../references/document-style/frontmatter.md`, and `template/spec.md`. Add the required metadata to Story documents and update both indexes with the same change. Do not create a combined `requirements.md` file when the repository uses the Story layout.
+Follow `../references/spec-convention.md`, `../references/document-style.md`, `../references/document-style/frontmatter.md`, `../references/testing-guidelines.md`, and `template/spec.md`. Add the required metadata to Story documents and update both indexes with the same change. Do not create a combined `requirements.md` file when the repository uses the Story layout.
 
 ## What this skill does and does not do
 
@@ -62,7 +57,7 @@ This skill defines **what** must be true. It does not:
 - pull deferred topics into a slice;
 - invent every hypothetical failure.
 
-Those belong to `/skill:ood`, `/skill:tdd`, and `/skill:to-plan`.
+Those belong to `/skill:ood` and `/skill:to-plan`.
 
 ## Workflow
 
@@ -142,7 +137,7 @@ Check the whole set before writing:
 - every product-goal outcome belongs to exactly one accepted slice or is explicitly out of scope/deferred;
 - every slice has one coherent user-facing flow with an explicit start/end and can be implemented independently in its listed order;
 - acceptance criteria are SMART and Given–When–Then per `../references/requirement-engineering.md`;
-- every Verification Method names an integration test, E2E test, query, or genuinely manual check with an observable result, per `../references/deterministic-evaluation.md`;
+- every Verification Method names the lowest-cost sufficient unit, integration, API/contract, E2E, or genuinely manual check with an observable result, per `../references/testing-guidelines.md` and `../references/deterministic-evaluation.md`;
 - no acceptance criterion chooses a class, API, library, database shape, or other implementation detail;
 - the prototype's known states and trial findings are reflected or explicitly rejected.
 
