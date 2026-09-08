@@ -1,8 +1,1 @@
-{
-  "packages": [
-    "npm:pi-subagents"
-  ],
-  "subagents": {
-    "disableBuiltins": true
-  }
-}
+{}

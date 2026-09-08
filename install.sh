@@ -211,7 +211,20 @@ configure_pi_settings() {
     if (!settings.subagents || typeof settings.subagents !== "object" || Array.isArray(settings.subagents)) {
       settings.subagents = {};
     }
-    settings.subagents.disableBuiltins = true;
+    delete settings.subagents.disableBuiltins;
+    const model = "openai-codex/gpt-5.6-luna:high";
+    settings.subagents.defaultModel = model;
+    settings.subagents.defaultThinking = "high";
+    const roles = ["delegate", "oracle", "researcher", "reviewer", "scout", "worker"];
+    if (!settings.subagents.agentOverrides || typeof settings.subagents.agentOverrides !== "object" || Array.isArray(settings.subagents.agentOverrides)) {
+      settings.subagents.agentOverrides = {};
+    }
+    for (const role of roles) {
+      const override = settings.subagents.agentOverrides[role];
+      settings.subagents.agentOverrides[role] = override && typeof override === "object" && !Array.isArray(override)
+        ? { ...override, model, thinking: "high" }
+        : { model, thinking: "high" };
+    }
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
   ' "$settings" "$tmp"
   mv "$tmp" "$settings"
