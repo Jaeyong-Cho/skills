@@ -51,6 +51,10 @@ Re-ask that Qn, unchanged, in the next round alongside whatever else the
 frontier opens up. Don't let one unanswered question block recording the
 round's other answers.
 
+## Preference
+- I don't want to too much over engineering.
+- Do not think about the uncertainty not yet encountered.
+
 ## Next round
 
 Each round's answers reshape the tree — settled decisions push the frontier
