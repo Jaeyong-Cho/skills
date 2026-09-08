@@ -30,14 +30,7 @@ Add one or more of these aids whenever they remove ambiguity; do not add decorat
 ```text
 ❓ **Qn** - **<short title>**:
 
-**Background context**
-- **Goal:** [what we are trying to understand or decide]
-- **Why it matters:** [the impact or reason this question is relevant]
-
-**Current situation**
-- **Known or observed:** [relevant facts and evidence]
-- **Already decided:** [prior answers or constraints]
-- **Uncertain:** [the specific gap this question addresses]
+**Description**
 
 **Helpful example / code / ASCII diagram (when useful)**
 [one concrete aid tied directly to the question]
