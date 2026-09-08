@@ -47,6 +47,7 @@ Build each question from these parts:
 5. **Focused question (required H1)** — put the complete question at the top as `# ❓ Qn — <actual question?>`. It must be a real question ending in `?`, not a topic or short title.
 6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
 7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
+8. **Clarity** — Do not use abbreviation. ELI5 as if asking a question to someone hearing it for the first time.
 
 These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Two presentation elements are mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds: the question H1 at the top and a helpful example. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
 
