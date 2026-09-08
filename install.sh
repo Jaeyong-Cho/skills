@@ -230,7 +230,7 @@ configure_pi_settings() {
     settings.subagents.defaultModel = model;
     settings.subagents.defaultThinking = thinking;
     const roles = ["delegate", "oracle", "researcher", "reviewer", "scout", "worker"];
-    const enabledRoles = new Set(["scout", "worker"]);
+    const enabledRoles = new Set(["researcher", "scout", "worker"]);
     if (!settings.subagents.agentOverrides || typeof settings.subagents.agentOverrides !== "object" || Array.isArray(settings.subagents.agentOverrides)) {
       settings.subagents.agentOverrides = {};
     }
@@ -250,7 +250,7 @@ configure_pi_settings() {
   ' "$settings" "$tmp" "$PI_SUBAGENT_THINKING"
   mv "$tmp" "$settings"
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
-  echo "  ✓ pi subagents → scout, worker → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
+  echo "  ✓ pi subagents → researcher, scout, worker → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
 }
 
 setup_pi() {
@@ -294,11 +294,9 @@ setup_pi() {
       echo "  $pkg install failed, run manually: pi install $pkg"
     fi
   done
-  # Remove the retired review agent from older installations.
-  rm -f "$PI_AGENT_DIR/agents/stage-reviewer.md"
-  if [ -d "$SKILLS_DIR/.pi/agents" ]; then
+  if [ -d "$SKILLS_DIR/agents" ]; then
     mkdir -p "$PI_AGENT_DIR/agents"
-    cp -R "$SKILLS_DIR/.pi/agents/." "$PI_AGENT_DIR/agents/"
+    cp -R "$SKILLS_DIR/agents/." "$PI_AGENT_DIR/agents/"
     echo "  ✓ custom subagents → $PI_AGENT_DIR/agents"
   fi
 
