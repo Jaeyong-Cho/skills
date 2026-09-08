@@ -13,35 +13,3 @@ Scaffold the six baseline artifacts below in the target repo. This is idempotent
 4. **Branch strategy.** Create a `develop` branch from `main` if one doesn't already exist (`git branch develop main`; don't switch to it). Then append a `## Branching` section to README.md (skip if that section already exists) documenting: `main` is releases only; `develop` is the integration branch; work happens on `<type>/<topic>` branches cut from `develop` and merged back into `develop` via PR, where `<type>` matches the commit-msg types (`feature`, `fix`, `refactor`, `docs`, `chore`, ...); `develop` merges into `main` for releases. Completion criterion: `develop` branch exists, and README.md has a `## Branching` section.
 
 Once complete, tell the user which of the six artifacts were created vs. already present (skipped). Note that `core.hooksPath` is a per-clone git config — each teammate's existing clone needs to run step 4's `git config` line too, or the repo should commit `.githooks/` and mention that setup step in the README.
-
-## Baml Setup
-Set up BAML in this repo so I can write great agent first code.
-
-Install the toolchain (pick one for this machine):
-- Homebrew (macOS/Linux): brew install baml
-- curl (macOS/Linux): curl -fsSL https://pkg.boundaryml.com/install.sh | sh -s
-- Arch: yay -S baml-bin
-- Windows: irm https://pkg.boundaryml.com/install.ps1 | iex
-
-Then set up the project:
-- baml init
-- baml agent install
-- baml run main
-
-If this repo already has an app in another language, wire up the bridge so it
-can call BAML directly. Run baml bridge add <target> once, then
-baml bridge generate whenever the .baml files change. The add command prints
-the host package to install. Targets:
-- Python: python/pydantic
-- TypeScript: typescript/node
-- TS / Web: typescript/web
-- Go: go (also pass --sdk-import-path <MODULE>/baml_sdk)
-- Rust: rust
-- Java: java
-- Kotlin: java (the Gradle plugin adds the Kotlin layer)
-- C#: csharp
-- C++: cpp
-- Swift: swift
-- Pydantic v1: python/pydantic/v1
-
-After that, use the BAML skill and baml describe to write and edit .baml files.
