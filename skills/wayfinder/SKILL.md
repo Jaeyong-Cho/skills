@@ -53,6 +53,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 
 ## Prefered Ways and Tasks Order
 - At the beginning of the starting goal, I don't want to fully completed output and result.
+- Uncertainty should be resolved with `/experience` or just explore. **MUST USE** a cheapest method.
 - Build first **fast**, **simple**, **not perfect** something first, It is important to see the **first working happy path vertical slice**. **Verification** for details should be later. 
 - After that review the edge cases, security and improvement for reach a perfect.
 - Increamentally improve and building a positive working loop and system from the working system.
