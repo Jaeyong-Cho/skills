@@ -242,15 +242,14 @@ setup_pi() {
 
   command -v pi &>/dev/null || return
 
-  # Remove the superseded interactive-subagents package, then install the
-  # managed Pi extensions.
-  pi remove "https://github.com/hazat/pi-interactive-subagents" &>/dev/null || true
-
+  # Install the managed Pi extensions.
   local pkg
   for pkg in \
+    "git:github.com/HazAT/pi-interactive-subagents" \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:@juicesharp/rpiv-todo" \
+    "npm:@juicesharp/rpiv-ask-user-question" \
     "npm:pi-must-have-extension" \
     "npm:pi-vimmode"
   do
