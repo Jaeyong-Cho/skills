@@ -1,12 +1,12 @@
 ---
 name: to-way
-description: Record a Wayfinder task plan as navigable Markdown work packages, preserving uncertainties, prerequisites, and parallel execution guidance. Invoke as /to-way.
+description: Create or update a Wayfinder task plan as navigable Markdown work packages, preserving uncertainties, prerequisites, parallel execution guidance, and completed-task evidence. Invoke as /to-way.
 disable-model-invocation: true
 ---
 
 # To-Way
 
-Record one Wayfinder plan without redesigning or executing it. Preserve its goal, grounding, tree, each task's Why/What/How, uncertainty details, dependencies, conditions, completion signals, and execution guidance. A tree alone is insufficient if the information needed to execute its leaves is missing.
+Create or update one Wayfinder plan without redesigning or executing it. Preserve its goal, grounding, tree, each task's Why/What/How, uncertainty details, dependencies, conditions, completion signals, execution guidance, and evidence for completed tasks. A tree alone is insufficient if the information needed to execute its leaves is missing.
 
 ## Layout: files for ways, tasks inline
 
@@ -37,19 +37,23 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
    - every executable leaf has a concrete Why (purpose/consequence of omission), What (scoped result), How (approach/steps or explicit blocking decision), prerequisites (explicitly none where appropriate), status, and completion signal;
    - uncertainties retain their question, impact, resolving action, exit signal, and affected IDs;
    - dependency references exist, point to executable leaves, and contain no cycles;
-   - readiness and parallel guidance do not contradict prerequisites or recorded resource conflicts.
+   - readiness and parallel guidance do not contradict prerequisites or recorded resource conflicts;
+   - every `done` task has supplied completion evidence; never infer evidence from its title or status alone.
 
    Explicitly partial branches blocked by named uncertainties are valid; retain their limits. Missing planning information is not permission to invent it. For a legacy requirements/design/implement/test tree or other invalid source, explain the missing decisions and ask for a revised Wayfinder plan. Do not silently upgrade it or serialize empty placeholders.
-2. **Confirm the destination.** Reuse a destination confirmed in this session; otherwise ask one standalone question, recommending `./ways/`:
+2. **Recommend create or update after inspection.** Reuse a destination confirmed in this session; otherwise ask one standalone question, recommending `./ways/`:
 
    ❓ **Q1** - **Destination**: Where should this plan be recorded?
 
    ➡️ `./ways/` in the current directory, under a numbered goal directory.
 
-   Once confirmed, use `ways/{nn}-{slug}/`; update an existing same-goal directory rather than creating a duplicate. Inspect existing files first. Preserve user annotations and completed-work evidence; if a revised tree conflicts with them, ask rather than overwrite. If migration/reordering would remove or strand old group or task files, show the affected paths and get confirmation before removing or moving them. Do not leave contradictory old files mixed into a reported-complete plan.
-3. **Map and write.** Build one source-ID → file/anchor mapping for the entire plan before writing. Root and ways own files; every executable leaf appears exactly once as a section in its parent's file. Link child ways and cross-way prerequisites using relative Markdown links. Preserve all source notes at their owning node; do not fabricate descriptions or signals to fill the format.
-4. **Check the recorded plan.** Compare every source node's Why/What/How, dependency, uncertainty, condition, and completion signal with its recorded location. Preserve ordered How steps and their evidence references; do not compress them into a generic action label. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes or unsupported parallel claims may be introduced by serialization.
-5. **Report.** Give the output directory, root entry point, group-file count, and any remaining blockers. The linked root is the navigation index; do not dump every inline task as a file path.
+   Do not ask the user to choose create or update at the beginning. Inspect the confirmed destination and recommend the operation after validation: create `ways/{nn}-{slug}/` using the next sequence number for a new goal; update the matching goal directory in place for an existing goal or new child way. Preserve stable IDs, user annotations, completed-work evidence, and existing `done` statuses. Add new nodes with globally unique IDs.
+
+   If a revised tree would move or remove files, strand tasks, or conflict with recorded evidence, show the affected paths and ask before changing them. A completed task omitted from a revised plan is not silently deleted; preserve it or get explicit removal confirmation.
+3. **Map and write.** Build one source-ID → file/anchor mapping for the entire plan before writing. Root and ways own files; every executable leaf appears exactly once as a section in its parent's file. Link child ways and cross-way prerequisites using relative Markdown links. Preserve all source notes at their owning node. In update mode, merge new/changed nodes into the existing files and retain annotations/evidence that the source did not supersede; do not fabricate descriptions, signals, or done evidence.
+4. **Record completion explicitly.** When the source supplies evidence that a task finished, write `Status: done` and retain the evidence beside that status. Keep unfinished tasks `ready`, `waiting`, or `blocked`; do not infer completion because a dependent task is done. If a task is marked done without evidence, stop and request the evidence instead of writing a false completion.
+5. **Check the recorded plan.** Compare every source node's Why/What/How, dependency, uncertainty, condition, completion signal, status, and completion evidence with its recorded location. Preserve ordered How steps and their evidence references; do not compress them into a generic action label. Verify links/anchors resolve, sibling order is preserved, paths do not collide, and the root execution overview still matches the task dependencies. No generic lifecycle nodes, unsupported parallel claims, lost annotations, or unproven `done` statuses may be introduced by serialization.
+6. **Report.** Give the model-recommended operation (`created` or `updated`), output directory, root entry point, group-file count, and any remaining blockers. Summarize created/updated ways and the IDs recorded as done; do not dump every inline task as a file path.
 
 No JSON, implementation, detailed design documents, new planning decisions, or downstream skill handoffs.
 
@@ -91,6 +95,7 @@ For each inline leaf in `Work`:
 - How: <source approach; preserve ordered steps as a nested list when present, including any named blocking decision>
 - Needs: <linked prerequisite IDs and the result needed from each; or —>
 - Status: <ready | waiting | blocked | done, with source evidence where supplied>
+- Evidence: <proof for a done status, such as a test result, commit, or user-confirmed completion; required only when done>
 - Done when: <observable completion signal>
 - Conditions/conflicts: <only if present in source>
 
@@ -109,4 +114,4 @@ Do not infer new prerequisites or parallel lanes from file numbers. If a needed 
 
 ## Completion criterion
 
-Every source node has exactly one canonical location; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.
+Every source node has exactly one canonical location; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. New goals are created without collisions, existing goals are updated in place, annotations and completed tasks are preserved, and every recorded `done` status has evidence. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.

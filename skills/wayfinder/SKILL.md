@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Use grill-me to reach shared understanding of one goal and its ways, then finalize concrete tasks, uncertainties, dependencies, and safe parallel work. Invoke as /wayfinder.
+description: Use grill-me to reach shared understanding of one goal and its ways, then create or update a recorded way with concrete tasks, uncertainties, dependencies, and safe parallel work. Invoke as /wayfinder.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,23 @@ Produce a task plan, not a lifecycle checklist. Answer:
 
 > What work is actually needed, what do we not know yet, what can start now, and what must wait for what?
 
-Planning only: use grill-me for the user conversation and inspect context, but do not implement, run experiments, write detailed designs, or invoke execution/recording skills. Propose evidence-gathering work when needed; never report a proposed check as completed.
+Plan first: use grill-me for the user conversation and inspect context, but do not implement or run experiments. After the user confirms the plan, persist it only when requested: use `@skills/to-way` to create a new way or update the matching existing way. Propose evidence-gathering work when needed; never report a proposed check as completed.
+
+## Create or update a way
+
+- Inspect the supplied way path, or `./ways/`, as context before planning. Do not ask the user to choose create or update at the beginning.
+- Decide and recommend the operation at the end, after the plan and target have been inspected: create a new numbered way for a new goal; update the matching goal in place for an existing goal; update the parent goal when adding a child way.
+- For updates, preserve stable IDs, completed-work evidence, and user annotations; add new nodes with globally unique IDs.
+- If updating would move or remove files, strand old tasks, or conflict with recorded evidence, stop and ask before changing them.
+- Do not write either form before the shared-understanding confirmation. If the user wants planning only, return the confirmed plan and the model's recommended operation without invoking `@skills/to-way`.
+
+## One implementation handoff
+
+- When the goal changes product code, add exactly one root-level node with the stable ID `IMPL`.
+- `IMPL` owns the complete implementation handoff for the goal; it is not repeated under each way, task, or vertical slice.
+- Its ordered How is: `/req` for the complete goal, `/ood` for the approved requirement batch, `/to-plan` for the implementation plan(s), then `/do-plan` for the approved plan(s). Let each skill create its required per-slice artifacts, but keep that decomposition inside `IMPL`, not in the Wayfinder tree.
+- Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes for individual ways or tasks. Way nodes describe product outcomes and dependencies; `IMPL` is the single bridge to product-code changes.
+- `IMPL` is blocked by unresolved scope or behavior decisions that affect implementation. It is ready only when the required way outcomes and blocking uncertainties are settled.
 
 ## Shared understanding with grill-me
 
@@ -33,7 +49,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
 - Name the actual change or decision: `Preserve the trailing newline when serializing the buffer`, not `Implement serialization`. If a title could be pasted into an unrelated feature unchanged, rewrite or remove it.
-- **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work.
+- **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work. Product-code implementation is represented once by `IMPL`, not as a lifecycle chain under every way.
 - Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
 
 ## Prefered Ways and Tasks Order
@@ -55,13 +71,13 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 
 ## Planning process
 
-1. **Start grill-me and ground the goal.** Begin the shared-understanding session above. Capture the success signal and scope with the user. Inspect supplied context and the relevant repository paths, existing behavior, and tests. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it through grill-me before dependent planning.
+1. **Start grill-me and ground the goal.** Begin the shared-understanding session above. Capture the success signal and scope with the user. Inspect any supplied way plus relevant repository paths, existing behavior, and tests, but defer the create/update decision. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it through grill-me before dependent planning.
 2. **Find consequential unknowns.** Look for gaps in behavior, integration contracts, feasibility, data safety, external dependencies, and validation. Record only those that could change the plan or prevent trustworthy completion; do not invent an uncertainty quota.
 3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
 6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
-7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions; do not implement or record files automatically.
+7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the target path and reason; do not ask for this choice at the beginning. Only after confirmation return the final plan in the output format below. If persistence was requested, invoke `@skills/to-way` with that recommendation; corrections reopen the affected decisions. Do not implement or record files before confirmation.
 
 ## Uncertainty handling
 
@@ -96,6 +112,7 @@ During the interview, show only the draft context needed for the current questio
 3. **Work map** — one record per executable leaf: ID/title, kind (`task | uncertainty | checkpoint`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
+6. **Persistence** — the model's end-of-plan recommendation: `create`, `update`, or planning-only; name the target directory, evidence for the recommendation, and any preservation/blocking condition.
 
 **MUST USE** a simple ELI5 word and sentence for a way's title and description. 
 
@@ -114,6 +131,7 @@ G  Add modal insertion and explicit saving
 │   ├── B2  Dispatch write commands without exiting the session
 │   └── B3  Persist the snapshot using the agreed file-safety policy
 └── C  Verify edit → save → reopen and recovery after a failed save
+└── IMPL  Carry the confirmed goal through requirements, design, planning, and product-code execution
 ```
 
 Example work-map entries (the actual output must cover every executable leaf):
@@ -141,6 +159,8 @@ Example work-map entries (the actual output must cover every executable leaf):
 
 U1: inspect file-opening behavior and supported paths; ask the owner if policy is unspecified. Exit: supported file types and preservation guarantees are recorded. Blocks B3: replace-by-rename may work for regular files, but symlink/metadata requirements may change the strategy. Do not choose one without evidence.
 
+IMPL: run `/req` once for the complete goal, `/ood` once for the approved requirement batch, `/to-plan` for the resulting implementation plan(s), and `/do-plan` for those approved plan(s). Do not create one pipeline node per way or task. Exit: product code satisfies the approved acceptance criteria and the implementation report records any remaining blockers.
+
 Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's insertion behavior; B2 needs B1's command contract; B3 needs B1 and U1. B2 need not wait for U1. After B1, B2 and B3 can run in parallel once U1 is resolved, provided the separate-module boundary holds. C joins A2, B2, and B3 to verify the real session and failed-save recovery.
 
 ## Completion criterion
@@ -152,3 +172,4 @@ Execution: start A1, B1, and the U1 inspection independently. A2 needs A1's inse
 - Every consequential uncertainty has a resolving action and clearly scoped blockers; there is no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
+- A product-code plan has exactly one `IMPL` handoff, whose ordered skill sequence is `/req` → `/ood` → `/to-plan` → `/do-plan`; no skill is duplicated per way or task.
