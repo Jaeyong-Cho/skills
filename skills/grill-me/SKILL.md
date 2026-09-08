@@ -15,27 +15,17 @@ Before round 1: if the topic handed to this skill looks too large for a handful 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier (after the KB check above) in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
 
 Each question should be formatted like so:
-
-## Question format (mandatory)
-
-Every user-facing question must use this format; never send a bare question. Include all three core parts: **Background context**, **Current situation**, and **Specific question**. Explain the background and situation sufficiently for the user to understand why the question is being asked; do not compress either into a single vague or fragmentary sentence. Include the relevant facts, prior decisions, constraints, and uncertainty, while omitting unrelated detail.
-
-Make the question easy to understand with the clearest aid for the topic:
-- Use a concrete **example** when the user must compare, predict, or choose.
-- Use a fenced **code block** when syntax, data, a request, or an implementation shape is relevant.
-- Use an **ASCII diagram** when showing flow, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
-
-Add one or more of these aids whenever they remove ambiguity; do not add decorative examples or diagrams that do not help answer the question. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
-
 ```text
-#❓ **Qn** - [Question]
+# ❓ Qn — <one precise question?>
 
-## Description
+<Why this matters, what is already true, and what remains uncertain.>
 
-## Helpful example / code / ASCII diagram (when useful)
-[one concrete aid tied directly to the question]
+**Example**
+<Concrete scenario, fenced code, or ASCII diagram.>
 
-➡️ **Recommended answer:** [answer and brief reason, when applicable]
+**Answer with:** <the expected response shape>
+
+➡️ **Recommendation:** <answer and brief reason>
 ```
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
@@ -45,6 +35,47 @@ Finding _facts_ is your job, never the user's. When a frontier question needs a 
 If needed some experiment to find the question's answer, run the `@skills/experiment`.
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
+
+## Good question framework
+
+Build each question from these parts:
+
+1. **Purpose** — state the goal and why this decision matters.
+2. **Grounding** — summarize the relevant evidence, current situation, prior decisions, and constraints.
+3. **Gap** — identify the uncertainty or trade-off that remains.
+4. **Helpful example (required)** — give one concrete scenario that makes the choice easier to understand.
+5. **Focused question (required H1)** — put the complete question at the top as `# ❓ Qn — <actual question?>`. It must be a real question ending in `?`, not a topic or short title.
+6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
+7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
+
+These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Two presentation elements are mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds: the question H1 at the top and a helpful example. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
+
+The example must be specific enough for the user to reason from; merely rephrasing the question does not count. Use a fenced code block when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
+
+```text
+# ❓ Qn — <one precise question?>
+
+<Why this matters, what is already true, and what remains uncertain.>
+
+**Example**
+<Concrete scenario, fenced code, or ASCII diagram.>
+
+**Answer with:** <the expected response shape>
+
+➡️ **Recommendation:** <answer and brief reason>
+```
+
+Keep numbering and recommendations for decision questions. Calibration and teach-back may use a natural response suggestion instead of a recommendation.
+
+Before sending, verify that the question:
+
+- starts with the complete question as an H1 and ends it with `?`;
+- includes a concrete helpful example;
+- is answerable from the context provided;
+- asks one thing rather than bundling dependent decisions;
+- uses plain, neutral language and defines necessary jargon;
+- does not ask the user for facts you can inspect yourself;
+- makes the consequence of the answer clear.
 
 ## When the user can't answer one
 
