@@ -1,108 +1,64 @@
 ---
 name: grill-me
-description: Calibrate the user's understanding, teach only the knowledge needed for the session, then interview round by round over a design-tree frontier with clear, specific questions. Invoke as /grill-me, or via dev-grill-me's checklists.
+description: Personal grilling engine — interview the user round by round over a design-tree frontier; any question the user can't answer gets progressive-disclosure clarification before being re-asked. Invoke as /grill-me, or via dev-grill-me's checklists.
 disable-model-invocation: false
 ---
 
 # Grill Me
 
-Interview the user until you reach a shared understanding. Calibrate first, teach only what this session needs, then work through the decision tree. Do not jump straight into grilling.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-## Good question framework
+## Scope check
 
-Build each question from these parts:
+Before round 1: if the topic handed to this skill looks too large for a handful of rounds to converge (a whole system, a whole app, several unrelated features bundled together), **MUST ASK** for confirmation before diving in — show 2-3 candidate narrower sub-scopes, each a single focused target this session could actually finish, with your recommended one marked `➡️`. "No, keep the full scope" is a valid answer — treat it as confirmation and proceed with everything. A topic that's already a single focused target skips this check — go straight to round 1.
 
-1. **Purpose** — state the goal and why this decision matters.
-2. **Grounding** — summarize the relevant evidence, current situation, prior decisions, and constraints.
-3. **Gap** — identify the uncertainty or trade-off that remains.
-4. **Helpful example (required)** — give one concrete scenario that makes the choice easier to understand.
-5. **Focused question (required H1)** — put the complete question at the top as `# ❓ Qn — <actual question?>`. It must be a real question ending in `?`, not a topic or short title.
-6. **Response shape** — say whether the useful answer is a choice, comparison, example, priority, constraint, or trade-off.
-7. **Recommendation** — for a decision, give the preferred answer and a brief evidence-based reason.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier (after the KB check above) in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
 
-These are ingredients, not mandatory headings. Use natural prose, combine parts when that reads better, and omit anything that adds no value. Two presentation elements are mandatory for every user-facing question, including calibration, scope checks, teach-back, and decision rounds: the question H1 at the top and a helpful example. Give enough context that the user does not have to reconstruct the conversation, but do not bury the question in unrelated detail.
+Each question should be formatted like so:
 
-The example must be specific enough for the user to reason from; merely rephrasing the question does not count. Use a fenced code block when syntax, data, requests, or implementation shapes matter. Use an ASCII diagram for flows, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
+```
+❓ **Q1** - **<question title>**:
+<question body, might be multiple paragraphs, including multiple choices>
 
-A good default—not a rigid template—is:
-
-```text
-# ❓ Qn — <one precise question?>
-
-<Why this matters, what is already true, and what remains uncertain.>
-
-**Example**
-<Concrete scenario, fenced code, or ASCII diagram.>
-
-**Answer with:** <the expected response shape>
-
-➡️ **Recommendation:** <answer and brief reason>
+➡️ <your recommended answer>
 ```
 
-Keep numbering and recommendations for decision questions. Calibration and teach-back may use a natural response suggestion instead of a recommendation.
+Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
 
-Before sending, verify that the question:
+Finding _facts_ is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), dispatch a sub-agent to find it; don't ask the user for anything you could look up yourself. Don't block on it: a running exploration is an unsettled prerequisite, so only the questions downstream of it wait for the sub-agent to report; ask the rest of the frontier now. The _decisions_ are the user's: put each to them and wait.
 
-- starts with the complete question as an H1 and ends it with `?`;
-- includes a concrete helpful example;
-- is answerable from the context provided;
-- asks one thing rather than bundling dependent decisions;
-- uses plain, neutral language and defines necessary jargon;
-- does not ask the user for facts you can inspect yourself;
-- makes the consequence of the answer clear.
+If needed some experiment to find the question's answer, run the `@skills/experiment`.
 
-## Session sequence
+The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
 
-Run these stages in order. Keep the user's learning level and unresolved decisions visible.
+## When the user can't answer one
 
-### 0. Calibrate current understanding
+"I don't know" / "not sure" / "you decide" is itself a valid answer, not a
+stall — don't push back or re-ask it. Take the recommended answer (➡️) as
+the decision, tag it as an assumption with its uncertainty (per
+`../references/grill-impact.md`) so it carries into `@skills/to-plan`'s
+Assertions section, and move straight to the rest of the round.
 
-Ask one Socratic baseline question about the real topic. Ask the user to explain, predict, compare, or give an example; do not ask only “Do you understand?” Include a concrete scenario they can reason about.
+Only when the reply is an actual question back — they're asking *you*
+something, not declining to decide — answer it first, in layers, with
+`@skills/grill-ai`:
 
-Reflect their answer without correcting it yet, then record:
+- Core: answer, 1-2 sentences
+- Reason: key reasoning, only if they push further
+- Detail: examples/edge cases, only if explicitly requested
 
-- **Known** — explained accurately.
-- **Assumed** — plausible but unconfirmed.
-- **Needs teaching** — required knowledge that is missing or incorrect.
+Re-ask that Qn, unchanged, in the next round alongside whatever else the
+frontier opens up. Don't let one unanswered question block recording the
+round's other answers.
 
-### Scope check
+## Next round
 
-If the topic is too large for a handful of rounds, ask the user to choose among 2–3 focused sub-scopes and mark the recommended one with `➡️`. “Keep the full scope” is valid. Skip this check for an already focused topic.
-
-### 1. Teach only what is needed
-
-Inspect repository and environment facts yourself. Build a small knowledge map:
-
-1. **Essential** — required to answer this session's questions.
-2. **Relevant** — may affect a decision.
-3. **Not needed now** — defer.
-
-Teach only **Essential** items first. For each, give a plain definition, why it matters here, one concrete example, and the decision it affects. Define jargon before using it; correct misunderstandings briefly.
-
-Then ask one teach-back question: have the user restate the core concept and apply it to a concrete example. If it exposes a gap, teach only that gap and repeat. Continue when the user can state the scope, key terms, and relevant consequence.
-
-### 2. Grill the decision tree
-
-The **frontier** is every decision whose prerequisites are settled. Ask the surviving frontier in rounds of at most three questions, prioritizing the highest-impact or most-blocking decisions per `../references/grill-impact.md` where applicable.
-
-Apply the good question framework to each frontier decision and show the available choices when useful.
-
-After each response, record the decisions, recompute the frontier, and ask the next round. Do not ask a question while one of its prerequisites remains unresolved.
-
-Finding facts is your job, not the user's. Inspect the environment or dispatch a sub-agent when needed. While exploration runs, ask unrelated frontier questions and defer only dependent ones. If evidence requires an experiment, use `@skills/experiment`.
-
-## When the user cannot answer
-
-“I don't know,” “not sure,” or “you decide” is a valid answer. Adopt the recommendation, mark it as an assumption with uncertainty per `../references/grill-impact.md`, and continue.
-
-If the user asks you a question instead, answer it with `@skills/grill-ai`:
-
-- **Core:** 1–2 sentence answer.
-- **Reason:** only if they ask further.
-- **Detail:** examples or edge cases only when requested.
-
-Re-ask the original decision in the next round without discarding other answers from the current round.
+Each round's answers reshape the tree — settled decisions push the frontier
+outward and unblock questions that depended on them. Recompute the frontier
+and ask the next round.
 
 ## Done
 
-Finish when the frontier is empty and nothing remains silently assumed. Summarize the shared understanding and ask the user to confirm it. Do not begin implementation before confirmation.
+The session is done when the frontier is empty: every branch of the design
+tree visited, nothing left silently assumed. Do not act on it until the
+user confirms shared understanding.
