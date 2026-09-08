@@ -11,7 +11,7 @@ Create or update one Wayfinder plan without redesigning or executing it. Preserv
 ## Layout: files for ways, tasks inline
 
 - Write `0-goal.md` for the root and one group file per **way** (work package).
-- Keep task, uncertainty, and checkpoint leaves inside their immediate parent's file, with an explicit anchor for each source ID. Do not create one-line task files or lifecycle-stage directories.
+- Keep task, IMPL, uncertainty, and checkpoint leaves inside their immediate parent's file, with an explicit anchor for each source ID. `IMPL` is an inline task kind, not a way or lifecycle-stage directory. Do not create one-line task files or lifecycle-stage directories.
 - A child way at depth `D`, sibling position `N`, uses `{D}-{N}-{slug}.md`. Count positions in the original tree, including inline leaves; gaps in file numbering are valid.
 - Child way files live in a directory matching the parent's numeric path key (`0-goal`, `1-2`, etc.), not its logical source ID (`G`, `B`, etc.). Preserve the full ancestry to avoid collisions.
 - Numbers preserve presentation order, **not** prerequisites or mandatory serial execution. Dependencies determine readiness and parallelism.
@@ -39,6 +39,7 @@ If B contains a sub-way in position 2, that sub-way's file is `0-goal/1-2/2-2-{s
 1. **Gather and validate before writing.** Use the supplied plan or the complete Wayfinder result in the session, including its work map and execution notes. If missing, ask for it. Check:
    - one goal root, unique IDs, exactly one parent per non-root node;
    - concrete domain work rather than repeated lifecycle chains;
+   - an `IMPL` node is an inline executable leaf under its owning way, not a separate way or root-level node;
    - every executable leaf has a concrete Why (purpose/consequence of omission), What (scoped result), How (approach/steps or explicit blocking decision), prerequisites (explicitly none where appropriate), status, and completion signal;
    - uncertainties retain their question, impact, resolving action, exit signal, and affected IDs;
    - dependency references exist, point to executable leaves, and contain no cycles;
@@ -94,7 +95,7 @@ For each inline leaf in `Work`:
 ```markdown
 <a id="B3"></a>
 ### B3 — <concrete task title>
-- Kind: <task | uncertainty | checkpoint>
+- Kind: <task | IMPL | uncertainty | checkpoint>
 - Why: <source purpose, parent outcome, and consequence of omitting this task>
 - What: <source behavior/decision/artifact and scope boundaries>
 - How: <source approach; preserve ordered steps as a nested list when present, including any named blocking decision>
@@ -120,4 +121,4 @@ Do not infer new prerequisites or parallel lanes from file numbers. If a needed 
 
 ## Completion criterion
 
-Every source node has exactly one canonical location; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. New goals are created without collisions, existing goals are updated in place, task workspaces are created only when work or artifacts require them, annotations and in-progress/completed tasks are preserved, and every recorded `done` status has evidence. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.
+Every source node has exactly one canonical location; all planning meaning survives recording, every link resolves, and a reader can start at `0-goal.md` to find what can proceed, what must wait and why, how to resolve blockers, and what proves completion. `IMPL` leaves remain inline task records, with their handoff How preserved. New goals are created without collisions, existing goals are updated in place, task workspaces are created only when work or artifacts require them, annotations and in-progress/completed tasks are preserved, and every recorded `done` status has evidence. No redundant task files, lost dependency edges, invented work, or unapproved migration remains.
