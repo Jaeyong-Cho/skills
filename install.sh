@@ -250,6 +250,7 @@ setup_pi() {
   for pkg in \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
+    "npm:@juicesharp/rpiv-todo" \
     "npm:pi-must-have-extension" \
     "npm:pi-vimmode"
   do
