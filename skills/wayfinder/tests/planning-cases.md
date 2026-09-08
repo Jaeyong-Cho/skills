@@ -26,6 +26,8 @@ Input:
 Pass when:
 
 - No repeated requirements/design/implement/test chains or renamed one-child wrappers appear.
+- A product-code handoff is an inline `Kind: IMPL` leaf under its relevant way (for example, A4 or B3), not a separate root-level way.
+- `/next-way` recommends a ready `IMPL` leaf in the same position as any other task, then alerts the user to run `/req` → `/ood` → `/to-plan` → `/do-plan`; it does not invoke those skills or implement the task.
 - Every executable leaf has Why (the outcome/risk and consequence of omission), What (a scoped result, not a repeated title), How (concrete approach/steps), and a separate observable completion signal.
 - How names meaningful actions such as tracing mode dispatch and checking the same key in both modes—not a generic lifecycle chain. Unknown file policy blocks selection of a persistence mechanism rather than inviting a guessed implementation.
 - Existing navigation/rendering is reused; relevant regressions are checked rather than planned as new capabilities.
