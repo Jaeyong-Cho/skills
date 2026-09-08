@@ -13,12 +13,25 @@ AGENTS_MD="$SKILLS_DIR/AGENTS.md"
 # clean (--clean): also remove skills this repo installed previously but no
 #   longer ships (renamed/deleted), tracked via the install manifest.
 MODE="overwrite"
-for arg in "$@"; do
-  case "$arg" in
+PI_SUBAGENT_THINKING="${PI_SUBAGENT_THINKING:-high}"
+while [ "$#" -gt 0 ]; do
+  case "$1" in
     --clean) MODE="clean" ;;
     --overwrite) MODE="overwrite" ;;
+    --subagent-thinking)
+      [ "$#" -gt 1 ] || { echo "Missing value for --subagent-thinking (use high or max)." >&2; exit 2; }
+      PI_SUBAGENT_THINKING="$2"
+      shift
+      ;;
+    --subagent-thinking=*) PI_SUBAGENT_THINKING="${1#*=}" ;;
   esac
+  shift
 done
+
+case "$PI_SUBAGENT_THINKING" in
+  high|max) ;;
+  *) echo "Invalid subagent thinking level: $PI_SUBAGENT_THINKING (use high or max)." >&2; exit 2 ;;
+esac
 
 echo "=== Skills Install ($MODE) ==="
 echo ""
@@ -212,23 +225,32 @@ configure_pi_settings() {
       settings.subagents = {};
     }
     delete settings.subagents.disableBuiltins;
-    const model = "openai-codex/gpt-5.6-luna:high";
+    const model = "openai-codex/gpt-5.6-luna";
+    const thinking = process.argv[3];
     settings.subagents.defaultModel = model;
-    settings.subagents.defaultThinking = "high";
+    settings.subagents.defaultThinking = thinking;
     const roles = ["delegate", "oracle", "researcher", "reviewer", "scout", "worker"];
+    const enabledRoles = new Set(["scout", "worker"]);
     if (!settings.subagents.agentOverrides || typeof settings.subagents.agentOverrides !== "object" || Array.isArray(settings.subagents.agentOverrides)) {
       settings.subagents.agentOverrides = {};
     }
     for (const role of roles) {
       const override = settings.subagents.agentOverrides[role];
-      settings.subagents.agentOverrides[role] = override && typeof override === "object" && !Array.isArray(override)
-        ? { ...override, model, thinking: "high" }
-        : { model, thinking: "high" };
+      const config = override && typeof override === "object" && !Array.isArray(override) ? { ...override } : {};
+      if (enabledRoles.has(role)) {
+        delete config.disabled;
+        config.model = model;
+        config.thinking = thinking;
+      } else {
+        config.disabled = true;
+      }
+      settings.subagents.agentOverrides[role] = config;
     }
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
-  ' "$settings" "$tmp"
+  ' "$settings" "$tmp" "$PI_SUBAGENT_THINKING"
   mv "$tmp" "$settings"
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
+  echo "  ✓ pi subagents → scout, worker → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
 }
 
 setup_pi() {

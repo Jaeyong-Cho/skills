@@ -13,6 +13,14 @@ git clone git@github.com:Jaeyong-Cho/skills.git ~/.claude/skills
 ~/.claude/skills/install.sh
 ```
 
+For Pi subagents, the installer defaults to `openai-codex/gpt-5.6-luna` with high thinking. Use max thinking when installing with:
+
+```bash
+~/.claude/skills/install.sh --subagent-thinking max
+```
+
+`--subagent-thinking high` is also supported; `PI_SUBAGENT_THINKING=max` works for scripted installs.
+
 ## Repository Layout
 
 ```
@@ -29,7 +37,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Enables Pi truecolor, installs `ponytail` and the Pi UI packages; disables bundled subagents so project/user agents are used |
+| pi coding agent | Enables Pi truecolor, installs `ponytail` and the Pi UI packages; enables only `scout` and `worker` on `openai-codex/gpt-5.6-luna` with the selected thinking level |
 
 `references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
