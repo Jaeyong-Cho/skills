@@ -11,6 +11,7 @@ Produce a task plan, not a lifecycle checklist. Answer:
 > What work is actually needed, what do we not know yet, what can start now, and what must wait for what?
 
 Plan first: use grill-me for the user conversation and inspect context, but do not implement or run experiments. After the user confirms the plan, persist it only when requested: use `@skills/to-way` to create a new way or update the matching existing way. Propose evidence-gathering work when needed; never report a proposed check as completed.
+**MUST NOT** Update or write a way document directly. Make alert to call `@skills/to-way` for update or write.
 
 ## Create or update a way
 
