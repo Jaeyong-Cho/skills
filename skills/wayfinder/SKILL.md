@@ -90,6 +90,8 @@ During the interview, show only the draft context needed for the current questio
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
 
+**MUST USE** a simple ELI5 word and sentence for a way's title and description. 
+
 ### Example shape — not a template of required tasks
 
 Illustrative facts: insertion behavior is already agreed; the command loop and file writer are separate modules; their request/result contract is not yet agreed. Adapt to actual repository evidence.
