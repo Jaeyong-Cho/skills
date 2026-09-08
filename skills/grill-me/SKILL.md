@@ -16,11 +16,36 @@ Work the tree in **rounds**. The **frontier** is every decision whose prerequisi
 
 Each question should be formatted like so:
 
-```
-❓ **Q1** - **<question title>**:
-<question body, might be multiple paragraphs, including multiple choices>
+## Question format (mandatory)
 
-➡️ <your recommended answer>
+Every user-facing question must use this format; never send a bare question. Include all three core parts: **Background context**, **Current situation**, and **Specific question**. Explain the background and situation sufficiently for the user to understand why the question is being asked; do not compress either into a single vague or fragmentary sentence. Include the relevant facts, prior decisions, constraints, and uncertainty, while omitting unrelated detail.
+
+Make the question easy to understand with the clearest aid for the topic:
+- Use a concrete **example** when the user must compare, predict, or choose.
+- Use a fenced **code block** when syntax, data, a request, or an implementation shape is relevant.
+- Use an **ASCII diagram** when showing flow, relationships, states, boundaries, or alternatives. Do not use Mermaid or image-only diagrams.
+
+Add one or more of these aids whenever they remove ambiguity; do not add decorative examples or diagrams that do not help answer the question. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
+
+```text
+❓ **Qn** - **<short title>**:
+
+**Background context**
+- **Goal:** [what we are trying to understand or decide]
+- **Why it matters:** [the impact or reason this question is relevant]
+
+**Current situation**
+- **Known or observed:** [relevant facts and evidence]
+- **Already decided:** [prior answers or constraints]
+- **Uncertain:** [the specific gap this question addresses]
+
+**Helpful example / code / ASCII diagram (when useful)**
+[one concrete aid tied directly to the question]
+
+**Specific question:** [one precise question]
+**Desired answer:** [the response shape wanted: choice, comparison, example, priority, constraint, or trade-off]
+
+➡️ **Recommended answer:** [answer and brief reason, when applicable]
 ```
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
