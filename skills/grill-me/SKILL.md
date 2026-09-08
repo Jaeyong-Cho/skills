@@ -28,15 +28,12 @@ Make the question easy to understand with the clearest aid for the topic:
 Add one or more of these aids whenever they remove ambiguity; do not add decorative examples or diagrams that do not help answer the question. Also state the **Desired answer** and, when making a decision, the **Recommended answer**. This applies to calibration, teach-back, scope confirmation, and every grill round.
 
 ```text
-❓ **Qn** - **<short title>**:
+#❓ **Qn** - [Question]
 
-**Description**
+## Description
 
-**Helpful example / code / ASCII diagram (when useful)**
+## Helpful example / code / ASCII diagram (when useful)
 [one concrete aid tied directly to the question]
-
-**Specific question:** [one precise question]
-**Desired answer:** [the response shape wanted: choice, comparison, example, priority, constraint, or trade-off]
 
 ➡️ **Recommended answer:** [answer and brief reason, when applicable]
 ```
