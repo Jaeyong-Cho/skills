@@ -36,6 +36,13 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 - **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work.
 - Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
 
+## Prefered Ways and Tasks Order
+- At the beginning of the starting goal, I don't want to fully completed output and result.
+- Build first **fast**, **simple**, **not perfect** something first, It is important to see the **first working vertical slice**.
+- After that review the edge cases, security and improvement for reach a perfect.
+- Increamentally improve and building a positive working loop and system from the working system.
+- Do not well made automation first. The automation system is create management effort. Fast experiment, finding uncertainty first, building automation system increamentally after. 
+
 ## Task details: Why, What, How
 
 Every executable leaf, including uncertainty and checkpoint work, must explain:
