@@ -1,6 +1,6 @@
 # Research Topic Directory
 
-`@skills/to-plan`, `@skills/experiment`, `@skills/to-context`, and `@skills/to-intents` all file their output under one `~/wiki/today/research/{NN}-{slug}/` directory per topic (`plans/`, `experiments/`, `contexts/`, and `intents/` sit inside it as siblings). Which directory a write lands in is never picked silently — confirm it with the user before the first write of a session.
+`@skills/to-plan`, `@skills/experiment`, `@skills/to-facts`, and `@skills/to-intents` all file their output under one `~/wiki/today/research/{NN}-{slug}/` directory per topic (`plans/`, `experiments/`, and `contexts/` sit inside it). The facts and intents outputs are paired files in `contexts/`: `{NN}-facts-{slug}.md` and `{NN}-intents-{slug}.md`. Which directory a write lands in is never picked silently — confirm it with the user before the first write of a session.
 
 1. List every existing `NN-*` directory under `~/wiki/today/research/` — its slug, plus a one-line peek at whatever's already inside (`plans/`, `experiments/`, or `contexts/`) so the user can tell what each one is about without opening it.
 2. Recommend one:
