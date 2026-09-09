@@ -316,7 +316,7 @@ configure_pi_settings() {
     const fs = require("fs");
     const [settingsPath, outputPath] = process.argv.slice(1);
     const settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
-    settings.tuiMode = "fullscreen";
+    settings.tuiMode = "regular";
     settings.fullscreenScrollbar = "auto";
     if (!settings.terminal || typeof settings.terminal !== "object" || Array.isArray(settings.terminal)) {
       settings.terminal = {};
