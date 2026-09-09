@@ -1,6 +1,7 @@
 ---
 name: ood
 description: Design all approved requirement slices as small object-oriented vertical-slice solutions, then write one approved design-and-contract document per slice. Use after req and before to-plan.
+disable-model-invocation: true
 ---
 
 # OOD

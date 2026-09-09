@@ -1,6 +1,7 @@
 ---
 name: to-plan
 description: Write up this session's decisions as a plan document — acceptance criteria and action items. Does not write a spec document. Invoke as /to-plan.
+disable-model-invocation: true
 ---
 
 # To-Plan
