@@ -19,7 +19,7 @@ To configure Pi subagents, run:
 ~/.claude/skills/install.sh --subagent
 ```
 
-This dedicated mode installs only `pi-interactive-subagents`: it lists the models available to Pi, asks for a model and thinking effort, updates Pi's subagent defaults, then copies `agents/*.md` to `~/.pi/agent/agents/` with those values in each agent's frontmatter. It skips all other plugins, skills, hooks, and helper binaries. Without `--subagent`, the normal installer runs and the repository's agent defaults are copied unchanged. `PI_SUBAGENT_MODEL`, `PI_SUBAGENT_THINKING`, and `--subagent-thinking` set prompt/default values for scripted or repeated installs.
+This dedicated mode installs only `pi-interactive-subagents`: it lists the models available to Pi, asks for a model and thinking effort, updates Pi's subagent defaults, then copies `agents/*.md` to `~/.pi/agent/agents/` with those values in each agent's frontmatter. It skips all other plugins, skills, hooks, and helper binaries. The normal installer does not install or configure `pi-interactive-subagents`. Without `--subagent`, the normal installer runs and the repository's agent defaults are copied unchanged. `PI_SUBAGENT_MODEL`, `PI_SUBAGENT_THINKING`, and `--subagent-thinking` set prompt/default values for scripted or repeated installs.
 
 ## Repository Layout
 
@@ -70,6 +70,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/next-way` | recorded way outcomes, dependencies, readiness, and implementation evidence | Find the next actionable way; follow the recorded task approach without imposing a fixed process, then review implementation evidence against the expected result and way purpose before dependent work proceeds |
 | `/to-way` | `ways/{nn}-{slug}/0-goal.md` and nested work-package files | Record a Wayfinder plan while preserving task kinds, Why/What/How details, dependency links, execution guidance, and done-task evidence |
 | `/to-context` | `~/wiki/today/research/NN-{slug}/contexts/nn-{slug}.md` | Write up this session as a context document — objective, background, key facts, current state — so a fresh session can resume it cold |
+| `/to-intents` | `intents/{nn}-{slug}.md` (or the confirmed wiki research topic) | Extract the user's goals, desired outcome, motivation, constraints, boundaries, decisions, and open questions into a reusable intent document |
 | `/to-journal` | `~/wiki/today/journal.md` | Summarize this session very short, ELI5-simple, and append it as a formatted entry to today's journal |
 | `/to-anki` | `{slug}.anki.csv` | Turn a requested topic, notes file, or explicit Q&A list into an Anki-importable flashcard CSV — one atomic fact per Front/Back row, with the `#separator`/`#columns` header Anki's importer auto-detects |
 | `/grill-ai` | — | Toggle mode: clarify unclear requests before answering, then answer in layers (core answer first, depth only on request), in plain ELI5 language |

@@ -333,7 +333,6 @@ setup_pi() {
 
   mkdir -p "$PI_AGENT_DIR"
   configure_pi_settings
-  configure_subagent_settings
   cp "$SKILLS_DIR/config/open-tui.json" "$PI_AGENT_DIR/open-tui.json"
   echo "  ✓ ~/.pi/agent/open-tui.json ← $SKILLS_DIR/config/open-tui.json"
   if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
@@ -356,7 +355,6 @@ setup_pi() {
   # Install the managed Pi extensions.
   local pkg
   for pkg in \
-    "git:github.com/HazAT/pi-interactive-subagents" \
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:@juicesharp/rpiv-todo" \
