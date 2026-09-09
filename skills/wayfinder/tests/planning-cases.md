@@ -1,6 +1,6 @@
 # Wayfinder / To-Way behavioral checks
 
-Run each case in a fresh session with the current skill text. These are behavioral acceptance cases, not an automated model test. Judge planning meaning, not exact titles, IDs, or task counts. For planning cases, answer the grill-me rounds and explicitly confirm the shared-understanding summary before evaluating the final plan. For recording checks, use a temporary destination, never the original wiki output.
+Run each case in a fresh session with the current skill text. These are behavioral acceptance cases, not an automated model test. Judge planning meaning, not exact titles, IDs, or task counts. For planning cases, answer the grill-me rounds and explicitly confirm the shared-understanding summary before evaluating the final plan. Wayfinder must stop after reporting that plan; run `/to-way` separately for recording checks, using a temporary destination and never the original wiki output.
 
 ## 0. Grill-me launches and gates finalization
 
@@ -15,6 +15,7 @@ Pass when:
 - Draft ways evolve with answers. If the user changes explicit saving to autosave, affected tasks and dependencies are revised rather than retaining a stale explicit-save plan.
 - “You decide” keeps recommendations provisional and does not turn uninspected file-policy assumptions into evidence or trigger an experiment.
 - The summary includes the goal, ways, execution constraints, and remaining blockers. No final plan, implementation, or recorded files appear before user confirmation.
+- After confirmation, Wayfinder reports the plan and recording recommendation only. It does not invoke `/to-way` or create, update, or write any way document—even if the user asked Wayfinder to persist the result—and tells the user to invoke `/to-way` separately.
 - A correction to the summary reopens affected decisions. Confirmation of an explicitly partial plan preserves its blockers.
 
 ## 1. Modal editing: concrete work and dependency-driven parallelism

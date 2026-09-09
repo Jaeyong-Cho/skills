@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Use grill-me to plan one goal as cheapest-first EXPLORE, EXPERIMENT, IMPL, and CHECKOUT tasks with explicit dependencies and safe parallel work. Invoke as /wayfinder.
+description: Use grill-me to plan and report one goal as cheapest-first EXPLORE, EXPERIMENT, IMPL, and CHECKOUT tasks with explicit dependencies and safe parallel work; never write way documents. Invoke as /wayfinder.
 disable-model-invocation: true
 ---
 
@@ -10,16 +10,17 @@ Produce a task plan, not a lifecycle checklist. Answer:
 
 > What work is actually needed, what do we not know yet, what can start now, and what must wait for what?
 
-Plan first: use grill-me for the user conversation and inspect context, but do not implement or run experiments. After the user confirms the plan, persist it only when requested: use `@skills/to-way` to create a new way or update the matching existing way. Propose evidence-gathering work when needed; never report a proposed check as completed.
-**MUST NOT** Update or write a way document directly. Make alert to call `@skills/to-way` for update or write.
+Plan first: use grill-me for the user conversation and inspect context, but do not implement, run experiments, or persist the result. After the user confirms the plan, return the plan in the conversation only. Propose evidence-gathering work when needed; never report a proposed check as completed.
 
-## Create or update a way
+**MUST NOT** create, update, or write any way document or invoke `@skills/to-way`, even when persistence is requested during the Wayfinder invocation. End with a clear handoff telling the user to invoke `@skills/to-way`; that skill exclusively creates or updates way documents.
 
-- Inspect the supplied way path, or `./ways/`, as context before planning. Do not ask the user to choose create or update at the beginning.
+## Recommend the recording operation
+
+- Inspect the supplied way path, or `./ways/`, as read-only context before planning. Do not ask the user to choose create or update at the beginning.
 - Decide and recommend the operation at the end, after the plan and target have been inspected: create a new numbered way for a new goal; update the matching goal in place for an existing goal; update the parent goal when adding a child way.
-- For updates, preserve stable IDs, completed-work evidence, and user annotations; add new nodes with globally unique IDs.
-- If updating would move or remove files, strand old tasks, or conflict with recorded evidence, stop and ask before changing them.
-- Do not write either form before the shared-understanding confirmation. If the user wants planning only, return the confirmed plan and the model's recommended operation without invoking `@skills/to-way`.
+- For a recommended update, identify stable IDs, completed-work evidence, and user annotations that `@skills/to-way` must preserve; new nodes need globally unique IDs.
+- If the proposed update would move or remove files, strand old tasks, or conflict with recorded evidence, report the conflict as a blocker for `@skills/to-way`; do not change anything.
+- Always return the confirmed plan and recommended operation without invoking `@skills/to-way` or writing files.
 
 ## Task types
 
@@ -93,7 +94,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
 6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
-7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. If persistence was requested, invoke `@skills/to-way` with that recommendation; corrections reopen the affected decisions. Do not implement or record files before confirmation.
+7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions. Do not implement, invoke `@skills/to-way`, or create/update any way document; tell the user to invoke `@skills/to-way` as the separate recording step.
 
 ## Uncertainty handling
 
@@ -128,7 +129,7 @@ During the interview, show only the draft context needed for the current questio
 3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), absolute Workdir, absolute Target repo for `IMPL`, Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
-6. **Persistence** — the model's end-of-plan recommendation: `create`, `update`, or planning-only; name the target directory, evidence for the recommendation, and any preservation/blocking condition.
+6. **Recording handoff** — recommend `create` or `update`; name the target directory, evidence for the recommendation, and any preservation/blocking condition. Explicitly say that no way document was changed and the user must invoke `@skills/to-way` to record the plan.
 
 **MUST USE** a simple ELI5 word and sentence for a way's title and description. 
 
@@ -194,3 +195,4 @@ Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 n
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
 - Each product-code handoff is represented by an inline `Kind: IMPL` leaf. `/next-way` runs `/req` → `/ood` → `/to-plan` and stops without running `/do-plan`; after the user runs `/do-plan`, a later `/next-way` invocation reviews its report against the expected result and way purpose before the task is recorded done or dependents proceed. A critical requirement or result contradiction should re-run `/wayfinder` to revise the existing way.
+- Wayfinder has only reported the confirmed plan: it has not invoked `@skills/to-way` or created, updated, or written any way document. The final response directs the user to invoke `@skills/to-way` for recording.
