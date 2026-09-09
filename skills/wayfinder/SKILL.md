@@ -27,7 +27,7 @@ Every executable leaf has exactly one of these kinds:
 
 - `EXPLORE` — resolve an uncertainty using read-only inspection: search, read files/docs, trace existing code, or inspect already-produced evidence. It must not edit files, run a behavioral trial, or change production state.
 - `EXPERIMENT` — resolve an uncertainty that inspection cannot answer by running `/experiment`. Its How names the question, expected distinguishing result, and `/experiment`; the experiment remains isolated from production per that skill.
-- `IMPL` — eventually change production code using inspected context and resolved consequential uncertainties. It is an inline task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains stable.
+- `IMPL` — eventually change production code using inspected context and resolved consequential uncertainties. It is an inline task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains stable. Every `IMPL` task should name its target repository as a resolved absolute path.
 - `CHECKOUT` — a human checkpoint for a decision, approval, or hands-on verification that cannot be delegated to inspection or experiment. It states exactly what the human must decide or check and what evidence/answer releases dependent work.
 
 Use the cheapest reliable kind that can close the task: existing evidence before new work, `EXPLORE` before `EXPERIMENT`, and either before asking a human to discover a fact. Use `CHECKOUT` for human judgment or authority, not as a substitute for agent fact-finding. Do not create an `EXPLORE` step when inspection is already known to be unable to answer the question, and do not experiment when a search/read can settle it.
@@ -58,6 +58,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
   - **Assumptions:** conditions treated as true but not yet proven, each with evidence or an uncertainty task; write `—` when there are none rather than hiding assumptions.
 - Siblings are normally all needed, not competing solutions.
 - A **task** is a concrete `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` action with a usable result and an observable completion signal. A way may contain tasks, sub-ways, or both.
+- Every task should record a resolved absolute `Workdir` inside the recommended way directory, ending in its stable ID (for example, `/abs/path/ways/01-goal/0-goal/A1`). This declares artifact location without requiring the directory to exist before work starts. Use stage subdirectories beneath it: `experiments/` for `/experiment`, and `req/`, `ood/`, and `plans/` for an `IMPL` handoff. Thus a handoff may use `/abs/path/.../A1/req` and `/abs/path/.../A1/ood`; never leave these as relative paths.
 - Give every node a stable, globally unique ID; every non-root node has exactly one parent. Dependencies are separate from parentage.
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
@@ -77,6 +78,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 
 Every executable leaf, regardless of kind, must explain:
 
+- **Workdir:** the resolved absolute task workspace path in the recorded way directory. An `IMPL` task also records **Target repo:** as a resolved absolute repository path. If either base is unknown, resolve it before finalizing rather than writing `./`, `~/`, or a path relative to the current shell.
 - **Why:** the parent outcome it enables, risk it reduces, or downstream work it unblocks—and what fails or stays blocked if it is omitted. “Needed for the feature” is not a reason; remove work with no concrete justification.
 - **What:** the specific behavior, decision, or artifact to deliver, with its scope and important boundaries. Do not just repeat the title. Keep **Done when** as the separate observable proof that this result exists.
 - **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach. An `IMPL` task ends with a later `/next-way` review of its `/do-plan` report against `What`, `Done when`, and the parent purpose.
@@ -91,7 +93,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
 6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
-7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the target path and reason; do not ask for this choice at the beginning. Only after confirmation return the final plan in the output format below. If persistence was requested, invoke `@skills/to-way` with that recommendation; corrections reopen the affected decisions. Do not implement or record files before confirmation.
+7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. If persistence was requested, invoke `@skills/to-way` with that recommendation; corrections reopen the affected decisions. Do not implement or record files before confirmation.
 
 ## Uncertainty handling
 
@@ -123,7 +125,7 @@ During the interview, show only the draft context needed for the current questio
 
 1. **Goal and grounding** — purpose, expected result, hypothesis, assumptions, success, scope, and key evidence.
 2. **Way tree** — outcome-oriented ways and concrete leaves; give each way its purpose, expected result, hypothesis, assumptions, concise scope, and success signal, and mark partial branches.
-3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
+3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), absolute Workdir, absolute Target repo for `IMPL`, Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
 6. **Persistence** — the model's end-of-plan recommendation: `create`, `update`, or planning-only; name the target directory, evidence for the recommendation, and any preservation/blocking condition.
@@ -151,6 +153,8 @@ Example work-map entries (the actual output must cover every executable leaf):
 
 ### A1 — Route printable keys only in insert mode
 - Kind: IMPL
+- Workdir: /abs/path/ways/01-modal-editor/0-goal/A1
+- Target repo: /abs/path/modal-editor
 - Why: Enables text entry without making normal-mode navigation keys accidentally modify the buffer.
 - What: Mode-aware routing of printable ASCII input; preserve existing normal-mode navigation. Cursor adjustment belongs to A2.
 - How:
@@ -163,6 +167,8 @@ Example work-map entries (the actual output must cover every executable leaf):
 
 ### B3 — Persist the snapshot using the agreed file-safety policy
 - Kind: IMPL
+- Workdir: /abs/path/ways/01-modal-editor/0-goal/1-2/B3
+- Target repo: /abs/path/modal-editor
 - Why: Makes edits durable without destroying the original file or recoverable edits when a write fails.
 - What: Save the snapshot from B1 to the supported target paths, returning success/failure through B1's contract. Command dispatch belongs to B2.
 - How:
@@ -173,7 +179,7 @@ Example work-map entries (the actual output must cover every executable leaf):
 - Status: blocked
 - Done when: Saved bytes match the snapshot; forced failure preserves the original and recoverable edits.
 
-U1 (`EXPLORE`): search and read file-opening behavior and supported paths. Exit: repository evidence about supported file types and preservation behavior is recorded, including a clear “not specified” result when applicable. Blocks B1, whose human `CHECKOUT` decides any policy the evidence cannot establish.
+U1 (`EXPLORE`; Workdir: `/abs/path/ways/01-modal-editor/0-goal/1-2/U1`): search and read file-opening behavior and supported paths. Exit: repository evidence about supported file types and preservation behavior is recorded, including a clear “not specified” result when applicable. Blocks B1, whose human `CHECKOUT` decides any policy the evidence cannot establish.
 
 Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 needs U1's evidence; B2 and B3 need B1's approved contract. After B1, B2 and B3 can run in parallel if the separate-module boundary still holds. C joins A2, B2, and B3 for the human check of the real session and failed-save recovery.
 
@@ -183,7 +189,7 @@ Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 n
 - Every requested outcome is covered by concrete work or an explicitly blocked partial branch; existing work is not needlessly recreated.
 - Every way, including the root, explicitly records its purpose, expected result, falsifiable hypothesis, and assumptions (`—` when none); these fields agree with its parent and inspected evidence.
 - No generic lifecycle chains, renamed single-child wrappers, or `Test the tests` branches remain.
-- Every executable leaf has a concrete Why, scoped What, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
+- Every executable leaf has a resolved absolute Workdir, concrete Why, scoped What, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. Every `IMPL` leaf also has a resolved absolute Target repo. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
 - Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped blockers; every `IMPL` task has context and resolved-uncertainty prerequisites, with no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).

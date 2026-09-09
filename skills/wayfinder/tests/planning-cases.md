@@ -26,8 +26,8 @@ Input:
 Pass when:
 
 - No repeated requirements/design/implement/test chains or renamed one-child wrappers appear.
-- A product-code handoff is an inline `Kind: IMPL` leaf under its relevant way (for example, A4 or B3), not a separate root-level way.
-- `/next-way` selects a ready `IMPL` leaf in the same position as any other task, runs `/req` → `/ood` → `/to-plan` from the first missing approved artifact, then stops and leaves `/do-plan` to the user. It checks approved requirements against the way's purpose, hypothesis, and assumptions before OOD; a critical contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way. On a later invocation after `/do-plan`, it reviews the report against the task's expected result and way purpose before dependent work proceeds.
+- A product-code handoff is an inline `Kind: IMPL` leaf under its relevant way (for example, A4 or B3), not a separate root-level way. Every task records an absolute Workdir inside the way directory, and every `IMPL` task records an absolute Target repo.
+- `/next-way` selects a ready `IMPL` leaf in the same position as any other task, asks the user to accept starting it, records it `in-progress` through `/to-way` before starting, then runs `/req` → `/ood` → `/to-plan` from the first missing approved artifact. The stage working directories are the task's absolute `<Workdir>/req/`, `<Workdir>/ood/`, and `<Workdir>/plans/`. It stops and leaves `/do-plan` to the user. It checks approved requirements against the way's purpose, hypothesis, and assumptions before OOD; a critical contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way. On a later invocation after `/do-plan`, it reviews the report against the task's expected result and way purpose before dependent work proceeds.
 - The root and every way explicitly record purpose, observable expected result, a falsifiable hypothesis, and assumptions (`—` when none). Every executable leaf has Why (the outcome/risk and consequence of omission), What (a scoped result, not a repeated title), How (concrete approach/steps), and a separate observable completion signal.
 - How names meaningful actions such as tracing mode dispatch and checking the same key in both modes—not a generic lifecycle chain. Unknown file policy blocks selection of a persistence mechanism rather than inviting a guessed implementation.
 - Existing navigation/rendering is reused; relevant regressions are checked rather than planned as new capabilities.
@@ -54,7 +54,7 @@ Input:
 
 > Change the existing settings label from "Colour" to "Color". There is one occurrence, no localization, no generated files, and no behavior change. The existing UI snapshot must reflect the new label. These facts are confirmed; plan only.
 
-Pass when: one concrete `IMPL` task with a snapshot completion check suffices; no invented `EXPLORE`/`EXPERIMENT` work, sub-way wrappers, or parallel lanes. Why explains the requested spelling consistency; What scopes the label change without behavior changes; How says to replace the label and update/check the existing snapshot, without padding the task into phases. Recording needs only `0-goal.md`, with the task inline.
+Pass when: one concrete `IMPL` task with a snapshot completion check suffices; no invented `EXPLORE`/`EXPERIMENT` work, sub-way wrappers, or parallel lanes. It records an absolute Workdir and absolute Target repo. Why explains the requested spelling consistency; What scopes the label change without behavior changes; How says to replace the label and update/check the existing snapshot, without padding the task into phases. Recording needs only `0-goal.md`, with the task inline; declaring its absolute workspace does not create the directory before work starts.
 
 ## 3. A blocked branch and a shared write surface
 
@@ -84,15 +84,18 @@ Record a valid result of case 1 with `/to-way` in a confirmed temporary director
 Pass when:
 
 - Root/ways have files; `EXPLORE`, `EXPERIMENT`, `IMPL`, and `CHECKOUT` leaves have inline anchors, not separate files.
+- Every leaf records its absolute Workdir under the way directory; every `IMPL` leaf also records its absolute Target repo. Untouched workspace directories are not created. When work starts, `/next-way` uses `experiments/`, `req/`, `ood/`, and `plans/` beneath the recorded Workdir as applicable.
 - Every source node has one canonical location; the root links the whole hierarchy.
 - Every way retains its purpose, expected result, hypothesis, and assumptions. Every leaf retains exactly one allowed kind and every dependency link resolves to the original ID with its reason. Why/What/How details (including ordered steps, scope boundaries, and evidence references), uncertainty resolution details, completion signals, statuses, and parallel conditions survive unchanged. A done `IMPL` retains its `/do-plan` report path and `/next-way` `MATCH` review against its expected result and parent purpose.
 - Numbering follows source presentation order without introducing serial prerequisites; nested ways use full ancestry without path collisions.
 - A blocked partial plan from case 3 can also be recorded without filling its missing branch.
 
+Start-state check: select a ready node with `/next-way`. It must wait for user acceptance, make `/to-way` record the selected task (or selected way) as `in-progress`, verify that marker, and only then invoke a handoff or recommend beginning work. Declining leaves the way unchanged. A node already recorded `in-progress` resumes without a second acceptance.
+
 Negative checks (each must stop before writing and request source correction):
 
 - Supply the legacy modal-editing tree consisting of repeated requirements/design/implement/test leaves.
-- Remove a way's purpose, expected result, hypothesis, or assumptions, or remove a task's Why, What, How, completion signal, or prerequisites field without explicitly marking a partial branch. Missing detail must not be silently invented by the recorder.
+- Remove a way's purpose, expected result, hypothesis, or assumptions, remove a task's absolute Workdir, remove an `IMPL` task's absolute Target repo, or remove a task's Why, What, How, completion signal, or prerequisites field without explicitly marking a partial branch. Missing detail must not be silently invented by the recorder.
 - Replace Why with “needed for the feature,” What with only the title, or How with “design, implement, test.”
 - Add a dependency on an absent ID, or introduce a dependency cycle.
 - Mark an `IMPL` task ready despite unresolved context or uncertainty prerequisites, choose `EXPERIMENT` where read/search can answer, use `CHECKOUT` to make the human discover an inspectable fact, or assert parallelism across a dependency path.
