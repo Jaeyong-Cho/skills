@@ -28,7 +28,7 @@ Pass when:
 
 - No repeated requirements/design/implement/test chains or renamed one-child wrappers appear.
 - A product-code handoff is an inline `Kind: IMPL` leaf under its relevant way (for example, A4 or B3), not a separate root-level way. Every task records an absolute Workdir inside the way directory, and every `IMPL` task records an absolute Target repo.
-- `/next-way` selects a ready `IMPL` leaf in the same position as any other task, asks the user to accept starting it, records it `in-progress` through `/to-way` before starting, then runs `/req` → `/ood` → `/to-plan` from the first missing approved artifact. The stage working directories are the task's absolute `<Workdir>/req/`, `<Workdir>/ood/`, and `<Workdir>/plans/`. It stops and leaves `/do-plan` to the user. It checks approved requirements against the way's purpose, hypothesis, and assumptions before OOD; a critical contradiction stops the handoff and should re-run `/wayfinder` to revise the existing way. On a later invocation after `/do-plan`, it reviews the report against the task's expected result and way purpose before dependent work proceeds.
+- The selector treats a ready `IMPL` leaf like any other task, asks the user to accept starting it, records it `in-progress` before starting, and follows the task's recorded How without imposing a process sequence. A critical contradiction stops work and requires revising the existing way. On a later invocation, it reviews available implementation evidence against the task's expected result and way purpose before dependent work proceeds.
 - The root and every way explicitly record purpose, observable expected result, a falsifiable hypothesis, and assumptions (`—` when none). Every executable leaf has Why (the outcome/risk and consequence of omission), What (a scoped result, not a repeated title), How (concrete approach/steps), and a separate observable completion signal.
 - How names meaningful actions such as tracing mode dispatch and checking the same key in both modes—not a generic lifecycle chain. Unknown file policy blocks selection of a persistence mechanism rather than inviting a guessed implementation.
 - Existing navigation/rendering is reused; relevant regressions are checked rather than planned as new capabilities.
@@ -40,14 +40,14 @@ Pass when:
 
 ## 1b. Review the implementation result before moving on
 
-Use a recorded `IMPL` task with a linked plan and three separate `/do-plan` report variants.
+Use a recorded `IMPL` task with three separate implementation-evidence variants.
 
 Pass when:
 
-- A matching report receives `MATCH` only after its actual changed behavior, acceptance evidence, review findings, residual risks, and commit state satisfy the task's `What`/`Done when` and advance the parent purpose. If that review is not recorded yet, `/next-way` stops and recommends `/to-way` record it before selecting dependents.
-- A report with an unmet completion condition or missing evidence receives `PARTIAL`; `/next-way` stops and recommends resuming the same plan or resolving its blocker.
-- A report whose built result defeats the way's purpose or refutes its hypothesis/required assumption receives `CONTRADICTION`; `/next-way` stops and should run `/wayfinder` to revise the existing way rather than redefining success.
-- `/next-way` never invokes `/do-plan` itself.
+- Matching evidence receives `MATCH` only after its actual changed behavior, acceptance evidence, review findings, residual risks, and commit state satisfy the task's `What`/`Done when` and advance the parent purpose. If that review is not recorded yet, selection stops and recommends recording it before selecting dependents.
+- Evidence with an unmet completion condition or missing proof receives `PARTIAL`; selection stops and recommends continuing the same work or resolving its blocker.
+- Evidence whose built result defeats the way's purpose or refutes its hypothesis/required assumption receives `CONTRADICTION`; selection stops and the existing way should be revised rather than redefining success.
+- Selection never imposes or invokes a fixed implementation process.
 
 ## 2. Small, already-understood change
 
@@ -76,7 +76,7 @@ Input:
 
 > The library documentation and source do not establish whether cancellation preserves partial output. Plan how to find out without changing production code.
 
-Pass when: one `EXPERIMENT` task runs `/experiment` with a distinguishing cancellation trial and isolated output. It does not add an `EXPLORE` task after inspection is already known insufficient, classify the trial as `IMPL`, or send factual discovery to a human `CHECKOUT`.
+Pass when: one `EXPERIMENT` task runs a distinguishing cancellation trial with isolated output. It does not add an `EXPLORE` task after inspection is already known insufficient, classify the trial as `IMPL`, or send factual discovery to a human `CHECKOUT`.
 
 ## 4. Recording and invalid-source handling
 
@@ -85,13 +85,13 @@ Record a valid result of case 1 with `/to-way` in a confirmed temporary director
 Pass when:
 
 - Root/ways have files; `EXPLORE`, `EXPERIMENT`, `IMPL`, and `CHECKOUT` leaves have inline anchors, not separate files.
-- Every leaf records its absolute Workdir under the way directory; every `IMPL` leaf also records its absolute Target repo. Untouched workspace directories are not created. When work starts, `/next-way` uses `experiments/`, `req/`, `ood/`, and `plans/` beneath the recorded Workdir as applicable.
+- Every leaf records its absolute Workdir under the way directory; every `IMPL` leaf also records its absolute Target repo. Untouched workspace directories are not created. When work starts, task-specific artifacts stay beneath the recorded Workdir.
 - Every source node has one canonical location; the root links the whole hierarchy.
-- Every way retains its purpose, expected result, hypothesis, and assumptions. Every leaf retains exactly one allowed kind and every dependency link resolves to the original ID with its reason. Why/What/How details (including ordered steps, scope boundaries, and evidence references), uncertainty resolution details, completion signals, statuses, and parallel conditions survive unchanged. A done `IMPL` retains its `/do-plan` report path and `/next-way` `MATCH` review against its expected result and parent purpose.
+- Every way retains its purpose, expected result, hypothesis, and assumptions. Every leaf retains exactly one allowed kind and every dependency link resolves to the original ID with its reason. Why/What/How details (including ordered steps, scope boundaries, and evidence references), uncertainty resolution details, completion signals, statuses, and parallel conditions survive unchanged. A done `IMPL` retains its implementation evidence and review against its expected result and parent purpose.
 - Numbering follows source presentation order without introducing serial prerequisites; nested ways use full ancestry without path collisions.
 - A blocked partial plan from case 3 can also be recorded without filling its missing branch.
 
-Start-state check: select a ready node with `/next-way`. It must wait for user acceptance, make `/to-way` record the selected task (or selected way) as `in-progress`, verify that marker, and only then invoke a handoff or recommend beginning work. Declining leaves the way unchanged. A node already recorded `in-progress` resumes without a second acceptance.
+Start-state check: select a ready node. It must wait for user acceptance, record the selected task (or selected way) as `in-progress`, verify that marker, and only then recommend beginning work. Declining leaves the way unchanged. A node already recorded `in-progress` resumes without a second acceptance.
 
 Negative checks (each must stop before writing and request source correction):
 

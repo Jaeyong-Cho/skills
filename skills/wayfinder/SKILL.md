@@ -12,22 +12,22 @@ Produce a task plan, not a lifecycle checklist. Answer:
 
 Plan first: use grill-me for the user conversation and inspect context, but do not implement, run experiments, or persist the result. After the user confirms the plan, return the plan in the conversation only. Propose evidence-gathering work when needed; never report a proposed check as completed.
 
-**MUST NOT** create, update, or write any way document or invoke `@skills/to-way`, even when persistence is requested during the Wayfinder invocation. End with a clear handoff telling the user to invoke `@skills/to-way`; that skill exclusively creates or updates way documents.
+**MUST NOT** create, update, or write any way document, even when persistence is requested during the Wayfinder invocation. End with a clear handoff for the separate recording step.
 
 ## Recommend the recording operation
 
 - Inspect the supplied way path, or `./ways/`, as read-only context before planning. Do not ask the user to choose create or update at the beginning.
 - Decide and recommend the operation at the end, after the plan and target have been inspected: create a new numbered way for a new goal; update the matching goal in place for an existing goal; update the parent goal when adding a child way.
-- For a recommended update, identify stable IDs, completed-work evidence, and user annotations that `@skills/to-way` must preserve; new nodes need globally unique IDs.
-- If the proposed update would move or remove files, strand old tasks, or conflict with recorded evidence, report the conflict as a blocker for `@skills/to-way`; do not change anything.
-- Always return the confirmed plan and recommended operation without invoking `@skills/to-way` or writing files.
+- For a recommended update, identify stable IDs, completed-work evidence, and user annotations that the recording step must preserve; new nodes need globally unique IDs.
+- If the proposed update would move or remove files, strand old tasks, or conflict with recorded evidence, report the conflict before recording; do not change anything.
+- Always return the confirmed plan and recommended operation without writing files.
 
 ## Task types
 
 Every executable leaf has exactly one of these kinds:
 
 - `EXPLORE` — resolve an uncertainty using read-only inspection: search, read files/docs, trace existing code, or inspect already-produced evidence. It must not edit files, run a behavioral trial, or change production state.
-- `EXPERIMENT` — resolve an uncertainty that inspection cannot answer by running `/experiment`. Its How names the question, expected distinguishing result, and `/experiment`; the experiment remains isolated from production per that skill.
+- `EXPERIMENT` — resolve an uncertainty that inspection cannot answer by running an isolated experiment. Its How names the question, expected distinguishing result, and isolation boundary.
 - `IMPL` — eventually change production code using inspected context and resolved consequential uncertainties. It is an inline task kind, not a separate way or root-level node; an existing leaf ID such as `A4` or `B3` remains stable. Every `IMPL` task should name its target repository as a resolved absolute path.
 - `CHECKOUT` — a human checkpoint for a decision, approval, or hands-on verification that cannot be delegated to inspection or experiment. It states exactly what the human must decide or check and what evidence/answer releases dependent work.
 
@@ -35,7 +35,7 @@ Use the cheapest reliable kind that can close the task: existing evidence before
 
 **MUST USE** at least one or more `EXPLORE` or `EXPERIMENT` before for each `IMPL` task. 
 
-An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes or expand the handoff into lifecycle children. `/next-way` runs `/req` → `/ood` → `/to-plan`, then stops and leaves `/do-plan` to the user. On a later invocation, `/next-way` reviews the `/do-plan` report against the task's expected result and the way's purpose before dependent work proceeds. A critical requirement or result contradiction stops and should re-run `/wayfinder` to revise the existing way.
+An `IMPL` task owns the implementation work for its product-code scope. Its How describes the concrete implementation approach and verification. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate lifecycle nodes merely to represent process steps. After implementation, the available evidence is reviewed against the task's expected result and the way's purpose before dependent work proceeds. A critical requirement or result contradiction stops and should revise the existing way.
 
 ## Shared understanding with grill-me
 
@@ -59,17 +59,17 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
   - **Assumptions:** conditions treated as true but not yet proven, each with evidence or an uncertainty task; write `—` when there are none rather than hiding assumptions.
 - Siblings are normally all needed, not competing solutions.
 - A **task** is a concrete `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` action with a usable result and an observable completion signal. A way may contain tasks, sub-ways, or both.
-- Every task should record a resolved absolute `Workdir` inside the recommended way directory, ending in its stable ID (for example, `/abs/path/ways/01-goal/0-goal/A1`). This declares artifact location without requiring the directory to exist before work starts. Use stage subdirectories beneath it: `experiments/` for `/experiment`, and `req/`, `ood/`, and `plans/` for an `IMPL` handoff. Thus a handoff may use `/abs/path/.../A1/req` and `/abs/path/.../A1/ood`; never leave these as relative paths.
+- Every task should record a resolved absolute `Workdir` inside the recommended way directory, ending in its stable ID (for example, `/abs/path/ways/01-goal/0-goal/A1`). This declares artifact location without requiring the directory to exist before work starts. Task-specific artifact subdirectories are chosen by the task's How or the executing skill; never leave required paths relative.
 - Give every node a stable, globally unique ID; every non-root node has exactly one parent. Dependencies are separate from parentage.
 - Split only when children have distinct deliverables, prerequisites, uncertainties, or useful handoff boundaries. Collapse a wrapper that merely renames its only child.
 - Stop when a task can be picked up without another planning round. Routine implementation choices can remain local; unresolved choices that change scope, boundaries, or safety must be explicit.
 - Name the actual change or decision: `Preserve the trailing newline when serializing the buffer`, not `Implement serialization`. If a title could be pasted into an unrelated feature unchanged, rewrite or remove it.
-- **Never append requirements → design → implement → test to each leaf.** Requirements and design become tasks only when a specific unresolved decision or contract needs its own deliverable. Put local checks in the task's completion signal; add separate verification tasks only for distinct integration, regression, or release work. Product-code implementation is represented by an inline `Kind: IMPL` task at the relevant outcome, not by a lifecycle chain beneath every leaf.
+- **Never append a fixed process sequence to each leaf.** Add a separate task only when a distinct decision, deliverable, integration, regression, or release check is needed. Put local checks in the task's completion signal. Product-code implementation is represented by an inline `Kind: IMPL` task at the relevant outcome, not by a lifecycle chain beneath every leaf.
 - Keep detail proportional to the task: name relevant existing modules/files when known, but do not enumerate every function, class, command, or test case.
 
 ## Preferred ways and task order
 
-- **MUST use the cheapest reliable method.** Reuse existing evidence first; use `EXPLORE` for search/read; use `EXPERIMENT` with `/experiment` only when inspection cannot answer; use `CHECKOUT` only when human judgment, authority, or hands-on verification is required.
+- **MUST use the cheapest reliable method.** Reuse existing evidence first; use `EXPLORE` for search/read; use `EXPERIMENT` only when inspection cannot answer; use `CHECKOUT` only when human judgment, authority, or hands-on verification is required.
 - Do not demand a complete or polished result at the beginning of a goal.
 - Build a fast, simple first working happy-path vertical slice before broad edge-case hardening when safety permits.
 - Then improve edge cases, security, and quality incrementally from the working system.
@@ -82,7 +82,7 @@ Every executable leaf, regardless of kind, must explain:
 - **Workdir:** the resolved absolute task workspace path in the recorded way directory. An `IMPL` task also records **Target repo:** as a resolved absolute repository path. If either base is unknown, resolve it before finalizing rather than writing `./`, `~/`, or a path relative to the current shell.
 - **Why:** the parent outcome it enables, risk it reduces, or downstream work it unblocks—and what fails or stays blocked if it is omitted. “Needed for the feature” is not a reason; remove work with no concrete justification.
 - **What:** the specific behavior, decision, or artifact to deliver, with its scope and important boundaries. Do not just repeat the title. Keep **Done when** as the separate observable proof that this result exists.
-- **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. “Define requirements, design, implement, test” is not an approach. An `IMPL` task ends with a later `/next-way` review of its `/do-plan` report against `What`, `Done when`, and the parent purpose.
+- **How:** the concrete approach and steps needed to produce that result, including what to inspect/reuse/change and how to check it. Use a short ordered list when sequence matters; a single specific action suffices for a trivial task. A generic process list is not an approach. An `IMPL` task ends with implementation evidence reviewed against `What`, `Done when`, and the parent purpose.
 
 Ground How in inspected context or explicit user decisions. If a consequential choice is unresolved, name the blocking `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` task and what can happen before/after it; do not invent a mechanism or leave only “TBD.” For uncertainty work, Why is its impact, What is the evidence or decision to obtain, and How is the cheapest reliable resolving method. These are fields within the task, not extra child nodes or lifecycle stages.
 
@@ -94,7 +94,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
 6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
-7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions. Do not implement, invoke `@skills/to-way`, or create/update any way document; tell the user to invoke `@skills/to-way` as the separate recording step.
+7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions. Do not implement or create/update any way document; return the confirmed plan for the separate recording step.
 
 ## Uncertainty handling
 
@@ -114,7 +114,7 @@ Ask owner decisions through grill-me, with concrete examples, answer-dependent c
 ## Dependencies and parallelism
 
 - `Needs: —` means no prerequisite. Otherwise list executable leaf IDs plus the required result. A task becomes ready only when all its prerequisites are satisfied and its conditions hold.
-- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). An `IMPL` task is not `done` until its `/do-plan` report exists and `/next-way` records a `MATCH` review against the expected result and parent purpose. Propagate blockers to dependent work. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
+- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). An `IMPL` task is not `done` until its implementation evidence supports the expected result and parent purpose, with the review recorded. Propagate blockers to dependent work. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
 - Dependencies must exist and be acyclic. Tree indentation and sibling order express scope/presentation, **not** a global serial schedule.
 - Recommend parallel tasks only when there is no dependency path between them and their write surfaces, mutable resources, and contracts do not conflict. State the reason or required isolation/contract. Different branches alone do not establish independence.
 - If work shares an unsettled interface, first plan the concrete contract decision that unlocks both sides. If work shares files/resources, sequence it or state an isolation and integration strategy. When context is insufficient, label parallelism conditional rather than promising it.
@@ -129,7 +129,7 @@ During the interview, show only the draft context needed for the current questio
 3. **Work map** — one record per executable leaf: ID/title, kind (`EXPLORE | EXPERIMENT | IMPL | CHECKOUT`), absolute Workdir, absolute Target repo for `IMPL`, Why, What, How, needs (with reasons), status, and done when. Keep all IDs aligned with the tree. Use short task blocks so explanations and ordered steps remain readable instead of squeezing them into a wide table.
 4. **Uncertainties** — question, impact, resolution method, exit signal, and affected IDs; or a grounded statement that none remain.
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
-6. **Recording handoff** — recommend `create` or `update`; name the target directory, evidence for the recommendation, and any preservation/blocking condition. Explicitly say that no way document was changed and the user must invoke `@skills/to-way` to record the plan.
+6. **Recording handoff** — recommend `create` or `update`; name the target directory, evidence for the recommendation, and any preservation/blocking condition. Explicitly say that no way document was changed and return the plan for the separate recording step.
 
 **MUST USE** a simple ELI5 word and sentence for a way's title and description. 
 
@@ -159,9 +159,8 @@ Example work-map entries (the actual output must cover every executable leaf):
 - Why: Enables text entry without making normal-mode navigation keys accidentally modify the buffer.
 - What: Mode-aware routing of printable ASCII input; preserve existing normal-mode navigation. Cursor adjustment belongs to A2.
 - How:
-  1. Let `/next-way` run the approved `/req` → `/ood` → `/to-plan` handoff from the first missing artifact.
-  2. Route printable ASCII to buffer insertion only in insert mode; retain the existing normal-mode dispatch.
-  3. Run `/do-plan` and exercise the same printable key in both modes to check that only insert mode changes text.
+  1. Route printable ASCII to buffer insertion only in insert mode; retain the existing normal-mode dispatch.
+  2. Exercise the same printable key in both modes to check that only insert mode changes text.
 - Needs: —
 - Status: ready
 - Done when: Insert mode changes text; normal-mode navigation does not.
@@ -173,9 +172,8 @@ Example work-map entries (the actual output must cover every executable leaf):
 - Why: Makes edits durable without destroying the original file or recoverable edits when a write fails.
 - What: Save the snapshot from B1 to the supported target paths, returning success/failure through B1's contract. Command dispatch belongs to B2.
 - How:
-  1. Let `/next-way` run `/req`, `/ood`, and `/to-plan` from the first missing approved artifact; after it checks the requirements against this way's purpose, hypothesis, and assumptions, run `/do-plan` on the approved plan.
-  2. Use B1's approved file policy and snapshot/result contract.
-  3. Adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure.
+  1. Use B1's approved file policy and snapshot/result contract.
+  2. Adapt the existing file-writer boundary to those guarantees and check saved bytes plus a forced write failure.
 - Needs: B1: approved file policy and snapshot/result contract
 - Status: blocked
 - Done when: Saved bytes match the snapshot; forced failure preserves the original and recoverable edits.
@@ -194,5 +192,5 @@ Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 n
 - Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped blockers; every `IMPL` task has context and resolved-uncertainty prerequisites, with no guessed decomposition behind a blocker.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
-- Each product-code handoff is represented by an inline `Kind: IMPL` leaf. `/next-way` runs `/req` → `/ood` → `/to-plan` and stops without running `/do-plan`; after the user runs `/do-plan`, a later `/next-way` invocation reviews its report against the expected result and way purpose before the task is recorded done or dependents proceed. A critical requirement or result contradiction should re-run `/wayfinder` to revise the existing way.
-- Wayfinder has only reported the confirmed plan: it has not invoked `@skills/to-way` or created, updated, or written any way document. The final response directs the user to invoke `@skills/to-way` for recording.
+- Each product-code handoff is represented by an inline `Kind: IMPL` leaf. Its recorded How describes the work and verification without prescribing a process sequence. A later review checks the available implementation evidence against the expected result and way purpose before the task is recorded done or dependents proceed. A critical requirement or result contradiction should revise the existing way.
+- Wayfinder has only reported the confirmed plan: it has not created, updated, or written any way document. The final response returns the plan for the separate recording step.
