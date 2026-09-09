@@ -33,22 +33,22 @@ Every executable leaf has exactly one of these kinds:
 
 Use the cheapest reliable kind that can close the task: existing evidence before new work, `EXPLORE` before `EXPERIMENT`, and either before asking a human to discover a fact. Use `CHECKOUT` for human judgment or authority, not as a substitute for agent fact-finding. Do not create an `EXPLORE` step when inspection is already known to be unable to answer the question, and do not experiment when a search/read can settle it.
 
-**MUST USE** at least one or more `EXPLORE` or `EXPERIMENT` before for each `IMPL` task. 
+Use at least one `EXPLORE` or `EXPERIMENT` before an `IMPL` task when it reduces a real uncertainty; skip it when existing context is sufficient.
 
-An `IMPL` task owns the implementation work for its product-code scope. Its How describes the concrete implementation approach and verification. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate lifecycle nodes merely to represent process steps. After implementation, the available evidence is reviewed against the task's expected result state and the way's purpose before dependent work proceeds. A critical requirement or result contradiction stops and should revise the existing way.
+An `IMPL` task owns the implementation work for its product-code scope. Its How describes the concrete implementation approach and verification. It may be `ready` when available context is sufficient, with missing context recorded as a risk. Do not add separate lifecycle nodes merely to represent process steps. After implementation, the available evidence is reviewed against the task's expected result state and the way's purpose. A critical requirement or result contradiction should be reported and may be resolved by revising the existing way.
 
 ## Shared understanding with grill-me
 
-**MUST RUN `@skills/grill-me`**: read `../grill-me/SKILL.md` and follow its session sequence in this conversation. Do not merely recommend that the user launch it, delegate the interview to a background agent, or replace it with a custom questionnaire.
+When clarification is useful, run `@skills/grill-me`: read `../grill-me/SKILL.md` and follow its session sequence in this conversation. Do not delegate an active interview to a background agent or replace it with a custom questionnaire.
 
 The interview is about **the user's goal and its ways**, not how to configure Wayfinder. It spans the planning process below:
 
-- Start with grill-me's calibration using a concrete scenario from the goal, then wait for the user's answer. Teach only essential gaps and use its teach-back before decision rounds. Reuse already established understanding and decisions rather than restarting an active session.
+- Start with grill-me's calibration using a concrete scenario from the goal when interactive clarification is useful. Ask for the user's answer, but if it is unavailable, mark the understanding provisional and continue with explicit assumptions. Teach only essential gaps and use its teach-back before decision rounds. Reuse already established understanding and decisions rather than restarting an active session.
 - Use the goal's success signal, scope/exclusions, proposed ways and their boundaries, consequential unknowns, prerequisites, and safe parallel work as the decision tree. Settle parent scope before dependent decomposition; do not grill every routine implementation detail.
 - Show a small draft way tree as proposals become grounded. Ask whether its outcomes and boundaries match the user's intent, not just whether the user agrees with a finished plan. Update the draft and affected dependencies after each answer.
 - Let grill-me own question format, examples, mode selection, impact/uncertainty labels, and round size. Inspect repository facts yourself. Within this planning session, record unresolved fact-finding as `EXPLORE` or `EXPERIMENT` work rather than executing it automatically.
 - Keep confirmed decisions, provisional assumptions, and unresolved evidence separate. A delegated choice such as “you decide” may adopt the recommendation provisionally; it does not establish an external fact or remove an evidence blocker.
-- Before finalizing, summarize the agreed goal, ways, ordering/parallel constraints, and remaining assumptions/blockers; ask for confirmation using grill-me's question format and wait. Confirmation may approve an explicitly partial plan, not pretend its unknowns are resolved. If corrected, revise affected work and confirm again.
+- Before finalizing, summarize the understood goal, ways, ordering/parallel constraints, and remaining assumptions/blockers; invite confirmation using grill-me's question format when appropriate. A plan may remain explicitly provisional or partial; do not pretend its unknowns are resolved. If corrected, revise affected work.
 
 ## Ways and tasks
 
@@ -70,7 +70,7 @@ The interview is about **the user's goal and its ways**, not how to configure Wa
 
 ## Preferred ways and task order
 
-- **MUST use the cheapest reliable method.** Reuse existing evidence first; use `EXPLORE` for search/read; use `EXPERIMENT` only when inspection cannot answer; use `CHECKOUT` only when human judgment, authority, or hands-on verification is required.
+- **Prefer the cheapest reliable method.** Reuse existing evidence first; use `EXPLORE` for search/read; use `EXPERIMENT` only when inspection cannot answer; use `CHECKOUT` only when human judgment, authority, or hands-on verification is required.
 - Do not demand a complete or polished result at the beginning of a goal.
 - Build a fast, simple first working happy-path vertical slice before broad edge-case hardening when safety permits.
 - Then improve edge cases, security, and quality incrementally from the working system.
@@ -90,13 +90,13 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 
 ## Planning process
 
-1. **Start grill-me and ground the goal.** Begin the shared-understanding session above. Capture the success signal and scope with the user. Inspect any supplied way plus relevant repository paths, existing behavior, and tests, but defer the create/update decision. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it through grill-me before dependent planning.
+1. **Ground the goal.** Use the shared-understanding session above when needed. Capture the success signal and scope with the user. Inspect any supplied way plus relevant repository paths, existing behavior, and tests, but defer the create/update decision. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it before dependent planning or mark the plan provisional.
 2. **Find consequential unknowns.** Look for gaps in behavior, integration contracts, feasibility, data safety, external dependencies, and validation. Record only those that could change the plan or prevent trustworthy completion; do not invent an uncertainty quota.
 3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. For every way, state its purpose, current state, expected result state, falsifiable hypothesis, and assumptions before decomposing its children. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
 5. **Find the execution frontier.** Identify ready work, then describe which completions unlock which tasks, safe parallel lanes, shared-resource conflicts, and the final convergence check. Order by actual constraints, not by repeating development phases.
-6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim the entire plan is executable.
-7. **Confirm and finalize.** Complete grill-me's shared-understanding confirmation and wait for the user's answer. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Only after confirmation return the final plan in the output format below. Corrections reopen the affected decisions. Do not implement or create/update any way document; return the confirmed plan for the separate recording step.
+6. **Prune and validate the draft.** Check the planning criteria below. Keep blocked branches explicitly partial with their next resolving actions; do not claim unresolved work is verified.
+7. **Finalize.** Summarize the shared understanding and invite correction or confirmation when useful. At the end, inspect the final plan against the available way files and recommend `create` or `update` with the resolved absolute target path and reason; do not ask for this choice at the beginning. Derive every task's absolute `Workdir` from that target and resolve every `IMPL` target repository before finalizing. Do not implement or create/update any way document; return the plan for the separate recording step.
 
 ## Uncertainty handling
 
@@ -107,16 +107,16 @@ Place each uncertainty at the smallest common parent of the work it affects. Rep
 - **Exit signal:** what evidence or decision closes the question. For experiments, state the method and distinguishing outcomes, including what to do if inconclusive.
 - **Blocks:** affected task/way IDs and how different answers change the next work.
 
-Use the uncertainty's ID as a prerequisite of known dependent tasks. If their tasks cannot yet be named, mark the affected way `partial; blocked by <ID>` and return to decomposition after the answer. Do not block unrelated ways or require all uncertainties to resolve before any implementation.
+Use the uncertainty's ID as a prerequisite of known dependent tasks when the dependency is real. If their tasks cannot yet be named, mark the affected way `partial; risk noted for <ID>` and continue independent work. Do not block unrelated ways or require all uncertainties to resolve before implementation.
 
-An uncertainty-resolution task can be ready while its consumers are blocked. Mark it done only with recorded evidence. If context is unavailable, use `EXPLORE` rather than claiming a repository fact. Escalate to `EXPERIMENT` only when read-only inspection cannot answer; use `CHECKOUT` only for a human-owned decision or check. If no consequential unknown remains, say why briefly; do not create a placeholder task.
+An uncertainty-resolution task can be ready while its consumers wait. Mark it done only with recorded evidence when available. If context is unavailable, use `EXPLORE` rather than claiming a repository fact. Escalate to `EXPERIMENT` only when read-only inspection cannot answer; use `CHECKOUT` only for a human-owned decision or check. If no consequential unknown remains, say why briefly; do not create a placeholder task.
 
 Ask owner decisions through grill-me, with concrete examples, answer-dependent consequences, and a recommendation. Keep unresolved external-owner decisions as blockers when the current user cannot settle them.
 
 ## Dependencies and parallelism
 
 - `Needs: —` means no prerequisite. Otherwise list executable leaf IDs plus the required result. A task becomes ready only when all its prerequisites are satisfied and its conditions hold.
-- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). An `IMPL` task is not `done` until its implementation evidence supports the expected result state and parent purpose, with the review recorded. Propagate blockers to dependent work. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
+- Use `ready`, `waiting` (unfinished prerequisites), `blocked` (unresolved uncertainty/decision), or `done` (evidence supplied). These statuses guide sequencing rather than create hard gates; the user may choose to proceed from `waiting` or `blocked` work after the risk is stated. An `IMPL` task is normally considered fully verified after its implementation evidence supports the expected result state and parent purpose, with the review recorded; if that evidence is missing, label the result unverified and state the risk rather than silently claiming success. Parent completion means its required children are complete; depend on the relevant leaves, not on parents or descendants of yourself.
 - Dependencies must exist and be acyclic. Tree indentation and sibling order express scope/presentation, **not** a global serial schedule.
 - Recommend parallel tasks only when there is no dependency path between them and their write surfaces, mutable resources, and contracts do not conflict. State the reason or required isolation/contract. Different branches alone do not establish independence.
 - If work shares an unsettled interface, first plan the concrete contract decision that unlocks both sides. If work shares files/resources, sequence it or state an isolation and integration strategy. When context is insufficient, label parallelism conditional rather than promising it.
@@ -133,7 +133,7 @@ During the interview, show only the draft context needed for the current questio
 5. **Execution** — start now, unlocks/sequence, safe or conditional parallel lanes with reasons, convergence check, and next action. These summarize the work map, not a second conflicting schedule.
 6. **Recording handoff** — recommend `create` or `update`; name the target directory, evidence for the recommendation, and any preservation/blocking condition. Explicitly say that no way document was changed and return the plan for the separate recording step.
 
-**MUST USE** a simple ELI5 word and sentence for a way's title and description. 
+Use a simple ELI5 word and sentence for a way's title and description when practical.
 
 ### Example shape — not a template of required tasks
 
@@ -190,13 +190,13 @@ Execution: start A1 and U1 independently. A2 needs A1's insertion behavior; B1 n
 
 ## Completion criterion
 
-- Grill-me has established shared understanding of the goal and its ways, and the user has confirmed the summary, including any provisional assumptions and partial branches.
-- Every requested outcome is covered by concrete work or an explicitly blocked partial branch; existing work is not needlessly recreated.
+- The goal and its ways have been discussed enough to act, with confirmation or clearly labeled provisional assumptions and partial branches.
+- Every requested outcome is covered by concrete work or an explicitly partial branch with its risk or dependency named; existing work is not needlessly recreated.
 - Every way, including the root, explicitly records its purpose, current state, expected result state, falsifiable hypothesis, and assumptions (`—` when none); these fields agree with its parent and inspected evidence.
 - No generic lifecycle chains, renamed single-child wrappers, or `Test the tests` branches remain.
-- Every executable leaf has a resolved absolute Workdir, evidence-grounded current state, concrete Why, scoped What, expected result state, actionable How (or named blocking decision), correct prerequisites, status, and observable completion signal. Every `IMPL` leaf also has a resolved absolute Target repo. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is not presented as fact.
-- Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped blockers; every `IMPL` task has context and resolved-uncertainty prerequisites, with no guessed decomposition behind a blocker.
+- Every executable leaf has a resolved absolute Workdir, evidence-grounded current state, concrete Why, scoped What, expected result state, actionable How (or named decision), relevant prerequisites, status, and observable completion signal. Every `IMPL` leaf also has a resolved absolute Target repo. No generic rationale or lifecycle boilerplate substitutes for task details. Planned evidence is labeled as planned or provisional.
+- Every task uses exactly one allowed kind; every consequential uncertainty has a cheapest-reliable `EXPLORE`, `EXPERIMENT`, or `CHECKOUT` action and clearly scoped risks; every `IMPL` task records available context and unresolved uncertainties without inventing unsupported decomposition.
 - IDs are unique, every non-root node has one parent, all dependency references resolve, and the dependency graph is acyclic.
 - The execution summary matches dependencies, explains parallel safety/conflicts, and names an immediately useful next action (including an owner decision when that is all that can proceed).
-- Each product-code handoff is represented by an inline `Kind: IMPL` leaf. Its recorded How describes the work and verification without prescribing a process sequence. A later review checks the available implementation evidence against the expected result state and way purpose before the task is recorded done or dependents proceed. A critical requirement or result contradiction should revise the existing way.
+- Each product-code handoff is represented by an inline `Kind: IMPL` leaf. Its recorded How describes the work and verification without prescribing a process sequence. A later review checks the available implementation evidence against the expected result state and way purpose. A critical requirement or result contradiction should be surfaced, and the existing way can be revised when needed.
 - Wayfinder has only reported the confirmed plan: it has not created, updated, or written any way document. The final response returns the plan for the separate recording step.
