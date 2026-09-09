@@ -110,7 +110,7 @@ For each inline leaf in `Work`:
 - How: <source approach; preserve ordered steps as a nested list when present, including any named blocking decision>
 - Needs: <linked prerequisite IDs and the result needed from each; or —>
 - Status: <ready | in-progress | waiting | blocked | done, with source evidence where supplied>
-- Workdir: <resolved absolute `<ID>/` task workspace; always present even before creation>
+- Workdir: <resolved absolute `<ID>/` task workspace; always present even before creation> not repo path. (`ways/0-goal/A1/impl/`, `ways/0-goal/A2/experiments/` or `ways/0-goal/B3/explore/`)
 - Target repo: <resolved absolute repository path; IMPL only>
 - Evidence: <proof for a done status; for IMPL include the `/do-plan` report path and `/next-way` MATCH verdict against `What`, `Done when`, and parent purpose; required only when done>
 - Done when: <observable completion signal>
