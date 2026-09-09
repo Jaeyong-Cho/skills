@@ -13,13 +13,16 @@ AGENTS_MD="$SKILLS_DIR/AGENTS.md"
 # clean (--clean): also remove skills this repo installed previously but no
 #   longer ships (renamed/deleted), tracked via the install manifest.
 MODE="overwrite"
+INSTALL_SUBAGENTS=false
+PI_SUBAGENT_MODEL="${PI_SUBAGENT_MODEL:-openai-codex/gpt-5.6-luna}"
 PI_SUBAGENT_THINKING="${PI_SUBAGENT_THINKING:-high}"
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --clean) MODE="clean" ;;
     --overwrite) MODE="overwrite" ;;
+    --subagent) INSTALL_SUBAGENTS=true ;;
     --subagent-thinking)
-      [ "$#" -gt 1 ] || { echo "Missing value for --subagent-thinking (use high or max)." >&2; exit 2; }
+      [ "$#" -gt 1 ] || { echo "Missing value for --subagent-thinking." >&2; exit 2; }
       PI_SUBAGENT_THINKING="$2"
       shift
       ;;
@@ -29,8 +32,8 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$PI_SUBAGENT_THINKING" in
-  high|max) ;;
-  *) echo "Invalid subagent thinking level: $PI_SUBAGENT_THINKING (use high or max)." >&2; exit 2 ;;
+  off|minimal|low|medium|high|xhigh|max) ;;
+  *) echo "Invalid subagent thinking level: $PI_SUBAGENT_THINKING (use off, minimal, low, medium, high, xhigh, or max)." >&2; exit 2 ;;
 esac
 
 echo "=== Skills Install ($MODE) ==="
@@ -52,22 +55,24 @@ detect() {
   done
 }
 
-detect "claude"  "Claude Code        (claude CLI)" "command -v claude"
-detect "copilot" "GitHub Copilot CLI (copilot)"    "command -v copilot"
-detect "pi"      "pi coding agent    (pi CLI)"     "command -v pi"
+if ! $INSTALL_SUBAGENTS; then
+  detect "claude"  "Claude Code        (claude CLI)" "command -v claude"
+  detect "copilot" "GitHub Copilot CLI (copilot)"    "command -v copilot"
+  detect "pi"      "pi coding agent    (pi CLI)"     "command -v pi"
 
-if [ ${#DETECTED_KEYS[@]} -eq 0 ]; then
-  echo "No supported AI agents detected. Exiting."
-  exit 0
+  if [ ${#DETECTED_KEYS[@]} -eq 0 ]; then
+    echo "No supported AI agents detected. Exiting."
+    exit 0
+  fi
+
+  echo "Detected agents:"
+  for i in "${!DETECTED_KEYS[@]}"; do
+    echo "  $((i+1))) ${DETECTED_LABELS[$i]}"
+  done
+  echo ""
+  read -rp "Which to set up? (numbers separated by spaces, or 'all') [all]: " SELECTION
+  SELECTION="${SELECTION:-all}"
 fi
-
-echo "Detected agents:"
-for i in "${!DETECTED_KEYS[@]}"; do
-  echo "  $((i+1))) ${DETECTED_LABELS[$i]}"
-done
-echo ""
-read -rp "Which to set up? (numbers separated by spaces, or 'all') [all]: " SELECTION
-SELECTION="${SELECTION:-all}"
 
 selected() {
   local key="$1"
@@ -206,6 +211,102 @@ setup_copilot() {
   setup_boy_scout copilot
 }
 
+select_subagent_config() {
+  local choice default_number="" i
+  local -a models thinking_levels=(off minimal low medium high xhigh max)
+
+  while IFS= read -r choice; do
+    [ -n "$choice" ] && models+=("$choice")
+  done < <(pi --list-models 2>/dev/null | awk 'NR > 1 && $1 != "" && $2 != "" { print $1 "/" $2 }')
+  [ ${#models[@]} -gt 0 ] || { echo "No available Pi models found." >&2; return 1; }
+
+  echo "Available subagent models:"
+  for i in "${!models[@]}"; do
+    echo "  $((i+1))) ${models[$i]}"
+    [ "${models[$i]}" = "$PI_SUBAGENT_MODEL" ] && default_number="$((i+1))"
+  done
+  [ -n "$default_number" ] || default_number=1
+  while :; do
+    read -rp "Model [$default_number]: " choice
+    choice="${choice:-$default_number}"
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#models[@]} ]; then
+      PI_SUBAGENT_MODEL="${models[$((choice-1))]}"
+      break
+    fi
+    echo "Choose a number from 1 to ${#models[@]}." >&2
+  done
+
+  echo "Thinking effort:"
+  default_number=1
+  for i in "${!thinking_levels[@]}"; do
+    echo "  $((i+1))) ${thinking_levels[$i]}"
+    [ "${thinking_levels[$i]}" = "$PI_SUBAGENT_THINKING" ] && default_number="$((i+1))"
+  done
+  while :; do
+    read -rp "Thinking [$default_number]: " choice
+    choice="${choice:-$default_number}"
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#thinking_levels[@]} ]; then
+      PI_SUBAGENT_THINKING="${thinking_levels[$((choice-1))]}"
+      break
+    fi
+    echo "Choose a number from 1 to ${#thinking_levels[@]}." >&2
+  done
+  echo "  ✓ subagent profile → $PI_SUBAGENT_MODEL ($PI_SUBAGENT_THINKING thinking)"
+}
+
+install_subagent_agents() {
+  local src dest tmp
+  [ -d "$SKILLS_DIR/agents" ] || return
+  mkdir -p "$PI_AGENT_DIR/agents"
+  for src in "$SKILLS_DIR"/agents/*.md; do
+    [ -e "$src" ] || continue
+    dest="$PI_AGENT_DIR/agents/$(basename "$src")"
+    tmp="$(mktemp "$PI_AGENT_DIR/agents/.agent.XXXXXX")"
+    node - "$src" "$tmp" "$PI_SUBAGENT_MODEL" "$PI_SUBAGENT_THINKING" <<'NODE'
+const fs = require("fs");
+const [source, destination, model, thinking] = process.argv.slice(2);
+const lines = fs.readFileSync(source, "utf8").split("\n");
+const end = lines.indexOf("---", 1);
+if (lines[0] !== "---" || end < 0) throw new Error(`Missing YAML frontmatter: ${source}`);
+let hasModel = false;
+let hasThinking = false;
+for (let i = 1; i < end; i++) {
+  if (/^model:/.test(lines[i])) { lines[i] = `model: ${model}`; hasModel = true; }
+  if (/^thinking:/.test(lines[i])) { lines[i] = `thinking: ${thinking}`; hasThinking = true; }
+}
+const additions = [];
+if (!hasModel) additions.push(`model: ${model}`);
+if (!hasThinking) additions.push(`thinking: ${thinking}`);
+lines.splice(end, 0, ...additions);
+fs.writeFileSync(destination, lines.join("\n"));
+NODE
+    mv "$tmp" "$dest"
+  done
+  echo "  ✓ custom subagents → $PI_AGENT_DIR/agents ($PI_SUBAGENT_MODEL, $PI_SUBAGENT_THINKING thinking)"
+}
+
+configure_subagent_settings() {
+  local settings="$PI_AGENT_DIR/settings.json" tmp
+
+  [ -f "$settings" ] || printf '{}\n' > "$settings"
+  tmp="$(mktemp "$PI_AGENT_DIR/settings.json.XXXXXX")"
+  node -e '
+    const fs = require("fs");
+    const [settingsPath, outputPath, model, thinking] = process.argv.slice(1);
+    const settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
+    if (!settings.subagents || typeof settings.subagents !== "object" || Array.isArray(settings.subagents)) {
+      settings.subagents = {};
+    }
+    delete settings.subagents.disableBuiltins;
+    settings.subagents.defaultModel = model;
+    settings.subagents.defaultThinking = thinking;
+    delete settings.subagents.agentOverrides;
+    fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
+  ' "$settings" "$tmp" "$PI_SUBAGENT_MODEL" "$PI_SUBAGENT_THINKING"
+  mv "$tmp" "$settings"
+  echo "  ✓ pi subagent defaults → $PI_SUBAGENT_MODEL ($PI_SUBAGENT_THINKING thinking)"
+}
+
 configure_pi_settings() {
   local settings="$PI_AGENT_DIR/settings.json" tmp
 
@@ -221,20 +322,10 @@ configure_pi_settings() {
       settings.terminal = {};
     }
     settings.terminal.trueColor = true;
-    if (!settings.subagents || typeof settings.subagents !== "object" || Array.isArray(settings.subagents)) {
-      settings.subagents = {};
-    }
-    delete settings.subagents.disableBuiltins;
-    const model = "openai-codex/gpt-5.6-luna";
-    const thinking = process.argv[3];
-    settings.subagents.defaultModel = model;
-    settings.subagents.defaultThinking = thinking;
-    delete settings.subagents.agentOverrides;
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2) + "\n");
-  ' "$settings" "$tmp" "$PI_SUBAGENT_THINKING"
+  ' "$settings" "$tmp"
   mv "$tmp" "$settings"
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
-  echo "  ✓ pi subagent defaults → openai-codex/gpt-5.6-luna ($PI_SUBAGENT_THINKING thinking)"
 }
 
 setup_pi() {
@@ -242,6 +333,7 @@ setup_pi() {
 
   mkdir -p "$PI_AGENT_DIR"
   configure_pi_settings
+  configure_subagent_settings
   cp "$SKILLS_DIR/config/open-tui.json" "$PI_AGENT_DIR/open-tui.json"
   echo "  ✓ ~/.pi/agent/open-tui.json ← $SKILLS_DIR/config/open-tui.json"
   if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
@@ -285,6 +377,22 @@ setup_pi() {
   fi
 
   setup_boy_scout pi
+}
+
+setup_pi_subagents() {
+  echo "→ Pi interactive subagents"
+  command -v pi &>/dev/null || { echo "  pi not found; cannot install subagents." >&2; return 1; }
+  command -v node &>/dev/null || { echo "  node not found; cannot configure subagents." >&2; return 1; }
+  mkdir -p "$PI_AGENT_DIR"
+  select_subagent_config
+  if pi install "git:github.com/HazAT/pi-interactive-subagents" &>/dev/null; then
+    echo "  ✓ git:github.com/HazAT/pi-interactive-subagents"
+  else
+    echo "  subagent plugin install failed, run manually: pi install git:github.com/HazAT/pi-interactive-subagents" >&2
+    return 1
+  fi
+  configure_subagent_settings
+  install_subagent_agents
 }
 
 # ── rtk binary ───────────────────────────────────────────────────────────────
@@ -414,10 +522,14 @@ setup_bin() {
 # ── Run selected setups ───────────────────────────────────────────────────────
 
 echo ""
-selected "claude"  && setup_claude  && echo ""
-selected "copilot" && setup_copilot && echo ""
-selected "pi"      && setup_pi      && echo ""
-setup_agents_skills && echo ""
-setup_bin && echo ""
+if $INSTALL_SUBAGENTS; then
+  setup_pi_subagents
+else
+  selected "claude"  && setup_claude  && echo ""
+  selected "copilot" && setup_copilot && echo ""
+  selected "pi"      && setup_pi      && echo ""
+  setup_agents_skills && echo ""
+  setup_bin && echo ""
+fi
 
 echo "Done."

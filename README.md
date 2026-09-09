@@ -13,13 +13,13 @@ git clone git@github.com:Jaeyong-Cho/skills.git ~/.claude/skills
 ~/.claude/skills/install.sh
 ```
 
-For Pi subagents, the installer defaults to `openai-codex/gpt-5.6-luna` with high thinking. Use max thinking when installing with:
+To configure Pi subagents, run:
 
 ```bash
-~/.claude/skills/install.sh --subagent-thinking max
+~/.claude/skills/install.sh --subagent
 ```
 
-`--subagent-thinking high` is also supported; `PI_SUBAGENT_THINKING=max` works for scripted installs.
+This dedicated mode installs only `pi-interactive-subagents`: it lists the models available to Pi, asks for a model and thinking effort, updates Pi's subagent defaults, then copies `agents/*.md` to `~/.pi/agent/agents/` with those values in each agent's frontmatter. It skips all other plugins, skills, hooks, and helper binaries. Without `--subagent`, the normal installer runs and the repository's agent defaults are copied unchanged. `PI_SUBAGENT_MODEL`, `PI_SUBAGENT_THINKING`, and `--subagent-thinking` set prompt/default values for scripted or repeated installs.
 
 ## Repository Layout
 
@@ -38,7 +38,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Copies `agents/` to `~/.pi/agent/agents/`; enables Pi truecolor, installs `ponytail` and the Pi UI packages; sets the default subagent model/thinking to `openai-codex/gpt-5.6-luna` while custom agent files provide role-specific settings |
+| pi coding agent | Copies `agents/` to `~/.pi/agent/agents/`; with `--subagent`, interactively applies one selected Pi model/thinking effort to every copied agent; enables Pi truecolor and installs `ponytail` plus the Pi UI packages |
 
 `references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
