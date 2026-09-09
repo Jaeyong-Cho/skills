@@ -43,6 +43,26 @@ def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _has_state_example(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    fence = None
+    content = []
+    for line in value.splitlines():
+        if fence is None:
+            opening = re.fullmatch(r" {0,3}(`{3,}|~{3,})(.*)", line)
+            if opening and not (opening[1][0] == "`" and "`" in opening[2]):
+                fence = opening[1]
+                content = []
+        elif re.fullmatch(r" {0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}[ \t]*", line):
+            if "\n".join(content).strip():
+                return True
+            fence = None
+        else:
+            content.append(line)
+    return False
+
+
 def _safe_relative(value: Any) -> bool:
     if not isinstance(value, str) or not value or Path(value).is_absolute():
         return False
@@ -80,6 +100,9 @@ def validate(document: Any) -> list[str]:
         for field in REQUIRED_NODE_FIELDS:
             if field not in node:
                 errors.append(f"{prefix}.{field} is required")
+        for field in ("current_state", "expected_result_state"):
+            if field in node and not _has_state_example(node[field]):
+                errors.append(f"{prefix}.{field} must be a Markdown string with a non-empty, closed fenced code block showing a concrete state example")
         if not _nonempty(node.get("title")):
             errors.append(f"{prefix}.title must be a non-empty string")
         if not isinstance(node.get("children"), list):
@@ -270,6 +293,10 @@ def _lines(value: Any, indent: int = 0) -> list[str]:
     return [prefix + _text(value)]
 
 
+def _state_field(label: str, value: str) -> str:
+    return f"- {label}:\n\n" + "\n".join("  " + line if line else "" for line in value.splitlines())
+
+
 def _slug_title(title: str) -> str:
     return re.sub(r"\s+", " ", title).strip()
 
@@ -311,8 +338,8 @@ def render(document: dict[str, Any], goal_id: str) -> dict[str, str]:
             lines.append(f"- Parent: {link(node['file'], node['parent'])}")
         lines += [
             f"- Purpose: {_text(node['purpose'])}",
-            f"- Current state: {_text(node['current_state'])}",
-            f"- Expected result state: {_text(node['expected_result_state'])}",
+            _state_field("Current state", node["current_state"]),
+            _state_field("Expected result state", node["expected_result_state"]),
             f"- Hypothesis: {_text(node['hypothesis'])}",
             f"- Assumptions: {_text(node['assumptions'])}",
         ]
@@ -345,7 +372,9 @@ def render(document: dict[str, Any], goal_id: str) -> dict[str, str]:
         if "conditions_conflicts" in task:
             fields.append(("Conditions/conflicts", task["conditions_conflicts"]))
         for label, value in fields:
-            if label == "How" and isinstance(value, list):
+            if label in ("Current state", "Expected result state"):
+                lines.append(_state_field(label, value))
+            elif label == "How" and isinstance(value, list):
                 lines.append("- How:")
                 lines.extend(f"  {index}. {_text(item)}" for index, item in enumerate(value, 1))
             else:
