@@ -360,7 +360,6 @@ setup_pi() {
     "npm:pi-open-tui" \
     "npm:@narumitw/pi-usage" \
     "npm:@juicesharp/rpiv-todo" \
-    "npm:@juicesharp/rpiv-ask-user-question" \
     "npm:pi-must-have-extension" \
     "npm:pi-vimmode"
   do
