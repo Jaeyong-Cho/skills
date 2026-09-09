@@ -32,6 +32,8 @@ Every executable leaf has exactly one of these kinds:
 
 Use the cheapest reliable kind that can close the task: existing evidence before new work, `EXPLORE` before `EXPERIMENT`, and either before asking a human to discover a fact. Use `CHECKOUT` for human judgment or authority, not as a substitute for agent fact-finding. Do not create an `EXPLORE` step when inspection is already known to be unable to answer the question, and do not experiment when a search/read can settle it.
 
+**MUST USE** at least one or more `EXPLORE` or `EXPERIMENT` before for each `IMPL` task. 
+
 An `IMPL` task owns the implementation handoff for its product-code scope. Its ordered How is `/req` → `/ood` → `/to-plan` → `/do-plan`; use existing approved artifacts and start at the first missing handoff stage. It cannot be `ready` until its context-producing and uncertainty-resolving prerequisites are `done`. Do not add separate `REQ`, `OOD`, `TO-PLAN`, or `DO-PLAN` nodes or expand the handoff into lifecycle children. `/next-way` runs `/req` → `/ood` → `/to-plan`, then stops and leaves `/do-plan` to the user. On a later invocation, `/next-way` reviews the `/do-plan` report against the task's expected result and the way's purpose before dependent work proceeds. A critical requirement or result contradiction stops and should re-run `/wayfinder` to revise the existing way.
 
 ## Shared understanding with grill-me
