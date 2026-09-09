@@ -1,6 +1,7 @@
 # Story Checklist
 
-Every point a `@skills/grill-me` interview must cover to build a complete agile Story. Phrase every question in plain, ELI5 language — no jargon, no unexplained terms.
+Use every point below to build a complete agile Story. Phrase every question
+in plain, ELI5 language — no jargon, no unexplained terms.
 
 - Persona (who hits this — a real user role, not "the system")
 - User value (the "so that" — what they get, what breaks or stays missing without it)

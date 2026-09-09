@@ -1,9 +1,8 @@
 # Intent Checklist
 
-Every point a `@skills/grill-me` interview must cover to uncover the real
-intent behind a request, before any problem, architecture, or solution work
-starts. Phrase every question in plain, ELI5 language — no jargon, no
-unexplained terms.
+Use every point below to uncover the real intent behind a request before any
+problem, architecture, or solution work starts. Phrase every question in
+plain, ELI5 language — no jargon, no unexplained terms.
 
 - Explicit request — the ask, close to verbatim, not paraphrased into something bigger or smaller
 - Intent / motivation — why this request, in the user's own words, not a guess dressed up as fact
