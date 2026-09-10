@@ -1,6 +1,7 @@
 ---
 name: project-setup
 description: Scaffold a new or existing project's baseline hygiene — README.md, INSTALL.md, a commit-msg hook enforcing Conventional Commits (feat(topic), fix(topic), ...), a post-merge hook that flags dependency-manifest changes, and a main/develop branch strategy. Use when the user wants to set up a new repo, add commit message linting, wire up git hooks, or establish a branching model. Idempotent — safe to re-run on an existing repo, it only fills in whatever's missing.
+disable-model-invocation: true
 ---
 
 # Project Setup
