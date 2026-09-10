@@ -307,6 +307,27 @@ configure_subagent_settings() {
   echo "  ✓ pi subagent defaults → $PI_SUBAGENT_MODEL ($PI_SUBAGENT_THINKING thinking)"
 }
 
+configure_subagent_tmux_layout() {
+  local source="$PI_AGENT_DIR/git/github.com/HazAT/pi-interactive-subagents/pi-extension/subagents/cmux.ts"
+
+  [ -f "$source" ] || { echo "  subagent tmux layout patch skipped (plugin source not found)" >&2; return; }
+  if node - "$source" <<'NODE'
+const fs = require("fs");
+const sourcePath = process.argv[2];
+const source = fs.readFileSync(sourcePath, "utf8");
+const patched = '    execFileSync("tmux", ["select-layout", "-t", pane, "even-horizontal"], { encoding: "utf8" });\n    return pane;';
+const original = '    if (!pane.startsWith("%")) {\n      throw new Error(`Unexpected tmux split-window output: ${pane}`);\n    }\n\n    return pane;';
+if (source.includes(patched)) process.exit(0);
+if (!source.includes(original)) throw new Error("Unsupported pi-interactive-subagents version");
+fs.writeFileSync(sourcePath, source.replace(original, original.replace("    return pane;", patched)));
+NODE
+  then
+    echo "  ✓ pi subagent tmux panes → even horizontal layout"
+  else
+    echo "  subagent tmux layout patch failed; plugin update may need a new patch" >&2
+  fi
+}
+
 configure_pi_settings() {
   local settings="$PI_AGENT_DIR/settings.json" tmp
 
@@ -421,6 +442,7 @@ setup_pi_subagents() {
     echo "  subagent plugin install failed, run manually: pi install git:github.com/HazAT/pi-interactive-subagents" >&2
     return 1
   fi
+  configure_subagent_tmux_layout
   configure_subagent_settings
   install_subagent_agents
 }

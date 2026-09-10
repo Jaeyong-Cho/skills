@@ -15,6 +15,16 @@ fi
 SH
 chmod +x "$TMP/bin/pi"
 
+SOURCE="$TMP/home/.pi/agent/git/github.com/HazAT/pi-interactive-subagents/pi-extension/subagents/cmux.ts"
+mkdir -p "$(dirname "$SOURCE")"
+cat > "$SOURCE" <<'TS'
+    if (!pane.startsWith("%")) {
+      throw new Error(`Unexpected tmux split-window output: ${pane}`);
+    }
+
+    return pane;
+TS
+
 printf '2\n4\n' | HOME="$TMP/home" PATH="$TMP/bin:/usr/bin:/bin" PI_LOG="$TMP/pi.log" \
   "$ROOT/install.sh" --subagent >/dev/null
 
@@ -34,6 +44,7 @@ node -e '
 ' "$TMP/home/.pi/agent/models.json"
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
 grep -q '^install git:github.com/HazAT/pi-interactive-subagents$' "$TMP/pi.log"
+grep -q 'select-layout", "-t", pane, "even-horizontal"' "$SOURCE"
 [ ! -e "$TMP/home/.agents" ]
 [ ! -e "$TMP/home/.local" ]
 
