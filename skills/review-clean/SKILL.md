@@ -41,6 +41,7 @@ Treat the thermo-nuclear standard as an escalation mode within this review: acti
 - [ ] [Successive refinement](../references/clean-code/14-successive-refinement.md) — simplify in small, behavior-preserving steps.
 - [ ] [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md) — look for deletable complexity and duplication.
 - [ ] [Deep modules](../references/deep-modules.md) — prefer simple interfaces over shallow wrappers.
+- [ ] [Abstraction levels](../references/abstraction-levels.md) — keep each responsibility at the right level and avoid layer mixing.
 - [ ] [Naming](../references/naming.md) — use names that reduce reader effort.
 - [ ] [Architecture forces](../references/meta-pattern.md) — check that structure follows real constraints.
 
