@@ -7,7 +7,7 @@ license: MIT
 
 # Review Loop
 
-Run the selected review skills in parallel against the current state, then handle their findings as a gated loop. Review one target, fix one accepted target, verify the change, and rerun the parallel review batch before moving on.
+Run the selected review skills in parallel against the current state. Show each selected stage's highest-impact finding in the same review cycle, then handle fixes as a gated loop: fix one accepted target, verify the change, and rerun the parallel review batch before moving on.
 
 Return all progress and results directly in the current session. Do not create or modify a review report file unless explicitly asked.
 
@@ -90,24 +90,25 @@ selectedStages.forEach((stage) => {
   subagent({
     name: `Reviewer-${stage}`,
     agent: "reviewer",
-    task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return the required one-finding review output. Do not make edits or delegate.",
+    task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return the required one-finding review output, including the exact violated checklist item or criterion (or Violation: None when clean). Do not make edits or delegate.",
   });
 });
 ```
 
 Do not await or serialize one stage before dispatching the next. Collect all results from the batch before deciding actions. Every reviewer must receive the same current-state snapshot and evidence. The linked review skill owns each review's criteria; provide its path without directly invoking the skill. Do not merge criteria from other stages into it. Reviewers are read-only (`tools: read, bash`, `spawning: false`) and must remain so.
 
-Each reviewer must identify at most one primary target. Parallel results may contain one target per stage, but process only one accepted finding at a time in the selected order. The Risk stage may inspect failure, boundary, and concurrency risks, but it must still report only one primary risk target at a time.
+Each reviewer must identify and show only its highest-impact or highest-risk primary target first, and label the exact violated checklist item or criterion from its linked skill (for example, `review-risk — Concurrency`). If no in-scope finding remains, report `Violation: None`. Show every selected stage's result together in the same review cycle; process only one accepted finding at a time in the selected order. The Risk stage may inspect failure, boundary, and concurrency risks, but it must still report only one primary risk target at a time.
 
-For the primary target, show the child review's human-readable:
+For each selected stage's primary target/result, show the child review's human-readable fields in the same cycle:
 
 - location;
+- violation — the exact checklist item or criterion that is violated, or `None`;
 - problem;
 - reason;
 - separate `Example` section with a fenced code block, real code, data, logs, or an ASCII diagram;
 - recommended handling strategy.
 
-### 3. Fix one target
+### 3. Fix one target at a time
 
 For one accepted finding from the parallel batch:
 
@@ -123,7 +124,7 @@ If the fix creates a new issue in the same review target, address only that new 
 
 A stage with no remaining in-scope review point/finding in the latest parallel batch is automatically accepted and advances once the required relevant check supports the result. Do not ask the human to confirm a clean stage.
 
-When any current reviewer reports a review point/finding, show it to the human and pause for the human's decision or handling. Do not auto-fix, auto-accept, or advance. If the finding is not accepted or resolved, stay on that stage; results for other stages remain provisional until the current state is cleanly reviewed.
+When any current reviewer reports a review point/finding, show all selected stages' current findings together in the same cycle and pause for the human's decisions or handling. Do not hide a stage's finding, auto-fix, auto-accept, or advance. Fix accepted findings one at a time. If a finding is not accepted or resolved, stay on that stage; results for other stages remain provisional until the current state is cleanly reviewed.
 
 ### 5. Advance
 
@@ -133,7 +134,7 @@ If a later fix changes behavior that an earlier stage accepted, return to the ea
 
 ## Review control
 
-- **One target per cycle:** never fix a list of findings in one pass.
+- **One target per reviewer per cycle:** show one prioritized finding from every selected reviewer in the same cycle; never fix a list of findings in one pass.
 - **One scope per stage:** do not use a stage to report another stage's concerns.
 - **Current state wins:** every rerun uses the latest code and result evidence.
 - **No false acceptance:** a passing command does not prove an outcome unless it observes that outcome.
@@ -152,12 +153,15 @@ Use this structure:
 - Skipped: [stages]
 - Evidence: [context, changed code, result evidence]
 
-## Current stage: [stage]
+## Review cycle [number]
 
-### Cycle [number] — [Open | Fixed | Accepted]
-- **Target:** [one location or behavior]
-- **Problem:** [short statement]
-- **Reason:** [why it matters]
+Show one result block for every selected stage in this same cycle:
+
+### [stage] — [Open | Clean]
+- **Target:** [one location or behavior, or `None`]
+- **Violation:** [exact checklist item or criterion, or `None`]
+- **Problem:** [short statement, or `None`]
+- **Reason:** [why it matters, or `None`]
 
 ### Example
 
@@ -165,8 +169,8 @@ Use this structure:
 [real code, data, logs, or ASCII diagram]
 ```
 
-- **Recommended handling:** [strategy]
-- **Action:** [fix made, check run, or decision pending]
+- **Recommended handling:** [strategy, or `None`]
+- **Action:** [fix made, check run, decision pending, or none]
 - **Result:** [review/check result]
 
 ## Stage verdicts

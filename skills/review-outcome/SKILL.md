@@ -25,7 +25,7 @@ Treat missing inputs as unknowns, not as permission to invent requirements. Stat
 2. Trace the changed path from its entry point to its observable result.
 3. Compare the actual behavior and supplied result evidence with the intended outcome.
 4. Check the normal flow, relevant alternate flows, limits, and failure outcomes only when they affect the intended result.
-5. Report only outcome gaps, contradictions, or unverified claims.
+5. Rank findings by impact on the core observable outcome: complete failure first, then materially partial behavior, then narrower or merely unverified gaps. Show only the highest-impact finding first and defer lower-impact findings until it is resolved.
 
 Do not infer success from code shape alone when result evidence is available. Do not treat a passing command as proof of the product outcome unless the command checks that outcome.
 

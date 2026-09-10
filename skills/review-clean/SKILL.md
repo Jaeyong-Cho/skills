@@ -59,7 +59,8 @@ Treat the thermo-nuclear standard as an escalation mode within this review: acti
 5. Check whether names and comments reveal meaning, side effects, and non-obvious constraints.
 6. Check whether a refactor reduces the reader’s mental load rather than moving complexity elsewhere.
 7. Check for a healthy decomposition boundary, especially when a change pushes a file beyond roughly 1,000 lines.
-8. Report one primary cleanup target at a time and prefer the smallest safe simplification.
+8. Rank cleanup findings by reader and maintenance impact, prioritizing simplifications that remove the most risk or complexity. Show the highest-impact target first.
+9. Report one primary cleanup target at a time and prefer the smallest safe simplification.
 
 Passing tests are evidence of behavior, not approval of structure. Do not flood the review with cosmetic preferences.
 

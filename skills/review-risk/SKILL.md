@@ -44,7 +44,7 @@ If none of these risks are present, say that the risk stage is not applicable. D
 3. Trace the risky path from trigger to caller-visible result and final state.
 4. Check the highest-impact realistic failure or interleaving first.
 5. Check recovery, rollback, idempotency, ownership, and observability where they affect safety.
-6. Rank findings by impact and evidence, not by how unusual the scenario sounds.
+6. Rank findings by likely harm, blast radius, likelihood, and evidence—not by how unusual the scenario sounds. Show the highest-risk finding first.
 7. Report one primary target at a time; defer lower-priority risks until the primary target is resolved.
 
 A risk finding must identify a concrete trigger, the unsafe result, and a practical handling strategy. A passing happy path does not establish safety.

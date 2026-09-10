@@ -33,6 +33,7 @@ Inspect the changed production path and its tests together. If no test evidence 
 6. Check deterministic, independent, readable, maintainable tests and clear failure messages.
 7. For a bug fix, check for a regression case that reproduces the old failure at the lowest reliable level.
 8. Avoid demanding tests for trivial delegation, getters, setters, constructors, or private details already covered through public behavior.
+9. Rank findings by the importance and failure impact of the behavior left unprotected. Show the highest-impact testing gap or false-confidence risk first, then defer lower-priority findings.
 
 Optimize for confidence in important behavior, not test count or coverage percentage. Do not duplicate coverage across levels unless each test protects a different failure mode.
 
