@@ -28,6 +28,10 @@ node -e '
   if (settings.subagents.defaultThinking !== "medium") process.exit(1);
   if ("tuiMode" in settings || "terminal" in settings) process.exit(1);
 ' "$TMP/home/.pi/agent/settings.json"
+node -e '
+  const models = require(process.argv[1]);
+  if (models.providers.beta.modelOverrides.two.contextWindow !== 1000000) process.exit(1);
+' "$TMP/home/.pi/agent/models.json"
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
 grep -q '^install git:github.com/HazAT/pi-interactive-subagents$' "$TMP/pi.log"
 [ ! -e "$TMP/home/.agents" ]

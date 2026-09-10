@@ -328,11 +328,43 @@ configure_pi_settings() {
   echo "  ✓ pi TUI → fullscreen (scrollbar: auto, truecolor)"
 }
 
+configure_pi_context_window() {
+  local model_ref="$1" provider model models tmp
+  case "$model_ref" in
+    */*) provider="${model_ref%%/*}"; model="${model_ref#*/}" ;;
+    *) echo "Invalid Pi model reference: $model_ref (expected provider/model)." >&2; return 2 ;;
+  esac
+
+  models="$PI_AGENT_DIR/models.json"
+  [ -f "$models" ] || printf '{}\n' > "$models"
+  tmp="$(mktemp "$PI_AGENT_DIR/models.json.XXXXXX")"
+  node - "$models" "$tmp" "$provider" "$model" <<'NODE'
+const fs = require("fs");
+const [modelsPath, outputPath, providerName, modelId] = process.argv.slice(2);
+const models = JSON.parse(fs.readFileSync(modelsPath, "utf8"));
+if (!models.providers || typeof models.providers !== "object" || Array.isArray(models.providers)) {
+  models.providers = {};
+}
+const provider = models.providers[providerName] ||= {};
+if (!provider.modelOverrides || typeof provider.modelOverrides !== "object" || Array.isArray(provider.modelOverrides)) {
+  provider.modelOverrides = {};
+}
+provider.modelOverrides[modelId] = {
+  ...(provider.modelOverrides[modelId] || {}),
+  contextWindow: 1000000,
+};
+fs.writeFileSync(outputPath, JSON.stringify(models, null, 2) + "\n");
+NODE
+  mv "$tmp" "$models"
+  echo "  ✓ pi context window → 1M ($model_ref)"
+}
+
 setup_pi() {
   echo "→ pi coding agent"
 
   mkdir -p "$PI_AGENT_DIR"
   configure_pi_settings
+  configure_pi_context_window "$PI_SUBAGENT_MODEL"
   cp "$SKILLS_DIR/config/open-tui.json" "$PI_AGENT_DIR/open-tui.json"
   echo "  ✓ ~/.pi/agent/open-tui.json ← $SKILLS_DIR/config/open-tui.json"
   if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
@@ -382,6 +414,7 @@ setup_pi_subagents() {
   command -v node &>/dev/null || { echo "  node not found; cannot configure subagents." >&2; return 1; }
   mkdir -p "$PI_AGENT_DIR"
   select_subagent_config
+  configure_pi_context_window "$PI_SUBAGENT_MODEL"
   if pi install "git:github.com/HazAT/pi-interactive-subagents" &>/dev/null; then
     echo "  ✓ git:github.com/HazAT/pi-interactive-subagents"
   else
