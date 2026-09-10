@@ -7,7 +7,7 @@ license: MIT
 
 # Review Loop
 
-Run focused review skills as a gated loop. Review one target, fix one accepted target, verify the change, and rerun that review before moving on.
+Run the selected review skills in parallel against the current state, then handle their findings as a gated loop. Review one target, fix one accepted target, verify the change, and rerun the parallel review batch before moving on.
 
 Return all progress and results directly in the current session. Do not create or modify a review report file unless explicitly asked.
 
@@ -66,9 +66,9 @@ Available stages:
 - `test`
 - `clean`
 
-If the human gives no selection, show the recommended order and use it. Do not force unselected stages.
+If the human gives no selection, show the recommended order and use it. Do not force unselected stages. The selected order controls finding resolution and stage verdicts; it does not serialize reviewer dispatch.
 
-## Gated workflow
+## Parallel gated workflow
 
 ### 1. Establish the selection
 
@@ -81,21 +81,23 @@ Show:
 
 Do not begin a stage outside the selection.
 
-### 2. Review one stage
+### 2. Dispatch the selected reviews in parallel
 
-Dispatch the read-only `reviewer` sub-agent for the current stage using the explicit `subagent()` mechanism:
+Dispatch one read-only `reviewer` sub-agent for every selected stage before waiting for any result. Use the explicit `subagent()` mechanism and invoke all calls in the same turn:
 
 ```typescript
-subagent({
-  name: "Reviewer",
-  agent: "reviewer",
-  task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return the required one-finding review output. Do not make edits or delegate.",
+selectedStages.forEach((stage) => {
+  subagent({
+    name: `Reviewer-${stage}`,
+    agent: "reviewer",
+    task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return the required one-finding review output. Do not make edits or delegate.",
+  });
 });
 ```
 
-The linked review skill owns the review criteria; provide its path and relevant context to the reviewer without directly invoking the skill. Do not merge criteria from other stages into it. The reviewer is read-only (`tools: read, bash`, `spawning: false`) and must remain so.
+Do not await or serialize one stage before dispatching the next. Collect all results from the batch before deciding actions. Every reviewer must receive the same current-state snapshot and evidence. The linked review skill owns each review's criteria; provide its path without directly invoking the skill. Do not merge criteria from other stages into it. Reviewers are read-only (`tools: read, bash`, `spawning: false`) and must remain so.
 
-The review must identify at most one primary target at a time. If several findings exist, prioritize the highest-impact finding and defer the rest until the current target is resolved. The Risk stage may inspect failure, boundary, and concurrency risks, but it must still report only one primary risk target at a time.
+Each reviewer must identify at most one primary target. Parallel results may contain one target per stage, but process only one accepted finding at a time in the selected order. The Risk stage may inspect failure, boundary, and concurrency risks, but it must still report only one primary risk target at a time.
 
 For the primary target, show the child review's human-readable:
 
@@ -107,25 +109,25 @@ For the primary target, show the child review's human-readable:
 
 ### 3. Fix one target
 
-For an accepted finding:
+For one accepted finding from the parallel batch:
 
 1. Confirm the exact target and intended behavior.
 2. Make the smallest safe fix that addresses that target.
 3. Do not bundle unrelated cleanup or speculative improvements.
 4. Run the smallest relevant check available.
-5. Re-run the same review stage against the updated state.
+5. Invalidate all results from the pre-fix snapshot and dispatch every selected reviewer in parallel against the updated state.
 
-If the fix creates a new issue in the same review target, address only that new primary target before proceeding.
+If the fix creates a new issue in the same review target, address only that new primary target before proceeding. Never fix multiple parallel findings in one pass.
 
 ### 4. Accept or repeat
 
-A stage with no remaining in-scope review point/finding is automatically accepted and advances once the required relevant check supports the result. Do not ask the human to confirm a clean stage.
+A stage with no remaining in-scope review point/finding in the latest parallel batch is automatically accepted and advances once the required relevant check supports the result. Do not ask the human to confirm a clean stage.
 
-When the current review reports a review point/finding, show it to the human and pause for the human's decision or handling. Do not auto-fix, auto-accept, or advance. If the finding is not accepted or resolved, stay on that stage.
+When any current reviewer reports a review point/finding, show it to the human and pause for the human's decision or handling. Do not auto-fix, auto-accept, or advance. If the finding is not accepted or resolved, stay on that stage; results for other stages remain provisional until the current state is cleanly reviewed.
 
 ### 5. Advance
 
-After a clean review and required verification, automatically show the stage verdict and move to the next selected stage. The next stage reviews the current state, including all fixes from earlier stages.
+After the latest parallel batch is clean and required verification passes, automatically show each stage verdict in the selected order and move to the next selected stage. Every stage verdict must use a result from the latest current-state batch, including all fixes from earlier stages.
 
 If a later fix changes behavior that an earlier stage accepted, return to the earliest affected stage and repeat from there.
 
