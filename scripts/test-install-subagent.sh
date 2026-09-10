@@ -15,16 +15,6 @@ fi
 SH
 chmod +x "$TMP/bin/pi"
 
-SOURCE="$TMP/home/.pi/agent/git/github.com/HazAT/pi-interactive-subagents/pi-extension/subagents/cmux.ts"
-mkdir -p "$(dirname "$SOURCE")"
-cat > "$SOURCE" <<'TS'
-    if (!pane.startsWith("%")) {
-      throw new Error(`Unexpected tmux split-window output: ${pane}`);
-    }
-
-    return pane;
-TS
-
 printf '2\n4\n' | HOME="$TMP/home" PATH="$TMP/bin:/usr/bin:/bin" PI_LOG="$TMP/pi.log" \
   "$ROOT/install.sh" --subagent >/dev/null
 
@@ -32,6 +22,7 @@ for file in "$TMP/home/.pi/agent/agents"/*.md; do
   grep -q '^model: beta/two$' "$file"
   grep -q '^thinking: medium$' "$file"
 done
+grep -q '^Return up to three prioritized findings' "$TMP/home/.pi/agent/agents/reviewer.md"
 node -e '
   const settings = require(process.argv[1]);
   if (settings.subagents.defaultModel !== "beta/two") process.exit(1);
@@ -43,10 +34,8 @@ node -e '
   if (models.providers.beta.modelOverrides.two.contextWindow !== 1000000) process.exit(1);
 ' "$TMP/home/.pi/agent/models.json"
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
-grep -q '^install git:github.com/HazAT/pi-interactive-subagents$' "$TMP/pi.log"
-grep -q 'direction === "left" || direction === "right"' "$SOURCE"
-grep -q 'resize-pane", "-t", pane' "$SOURCE"
-! grep -q 'select-layout' "$SOURCE"
+grep -q '^install git:github.com/Jaeyong-Cho/pi-interactive-subagents$' "$TMP/pi.log"
+! grep -q 'HazAT/pi-interactive-subagents\|cmux\.ts\|configure_subagent_tmux_layout' "$ROOT/install.sh"
 grep -q 'skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review' "$ROOT/install.sh"
 [ ! -e "$TMP/home/.agents" ]
 [ ! -e "$TMP/home/.local" ]

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec pi install "git:github.com/HazAT/pi-interactive-subagents" "$@"
+exec pi install "git:github.com/Jaeyong-Cho/pi-interactive-subagents" "$@"
