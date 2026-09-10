@@ -19,6 +19,10 @@ Accept any combination of:
 
 Inspect the changed production path and its tests together. If no test evidence is supplied, say what confidence cannot be established.
 
+## Review checklist
+
+- [ ] [Testing guidelines](../references/testing-guidelines.md) — choose the smallest reliable test level and avoid false confidence.
+
 ## Review process
 
 1. Identify the important behavior, contract, or failure the change should protect.
@@ -63,9 +67,5 @@ Return the review directly in the current session. Do not create or modify a rev
 ## Untested risks
 - [important behavior or failure mode with insufficient evidence]
 ```
-
-## Reference material
-
-- [Testing guidelines](../references/testing-guidelines.md)
 
 A passing test suite is evidence, not proof of sufficient testing. Explain exactly what the tests do and do not establish.

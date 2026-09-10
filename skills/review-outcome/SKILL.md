@@ -29,11 +29,11 @@ Treat missing inputs as unknowns, not as permission to invent requirements. Stat
 
 Do not infer success from code shape alone when result evidence is available. Do not treat a passing command as proof of the product outcome unless the command checks that outcome.
 
-## Reference material
+## Review checklist
 
-- [Intent criteria](../references/intent-checklist.md)
-- [Story criteria](../references/req-checklist.md)
-- [Requirements engineering](../references/requirement-engineering.md)
+- [ ] [Intent criteria](../references/intent-checklist.md) — identify the actor, trigger, and observable result.
+- [ ] [Story criteria](../references/req-checklist.md) — check the request's acceptance conditions and user flow.
+- [ ] [Requirements engineering](../references/requirement-engineering.md) — resolve ambiguity before judging the outcome.
 
 ## Output
 

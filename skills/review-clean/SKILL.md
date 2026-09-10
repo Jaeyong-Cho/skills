@@ -30,6 +30,20 @@ Look for one of these connected cleanliness problems:
 
 Treat the thermo-nuclear standard as an escalation mode within this review: actively look for a behavior-preserving simplification that deletes concepts, branches, helpers, or layers. Do not demand abstraction for its own sake.
 
+## Review checklist
+
+- [ ] [Functions](../references/clean-code/03-functions.md) — keep responsibilities small and focused.
+- [ ] [Meaningful names](../references/clean-code/02-meaningful-names.md) — make intent and constraints obvious.
+- [ ] [Comments](../references/clean-code/04-comments.md) — retain only comments that explain non-obvious constraints.
+- [ ] [Objects and data structures](../references/clean-code/06-objects-and-data-structures.md) — keep data and behavior boundaries clear.
+- [ ] [Classes](../references/clean-code/10-classes.md) — preserve cohesion and single responsibility.
+- [ ] [Emergent design](../references/clean-code/12-emergence.md) — prefer simple structure that supports the current behavior.
+- [ ] [Successive refinement](../references/clean-code/14-successive-refinement.md) — simplify in small, behavior-preserving steps.
+- [ ] [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md) — look for deletable complexity and duplication.
+- [ ] [Deep modules](../references/deep-modules.md) — prefer simple interfaces over shallow wrappers.
+- [ ] [Naming](../references/naming.md) — use names that reduce reader effort.
+- [ ] [Architecture forces](../references/meta-pattern.md) — check that structure follows real constraints.
+
 ## Review process
 
 1. Establish the behavior and constraints that must remain unchanged.
@@ -78,17 +92,3 @@ Return the review directly in the current session. Do not create or modify a rev
 ```
 
 Do not approve merely because the implementation works when a clear, behavior-preserving simplification is visible.
-
-## Reference material
-
-- [Functions](../references/clean-code/03-functions.md)
-- [Meaningful names](../references/clean-code/02-meaningful-names.md)
-- [Comments](../references/clean-code/04-comments.md)
-- [Objects and data structures](../references/clean-code/06-objects-and-data-structures.md)
-- [Classes](../references/clean-code/10-classes.md)
-- [Emergent design](../references/clean-code/12-emergence.md)
-- [Successive refinement](../references/clean-code/14-successive-refinement.md)
-- [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md)
-- [Deep modules](../references/deep-modules.md)
-- [Naming](../references/naming.md)
-- [Architecture forces](../references/meta-pattern.md)

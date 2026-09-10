@@ -29,6 +29,14 @@ Select only the risk families relevant to the change:
 
 If none of these risks are present, say that the risk stage is not applicable. Do not manufacture hypothetical risks.
 
+## Review checklist
+
+- [ ] [Error handling](../references/clean-code/07-error-handling.md) — trace invalid input, failure, and recovery paths.
+- [ ] [Boundaries](../references/clean-code/08-boundaries.md) — check external contracts and trust boundaries.
+- [ ] [Concurrency](../references/clean-code/13-concurrency.md) — check shared state, ordering, retries, and atomicity.
+- [ ] [Concurrency appendix](../references/clean-code/appendix-a-concurrency-ii.md) — check deeper interleaving and shutdown cases when relevant.
+- [ ] [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md) — use targeted prompts to expose material risk.
+
 ## Review process
 
 1. Identify the changed operation and its blast radius.
@@ -80,11 +88,3 @@ Return the review directly in the current session. Do not create or modify a rev
 ```
 
 Do not recommend broad refactoring unless it is required to remove the material risk.
-
-## Reference material
-
-- [Error handling](../references/clean-code/07-error-handling.md)
-- [Boundaries](../references/clean-code/08-boundaries.md)
-- [Concurrency](../references/clean-code/13-concurrency.md)
-- [Concurrency appendix](../references/clean-code/appendix-a-concurrency-ii.md)
-- [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md)
