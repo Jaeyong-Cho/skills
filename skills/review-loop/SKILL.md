@@ -83,7 +83,17 @@ Do not begin a stage outside the selection.
 
 ### 2. Review one stage
 
-Invoke only the selected review skill for the current stage. That skill owns the review criteria. Do not merge criteria from other stages into it.
+Dispatch the read-only `reviewer` sub-agent for the current stage using the explicit `subagent()` mechanism:
+
+```typescript
+subagent({
+  name: "Reviewer",
+  agent: "reviewer",
+  task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return the required one-finding review output. Do not make edits or delegate.",
+});
+```
+
+The linked review skill owns the review criteria; provide its path and relevant context to the reviewer without directly invoking the skill. Do not merge criteria from other stages into it. The reviewer is read-only (`tools: read, bash`, `spawning: false`) and must remain so.
 
 The review must identify at most one primary target at a time. If several findings exist, prioritize the highest-impact finding and defer the rest until the current target is resolved. The Risk stage may inspect failure, boundary, and concurrency risks, but it must still report only one primary risk target at a time.
 
