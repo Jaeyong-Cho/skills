@@ -27,16 +27,23 @@ Missing evidence is an uncertainty to report, not a reason to invent facts.
 Unless the human chooses another selection or order, recommend and run:
 
 1. **Outcome** → [review-outcome](../review-outcome/SKILL.md)
+   - [ ] Intent — identify the actor, trigger, and observable result.
+   - [ ] Acceptance — check the request's conditions and user flow.
+   - [ ] Evidence — compare the actual result with the intended outcome.
 2. **Risk** → [review-risk](../review-risk/SKILL.md)
+   - [ ] Failure — check invalid input, dependency failure, and recovery.
+   - [ ] Boundary — check external contracts and trust boundaries.
+   - [ ] Concurrency — check shared state, retries, ordering, and atomicity.
 3. **Test** → [review-test](../review-test/SKILL.md)
+   - [ ] Behavior — identify the important behavior or contract to protect.
+   - [ ] Test level — choose the smallest level that reliably observes it.
+   - [ ] Test quality — check deterministic, independent, outcome-focused evidence.
 4. **Clean** → [review-clean](../review-clean/SKILL.md)
+   - [ ] Complexity — look for behavior-preserving deletion and simplification.
+   - [ ] Cohesion — keep each responsibility focused and well-bounded.
+   - [ ] Intent — make names, interfaces, and structure easy to understand.
 
-The reason for this order is simple:
-
-- First confirm that the change does what the human wants.
-- Then find material failure, integrity, boundary, and concurrency risks.
-- Then make sure tests provide useful confidence in the accepted behavior.
-- Finally simplify and refactor without losing the accepted behavior.
+Each stage shows no more than three review points; the linked skill owns the full criteria.
 
 ## Flexible selection
 
