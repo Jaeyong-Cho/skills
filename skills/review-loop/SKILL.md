@@ -119,17 +119,13 @@ If the fix creates a new issue in the same review target, address only that new 
 
 ### 4. Accept or repeat
 
-A stage is accepted only when:
+A stage with no remaining in-scope review point/finding is automatically accepted and advances once the required relevant check supports the result. Do not ask the human to confirm a clean stage.
 
-- the current review has no remaining in-scope blocking finding;
-- the relevant check supports the result, or the missing evidence is explicitly accepted as a risk; and
-- the human accepts the stage, unless the human explicitly delegated acceptance to the review result.
-
-If the stage is not accepted, stay on that stage. Do not advance to the next stage.
+When the current review reports a review point/finding, show it to the human and pause for the human's decision or handling. Do not auto-fix, auto-accept, or advance. If the finding is not accepted or resolved, stay on that stage.
 
 ### 5. Advance
 
-After acceptance, show the stage verdict and move to the next selected stage. The next stage reviews the current state, including all fixes from earlier stages.
+After a clean review and required verification, automatically show the stage verdict and move to the next selected stage. The next stage reviews the current state, including all fixes from earlier stages.
 
 If a later fix changes behavior that an earlier stage accepted, return to the earliest affected stage and repeat from there.
 
@@ -140,7 +136,7 @@ If a later fix changes behavior that an earlier stage accepted, return to the ea
 - **Current state wins:** every rerun uses the latest code and result evidence.
 - **No false acceptance:** a passing command does not prove an outcome unless it observes that outcome.
 - **No speculative work:** defer low-confidence or unrelated improvements.
-- **Human control:** the human may accept, reject, reorder, skip, or stop at any stage.
+- **Human control:** the human controls every finding and may accept, reject, reorder, skip, or stop at any stage; clean stages advance automatically after required verification.
 
 ## Session output
 
