@@ -30,6 +30,13 @@ Look for one of these connected cleanliness problems:
 
 Treat the thermo-nuclear standard as an escalation mode within this review: actively look for a behavior-preserving simplification that deletes concepts, branches, helpers, or layers. Do not demand abstraction for its own sake.
 
+## Priority checks
+
+- [ ] [Abstraction levels](../references/abstraction-levels.md) — keep each responsibility at the right level and prevent layer mixing.
+- [ ] [Deep modules](../references/deep-modules.md) — prefer small interfaces that hide substantial implementation complexity.
+- [ ] Complexity — delete duplicated knowledge, branches, flags, wrappers, and needless layers.
+- [ ] Dependency direction — keep higher-level policy independent from lower-level mechanisms and concrete details.
+
 ## Review checklist
 
 - [ ] [Functions](../references/clean-code/03-functions.md) — keep responsibilities small and focused.
@@ -40,8 +47,6 @@ Treat the thermo-nuclear standard as an escalation mode within this review: acti
 - [ ] [Emergent design](../references/clean-code/12-emergence.md) — prefer simple structure that supports the current behavior.
 - [ ] [Successive refinement](../references/clean-code/14-successive-refinement.md) — simplify in small, behavior-preserving steps.
 - [ ] [Code-smell prompts](../references/clean-code/17-smells-and-heuristics.md) — look for deletable complexity and duplication.
-- [ ] [Deep modules](../references/deep-modules.md) — prefer simple interfaces over shallow wrappers.
-- [ ] [Abstraction levels](../references/abstraction-levels.md) — keep each responsibility at the right level and avoid layer mixing.
 - [ ] [Naming](../references/naming.md) — use names that reduce reader effort.
 - [ ] [Architecture forces](../references/meta-pattern.md) — check that structure follows real constraints.
 
