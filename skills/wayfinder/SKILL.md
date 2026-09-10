@@ -10,9 +10,13 @@ Produce a task plan, not a lifecycle checklist. Answer:
 
 > What work is actually needed, what do we not know yet, what can start now, and what must wait for what?
 
-Plan first: use grill-me for the user conversation and inspect context, but do not implement, run experiments, or persist the result. After the user confirms the plan, return the plan in the conversation only. Propose evidence-gathering work when needed; never report a proposed check as completed.
+Plan first: use grill-me for the user conversation and inspect context, but do not implement, run experiments, or persist the result. Before finding ways, identify the relevant `contexts/` directory (including one alongside the supplied goal, repository, or way path when present) and read applicable `*-facts-*`, `*-intents-*`, and `*-constraints-*` files as read-only inputs. Keep confirmed facts, user intent, constraints, and unresolved questions explicitly distinct; do not turn inferences or open questions into facts or decisions. After the user confirms the plan, return the plan in the conversation only. Propose evidence-gathering work when needed; never report a proposed check as completed.
 
-**MUST NOT** create, update, or write any way document, even when persistence is requested during the Wayfinder invocation. End with a clear handoff for the separate recording step.
+## Initial context-grounding run
+
+On the initial Wayfinder run, the first/root way is a context-grounding way whose purpose is to find and confirm the facts, user intent, and constraints needed for planning. That way may use `EXPLORE` for read-only inspection and `CHECKOUT` for explicit user confirmation, but it must not use `EXPERIMENT`; Wayfinder itself never runs experiments. When those contexts are missing or unconfirmed, the initial run should stop at and return the context-gathering plan. The user then runs Wayfinder again; that later run reads the confirmed contexts and builds the actual outcome-oriented ways. This does not replace the task-type rules below: later plans may represent experiment work as `EXPERIMENT`, but Wayfinder only proposes it and never executes it.
+
+**MUST NOT** create, update, or write any way document, even when persistence is requested during the Wayfinder invocation. Separate to-context or other recording operations may persist confirmed context after confirmation; those operations are outside Wayfinder. End with a clear handoff for the separate recording step.
 
 ## Recommend the recording operation
 
@@ -90,7 +94,7 @@ Ground How in inspected context or explicit user decisions. If a consequential c
 
 ## Planning process
 
-1. **Ground the goal.** Use the shared-understanding session above when needed. Capture the success signal and scope with the user. Inspect any supplied way plus relevant repository paths, existing behavior, and tests, but defer the create/update decision. Distinguish observed facts (cite paths), user decisions, assumptions, and missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it before dependent planning or mark the plan provisional.
+1. **Ground the goal.** Use the shared-understanding session above when needed. Capture the success signal and scope with the user. Inspect the relevant `contexts/` directory and read applicable `*-facts-*`, `*-intents-*`, and `*-constraints-*` files, alongside any supplied way, relevant repository paths, existing behavior, and tests; all are read-only inputs, and defer the create/update decision. Distinguish confirmed facts (cite paths), user intent, constraints, assumptions, and unresolved questions or missing evidence. Do not plan rebuilding existing capabilities. If the goal or success signal is missing, clarify it before dependent planning or mark the plan provisional.
 2. **Find consequential unknowns.** Look for gaps in behavior, integration contracts, feasibility, data safety, external dependencies, and validation. Record only those that could change the plan or prevent trustworthy completion; do not invent an uncertainty quota.
 3. **Decompose by outcomes.** Identify the needed ways and concrete tasks using the rules above. For every way, state its purpose, current state, expected result state, falsifiable hypothesis, and assumptions before decomposing its children. Cover the goal once, including integration and failure handling where relevant. If an unknown changes a branch's decomposition, leave that branch explicitly partial instead of inventing children; continue independent branches.
 4. **Wire prerequisites.** For each executable leaf, record the leaf IDs it needs and the result consumed from each. Include dependencies across ways. Share a prerequisite once rather than duplicating it under every consumer.
