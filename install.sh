@@ -310,21 +310,28 @@ configure_subagent_settings() {
 configure_subagent_tmux_layout() {
   local source="$PI_AGENT_DIR/git/github.com/HazAT/pi-interactive-subagents/pi-extension/subagents/cmux.ts"
 
-  [ -f "$source" ] || { echo "  subagent tmux layout patch skipped (plugin source not found)" >&2; return; }
+  [ -f "$source" ] || { echo "  subagent tmux layout patch skipped (plugin source not found)" >&2; return 1; }
   if node - "$source" <<'NODE'
 const fs = require("fs");
 const sourcePath = process.argv[2];
 const source = fs.readFileSync(sourcePath, "utf8");
-const patched = '    execFileSync("tmux", ["select-layout", "-t", pane, "even-horizontal"], { encoding: "utf8" });\n    return pane;';
+const patched = '    if (direction === "left" || direction === "right") {\n      const sourcePane = fromSurface ?? execFileSync("tmux", ["display-message", "-p", "#{pane_id}"], { encoding: "utf8" }).trim();\n      const sourceWidth = Number(execFileSync("tmux", ["display-message", "-p", "-t", sourcePane, "#{pane_width}"], { encoding: "utf8" }).trim());\n      const paneWidth = Number(execFileSync("tmux", ["display-message", "-p", "-t", pane, "#{pane_width}"], { encoding: "utf8" }).trim());\n      execFileSync("tmux", ["resize-pane", "-t", pane, "-x", String(Math.floor((sourceWidth + paneWidth) / 2))], { encoding: "utf8" });\n    }\n    return pane;';
 const original = '    if (!pane.startsWith("%")) {\n      throw new Error(`Unexpected tmux split-window output: ${pane}`);\n    }\n\n    return pane;';
+const previous = '    execFileSync("tmux", ["select-layout", "-t", pane, "even-horizontal"], { encoding: "utf8" });\n    return pane;';
 if (source.includes(patched)) process.exit(0);
-if (!source.includes(original)) throw new Error("Unsupported pi-interactive-subagents version");
-fs.writeFileSync(sourcePath, source.replace(original, original.replace("    return pane;", patched)));
+if (source.includes(previous)) {
+  fs.writeFileSync(sourcePath, source.replace(previous, patched));
+} else if (source.includes(original)) {
+  fs.writeFileSync(sourcePath, source.replace(original, original.replace("    return pane;", patched)));
+} else {
+  throw new Error("Unsupported pi-interactive-subagents version");
+}
 NODE
   then
-    echo "  ✓ pi subagent tmux panes → even horizontal layout"
+    echo "  ✓ pi subagent tmux panes → targeted horizontal resize"
   else
     echo "  subagent tmux layout patch failed; plugin update may need a new patch" >&2
+    return 1
   fi
 }
 
@@ -399,8 +406,11 @@ setup_pi() {
     npx --yes skills add DietrichGebert/ponytail -a pi -g -y &>/dev/null \
       && echo "  ✓ ponytail (skills.sh)" \
       || echo "  ponytail install failed, run manually: npx skills add DietrichGebert/ponytail -a pi -g -y"
+    npx --yes skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review -a pi -g -y &>/dev/null \
+      && echo "  ✓ thermo-nuclear-code-quality-review (skills.sh)" \
+      || echo "  thermo-nuclear-code-quality-review install failed, run manually: npx skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review"
   else
-    echo "  npx not found, skipping ponytail"
+    echo "  npx not found, skipping ponytail and thermo-nuclear-code-quality-review"
   fi
 
   command -v pi &>/dev/null || return
@@ -435,14 +445,14 @@ setup_pi_subagents() {
   command -v node &>/dev/null || { echo "  node not found; cannot configure subagents." >&2; return 1; }
   mkdir -p "$PI_AGENT_DIR"
   select_subagent_config
-  configure_pi_context_window "$PI_SUBAGENT_MODEL"
   if pi install "git:github.com/HazAT/pi-interactive-subagents" &>/dev/null; then
     echo "  ✓ git:github.com/HazAT/pi-interactive-subagents"
   else
     echo "  subagent plugin install failed, run manually: pi install git:github.com/HazAT/pi-interactive-subagents" >&2
     return 1
   fi
-  configure_subagent_tmux_layout
+  configure_subagent_tmux_layout || return 1
+  configure_pi_context_window "$PI_SUBAGENT_MODEL"
   configure_subagent_settings
   install_subagent_agents
 }

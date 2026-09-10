@@ -44,7 +44,10 @@ node -e '
 ' "$TMP/home/.pi/agent/models.json"
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
 grep -q '^install git:github.com/HazAT/pi-interactive-subagents$' "$TMP/pi.log"
-grep -q 'select-layout", "-t", pane, "even-horizontal"' "$SOURCE"
+grep -q 'direction === "left" || direction === "right"' "$SOURCE"
+grep -q 'resize-pane", "-t", pane' "$SOURCE"
+! grep -q 'select-layout' "$SOURCE"
+grep -q 'skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review' "$ROOT/install.sh"
 [ ! -e "$TMP/home/.agents" ]
 [ ! -e "$TMP/home/.local" ]
 
