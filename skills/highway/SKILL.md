@@ -33,16 +33,6 @@ If the plan does not establish safe parallelism, leave the task undispatched and
 
 Before dispatching, mark each selected task `Status: in-progress` when practical, preserving its recorded content. Then dispatch every selected task in the same turn without waiting for another child:
 
-```typescript
-selectedTasks.forEach((task) => {
-  subagent({
-    name: `Highway-${task.id}`,
-    agent: task.kind === "EXPLORE" ? "scout" : "worker",
-    task: `Execute exactly task ${task.id} from [plan path]. Kind: [kind]. Workdir: [absolute Workdir]. Target repo: [absolute Target repo, IMPL only]. Follow its recorded Why, What, How, Needs, conditions, and Done when. For EXPLORE, remain read-only. For EXPERIMENT, keep all trial changes and evidence inside the Workdir. For IMPL, change only the Target repo within the recorded scope. Do not wait for sibling tasks, delegate, or expand scope. Return the observable result, commands/checks, failures, and evidence path; do not claim done without the recorded completion signal.`,
-  });
-});
-```
-
 Use `scout` only for read-only `EXPLORE`. Use `worker` for executable `EXPERIMENT` and `IMPL` tasks, passing the exact recorded paths and constraints. Do not dispatch a child for a `CHECKOUT`. Every child is independent and must not wait for another highway child.
 
 Dispatch is non-blocking: send all calls before collecting any result. Report the batch immediately with task IDs, child names, kinds, workspaces, target repositories, and the safety reason for parallel execution. Running is not completed.
