@@ -1,0 +1,8 @@
+{
+  "description": "Manual fixture annotation: a category is present when the case explicitly addresses it, including an explicit statement that it is absent or unchanged.",
+  "expected_present": {
+    "A": ["scope_paths", "structure", "coding_style", "build_test", "dependencies", "branch_versioning", "release_publishing", "ownership_approval", "generated_artifacts", "security", "configuration", "data", "compatibility", "performance", "observability", "documentation", "licensing", "process"],
+    "B": ["scope_paths", "build_test", "process"],
+    "C": ["structure", "coding_style", "interfaces_contracts", "build_test", "dependencies", "branch_versioning", "release_publishing", "ownership_approval", "changeability_rollback", "deployment", "configuration", "compatibility", "observability", "documentation", "licensing"]
+  }
+}

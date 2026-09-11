@@ -1,0 +1,186 @@
+{
+  "aggregate": {
+    "checklist_missing_detection": {
+      "fn": 0,
+      "fp": 0,
+      "tp": 27
+    },
+    "checklist_missing_precision": 1.0,
+    "checklist_missing_recall": 1.0,
+    "gold_missing_total": 27,
+    "prose_only_missing_recall": 0
+  },
+  "cases": [
+    {
+      "case": "A",
+      "checklist_error_counts": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 3
+      },
+      "checklist_missing": [
+        "changeability_rollback",
+        "deployment",
+        "interfaces_contracts"
+      ],
+      "gold_missing": [
+        "changeability_rollback",
+        "deployment",
+        "interfaces_contracts"
+      ],
+      "missing_counts": {
+        "checklist": 3,
+        "gold": 3
+      },
+      "prose_only_missing_report": [],
+      "prose_only_present": [
+        "branch_versioning",
+        "build_test",
+        "coding_style",
+        "compatibility",
+        "configuration",
+        "data",
+        "dependencies",
+        "documentation",
+        "generated_artifacts",
+        "licensing",
+        "observability",
+        "ownership_approval",
+        "performance",
+        "process",
+        "release_publishing",
+        "scope_paths",
+        "security",
+        "structure"
+      ]
+    },
+    {
+      "case": "B",
+      "checklist_error_counts": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 18
+      },
+      "checklist_missing": [
+        "branch_versioning",
+        "changeability_rollback",
+        "coding_style",
+        "compatibility",
+        "configuration",
+        "data",
+        "dependencies",
+        "deployment",
+        "documentation",
+        "generated_artifacts",
+        "interfaces_contracts",
+        "licensing",
+        "observability",
+        "ownership_approval",
+        "performance",
+        "release_publishing",
+        "security",
+        "structure"
+      ],
+      "gold_missing": [
+        "branch_versioning",
+        "changeability_rollback",
+        "coding_style",
+        "compatibility",
+        "configuration",
+        "data",
+        "dependencies",
+        "deployment",
+        "documentation",
+        "generated_artifacts",
+        "interfaces_contracts",
+        "licensing",
+        "observability",
+        "ownership_approval",
+        "performance",
+        "release_publishing",
+        "security",
+        "structure"
+      ],
+      "missing_counts": {
+        "checklist": 18,
+        "gold": 18
+      },
+      "prose_only_missing_report": [],
+      "prose_only_present": [
+        "build_test",
+        "process",
+        "scope_paths"
+      ]
+    },
+    {
+      "case": "C",
+      "checklist_error_counts": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 6
+      },
+      "checklist_missing": [
+        "data",
+        "generated_artifacts",
+        "performance",
+        "process",
+        "scope_paths",
+        "security"
+      ],
+      "gold_missing": [
+        "data",
+        "generated_artifacts",
+        "performance",
+        "process",
+        "scope_paths",
+        "security"
+      ],
+      "missing_counts": {
+        "checklist": 6,
+        "gold": 6
+      },
+      "prose_only_missing_report": [],
+      "prose_only_present": [
+        "branch_versioning",
+        "build_test",
+        "changeability_rollback",
+        "coding_style",
+        "compatibility",
+        "configuration",
+        "dependencies",
+        "deployment",
+        "documentation",
+        "interfaces_contracts",
+        "licensing",
+        "observability",
+        "ownership_approval",
+        "release_publishing",
+        "structure"
+      ]
+    }
+  ],
+  "categories": [
+    "scope_paths",
+    "structure",
+    "coding_style",
+    "build_test",
+    "interfaces_contracts",
+    "dependencies",
+    "branch_versioning",
+    "release_publishing",
+    "ownership_approval",
+    "changeability_rollback",
+    "generated_artifacts",
+    "security",
+    "deployment",
+    "configuration",
+    "data",
+    "compatibility",
+    "performance",
+    "observability",
+    "documentation",
+    "licensing",
+    "process"
+  ],
+  "method": "same cue extractor; prose-only reports present categories, checklist reports all absent categories"
+}
