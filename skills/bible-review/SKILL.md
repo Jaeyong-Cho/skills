@@ -37,6 +37,7 @@ Missing evidence is `Cannot determine`, not compliance.
 - **Law authority:** WHAT is the compliance test; WHY explains its protected intent and exposes possible Law concerns.
 - **No automatic Law changes:** amendment, repeal, or reorganization belongs to `@skills/bible-enact` after human review.
 - **Human gate:** no implementation edit or reform dispatch occurs before explicit confirmation for that proposed fix.
+- **Related scope:** propose or apply one cohesive related task at a time; do not bundle unrelated violations.
 - **No hidden findings:** show every non-pass finding and every unresolved violation; do not print clean Law results; list deferred work with its reason.
 - **No false acceptance:** missing, stale, or nondeterministic evidence remains `Cannot determine`; preserve and follow every `AI VERIFICATION METHOD` alert.
 

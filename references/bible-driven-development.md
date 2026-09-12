@@ -176,7 +176,7 @@ Audit resolves the effective parent chain, selects applicable Laws, checks for c
 
 ### Reform
 
-Reform consumes current Audit violations, reads WHY and WHAT, finds the cause, makes the smallest safe implementation change, and reinforces the Judge where useful. It may modify source, tests, configuration, build logic, or deterministic tooling, but never a Bible. It audits the changed state again before declaring the violation resolved.
+Reform consumes one selected related group of current Audit violations, reads WHY and WHAT, finds the shared cause, makes the smallest safe implementation change, and reinforces the Judge where useful. It may modify source, tests, configuration, build logic, or deterministic tooling, but never a Bible. It audits the changed state again before declaring that task resolved; unrelated violations wait for later cycles.
 
 ## Linter
 

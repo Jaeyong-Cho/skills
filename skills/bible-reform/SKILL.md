@@ -16,19 +16,20 @@ Restore implementation compliance from an Audit report. Reform may change implem
 3. Read the violated Law's full parent/child chain, including both WHY and WHAT, before editing.
 4. If the report contains a verification gap, Law conflict, Law concern, ambiguous scope, missing evidence, or a WHAT that no longer serves its WHY, stop and return it to `@skills/bible-enact`. Do not add or work around a missing Bible audit script here.
 5. Inspect the actual cause and all relevant callers before choosing the smallest safe correction. Do not make a cosmetic change that only fools the Judge.
+6. Select exactly one related task per Reform invocation: a cohesive group of violations sharing a root cause, component, Law boundary, or change surface. If the report contains unrelated violations, leave them for later cycles.
 
-## Reform each violation
+## Reform one related task
 
-For each selected violation, in priority order:
+For the selected related task:
 
-1. State the violated WHAT, protected WHY, root cause, and intended observable outcome.
-2. Make the smallest implementation change that satisfies WHAT and preserves WHY.
-3. Add or strengthen the lowest-cost useful regression check, lint rule, assertion, or other Judge reinforcement when the existing Audit method does not prevent recurrence. Do not add speculative infrastructure.
-4. Run the Law's Audit method and the focused regression check. Capture commands, exit codes, and observed results.
-5. If the check fails, stop with the evidence. Do not weaken the Law or claim success.
-6. Run the bundled `@skills/bible-audit/scripts/lint_bible.py` against unchanged Bible roots and re-run `@skills/bible-audit` against the changed state before declaring the violation resolved.
+1. State the selected violations, why they belong together, the violated WHATs, protected WHYs, root cause, and intended observable outcome.
+2. Make the smallest implementation change that satisfies only this related group and preserves each Law's WHY. Do not fix unrelated violations in the same invocation.
+3. Add or strengthen the lowest-cost useful regression check, lint rule, assertion, or other Judge reinforcement for this task when the existing Audit method does not prevent recurrence. Do not add speculative infrastructure.
+4. Run the task's Law Audit methods and focused regression checks. Capture commands, exit codes, and observed results.
+5. If a check fails, stop with the evidence. Do not weaken a Law or claim success.
+6. Run the bundled `@skills/bible-audit/scripts/lint_bible.py` against unchanged Bible roots and re-run `@skills/bible-audit` against the changed state before declaring this task resolved.
 
-Do not bundle unrelated cleanup. If one fix changes another Law's scope or observable behavior, stop for human review rather than silently expanding the task.
+Do not bundle unrelated cleanup or violations. If one fix changes another Law's scope or observable behavior, stop for human review rather than silently expanding the task.
 
 ## Output
 
@@ -40,6 +41,7 @@ Return:
 ## Input
 - **Audit:** [report/source]
 - **Bible chain:** [global → repository → component, as applicable]
+- **Selected related task:** [one cohesive violation group]
 
 ## Changes
 ### VIOLATION-001 — [title]
@@ -54,7 +56,7 @@ Return:
 - [blocked item and evidence, or `None`]
 
 ## Verdict
-[Reformed | Partially reformed | Stopped for Enact]
+[Reformed one related task | Partially reformed one related task | Stopped for Enact]
 ```
 
-Completion criterion: each attempted violation has a cause, a WHAT-and-WHY-preserving change or an explicit blocker, verification evidence, and a fresh audit result; no Bible file was modified.
+Completion criterion: exactly one related task was selected for this invocation; every attempted violation in that task has a cause, a WHAT-and-WHY-preserving change or an explicit blocker, verification evidence, and a fresh audit result; unrelated violations remain unresolved for later cycles; no Bible file was modified.
