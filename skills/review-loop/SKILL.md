@@ -1,13 +1,13 @@
 ---
 name: review-loop
-description: Orchestrate clean and thermo review cycles with reviewed fixes. Use when a change should pass focused quality review while allowing the human to select or reorder the stages and confirm each fix.
+description: Orchestrate clean and thermo review cycles with reviewed fixes. Use when a change should pass focused quality review while allowing the human to select or reorder the stages and confirm each proposed fix before it is applied.
 disable-model-invocation: true
 license: MIT
 ---
 
 # Review Loop
 
-Run the selected review skills in parallel against the current state. Show up to three findings from each selected stage in the same review cycle, then fix all non-blocking findings one at a time: verify each fix and wait for human confirmation before rerunning reviews or proceeding.
+Run the selected review skills in parallel against the current state. Show up to three findings from each selected stage in the same review cycle, then handle non-blocking findings one at a time: propose each fix and wait for explicit human confirmation before editing, then verify the confirmed fix before rerunning reviews or proceeding.
 
 Return all progress and results directly in the current session. Do not create or modify a review report file unless explicitly asked.
 
@@ -96,9 +96,9 @@ For each selected stage's reported finding, show the child review's human-readab
 - separate `Example` section with a fenced code block, real code, data, logs, or an ASCII diagram;
 - recommended handling strategy.
 
-### 3. Fix one target, then wait for confirmation
+### 3. Confirm one target, then fix it
 
-Process findings one at a time, in selected stage order and descending priority. Before fixing each finding, stop and request human handling if any of these conditions apply:
+Process findings one at a time, in selected stage order and descending priority. Before asking for confirmation, stop and request human handling if any of these conditions apply:
 
 - the finding or required behavior is ambiguous, unresolved, or marked `Cannot determine`;
 - the finding is explicitly critical or has `Blocker` severity;
@@ -106,18 +106,18 @@ Process findings one at a time, in selected stage order and descending priority.
 
 Otherwise:
 
-1. make the smallest safe fix for that target only;
-2. run the smallest relevant check available;
-3. show the fix and check result, then wait for explicit human confirmation;
-4. only after confirmation, invalidate all results from the pre-fix snapshot and dispatch every selected reviewer in parallel against the updated state.
+1. show the finding, proposed smallest safe fix, scope, and relevant check, then ask for explicit human confirmation;
+2. do not edit, write, or apply the fix until the human confirms that proposed fix;
+3. after confirmation, make only that targeted fix and run the smallest relevant check available;
+4. if the check passes, invalidate all results from the pre-fix snapshot and dispatch every selected reviewer in parallel against the updated state.
 
-Do not bundle unrelated cleanup or speculative improvements. If the check fails, stop and request human handling. If a confirmed fix creates a new issue, handle only that new highest-priority target before proceeding.
+Do not bundle unrelated cleanup or speculative improvements. If the check fails, stop and request human handling. If a confirmed fix creates a new issue, handle only that new highest-priority target before proceeding; ask for confirmation before applying it.
 
 ### 4. Accept or stop
 
 A stage with no remaining in-scope review point/finding in the latest parallel batch is automatically accepted and advances once the required relevant check supports the result. Do not ask the human to confirm a clean stage.
 
-When a current reviewer reports findings, show all selected stages' findings together in the same cycle and fix the next non-blocking target. After verification, pause for explicit human confirmation before rerunning reviews or advancing; continue this loop until all non-blocking findings are fixed or no longer reported. Do not hide a finding. If a stop condition applies, pause with that finding and keep the pipeline stopped; results for other stages remain provisional until the current state is cleanly reviewed.
+When a current reviewer reports findings, show all selected stages' findings together in the same cycle and propose the next non-blocking target. Pause for explicit human confirmation before editing; after the confirmed fix is verified, rerun reviews or advance as appropriate. Continue this loop until all non-blocking findings are fixed or no longer reported. Do not hide a finding. If a stop condition applies, pause with that finding and keep the pipeline stopped; results for other stages remain provisional until the current state is cleanly reviewed.
 
 ### 5. Advance
 
@@ -132,7 +132,7 @@ If a later fix changes behavior that an earlier stage accepted, return to the ea
 - **Current state wins:** every rerun uses the latest code and result evidence.
 - **No false acceptance:** a passing command does not prove an outcome unless it observes that outcome.
 - **No speculative work:** defer low-confidence or unrelated improvements.
-- **Gated handling:** fix every concrete, non-blocking finding one at a time, verify each fix, then wait for explicit human confirmation before rerunning reviews or proceeding; stop for ambiguity, explicit critical/Blocker severity, or intent mismatch.
+- **Gated handling:** propose every concrete, non-blocking fix one at a time and wait for explicit human confirmation before editing; verify each confirmed fix before rerunning reviews or proceeding; stop for ambiguity, explicit critical/Blocker severity, or intent mismatch.
 
 ## Session output
 
@@ -163,7 +163,7 @@ Show up to three result blocks for every selected stage in this same cycle, orde
 ```
 
 - **Recommended handling:** [strategy, or `None`]
-- **Action:** [fix made, check run, decision pending, or none]
+- **Action:** [proposed fix awaiting confirmation, fix made, check run, decision pending, or none]
 - **Result:** [review/check result]
 
 ## Stage verdicts
@@ -182,4 +182,4 @@ Keep the response human-readable. Use fenced examples rather than prose-only pla
 
 ## Completion criterion
 
-The loop is complete only when every selected stage is accepted, skipped, or stopped by a defined stop condition or the human. Every fixed finding has one targeted fix, a relevant check, human confirmation, and a re-review result recorded in the current session.
+The loop is complete only when every selected stage is accepted, skipped, or stopped by a defined stop condition or the human. Every fixed finding has one targeted proposal, explicit human confirmation before editing, a relevant check, and a re-review result recorded in the current session.

@@ -82,7 +82,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `writing-great-skills` | — | Reference for writing and editing skills well; read directly when authoring a skill, not invoked via workflow |
 | `diagram-design` | — | Vendored from [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) (MIT). Draw architecture, flowchart, sequence, state-machine, ER, and other diagram types as standalone HTML/SVG/PNG, including redrawing existing `.drawio`/Mermaid sources |
 | `frontend-design` | — | Vendored from [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design) (Apache 2.0). Guidance for distinctive, intentional visual design when building or reshaping UI — deliberate palette/typography/layout choices, one justified aesthetic risk, avoiding the generic AI-design defaults |
-| `review-loop` | — | Run Clean and Thermo reviews through subagents, fixing all non-blocking findings one at a time and waiting for human confirmation after each fix |
+| `review-loop` | — | Run Clean and Thermo reviews through subagents, proposing non-blocking fixes one at a time and requiring human confirmation before each fix |
 | `review-clean` | — | Review whether the change leaves the code simpler, clearer, and safer to change; report up to three findings |
 | `review-thermo` | — | Strict abstraction, spaghetti, decomposition, and maintainability review; report up to three findings |
 
