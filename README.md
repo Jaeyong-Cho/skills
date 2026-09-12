@@ -55,6 +55,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/bible-audit` | — | Read-only audit of inherited and local Bible Laws, judging WHAT and returning concrete evidence for every applicable Law; includes `scripts/lint_bible.py` for structure checks |
 | `/bible-reform` | — | Correct implementation violations from an audit while preserving WHY and WHAT; never edits Bible Laws |
 | `/bible-loop` | — | Run bounded audit → reform cycles through subagents, defaulting to three cycles and returning evidence when Enact is needed |
+| `/bible-review` | — | Review implementation against effective Bible Laws with concrete evidence, human-confirmed fixes, and a fresh audit after each change |
 | `/req-grill-me` | — | Run `/grill-me` to build an agile Story in one pass: persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check |
 | `/refact-grill-me` | — | Run `/grill-me` to refactor a named function or usecase sequence against `abstraction-levels.md`'s L1/L2/L3 rule: current shape and smells, behavior-preservation baseline, target decomposition |
 | `/l1-grill-me` | — | Run `/grill-me` to nail down one L1 orchestration flow's step sequence: trigger, ordered L2/L3 calls, branches, end state — feeds `/l1-implement` |
