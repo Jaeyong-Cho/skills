@@ -1,5 +1,7 @@
 # How to Make a Pi Custom Subagent
 
+**Pi only.** This file is a reference for Pi's custom-agent format and `subagent()` dispatch. Shared skills must say “dispatch a subagent” and use the active host's native mechanism; do not copy this TypeScript call into them.
+
 A pi subagent is one markdown file: YAML frontmatter, then its system prompt below. Sub-agents run via [`pi-subagents`](https://github.com/nicobailon/pi-subagents) — install with `pi install npm:pi-subagents`. A spawn may run in the foreground or background; pi-subagents manages the child session and returns its result to the parent.
 
 ## Where to put it

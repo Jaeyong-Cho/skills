@@ -71,19 +71,11 @@ Do not begin a stage outside the selection.
 
 ### 2. Dispatch the selected reviews in parallel
 
-Dispatch one read-only `reviewer` sub-agent for every selected stage before waiting for any result. Clean and Thermo must be dispatched in parallel in the same turn when both are selected; neither may wait for the other. `review-thermo` is invoked only through this dispatch path; do not call it directly outside the review loop. Use the explicit `subagent()` mechanism and invoke all calls in the same turn:
+Dispatch one read-only `reviewer` sub-agent for every selected stage before waiting for any result. Clean and Thermo must be dispatched in parallel in the same turn when both are selected; neither may wait for the other. `review-thermo` is invoked only through this dispatch path; do not call it directly outside the review loop. Use the active host agent's native subagent dispatch mechanism, not a platform-specific call embedded in this skill. On Pi, use the `subagent()` call described in `../references/pi-custom-subagent.md`.
 
-```typescript
-selectedStages.forEach((stage) => {
-  subagent({
-    name: `Reviewer-${stage}`,
-    agent: "reviewer",
-    task: "Review the selected stage: [stage]. Apply the criteria in [linked review-skill path]. Review this context, changed code/diff, and result evidence: [supplied inputs]. Return up to three findings in descending priority, each including the exact violated checklist item or criterion (or Violation: None when clean). Do not make edits or delegate.",
-  });
-});
-```
+Pass each reviewer the selected stage, its linked review-skill path, the same current-state snapshot, changed code/diff, and result evidence. Require up to three findings in descending priority, each including the exact violated checklist item or criterion (or `Violation: None` when clean). Instruct reviewers not to edit or delegate; configure them as read-only (`read`, `bash`) with spawning disabled.
 
-Do not await or serialize one stage before dispatching the next. Collect all selected results from the batch before deciding actions. Every reviewer must receive the same current-state snapshot and evidence. The linked review skill owns each review's criteria; provide its path without directly invoking the skill. Do not merge criteria from other stages into it. Reviewers are read-only (`tools: read, bash`, `spawning: false`) and must remain so.
+Do not await or serialize one stage before dispatching the next. Collect all selected results from the batch before deciding actions. Every reviewer must receive the same current-state snapshot and evidence. The linked review skill owns each review's criteria; provide its path without directly invoking the skill. Do not merge criteria from other stages into it.
 
 Each reviewer may identify up to three in-scope targets, ordered from highest impact to lowest, and label the exact violated checklist item or criterion from its linked skill. If no in-scope finding remains, report `Violation: None`. Show every selected stage's findings together in the same review cycle; process one finding at a time in the selected order.
 
