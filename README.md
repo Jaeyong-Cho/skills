@@ -52,7 +52,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/now` | — | Break out of whatever's running — a `/grill-me` round, any conversation — and get one task done immediately, no plan/round/confirmation, then resume the interrupted flow exactly where it paused |
 | `/dev-grill-me` | — | Run `/grill-me` covering both feature and fix concerns in one pass: intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan |
 | `/bible-enact` | `.bible/` or a confirmed Bible path | Start with `/grill-me`, then define, amend, or repeal Laws with both WHY and WHAT; supports global, repository, and nested sub-Bibles |
-| `/bible-audit` | — | Read-only audit of inherited and local Bible Laws, judging WHAT and returning concrete evidence for every applicable Law; includes `scripts/lint_bible.py` for structure checks |
+| `/bible-audit` | — | Read-only audit of inherited and local Bible Laws, returning statistics plus concrete evidence only for violations and other non-pass findings; includes `scripts/lint_bible.py` for structure checks |
 | `/bible-reform` | — | Correct implementation violations from an audit while preserving WHY and WHAT; never edits Bible Laws |
 | `/bible-loop` | — | Run bounded audit → reform cycles through subagents, defaulting to three cycles and returning evidence when Enact is needed |
 | `/bible-review` | — | Review implementation against effective Bible Laws with concrete evidence, human-confirmed fixes, and a fresh audit after each change |

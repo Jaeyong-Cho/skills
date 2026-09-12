@@ -132,16 +132,15 @@ Every enacted Law MUST have a stable unique `LAW-...` identifier. The identifier
 
 ## Tools
 
-Tools under `tools/` inspect reality; they are not Laws. A tool may serve many Laws. Prefer the cheapest reliable Judge:
+Tools under `tools/` inspect reality; they are not Laws. A tool may serve many Laws. Prefer the cheapest reliable Judge and run tiers in order:
 
 ```text
-static check
--> focused test
--> integration test
--> end-to-end test
--> agent review
--> human review
+LOW     static check, lint, grep, AST, dependency query
+-> MEDIUM  focused unit/contract/integration test, deterministic CLI probe
+-> HIGH    end-to-end test, broad verification, agent review, human review
 ```
+
+Fail fast: complete Low checks before Medium, and Medium before High. If a lower-cost tier finds a violation, cannot determine the result, or exposes a Law conflict, stop before running higher-cost checks; fix or resolve it, then restart the audit at Low.
 
 A deterministic tool has this contract:
 
@@ -173,7 +172,7 @@ Enact starts with `@skills/grill-me` unless intent and scope are already confirm
 
 ### Audit
 
-Audit resolves the effective parent chain, selects applicable Laws, checks for contradictory requirements, reads WHY and WHAT, runs each Law's Judge, and records commands, paths, exit codes, and observed output. It is read-only. If Laws conflict, report a Law conflict and stop the workflow for Enact; if WHAT and WHY appear inconsistent, report a Law concern instead of ignoring WHAT or editing the Bible.
+Audit resolves the effective parent chain, selects applicable Laws, checks for contradictory requirements, reads WHY and WHAT, runs each Law's Judge, and records commands, paths, exit codes, and observed output. It is read-only. Return statistics for all applicable Laws and detailed output only for violations or other non-pass findings; a clean audit returns statistics only. If Laws conflict, report a Law conflict and stop the workflow for Enact; if WHAT and WHY appear inconsistent, report a Law concern instead of ignoring WHAT or editing the Bible.
 
 ### Reform
 

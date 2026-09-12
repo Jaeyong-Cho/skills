@@ -16,6 +16,16 @@ Find where applicable Laws are false and collect reproducible evidence. Audit is
 3. Read the relevant indexes, then the target Bible and every parent Bible up to the root. A parent `.bible/` governs descendants unless its Scope excludes them. A nested `.bible/` adds Laws for its subtree.
 4. Determine applicability from each Law under `laws/<category>/<subcategory>/` and the target. Do not audit unrelated Laws, and do not treat a child Law as permission to weaken an inherited Law.
 
+## Cost-ordered audit
+
+Classify each Law's Audit method before running it:
+
+- **Low:** static inspection, lint, grep, AST/dependency query, or a cheap audit script.
+- **Medium:** focused unit, contract, integration, or deterministic CLI verification.
+- **High:** end-to-end test, broad verification, agent review, or human review.
+
+Run every applicable check in Low → Medium → High order. Complete the current tier before advancing. If any tier produces a violation, `Cannot determine`, verification gap, Law conflict, or Law concern, stop before running higher-cost tiers and return only the non-pass findings. After Reform or another fix, restart from Low; never reuse a higher-tier result from the old state.
+
 ## Judge
 
 For every applicable Law:
@@ -29,45 +39,42 @@ For every applicable Law:
 
 ## Output
 
-Return one result for every applicable Law, followed by violations and separate Law concerns:
+Return statistics for every audit. Return detailed output only for violations and other non-pass findings; never print clean Law rows. If there are no violations, conflicts, concerns, gaps, or indeterminate checks, return only the statistics and a `Compliant` verdict.
 
 ```markdown
 # Bible Audit
 
-## Target
-- **Path:** [Bible roots and implementation target]
+## Statistics
+- **Target:** [Bible roots and implementation target]
 - **Bible chain:** [root → ... → nearest]
-
-## Law results
-| Law | Scope | Result | Judge/evidence |
-|---|---|---|---|
-| LAW-... | ... | Compliant / Violated / Cannot determine | command or inspection |
+- **Applicable Laws:** [count]
+- **Audit tiers completed:** [Low / Medium / High]
+- **Higher tiers skipped:** [tiers, or `None`]
+- **Audit scripts/checks run:** [count]
+- **Compliant:** [count]
+- **Violations:** [count]
+- **Cannot determine:** [count]
+- **Verification gaps:** [count]
+- **Law conflicts:** [count]
+- **Law concerns:** [count]
 
 ## Violations
+
 ### VIOLATION-001 — [short title]
+- **Cost:** Low / Medium / High
+- **Type:** Violation / Cannot determine / Verification gap / Law conflict / Law concern
 - **Law:** LAW-...
-- **WHY:** [intent]
-- **Expected (WHAT):** [exact requirement]
-- **Actual:** [observed state]
+- **WHY:** [intent, when relevant]
+- **Expected (WHAT):** [exact requirement, when relevant]
+- **Actual:** [observed state or conflict]
 - **Evidence:** [paths, commands, output, exit code]
-- **Smallest safe reform:** [candidate, not an edit]
-
-## Verification gaps
-- [LAW-... — command-verifiable WHAT without a matching audit script, or `None`]
-
-## AI verification methods
-- [LAW-... — complete `AI VERIFICATION METHOD` alert and follow-up result, or `None`]
-
-## Law conflicts
-- [conflicting Law IDs, incompatible requirements, scope, and evidence, or `None`]
-
-## Law concerns
-- [WHAT/WHY inconsistency, or `None`]
+- **AI VERIFICATION METHOD:** [complete alert and follow-up result, when exit `2`]
+- **Smallest safe reform:** [candidate, not an edit, when applicable]
 
 ## Verdict
 [Compliant | Violations found | Cannot determine | Law conflict]
 ```
 
-Do not hide clean results, skip applicable Laws, or call an unverified state compliant. An audit finding is evidence for Reform; a Law concern is evidence to return to Enact.
+Omit `## Violations` entirely when all non-pass counts are `0`. Do not hide non-pass findings, skip applicable Laws during the audit, or call an unverified state compliant. An audit finding is evidence for Reform; a Law concern or conflict is evidence to return to Enact.
 
-Completion criterion: every applicable inherited and local Law has a result, every available matching audit script was run and its exit/output recorded, every applicable Law conflict was checked and reported, every command-verifiable Law missing its audit script has a verification gap, every violation has concrete evidence tied to WHAT, separate Law concerns are recorded, and no file was modified.
+Completion criterion: every applicable inherited and local Law was checked and included in the statistics, every available matching audit script was run and its exit/output recorded, every non-pass result has a detailed finding, and no file was modified.
