@@ -25,7 +25,7 @@ A `.bible/` governs its directory tree. Nested Bibles inherit Laws from their ne
 
 1. Establish and show the target, Bible chain, scope, maximum, and available evidence. Run the bundled `@skills/bible-audit/scripts/lint_bible.py` against each Bible root. If no repository Bible exists, stop and invoke `@skills/bible-enact`; do not invent one.
 2. For each cycle, dispatch a read-only audit subagent before any reform subagent through the active host agent's native subagent mechanism. On Pi, use the `subagent()` call described in `../references/pi-custom-subagent.md`. Pass the same current-state target, Bible chain, scope, and evidence. The audit subagent follows `@skills/bible-audit`, returns its complete report, and MUST NOT edit files.
-3. If the audit is `Compliant`, stop successfully. If it is `Cannot determine`, stop and show the missing evidence; do not ask Reform to guess.
+3. If the audit is `Compliant` and has no verification gap, stop successfully. If it is `Cannot determine` or reports a verification gap, stop and show the missing evidence; route a missing audit script to `@skills/bible-enact` rather than asking Reform to guess.
 4. If violations exist and the cycle limit has not been reached, dispatch a reform subagent with the audit report verbatim through the same host-native mechanism. Use a worker-capable subagent for Reform, but instruct it to follow `@skills/bible-reform`, change only implementation-side files, and return its complete report. It MUST NOT edit any Bible file.
 5. After Reform returns, verify that every Bible in the chain is unchanged (for example, compare `git diff -- [Bible paths]` or recorded hashes), collect its checks and fresh audit result, then begin the next cycle from the current state. If a Bible changed, stop as `Enact required`. Do not reuse a pre-fix audit result.
 6. At the limit, stop. Show every unresolved violation, its latest evidence, failed or missing checks, changed files, and any Law concerns. State that this evidence can be supplied to `@skills/bible-enact` for a human WHY/WHAT decision; Enact decides whether amendment or repeal is justified. Do not amend the Bible automatically.
@@ -51,7 +51,7 @@ Do not dispatch audit and reform in parallel: Reform depends on the current audi
 - **Reform:** [report/checks, or not run]
 
 ## Final status
-[Compliant | Stopped: cannot determine | Stopped: maximum reached | Stopped: Enact required]
+[Compliant | Stopped: cannot determine | Stopped: verification gap | Stopped: maximum reached | Stopped: Enact required]
 
 ## Evidence for next Enact
 - [unresolved violation and latest evidence; Enact decides whether a Law change is justified]

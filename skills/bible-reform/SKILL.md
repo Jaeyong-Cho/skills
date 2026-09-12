@@ -14,7 +14,7 @@ Restore implementation compliance from an Audit report. Reform may change implem
 1. Read `../references/bible-driven-development.md`.
 2. Require a current `bible-audit` report, or run `@skills/bible-audit` first. Do not fix from a vague claim or stale evidence.
 3. Read the violated Law's full parent/child chain, including both WHY and WHAT, before editing.
-4. If the report contains a Law concern, an ambiguous scope, missing evidence, or a WHAT that no longer serves its WHY, stop and return it to `@skills/bible-enact`. Do not work around the Law.
+4. If the report contains a verification gap, Law concern, ambiguous scope, missing evidence, or a WHAT that no longer serves its WHY, stop and return it to `@skills/bible-enact`. Do not add or work around a missing Bible audit script here.
 5. Inspect the actual cause and all relevant callers before choosing the smallest safe correction. Do not make a cosmetic change that only fools the Judge.
 
 ## Reform each violation

@@ -25,7 +25,7 @@ Missing evidence is `Cannot determine`, not compliance.
 1. Establish and show the target, complete parent-to-child Bible chain, scope, and available evidence. Read `../references/bible-driven-development.md` and run `@skills/bible-audit/scripts/lint_bible.py` against every Bible root. If no applicable repository Bible exists, stop and recommend `@skills/bible-enact`; do not invent or amend a Law.
 2. Dispatch one read-only audit subagent through the active host's native subagent mechanism. On Pi, use the `subagent()` call described in `../references/pi-custom-subagent.md`. Give it the same target, Bible chain, scope, and evidence. It must follow `@skills/bible-audit`, inspect every applicable inherited and local Law, return one result per Law, and make no edits or further delegation.
 3. Show the complete audit result, including clean Laws, violations, `Cannot determine` results, and separate Law concerns. Do not reinterpret a precise WHAT because its WHY seems satisfied.
-4. If the result is `Compliant`, accept the review. If it contains `Cannot determine`, a Law concern, or a critical/Blocker violation, stop and return the evidence for human handling or `@skills/bible-enact`.
+4. If the result is `Compliant` and has no verification gap, accept the review. If it contains `Cannot determine`, a verification gap, a Law concern, or a critical/Blocker violation, stop and return the evidence for human handling or `@skills/bible-enact`.
 5. For each remaining non-blocking violation, in priority order, show the Law's WHY, exact WHAT, observed actual state, evidence, smallest safe implementation fix, and focused check. Ask for explicit human confirmation before editing or dispatching any reform work. Never fix a violation by changing `.bible/` files.
 6. After confirmation, apply only that implementation-side fix, or dispatch a worker-capable subagent to follow `@skills/bible-reform` for a larger fix. Preserve the Law's WHY and WHAT. Run the focused check, verify every Bible root is unchanged, and dispatch a fresh audit against the updated state before handling the next finding.
 7. Continue until every applicable Law is compliant, the human stops or defers a fix, or a stop condition is reached. Never reuse a pre-fix audit result or declare success from a passing command that does not observe the Law's WHAT.
@@ -37,7 +37,7 @@ Missing evidence is `Cannot determine`, not compliance.
 - **No automatic Law changes:** amendment, repeal, or reorganization belongs to `@skills/bible-enact` after human review.
 - **Human gate:** no implementation edit or reform dispatch occurs before explicit confirmation for that proposed fix.
 - **No hidden findings:** show every Law result and every unresolved violation; list deferred work with its reason.
-- **No false acceptance:** missing, stale, or nondeterministic evidence remains `Cannot determine`.
+- **No false acceptance:** missing, stale, or nondeterministic evidence remains `Cannot determine`; preserve and follow every `AI VERIFICATION METHOD` alert.
 
 ## Session output
 
@@ -59,6 +59,12 @@ Use this structure:
 |---|---|---|---|
 | LAW-... | ... | Compliant / Violated / Cannot determine | ... |
 
+### Verification gaps
+- [LAW-... — command-verifiable WHAT without a matching audit script, or `None`]
+
+### AI verification methods
+- [LAW-... — complete `AI VERIFICATION METHOD` alert and follow-up result, or `None`]
+
 ### Finding [number]
 - **Law:** LAW-...
 - **WHY:** ...
@@ -70,7 +76,7 @@ Use this structure:
 - **Check:** ...
 
 ## Final status
-[Compliant | Stopped: cannot determine | Stopped: Law concern | Stopped: human decision | Deferred findings]
+[Compliant | Stopped: verification gap | Stopped: cannot determine | Stopped: Law concern | Stopped: human decision | Deferred findings]
 
 ## Deferred
 - [Law, reason, and evidence]

@@ -22,9 +22,9 @@ For every applicable Law:
 
 1. Read both WHY and WHAT. Use WHY to understand the purpose and detect a possible Law design problem.
 2. Judge compliance strictly against WHAT. Do not ignore a precise WHAT because another implementation seems to satisfy its WHY.
-3. Use the Law's Audit method first. Run the lowest-cost sufficient check and inspect relevant files, callers, tests, dependency graphs, or command output.
-4. Record observed results, exact paths/line references, commands, exit codes, and relevant output. Missing or nondeterministic evidence is `Cannot determine`, not `Compliant`.
-5. If WHAT and WHY appear inconsistent, report a separate `Law concern`; do not reinterpret the Law or propose an amendment here.
+3. If `.bible/tools/<category>/<subcategory>/<LAW-ID>.audit.sh` exists, run that executable first from the target repository root with the target path as its first argument. Otherwise use the Law's declared Audit method and the lowest-cost sufficient check. Inspect relevant files, callers, tests, dependency graphs, or command output as needed.
+4. Interpret audit-script exit `0` as `Compliant`, `1` as `Violated`, and `2` or an execution failure as `Cannot determine`; do not override an audit-script result without concrete evidence. For exit `2`, preserve and surface the complete `AI VERIFICATION METHOD` block, then follow its method before deciding compliance. Record observed results, exact paths/line references, commands, exit codes, and relevant output. Missing or nondeterministic evidence is `Cannot determine`, not `Compliant`.
+5. If a Law's WHAT is command-verifiable but its matching audit script is missing, report a verification gap and use the declared Audit method only as provisional evidence. If WHAT and WHY appear inconsistent, report a separate `Law concern`; do not reinterpret the Law or propose an amendment here.
 
 ## Output
 
@@ -51,6 +51,12 @@ Return one result for every applicable Law, followed by violations and separate 
 - **Evidence:** [paths, commands, output, exit code]
 - **Smallest safe reform:** [candidate, not an edit]
 
+## Verification gaps
+- [LAW-... — command-verifiable WHAT without a matching audit script, or `None`]
+
+## AI verification methods
+- [LAW-... — complete `AI VERIFICATION METHOD` alert and follow-up result, or `None`]
+
 ## Law concerns
 - [WHAT/WHY inconsistency, or `None`]
 
@@ -60,4 +66,4 @@ Return one result for every applicable Law, followed by violations and separate 
 
 Do not hide clean results, skip applicable Laws, or call an unverified state compliant. An audit finding is evidence for Reform; a Law concern is evidence to return to Enact.
 
-Completion criterion: every applicable inherited and local Law has a result, every violation has concrete evidence tied to WHAT, separate Law concerns are recorded, and no file was modified.
+Completion criterion: every applicable inherited and local Law has a result, every available matching audit script was run and its exit/output recorded, every command-verifiable Law missing its audit script has a verification gap, every violation has concrete evidence tied to WHAT, separate Law concerns are recorded, and no file was modified.

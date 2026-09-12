@@ -128,7 +128,7 @@ Run the public-interface inspection tool and record its output.
 
 A Law without WHY cannot be safely amended or reformed. A Law without WHAT cannot be judged. Laws SHOULD constrain boundaries and observable invariants rather than prescribe an implementation sequence.
 
-Stable `LAW-...` identifiers are recommended. If used, each identifier MUST be unique within the effective Bible chain.
+Every enacted Law MUST have a stable unique `LAW-...` identifier. The identifier connects the Law to its audit script and remains unique within the effective Bible chain.
 
 ## Tools
 
@@ -146,10 +146,24 @@ static check
 A deterministic tool has this contract:
 
 - exit code `0`: the checked condition holds;
-- non-zero exit code: the condition does not hold or could not be checked;
+- exit code `1`: the checked condition is violated;
+- exit code `2`: the tool cannot determine the result;
 - stdout/stderr: enough command, input, observed result, and expected result to reproduce the Evidence.
 
-A Law should name the tool or command in its Audit section. Missing evidence is `Cannot determine`, not `Compliant`.
+When a Law's WHAT can be checked by a command, Enact SHOULD create a dedicated executable audit script at `.bible/tools/<category>/<subcategory>/<LAW-ID>.audit.sh`. The script is the Law's `audit.sh`: run it from the target repository root with the target path as `$1`; use exit `0` for compliant, `1` for violated, and `2` when it cannot determine the result. Print the command, expected condition, observed result, and useful paths or output. If the check is nondeterministic or needs agent/human judgment, it MUST NOT guess or return `0`; return `2` and print this machine-visible alert with the concrete follow-up method:
+
+```text
+AI VERIFICATION METHOD:
+Method: <inspection, comparison, probe, or human decision to perform>
+Inputs: <paths, command output, or other evidence needed>
+Expected: <condition to judge>
+Observed: <what the script could establish>
+Next action: <what the AI or human must do>
+```
+
+A Law that genuinely needs human judgment may omit the script, but its Audit section MUST say why.
+
+A Law should name its audit script or other Audit method in its Audit section. Bible Audit runs the matching `<LAW-ID>.audit.sh` first when it exists and records its exit code and output. For exit `2`, it MUST surface the complete `AI VERIFICATION METHOD` alert and follow it before deciding compliance. Missing evidence is `Cannot determine`, not `Compliant`.
 
 ## Enact, Audit, Reform
 
