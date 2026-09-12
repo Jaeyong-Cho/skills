@@ -8,11 +8,15 @@ disable-model-invocation: false
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
+## Impact Level and Uncertainty
+
+Before any scope check, calibration, or other question, **MUST READ** `../references/grill-impact.md`. Ask its Mode question once, carry the chosen mode through the session, and apply its Impact Level, Uncertainty, and Action rules to every decision. Classify each frontier decision before asking or auto-deciding it, mark every question with its impact and uncertainty, and recommend the smallest experiment for every High-uncertainty decision.
+
 ## Scope check
 
 Before round 1: if the topic handed to this skill looks too large for a handful of rounds to converge (a whole system, a whole app, several unrelated features bundled together), **MUST ASK** for confirmation before diving in — show 2-3 candidate narrower sub-scopes, each a single focused target this session could actually finish, with your recommended one marked `➡️`. "No, keep the full scope" is a valid answer — treat it as confirmation and proceed with everything. A topic that's already a single focused target skips this check — go straight to round 1.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier (after the KB check above) in one round, **capped at 3 questions**: number each question and give your recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones (per `../references/grill-impact.md` where applicable) and carry the rest into the next round instead of dumping the whole tree at once.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the surviving frontier (after the KB check above) in one round, **capped at 3 questions**: number each question and give its recommended answer, then wait for the user's answers before the next round. If the frontier has more than 5, ask the 5 highest-impact/most-blocking ones and carry the rest into the next round instead of dumping the whole tree at once.
 
 Each question should be formatted like so:
 ```text
@@ -82,9 +86,9 @@ Before sending, verify that the question:
 
 "I don't know" / "not sure" / "you decide" is itself a valid answer, not a
 stall — don't push back or re-ask it. Take the recommended answer (➡️) as
-the decision, tag it as an assumption with its uncertainty (per
-`../references/grill-impact.md`) so it carries into `@skills/to-plan`'s
-Assertions section, and move straight to the rest of the round.
+the decision, tag it as an assumption with its uncertainty so it carries into
+`@skills/to-plan`'s Assertions section, and move straight to the rest of the
+round.
 
 Only when the reply is an actual question back — they're asking *you*
 something, not declining to decide — answer it first, in layers, with
