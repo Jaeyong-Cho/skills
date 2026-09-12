@@ -40,7 +40,7 @@ A Bible root is a `.bible/` directory. The effective Bible for a target is the o
 - `~/.bible/` describes how the owner builds software.
 - `<repository>/.bible/` describes what that repository MUST be.
 - A nested `<component>/.bible/` is a sub-Bible for that component. It inherits Laws from its nearest parent and may add narrower Laws.
-- A child Bible MUST NOT weaken or contradict an inherited Law. Change the parent Law through Enact instead.
+- A child Bible MUST NOT weaken or contradict an inherited Law. Laws at any applicable level MUST NOT make incompatible requirements for the same target. Change or reconcile conflicting Laws through Enact instead.
 - The global and repository roots are the default scopes. Add component sub-Bibles only when a clear boundary needs its own Laws.
 
 Agents MUST read the parent-to-child chain before auditing or reforming a target. A child Law is additional scope, not an override.
@@ -173,7 +173,7 @@ Enact starts with `@skills/grill-me` unless intent and scope are already confirm
 
 ### Audit
 
-Audit resolves the effective parent chain, selects applicable Laws, reads WHY and WHAT, runs each Law's Judge, and records commands, paths, exit codes, and observed output. It is read-only. If WHAT and WHY appear inconsistent, report a Law concern instead of ignoring WHAT or editing the Bible.
+Audit resolves the effective parent chain, selects applicable Laws, checks for contradictory requirements, reads WHY and WHAT, runs each Law's Judge, and records commands, paths, exit codes, and observed output. It is read-only. If Laws conflict, report a Law conflict and stop the workflow for Enact; if WHAT and WHY appear inconsistent, report a Law concern instead of ignoring WHAT or editing the Bible.
 
 ### Reform
 
