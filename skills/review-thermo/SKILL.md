@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Thermo-Nuclear Code Quality Review
 
-Use this skill for an unusually strict review focused on implementation quality, maintainability, abstraction quality, and codebase health.
+Use this local custom review for an unusually strict review focused on implementation quality, maintainability, abstraction quality, and codebase health. Before reviewing, read [`../references/deep-modules.md`](../references/deep-modules.md) and [`../references/abstraction-levels.md`](../references/abstraction-levels.md). These references are mandatory review criteria, not optional background.
 
 Above all, this skill should push the reviewer to be **ambitious** about code structure. Do not merely identify local cleanup opportunities. Actively search for "code judo" moves: restructurings that preserve behavior while making the implementation dramatically simpler, smaller, more direct, and more elegant.
 
@@ -22,7 +22,32 @@ Start from this baseline:
 
 ## Non-Negotiable Additional Standards
 
-Apply the baseline prompt above, plus these explicit review rules:
+Apply the baseline prompt above, plus the explicit rules below and the two mandatory references.
+
+### Deep-module rules
+
+For every changed or newly introduced module boundary:
+
+- prefer a small, intention-revealing interface over exposing implementation steps;
+- hide substantial implementation complexity behind that interface;
+- flag shallow modules, pass-through methods, duplicated logic, information leakage, temporal decomposition, leaky interfaces, and conjoined modules;
+- require dependencies to be accepted at the boundary rather than constructed inside when that improves testability;
+- prefer returned results and narrow surfaces over hidden side effects when the behavior permits it.
+
+A deep-module finding must identify the boundary, show the interface-to-implementation problem, and recommend deletion, consolidation, or a narrower contract.
+
+### Abstraction-level rules
+
+Classify changed functions relative to their current callers:
+
+- **L1 — Intent:** workflow and public contract;
+- **L2 — Domain:** business rules, validation, policy, calculation, or state transition;
+- **L3 — Mechanism:** database, HTTP, SDK, filesystem, serialization, framework, or operating-system work.
+
+Flag mixed levels in one function, L1 leaking L3, L2 leaking concrete L3 details, L3 or L2 calling upward, a missing L2 business rule hidden by an unjustified L1 → L3 skip, shallow L1 orchestration, and mechanical extraction without a meaningful concept. Allow same-level composition and a genuine L1 → L3 skip when no business rule exists. Do not confuse public/private access with abstraction level.
+
+An abstraction-level finding must name the affected function, classify its level, cite the violated direction or boundary, and recommend the smallest meaningful decomposition or interface change.
+
 
 0. **Be ambitious about structural simplification.**
    - Do not stop at "this could be a bit cleaner."

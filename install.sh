@@ -391,11 +391,8 @@ setup_pi() {
     npx --yes skills add DietrichGebert/ponytail -a pi -g -y &>/dev/null \
       && echo "  ✓ ponytail (skills.sh)" \
       || echo "  ponytail install failed, run manually: npx skills add DietrichGebert/ponytail -a pi -g -y"
-    npx --yes skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review -a pi -g -y &>/dev/null \
-      && echo "  ✓ thermo-nuclear-code-quality-review (skills.sh)" \
-      || echo "  thermo-nuclear-code-quality-review install failed, run manually: npx skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review"
   else
-    echo "  npx not found, skipping ponytail and thermo-nuclear-code-quality-review"
+    echo "  npx not found, skipping ponytail"
   fi
 
   command -v pi &>/dev/null || return

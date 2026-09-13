@@ -69,7 +69,8 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/wayfinder` | — | Record each way's purpose, expected result, hypothesis, and assumptions, then plan `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` tasks using the cheapest reliable method |
 | `/next-way` | recorded way outcomes, dependencies, readiness, and implementation evidence | Find the next actionable way; follow the recorded task approach without imposing a fixed process, then review implementation evidence against the expected result and way purpose before dependent work proceeds |
 | `/highway` | — | Automatically dispatch safe, non-blocked Wayfinder tasks to subagents in parallel, continuing batches until no safe work can proceed; reconcile each result against its recorded completion signal |
-| `/target-loop` | — | Repeatedly inspect, resolve, and verify a requested target through subagents; defaults to three cycles and stops on acceptance or a blocker |
+| `/verify-design` | — | Build and validate a discoverable project-level `verify/` interface, reusing native checks and exposing new gaps with intent-rich evidence |
+| `/verify-loop` | — | Drive a requested change through ordered UT → IT → E2E verification with independent Style and Architecture gates, root-cause analysis, and safe retries |
 | `/to-way` | `ways/{nn}-{slug}/0-goal.md` and nested work-package files | Record a Wayfinder plan while preserving task kinds, Why/What/How details, dependency links, execution guidance, and done-task evidence |
 | `/to-context` | `contexts/NN-facts-{slug}.md` and `contexts/NN-intents-{slug}.md` | Run `/to-facts` and `/to-intents` to preserve this session's facts and user intent as paired context documents |
 | `/get-context` | `contexts/NN-intents-{slug}.md`, `contexts/NN-facts-{slug}.md`, and `contexts/NN-constraints-{slug}.md` | Run `/to-intents`, then `/to-facts`, then `/to-constraint` to capture durable context in order |

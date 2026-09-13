@@ -45,7 +45,7 @@ node -e '
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
 grep -q '^install git:github.com/Jaeyong-Cho/pi-interactive-subagents$' "$TMP/pi.log"
 ! grep -q 'HazAT/pi-interactive-subagents\|cmux\.ts\|configure_subagent_tmux_layout' "$ROOT/install.sh"
-grep -q 'skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review' "$ROOT/install.sh"
+! grep -q 'skills add https://github.com/cursor/plugins --skill thermo-nuclear-code-quality-review' "$ROOT/install.sh"
 [ ! -e "$TMP/home/.agents" ]
 [ ! -e "$TMP/home/.local" ]
 
