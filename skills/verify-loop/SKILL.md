@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Drive a requested change to evidence-backed acceptance by running ordered UT → IT → E2E verification with independent Style and Architecture gates, analyzing failures, and retrying failed resolver attempts with a safer strategy.
+description: Drive a requested change to evidence-backed acceptance by preparing first, then running ordered UT → IT → E2E verification with independent Style and Architecture gates, analyzing failures, and retrying failed resolver attempts with a safer strategy.
 disable-model-invocation: true
 license: MIT
 ---
@@ -19,21 +19,24 @@ After confirmation, reject an unknown level or non-positive cycle count. If the 
 
 ## Verification execution
 
-For each verification run, use the selected functional chain and two independent gates:
+For each verification run, use preparation, the selected functional chain, and two independent gates:
 
 ```text
-ut ──pass──> it ──pass──> e2e       (only through the selected level)
-│            │            │
-└────────────┴────────────┴── style + archi run independently and in parallel
+prepare ──pass──> ut ──pass──> it ──pass──> e2e (only through the selected level)
+                    │            │            │
+                    └────────────┴────────────┴── style + archi run independently and in parallel
 ```
 
-1. Start `verify/style/run.sh`, `verify/archi/run.sh`, and `verify/ut/run.sh` independently.
-2. Start IT only after UT passes and only for `it` or `e2e`.
-3. Start E2E only after IT passes and only for `e2e`.
-4. Stop starting later functional levels after any known failure. Let already-running independent checks finish so their evidence is retained.
-5. Capture each command's output and exit status separately. A runner passes only with exit status zero.
+1. Start `verify/prepare/run.sh` and wait for it to pass. Do not start any other runner before it completes successfully.
+2. After preparation passes, start `verify/style/run.sh`, `verify/archi/run.sh`, and `verify/ut/run.sh` independently.
+3. Start IT only after UT passes and only for `it` or `e2e`.
+4. Start E2E only after IT passes and only for `e2e`.
+5. Stop starting later functional levels after any known failure. Let already-running independent checks finish so their evidence is retained.
+6. Capture each command's output and exit status separately. A runner passes only with exit status zero.
 
-Style and Architecture do not wait for UT, IT, E2E, or each other. Run them concurrently with the functional chain using the host's native process mechanism. Do not hide a failure behind a combined pipeline status.
+Every item is independently invokable with one command (`./verify/<item>/run.sh`). When using the project root runner, use `./verify/run.sh <item>` where `<item>` is `prepare`, `ut`, `it`, `e2e`, `style`, or `archi`; it must perform preparation before any selected item other than `prepare`. For parallel gates, invoke their domain runners only after the single preparation run has passed.
+
+Style and Architecture do not wait for UT, IT, E2E, or each other. Run them concurrently after preparation using the host's native process mechanism. Do not hide a failure behind a combined pipeline status. If preparation fails, report the preparation failure and do not start the other runners.
 
 Before reporting a failure, read the nearest `index.md` and print:
 
@@ -57,12 +60,13 @@ Repeat until accepted, blocked, or the maximum is reached.
 Give a scout the target, acceptance condition, project, current diff, requested level, and available evidence. Require it to:
 
 - inspect the implementation and relevant callers;
+- run `verify/prepare/run.sh` first and only start the requested verification runners after it passes;
 - run the verification interface at the requested level;
 - compare observed behavior with the acceptance condition;
 - report changed files, exact failures, each failure's intent and violated rule, risks, and evidence;
 - make no edits and delegate no further work.
 
-If `verify/` or a required runner is missing, report **BLOCKED** and recommend `verify-design`; do not silently run unrelated commands as a substitute.
+If `verify/`, `verify/prepare/`, or a required runner is missing, report **BLOCKED** and recommend `verify-design`; do not silently run unrelated commands as a substitute.
 
 ### 2. Analyze the gap — main orchestrator
 
@@ -131,7 +135,7 @@ After **ACCEPT**, stop immediately. Do not spend remaining cycles on optional cl
 - Default maximum: `3` cycles; honor a user-supplied positive integer exactly.
 - One read-only scout and at most one resolver per cycle.
 - The resolver depends on inspection and root-cause analysis.
-- Functional verification is ordered `ut → it → e2e`; Style and Architecture are independent parallel gates.
+- Preparation is mandatory and completes before any other runner; functional verification is ordered `ut → it → e2e`; Style and Architecture are independent parallel gates.
 - Do not dispatch a resolver for an accepted candidate or unsupported root cause.
 - Failed resolver attempts are rolled back before retry; do not silently keep partial fixes.
 - Stop for ambiguity, contradictory requirements, unsafe rollback, destructive/security-sensitive changes without authority, unavailable credentials, or a human-owned decision.

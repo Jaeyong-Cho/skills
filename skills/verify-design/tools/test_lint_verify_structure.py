@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 
 TOOL = Path(__file__).with_name("lint-verify-structure")
-DOMAINS = ("ut", "it", "e2e", "style", "archi")
+DOMAINS = ("prepare", "ut", "it", "e2e", "style", "archi")
 
 
 def make_project(root: Path) -> None:
@@ -38,10 +38,11 @@ def main() -> None:
         make_project(root)
         result = run(root)
         assert result.returncode == 0, result.stdout + result.stderr
-        (root / "verify" / "style" / "run.sh").unlink()
+        (root / "verify" / "prepare" / "run.sh").unlink()
         result = run(root)
         assert result.returncode != 0
         assert "V-RUN-002" in result.stdout
+        assert "verify/prepare/run.sh" in result.stdout
 
 
 if __name__ == "__main__":
