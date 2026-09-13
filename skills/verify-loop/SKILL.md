@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Drive a requested change to evidence-backed acceptance by preparing first, then running ordered UT → IT → E2E verification with independent Style and Architecture gates, analyzing failures, and retrying failed resolver attempts with a safer strategy.
+description: Drive a requested change through one specified target test: prepare first, run the test, identify an evidence-backed Gap, and resolve it with safe retries.
 disable-model-invocation: true
 license: MIT
 ---
@@ -13,43 +13,49 @@ Use `verify-design` first when the project lacks the `verify/` interface or when
 
 ## Establish shared intent
 
-Before running checks, dispatching a scout, or changing code, **MUST RUN** a session of `@skills/grill-me` in the current conversation. Give it the requested goal, project, requested state, evidence, level, maximum cycles, and [`../references/intent-checklist.md`](../references/intent-checklist.md). It must establish the observable outcome, scope, constraints, and assumptions, follow its calibration, impact, uncertainty, and round rules, and finish with a teach-back and explicit confirmation of shared understanding. Do not begin the loop until the human confirms. Use that confirmed outcome and acceptance condition as the target; do not invent requirements.
+Before running checks, dispatching a scout, or changing code, **MUST RUN** a session of `@skills/grill-me` in the current conversation. Give it the requested goal, project, requested state, evidence, maximum cycles, and [`../references/intent-checklist.md`](../references/intent-checklist.md). It must establish the observable outcome, scope, constraints, and assumptions, then discuss the cheapest sufficient evidence method for reaching the user's intended goal:
 
-After confirmation, reject an unknown level or non-positive cycle count. If the target or acceptance condition is not judgeable, stop and ask for clarification.
+- compare only the relevant target-test options and their verification domains;
+- prefer the lowest sufficient domain and an existing native test or focused runner;
+- define the exact single command, check path, expected result, deterministic pass signal, and what evidence would be insufficient;
+- identify the cost and coverage trade-off without expanding into a broad verification suite.
 
-## Verification execution
+`grill-me` must finish with the recommended target test and domain, a teach-back, and explicit human confirmation. Do not begin the loop until the human confirms. Use that confirmed outcome, cheapest-method decision, and acceptance condition as the target; do not invent requirements.
 
-For each verification run, use preparation, the selected functional chain, and two independent gates:
+After confirmation, require exactly one **Target test**: the exact single command to run, its check path, expected result, and deterministic pass signal. The target may specify one verification domain (`ut`, `it`, `e2e`, `style`, or `archi`); record that domain and run only its target test. Reject a non-positive cycle count. If the target test, expected result, or acceptance condition is not judgeable, stop and ask for clarification. Do not substitute a broad UT/IT/E2E suite or unrelated Style/Architecture checks.
+
+The main agent MUST compare the target test's intent, assertion, pass signal, observed result, and confirmed acceptance condition before resolving a Gap. If any tests or requirements contradict each other, or the target test cannot consistently express the requested outcome, stop as **BLOCKED**, report **CONTRADICTION**, and request that `verify-design` be fixed. Do not edit implementation code or dispatch a resolver for a contradictory test design.
+
+## Target-test loop
+
+`verify-loop` runs only the specified target test through this loop:
 
 ```text
-prepare ──pass──> ut ──pass──> it ──pass──> e2e (only through the selected level)
-                    │            │            │
-                    └────────────┴────────────┴── style + archi run independently and in parallel
+prepare ──pass──> target test ──pass──> ACCEPT
+                       │
+                       └──fail──> GAP ──resolve──> repeat
 ```
 
-1. Start `verify/prepare/run.sh` and wait for it to pass. Do not start any other runner before it completes successfully.
-2. After preparation passes, start `verify/style/run.sh`, `verify/archi/run.sh`, and `verify/ut/run.sh` independently.
-3. Start IT only after UT passes and only for `it` or `e2e`.
-4. Start E2E only after IT passes and only for `e2e`.
-5. Stop starting later functional levels after any known failure. Let already-running independent checks finish so their evidence is retained.
-6. Capture each command's output and exit status separately. A runner passes only with exit status zero.
+1. Start `verify/prepare/run.sh` and wait for it to pass. Do not start the target test before preparation completes successfully.
+2. Run exactly the specified target test command and capture its output and exit status separately. A test passes only with its stated deterministic pass signal and zero exit status.
+3. If the target test passes, accept only when it observes the requested outcome; do not run additional checks.
+4. If the target test fails, record a **GAP**, analyze its evidence, and resolve only that gap.
+5. After a resolver edit, repeat preparation and the same target test. Never replace it with another test or silently expand the scope.
 
-Every item is independently invokable with one command (`./verify/<item>/run.sh`). When using the project root runner, use `./verify/run.sh <item>` where `<item>` is `prepare`, `ut`, `it`, `e2e`, `style`, or `archi`; it must perform preparation before any selected item other than `prepare`. For parallel gates, invoke their domain runners only after the single preparation run has passed.
+The target test may be a project runner such as `./verify/ut/run.sh` or a native test command. Every command must remain independently invokable. A domain target does not authorize running the domain's other tests or any other domain. If preparation fails, report the preparation failure as **BLOCKED** and do not start the target test.
 
-Style and Architecture do not wait for UT, IT, E2E, or each other. Run them concurrently after preparation using the host's native process mechanism. Do not hide a failure behind a combined pipeline status. If preparation fails, report the preparation failure and do not start the other runners.
-
-Before reporting a failure, read the nearest `index.md` and print:
+Before reporting a failure, read the nearest `index.md` when the target is under `verify/` and print:
 
 ```text
-FAIL: verify/<domain>
-Intent: <why this verification exists, from index.md>
-Violated: <rule, expected behavior, stable test name, or runner assertion>
-Command: ./verify/<domain>/run.sh
+FAIL: target test
+Intent: <why this test exists, from its index.md or test definition>
+Violated: <rule, expected behavior, stable test name, or assertion>
+Command: <exact target test command>
 Evidence:
 <captured output>
 ```
 
-Use the failing check's own rule identifier, assertion, test name, or runner message for `Violated`. Never invent a rule. If none is available, use `Violated: <domain> verification failed` and retain the raw output. For a requested state, also print `Expected` and `Observed`.
+Use the target test's own rule identifier, assertion, test name, or runner message for `Violated`. Never invent a rule. If none is available, use `Violated: target test failed` and retain the raw output. For a requested state, also print `Expected` and `Observed`.
 
 ## Cycle
 
@@ -57,24 +63,27 @@ Repeat until accepted, blocked, or the maximum is reached.
 
 ### 1. Inspect current state — dispatch a read-only scout
 
-Give a scout the target, acceptance condition, project, current diff, requested level, and available evidence. Require it to:
+Give a scout the target, acceptance condition, project, current diff, target domain, exact target test command, and available evidence. Require it to:
 
 - inspect the implementation and relevant callers;
-- run `verify/prepare/run.sh` first and only start the requested verification runners after it passes;
-- run the verification interface at the requested level;
+- run `verify/prepare/run.sh` first and only start the target test after it passes;
+- run exactly the specified target test, not a broader verification suite;
 - compare observed behavior with the acceptance condition;
-- report changed files, exact failures, each failure's intent and violated rule, risks, and evidence;
+- report changed files, the exact target-test failure, its intent and violated rule, risks, and evidence;
 - make no edits and delegate no further work.
 
 If `verify/`, `verify/prepare/`, or a required runner is missing, report **BLOCKED** and recommend `verify-design`; do not silently run unrelated commands as a substitute.
 
 ### 2. Analyze the gap — main orchestrator
 
-Classify the current state as:
+The main orchestrator must first reconcile the target domain, test intent, assertion, pass signal, observed result, and confirmed acceptance condition. Classify the current state as:
 
-- **Accepted candidate:** the acceptance condition is met and current verification evidence is sufficient;
-- **Gap:** a concrete mismatch remains;
-- **Blocked:** evidence is missing, the requirement is ambiguous, a runner cannot execute, or a human-owned decision is required.
+- **Accepted candidate:** the target test passes and the acceptance condition is met;
+- **Gap:** the target test has a concrete failure that contradicts the acceptance condition;
+- **Blocked:** evidence is missing, the requirement is ambiguous, a runner cannot execute, or a human-owned decision is required;
+- **Contradiction:** tests, test definitions, domain intent, or requirements demand incompatible outcomes. Treat this as **BLOCKED**.
+
+For **Contradiction**, stop immediately. Do not infer a preferred rule, edit implementation code, or dispatch a resolver. Report the conflicting commands/assertions and request that `verify-design` correct the verification design before restarting `verify-loop`.
 
 For a Gap, analyze the root cause rather than repeating the failed symptom. State exactly:
 
@@ -97,7 +106,7 @@ Require it to:
 
 - change only the scoped implementation, test, configuration, or documentation;
 - preserve unrelated behavior and avoid speculative refactors;
-- run the smallest relevant verification after editing;
+- run preparation and the exact target test after editing;
 - report changed files, commands, results, residual risks, and unresolved gaps;
 - stop rather than guess if the strategy is insufficient or requirements conflict.
 
@@ -105,11 +114,11 @@ The worker may edit; `verify-loop` itself does not directly implement the gap. D
 
 ### 4. Verify and judge the attempt
 
-Run the verification interface again at the requested level. Inspect the current diff and compare current evidence with the acceptance condition.
+Run preparation and the same target test again. Inspect the current diff and compare current evidence with the acceptance condition. Do not run unrelated verification.
 
 Judge one of:
 
-- **ACCEPT:** acceptance is met, all selected verification gates pass, and no blocking regression or unresolved risk contradicts the target;
+- **ACCEPT:** the target test passes with its deterministic signal, observes the requested outcome, and no blocking regression or unresolved risk contradicts the target;
 - **CONTINUE:** the attempt failed, a concrete root cause and improved strategy are available, and another cycle remains;
 - **STOP:** maximum reached, evidence is missing, rollback is unsafe, the change is destructive, or human judgment is required.
 
@@ -134,11 +143,12 @@ After **ACCEPT**, stop immediately. Do not spend remaining cycles on optional cl
 
 - Default maximum: `3` cycles; honor a user-supplied positive integer exactly.
 - One read-only scout and at most one resolver per cycle.
-- The resolver depends on inspection and root-cause analysis.
-- Preparation is mandatory and completes before any other runner; functional verification is ordered `ut → it → e2e`; Style and Architecture are independent parallel gates.
-- Do not dispatch a resolver for an accepted candidate or unsupported root cause.
+- The resolver depends on target-test inspection and root-cause analysis.
+- Preparation is mandatory and completes before the target test.
+- Do not dispatch a resolver for a passing target test or unsupported root cause.
 - Failed resolver attempts are rolled back before retry; do not silently keep partial fixes.
-- Stop for ambiguity, contradictory requirements, unsafe rollback, destructive/security-sensitive changes without authority, unavailable credentials, or a human-owned decision.
+- Stop for contradictory tests, test definitions, domain intents, or requirements; report **CONTRADICTION** and request a `verify-design` fix before continuing.
+- Also stop for ambiguity, unsafe rollback, destructive/security-sensitive changes without authority, unavailable credentials, or a human-owned decision.
 - Never claim success when the loop stops at its maximum or a blocker.
 
 ## Output
@@ -151,7 +161,9 @@ Return all progress in the current session; do not create a report file unless r
 - Target: [requested outcome]
 - Acceptance: [observable condition]
 - Project: [path]
-- Maximum functional level: [ut | it | e2e]
+- Target domain: [ut | it | e2e | style | archi | native]
+- Target test: [exact command and check path]
+- Cheapest sufficient method: [confirmed rationale and rejected broader alternatives]
 - Maximum cycles: [number]
 
 ## Cycle [n]
