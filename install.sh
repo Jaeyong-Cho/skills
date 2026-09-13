@@ -394,7 +394,8 @@ setup_pi() {
     "npm:@narumitw/pi-usage" \
     "npm:@juicesharp/rpiv-todo" \
     "npm:pi-must-have-extension" \
-    "npm:pi-vimmode"
+    "npm:pi-vimmode" \
+    "npm:pi-notify"
   do
     if pi install "$pkg" &>/dev/null; then
       echo "  ✓ $pkg"
