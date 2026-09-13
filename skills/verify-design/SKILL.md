@@ -7,30 +7,23 @@ license: MIT
 
 # Verify Design
 
-Make a project's proof of correctness discoverable, executable, and honest. Read [`../references/verification-structure.md`](../references/verification-structure.md) before changing anything.
+Make a project's proof of correctness discoverable, executable, and honest. Read [`../references/verification-structure.md`](../references/verification-structure.md) and [`../references/deterministic-evaluation.md`](../references/deterministic-evaluation.md) before changing anything.
 
 Do not impose a testing framework. Reuse existing mechanisms, then reference them, wrap them, extend them, and create new verification only when necessary.
 
-## Inputs
-
-Accept:
-
-- **Project:** repository or component to inspect and change.
-- **Requested behavior:** optional new feature, bug, or other expected state that is not true in the current state.
-- **Level:** optional maximum functional level: `ut`, `it`, or `e2e`; default `ut`.
-- **Evidence:** existing commands, failures, logs, or acceptance criteria.
-
-If the requested behavior is absent or ambiguous, inspect the project first. Do not invent an expected state.
-
 ## Procedure
 
-### 1. Inspect and classify
+### 1. Establish shared intent
 
-Find the project's native tests, linters, static analysis, build commands, continuous-integration commands, architecture checks, and existing verification. Classify each as UT, IT, E2E, Style, or Architecture. Record the native command and its source location.
+Before inspecting or changing the project, **MUST RUN** a session of `@skills/grill-me` in the current conversation. Give it the request, project, level, evidence, and [`../references/intent-checklist.md`](../references/intent-checklist.md). It must cover every intent-checklist point, follow its calibration, impact, uncertainty, and round rules, and finish with a teach-back and explicit confirmation of shared understanding. Do not begin design work until the human confirms that understanding. Do not create an intent file unless the human separately asks for persistence.
+
+### 2. Inspect and classify
+
+Find the project's native tests, linters, static analysis, build commands, continuous-integration commands, architecture checks, and existing verification. Classify each as UT, IT, E2E, Style, or Architecture. Record the native command, source location, and deterministic pass signal.
 
 Completion criterion: every discovered relevant mechanism is classified, or explicitly recorded as unavailable; no test is moved or duplicated merely for this interface.
 
-### 2. Build the interface
+### 3. Build the interface
 
 Create or adapt this project-level shape:
 
@@ -51,11 +44,18 @@ Every directory added below `verify/` gets a local `index.md`. Each index descri
 
 Completion criterion: the required directories, runners, and indexes exist; runners execute native checks or explicitly document no applicable check; every index entry points to an existing direct child and has a description.
 
-### 3. Add a red check for a requested new state
+### 4. Add a red check for a requested new state
 
 When the human requests a new feature, bug fix, regression check, or any expected state that is not the current state, add the smallest native check that expresses the expected behavior. Prefer a focused test or deterministic style/architecture check over a new framework.
 
-Run the relevant verification level. A failure is expected evidence, not an implementation failure:
+Before running each check, define a verification method for every relevant mechanism, requested state, or acceptance criterion:
+
+- **Type:** the lowest sufficient UT, IT, E2E, Style, or Architecture check.
+- **Location:** the existing or new test/check path.
+- **Command:** the exact command to run it.
+- **Pass signal:** the exact observable result, such as a named assertion, returned value, database row, HTTP status, or zero exit status for a structural check; never "looks right."
+
+Run the relevant verification level and record that method with its current evidence. A failure is expected evidence, not an implementation failure:
 
 ```text
 GAP
@@ -68,7 +68,7 @@ Next: implementation must make the check pass
 
 Do not implement the requested feature in this skill. If the new check passes immediately, report that no current gap was observed. If the project cannot express the check with its native mechanisms, stop and report the blocker instead of creating speculative infrastructure.
 
-### 4. Lint the structure
+### 5. Lint the structure
 
 Run the bundled deterministic linter from the skill directory:
 
@@ -79,10 +79,6 @@ Run the bundled deterministic linter from the skill directory:
 It checks required directories and runners, indexes, local links, descriptions, stale/out-of-scope references, and unexplained depth. Fix structural failures and rerun it. A depth warning may remain only with a documented reason.
 
 Completion criterion: the linter passes with no structural errors and its output is retained as evidence.
-
-### 5. Run the verification loop
-
-Invoke `@skills/verify-loop` at the requested maximum level. Pass it the project, requested behavior, the new check (if any), the linter result, and all native command evidence. `verify-loop` owns ordered functional execution, independent Style/Architecture gates, intent output, and the final pass/fail judgment.
 
 ## Output
 
@@ -107,12 +103,17 @@ Return the result in the current session; do not create a report unless requeste
 - Violated: [rule/check]
 - Evidence: [command and output]
 
+## Verification method
+| State, mechanism, or acceptance criterion | Type | Check path | Command | Observable pass signal |
+|---|---|---|---|---|
+| [state] | [UT/IT/E2E/Style/Architecture] | [path] | `[command]` | [exact result] |
+
 ## Validation
 - Structure linter: [pass/fail]
-- Verify loop: [pass/fail/stopped]
+- Verification methods: [defined and run / blocked]
 
 ## Residual risks
 - [risk, or `None`]
 ```
 
-The skill is complete only when the interface is locally indexed, native mechanisms are reused or explicitly unavailable, the structure linter passes, and `verify-loop` returns current evidence. For a new requested state, completion also requires a focused check and an explicit GAP when the current state fails it.
+The skill is complete only when the interface is locally indexed, native mechanisms are reused or explicitly unavailable, every requested state has a deterministic verification method with current evidence, and the structure linter passes. For a new requested state, completion also requires a focused check and an explicit GAP when the current state fails it.

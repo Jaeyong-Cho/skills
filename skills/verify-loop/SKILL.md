@@ -7,22 +7,15 @@ license: MIT
 
 # Verify Loop
 
-This is the implementation-and-verification loop. Read [`../references/verification-structure.md`](../references/verification-structure.md) before running checks.
+This is the implementation-and-verification loop. Read [`../references/verification-structure.md`](../references/verification-structure.md) and [`../references/deterministic-evaluation.md`](../references/deterministic-evaluation.md) before running checks.
 
 Use `verify-design` first when the project lacks the `verify/` interface or when a new feature, bug, or other non-current expected state needs a focused red check. `verify-loop` runs checks, analyzes gaps, dispatches scoped implementation attempts, and judges acceptance; it does not invent requirements.
 
-## Inputs
+## Establish shared intent
 
-Accept:
+Before running checks, dispatching a scout, or changing code, **MUST RUN** a session of `@skills/grill-me` in the current conversation. Give it the requested goal, project, requested state, evidence, level, maximum cycles, and [`../references/intent-checklist.md`](../references/intent-checklist.md). It must establish the observable outcome, scope, constraints, and assumptions, follow its calibration, impact, uncertainty, and round rules, and finish with a teach-back and explicit confirmation of shared understanding. Do not begin the loop until the human confirms. Use that confirmed outcome and acceptance condition as the target; do not invent requirements.
 
-- **Target:** requested outcome and observable acceptance condition.
-- **Project:** repository or component containing `verify/`.
-- **Requested state:** feature, bug fix, regression, or other expected behavior.
-- **Level:** maximum functional level: `ut`, `it`, or `e2e`; default `ut`.
-- **Evidence:** current diff, failing check, logs, issue, or existing results.
-- **Maximum cycles:** positive integer; default `3`.
-
-Reject an unknown level or non-positive cycle count. If the target or acceptance condition is not judgeable, stop and ask for clarification. Do not turn a vague request into an invented definition of done.
+After confirmation, reject an unknown level or non-positive cycle count. If the target or acceptance condition is not judgeable, stop and ask for clarification.
 
 ## Verification execution
 
