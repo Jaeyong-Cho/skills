@@ -1,6 +1,6 @@
 ---
 name: verify-loop
-description: Drive a requested change through one specified target test: prepare first, run the test, identify an evidence-backed Gap, and resolve it with safe retries.
+description: Drive a requested change through one specified target test; prepare first, run the test, identify an evidence-backed Gap, and resolve it with safe retries.
 disable-model-invocation: true
 license: MIT
 ---
