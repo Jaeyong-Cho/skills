@@ -31,7 +31,16 @@ node -e '
 ' "$TMP/home/.pi/agent/settings.json"
 node -e '
   const models = require(process.argv[1]);
-  if (models.providers.beta.modelOverrides.two.contextWindow !== 1000000) process.exit(1);
+  const overrides = models.providers;
+  for (const [provider, model] of [
+    ["beta", "two"],
+    ["openai-codex", "gpt-5.6-sol"],
+    ["openai-codex", "gpt-5.6-terra"],
+    ["openai-codex", "gpt-5.6-luna"],
+    ["openai-codex", "gpt-6-astra"],
+  ]) {
+    if (overrides[provider].modelOverrides[model].contextWindow !== 1000000) process.exit(1);
+  }
 ' "$TMP/home/.pi/agent/models.json"
 [ "$(grep -c '^install ' "$TMP/pi.log")" -eq 1 ]
 grep -q '^install git:github.com/Jaeyong-Cho/pi-interactive-subagents$' "$TMP/pi.log"

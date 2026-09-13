@@ -359,12 +359,25 @@ NODE
   echo "  ✓ pi context window → 1M ($model_ref)"
 }
 
+configure_pi_context_windows() {
+  local selected="$1" model
+  configure_pi_context_window "$selected"
+  for model in \
+    openai-codex/gpt-5.6-sol \
+    openai-codex/gpt-5.6-terra \
+    openai-codex/gpt-5.6-luna \
+    openai-codex/gpt-6-astra
+  do
+    [ "$model" = "$selected" ] || configure_pi_context_window "$model"
+  done
+}
+
 setup_pi() {
   echo "→ pi coding agent"
 
   mkdir -p "$PI_AGENT_DIR"
   configure_pi_settings
-  configure_pi_context_window "$PI_SUBAGENT_MODEL"
+  configure_pi_context_windows "$PI_SUBAGENT_MODEL"
   cp "$SKILLS_DIR/config/open-tui.json" "$PI_AGENT_DIR/open-tui.json"
   echo "  ✓ ~/.pi/agent/open-tui.json ← $SKILLS_DIR/config/open-tui.json"
   if [ -f "$PI_AGENT_DIR/AGENTS.md" ] && [ ! -L "$PI_AGENT_DIR/AGENTS.md" ]; then
@@ -424,7 +437,7 @@ setup_pi_subagents() {
     echo "  subagent plugin install failed, run manually: pi install git:github.com/Jaeyong-Cho/pi-interactive-subagents" >&2
     return 1
   fi
-  configure_pi_context_window "$PI_SUBAGENT_MODEL"
+  configure_pi_context_windows "$PI_SUBAGENT_MODEL"
   configure_subagent_settings
   install_subagent_agents
 }
