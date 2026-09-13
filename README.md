@@ -51,11 +51,6 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/grill-me` | — | Personal grilling engine: interview one question at a time from a design-tree frontier; when the user can't answer, drop into progressive-disclosure clarification before returning to the question |
 | `/now` | — | Break out of whatever's running — a `/grill-me` round, any conversation — and get one task done immediately, no plan/round/confirmation, then resume the interrupted flow exactly where it paused |
 | `/dev-grill-me` | — | Run `/grill-me` covering both feature and fix concerns in one pass: intent, scope, value, root cause, architecture, impact, observability/monitoring, testability, release plan |
-| `/bible-enact` | `.bible/` or a confirmed Bible path | Start with `/grill-me`, then define, amend, or repeal Laws with both WHY and WHAT; supports global, repository, and nested sub-Bibles |
-| `/bible-audit` | — | Read-only audit of inherited and local Bible Laws, returning statistics plus concrete evidence only for violations and other non-pass findings; includes `scripts/lint_bible.py` for structure checks |
-| `/bible-reform` | — | Correct implementation violations from an audit while preserving WHY and WHAT; never edits Bible Laws |
-| `/bible-loop` | — | Run bounded audit → reform cycles through subagents, defaulting to three cycles and returning evidence when Enact is needed |
-| `/bible-review` | — | Review implementation against effective Bible Laws with concrete evidence, human-confirmed fixes, and a fresh audit after each change |
 | `/req-grill-me` | — | Run `/grill-me` to build an agile Story in one pass: persona, user value, trigger, happy/alternate/edge/negative scenarios, dependencies, INVEST check |
 | `/refact-grill-me` | — | Run `/grill-me` to refactor a named function or usecase sequence against `abstraction-levels.md`'s L1/L2/L3 rule: current shape and smells, behavior-preservation baseline, target decomposition |
 | `/l1-grill-me` | — | Run `/grill-me` to nail down one L1 orchestration flow's step sequence: trigger, ordered L2/L3 calls, branches, end state — feeds `/l1-implement` |
@@ -74,6 +69,7 @@ The script also copies `skills/`, `references/`, and `template/` to `~/.agents/s
 | `/wayfinder` | — | Record each way's purpose, expected result, hypothesis, and assumptions, then plan `EXPLORE`, `EXPERIMENT`, `IMPL`, or `CHECKOUT` tasks using the cheapest reliable method |
 | `/next-way` | recorded way outcomes, dependencies, readiness, and implementation evidence | Find the next actionable way; follow the recorded task approach without imposing a fixed process, then review implementation evidence against the expected result and way purpose before dependent work proceeds |
 | `/highway` | — | Automatically dispatch safe, non-blocked Wayfinder tasks to subagents in parallel, continuing batches until no safe work can proceed; reconcile each result against its recorded completion signal |
+| `/target-loop` | — | Repeatedly inspect, resolve, and verify a requested target through subagents; defaults to three cycles and stops on acceptance or a blocker |
 | `/to-way` | `ways/{nn}-{slug}/0-goal.md` and nested work-package files | Record a Wayfinder plan while preserving task kinds, Why/What/How details, dependency links, execution guidance, and done-task evidence |
 | `/to-context` | `contexts/NN-facts-{slug}.md` and `contexts/NN-intents-{slug}.md` | Run `/to-facts` and `/to-intents` to preserve this session's facts and user intent as paired context documents |
 | `/get-context` | `contexts/NN-intents-{slug}.md`, `contexts/NN-facts-{slug}.md`, and `contexts/NN-constraints-{slug}.md` | Run `/to-intents`, then `/to-facts`, then `/to-constraint` to capture durable context in order |
@@ -119,4 +115,3 @@ Referenced by workflow skills — loaded at the point they're needed.
 | `spec-convention.md` | A target project's spec documents live under `spec/{epic-slug}/{story-slug}.md` (format: `template/spec.md`), indexed by `spec/{epic-slug}/index.md` and the top-level `spec/index.md` |
 | `top-down-decompose.md` | MECE top-down decomposition methodology to split a goal into atomic sub-goals |
 | `question-format.md` | Format human checkpoints with ❓ questions and ➡️ recommendations |
-| `bible-driven-development.md` | Bible locations, parent/sub-Bible inheritance, directory structure, Law and Tool contracts, lifecycle, authority, and linter usage |
