@@ -59,11 +59,9 @@ Create only needed scripts, named `NN-{step}.sh` in execution order. Never store
 
    Stop once confidence is sufficient. E2E and full tests are confidence gates: they MUST be the last stage and never the first development feedback. Use the narrowest verification that can falsify the current assumption; challenge any proposal that starts broad.
 
-## Three-minute budget
+## Verification cost
 
-A normal cycle MUST finish within three minutes. Before accepting a longer design, try a focused subsystem, smaller representative data, reused setup/build artifacts, a test seam, or decomposition. If a longer cycle is unavoidable, state its duration and justification in the handoff to `@skills/loop-run`, not in the cycle `README.md`.
-
-An E2E or full test does not justify a longer budget by itself. The handoff must also explain why final verification is necessary now and why cheaper checks already performed are insufficient.
+Do not choose verification by a time budget. Choose the cheapest method that can falsify the current assumption: prefer a focused subsystem, smaller representative data, reused setup/build artifacts, a test seam, or decomposition. Stop once confidence is sufficient; use E2E or full testing only when cheaper evidence cannot answer the current question.
 
 ## Completion
 
