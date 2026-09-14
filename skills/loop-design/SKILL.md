@@ -11,7 +11,7 @@ Turn one concrete development goal into a tight, observable loop:
 Goal → Setup → Executable Verification → First Gap → Change → Verification → Repeat
 ```
 
-Completion is a PASS for every required verifier, not an implementation narrative. Reuse fresh evidence only when the verifier's command, environment, and observed inputs remain unchanged; otherwise rerun it.
+Completion is `loop/verify/run.sh` exiting `0`, not an implementation narrative. Reuse fresh evidence only for intermediate decisions when the verifier's command, environment, and observed inputs remain unchanged; final acceptance MUST run full verification.
 
 ## Principles
 
