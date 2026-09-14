@@ -7,6 +7,23 @@ description: Execute a prepared loop-design development loop: implement one veri
 
 Run an existing `loop-design` loop to completion or a defined stop. The default maximum is **3 change iterations**; honor a user-provided positive maximum instead. A baseline verification run does not consume an iteration.
 
+## Loop layout
+
+Read `loop/README.md` first; it names the goal, scope, setup, verifier order, and completion condition. The loop may contain only the directories needed for its goal:
+
+```text
+loop/
+├── README.md
+├── setup/{run.sh,NN-{slug}.sh}
+├── verify/{run.sh,NN-{slug}.sh}
+├── tools/
+├── config/
+├── workspace/
+└── runs/{timestamp}/
+```
+
+`setup/run.sh` and `verify/run.sh` are the entry points. Numbered scripts execute in numeric order; `verify/run.sh` stops at the first failure. `tools/` supplies only required check helpers, and `runs/` holds execution evidence. `loop-design` owns this layout: do not create or restructure it while operating the loop unless a missing verifier makes the loop invalid.
+
 ## Preconditions
 
 Before changing code, confirm that `loop-design` has completed for this one goal: the `grill-me` session was confirmed, setup and ordered verification exist, and `loop/verify/run.sh` is runnable. Run `loop/setup/run.sh` if the prepared loop requires it. Build a current verification ledger from immediate command results.
