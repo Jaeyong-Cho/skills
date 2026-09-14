@@ -1,6 +1,6 @@
 ---
 name: loop-run
-description: Execute one selected NN-slug loop cycle, capture all runtime evidence, review its cost and sufficiency, and commit an accepted scoped change. Use after loop-design prepares a cycle; it never runs multiple cycles.
+description: Execute one selected NN-slug loop cycle, capture all runtime evidence, review its cost and sufficiency, and commit an accepted scoped change. Use after to-loop prepares a cycle; it never runs multiple cycles.
 ---
 
 # Loop Run
@@ -48,7 +48,7 @@ Review the cycle README, captured evidence, elapsed time, Git diff, and reused r
 Return exactly one verdict:
 
 - **DONE:** evidence is sufficient at justified cost. If the cycle made a scoped source or reusable-cycle-definition change, inspect Git status and diff, then create one focused commit. Do not include unrelated changes or generated run artifacts unless required deliverables.
-- **NEXT-CYCLE:** this cycle is sufficient but reveals one next necessary question. Hand only that question to `@skills/to-loop`; do not design it here.
+- **NEXT-CYCLE:** this cycle is sufficient but reveals one next necessary question. Hand only that question to `@skills/loop-design`; do not design it here.
 - **RETRY:** the result is inconclusive or failed for a correctable issue within this scope. State the smallest correction and rerun only this cycle.
 - **ESCALATE:** requirements conflict, evidence is ambiguous, the cycle is unnecessarily broad, or E2E/full testing was ordinary feedback. Alert the human with exact evidence; do not broaden, commit, or start another cycle.
 
@@ -62,5 +62,5 @@ First failure: script, expected, actual, evidence (or none)
 Final stage: not reached | passed | failed
 Review: cost order, evidence sufficiency, and verdict
 Commit: hash | not applicable | blocked
-Next: none | to-loop | retry | human escalation
+Next: none | loop-design | retry | human escalation
 ```

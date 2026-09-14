@@ -1,22 +1,28 @@
 ---
 name: loop-design
-description: Select and design the smallest executable feedback element for a development goal; one script, setup, verification, experiment, or at most one cycle. Use with to-loop to prepare the current cycle without speculating about future cycles.
+description: Discuss and select the smallest executable feedback element for a development goal, then hand it to to-loop to write one cycle without speculating about future cycles.
 ---
 
 # Loop Design
 
-`to-loop` identifies the next needed element; this skill designs it. One invocation MUST design or modify **at most one cycle**. Prefer completing or modifying the current cycle over creating a future cycle.
+This skill starts the discussion about building or setting up the work system. It selects the next loop element; `@skills/to-loop` writes the cycle files afterward. One invocation MUST select **at most one cycle**. Prefer completing the current cycle over creating a future cycle.
 
-## Shared-understanding gate
+## Design Loop Mode
 
-Every invocation MUST first run or continue `@skills/grill-me`. Use it to establish shared understanding with the human about the goal, the current cycle question, and the observable pass/fail result. Do not design, write, or modify a cycle until `grill-me` reaches an empty frontier and the human explicitly confirms the shared understanding. For later cycles, an existing confirmed context may make this a short confirmation, but `grill-me` still MUST run; re-interview whenever a new decision or ambiguity appears.
+Invoking this skill enters **Design Loop Mode**: think about the smallest executable cycle for building or setting up a work system. This mode designs the feedback loop, not the product work itself. Do not invoke `@skills/grill-me`; use the available goal, intent, repository state, and run evidence to define the cycle.
+
+Think in this shape:
+
+```text
+goal and intent → setup → execute → verify → evidence → pass/fail
+```
 
 ```text
 minimum scope                         maximum scope
 one script / setup script  ────────>  one cycle
 ```
 
-For the first cycle of a new goal, use its confirmed `grill-me` context. Later cycles reuse that confirmed goal and immediate run/review evidence; do not re-interview or plan future cycles without a new unresolved decision.
+For the first cycle of a new goal, use the available goal and intent. Later cycles reuse that goal and immediate run/review evidence; do not plan future cycles without a new unresolved decision.
 
 ## Cycle layout
 
@@ -39,13 +45,12 @@ loop/
 
 Create only needed scripts, named `NN-{step}.sh` in execution order. Never store runtime output in a cycle directory; all runtime artifacts belong in `loop/runs/cycle-NN-{timestamp}/`.
 
-## Design the current element
+## Discuss the current loop
 
-1. Read the goal, current repository state, existing cycle READMEs, and immediate run/review evidence. State the one question this element must answer and its observable pass/fail result.
-2. Select the smallest scope that can answer it: add or change one script in the current cycle when sufficient; otherwise create one new cycle. Do not create speculative later cycles.
-3. Write or update that cycle's `README.md` with the human's **GOAL** and **INTENT** as the purpose of the cycle, followed by its question, scope, ordered scripts, expected evidence, and whether it is a final-confidence cycle. Preserve the human's meaning; do not replace it with implementation language.
-4. Put setup, execution, test, experiment, or verification commands in the numbered scripts. Each script has clear inputs, outputs, and meaningful exit status. Reuse existing project commands before adding helpers. Read [verification-design.md](references/verification-design.md) for non-trivial behavior, API, structure, or architecture checks; read [verification-tools.md](references/verification-tools.md) only when an existing command cannot express a required check.
-5. Define only the verification stages needed for the current question, ordered by cost:
+1. Read the user's request and discussion, the current repository state, existing cycle READMEs, and immediate run/review evidence. Preserve the human's **GOAL** and **INTENT**.
+2. Discuss the work-system topic with the human. State the one question the next element must answer, its scope, and its observable pass/fail result. Ask only for decisions needed to select this element; do not invoke `@skills/grill-me`.
+3. Select the smallest scope that can answer it: a setup, execution, verification, experiment, or one cycle change. Do not create speculative later cycles.
+4. Define only the verification stages needed for the current question, ordered by cost:
 
    ```text
    static/deterministic
@@ -58,6 +63,22 @@ Create only needed scripts, named `NN-{step}.sh` in execution order. Never store
    ```
 
    Stop once confidence is sufficient. E2E and full tests are confidence gates: they MUST be the last stage and never the first development feedback. Use the narrowest verification that can falsify the current assumption; challenge any proposal that starts broad.
+5. When the discussion is settled and writing is needed, hand the selected element to `@skills/to-loop`. Do not write cycle files in this skill.
+
+## Handoff to to-loop
+
+```text
+GOAL: <human's desired outcome>
+INTENT: <why the human wants it>
+CURRENT STATE: <observed state and evidence>
+NEXT ELEMENT: <one setup, execution, verification, experiment, or cycle change>
+QUESTION: <one thing this element must answer>
+SCOPE: <what is included and excluded>
+EXPECTED EVIDENCE: <what will be observed>
+PASS/FAIL: <observable result>
+CHEAPEST METHOD: <why this is the smallest sufficient check>
+HANDOFF: @skills/to-loop
+```
 
 ## Verification cost
 
@@ -65,4 +86,4 @@ Do not choose verification by a time budget. Choose the cheapest method that can
 
 ## Completion
 
-The cycle README and only its needed reusable scripts exist and are ordered by cost. Hand the selected cycle to `@skills/loop-run`; do not run or design another cycle here.
+The discussion produces one settled loop-design brief with the human's goal, intent, scope, question, evidence, pass/fail result, and cheapest method. Hand it to `@skills/to-loop`; do not write or run the cycle here.
