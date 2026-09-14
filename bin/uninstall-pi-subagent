@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+AGENT_DIR="$HOME/.pi/agent"
+AGENTS_DIR="$AGENT_DIR/agents"
+MANIFEST="$AGENT_DIR/.installed-pi-subagents"
+PLUGIN="git:github.com/Jaeyong-Cho/pi-interactive-subagents"
+command -v pi >/dev/null || { echo "pi not found" >&2; exit 1; }
+pi uninstall "$PLUGIN"
+if [ -f "$MANIFEST" ]; then
+  while IFS= read -r name; do
+    [[ "$name" =~ ^[A-Za-z0-9._-]+\.md$ ]] || continue
+    rm -f "$AGENTS_DIR/$name"
+  done < "$MANIFEST"
+  rm -f "$MANIFEST"
+fi
+if [ -f "$AGENT_DIR/settings.json" ]; then
+  node - "$AGENT_DIR/settings.json" <<'NODE'
+const fs = require('fs'); const file = process.argv[2]; const settings = JSON.parse(fs.readFileSync(file, 'utf8'));
+if (settings.subagents && typeof settings.subagents === 'object' && !Array.isArray(settings.subagents)) {
+ delete settings.subagents.defaultModel; delete settings.subagents.defaultThinking;
+ if (Object.keys(settings.subagents).length === 0) delete settings.subagents;
+}
+const tmp = `${file}.tmp`; fs.writeFileSync(tmp, JSON.stringify(settings, null, 2) + '\n'); fs.renameSync(tmp, file);
+NODE
+fi
+echo "Pi subagents uninstalled"

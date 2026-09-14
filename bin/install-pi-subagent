@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+AGENT_DIR="$HOME/.pi/agent"
+AGENTS_DIR="$AGENT_DIR/agents"
+MANIFEST="$AGENT_DIR/.installed-pi-subagents"
+MODEL="${PI_SUBAGENT_MODEL:-openai-codex/gpt-5.6-luna}"
+THINKING="${PI_SUBAGENT_THINKING:-low}"
+
+command -v pi >/dev/null || { echo "pi not found" >&2; exit 1; }
+command -v node >/dev/null || { echo "node not found" >&2; exit 1; }
+
+MODELS=()
+while IFS= read -r model; do MODELS+=("$model"); done < <(pi --list-models 2>/dev/null | awk 'NR > 1 && $1 != "" && $2 != "" { print $1 "/" $2 }')
+[ "${#MODELS[@]}" -gt 0 ] || { echo "No available Pi models found." >&2; exit 1; }
+DEFAULT=1
+for i in "${!MODELS[@]}"; do [ "${MODELS[$i]}" = "$MODEL" ] && DEFAULT=$((i + 1)); done
+echo "Available subagent models:"
+for i in "${!MODELS[@]}"; do echo "  $((i + 1))) ${MODELS[$i]}"; done
+while :; do
+  read -rp "Model [$DEFAULT]: " CHOICE; CHOICE="${CHOICE:-$DEFAULT}"
+  [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le "${#MODELS[@]}" ] && { MODEL="${MODELS[$((CHOICE - 1))]}"; break; }
+  echo "Choose a number from 1 to ${#MODELS[@]}." >&2
+done
+LEVELS=(off minimal low medium high xhigh max); DEFAULT=1
+for i in "${!LEVELS[@]}"; do [ "${LEVELS[$i]}" = "$THINKING" ] && DEFAULT=$((i + 1)); done
+echo "Thinking effort:"
+for i in "${!LEVELS[@]}"; do echo "  $((i + 1))) ${LEVELS[$i]}"; done
+while :; do
+  read -rp "Thinking [$DEFAULT]: " CHOICE; CHOICE="${CHOICE:-$DEFAULT}"
+  [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le "${#LEVELS[@]}" ] && { THINKING="${LEVELS[$((CHOICE - 1))]}"; break; }
+  echo "Choose a number from 1 to ${#LEVELS[@]}." >&2
+done
+
+mkdir -p "$AGENTS_DIR"
+pi install "git:github.com/Jaeyong-Cho/pi-interactive-subagents"
+node - "$AGENT_DIR/settings.json" "$MODEL" "$THINKING" <<'NODE'
+const fs = require('fs'); const [file, model, thinking] = process.argv.slice(2);
+let settings = {}; try { settings = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (_) {}
+if (!settings.subagents || typeof settings.subagents !== 'object' || Array.isArray(settings.subagents)) settings.subagents = {};
+settings.subagents.defaultModel = model; settings.subagents.defaultThinking = thinking;
+const tmp = `${file}.tmp`; fs.writeFileSync(tmp, JSON.stringify(settings, null, 2) + '\n'); fs.renameSync(tmp, file);
+NODE
+node - "$AGENT_DIR/models.json" "$MODEL" <<'NODE'
+const fs = require('fs'); const [file, selected] = process.argv.slice(2);
+let models = {}; try { models = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (_) {}
+models.providers ||= {};
+for (const ref of new Set([selected, 'openai-codex/gpt-5.6-sol', 'openai-codex/gpt-5.6-terra', 'openai-codex/gpt-5.6-luna', 'openai-codex/gpt-6-astra'])) {
+ const [provider, model] = ref.split('/'); const p = models.providers[provider] ||= {}; const o = p.modelOverrides ||= {}; o[model] = {...(o[model] || {}), contextWindow: 1000000};
+}
+const tmp = `${file}.tmp`; fs.writeFileSync(tmp, JSON.stringify(models, null, 2) + '\n'); fs.renameSync(tmp, file);
+NODE
+TMP_MANIFEST="$(mktemp "$AGENT_DIR/.installed-pi-subagents.XXXXXX")"
+for src in "$ROOT"/agents/*.md; do
+  [ -e "$src" ] || continue
+  name="$(basename "$src")"; dest="$AGENTS_DIR/$name"; tmp="$(mktemp "$AGENTS_DIR/.agent.XXXXXX")"
+  node - "$src" "$tmp" "$MODEL" "$THINKING" <<'NODE'
+const fs = require('fs'); const [src, dest, model, thinking] = process.argv.slice(2);
+const lines = fs.readFileSync(src, 'utf8').split('\n'); const end = lines.indexOf('---', 1);
+if (lines[0] !== '---' || end < 0) throw new Error(`Missing YAML frontmatter: ${src}`);
+let hasModel = false, hasThinking = false;
+for (let i = 1; i < end; i++) { if (/^model:/.test(lines[i])) { lines[i] = `model: ${model}`; hasModel = true; } if (/^thinking:/.test(lines[i])) { lines[i] = `thinking: ${thinking}`; hasThinking = true; } }
+if (!hasModel) lines.splice(end, 0, `model: ${model}`); if (!hasThinking) lines.splice(end, 0, `thinking: ${thinking}`);
+fs.writeFileSync(dest, lines.join('\n'));
+NODE
+  mv "$tmp" "$dest"; printf '%s\n' "$name" >> "$TMP_MANIFEST"
+done
+mv "$TMP_MANIFEST" "$MANIFEST"
+echo "Pi subagents installed: $MODEL ($THINKING thinking)"

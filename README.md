@@ -13,13 +13,15 @@ git clone git@github.com:Jaeyong-Cho/skills.git ~/.claude/skills
 ~/.claude/skills/install.sh
 ```
 
-To configure Pi subagents, run:
+Pi subagents are opt-in:
 
 ```bash
-~/.claude/skills/install.sh --subagent
+~/.claude/skills/bin/install-pi-subagent
+# later, to remove only installer-managed subagent state:
+~/.claude/skills/bin/uninstall-pi-subagent
 ```
 
-This dedicated mode installs only `pi-interactive-subagents`: it lists the models available to Pi, asks for a model and thinking effort, updates Pi's subagent defaults, then copies `agents/*.md` to `~/.pi/agent/agents/` with those values in each agent's frontmatter. It skips all other plugins, skills, hooks, and helper binaries. The normal installer does not install or configure `pi-interactive-subagents`. Without `--subagent`, the normal installer runs and the repository's agent defaults are copied unchanged. `PI_SUBAGENT_MODEL`, `PI_SUBAGENT_THINKING`, and `--subagent-thinking` set prompt/default values for scripted or repeated installs.
+The dedicated installer lists Pi models, asks for a model and thinking effort, installs `pi-interactive-subagents`, configures subagent defaults and 1M context windows, and renders `agents/*.md`. It records the rendered files in a manifest so the dedicated uninstaller removes only those files and subagent defaults. Normal `install.sh` (including `--clean`) does not install or configure Pi subagents.
 
 ## Repository Layout
 
@@ -38,7 +40,7 @@ The script detects which AI agents are installed and sets up each one:
 |-------|----------------------|
 | Claude Code | Copies `skills/`, `references/`, and `template/` to `~/.claude/skills/`; configures the `~/.claude/CLAUDE.md` symlink, `rtk init -g` hooks, and the `ponytail` plugin (marketplace install) |
 | GitHub Copilot CLI | Copies `skills/`, `references/`, and `template/` to `~/.copilot/skills/`; configures the `~/.copilot/copilot-instructions.md` symlink, `rtk init -g --copilot` hooks, and the same plugin |
-| pi coding agent | Copies `agents/` to `~/.pi/agent/agents/`; with `--subagent`, interactively applies one selected Pi model/thinking effort to every copied agent; enables Pi truecolor and installs `ponytail` plus the Pi UI packages |
+| pi coding agent | Enables Pi truecolor, configures standard context windows, and installs `ponytail` plus the Pi UI packages; subagents require the dedicated opt-in installer |
 
 `references/` and `template/` are copied alongside `skills/`, so installed skills can resolve sibling resources through paths such as `../references/...`.
 
