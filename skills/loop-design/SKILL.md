@@ -1,6 +1,7 @@
 ---
 name: loop-design
 description: Discuss and select the smallest executable feedback element for a development goal, then hand it to to-loop to write one cycle without speculating about future cycles.
+disable-model-invocation: true
 ---
 
 # Loop Design
@@ -48,7 +49,7 @@ Create only needed scripts, named `NN-{step}.sh` in execution order. Never store
 ## Discuss the current loop
 
 1. Read the user's request and discussion, the current repository state, existing cycle READMEs, and immediate run/review evidence. Preserve the human's **GOAL** and **INTENT**.
-2. Discuss the work-system topic with the human. State the one question the next element must answer, its scope, and its observable pass/fail result. Ask only for decisions needed to select this element; do not invoke `@skills/grill-me`.
+2. Discuss the work-system topic with the human. State the target code or work-system files, the one question the next element must answer, its scope, and its observable pass/fail result. Ask only for decisions needed to select this element; do not invoke `@skills/grill-me`.
 3. Select the smallest scope that can answer it: a setup, execution, verification, experiment, or one cycle change. Do not create speculative later cycles.
 4. Define only the verification stages needed for the current question, ordered by cost:
 
@@ -71,6 +72,7 @@ Create only needed scripts, named `NN-{step}.sh` in execution order. Never store
 GOAL: <human's desired outcome>
 INTENT: <why the human wants it>
 CURRENT STATE: <observed state and evidence>
+TARGET CODE: <code or work-system files allowed to change; never verification scripts>
 NEXT ELEMENT: <one setup, execution, verification, experiment, or cycle change>
 QUESTION: <one thing this element must answer>
 SCOPE: <what is included and excluded>

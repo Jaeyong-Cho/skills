@@ -1,19 +1,16 @@
 ---
 name: loop-run
-description: Execute one selected NN-slug loop cycle, capture all runtime evidence, review its cost and sufficiency, and commit an accepted scoped change. Use after to-loop prepares a cycle; it never runs multiple cycles.
+description: Run one selected NN-slug cycle as a single feedback loop: capture the expected/current gap, change the target code, and rerun to verify the change. Use after to-loop prepares a cycle; it never starts a second cycle.
+disable-model-invocation: true
 ---
 
 # Loop Run
 
-Execute exactly one selected `loop/cycles/NN-slug/` cycle. Do not design, broaden, or start another cycle while running it.
-
-## Single-subagent boundary
-
-Sub-agent dispatch is optional. If a sub-agent is used, it owns the selected cycle end to end: it runs the scripts, captures evidence, diagnoses failures, applies only the scoped fix, reruns the cycle when needed, reviews the result, and returns the verdict. Never split this work between a verify runner and a fix agent, and never use a second sub-agent for the same cycle. A scoped retry is still part of this one cycle; it is not a new cycle.
+Run exactly one selected `loop/cycles/NN-slug/` cycle as one feedback loop. Do not design or start another cycle here.
 
 ## Preconditions
 
-1. Read the cycle `README.md`, validate its `NN-slug` name, script order, and expected evidence.
+1. Read the cycle `README.md` and validate its `NN-slug` name, script order, target code, expected evidence, and pass/fail result.
 2. Create one run directory before execution:
 
    ```text
@@ -23,44 +20,36 @@ Sub-agent dispatch is optional. If a sub-agent is used, it owns the selected cyc
    └── results/
    ```
 
-   Record cycle path, Git state, commands, start time, and environment metadata. Export the run path to scripts so their artifacts go under `outputs/` or `results/`.
+   Record the cycle path, Git state, commands, start time, and environment metadata. Export the run path to scripts so their artifacts go under `outputs/` or `results/`.
 
-## Execute cheaply and in order
+## One feedback loop
 
-Run `NN-{step}.sh` scripts numerically. Capture each script's stdout and stderr under `logs/`, its exit status and duration under `results/`, and all required outputs, test results, measurements, benchmarks, and other artifacts under `outputs/` or `results/`.
+1. Run the selected cycle's numbered scripts in order. Capture stdout and stderr under `logs/`, exit statuses under `results/`, and required outputs under `outputs/` or `results/`.
+2. Compare the expected result with the current result. Record the **GAP**—what should happen, what happened, and the evidence showing the difference.
+3. If a GAP exists, make the smallest scoped change to the **target code** that reduces it. Do not change verification scripts, weaken assertions, alter expected results, or add unrelated work to make the cycle pass.
+4. Rerun the same selected cycle to verify the target-code change. Capture the new evidence and whether the GAP closed, narrowed, or remains.
+5. Stop after this feedback loop. Do not start another cycle or perform another fix-and-rerun iteration here. A remaining GAP returns to a later `@skills/loop-design` discussion.
 
-Before rerunning a passing step, reuse its immediate prior result only when its command, environment, and observed inputs are unchanged. Otherwise execute it. Reuse is never allowed for a cycle's final E2E or full-test stage: that stage MUST execute when the cycle reaches it.
-
-Run verification from narrowest/cheapest to broadest/most expensive. Do not execute E2E or a full test until every required cheaper stage in this cycle has passed. Stop at the first unexpected failure or missing expected evidence; preserve the evidence and do not run later expensive stages.
-
-The single sub-agent owns any diagnosis or scoped source change. It makes only the small change explicitly scoped by this cycle and does not add unrelated work.
-
-## Review the cycle
-
-Review the cycle README, captured evidence, elapsed time, Git diff, and reused results. Determine whether:
-
-- the intended question was answered;
-- verification went from cheap/targeted to broad/expensive;
-- the representative evidence was sufficient;
-- E2E/full testing, if used, was final verification only;
-- another cycle is actually necessary.
-
-Return exactly one verdict:
-
-- **DONE:** evidence is sufficient at justified cost. If the cycle made a scoped source or reusable-cycle-definition change, inspect Git status and diff, then create one focused commit. Do not include unrelated changes or generated run artifacts unless required deliverables.
-- **NEXT-CYCLE:** this cycle is sufficient but reveals one next necessary question. Hand only that question to `@skills/loop-design`; do not design it here.
-- **RETRY:** the result is inconclusive or failed for a correctable issue within this scope. State the smallest correction and rerun only this cycle.
-- **ESCALATE:** requirements conflict, evidence is ambiguous, the cycle is unnecessarily broad, or E2E/full testing was ordinary feedback. Alert the human with exact evidence; do not broaden, commit, or start another cycle.
+Run verification from narrowest/cheapest to broadest/most expensive. Do not execute E2E or a full test until every required cheaper stage in this cycle has passed. Preserve all initial and rerun evidence.
 
 ## Result
+
+Return exactly one run result:
 
 ```text
 Cycle: NN-slug
 Run: loop/runs/cycle-NN-{timestamp}/
-Steps: executed and validly reused results
-First failure: script, expected, actual, evidence (or none)
-Final stage: not reached | passed | failed
-Review: cost order, evidence sufficiency, and verdict
-Commit: hash | not applicable | blocked
-Next: none | loop-design | retry | human escalation
+Expected: <intended result>
+Initial current: <observed result>
+Initial GAP: <difference and evidence>
+Target change: <scoped target-code change, or none>
+Rerun current: <observed result>
+Final GAP: closed | narrowed | remains | none
+Evidence: <paths to initial and rerun evidence>
+Status: passed | failed | incomplete
+Next: none | loop-design | human review
 ```
+
+## Completion criterion
+
+One selected cycle completed one feedback loop: it captured the expected/current GAP with evidence, made at most one scoped target-code change without modifying verification scripts, reran the same cycle, and reported whether the GAP closed. No second cycle or additional fix iteration was started.
