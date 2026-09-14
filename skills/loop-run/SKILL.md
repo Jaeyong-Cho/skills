@@ -1,6 +1,7 @@
 ---
 name: loop-run
 description: Execute a prepared loop-design development loop; implement one verified gap at a time with a scoped sub-agent assessment. Use when `loop/verify/run.sh` exists and the user wants bounded RED-to-GREEN implementation; defaults to three change iterations.
+disable-model-invocation: true
 ---
 
 # Loop Run
