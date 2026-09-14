@@ -1,6 +1,7 @@
 ---
 name: loop-design
 description: Design and run a deterministic development loop for one concrete software goal. Use when a development task needs executable acceptance checks, fast feedback, a RED-to-GREEN path, or ordered verification before implementation.
+disable-model-invocation: true
 ---
 
 # Loop Design
