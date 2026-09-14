@@ -1,71 +1,78 @@
 ---
 name: loop-design
-description: Design and run a deterministic development loop for one concrete software goal. Use when a development task needs executable acceptance checks, fast feedback, a RED-to-GREEN path, or ordered verification before implementation.
-disable-model-invocation: true
+description: Select and design the smallest executable feedback element for a development goal: one script, setup, verification, experiment, or at most one cycle. Use with to-loop to prepare the current cycle without speculating about future cycles.
 ---
 
 # Loop Design
 
-Turn one concrete development goal into a tight, observable loop:
+`to-loop` identifies the next needed element; this skill designs it. One invocation MUST design or modify **at most one cycle**. Prefer completing or modifying the current cycle over creating a future cycle.
 
 ```text
-Goal → Setup → Executable Verification → First Gap → Change → Verification → Repeat
+minimum scope                         maximum scope
+one script / setup script  ────────>  one cycle
 ```
 
-Completion is `loop/verify/run.sh` exiting `0`, not an implementation narrative. Reuse fresh evidence only for intermediate decisions when the verifier's command, environment, and observed inputs remain unchanged; final acceptance MUST run full verification.
+For the first cycle of a new goal, use its confirmed `grill-me` context. Later cycles reuse that confirmed goal and immediate run/review evidence; do not re-interview or plan future cycles without a new unresolved decision.
 
-## Principles
+## Cycle layout
 
-- Verification defines completion; prefer executable evidence to interpretation.
-- Start at the first meaningful failing verification.
-- Order feedback cheap, fast, local, and specific before broad or expensive; reuse still-valid evidence rather than rerunning it.
-- Convert important mechanically checkable design constraints into checks.
-- If the gap is unclear, improve observability before adding reasoning.
-- Keep loop infrastructure smaller than the problem it supports.
+Every new cycle directory is `NN-slug/`, with a two-digit numeric prefix. Cycle directories contain reusable definitions only:
 
-## Required prerequisite
+```text
+loop/
+├── cycles/
+│   └── NN-slug/
+│       ├── README.md
+│       ├── 00-setup.sh
+│       ├── 01-execute.sh
+│       └── 02-verify.sh
+└── runs/
+    └── cycle-NN-{timestamp}/
+        ├── logs/
+        ├── outputs/
+        └── results/
+```
 
-Before designing a loop, **MUST run `@skills/grill-me` session** for the goal. Do not begin loop design, setup, verification, or implementation until that session reaches shared understanding and the user confirms it.
+Create only needed scripts, named `NN-{step}.sh` in execution order. Never store runtime output in a cycle directory; all runtime artifacts belong in `loop/runs/cycle-NN-{timestamp}/`.
 
-## Scope and inspect
+## Design the current element
 
-1. Use the confirmed grill-me outcome to state the single goal's behavior, observable outputs, interfaces, enforceable architectural constraints, required repositories/environment, and completion conditions. Do not implement yet.
-2. Inspect the current state: repositories and Git status, build/test/CI commands, architecture, project tools, and existing observability. Reuse sufficient mechanisms.
-3. Create only the necessary structure:
+1. Read the goal, current repository state, existing cycle READMEs, and immediate run/review evidence. State the one question this element must answer and its observable pass/fail result.
+2. Select the smallest scope that can answer it: add or change one script in the current cycle when sufficient; otherwise create one new cycle. Do not create speculative later cycles.
+3. Write or update that cycle's `README.md` with its question, scope, ordered scripts, expected evidence, execution budget, and whether it is a final-confidence cycle.
+4. Put setup, execution, test, experiment, or verification commands in the numbered scripts. Each script has clear inputs, outputs, and meaningful exit status. Reuse existing project commands before adding helpers. Read [verification-design.md](references/verification-design.md) for non-trivial behavior, API, structure, or architecture checks; read [verification-tools.md](references/verification-tools.md) only when an existing command cannot express a required check.
+5. Define only the verification stages needed for the current question, ordered by cost:
 
    ```text
-   loop/
-   ├── README.md
-   ├── setup/{run.sh,NN-{slug}.sh}
-   ├── verify/{run.sh,NN-{slug}.sh}
-   ├── tools/
-   ├── config/
-   ├── workspace/
-   └── runs/{timestamp}/
+   static/deterministic
+   → targeted unit
+   → targeted component
+   → targeted integration
+   → representative path
+   → broader regression
+   → E2E/full test
    ```
 
-   Create or update `loop/README.md` with the confirmed goal, scope, setup command, ordered verifiers, how to run the loop, and completion condition. It is the loop's navigation record, not a generated run report. Omit unused directories. Number executable scripts `00` through `99` in execution order only. Make `setup/run.sh` run setup scripts numerically and idempotently where practical.
+   Stop once confidence is sufficient. E2E and full tests are confidence gates: they MUST be the last stage and never the first development feedback. Use the narrowest verification that can falsify the current assumption; challenge any proposal that starts broad.
 
-## Define verification
+## Three-minute budget
 
-Ask, “What MUST be true when this is complete?” Decompose that answer into ordered `verify/NN-{slug}.sh` invariants rather than implementation tasks.
+A normal cycle MUST finish within three minutes. Before accepting a longer design, try a focused subsystem, smaller representative data, reused setup/build artifacts, a test seam, or decomposition.
 
-- Each check exits `0` on pass and non-zero on failure.
-- A failed check reports `Expected`, `Actual`, and `Evidence`.
-- `verify/run.sh` runs checks numerically, stops at the first failure, and creates `loop/runs/{timestamp}/` for useful logs, metadata, failure evidence, and artifacts.
-- Prefer a genuine RED check before implementation when practical; never manufacture RED merely for ceremony.
-- Read [verification-design.md](references/verification-design.md) before non-trivial behavior, API, CLI, structural, or architecture checks.
+A cycle exceeding three minutes is allowed only when its `README.md` contains:
 
-Use existing project commands first. Create a small helper in `loop/tools/` only if a required invariant cannot otherwise be expressed clearly and deterministically. Read [verification-tools.md](references/verification-tools.md) before creating one.
+```text
+Execution Budget: <duration>
 
-## Hand off to loop-run
+Justification:
+<why this runtime is necessary>
 
-Once the goal, reproducible setup, and ordered verification are ready, invoke `@skills/loop-run` to execute the baseline, implementation, sub-agent assessment, and verification cycle. `loop-design` defines the loop; `loop-run` operates it.
+Why a cheaper representative verification is insufficient:
+<evidence>
+```
 
-## Guardrails
+An E2E or full test does not justify a longer budget by itself. It must also document why final verification is necessary now and why cheaper checks already performed are insufficient.
 
-- Do not declare success with a failing verifier or bypass an earlier meaningful failure without a concrete reason.
-- Keep one loop focused on one goal.
-- Do not build generic setup, tooling, or verification frameworks speculatively.
-- Enforce material, checkable design decisions—not every architectural preference.
-- Do not substitute AI judgment for deterministic verification when the latter is practical.
+## Completion
+
+The cycle README and only its needed reusable scripts exist, are ordered by cost, and specify a three-minute-or-justified budget. Hand the selected cycle to `@skills/loop-run`; do not run or design another cycle here.

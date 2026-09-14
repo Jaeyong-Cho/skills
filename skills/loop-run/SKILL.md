@@ -1,81 +1,65 @@
 ---
 name: loop-run
-description: Execute a prepared loop-design development loop; implement one verified gap at a time with a scoped sub-agent assessment. Use when `loop/verify/run.sh` exists and the user wants bounded RED-to-GREEN implementation; defaults to three change iterations.
-disable-model-invocation: true
+description: Execute one selected NN-slug loop cycle, capture all runtime evidence, review its cost and sufficiency, and commit an accepted scoped change. Use after loop-design prepares a cycle; it never runs multiple cycles.
 ---
 
 # Loop Run
 
-Run an existing `loop-design` loop to completion or a defined stop. The default maximum is **3 change iterations**; honor a user-provided positive maximum instead. A baseline verification run does not consume an iteration.
-
-## Loop layout
-
-Read `loop/README.md` first; it names the goal, scope, setup, verifier order, and completion condition. The loop may contain only the directories needed for its goal:
-
-```text
-loop/
-├── README.md
-├── setup/{run.sh,NN-{slug}.sh}
-├── verify/{run.sh,NN-{slug}.sh}
-├── tools/
-├── config/
-├── workspace/
-└── runs/{timestamp}/
-```
-
-`setup/run.sh` and `verify/run.sh` are the entry points. Numbered scripts execute in numeric order; `verify/run.sh` stops at the first failure. `tools/` supplies only required check helpers, and `runs/` holds execution evidence. `loop-design` owns this layout: do not create or restructure it while operating the loop unless a missing verifier makes the loop invalid.
+Execute exactly one selected `loop/cycles/NN-slug/` cycle. Do not design, broaden, or start another cycle while running it.
 
 ## Preconditions
 
-Before changing code, confirm that `loop-design` has completed for this one goal: the `grill-me` session was confirmed, setup and ordered verification exist, and `loop/verify/run.sh` is runnable. Run `loop/setup/run.sh` if the prepared loop requires it. Build a current verification ledger from immediate command results.
+1. Read the cycle `README.md`, validate its `NN-slug` name, script order, expected evidence, and execution budget.
+2. The default maximum runtime is three minutes. A longer deadline is allowed only when the README includes the required budget, justification, and why a cheaper representative verification is insufficient. Enforce the documented deadline with the available timeout mechanism.
+3. Create one run directory before execution:
 
-Reuse an immediate passing result directly when its command, environment, and observed inputs are unchanged since it ran; do not rerun it merely to rebuild the ledger. Otherwise rerun that verifier. When no reliable ledger identifies the current first gap, run:
+   ```text
+   loop/runs/cycle-NN-{timestamp}/
+   ├── logs/
+   ├── outputs/
+   └── results/
+   ```
 
-```bash
-loop/verify/run.sh
-```
+   Record cycle path, Git state, commands, start time, deadline, and environment metadata. Export the run path to scripts so their artifacts go under `outputs/` or `results/`.
 
-- Passing evidence for every verifier means the goal is already complete: report the evidence and stop.
-- A failure must identify the first failing verifier and include its expected state, actual state, and evidence.
-- Missing, non-runnable, ambiguous, or non-deterministic verification is a setup gap. Stop and return to `loop-design`; do not invent acceptance criteria or implement against a guess.
+## Execute cheaply and in order
 
-## Each change iteration
+Run `NN-{step}.sh` scripts numerically. Capture each script's stdout and stderr under `logs/`, its exit status and duration under `results/`, and all required outputs, test results, measurements, benchmarks, and other artifacts under `outputs/` or `results/`.
 
-For the current first failure, perform these steps, up to the limit:
+Before rerunning a passing step, reuse its immediate prior result only when its command, environment, and observed inputs are unchanged. Otherwise execute it. Reuse is never allowed for a cycle's final E2E or full-test stage: that stage MUST execute when the cycle reaches it.
 
-1. **Check for contradiction.** Compare the goal, confirmed decisions, green verification prefix, and current failure. A contradiction exists when required invariants cannot all be true under the same conditions, required scripts need incompatible environment states, or a check conflicts with the confirmed goal. If found, make no change and alert the human with the conflicting requirements, verifier paths, and evidence. Do not skip, weaken, or reorder checks to hide it.
-2. **Delegate assessment.** SHOULD dispatch one scoped sub-agent for this iteration. Give it the goal, current first failure, relevant source, green prefix, and prior attempts. It investigates read-only and returns: root-cause evidence, the smallest viable change, relevant risks, and any contradiction. It must not edit, broaden scope, or declare success. If delegation is unavailable, record that fact and proceed only when the existing evidence is sufficient.
-3. **Orchestrate the change.** Judge the evidence and delegated assessment. If they reveal a contradiction or insufficient evidence, stop as above or improve observability before changing code. Otherwise make one small, cohesive change that closes the current gap; do not perform unrelated cleanup.
-4. **Verify.** Rerun the failed script and every earlier check invalidated by the change. Reuse only valid immediate passing evidence for unaffected checks. Then run unverified or invalidated later scripts in order until the next failure. Once no gap remains, MUST run `loop/verify/run.sh` as the final full verification; reused evidence never replaces this final run. Use `loop/verify/run.sh` earlier when no trustworthy ledger exists, the affected scope is unclear, or it is cheaper than selective execution.
-5. **Judge, commit, and choose the next behavior.** The orchestrator accepts an iteration only when current execution or valid reused evidence covers its failed check and prerequisites, the change is in scope, and no contradiction remains. It MUST inspect the Git status and diff, then create one focused commit for that accepted small change before taking another iteration. A later verifier may still expose the next gap; that does not invalidate the accepted prefix. If the diff cannot be cleanly scoped, the commit fails, or the change does not produce a clearer or smaller gap, stop and alert the human. Do not carry an accepted change uncommitted.
+Run verification from narrowest/cheapest to broadest/most expensive. Do not execute E2E or a full test until every required cheaper stage in this cycle has passed. Stop at the first unexpected failure, timeout, or missing expected evidence; preserve the evidence and do not run later expensive stages.
 
-## Handoff after full completion
+For a cycle that requires diagnosis or a scoped source change, SHOULD dispatch one read-only sub-agent to assess the current evidence, smallest viable change, risks, and contradictions. The orchestrator makes only the small change explicitly scoped by this cycle; it does not add unrelated work.
 
-When the final `loop/verify/run.sh` exits `0` and every accepted iteration is committed, hand the verified commit series to `@skills/verify-and-ship` for independent target-repository validation, merge, and shipping.
+## Review the cycle
 
-## Stop conditions
+Review the cycle README, captured evidence, elapsed time, Git diff, and reused results. Determine whether:
 
-Stop and report the current state when any of these occurs:
+- the intended question was answered;
+- verification went from cheap/targeted to broad/expensive;
+- the representative evidence was sufficient;
+- E2E/full testing, if used, was final verification only;
+- the cycle met its three-minute budget or has valid explicit justification; and
+- another cycle is actually necessary.
 
-- The final `loop/verify/run.sh` exits `0` and every accepted iteration is committed: **complete**.
-- Verification requirements contradict each other or the confirmed goal: **contradiction — human decision required**.
-- Evidence is inadequate: **observability/design gap — return to loop-design**.
-- The maximum number of change iterations is reached while verification still fails: **iteration limit reached**; include the first remaining failure and ask whether to extend the limit.
-- A change fails to make progress: **blocked — human direction required**.
+Return exactly one verdict:
 
-Never claim completion from implementation reasoning, sub-agent opinion, reused intermediate output, or a partial green prefix. Only the final full `loop/verify/run.sh` can complete the loop.
+- **DONE:** evidence is sufficient at justified cost. If the cycle made a scoped source or reusable-cycle-definition change, inspect Git status and diff, then create one focused commit. Do not include unrelated changes or generated run artifacts unless required deliverables.
+- **NEXT-CYCLE:** this cycle is sufficient but reveals one next necessary question. Hand only that question to `@skills/to-loop`; do not design it here.
+- **RETRY:** the result is inconclusive or failed for a correctable issue within this scope. State the smallest correction and rerun only this cycle.
+- **ESCALATE:** requirements conflict, evidence is ambiguous, the cycle is unnecessarily broad, E2E/full testing was ordinary feedback, or the budget was exceeded without valid justification. Alert the human with exact evidence; do not broaden, commit, or start another cycle.
 
-## Per-iteration report
-
-After each iteration, report concisely:
+## Result
 
 ```text
-Iteration: N / maximum
-First failure: NN-slug
-Sub-agent: assessment summary or unavailable
-Change: path(s) and intent
-Verification: executed and reused check results, with invalidation basis
-Orchestrator judgment: accepted | next gap | contradiction | blocked | complete
+Cycle: NN-slug
+Run: loop/runs/cycle-NN-{timestamp}/
+Budget: allowed / elapsed / justification status
+Steps: executed and validly reused results
+First failure: script, expected, actual, evidence (or none)
+Final stage: not reached | passed | failed
+Review: cost order, evidence sufficiency, and verdict
 Commit: hash | not applicable | blocked
-Next behavior: commit accepted change and implement next gap | hand off to verify-and-ship | stop and alert human
+Next: none | to-loop | retry | human escalation
 ```
