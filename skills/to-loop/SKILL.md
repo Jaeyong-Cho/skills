@@ -22,6 +22,7 @@ Write the cycle selected by `@skills/loop-design`. This skill records the agreed
    - ordered scripts and their expected evidence;
    - the cheapest verification method and why it is sufficient; and
    - whether this is a final-confidence cycle.
+   - also each step script's brief description.
 6. Put setup, execution, experiment, test, or verification commands in the numbered scripts. Each script has clear inputs, outputs, and meaningful exit status. Reuse existing project commands before adding helpers.
 7. Keep runtime output out of the cycle directory. Outputs belong under `loop/runs/cycle-NN-{timestamp}/` when `@skills/loop-run` executes the cycle.
 8. Stop after writing the cycle definition. Hand it to `@skills/loop-run`; do not run it here.
