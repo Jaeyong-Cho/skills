@@ -26,7 +26,11 @@ Write the cycle selected by `@skills/loop-design`. This skill records the agreed
 6. Put setup, execution, experiment, test, or verification commands in the numbered scripts. Each script has clear inputs, outputs, and meaningful exit status. Reuse existing project commands before adding helpers.
 7. Keep runtime output out of the cycle directory. Outputs belong under `loop/runs/cycle-NN-{timestamp}/` when `@skills/loop-run` executes the cycle.
 8. Stop after writing the cycle definition. Hand it to `@skills/loop-run`; do not run it here.
+9. For about reuseable data (previous run's cacheable data) for next run then locate the output here:
 
+   ```text
+   loop/cycles/NN-slug/data/
+   ```
 ## Verification order
 
 Write only the stages needed for the current question and order them from cheapest to most expensive:
