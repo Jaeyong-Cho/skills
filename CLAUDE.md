@@ -7,6 +7,3 @@ Unless the user specifies otherwise, write and communicate only in English.
 
 ## Context Structure
 - The wiki is in `~/wiki`.
-
-@RTK.md
-
