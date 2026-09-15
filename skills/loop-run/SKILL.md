@@ -1,6 +1,6 @@
 ---
 name: loop-run
-description: Run one selected NN-slug cycle as a single feedback loop: capture the expected/current gap, change the target code, and rerun to verify the change. Use after to-loop prepares a cycle; it never starts a second cycle.
+description: Run one selected NN-slug cycle as a single feedback loop; capture the expected/current gap, change the target code, and rerun to verify the change. Use after to-loop prepares a cycle; it never starts a second cycle.
 disable-model-invocation: true
 ---
 
