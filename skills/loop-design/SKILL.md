@@ -10,7 +10,7 @@ This skill starts the discussion about building or setting up the work system. I
 
 ## Design Loop Mode
 
-Invoking this skill enters **Design Loop Mode**: think about the smallest executable cycle for building or setting up a work system. This mode designs the feedback loop, not the product work itself. **MUST ASK** to user to run `@skills/grill-me` or not; use the available goal, intent, repository state, and run evidence to define the cycle.
+Invoking this skill enters **Design Loop Mode**: think about the smallest executable cycle for building or setting up a work system. This mode designs the feedback loop, not the product work itself. **MUST RUN** `@skills/grill-me`; use the available goal, intent, repository state, and run evidence to define the cycle.
 
 Think in this shape:
 
