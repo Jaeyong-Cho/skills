@@ -47,6 +47,7 @@ loop/
 Create only needed scripts, named `NN-{step}.sh` in execution order. Never store runtime output in a cycle directory; all runtime artifacts belong in `loop/runs/cycle-NN-{timestamp}/`.
 
 ## Discuss the current loop
+Before discuss, see thie references `./references/verification-design.md` and `./references/verification-tools.md`
 
 1. Read the user's request and discussion, the current repository state, existing cycle READMEs, and immediate run/review evidence. Preserve the human's **GOAL** and **INTENT**.
 2. Discuss the work-system topic with the human. State the target code or work-system files, the one question the next element must answer, its scope, and its observable pass/fail result. Ask only for decisions needed to select this element; do not invoke `@skills/grill-me`.
