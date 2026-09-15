@@ -19,6 +19,11 @@ Run exactly one selected `loop/cycles/NN-slug/` cycle as one feedback loop. Do n
    ├── outputs/
    └── results/
    ```
+3. For a reuseable data for next run then locate the output here:
+
+   ```text
+   loop/cycles/NN-slug/outputs/
+   ```
 
    Record the cycle path, Git state, commands, start time, and environment metadata. Export the run path to scripts so their artifacts go under `outputs/` or `results/`.
 
