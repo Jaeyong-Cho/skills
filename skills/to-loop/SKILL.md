@@ -24,13 +24,9 @@ Write the cycle selected by `@skills/loop-design`. This skill records the agreed
    - whether this is a final-confidence cycle.
    - also each step script's brief description.
 6. Put setup, execution, experiment, test, or verification commands in the numbered scripts. Each script has clear inputs, outputs, and meaningful exit status. Reuse existing project commands before adding helpers.
-7. Keep runtime output out of the cycle directory. Outputs belong under `loop/runs/cycle-NN-{timestamp}/` when `@skills/loop-run` executes the cycle.
+7. Keep transient runtime logs, temporary files, and run results out of the cycle directory. Reusable cycle data may be stored under `loop/cycles/NN-slug/data/` when the human intends to preserve and reuse it. Preserve the requested data structure beneath `data/`. If `@skills/loop-run` creates timestamped execution evidence, keep that transient evidence under `loop/runs/cycle-NN-{timestamp}/`.
 8. Stop after writing the cycle definition. Hand it to `@skills/loop-run`; do not run it here.
-9. For about reuseable data (previous run's cacheable data) for next run then locate the output here:
 
-   ```text
-   loop/cycles/NN-slug/data/
-   ```
 ## Verification order
 
 Write only the stages needed for the current question and order them from cheapest to most expensive:
@@ -49,4 +45,4 @@ Use the narrowest check that can falsify the current assumption. E2E and full te
 
 ## Completion criterion
 
-The selected cycle directory contains its required README and only its needed reusable scripts; the README preserves the human's goal and intent, has an observable question and pass/fail result, and records the cheapest sufficient verification. The cycle is ready for `@skills/loop-run` and has not been executed.
+The selected cycle directory contains its required README, only its needed reusable scripts, and any explicitly scoped reusable data under `data/`; the README preserves the human's goal and intent, has an observable question and pass/fail result, and records the cheapest sufficient verification. Transient logs and run results are not stored in the cycle directory. The cycle is ready for `@skills/loop-run` and has not been executed.
