@@ -293,6 +293,7 @@ setup_pi() {
     "npm:@juicesharp/rpiv-todo" \
     "npm:pi-must-have-extension" \
     "npm:pi-vimmode" \
+    "npm:@juicesharp/rpiv-ask-user-question" \
     "npm:pi-notify"
   do
     if pi install "$pkg" &>/dev/null; then
